@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Idasen.BluetoothLE.Characteristics\Idasen.BluetoothLE.Characteristics.csproj" />
+        <ProjectReference Include="..\Idasen.BluetoothLE.Core\Idasen.BluetoothLE.Core.csproj" />
+        <ProjectReference Include="..\Idasen.BluetoothLE.Linak\Idasen.BluetoothLE.Linak.csproj" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <PackageId>idasen.desk.core</PackageId>
+        <Authors>tschroedter</Authors>
+        <Product>idasen.desk.core</Product>
+        <Description>Core package to control the idasen desk.</Description>
+        <AnalysisLevel>latest-recommended</AnalysisLevel>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+        <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+    </PropertyGroup>
+
+</Project>
