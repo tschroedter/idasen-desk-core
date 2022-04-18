@@ -1216,9 +1216,6 @@
       "idasen.desk.core": {
         "type": "Project",
         "dependencies": {
-          "Idasen.BluetoothLE.Characteristics": "1.0.0",
-          "Idasen.BluetoothLE.Core": "1.0.0",
-          "Idasen.BluetoothLE.Linak": "1.0.0",
           "Serilog.Sinks.Console": "4.0.1",
           "Serilog.Sinks.File": "5.0.0"
         }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -7,12 +7,16 @@
     <ItemGroup>
         <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Idasen.BluetoothLE.Characteristics\Idasen.BluetoothLE.Characteristics.csproj" />
-        <ProjectReference Include="..\Idasen.BluetoothLE.Core\Idasen.BluetoothLE.Core.csproj" />
-        <ProjectReference Include="..\Idasen.BluetoothLE.Linak\Idasen.BluetoothLE.Linak.csproj" />
+        <ProjectReference Include="..\Idasen.BluetoothLE.Characteristics\Idasen.BluetoothLE.Characteristics.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="..\Idasen.BluetoothLE.Core\Idasen.BluetoothLE.Core.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="..\Idasen.BluetoothLE.Linak\Idasen.BluetoothLE.Linak.csproj" PrivateAssets="all"/>
     </ItemGroup>
 
     <PropertyGroup>
@@ -30,6 +34,12 @@
 
     <PropertyGroup>
         <VersionPrefix>1.0.0</VersionPrefix>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <NoProjectBuildInPackageWelcome>false</NoProjectBuildInPackageWelcome>
+        <!-- You can choose between detailed or d, normal or n and false to disable verbosity. -->
+        <ProjectBuildInPackageVerbosity>normal</ProjectBuildInPackageVerbosity>
     </PropertyGroup>
 
 </Project>

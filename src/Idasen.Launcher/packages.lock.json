@@ -20,6 +20,12 @@
           "Serilog": "2.10.0"
         }
       },
+      "Teronis.MSBuild.Packaging.ProjectBuildInPackage": {
+        "type": "Direct",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "mTAUIvyVFzFI8MtfW+OpC2FTXTbi4RD9v4iOnjCgCgdgmSYjOgyBRGwNoxy7nJ4K1iJFky7/pDXI2t4vsu+dGw=="
+      },
       "Autofac": {
         "type": "Transitive",
         "resolved": "6.3.0",
