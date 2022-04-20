@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
     </PropertyGroup>
 
     <ItemGroup>
@@ -40,7 +41,7 @@
         <NoProjectBuildInPackageWelcome>false</NoProjectBuildInPackageWelcome>
         <!-- You can choose between detailed or d, normal or n and false to disable verbosity. -->
         <ProjectBuildInPackageVerbosity>normal</ProjectBuildInPackageVerbosity>
-        <EnableNETAnalyzers>False</EnableNETAnalyzers>
+        <EnableNETAnalyzers>True</EnableNETAnalyzers>
     </PropertyGroup>
 
 </Project>

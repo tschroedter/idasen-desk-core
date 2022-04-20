@@ -4,6 +4,7 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <AssemblyName>Idasen.BluetoothLE.Characteristics</AssemblyName>
         <RootNamespace>Idasen.BluetoothLE.Characteristics</RootNamespace>
+        <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
