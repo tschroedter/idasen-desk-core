@@ -1,0 +1,5 @@
+<Project>
+    <PropertyGroup>
+        <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
+    </PropertyGroup>
+</Project>
