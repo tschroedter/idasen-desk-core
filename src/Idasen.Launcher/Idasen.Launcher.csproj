@@ -14,20 +14,20 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Idasen.BluetoothLE.Characteristics\Idasen.BluetoothLE.Characteristics.csproj" PrivateAssets="all"/>
-        <ProjectReference Include="..\Idasen.BluetoothLE.Core\Idasen.BluetoothLE.Core.csproj" PrivateAssets="all"/>
-        <ProjectReference Include="..\Idasen.BluetoothLE.Linak\Idasen.BluetoothLE.Linak.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="..\Idasen.BluetoothLE.Characteristics\Idasen.BluetoothLE.Characteristics.csproj" PrivateAssets="all" />
+        <ProjectReference Include="..\Idasen.BluetoothLE.Core\Idasen.BluetoothLE.Core.csproj" PrivateAssets="all" />
+        <ProjectReference Include="..\Idasen.BluetoothLE.Linak\Idasen.BluetoothLE.Linak.csproj" PrivateAssets="all" />
     </ItemGroup>
 
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <PackageId>idasen.desk.core</PackageId>
+        <PackageId>Idasen.Desk.Core</PackageId>
         <Authors>tschroedter</Authors>
         <Product>idasen.desk.core</Product>
         <Description>Core package to control the idasen desk.</Description>
         <AnalysisLevel>latest-recommended</AnalysisLevel>
-        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
         <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
         <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
     </PropertyGroup>
@@ -40,6 +40,7 @@
         <NoProjectBuildInPackageWelcome>false</NoProjectBuildInPackageWelcome>
         <!-- You can choose between detailed or d, normal or n and false to disable verbosity. -->
         <ProjectBuildInPackageVerbosity>normal</ProjectBuildInPackageVerbosity>
+        <EnableNETAnalyzers>False</EnableNETAnalyzers>
     </PropertyGroup>
 
 </Project>
