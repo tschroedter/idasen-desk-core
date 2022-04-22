@@ -1213,11 +1213,21 @@
           "System.Reactive": "5.0.0"
         }
       },
-      "idasen.desk.core": {
+      "Idasen.Desk.Core": {
         "type": "Project",
         "dependencies": {
+          "Autofac": "6.3.0",
+          "Autofac.Extras.DynamicProxy": "6.0.1",
+          "AutofacSerilogIntegration": "5.0.0",
+          "CsvHelper": "27.2.1",
+          "JetBrains.Annotations": "2021.3.0",
+          "Microsoft.Windows.SDK.Contracts": "10.0.22000.196",
+          "Selkie.DefCon.One.Common": "0.0.17",
+          "Serilog": "2.10.0",
           "Serilog.Sinks.Console": "4.0.1",
-          "Serilog.Sinks.File": "5.0.0"
+          "Serilog.Sinks.File": "5.0.0",
+          "System.Reactive": "5.0.0",
+          "System.ValueTuple": "4.5.0"
         }
       }
     }
