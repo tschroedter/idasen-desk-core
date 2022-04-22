@@ -25,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Idasen.Aop\Idasen.Aop.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\Idasen.BluetoothLE.Characteristics\Idasen.BluetoothLE.Characteristics.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\Idasen.BluetoothLE.Core\Idasen.BluetoothLE.Core.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\Idasen.BluetoothLE.Linak\Idasen.BluetoothLE.Linak.csproj" PrivateAssets="all" />
