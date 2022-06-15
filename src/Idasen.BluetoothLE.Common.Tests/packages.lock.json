@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    ".NETCoreApp,Version=v3.1": {
+    "net6.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
         "requested": "[6.3.0, )",
@@ -44,11 +44,7 @@
         "type": "Direct",
         "requested": "[2.2.9, )",
         "resolved": "2.2.9",
-        "contentHash": "dO6VovRLCYXFGTFZOkCtMl4xb7OL31ZRIC3pRxRUh8L5qp3nHo1EJD0dPiIwunLwbEGvXJD8AT8HRbjdTVhuYQ==",
-        "dependencies": {
-          "NETStandard.Library": "1.6.1",
-          "System.Diagnostics.TextWriterTraceListener": "4.3.0"
-        }
+        "contentHash": "dO6VovRLCYXFGTFZOkCtMl4xb7OL31ZRIC3pRxRUh8L5qp3nHo1EJD0dPiIwunLwbEGvXJD8AT8HRbjdTVhuYQ=="
       },
       "Selkie.DefCon.One": {
         "type": "Direct",
@@ -565,19 +561,6 @@
         "type": "Transitive",
         "resolved": "4.7.1",
         "contentHash": "j81Lovt90PDAq8kLpaJfJKV/rWdWuEk6jfV+MBkee33vzYLEUsy4gXK8laa9V2nZlLM9VM9yA/OOQxxPEJKAMw=="
-      },
-      "System.Diagnostics.TextWriterTraceListener": {
-        "type": "Transitive",
-        "resolved": "4.3.0",
-        "contentHash": "F11kHWeiwYjFWto+kr8tt9ULMH0k8MsT1XmdCGPTLYHhWgN+2g7JsIZiXDrxlFGccSNkbjfwQy4xIS38gzUiZA==",
-        "dependencies": {
-          "System.Diagnostics.TraceSource": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.IO": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Threading": "4.3.0"
-        }
       },
       "System.Diagnostics.Tools": {
         "type": "Transitive",
