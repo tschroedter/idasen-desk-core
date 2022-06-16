@@ -4,9 +4,9 @@
     "net6.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[6.3.0, )",
-        "resolved": "6.3.0",
-        "contentHash": "gO4bli0N8tDnBHzbYktcnbXlmN6T+IT5W+FUGgCUaM6pwwHXIxOPoUGvfGum7sZpJJgfQNgjFFv80ZPuARgRdA==",
+        "requested": "[6.4.0, )",
+        "resolved": "6.4.0",
+        "contentHash": "tkFxl6wAPuwVhrlN8wuNADnd+k2tv4ReP7ZZSL0vjfcN0RcfC9v25ogxK6b03HC7D4NwWjSLf1G/zTG8Bw43wQ==",
         "dependencies": {
           "System.Diagnostics.DiagnosticSource": "4.7.1"
         }
@@ -29,9 +29,9 @@
       },
       "JetBrains.Annotations": {
         "type": "Direct",
-        "requested": "[2021.3.0, )",
-        "resolved": "2021.3.0",
-        "contentHash": "Ddxjs5RRjf+c8m9m++WvhW1lz1bqNhsTjWvCLbQN9bvKbkJeR9MhtfNwKgBRRdG2yLHcXFr5Lf7fsvvkiPaDRg=="
+        "requested": "[2022.1.0, )",
+        "resolved": "2022.1.0",
+        "contentHash": "ASfpoFJxiRsC9Xc4TWuPM41Zb/gl64xwfMOhnOZ3RnVWGYIZchjpWQV5zshJgoc/ZxVtgjaF7b577lURj7E6ig=="
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
@@ -41,9 +41,9 @@
       },
       "Serilog": {
         "type": "Direct",
-        "requested": "[2.10.0, )",
-        "resolved": "2.10.0",
-        "contentHash": "+QX0hmf37a0/OZLxM3wL7V6/ADvC1XihXN4Kq/p6d8lCPfgkRdiuhbWlMaFjR9Av0dy5F0+MBeDmDdRZN/YwQA=="
+        "requested": "[2.11.0, )",
+        "resolved": "2.11.0",
+        "contentHash": "ysv+hBzTul6Dp+Hvm10FlhJO3yMQcFKSAleus+LpiIzvNstpeV4Z7gGuIZ1OPNfIMulSHOjmLuGAEDKzpnV8ZQ=="
       },
       "System.Reactive": {
         "type": "Direct",
@@ -1099,8 +1099,8 @@
         "type": "Project",
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "6.0.1",
-          "JetBrains.Annotations": "2021.3.0",
-          "Serilog": "2.10.0"
+          "JetBrains.Annotations": "2022.1.0",
+          "Serilog": "2.11.0"
         }
       }
     }
