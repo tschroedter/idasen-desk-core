@@ -172,7 +172,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             detector.When ( x => x.Initialize ( deviceName ,
                                                 deviceAddress ,
                                                 deviceTimeout ) )
-                    .Do ( info => { source.Cancel ( ) ; } ) ;
+                    .Do ( _ => { source.Cancel ( ) ; } ) ;
 
             var (success , _) = await sut.Initialize ( deviceName ,
                                                        deviceAddress ,
@@ -195,7 +195,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             detector.When ( x => x.Initialize ( deviceName ,
                                                 deviceAddress ,
                                                 deviceTimeout ) )
-                    .Do ( info => { source.Cancel ( ) ; } ) ;
+                    .Do ( _ => { source.Cancel ( ) ; } ) ;
 
             var (_ , desk) = await sut.Initialize ( deviceName ,
                                                     deviceAddress ,
@@ -241,7 +241,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             Task.Run ( ( ) => sut.OnDeskDetected ( desk ) ,
                        source.Token ) ;
 
-            Thread.Sleep ( 500 ) ; // not a good way but the only way at the moment
+            Thread.Sleep ( 5000 ) ; // not a good way but the only way at the moment
 
             sut.Desk
                .Should ( )
