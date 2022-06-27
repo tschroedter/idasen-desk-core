@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net6.0-windows10.0.19041": {
+    "net6.0-windows10.0.22000": {
       "Autofac": {
         "type": "Direct",
         "requested": "[6.4.0, )",
@@ -1098,9 +1098,9 @@
       "idasen.aop": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "6.0.1",
-          "JetBrains.Annotations": "2022.1.0",
-          "Serilog": "2.11.0"
+          "Autofac.Extras.DynamicProxy": "[6.0.1, )",
+          "JetBrains.Annotations": "[2022.1.0, )",
+          "Serilog": "[2.11.0, )"
         }
       }
     }

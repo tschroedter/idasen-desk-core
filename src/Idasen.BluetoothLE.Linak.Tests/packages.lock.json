@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net6.0-windows10.0.19041": {
+    "net6.0-windows10.0.22000": {
       "FluentAssertions": {
         "type": "Direct",
         "requested": "[6.7.0, )",
@@ -1338,73 +1338,73 @@
       "idasen.aop": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "6.0.1",
-          "JetBrains.Annotations": "2022.1.0",
-          "Serilog": "2.11.0"
+          "Autofac.Extras.DynamicProxy": "[6.0.1, )",
+          "JetBrains.Annotations": "[2022.1.0, )",
+          "Serilog": "[2.11.0, )"
         }
       },
       "idasen.bluetoothle.characteristics": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "6.0.1",
-          "CsvHelper": "27.2.1",
-          "Idasen.Aop": "1.0.0",
-          "Idasen.BluetoothLE.Core": "1.0.0"
+          "Autofac.Extras.DynamicProxy": "[6.0.1, )",
+          "CsvHelper": "[27.2.1, )",
+          "Idasen.Aop": "[1.0.0, )",
+          "Idasen.BluetoothLE.Core": "[1.0.0, )"
         }
       },
       "idasen.bluetoothle.common.tests": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "6.4.0",
-          "AutofacSerilogIntegration": "5.0.0",
-          "FluentAssertions": "6.7.0",
-          "MSTest.TestFramework": "2.2.10",
-          "Microsoft.NET.Test.Sdk": "17.2.0",
-          "Selkie.DefCon.One": "0.0.17",
-          "Serilog.Sinks.Console": "4.0.1"
+          "Autofac": "[6.4.0, )",
+          "AutofacSerilogIntegration": "[5.0.0, )",
+          "FluentAssertions": "[6.7.0, )",
+          "MSTest.TestFramework": "[2.2.10, )",
+          "Microsoft.NET.Test.Sdk": "[17.2.0, )",
+          "Selkie.DefCon.One": "[0.0.17, )",
+          "Serilog.Sinks.Console": "[4.0.1, )"
         }
       },
       "idasen.bluetoothle.core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "6.4.0",
-          "AutofacSerilogIntegration": "5.0.0",
-          "CsvHelper": "27.2.1",
-          "Idasen.Aop": "1.0.0",
-          "JetBrains.Annotations": "2022.1.0",
-          "Selkie.DefCon.One.Common": "0.0.17",
-          "Serilog": "2.11.0",
-          "System.Reactive": "5.0.0",
-          "System.ValueTuple": "4.5.0"
+          "Autofac": "[6.4.0, )",
+          "AutofacSerilogIntegration": "[5.0.0, )",
+          "CsvHelper": "[27.2.1, )",
+          "Idasen.Aop": "[1.0.0, )",
+          "JetBrains.Annotations": "[2022.1.0, )",
+          "Selkie.DefCon.One.Common": "[0.0.17, )",
+          "Serilog": "[2.11.0, )",
+          "System.Reactive": "[5.0.0, )",
+          "System.ValueTuple": "[4.5.0, )"
         }
       },
       "idasen.bluetoothle.core.tests": {
         "type": "Project",
         "dependencies": {
-          "AutofacSerilogIntegration": "5.0.0",
-          "FluentAssertions": "6.7.0",
-          "Idasen.BluetoothLE.Common.Tests": "1.0.0",
-          "Idasen.BluetoothLE.Core": "1.0.0",
-          "JetBrains.Annotations": "2022.1.0",
-          "MSTest.TestAdapter": "2.2.10",
-          "MSTest.TestFramework": "2.2.10",
-          "Microsoft.NET.Test.Sdk": "17.2.0",
-          "Microsoft.Reactive.Testing": "5.0.0",
-          "NSubstitute": "4.3.0",
-          "Selkie.AutoMocking": "0.0.29",
-          "Selkie.DefCon.One": "0.0.17",
-          "Serilog": "2.11.0"
+          "AutofacSerilogIntegration": "[5.0.0, )",
+          "FluentAssertions": "[6.7.0, )",
+          "Idasen.BluetoothLE.Common.Tests": "[1.0.0, )",
+          "Idasen.BluetoothLE.Core": "[1.0.0, )",
+          "JetBrains.Annotations": "[2022.1.0, )",
+          "MSTest.TestAdapter": "[2.2.10, )",
+          "MSTest.TestFramework": "[2.2.10, )",
+          "Microsoft.NET.Test.Sdk": "[17.2.0, )",
+          "Microsoft.Reactive.Testing": "[5.0.0, )",
+          "NSubstitute": "[4.3.0, )",
+          "Selkie.AutoMocking": "[0.0.29, )",
+          "Selkie.DefCon.One": "[0.0.17, )",
+          "Serilog": "[2.11.0, )"
         }
       },
       "idasen.bluetoothle.linak": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "6.4.0",
-          "Idasen.Aop": "1.0.0",
-          "Idasen.BluetoothLE.Characteristics": "1.0.0",
-          "Idasen.BluetoothLE.Core": "1.0.0",
-          "Serilog": "2.11.0",
-          "System.Reactive": "5.0.0"
+          "Autofac": "[6.4.0, )",
+          "Idasen.Aop": "[1.0.0, )",
+          "Idasen.BluetoothLE.Characteristics": "[1.0.0, )",
+          "Idasen.BluetoothLE.Core": "[1.0.0, )",
+          "Serilog": "[2.11.0, )",
+          "System.Reactive": "[5.0.0, )"
         }
       }
     }

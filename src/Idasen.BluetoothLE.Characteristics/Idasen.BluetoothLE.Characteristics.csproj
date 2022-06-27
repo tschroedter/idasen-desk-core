@@ -5,7 +5,7 @@
         <AssemblyName>Idasen.BluetoothLE.Characteristics</AssemblyName>
         <RootNamespace>Idasen.BluetoothLE.Characteristics</RootNamespace>
         <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
-        <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+        <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
