@@ -1,6 +1,8 @@
 ﻿using System ;
+using System.IO ;
 using System.Threading ;
 using System.Threading.Tasks ;
+using Microsoft.Extensions.Configuration;
 using Autofac ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Idasen.Launcher ;
@@ -23,8 +25,10 @@ namespace Idasen.ConsoleApp
             var tokenSource = new CancellationTokenSource ( TimeSpan.FromSeconds ( 60 ) ) ;
             var token       = tokenSource.Token ;
 
-            var container = ContainerProvider.Create ( "Idasen.ConsoleApp" ,
-                                                       "Idasen.ConsoleApp.log" ) ;
+            var builder = new ConfigurationBuilder ( ).SetBasePath ( Directory.GetCurrentDirectory ( ) )
+                                                      .AddJsonFile ( "appsettings.json" ) ;
+
+            var container = ContainerProvider.Create ( builder.Build ( ) ) ;
 
             var logger   = container.Resolve < ILogger > ( ) ;
             var provider = container.Resolve < IDeskProvider > ( ) ;
@@ -40,7 +44,7 @@ namespace Idasen.ConsoleApp
             else
                 logger.Error ( "Failed to detect desk" ) ;
 
-            ReadLine ( ) ;
+            ReadLine( ) ;
         }
     }
 }
