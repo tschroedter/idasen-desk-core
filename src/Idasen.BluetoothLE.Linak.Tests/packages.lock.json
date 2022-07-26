@@ -48,11 +48,11 @@
       },
       "NSubstitute": {
         "type": "Direct",
-        "requested": "[4.3.0, )",
-        "resolved": "4.3.0",
-        "contentHash": "c0nY4GGSe5KidQemTk+CTuDLdv7hLvHHftH6vRbKoYb6bw07wzJ6DdgA0NWrwbW3xjmp/ByEskCsUEWAaMC20g==",
+        "requested": "[4.4.0, )",
+        "resolved": "4.4.0",
+        "contentHash": "aArWp0M9n/3IZHCNSb3QIHy0tkPLSft8l3KFeUa54GbznKiv0FE687TBfPhZbXf0/zGtc4EsHLEUqEEf0Bf4HQ==",
         "dependencies": {
-          "Castle.Core": "4.4.1"
+          "Castle.Core": "5.0.0"
         }
       },
       "Selkie.AutoMocking": {
@@ -119,25 +119,16 @@
       },
       "Castle.Core": {
         "type": "Transitive",
-        "resolved": "4.4.1",
-        "contentHash": "zanbjWC0Y05gbx4eGXkzVycOQqVOFVeCjVsDSyuao9P4mtN1w3WxxTo193NGC7j3o2u3AJRswaoC6hEbnGACnQ==",
+        "resolved": "5.0.0",
+        "contentHash": "edc8jjyXqzzy8jFdhs36FZdwmlDDTgqPb2Zy1Q5F/f2uAc88bu/VS/0Tpvgupmpl9zJOvOo5ZizVANb0ltN1NQ==",
         "dependencies": {
-          "NETStandard.Library": "1.6.1",
-          "System.Collections.Specialized": "4.3.0",
-          "System.ComponentModel": "4.3.0",
-          "System.ComponentModel.TypeConverter": "4.3.0",
-          "System.Diagnostics.TraceSource": "4.3.0",
-          "System.Dynamic.Runtime": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Reflection.Emit": "4.3.0",
-          "System.Reflection.TypeExtensions": "4.3.0",
-          "System.Xml.XmlDocument": "4.3.0"
+          "System.Diagnostics.EventLog": "6.0.0"
         }
       },
       "CsvHelper": {
         "type": "Transitive",
-        "resolved": "27.2.1",
-        "contentHash": "uS5ix5hL9gL5taiAG//CScyJa8Fn1ZOh3FDhDvf4laboESFs84mCNropfp7PIt8xCkyQofljFpqu1B5UnSXjyA=="
+        "resolved": "28.0.1",
+        "contentHash": "T/Eid0mP/GeWV1RcxmUPSsBCtOm6wHbFII6iFydPfpIa6cd+siec0KGrLq5uabI8sH6crFi84OA1vNLkp8Lzlw=="
       },
       "Fare": {
         "type": "Transitive",
@@ -587,6 +578,11 @@
         "type": "Transitive",
         "resolved": "4.7.1",
         "contentHash": "j81Lovt90PDAq8kLpaJfJKV/rWdWuEk6jfV+MBkee33vzYLEUsy4gXK8laa9V2nZlLM9VM9yA/OOQxxPEJKAMw=="
+      },
+      "System.Diagnostics.EventLog": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "lcyUiXTsETK2ALsZrX+nWuHSIQeazhqPphLfaRxzdGaG93+0kELqpgEHtwWOlQe7+jSFnKwaCAgL4kjeZCQJnw=="
       },
       "System.Diagnostics.TextWriterTraceListener": {
         "type": "Transitive",
@@ -1347,7 +1343,7 @@
         "type": "Project",
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "6.0.1",
-          "CsvHelper": "27.2.1",
+          "CsvHelper": "28.0.1",
           "Idasen.Aop": "1.0.0",
           "Idasen.BluetoothLE.Core": "1.0.0"
         }
@@ -1369,7 +1365,7 @@
         "dependencies": {
           "Autofac": "6.4.0",
           "AutofacSerilogIntegration": "5.0.0",
-          "CsvHelper": "27.2.1",
+          "CsvHelper": "28.0.1",
           "Idasen.Aop": "1.0.0",
           "JetBrains.Annotations": "2022.1.0",
           "Selkie.DefCon.One.Common": "0.0.17",
@@ -1390,7 +1386,7 @@
           "MSTest.TestFramework": "2.2.10",
           "Microsoft.NET.Test.Sdk": "17.2.0",
           "Microsoft.Reactive.Testing": "5.0.0",
-          "NSubstitute": "4.3.0",
+          "NSubstitute": "4.4.0",
           "Selkie.AutoMocking": "0.0.29",
           "Selkie.DefCon.One": "0.0.17",
           "Serilog": "2.11.0"

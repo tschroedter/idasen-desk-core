@@ -60,8 +60,8 @@
       },
       "CsvHelper": {
         "type": "Transitive",
-        "resolved": "27.2.1",
-        "contentHash": "uS5ix5hL9gL5taiAG//CScyJa8Fn1ZOh3FDhDvf4laboESFs84mCNropfp7PIt8xCkyQofljFpqu1B5UnSXjyA=="
+        "resolved": "28.0.1",
+        "contentHash": "T/Eid0mP/GeWV1RcxmUPSsBCtOm6wHbFII6iFydPfpIa6cd+siec0KGrLq5uabI8sH6crFi84OA1vNLkp8Lzlw=="
       },
       "JetBrains.Annotations": {
         "type": "Transitive",
@@ -1102,7 +1102,7 @@
         "type": "Project",
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "6.0.1",
-          "CsvHelper": "27.2.1",
+          "CsvHelper": "28.0.1",
           "Idasen.Aop": "1.0.0",
           "Idasen.BluetoothLE.Core": "1.0.0"
         }
@@ -1112,7 +1112,7 @@
         "dependencies": {
           "Autofac": "6.4.0",
           "AutofacSerilogIntegration": "5.0.0",
-          "CsvHelper": "27.2.1",
+          "CsvHelper": "28.0.1",
           "Idasen.Aop": "1.0.0",
           "JetBrains.Annotations": "2022.1.0",
           "Selkie.DefCon.One.Common": "0.0.17",
