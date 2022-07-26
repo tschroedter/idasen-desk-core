@@ -109,7 +109,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
             return readCsvFile ;
         }
 
-        private readonly Dictionary < ushort , OfficialGattService > _dictionary =
-            new Dictionary < ushort , OfficialGattService > ( ) ;
+        private readonly Dictionary < ushort , OfficialGattService > _dictionary = new( ) ;
     }
 }

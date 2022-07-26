@@ -219,7 +219,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         protected readonly IRawValueReader                     RawValueReader ;
 
         internal readonly Dictionary < string , IEnumerable < byte > >
-            RawValues = new Dictionary < string , IEnumerable < byte > > ( ) ;
+            RawValues = new( ) ;
 
         protected readonly IRawValueWriter RawValueWriter ;
 

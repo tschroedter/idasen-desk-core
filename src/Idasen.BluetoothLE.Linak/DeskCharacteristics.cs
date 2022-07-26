@@ -100,8 +100,7 @@ namespace Idasen.BluetoothLE.Linak
             return builder.ToString ( ) ;
         }
 
-        private readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > _available =
-            new Dictionary < DeskCharacteristicKey , ICharacteristicBase > ( ) ;
+        private readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > _available = new( ) ;
 
         private readonly IDeskCharacteristicsCreator _creator ;
         private readonly ILogger                     _logger ;

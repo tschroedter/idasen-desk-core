@@ -267,7 +267,7 @@ namespace Idasen.BluetoothLE.Linak.Control
 
         private readonly ILogger                               _logger ;
         private readonly IDeskMovementMonitorFactory           _monitorFactory ;
-        private readonly object                                _padlock = new object ( ) ;
+        private readonly object                                _padlock = new( ) ;
         private readonly IInitialHeightAndSpeedProviderFactory _providerFactory ;
         private readonly IScheduler                            _scheduler ;
         private readonly ISubject < uint >                     _subjectFinished ;

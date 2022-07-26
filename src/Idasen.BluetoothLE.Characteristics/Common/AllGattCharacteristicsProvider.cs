@@ -83,7 +83,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             return readCsvFile ;
         }
 
-        private readonly Dictionary < string , Guid > _descriptionToUuid = new Dictionary < string , Guid > ( ) ;
-        private readonly Dictionary < Guid , string > _uuidToDescription = new Dictionary < Guid , string > ( ) ;
+        private readonly Dictionary < string , Guid > _descriptionToUuid = new( ) ;
+        private readonly Dictionary < Guid , string > _uuidToDescription = new( ) ;
     }
 }

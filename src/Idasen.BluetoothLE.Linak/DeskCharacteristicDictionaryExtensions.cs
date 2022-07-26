@@ -8,15 +8,15 @@ namespace Idasen.BluetoothLE.Linak
     public static class DeskCharacteristicDictionaryExtensions
     {
         public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
-            new Dictionary < DeskCharacteristicKey , ICharacteristicBase >
+            new()
             {
-                { DeskCharacteristicKey.GenericAccess , new GenericAccess ( ) } ,
-                { DeskCharacteristicKey.GenericAttribute , new GenericAttribute ( ) } ,
-                { DeskCharacteristicKey.ReferenceInput , new ReferenceInput ( ) } ,
-                { DeskCharacteristicKey.ReferenceOutput , new ReferenceOutput ( ) } ,
-                { DeskCharacteristicKey.Dpg , new Dpg ( ) } ,
-                { DeskCharacteristicKey.Control , new Characteristics.Characteristics.Unknowns.Control ( ) }
-            } ;
+                      { DeskCharacteristicKey.GenericAccess , new GenericAccess ( ) } ,
+                      { DeskCharacteristicKey.GenericAttribute , new GenericAttribute ( ) } ,
+                      { DeskCharacteristicKey.ReferenceInput , new ReferenceInput ( ) } ,
+                      { DeskCharacteristicKey.ReferenceOutput , new ReferenceOutput ( ) } ,
+                      { DeskCharacteristicKey.Dpg , new Dpg ( ) } ,
+                      { DeskCharacteristicKey.Control , new Characteristics.Characteristics.Unknowns.Control ( ) }
+                  } ;
 
         public static T As < T > (
             this Dictionary < DeskCharacteristicKey , ICharacteristicBase > dictionary ,

@@ -79,9 +79,8 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             }
         }
 
-        private readonly Dictionary < TKey , TValue > _dictionary =
-            new Dictionary < TKey , TValue > ( ) ;
+        private readonly Dictionary < TKey , TValue > _dictionary = new( ) ;
 
-        private readonly object _padlock = new object ( ) ;
+        private readonly object _padlock = new( ) ;
     }
 }

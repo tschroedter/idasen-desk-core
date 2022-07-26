@@ -142,7 +142,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
 
         protected readonly Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > WrappersReadOnly
             =
-            new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( ) ;
+            new( ) ;
 
         protected IGattCharacteristicProvider                          CharacteristicProvider ;
         protected IGattCharacteristicWrapper                           CharacteristicWrapper1 ;
