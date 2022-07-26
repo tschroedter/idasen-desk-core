@@ -80,6 +80,9 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
                 $"RawSignalStrengthInDBm = {RawSignalStrengthInDBm}dB" ;
         }
 
+        /// <inheritdoc />
+        public string Details => ToString ( ) ;
+
         private string _name ;
     }
 }
