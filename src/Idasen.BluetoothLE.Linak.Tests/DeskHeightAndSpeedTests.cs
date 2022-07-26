@@ -237,7 +237,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.HeightChanged
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => wasNotified = true ) ;
+               .Subscribe ( _ => wasNotified = true ) ;
 
             _subjectRawHeightAndSpeed.OnNext ( _rawDetailsDummy ) ;
 
@@ -257,7 +257,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.SpeedChanged
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => wasNotified = true ) ;
+               .Subscribe ( _ => wasNotified = true ) ;
 
             _subjectRawHeightAndSpeed.OnNext ( _rawDetailsDummy ) ;
 
@@ -277,7 +277,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.HeightAndSpeedChanged
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => wasNotified = true ) ;
+               .Subscribe ( _ => wasNotified = true ) ;
 
             _subjectRawHeightAndSpeed.OnNext ( _rawDetailsDummy ) ;
 
@@ -302,7 +302,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.HeightChanged
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => wasNotified = true ) ;
+               .Subscribe ( _ => wasNotified = true ) ;
 
             _subjectRawHeightAndSpeed.OnNext ( _rawDetailsDummy ) ;
 
@@ -327,7 +327,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.SpeedChanged
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => wasNotified = true ) ;
+               .Subscribe ( _ => wasNotified = true ) ;
 
             _subjectRawHeightAndSpeed.OnNext ( _rawDetailsDummy ) ;
 
@@ -352,7 +352,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.HeightAndSpeedChanged
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => wasNotified = true ) ;
+               .Subscribe ( _ => wasNotified = true ) ;
 
             _subjectRawHeightAndSpeed.OnNext ( _rawDetailsDummy ) ;
 
