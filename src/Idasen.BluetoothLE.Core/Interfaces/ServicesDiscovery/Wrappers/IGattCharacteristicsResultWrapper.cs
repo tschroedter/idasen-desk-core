@@ -21,9 +21,9 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
         byte? ProtocolError { get ; }
 
         /// <summary>
-        ///     Gets the characterisitics.
+        ///     Gets the characteristics .
         /// </summary>
-        IReadOnlyList < IGattCharacteristicWrapper > Characteristics { get ; }
+        IReadOnlyList< IGattCharacteristicWrapper > Characteristics { get ; }
 
         /// <summary>
         ///     Initialize the instance.
