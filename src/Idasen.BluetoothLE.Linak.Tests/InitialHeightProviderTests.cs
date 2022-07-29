@@ -135,7 +135,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.Finished
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => finished = true ) ;
+               .Subscribe ( _ => finished = true ) ;
 
             _subjectHeightAndSpeed.OnNext ( _details1 ) ;
 
@@ -189,7 +189,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.Finished
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => finished = true ) ;
+               .Subscribe ( _ => finished = true ) ;
 
             _subjectHeightAndSpeed.OnNext ( _detailsZeroHeight ) ;
             _scheduler.Start ( ) ;
@@ -231,7 +231,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.Finished
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => finished = true ) ;
+               .Subscribe ( _ => finished = true ) ;
 
             _subjectHeightAndSpeed.OnNext ( _details2 ) ;
             _scheduler.Start ( ) ;
@@ -283,7 +283,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             sut.Finished
                .ObserveOn ( _scheduler )
-               .Subscribe ( x => finished = true ) ;
+               .Subscribe ( _ => finished = true ) ;
 
             await sut.Start ( ) ;
 

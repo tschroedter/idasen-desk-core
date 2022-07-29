@@ -85,6 +85,6 @@ namespace Idasen.BluetoothLE.Linak.Control
         private IDisposable _disposalHeightAndSpeed ;
 
         internal CircularBuffer < HeightSpeedDetails > History = // todo interface and test
-            new CircularBuffer < HeightSpeedDetails > ( 5 ) ;
+            new(5) ;
     }
 }

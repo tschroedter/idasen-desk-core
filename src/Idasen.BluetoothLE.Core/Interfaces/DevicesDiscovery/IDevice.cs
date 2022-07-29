@@ -33,5 +33,11 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         ///     The Mac Address of the device.
         /// </summary>
         string MacAddress { get ; }
+
+        /// <summary>
+        ///     The details of the device.
+        ///     (ToString() doesn't work because of the Aspects.)
+        /// </summary>
+        string Details { get ; }
     }
 }

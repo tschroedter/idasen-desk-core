@@ -81,8 +81,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         }
 
         private readonly Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > _dictionary =
-            new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( ) ;
+            new( ) ;
 
-        private readonly object _padlock = new object ( ) ;
+        private readonly object _padlock = new( ) ;
     }
 }

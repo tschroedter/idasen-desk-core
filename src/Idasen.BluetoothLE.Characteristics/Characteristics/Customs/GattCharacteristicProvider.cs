@@ -71,15 +71,13 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs
         public delegate IGattCharacteristicProvider
             Factory ( IGattCharacteristicsResultWrapper gattCharacteristics ) ;
 
-        private readonly Dictionary < string , IGattCharacteristicWrapper > _characteristics =
-            new Dictionary < string , IGattCharacteristicWrapper > ( ) ;
+        private readonly Dictionary < string , IGattCharacteristicWrapper > _characteristics = new( ) ;
 
         private readonly IGattCharacteristicsResultWrapper _gattCharacteristics ;
         private readonly ILogger                           _logger ;
 
-        private readonly Dictionary < string , GattCharacteristicProperties > _properties =
-            new Dictionary < string , GattCharacteristicProperties > ( ) ;
+        private readonly Dictionary < string , GattCharacteristicProperties > _properties = new( ) ;
 
-        private readonly List < string > _unavailable = new List < string > ( ) ;
+        private readonly List < string > _unavailable = new( ) ;
     }
 }

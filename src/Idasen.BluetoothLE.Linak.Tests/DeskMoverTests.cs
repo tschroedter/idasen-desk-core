@@ -319,7 +319,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             var wasNotified = false ;
 
             sut.Finished.ObserveOn ( _scheduler )
-               .Subscribe ( x => wasNotified = true ) ;
+               .Subscribe ( _ => wasNotified = true ) ;
 
             await sut.Stop ( ) ;
 

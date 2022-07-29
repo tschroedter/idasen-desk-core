@@ -127,8 +127,8 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             _logger.Information ( $"[{device.MacAddress}] Device updated" ) ;
         }
 
-        private readonly Dictionary < ulong , Device > _discoveredDevices = new Dictionary < ulong , Device > ( ) ;
+        private readonly Dictionary < ulong , Device > _discoveredDevices = new( ) ;
         private readonly ILogger                       _logger ;
-        private readonly object                        _padLock = new object ( ) ;
+        private readonly object                        _padLock = new( ) ;
     }
 }

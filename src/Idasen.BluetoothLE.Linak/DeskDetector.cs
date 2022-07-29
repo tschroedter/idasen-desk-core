@@ -2,6 +2,7 @@
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
+using System.Threading.Tasks ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
@@ -83,7 +84,7 @@ namespace Idasen.BluetoothLE.Linak
                                  .Where ( device => device.Name.StartsWith ( deviceName,
                                                                              StringComparison.InvariantCultureIgnoreCase ) ||
                                                     device.Address == deviceAddress )
-                                 .Subscribe ( OnDeskDiscovered ) ;
+                                 .SubscribeAsync ( OnDeskDiscovered ) ;
 
             return this;
         }
@@ -103,7 +104,7 @@ namespace Idasen.BluetoothLE.Linak
             _monitor.Stop ( ) ;
         }
 
-        private async void OnDeskDiscovered ( IDevice device )
+        private async Task OnDeskDiscovered ( IDevice device )
         {
             lock (this)
             {
@@ -130,7 +131,7 @@ namespace Idasen.BluetoothLE.Linak
             }
             catch ( Exception e )
             {
-                _logger.Error( $"Failed to connect to desk '{device.Name}' ({e.Message})" );
+                _logger.Error( $"[{device.MacAddress}] Failed to connect to desk '{device.Name}' ({e.Message})" );
 
                 IsConnecting = false ;
             }
@@ -140,17 +141,17 @@ namespace Idasen.BluetoothLE.Linak
 
         private void OnDeviceUpdated ( IDevice device )
         {
-            _logger.Information ( $"[{device.MacAddress}] Device Updated: {device}" ) ;
+            _logger.Information ( $"[{device.MacAddress}] Device Updated: {device.Details}" ) ;
         }
 
         private void OnDeviceDiscovered ( IDevice device )
         {
-            _logger.Information ( $"[{device.MacAddress}] Device Discovered: {device}" ) ;
+            _logger.Information ( $"[{device.MacAddress}] Device Discovered: {device.Details}" ) ;
         }
 
         private void OnDeviceNameChanged ( IDevice device )
         {
-            _logger.Information ( $"[{device.MacAddress}] Device Name Changed: {device}" ) ;
+            _logger.Information ( $"[{device.MacAddress}] Device Name Changed: {device.Details}" ) ;
         }
 
         private void OnRefreshedChanged ( bool status )

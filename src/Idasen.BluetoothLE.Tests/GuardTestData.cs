@@ -10,7 +10,7 @@ namespace Idasen.BluetoothLE.Tests
 
         private const int Integer = 1;
 
-        private static readonly object Instance = new object();
+        private static readonly object Instance = new();
 
 
         public static IEnumerable<object[]> InstanceAndInteger()

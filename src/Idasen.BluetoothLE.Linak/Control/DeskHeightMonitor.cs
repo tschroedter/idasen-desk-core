@@ -12,7 +12,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         private readonly ILogger _logger ;
         public const     int     MinimumNumberOfItems = 5;
 
-        private CircularBuffer<ulong> _history = new CircularBuffer<ulong>(MinimumNumberOfItems);
+        private CircularBuffer<ulong> _history = new(MinimumNumberOfItems);
 
         public DeskHeightMonitor ( [ NotNull ] ILogger logger)
         {

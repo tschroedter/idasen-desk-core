@@ -181,7 +181,7 @@ namespace Idasen.BluetoothLE.Linak
         private readonly IScheduler    _scheduler ;
         private readonly ITaskRunner   _taskRunner ;
 
-        internal readonly AutoResetEvent DeskDetectedEvent = new AutoResetEvent ( false ) ;
+        internal readonly AutoResetEvent DeskDetectedEvent = new( false ) ;
 
         private IDisposable _deskDetected ;
     }

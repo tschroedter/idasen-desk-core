@@ -237,8 +237,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs
         private readonly Guid _characteristics1Uuid = Guid.NewGuid ( ) ;
         private readonly Guid _characteristics2Uuid = Guid.NewGuid ( ) ;
 
-        private readonly List < IGattCharacteristicWrapper > _expectedCharacteristics =
-            new List < IGattCharacteristicWrapper > ( ) ;
+        private readonly List < IGattCharacteristicWrapper > _expectedCharacteristics = new( ) ;
 
         private IGattCharacteristicWrapper            _characteristic1 ;
         private IGattCharacteristicWrapper            _characteristic2 ;

@@ -26,7 +26,6 @@ namespace Idasen.BluetoothLE.Linak.Control
                                              out bytes ) ;
         }
 
-        private readonly Dictionary < DeskCommands , IEnumerable < byte > > _dictionary =
-            new Dictionary < DeskCommands , IEnumerable < byte > > ( ) ;
+        private readonly Dictionary < DeskCommands , IEnumerable < byte > > _dictionary = new( ) ;
     }
 }
