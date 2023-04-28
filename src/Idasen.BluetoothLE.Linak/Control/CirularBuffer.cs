@@ -2,6 +2,8 @@
 using System.Collections ;
 using System.Collections.Generic ;
 
+#nullable disable
+
 namespace Idasen.BluetoothLE.Linak.Control
 {
     /// <inheritdoc />

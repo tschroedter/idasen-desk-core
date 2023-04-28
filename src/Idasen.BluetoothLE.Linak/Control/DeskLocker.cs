@@ -5,7 +5,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control
@@ -14,11 +13,11 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class DeskLocker
         : IDeskLocker
     {
-        public DeskLocker ( [ NotNull ] ILogger              logger ,
-                            [ NotNull ] IScheduler           scheduler ,
-                            [ NotNull ] IDeskMover           deskMover ,
-                            [ NotNull ] IDeskCommandExecutor executer ,
-                            [ NotNull ] IDeskHeightAndSpeed  heightAndSpeed )
+        public DeskLocker ( ILogger                logger ,
+                            IScheduler             scheduler ,
+                            IDeskMover             deskMover ,
+                            IDeskCommandExecutor   executer ,
+                            IDeskHeightAndSpeed heightAndSpeed )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -69,8 +68,8 @@ namespace Idasen.BluetoothLE.Linak.Control
 
         public void Dispose ( )
         {
-            _deskMover?.Dispose ( ) ;
-            _heightAndSpeed?.Dispose ( ) ;
+            _deskMover.Dispose ( ) ;
+            _heightAndSpeed.Dispose ( ) ;
             _disposalHeightAndSpeed?.Dispose ( ) ;
         }
 
@@ -100,6 +99,6 @@ namespace Idasen.BluetoothLE.Linak.Control
         private readonly ILogger    _logger ;
         private readonly IScheduler _scheduler ;
 
-        private IDisposable _disposalHeightAndSpeed ;
+        private IDisposable ? _disposalHeightAndSpeed ;
     }
 }

@@ -1,11 +1,9 @@
-﻿using JetBrains.Annotations ;
-
-namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces
 {
     public interface IDeskLockerFactory
     {
-        IDeskLocker Create ( [ NotNull ] IDeskMover           deskMover ,
-                             [NotNull]   IDeskCommandExecutor executer ,
-                             [NotNull]   IDeskHeightAndSpeed  heightAndSpeed ) ;
+        IDeskLocker Create ( IDeskMover             deskMover ,
+                             IDeskCommandExecutor   executer ,
+                             IDeskHeightAndSpeed heightAndSpeed ) ;
     }
 }

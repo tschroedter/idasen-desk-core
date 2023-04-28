@@ -1,5 +1,4 @@
 ﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak.Interfaces
 {
@@ -18,7 +17,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <param name="device">
         ///     The device providing the characteristics.
         /// </param>
-        void Create ( [ NotNull ] IDeskCharacteristics characteristics ,
-                      [ NotNull ] IDevice              device ) ;
+        void Create ( IDeskCharacteristics characteristics ,
+                      IDevice           device ) ;
     }
 }

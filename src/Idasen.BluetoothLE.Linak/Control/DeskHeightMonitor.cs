@@ -1,7 +1,6 @@
 ﻿using System.Linq ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control
@@ -14,7 +13,7 @@ namespace Idasen.BluetoothLE.Linak.Control
 
         private CircularBuffer<ulong> _history = new(MinimumNumberOfItems);
 
-        public DeskHeightMonitor ( [ NotNull ] ILogger logger)
+        public DeskHeightMonitor ( ILogger logger)
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

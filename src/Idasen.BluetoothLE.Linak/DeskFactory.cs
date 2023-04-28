@@ -5,7 +5,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak
 {
@@ -14,9 +13,9 @@ namespace Idasen.BluetoothLE.Linak
         : IDeskFactory
     {
         public DeskFactory (
-            [ NotNull ] IDeviceFactory                    deviceFactory ,
-            [ NotNull ] Func < IDevice , IDeskConnector > deskConnectorFactory ,
-            [ NotNull ] Func < IDeskConnector , IDesk >   deskFactory )
+            IDeviceFactory                     deviceFactory ,
+            Func < IDevice , IDeskConnector >  deskConnectorFactory ,
+            Func < IDeskConnector , IDesk > deskFactory )
         {
             Guard.ArgumentNotNull ( deskConnectorFactory ,
                                     nameof ( deskConnectorFactory ) ) ;

@@ -1,5 +1,4 @@
 ﻿using System ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak.Interfaces
 {
@@ -24,9 +23,9 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         ///     The timeout used for monitored devices after a device expires
         ///     and is removed from the cache.
         /// </param>
-        IDeskDetector Initialize ( [ NotNull ] string deviceName ,
-                                    ulong              deviceAddress ,
-                                    uint               deviceTimeout ) ;
+        IDeskDetector Initialize ( string deviceName ,
+                                    ulong    deviceAddress ,
+                                    uint     deviceTimeout ) ;
 
         /// <summary>
         ///     Start the detection of a desk by device name or device address.

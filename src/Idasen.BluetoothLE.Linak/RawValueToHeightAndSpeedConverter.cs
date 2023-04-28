@@ -6,7 +6,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak
@@ -15,7 +14,7 @@ namespace Idasen.BluetoothLE.Linak
     public class RawValueToHeightAndSpeedConverter
         : IRawValueToHeightAndSpeedConverter
     {
-        public RawValueToHeightAndSpeedConverter ( [ NotNull ] ILogger logger )
+        public RawValueToHeightAndSpeedConverter ( ILogger logger )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

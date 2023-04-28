@@ -1,7 +1,7 @@
 ﻿using System ;
 using System.Threading ;
 using System.Threading.Tasks ;
-using JetBrains.Annotations ;
+
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Linak.Interfaces
@@ -17,8 +17,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <summary>
         ///     The currently detected desk.
         /// </summary>
-        [ CanBeNull ]
-        public IDesk Desk { get ; }
+        public IDesk ? Desk { get ; }
 
         /// <summary>
         ///     Initialize the instance and is required to be called first.
@@ -35,9 +34,9 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <returns>
         ///     Returns itself.
         /// </returns>
-        IDeskProvider Initialize ( [ NotNull ] string deviceName ,
-                                   ulong              deviceAddress ,
-                                   uint               deviceTimeout ) ;
+        IDeskProvider Initialize ( string deviceName ,
+                                   ulong     deviceAddress ,
+                                   uint      deviceTimeout ) ;
 
         /// <summary>
         ///     Start the desk detection process.
@@ -63,6 +62,6 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         ///     A tuple with the first value indicating if a desk was found or not.
         ///     The second parameter is the detected desk or null.
         /// </returns>
-        Task < (bool , IDesk) > TryGetDesk ( CancellationToken token ) ;
+        Task < (bool , IDesk ?) > TryGetDesk ( CancellationToken token ) ;
     }
 }

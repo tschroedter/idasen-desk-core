@@ -3,7 +3,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control
@@ -13,8 +12,8 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class StoppingHeightCalculator
         : IStoppingHeightCalculator
     {
-        public StoppingHeightCalculator ( [ NotNull ] ILogger                           logger ,
-                                          [ NotNull ] IHasReachedTargetHeightCalculator calculator )
+        public StoppingHeightCalculator ( ILogger                              logger ,
+                                          IHasReachedTargetHeightCalculator calculator )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

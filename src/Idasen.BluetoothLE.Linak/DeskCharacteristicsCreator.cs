@@ -4,7 +4,6 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak
@@ -15,8 +14,8 @@ namespace Idasen.BluetoothLE.Linak
         : IDeskCharacteristicsCreator
     {
         public DeskCharacteristicsCreator (
-            [ NotNull ] ILogger                    logger ,
-            [ NotNull ] ICharacteristicBaseFactory baseFactory )
+            ILogger                       logger ,
+            ICharacteristicBaseFactory baseFactory )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

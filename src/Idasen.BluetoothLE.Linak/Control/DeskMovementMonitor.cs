@@ -6,7 +6,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control
@@ -17,9 +16,9 @@ namespace Idasen.BluetoothLE.Linak.Control
     {
         internal const int MinimumNumberOfItems = 3;
 
-        public DeskMovementMonitor ( [ NotNull ] ILogger             logger ,
-                                     [ NotNull ] IScheduler          scheduler ,
-                                     [ NotNull ] IDeskHeightAndSpeed heightAndSpeed )
+        public DeskMovementMonitor ( ILogger                logger ,
+                                     IScheduler             scheduler ,
+                                     IDeskHeightAndSpeed heightAndSpeed )
         {
             Guard.ArgumentNotNull ( scheduler ,
                                     nameof ( scheduler ) ) ;
@@ -78,11 +77,11 @@ namespace Idasen.BluetoothLE.Linak.Control
             _logger.Debug ( "Good, speed changed" ) ;
         }
 
-        [ NotNull ] private readonly IDeskHeightAndSpeed _heightAndSpeed ;
-        [ NotNull ] private readonly ILogger             _logger ;
-        [ NotNull ] private readonly IScheduler          _scheduler ;
+        private readonly    IDeskHeightAndSpeed _heightAndSpeed ;
+        private readonly    ILogger             _logger ;
+        private readonly IScheduler          _scheduler ;
 
-        private IDisposable _disposalHeightAndSpeed ;
+        private IDisposable ? _disposalHeightAndSpeed ;
 
         internal CircularBuffer < HeightSpeedDetails > History = // todo interface and test
             new(5) ;

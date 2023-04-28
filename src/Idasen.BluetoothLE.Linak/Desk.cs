@@ -4,7 +4,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak
 {
@@ -13,7 +12,7 @@ namespace Idasen.BluetoothLE.Linak
         : IDesk
     {
         public Desk (
-            [ NotNull ] IDeskConnector connector )
+            IDeskConnector connector )
         {
             Guard.ArgumentNotNull ( connector ,
                                     nameof ( connector ) ) ;

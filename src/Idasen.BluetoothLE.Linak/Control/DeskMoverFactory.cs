@@ -2,7 +2,6 @@
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak.Control
 {
@@ -10,7 +9,7 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class DeskMoverFactory
         : IDeskMoverFactory
     {
-        public DeskMoverFactory ( [ NotNull ] DeskMover.Factory factory )
+        public DeskMoverFactory ( DeskMover.Factory factory )
         {
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;

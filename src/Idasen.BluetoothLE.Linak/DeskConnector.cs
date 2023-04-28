@@ -10,7 +10,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak
@@ -21,20 +20,20 @@ namespace Idasen.BluetoothLE.Linak
         : IDeskConnector
     {
         public DeskConnector (
-            [ NotNull ] ILogger                                    logger ,
-            [ NotNull ] IScheduler                                 scheduler ,
-            [ NotNull ] Func < ISubject < IEnumerable < byte > > > subjectFactory ,
-            [ NotNull ] ISubject < uint >                          subjectHeight ,
-            [ NotNull ] ISubject < int >                           subjectSpeed ,
-            [ NotNull ] ISubject < bool >                          subjectRefreshed ,
-            [ NotNull ] ISubject < HeightSpeedDetails >            subjectHeightAndSpeed ,
-            [ NotNull ] IDevice                                    device ,
-            [ NotNull ] IDeskCharacteristics                       deskCharacteristics ,
-            [ NotNull ] IDeskHeightAndSpeedFactory                 heightAndSpeedFactory ,
-            [ NotNull ] IDeskCommandExecutorFactory                commandExecutorFactory ,
-            [ NotNull ] IDeskMoverFactory                          moverFactory ,
-            [ NotNull ] IDeskLockerFactory                         deskLockerFactory,
-            [ NotNull ] IErrorManager                              errorManager )
+            ILogger                                    logger ,
+            IScheduler                                 scheduler ,
+            Func < ISubject < IEnumerable < byte > > > subjectFactory ,
+            ISubject < uint >                          subjectHeight ,
+            ISubject < int >                           subjectSpeed ,
+            ISubject < bool >                          subjectRefreshed ,
+            ISubject < HeightSpeedDetails >            subjectHeightAndSpeed ,
+            IDevice                                    device ,
+            IDeskCharacteristics                       deskCharacteristics ,
+            IDeskHeightAndSpeedFactory                 heightAndSpeedFactory ,
+            IDeskCommandExecutorFactory                commandExecutorFactory ,
+            IDeskMoverFactory                          moverFactory ,
+            IDeskLockerFactory                         deskLockerFactory,
+            IErrorManager                              errorManager )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -105,6 +104,7 @@ namespace Idasen.BluetoothLE.Linak
                 {
                     // to do don't know the real reason why _deskMover is null
                     _logger.Error ( "_deskMover is null, trying to force refresh" ) ;
+
                     DoRefresh ( GattCommunicationStatus.Success ).Wait ( TimeSpan.FromSeconds ( 30 ) ) ;
                 }
                 else
@@ -112,7 +112,7 @@ namespace Idasen.BluetoothLE.Linak
                     _logger.Debug ( $"[{GetHashCode ( )}] *** Finished = {_deskMover?.Finished.GetHashCode ( )}" ) ;
                 }
 
-                return _deskMover?.Finished ;
+                return _deskMover?.Finished ?? new Subject < uint > (  ); // todo new Subject here might be bad
             }
         }
 
@@ -129,7 +129,7 @@ namespace Idasen.BluetoothLE.Linak
             _disposableHeight?.Dispose ( ) ;
             _heightAndSpeed?.Dispose ( ) ;
             _subscriber?.Dispose ( ) ;
-            _device?.Dispose ( ) ;
+            _device.Dispose ( ) ;
         }
 
         /// <inheritdoc />
@@ -150,19 +150,19 @@ namespace Idasen.BluetoothLE.Linak
         /// <inheritdoc />
         public async Task < bool > MoveUp ( ) // todo this should be async
         {
-            if ( ! TryGetDeskMover ( out var deskMover ) )
+            if ( ! TryGetDeskMover ( out var deskMover) )
                 return false ;
 
-            return await deskMover.Up ( ) ;
+            return await deskMover!.Up ( ) ;
         }
 
         /// <inheritdoc />
         public async Task < bool > MoveDown ( ) // todo check test for async
         {
-            if ( ! TryGetDeskMover ( out var deskMover ) )
+            if ( ! TryGetDeskMover ( out IDeskMover ? deskMover ) )
                 return false ;
 
-            return await deskMover.Down ( ) ;
+            return await deskMover!.Down ( );
         }
 
         /// <inheritdoc />
@@ -171,10 +171,10 @@ namespace Idasen.BluetoothLE.Linak
         /// <inheritdoc />
         public void MoveTo ( uint targetHeight )
         {
-            if ( ! TryGetDeskMover ( out var deskMover ) )
+            if ( ! TryGetDeskMover ( out var deskMover))
                 return ;
 
-            deskMover.TargetHeight = targetHeight ;
+            deskMover!.TargetHeight = targetHeight ;
 
             if ( targetHeight == 0u )
                 throw new ArgumentException ( "TargetHeight can't be zero" ,
@@ -186,10 +186,10 @@ namespace Idasen.BluetoothLE.Linak
         /// <inheritdoc />
         public async Task < bool > MoveStop ( ) // todo check test for async
         {
-            if ( ! TryGetDeskMover ( out var deskMover ) )
+            if ( ! TryGetDeskMover ( out var deskMover))
                 return false ;
 
-            return await deskMover.Stop ( ) ;
+            return await deskMover!.Stop ( ) ;
         }
 
         /// <inheritdoc />
@@ -198,7 +198,7 @@ namespace Idasen.BluetoothLE.Linak
             if ( ! TryGetDeskLocker ( out var deskLocker ) )
                 return Task.FromResult(false);
 
-            deskLocker.Lock();
+            deskLocker!.Lock();
 
             return Task.FromResult(true);
         }
@@ -209,12 +209,12 @@ namespace Idasen.BluetoothLE.Linak
             if ( ! TryGetDeskLocker ( out var deskLocker ) )
                 return Task.FromResult ( false ) ;
 
-            deskLocker.Unlock ( ) ;
+            deskLocker!.Unlock ( ) ;
 
             return Task.FromResult ( true ) ;
         }
 
-        private bool TryGetDeskMover ( out IDeskMover deskMover )
+        private bool TryGetDeskMover ( out IDeskMover ? deskMover )
         {
             if ( _deskMover == null )
             {
@@ -230,7 +230,7 @@ namespace Idasen.BluetoothLE.Linak
             return true ;
         }
 
-        private bool TryGetDeskLocker(out IDeskLocker deskLocker)
+        private bool TryGetDeskLocker(out IDeskLocker ? deskLocker)
         {
             if (_deskLocker == null)
             {
@@ -337,14 +337,15 @@ namespace Idasen.BluetoothLE.Linak
         private readonly ISubject < bool >                 _subjectRefreshed ;
         private readonly ISubject < int >                  _subjectSpeed ;
 
-        private IDeskMover           _deskMover ;
-        private IDisposable          _disposableHeight ;
-        private IDisposable          _disposableHeightAndSpeed ;
-        private IDisposable          _disposableSpeed ;
-        private IDeskCommandExecutor _executor ;
+        // todo use list of IDisposables
+        private IDeskMover ?           _deskMover ;
+        private IDisposable ?          _disposableHeight ;
+        private IDisposable ?          _disposableHeightAndSpeed ;
+        private IDisposable ?          _disposableSpeed ;
+        private IDeskCommandExecutor ? _executor ;
 
-        private IDeskHeightAndSpeed _heightAndSpeed ;
-        private IDisposable         _subscriber ;
-        private IDeskLocker         _deskLocker ;
+        private IDeskHeightAndSpeed ? _heightAndSpeed ;
+        private IDisposable ?         _subscriber ;
+        private IDeskLocker ?         _deskLocker ;
     }
 }

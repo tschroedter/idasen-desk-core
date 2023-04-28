@@ -1,7 +1,6 @@
 ﻿using System ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak
 {
@@ -9,9 +8,9 @@ namespace Idasen.BluetoothLE.Linak
         : IErrorDetails
     {
         public ErrorDetails (
-            [ NotNull ] string message ,
-            [ NotNull ] string caller ,
-            Exception          exception = null )
+            string      message ,
+            string      caller ,
+            Exception ? exception = null )
         {
             Guard.ArgumentNotNull ( message ,
                                     nameof ( message ) ) ;
@@ -23,9 +22,9 @@ namespace Idasen.BluetoothLE.Linak
             Caller    = caller ;
         }
 
-        public string    Message   { get ; }
-        public Exception Exception { get ; }
-        public string    Caller    { get ; }
+        public string      Message   { get ; }
+        public Exception ? Exception { get ; }
+        public string      Caller    { get ; }
 
         public override string ToString ( )
         {

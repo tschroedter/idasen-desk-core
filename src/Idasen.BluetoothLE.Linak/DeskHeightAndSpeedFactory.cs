@@ -3,7 +3,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak
 {
@@ -11,7 +10,7 @@ namespace Idasen.BluetoothLE.Linak
     public class DeskHeightAndSpeedFactory
         : IDeskHeightAndSpeedFactory
     {
-        public DeskHeightAndSpeedFactory ( [ NotNull ] DeskHeightAndSpeed.Factory factory )
+        public DeskHeightAndSpeedFactory ( DeskHeightAndSpeed.Factory factory )
         {
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;

@@ -8,7 +8,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control
@@ -18,11 +17,11 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class InitialHeightProvider
         : IInitialHeightProvider
     {
-        public InitialHeightProvider ( [ NotNull ] ILogger              logger ,
-                                       [ NotNull ] IScheduler           scheduler ,
-                                       [ NotNull ] IDeskHeightAndSpeed  heightAndSpeed ,
-                                       [ NotNull ] IDeskCommandExecutor executor ,
-                                       [ NotNull ] ISubject < uint >    subjectFinished )
+        public InitialHeightProvider ( ILogger              logger ,
+                                       IScheduler           scheduler ,
+                                       IDeskHeightAndSpeed  heightAndSpeed ,
+                                       IDeskCommandExecutor executor ,
+                                       ISubject < uint >    subjectFinished )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -131,6 +130,6 @@ namespace Idasen.BluetoothLE.Linak.Control
         private readonly ISubject < uint > _subjectFinished ;
 
         // ReSharper disable once InconsistentNaming - only used for testing
-        internal IDisposable _disposalHeightAndSpeed ;
+        internal IDisposable ? _disposalHeightAndSpeed ;
     }
 }

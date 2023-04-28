@@ -10,7 +10,6 @@ using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak
@@ -19,13 +18,13 @@ namespace Idasen.BluetoothLE.Linak
     public class DeskHeightAndSpeed
         : IDeskHeightAndSpeed
     {
-        public DeskHeightAndSpeed ( [ NotNull ] ILogger                            logger ,
-                                    [ NotNull ] IScheduler                         scheduler ,
-                                    [ NotNull ] IReferenceOutput                   referenceOutput ,
-                                    [ NotNull ] IRawValueToHeightAndSpeedConverter converter ,
-                                    [ NotNull ] ISubject < uint >                  subjectHeight ,
-                                    [ NotNull ] ISubject < int >                   subjectSpeed ,
-                                    [ NotNull ] ISubject < HeightSpeedDetails >    subjectHeightAndSpeed )
+        public DeskHeightAndSpeed ( ILogger                            logger ,
+                                    IScheduler                         scheduler ,
+                                    IReferenceOutput                   referenceOutput ,
+                                    IRawValueToHeightAndSpeedConverter converter ,
+                                    ISubject < uint >                  subjectHeight ,
+                                    ISubject < int >                   subjectSpeed ,
+                                    ISubject < HeightSpeedDetails > subjectHeightAndSpeed )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -92,7 +91,7 @@ namespace Idasen.BluetoothLE.Linak
 
         public void Dispose ( )
         {
-            _referenceOutput?.Dispose ( ) ;
+            _referenceOutput.Dispose ( ) ;
             _subscriber?.Dispose ( ) ;
         }
 
@@ -100,9 +99,6 @@ namespace Idasen.BluetoothLE.Linak
 
         private void OnHeightSpeedChanged ( RawValueChangedDetails details )
         {
-            if ( details == null )
-                return ;
-
             if ( ! _converter.TryConvert ( details.Value ,
                                            out var height ,
                                            out var speed ) )
@@ -132,6 +128,6 @@ namespace Idasen.BluetoothLE.Linak
         private readonly ISubject < HeightSpeedDetails > _subjectHeightAndSpeed ;
         private readonly ISubject < int >                _subjectSpeed ;
 
-        private IDisposable _subscriber ;
+        private IDisposable ? _subscriber ;
     }
 }

@@ -13,7 +13,7 @@ namespace Idasen.BluetoothLE.Linak
         [ UsedImplicitly ]
         public static IDisposable SubscribeAsync < T > ( this IObservable < T > source ,
                                                          Func < Task >          asyncAction ,
-                                                         Action < Exception >   handler = null )
+                                                         Action < Exception > ? handler = null )
         {
             async Task < Unit > Wrapped ( T t )
             {
@@ -30,7 +30,7 @@ namespace Idasen.BluetoothLE.Linak
         [ UsedImplicitly ]
         public static IDisposable SubscribeAsync < T > ( this IObservable < T > source ,
                                                          Func < T , Task >      asyncAction ,
-                                                         Action < Exception >   handler = null )
+                                                         Action < Exception > ? handler = null )
         {
             async Task < Unit > Wrapped ( T t )
             {

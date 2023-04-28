@@ -5,7 +5,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak
@@ -15,8 +14,8 @@ namespace Idasen.BluetoothLE.Linak
         : IErrorManager
     {
         public ErrorManager (
-            [ NotNull ] ILogger                    logger ,
-            [ NotNull ] ISubject < IErrorDetails > subject )
+            ILogger                       logger ,
+            ISubject < IErrorDetails > subject )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

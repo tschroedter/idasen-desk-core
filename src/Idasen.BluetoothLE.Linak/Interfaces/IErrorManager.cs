@@ -1,6 +1,6 @@
 ﻿using System ;
 using System.Runtime.CompilerServices ;
-using JetBrains.Annotations ;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Idasen.BluetoothLE.Linak.Interfaces
@@ -18,7 +18,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <param name="details">
         ///     The details about the error.
         /// </param>
-        void Publish ( [ NotNull ] IErrorDetails details ) ;
+        void Publish ( IErrorDetails details ) ;
 
         /// <summary>
         ///     Publish an error so the UI can show it.
@@ -29,7 +29,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <param name="caller">
         ///     The caller information.
         /// </param>
-        void PublishForMessage ( [ NotNull ]          string message ,
+        void PublishForMessage ( string message ,
                                  [ CallerMemberName ] string caller = "" ) ;
     }
 }

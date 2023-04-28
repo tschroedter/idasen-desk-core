@@ -8,7 +8,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 [ assembly : InternalsVisibleTo ( "Idasen.BluetoothLE.Linak.Tests" ) ]
@@ -19,15 +18,15 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class DeskMover
         : IDeskMover
     {
-        public DeskMover ( [ NotNull ] ILogger                               logger ,
-                           [ NotNull ] IScheduler                            scheduler ,
-                           [ NotNull ] IInitialHeightAndSpeedProviderFactory providerFactory ,
-                           [ NotNull ] IDeskMovementMonitorFactory           monitorFactory ,
-                           [ NotNull ] IDeskCommandExecutor                  executor ,
-                           [ NotNull ] IDeskHeightAndSpeed                   heightAndSpeed ,
-                           [ NotNull ] IStoppingHeightCalculator             calculator ,
-                           [ NotNull ] ISubject < uint >                     subjectFinished ,
-                           [ NotNull ] IDeskHeightMonitor                    heightMonitor )
+        public DeskMover ( ILogger                               logger ,
+                           IScheduler                            scheduler ,
+                           IInitialHeightAndSpeedProviderFactory providerFactory ,
+                           IDeskMovementMonitorFactory           monitorFactory ,
+                           IDeskCommandExecutor                  executor ,
+                           IDeskHeightAndSpeed                   heightAndSpeed ,
+                           IStoppingHeightCalculator             calculator ,
+                           ISubject < uint >                     subjectFinished ,
+                           IDeskHeightMonitor                    heightMonitor )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -92,7 +91,10 @@ namespace Idasen.BluetoothLE.Linak.Control
             _disposalHeightAndSpeed?.Dispose ( ) ;
             _disposableTimer?.Dispose ( ) ;
 
-            _initialProvider.Start ( ) ;
+            if ( _initialProvider == null )
+                _logger.Error ( $"{nameof(_initialProvider)} is null" );
+
+            _initialProvider?.Start ( ) ;
         }
 
         public async Task < bool > Up ( )
@@ -274,12 +276,11 @@ namespace Idasen.BluetoothLE.Linak.Control
         private readonly IDeskHeightMonitor                    _heightMonitor ;
 
         public readonly TimeSpan    TimerInterval = TimeSpan.FromMilliseconds ( 100 ) ;
-        private         IDisposable _disposableProvider ;
 
-        private IDisposable _disposableTimer ;
-
-        private IDisposable            _disposalHeightAndSpeed ;
-        private IInitialHeightProvider _initialProvider ;
-        private IDeskMovementMonitor   _monitor ;
+        private IDisposable ?            _disposableProvider ;
+        private IDisposable ?            _disposableTimer ;
+        private IDisposable ?            _disposalHeightAndSpeed ;
+        private IInitialHeightProvider ? _initialProvider ;
+        private IDeskMovementMonitor ?   _monitor ;
     }
 }

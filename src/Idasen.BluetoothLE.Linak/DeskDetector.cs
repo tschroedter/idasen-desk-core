@@ -8,7 +8,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak
@@ -17,11 +16,11 @@ namespace Idasen.BluetoothLE.Linak
     public class DeskDetector
         : IDeskDetector
     {
-        public DeskDetector ( [ NotNull ] ILogger                  logger ,
-                              [ NotNull ] IScheduler               scheduler ,
-                              [ NotNull ] IDeviceMonitorWithExpiry monitor ,
-                              [ NotNull ] IDeskFactory             factory ,
-                              [ NotNull ] ISubject < IDesk >       deskDetected )
+        public DeskDetector ( ILogger                  logger ,
+                              IScheduler               scheduler ,
+                              IDeviceMonitorWithExpiry monitor ,
+                              IDeskFactory             factory ,
+                              ISubject < IDesk >    deskDetected )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -49,7 +48,7 @@ namespace Idasen.BluetoothLE.Linak
             _nameChanged?.Dispose ( ) ;
             _discovered?.Dispose ( ) ;
             _updated?.Dispose ( ) ;
-            _monitor?.Dispose ( ) ;
+            _monitor.Dispose ( ) ;
         }
 
         /// <inheritdoc />
@@ -109,11 +108,7 @@ namespace Idasen.BluetoothLE.Linak
             lock (this)
             {
                 if ( _desk != null || IsConnecting )
-                {
-                    _logger.Debug( $"({device.Address}) Already trying to connect to desk" );
-
                     return;
-                }
 
                 IsConnecting = true ;
             }
@@ -156,7 +151,10 @@ namespace Idasen.BluetoothLE.Linak
 
         private void OnRefreshedChanged ( bool status )
         {
-            _deskDetected.OnNext ( _desk ) ;
+            if (_desk != null )
+                _deskDetected.OnNext ( _desk ) ;
+            else
+                _logger.Warning ( "Desk is null" );
         }
 
         private readonly ISubject < IDesk > _deskDetected ;
@@ -167,12 +165,13 @@ namespace Idasen.BluetoothLE.Linak
         private readonly IDeviceMonitorWithExpiry _monitor ;
         private readonly IScheduler               _scheduler ;
 
-        private IDesk       _desk ;
-        private IDisposable _deskFound ;
-        private IDisposable _discovered ;
+        // todo use list of disposables
+        private IDesk ?       _desk ;
+        private IDisposable ? _deskFound ;
+        private IDisposable ? _discovered ;
 
-        private IDisposable _nameChanged ;
-        private IDisposable _refreshedChanged ;
-        private IDisposable _updated ;
+        private IDisposable ? _nameChanged ;
+        private IDisposable ? _refreshedChanged ;
+        private IDisposable ? _updated ;
     }
 }

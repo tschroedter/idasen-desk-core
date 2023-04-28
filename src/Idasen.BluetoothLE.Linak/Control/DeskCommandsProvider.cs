@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic ;
+﻿using System ;
+using System.Collections.Generic ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
@@ -22,8 +23,12 @@ namespace Idasen.BluetoothLE.Linak.Control
         public bool TryGetValue ( DeskCommands             command ,
                                   out IEnumerable < byte > bytes )
         {
-            return _dictionary.TryGetValue ( command ,
-                                             out bytes ) ;
+            var tryGetValue = _dictionary.TryGetValue ( command ,
+                                                        out var tempBytes ) ;
+
+            bytes = tempBytes ?? Array.Empty < byte > ( ) ;
+
+            return tryGetValue ;
         }
 
         private readonly Dictionary < DeskCommands , IEnumerable < byte > > _dictionary = new( ) ;

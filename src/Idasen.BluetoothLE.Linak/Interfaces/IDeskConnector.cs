@@ -25,7 +25,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <summary>
         ///     Notifies when the desk finished moving.
         /// </summary>
-        IObservable < uint > FinishedChanged { get ; }
+        IObservable < uint >  FinishedChanged { get ; }
 
         /// <summary>
         ///     Notifies when the desk's internal components have changed.

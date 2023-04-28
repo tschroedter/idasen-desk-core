@@ -5,7 +5,6 @@ using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control
@@ -14,10 +13,10 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class DeskCommandExecutor
         : IDeskCommandExecutor
     {
-        public DeskCommandExecutor ( [ NotNull ] ILogger               logger ,
-                                     [ NotNull ] IErrorManager         errorManager ,
-                                     [ NotNull ] IDeskCommandsProvider provider ,
-                                     [ NotNull ] IControl              control )
+        public DeskCommandExecutor ( ILogger               logger ,
+                                     IErrorManager         errorManager ,
+                                     IDeskCommandsProvider provider ,
+                                     IControl           control )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
