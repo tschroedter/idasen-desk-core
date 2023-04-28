@@ -7,7 +7,6 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common
@@ -17,8 +16,8 @@ namespace Idasen.BluetoothLE.Characteristics.Common
         : IRawValueWriter
     {
         public async Task < bool > TryWriteValueAsync (
-            [ NotNull ] IGattCharacteristicWrapper characteristic ,
-            [ NotNull ] IBuffer                    buffer )
+            IGattCharacteristicWrapper characteristic ,
+            IBuffer                    buffer )
         {
             Guard.ArgumentNotNull ( characteristic ,
                                     nameof ( characteristic ) ) ;
@@ -40,8 +39,8 @@ namespace Idasen.BluetoothLE.Characteristics.Common
         }
 
         public async Task < bool > TryWritableAuxiliariesValueAsync (
-            [ NotNull ] IGattCharacteristicWrapper characteristic ,
-            [ NotNull ] IBuffer                    buffer )
+            IGattCharacteristicWrapper characteristic ,
+            IBuffer                    buffer )
         {
             Guard.ArgumentNotNull ( characteristic ,
                                     nameof ( characteristic ) ) ;
@@ -63,8 +62,8 @@ namespace Idasen.BluetoothLE.Characteristics.Common
         }
 
         public async Task < IGattWriteResultWrapper > TryWriteWithoutResponseAsync (
-            [ NotNull ] IGattCharacteristicWrapper characteristic ,
-            [ NotNull ] IBuffer                    buffer )
+            IGattCharacteristicWrapper characteristic ,
+            IBuffer                    buffer )
         {
             Guard.ArgumentNotNull ( characteristic ,
                                     nameof ( characteristic ) ) ;

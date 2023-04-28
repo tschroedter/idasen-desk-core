@@ -8,7 +8,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns
     public class UnknownBase
         : ICharacteristicBase
     {
-        public T Initialize < T > ( ) where T : class
+        public T ? Initialize < T > ( ) where T : class
         {
             return this as T ;
         }

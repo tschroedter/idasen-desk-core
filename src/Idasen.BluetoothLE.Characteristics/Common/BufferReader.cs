@@ -14,7 +14,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common
     public class BufferReader
         : IBufferReader
     {
-        public BufferReader ( [ JetBrains.Annotations.NotNull ] ILogger logger )
+        public BufferReader ( ILogger logger )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -45,7 +45,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common
                                 message ) ;
             }
 
-            bytes = null ;
+            bytes = Array.Empty < byte > ( ) ;
 
             return false ;
         }

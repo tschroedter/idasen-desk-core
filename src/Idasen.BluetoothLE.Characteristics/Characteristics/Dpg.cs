@@ -46,7 +46,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         {
             DescriptionToUuid [ DpgKey ] = Guid.Parse ( "99FA0011-338A-1024-8A49-009C0215F78A" ) ;
 
-            return this as T ;
+            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
         }
     }
 }

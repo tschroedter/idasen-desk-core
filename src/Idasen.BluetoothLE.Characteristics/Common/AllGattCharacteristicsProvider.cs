@@ -29,8 +29,12 @@ namespace Idasen.BluetoothLE.Characteristics.Common
         public bool TryGetDescription ( Guid       uuid ,
                                         out string description )
         {
-            return _uuidToDescription.TryGetValue ( uuid ,
-                                                    out description ) ;
+            var success = _uuidToDescription.TryGetValue ( uuid ,
+                                                           out var tempDescription ) ;
+
+            description = tempDescription ?? string.Empty ;
+
+            return success ;
         }
 
         public bool TryGetUuid ( string   description ,

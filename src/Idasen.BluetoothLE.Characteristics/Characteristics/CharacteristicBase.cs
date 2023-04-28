@@ -13,7 +13,6 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 [ assembly : InternalsVisibleTo ( "Idasen.BluetoothLE.Characteristics.Tests" ) ]
@@ -25,14 +24,14 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         : ICharacteristicBase
     {
         protected CharacteristicBase (
-            [ NotNull ] ILogger                              logger ,
-            [ NotNull ] IScheduler                           scheduler ,
-            [ NotNull ] IDevice                              device ,
-            [ NotNull ] IGattCharacteristicsProviderFactory  providerFactory ,
-            [ NotNull ] IRawValueReader                      rawValueReader ,
-            [ NotNull ] IRawValueWriter                      rawValueWriter ,
-            [ NotNull ] ICharacteristicBaseToStringConverter toStringConverter ,
-            [ NotNull ] IDescriptionToUuid                   descriptionToUuid )
+            ILogger                              logger ,
+            IScheduler                           scheduler ,
+            IDevice                              device ,
+            IGattCharacteristicsProviderFactory  providerFactory ,
+            IRawValueReader                      rawValueReader ,
+            IRawValueWriter                      rawValueWriter ,
+            ICharacteristicBaseToStringConverter toStringConverter ,
+            IDescriptionToUuid                   descriptionToUuid )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -93,11 +92,18 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
             WithMapping < T > ( ) ;
 
-            return this as T ;
+            return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
 
         public virtual async Task Refresh ( )
         {
+            if ( Characteristics == null )
+            {
+                Logger.Error ( $"{nameof(Characteristics)} is null" );
+
+                return;
+            }
+
             Characteristics.Refresh ( DescriptionToUuid.ReadOnlyDictionary ) ;
 
             var keys = Characteristics.Characteristics.Keys.ToArray ( ) ;
@@ -108,13 +114,6 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                                                                      out var characteristic ) )
                 {
                     Logger.Warning ( $"Failed to get value for key '{key}'" ) ;
-
-                    continue ;
-                }
-
-                if ( characteristic == null )
-                {
-                    Logger.Warning ( $"Failed, characteristic for key '{key}' is null" ) ;
 
                     continue ;
                 }
@@ -172,6 +171,13 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         private async Task < bool > DoTryWriteValueAsync ( string               key ,
                                                            IEnumerable < byte > bytes )
         {
+            if (Characteristics == null)
+            {
+                Logger.Error($"{nameof(Characteristics)} is null");
+
+                return false;
+            }
+
             if ( ! Characteristics.Characteristics.TryGetValue ( key ,
                                                                  out var characteristic ) )
             {
@@ -180,17 +186,11 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                 return false ;
             }
 
-            if ( characteristic != null )
-                return await RawValueWriter.TryWriteValueAsync ( characteristic ,
-                                                                 bytes.ToArray ( )
-                                                                      .AsBuffer ( ) ) ;
-
-            Logger.Error ( $"Characteristic for key '{key}' is null" ) ;
-
-            return false ;
+            return await RawValueWriter.TryWriteValueAsync ( characteristic ,
+                                                             bytes.ToArray ( )
+                                                                  .AsBuffer ( ) ) ;
         }
 
-        [ NotNull ]
         protected IEnumerable < byte > GetValueOrEmpty ( string key )
         {
             return RawValues.TryGetValue ( key ,
@@ -227,6 +227,6 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
         private bool _disposed ;
 
-        internal IGattCharacteristicProvider Characteristics ;
+        internal IGattCharacteristicProvider ? Characteristics ;
     }
 }

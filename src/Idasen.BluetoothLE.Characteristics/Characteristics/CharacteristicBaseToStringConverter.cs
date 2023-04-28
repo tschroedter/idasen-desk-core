@@ -6,7 +6,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Core ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics
 {
@@ -16,7 +15,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         : ICharacteristicBaseToStringConverter
     {
         /// <inheritdoc />
-        public string ToString ( [ NotNull ] CharacteristicBase characteristic )
+        public string ToString ( CharacteristicBase characteristic )
         {
             Guard.ArgumentNotNull ( characteristic ,
                                     nameof ( characteristic ) ) ;
@@ -36,9 +35,10 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
                 builder.Append ( rawValueOrUnavailable ) ;
 
-                if ( characteristic.Characteristics.Properties.TryGetValue ( key ,
+                if ( characteristic.Characteristics != null &&
+                     characteristic.Characteristics.Properties.TryGetValue ( key ,
                                                                              out var properties )
-                )
+                   )
                     builder.AppendLine ( $" ({properties.ToCsv ( )})" ) ;
                 else
                     builder.AppendLine ( ) ;
@@ -51,7 +51,6 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         internal static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
                                                                                 .ToArray ( ) ;
 
-        [ NotNull ]
         protected IEnumerable < byte > TryGetValueOrEmpty ( CharacteristicBase characteristic ,
                                                             string             key )
         {
@@ -65,7 +64,8 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                                                  string               key ,
                                                  IEnumerable < byte > value )
         {
-            return characteristic.Characteristics.Characteristics
+            return characteristic.Characteristics != null &&
+                   characteristic.Characteristics.Characteristics
                                  .ContainsKey ( key )
                        ? $"{key} = [{value.ToHex ( )}]"
                        : $"{key} = Unavailable" ;

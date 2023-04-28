@@ -6,7 +6,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common
@@ -16,8 +15,8 @@ namespace Idasen.BluetoothLE.Characteristics.Common
         : IRawValueReader
     {
         public RawValueReader (
-            [ NotNull ] ILogger       logger ,
-            [ NotNull ] IBufferReader reader )
+            ILogger       logger ,
+            IBufferReader reader )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -70,7 +69,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common
         }
 
         private async Task < (bool , byte [ ]) > ReadValue (
-            [ NotNull ] IGattCharacteristicWrapper characteristic )
+            IGattCharacteristicWrapper characteristic )
         {
             Guard.ArgumentNotNull ( characteristic ,
                                     nameof ( characteristic ) ) ;

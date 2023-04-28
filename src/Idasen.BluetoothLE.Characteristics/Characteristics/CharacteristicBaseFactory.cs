@@ -4,7 +4,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics
 {
@@ -12,7 +11,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
     public class CharacteristicBaseFactory
         : ICharacteristicBaseFactory
     {
-        public CharacteristicBaseFactory ( [ NotNull ] ILifetimeScope scope )
+        public CharacteristicBaseFactory ( ILifetimeScope scope )
         {
             Guard.ArgumentNotNull ( scope ,
                                     nameof ( scope ) ) ;
@@ -20,7 +19,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             _scope = scope ;
         }
 
-        public T Create < T > ( IDevice device )
+        public T Create < T > ( IDevice device ) where T : notnull
         {
             var instance = _scope.Resolve < T > ( new NamedParameter ( "device" ,
                                                                        device ) ) ;

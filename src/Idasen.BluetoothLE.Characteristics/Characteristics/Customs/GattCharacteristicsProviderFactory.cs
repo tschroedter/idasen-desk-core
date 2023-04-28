@@ -3,7 +3,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs
 {
@@ -12,7 +11,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs
         : IGattCharacteristicsProviderFactory
     {
         public GattCharacteristicsProviderFactory (
-            [ NotNull ] GattCharacteristicProvider.Factory factory )
+            GattCharacteristicProvider.Factory factory )
         {
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;

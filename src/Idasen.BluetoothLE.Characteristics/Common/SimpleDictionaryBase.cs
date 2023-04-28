@@ -6,7 +6,7 @@ using Idasen.BluetoothLE.Core ;
 namespace Idasen.BluetoothLE.Characteristics.Common
 {
     public class SimpleDictionaryBase < TKey , TValue >
-        : ISimpleDictionary < TKey , TValue >
+        : ISimpleDictionary < TKey , TValue > where TKey : notnull
     {
         /// <inheritdoc />
         public TValue this [ TKey key ]
@@ -20,7 +20,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             }
             set
             {
-                Guard.ArgumentNotNull ( value ,
+                Guard.ArgumentNotNull ( value! ,
                                         nameof ( value ) ) ;
 
                 lock ( _padlock )

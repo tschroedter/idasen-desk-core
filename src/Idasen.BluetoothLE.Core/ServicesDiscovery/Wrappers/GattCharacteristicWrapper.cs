@@ -20,7 +20,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     {
         public GattCharacteristicWrapper (
             [ JetBrains.Annotations.NotNull ] ILogger                                            logger ,
-            [ JetBrains.Annotations.NotNull ] ISubject < GattCharacteristicValueChangedDetails > valueChanged ,
             [ JetBrains.Annotations.NotNull ] GattCharacteristic                                 characteristic ,
             [ JetBrains.Annotations.NotNull ] IGattCharacteristicValueChangedObservables         observables ,
             [ JetBrains.Annotations.NotNull ] IGattWriteResultWrapperFactory                     writeResultFactory ,
@@ -28,8 +27,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
-            Guard.ArgumentNotNull ( valueChanged ,
-                                    nameof ( valueChanged ) ) ;
             Guard.ArgumentNotNull ( characteristic ,
                                     nameof ( characteristic ) ) ;
             Guard.ArgumentNotNull ( observables ,

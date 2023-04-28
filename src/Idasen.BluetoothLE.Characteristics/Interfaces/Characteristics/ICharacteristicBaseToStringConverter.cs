@@ -1,5 +1,4 @@
 ﻿using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
 {
@@ -12,7 +11,6 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
         /// <summary>
         ///     Convert a <see cref="CharacteristicBase" /> instance to a string.
         /// </summary>
-        [ NotNull ]
         string ToString ( CharacteristicBase characteristic ) ;
     }
 }

@@ -6,7 +6,6 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics
@@ -24,7 +23,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             IRawValueWriter                             rawValueWriter ,
             ICharacteristicBaseToStringConverter        toStringConverter ,
             IDescriptionToUuid                          descriptionToUuid ,
-            [ NotNull ] IAllGattCharacteristicsProvider allGattCharacteristicsProvider )
+            IAllGattCharacteristicsProvider allGattCharacteristicsProvider )
             : base ( logger ,
                      scheduler ,
                      device ,
@@ -54,7 +53,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                                                               out var uuid ) )
                 DescriptionToUuid [ CharacteristicServiceChanged ] = uuid ;
 
-            return this as T ;
+            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
         }
 
         private readonly IAllGattCharacteristicsProvider _allGattCharacteristicsProvider ;

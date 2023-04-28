@@ -12,7 +12,6 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics
@@ -22,15 +21,15 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
           IReferenceOutput
     {
         public ReferenceOutput (
-            ILogger                                         logger ,
-            IScheduler                                      scheduler ,
-            IDevice                                         device ,
-            IGattCharacteristicsProviderFactory             providerFactory ,
-            IRawValueReader                                 rawValueReader ,
-            IRawValueWriter                                 rawValueWriter ,
-            ICharacteristicBaseToStringConverter            toStringConverter ,
-            IDescriptionToUuid                              descriptionToUuid ,
-            [ NotNull ] ISubject < RawValueChangedDetails > subjectHeightSpeed )
+            ILogger                                logger ,
+            IScheduler                             scheduler ,
+            IDevice                                device ,
+            IGattCharacteristicsProviderFactory    providerFactory ,
+            IRawValueReader                        rawValueReader ,
+            IRawValueWriter                        rawValueWriter ,
+            ICharacteristicBaseToStringConverter   toStringConverter ,
+            IDescriptionToUuid                     descriptionToUuid ,
+            ISubject < RawValueChangedDetails >    subjectHeightSpeed )
             : base ( logger ,
                      scheduler ,
                      device ,
@@ -65,16 +64,22 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         {
             base.Initialize < T > ( ) ;
 
-            return this as T ;
+            return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
 
         public override async Task Refresh ( )
         {
             await base.Refresh ( ) ;
 
+            if ( Characteristics == null )
+            {
+                Logger.Error ( $"{nameof(Characteristics)} is null" );
+
+                return;
+            }
+
             if ( ! Characteristics.Characteristics.TryGetValue ( HeightSpeed ,
-                                                                 out var heightAndSpeed ) ||
-                 heightAndSpeed == null )
+                                                                 out var heightAndSpeed ) )
             {
                 Logger.Error ( "Failed to find characteristic for Height and Speed " +
                                $"with UUID '{HeightSpeed}'" ) ;
@@ -128,18 +133,11 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             DescriptionToUuid [ Mask ]        = Guid.Parse ( "99FA0029-338A-1024-8A49-009C0215F78A" ) ;
             DescriptionToUuid [ DetectMask ]  = Guid.Parse ( "99FA002A-338A-1024-8A49-009C0215F78A" ) ;
 
-            return this as T ;
+            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
         }
 
         private void OnValueChanged ( GattCharacteristicValueChangedDetails details )
         {
-            if ( details == null )
-            {
-                Logger.Error ( $"{typeof ( GattCharacteristicValueChangedDetails )} is null" ) ;
-
-                return ;
-            }
-
             Logger.Debug ( $"Value = {details.Value.ToHex ( )}, " +
                            $"Timestamp = {details.Timestamp}, "   +
                            $"Uuid = {details.Uuid}" ) ;
@@ -162,6 +160,6 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
         private bool _disposed ;
 
-        private IDisposable _subscriber ;
+        private IDisposable ? _subscriber ;
     }
 }

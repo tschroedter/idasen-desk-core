@@ -8,7 +8,6 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics
@@ -18,16 +17,16 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
           IGenericAccess
     {
         public GenericAccess (
-            ILogger                                                logger ,
-            IScheduler                                             scheduler ,
-            IDevice                                                device ,
-            IGattCharacteristicsProviderFactory                    providerFactory ,
-            IRawValueReader                                        rawValueReader ,
-            IRawValueWriter                                        rawValueWriter ,
-            ICharacteristicBaseToStringConverter                   toStringConverter ,
-            IDescriptionToUuid                                     descriptionToUuid ,
-            [ NotNull ] Func < ISubject < IEnumerable < byte > > > subjectFactory ,
-            [ NotNull ] IAllGattCharacteristicsProvider            allGattCharacteristicsProvider )
+            ILogger                                    logger ,
+            IScheduler                                 scheduler ,
+            IDevice                                    device ,
+            IGattCharacteristicsProviderFactory        providerFactory ,
+            IRawValueReader                            rawValueReader ,
+            IRawValueWriter                            rawValueWriter ,
+            ICharacteristicBaseToStringConverter       toStringConverter ,
+            IDescriptionToUuid                         descriptionToUuid ,
+            Func < ISubject < IEnumerable < byte > > > subjectFactory ,
+            IAllGattCharacteristicsProvider         allGattCharacteristicsProvider )
             : base ( logger ,
                      scheduler ,
                      device ,
@@ -111,7 +110,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                                                               out uuid ) )
                 DescriptionToUuid [ CharacteristicResolution ] = uuid ;
 
-            return this as T ;
+            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
         }
 
         private readonly IAllGattCharacteristicsProvider _allGattCharacteristicsProvider ;
