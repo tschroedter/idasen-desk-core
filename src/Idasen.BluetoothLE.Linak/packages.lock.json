@@ -4,18 +4,18 @@
     "net6.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[6.4.0, )",
-        "resolved": "6.4.0",
-        "contentHash": "tkFxl6wAPuwVhrlN8wuNADnd+k2tv4ReP7ZZSL0vjfcN0RcfC9v25ogxK6b03HC7D4NwWjSLf1G/zTG8Bw43wQ==",
+        "requested": "[7.0.1, )",
+        "resolved": "7.0.1",
+        "contentHash": "J9Iz0Q+YU3uf82i8Lee0NpQOlRYfwHxwVV26jdG3zH3LFE5Y9Rx97Mju7Nswwzh/C7kVJALkTL860Y7e+mcLaw==",
         "dependencies": {
           "System.Diagnostics.DiagnosticSource": "4.7.1"
         }
       },
       "Serilog": {
         "type": "Direct",
-        "requested": "[2.11.0, )",
-        "resolved": "2.11.0",
-        "contentHash": "ysv+hBzTul6Dp+Hvm10FlhJO3yMQcFKSAleus+LpiIzvNstpeV4Z7gGuIZ1OPNfIMulSHOjmLuGAEDKzpnV8ZQ=="
+        "requested": "[2.12.0, )",
+        "resolved": "2.12.0",
+        "contentHash": "xaiJLIdu6rYMKfQMYUZgTy8YK7SMZjB4Yk50C/u//Z4OsvxkUfSPJy4nknfvwAC34yr13q7kcyh4grbwhSxyZg=="
       },
       "System.Reactive": {
         "type": "Direct",
@@ -60,13 +60,13 @@
       },
       "CsvHelper": {
         "type": "Transitive",
-        "resolved": "28.0.1",
-        "contentHash": "T/Eid0mP/GeWV1RcxmUPSsBCtOm6wHbFII6iFydPfpIa6cd+siec0KGrLq5uabI8sH6crFi84OA1vNLkp8Lzlw=="
+        "resolved": "30.0.1",
+        "contentHash": "rcZtgbWR+As4G3Vpgx0AMNmShGuQLFjkHAPIIflzrfkJCx8/AOd4m96ZRmiU1Wi39qS5UVjV0P8qdgqOo5Cwyg=="
       },
       "JetBrains.Annotations": {
         "type": "Transitive",
-        "resolved": "2022.1.0",
-        "contentHash": "ASfpoFJxiRsC9Xc4TWuPM41Zb/gl64xwfMOhnOZ3RnVWGYIZchjpWQV5zshJgoc/ZxVtgjaF7b577lURj7E6ig=="
+        "resolved": "2022.3.1",
+        "contentHash": "11nsS3+lFICGkztVs9PP2NRItxf9fF+qD6xEW/T0YGto52zj07wseUeBdMAU1ah9HNVTDZyRC1u4NWdtJScwhw=="
       },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
@@ -1093,32 +1093,32 @@
       "idasen.aop": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "6.0.1",
-          "JetBrains.Annotations": "2022.1.0",
-          "Serilog": "2.11.0"
+          "Autofac.Extras.DynamicProxy": "[6.0.1, )",
+          "JetBrains.Annotations": "[2022.3.1, )",
+          "Serilog": "[2.12.0, )"
         }
       },
       "idasen.bluetoothle.characteristics": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "6.0.1",
-          "CsvHelper": "28.0.1",
-          "Idasen.Aop": "1.0.0",
-          "Idasen.BluetoothLE.Core": "1.0.0"
+          "Autofac.Extras.DynamicProxy": "[6.0.1, )",
+          "CsvHelper": "[30.0.1, )",
+          "Idasen.Aop": "[1.0.0, )",
+          "Idasen.BluetoothLE.Core": "[1.0.0, )"
         }
       },
       "idasen.bluetoothle.core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "6.4.0",
-          "AutofacSerilogIntegration": "5.0.0",
-          "CsvHelper": "28.0.1",
-          "Idasen.Aop": "1.0.0",
-          "JetBrains.Annotations": "2022.1.0",
-          "Selkie.DefCon.One.Common": "0.0.17",
-          "Serilog": "2.11.0",
-          "System.Reactive": "5.0.0",
-          "System.ValueTuple": "4.5.0"
+          "Autofac": "[7.0.1, )",
+          "AutofacSerilogIntegration": "[5.0.0, )",
+          "CsvHelper": "[30.0.1, )",
+          "Idasen.Aop": "[1.0.0, )",
+          "JetBrains.Annotations": "[2022.3.1, )",
+          "Selkie.DefCon.One.Common": "[0.0.17, )",
+          "Serilog": "[2.12.0, )",
+          "System.Reactive": "[5.0.0, )",
+          "System.ValueTuple": "[4.5.0, )"
         }
       }
     }
