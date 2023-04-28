@@ -37,13 +37,13 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
         [ TestMethod ]
         public void Create_ForBroadcastTimesNull_Throws ( )
         {
-            Action action = ( ) =>
-                            {
-                                CreateSut ( ).Create ( null! ,
-                                                       _address ,
-                                                       _name ,
-                                                       _rawSignalStrengthInDBm ) ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             CreateSut ( ).Create ( null! ,
+                                                    _address ,
+                                                    _name ,
+                                                    _rawSignalStrengthInDBm ) ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )

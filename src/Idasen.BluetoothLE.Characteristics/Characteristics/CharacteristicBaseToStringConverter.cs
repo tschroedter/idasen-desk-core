@@ -47,10 +47,6 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             return builder.ToString ( ) ;
         }
 
-
-        internal static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
-                                                                                .ToArray ( ) ;
-
         protected IEnumerable < byte > TryGetValueOrEmpty ( CharacteristicBase characteristic ,
                                                             string             key )
         {
@@ -70,5 +66,9 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                        ? $"{key} = [{value.ToHex ( )}]"
                        : $"{key} = Unavailable" ;
         }
+
+
+        internal readonly static IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+                                                                                .ToArray ( ) ;
     }
 }

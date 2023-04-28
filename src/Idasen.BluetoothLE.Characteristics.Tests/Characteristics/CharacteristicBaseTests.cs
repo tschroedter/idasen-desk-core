@@ -18,8 +18,6 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
     public abstract class CharacteristicBaseTests < T >
         where T : CharacteristicBase
     {
-        public const string ToStringResult = "Some Text" ;
-
         [ TestInitialize ]
         public virtual void Initialize ( )
         {
@@ -137,8 +135,9 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
                .Be ( CharacteristicProvider ) ;
         }
 
-        protected abstract T    CreateSut ( ) ;
-        protected abstract void PopulateWrappers ( ) ;
+        protected abstract T      CreateSut ( ) ;
+        protected abstract void   PopulateWrappers ( ) ;
+        public const       string ToStringResult = "Some Text" ;
 
         protected readonly Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > WrappersReadOnly
             =

@@ -86,10 +86,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] ILogger     logger )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -102,10 +102,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] Func < ISubject < IDevice > > factory )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -118,10 +118,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] IDevices    devices )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -134,10 +134,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] IWatcher    watcher )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )

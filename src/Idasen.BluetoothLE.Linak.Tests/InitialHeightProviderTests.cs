@@ -17,8 +17,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
     [ TestClass ]
     public class InitialHeightProviderTests
     {
-        private const uint SomeHeight = 123u ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -246,7 +244,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
         {
             var sut = CreateSut ( ) ;
 
-            Func < Task > action = async ( ) => await sut.Start ( ) ;
+            var action = async ( ) => await sut.Start ( ) ;
 
             await action.Should ( )
                         .ThrowAsync < NotInitializeException > ( ) ;
@@ -375,15 +373,17 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return deviceMonitor ;
         }
 
-        private HeightSpeedDetails _details1          = null!;
-        private HeightSpeedDetails _details2          = null!;
-        private HeightSpeedDetails _detailsZeroHeight = null!;
+        private const uint SomeHeight = 123u ;
+
+        private HeightSpeedDetails _details1          = null! ;
+        private HeightSpeedDetails _details2          = null! ;
+        private HeightSpeedDetails _detailsZeroHeight = null! ;
 
         private IDeskCommandExecutor           _executor              = null! ;
-        private IDeskHeightAndSpeed            _heightAndSpeed        = null!;
-        private ILogger                        _logger                = null!;
-        private TestScheduler                  _scheduler             = null!;
-        private Subject < uint >               _subjectFinished       = null!;
-        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null!;
+        private IDeskHeightAndSpeed            _heightAndSpeed        = null! ;
+        private ILogger                        _logger                = null! ;
+        private TestScheduler                  _scheduler             = null! ;
+        private Subject < uint >               _subjectFinished       = null! ;
+        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
     }
 }

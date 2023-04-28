@@ -17,10 +17,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
     [ TestClass ]
     public class DeskHeightAndSpeedTests
     {
-        private const uint DefaultHeight = 1u ;
-        private const int  DefaultSpeed  = 2 ;
-
-
         [ TestMethod ]
         public void Initialize_ForInvokedTwice_DisposesSubscriber ( )
         {
@@ -199,6 +195,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                                 {
                                     x [ 1 ] = height ;
                                     x [ 2 ] = speed ;
+
                                     return result ;
                                 } ) ;
         }
@@ -362,6 +359,9 @@ namespace Idasen.BluetoothLE.Linak.Tests
                .Should ( )
                .BeFalse ( ) ;
         }
+
+        private const uint DefaultHeight = 1u ;
+        private const int  DefaultSpeed  = 2 ;
 
         private IRawValueToHeightAndSpeedConverter _converter                = null! ;
         private ILogger                            _logger                   = null! ;

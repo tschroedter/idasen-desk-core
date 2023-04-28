@@ -19,10 +19,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] ILogger logger )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sutLazy.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sutLazy.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -41,7 +41,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
         public void AddOrUpdateDevice_ForDeviceIsNull_Throws (
             Devices sut )
         {
-            Action action = ( ) => { sut.AddOrUpdateDevice ( null! ) ; } ;
+            var action = ( ) => { sut.AddOrUpdateDevice ( null! ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -52,7 +52,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
         public void RemoveDevice_ForDeviceIsNull_Throws (
             Devices sut )
         {
-            Action action = ( ) => { sut.RemoveDevice ( null! ) ; } ;
+            var action = ( ) => { sut.RemoveDevice ( null! ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -63,7 +63,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
         public void ContainsDevice_ForDeviceIsNull_Throws (
             Devices sut )
         {
-            Action action = ( ) => { sut.ContainsDevice ( null! ) ; } ;
+            var action = ( ) => { sut.ContainsDevice ( null! ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )

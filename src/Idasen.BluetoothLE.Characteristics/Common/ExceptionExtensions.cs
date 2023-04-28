@@ -8,9 +8,9 @@ namespace Idasen.BluetoothLE.Characteristics.Common
     {
         public static bool IsBluetoothDisabledException ( this Exception e )
         {
-            return ( ( uint ) e.HResult == 0x8007048F ||
-                     ( uint ) e.HResult == 0x800710DF ||
-                     ( uint ) e.HResult == 0x8000FFFF ) ;
+            return ( uint )e.HResult == 0x8007048F ||
+                   ( uint )e.HResult == 0x800710DF ||
+                   ( uint )e.HResult == 0x8000FFFF ;
         }
 
         public static void LogBluetoothStatusException ( this Exception exception ,

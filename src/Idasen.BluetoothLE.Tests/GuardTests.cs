@@ -1,101 +1,104 @@
-﻿using System;
-using FluentAssertions;
-using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System ;
+using FluentAssertions ;
+using FluentAssertions.Execution ;
+using Microsoft.VisualStudio.TestTools.UnitTesting ;
+using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Tests
 {
-    [TestClass]
+    [ TestClass ]
     public class GuardTests
     {
-        public static void AssertException(Action action,
-                                           Type   type,
-                                           string parameter)
+        public static void AssertException ( Action action ,
+                                             Type   type ,
+                                             string parameter )
         {
-            using (new AssertionScope())
+            using ( new AssertionScope ( ) )
             {
-                action.Should()
-                      .Throw<Exception>()
-                      .And.GetType()
-                      .Should()
-                      .Be(type);
+                action.Should ( )
+                      .Throw < Exception > ( )
+                      .And.GetType ( )
+                      .Should ( )
+                      .Be ( type ) ;
             }
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(GuardTestData.NullEmptyOrWhitespace),
-                     typeof(GuardTestData),
-                     DynamicDataSourceType.Method)]
-        public void ArgumentNotEmptyOrWhitespace_ForInvalidValues_Throws(string value,
-                                                                         Type   type)
+        [ DataTestMethod ]
+        [ DynamicData ( nameof ( GuardTestData.NullEmptyOrWhitespace ) ,
+                        typeof ( GuardTestData ) ,
+                        DynamicDataSourceType.Method ) ]
+        public void ArgumentNotEmptyOrWhitespace_ForInvalidValues_Throws ( string value ,
+                                                                           Type   type )
         {
-            AssertException(() => Selkie.AutoMocking.Guard.ArgumentNotEmptyOrWhitespace(value,
-                                                                                        "parameter"),
-                            type,
-                            "parameter");
+            AssertException ( ( ) => Guard.ArgumentNotEmptyOrWhitespace ( value ,
+                                                                          "parameter" ) ,
+                              type ,
+                              "parameter" ) ;
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(GuardTestData.InstanceAndInteger),
-                     typeof(GuardTestData),
-                     DynamicDataSourceType.Method)]
-        public void ArgumentNotEmptyOrWhitespace_ForValues_DoesNotThrows(object value)
+        [ DataTestMethod ]
+        [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
+                        typeof ( GuardTestData ) ,
+                        DynamicDataSourceType.Method ) ]
+        public void ArgumentNotEmptyOrWhitespace_ForValues_DoesNotThrows ( object value )
         {
-            var action = new Action(() => Selkie.AutoMocking.Guard.ArgumentNotEmptyOrWhitespace(value,
-                                                                                                "parameter"));
+            var action = new Action ( ( ) => Guard.ArgumentNotEmptyOrWhitespace ( value ,
+                                                                                  "parameter" ) ) ;
 
-            action.Should()
-                  .NotThrow();
+            action.Should ( )
+                  .NotThrow ( ) ;
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(GuardTestData.InstanceAndInteger),
-                     typeof(GuardTestData),
-                     DynamicDataSourceType.Method)]
-        public void ArgumentNotNull_ForValueNotNull_DoesNotThrows(object value)
+        [ DataTestMethod ]
+        [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
+                        typeof ( GuardTestData ) ,
+                        DynamicDataSourceType.Method ) ]
+        public void ArgumentNotNull_ForValueNotNull_DoesNotThrows ( object value )
         {
-            var action = new Action(() => Selkie.AutoMocking.Guard.ArgumentNotNull(value,
-                                                                                   "parameter"));
+            var action = new Action ( ( ) => Guard.ArgumentNotNull ( value ,
+                                                                     "parameter" ) ) ;
 
-            action.Should()
-                  .NotThrow();
+            action.Should ( )
+                  .NotThrow ( ) ;
         }
 
-        [TestMethod]
-        public void ArgumentNotNull_ForValueNull_Throws()
+        [ TestMethod ]
+        public void ArgumentNotNull_ForValueNull_Throws ( )
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            var action = new Action(() => Selkie.AutoMocking.Guard.ArgumentNotNull(null,
-                                                                                   "parameter"));
+            var action = new Action ( ( ) => Guard.ArgumentNotNull ( null ,
+                                                                     "parameter" ) ) ;
 
-            action.Should()
-                  .Throw<ArgumentNullException>()
-                  .And.ParamName.Should()
-                  .Be("parameter");
+            action.Should ( )
+                  .Throw < ArgumentNullException > ( )
+                  .And.ParamName.Should ( )
+                  .Be ( "parameter" ) ;
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(GuardTestData.InstanceAndInteger),
-                     typeof(GuardTestData),
-                     DynamicDataSourceType.Method)]
-        public void ArgumentNotNullOrEmpty_ForValues_DoesNotThrows(object value)
+        [ DataTestMethod ]
+        [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
+                        typeof ( GuardTestData ) ,
+                        DynamicDataSourceType.Method ) ]
+        public void ArgumentNotNullOrEmpty_ForValues_DoesNotThrows ( object value )
         {
-            var action = new Action(() => Selkie.AutoMocking.Guard.ArgumentNotNullOrEmpty(value,
-                                                                                          "parameter"));
+            var action = new Action ( ( ) => Guard.ArgumentNotNullOrEmpty ( value ,
+                                                                            "parameter" ) ) ;
 
-            action.Should()
-                  .NotThrow();
+            action.Should ( )
+                  .NotThrow ( ) ;
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(GuardTestData.NullOrEmpty), typeof(GuardTestData), DynamicDataSourceType.Method)]
-        public void ArgumentNotNullOrEmpty_ForValues_Throws(string value,
-                                                            Type   type)
+        [ DataTestMethod ]
+        [ DynamicData ( nameof ( GuardTestData.NullOrEmpty ) ,
+                        typeof ( GuardTestData ) ,
+                        DynamicDataSourceType.Method ) ]
+        public void ArgumentNotNullOrEmpty_ForValues_Throws ( string value ,
+                                                              Type   type )
         {
-            AssertException(() => Selkie.AutoMocking.Guard.ArgumentNotNullOrEmpty(value,
-                                                                                  "parameter"),
-                            type,
-                            "parameter");
+            AssertException ( ( ) => Guard.ArgumentNotNullOrEmpty ( value ,
+                                                                    "parameter" ) ,
+                              type ,
+                              "parameter" ) ;
         }
     }
 }

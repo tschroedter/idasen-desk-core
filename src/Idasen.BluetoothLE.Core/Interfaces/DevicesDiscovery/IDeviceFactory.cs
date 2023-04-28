@@ -24,8 +24,8 @@
         ///     A new device.
         /// </returns>
         IDevice Create ( IDateTimeOffset broadcastTime ,
-                         ulong              address ,
-                         string ?           name ,
-                         short              rawSignalStrengthInDBm ) ;
+                         ulong           address ,
+                         string ?        name ,
+                         short           rawSignalStrengthInDBm ) ;
     }
 }

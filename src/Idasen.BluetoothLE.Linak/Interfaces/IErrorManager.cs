@@ -29,7 +29,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <param name="caller">
         ///     The caller information.
         /// </param>
-        void PublishForMessage ( string message ,
+        void PublishForMessage ( string                      message ,
                                  [ CallerMemberName ] string caller = "" ) ;
     }
 }

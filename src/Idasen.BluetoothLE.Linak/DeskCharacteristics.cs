@@ -16,7 +16,7 @@ namespace Idasen.BluetoothLE.Linak
         : IDeskCharacteristics
     {
         public DeskCharacteristics (
-            ILogger                        logger ,
+            ILogger                     logger ,
             IDeskCharacteristicsCreator creator )
         {
             Guard.ArgumentNotNull ( creator ,
@@ -64,8 +64,8 @@ namespace Idasen.BluetoothLE.Linak
         public IControl Control => _available.As < IControl > ( DeskCharacteristicKey.Control ) ;
 
         public IDeskCharacteristics WithCharacteristics (
-            DeskCharacteristicKey  key ,
-            ICharacteristicBase characteristic )
+            DeskCharacteristicKey key ,
+            ICharacteristicBase   characteristic )
         {
             Guard.ArgumentNotNull ( characteristic ,
                                     nameof ( characteristic ) ) ;

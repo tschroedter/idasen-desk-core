@@ -90,7 +90,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             IDevice        deviceA )
         {
             deviceA.RawSignalStrengthInDBm
-                   .Returns ( ( short ) - 1 ) ;
+                   .Returns ( ( short )- 1 ) ;
 
             var deviceB = new Device ( deviceA.BroadcastTime ,
                                        deviceA.Address ,
@@ -203,7 +203,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             IDevice        deviceA )
         {
             deviceA.RawSignalStrengthInDBm
-                   .Returns ( ( short ) - 1 ) ;
+                   .Returns ( ( short )- 1 ) ;
 
             var deviceB = new Device ( deviceA.BroadcastTime ,
                                        deviceA.Address ,

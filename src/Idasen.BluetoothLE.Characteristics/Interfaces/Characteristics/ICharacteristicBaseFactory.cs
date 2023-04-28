@@ -4,6 +4,6 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
 {
     public interface ICharacteristicBaseFactory
     {
-        T Create < T > ( IDevice device ) where T : notnull;
+        T Create < T > ( IDevice device ) where T : notnull ;
     }
 }

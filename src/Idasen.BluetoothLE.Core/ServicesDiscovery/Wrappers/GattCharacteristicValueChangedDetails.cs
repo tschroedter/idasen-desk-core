@@ -6,9 +6,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     public class GattCharacteristicValueChangedDetails
     {
         public GattCharacteristicValueChangedDetails (
-            Guid                    uuid ,
+            Guid                 uuid ,
             IEnumerable < byte > value ,
-            DateTimeOffset          timestamp )
+            DateTimeOffset       timestamp )
         {
             Guard.ArgumentNotNull ( value ,
                                     nameof ( value ) ) ;

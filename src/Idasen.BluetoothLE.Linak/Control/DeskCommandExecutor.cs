@@ -16,7 +16,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         public DeskCommandExecutor ( ILogger               logger ,
                                      IErrorManager         errorManager ,
                                      IDeskCommandsProvider provider ,
-                                     IControl           control )
+                                     IControl              control )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

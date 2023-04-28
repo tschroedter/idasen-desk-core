@@ -13,8 +13,6 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control
     [ TestClass ]
     public class DeskMovementMonitorTests
     {
-        private const int DefaultCapacity = 3 ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -75,7 +73,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control
             _subjectHeightAndSpeed.OnNext ( _details2 ) ;
             _subjectHeightAndSpeed.OnNext ( _details3 ) ;
 
-            Action action = ( ) => _scheduler.Start ( ) ;
+            var action = ( ) => _scheduler.Start ( ) ;
 
             action.Should ( )
                   .NotThrow < ApplicationException > ( ) ;
@@ -90,7 +88,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control
             _subjectHeightAndSpeed.OnNext ( _details4SameHeightAsDetails1 ) ;
             _subjectHeightAndSpeed.OnNext ( _details5SameHeightAsDetails1 ) ;
 
-            Action action = ( ) => _scheduler.Start ( ) ;
+            var action = ( ) => _scheduler.Start ( ) ;
 
             action.Should ( )
                   .Throw < ApplicationException > ( )
@@ -106,25 +104,27 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control
             _subjectHeightAndSpeed.OnNext ( _details7WithSpeedZero ) ;
             _subjectHeightAndSpeed.OnNext ( _details8WithSpeedZero ) ;
 
-            Action action = ( ) => _scheduler.Start ( ) ;
+            var action = ( ) => _scheduler.Start ( ) ;
 
             action.Should ( )
                   .Throw < ApplicationException > ( )
                   .WithMessage ( DeskMovementMonitor.SpeedWasZero ) ;
         }
 
-        private HeightSpeedDetails  _details1                     = null!;
-        private HeightSpeedDetails  _details2                     = null!;
-        private HeightSpeedDetails  _details3                     = null!;
-        private HeightSpeedDetails  _details4SameHeightAsDetails1 = null!;
-        private HeightSpeedDetails  _details5SameHeightAsDetails1 = null!;
+        private const int DefaultCapacity = 3 ;
+
+        private HeightSpeedDetails  _details1                     = null! ;
+        private HeightSpeedDetails  _details2                     = null! ;
+        private HeightSpeedDetails  _details3                     = null! ;
+        private HeightSpeedDetails  _details4SameHeightAsDetails1 = null! ;
+        private HeightSpeedDetails  _details5SameHeightAsDetails1 = null! ;
         private HeightSpeedDetails  _details6WithSpeedZero        = null! ;
         private HeightSpeedDetails  _details7WithSpeedZero        = null! ;
-        private HeightSpeedDetails  _details8WithSpeedZero        = null!;
-        private IDeskHeightAndSpeed _heightAndSpeed               = null!;
+        private HeightSpeedDetails  _details8WithSpeedZero        = null! ;
+        private IDeskHeightAndSpeed _heightAndSpeed               = null! ;
 
-        private ILogger                        _logger                = null!;
-        private TestScheduler                  _scheduler             = null!;
-        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null!;
+        private ILogger                        _logger                = null! ;
+        private TestScheduler                  _scheduler             = null! ;
+        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
     }
 }

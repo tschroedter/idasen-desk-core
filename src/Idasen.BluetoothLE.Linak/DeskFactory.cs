@@ -13,9 +13,9 @@ namespace Idasen.BluetoothLE.Linak
         : IDeskFactory
     {
         public DeskFactory (
-            IDeviceFactory                     deviceFactory ,
-            Func < IDevice , IDeskConnector >  deskConnectorFactory ,
-            Func < IDeskConnector , IDesk > deskFactory )
+            IDeviceFactory                    deviceFactory ,
+            Func < IDevice , IDeskConnector > deskConnectorFactory ,
+            Func < IDeskConnector , IDesk >   deskFactory )
         {
             Guard.ArgumentNotNull ( deskConnectorFactory ,
                                     nameof ( deskConnectorFactory ) ) ;

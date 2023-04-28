@@ -20,7 +20,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
         public async Task TryReadValueAsync_ForCharacteristicIsNull_Throws (
             RawValueReader sut )
         {
-            Func < Task > action = async ( ) => { await sut.TryReadValueAsync ( null! ) ; } ;
+            var action = async ( ) => { await sut.TryReadValueAsync ( null! ) ; } ;
 
             await action.Should ( )
                         .ThrowAsync < ArgumentNullException > ( )

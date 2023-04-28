@@ -21,10 +21,10 @@ namespace Idasen.BluetoothLE.Linak.Tests
             [ BeNull ] ILogger           logger )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -37,10 +37,10 @@ namespace Idasen.BluetoothLE.Linak.Tests
             [ BeNull ] IDeskCommandsProvider provider )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -53,10 +53,10 @@ namespace Idasen.BluetoothLE.Linak.Tests
             [ BeNull ] IControl          control )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -74,6 +74,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = null ;
+
                                    return false ;
                                } ) ;
             await sut.Up ( ) ;
@@ -95,6 +96,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = bytes ;
+
                                    return true ;
                                } ) ;
             var actual = await sut.Up ( ) ;
@@ -116,6 +118,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = bytes ;
+
                                    return true ;
                                } ) ;
             await sut.Up ( ) ;
@@ -135,6 +138,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = null ;
+
                                    return false ;
                                } ) ;
             await sut.Down ( ) ;
@@ -155,6 +159,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = bytes ;
+
                                    return true ;
                                } ) ;
             var actual = await sut.Down ( ) ;
@@ -176,6 +181,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = bytes ;
+
                                    return true ;
                                } ) ;
             await sut.Down ( ) ;
@@ -195,6 +201,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = null ;
+
                                    return false ;
                                } ) ;
             await sut.Stop ( ) ;
@@ -215,6 +222,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = bytes ;
+
                                    return true ;
                                } ) ;
             var actual = await sut.Stop ( ) ;
@@ -236,6 +244,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     .Returns ( x =>
                                {
                                    x [ 1 ] = bytes ;
+
                                    return true ;
                                } ) ;
             await sut.Stop ( ) ;

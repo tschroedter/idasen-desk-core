@@ -1,8 +1,8 @@
-﻿using System ;
+﻿#nullable disable
+
+using System ;
 using System.Collections ;
 using System.Collections.Generic ;
-
-#nullable disable
 
 namespace Idasen.BluetoothLE.Linak.Control
 {
@@ -142,7 +142,9 @@ namespace Idasen.BluetoothLE.Linak.Control
                     throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer is empty" ) ;
                 if ( index >= _size )
                     throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer size is {_size}" ) ;
+
                 var actualIndex = InternalIndex ( index ) ;
+
                 return _buffer [ actualIndex ] ;
             }
             set
@@ -151,6 +153,7 @@ namespace Idasen.BluetoothLE.Linak.Control
                     throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer is empty" ) ;
                 if ( index >= _size )
                     throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer size is {_size}" ) ;
+
                 var actualIndex = InternalIndex ( index ) ;
                 _buffer [ actualIndex ] = value ;
             }
@@ -163,6 +166,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         public T Front ( )
         {
             ThrowIfEmpty ( ) ;
+
             return _buffer [ _start ] ;
         }
 
@@ -173,9 +177,11 @@ namespace Idasen.BluetoothLE.Linak.Control
         public T Back ( )
         {
             ThrowIfEmpty ( ) ;
+
             return _buffer [ ( _end != 0
                                    ? _end
-                                   : Capacity ) - 1 ] ;
+                                   : Capacity ) -
+                             1 ] ;
         }
 
         /// <summary>
@@ -313,9 +319,10 @@ namespace Idasen.BluetoothLE.Linak.Control
         /// </param>
         private int InternalIndex ( int index )
         {
-            return _start + ( index < Capacity - _start
-                                  ? index
-                                  : index - Capacity ) ;
+            return _start +
+                   ( index < Capacity - _start
+                         ? index
+                         : index - Capacity ) ;
         }
 
         private readonly T [ ] _buffer ;
@@ -355,6 +362,7 @@ namespace Idasen.BluetoothLE.Linak.Control
                 return new ArraySegment < T > ( _buffer ,
                                                 _start ,
                                                 _end - _start ) ;
+
             return new ArraySegment < T > ( _buffer ,
                                             _start ,
                                             _buffer.Length - _start ) ;
@@ -368,6 +376,7 @@ namespace Idasen.BluetoothLE.Linak.Control
                 return new ArraySegment < T > ( _buffer ,
                                                 _end ,
                                                 0 ) ;
+
             return new ArraySegment < T > ( _buffer ,
                                             0 ,
                                             _end ) ;

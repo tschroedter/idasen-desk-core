@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic ;
 using System.Threading.Tasks ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
@@ -18,12 +19,12 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
         /// <summary>
         ///     Gets the protocol error, if there is one.
         /// </summary>
-        byte? ProtocolError { get ; }
+        byte ? ProtocolError { get ; }
 
         /// <summary>
         ///     Gets the characteristics .
         /// </summary>
-        IReadOnlyList< IGattCharacteristicWrapper > Characteristics { get ; }
+        IReadOnlyList < IGattCharacteristicWrapper > Characteristics { get ; }
 
         /// <summary>
         ///     Initialize the instance.

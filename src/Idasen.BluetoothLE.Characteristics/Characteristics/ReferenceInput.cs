@@ -35,17 +35,17 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
         public IEnumerable < byte > Ctrl1 => GetValueOrEmpty ( Ctrl1Key ) ;
 
-        public delegate IReferenceInput Factory ( IDevice device ) ;
-
-        internal const string Ctrl1Key = "Ctrl1" ;
-
         public override Guid GattServiceUuid { get ; } = Guid.Parse ( "99FA0030-338A-1024-8A49-009C0215F78A" ) ;
+
+        public delegate IReferenceInput Factory ( IDevice device ) ;
 
         protected override T WithMapping < T > ( ) where T : class
         {
             DescriptionToUuid [ Ctrl1Key ] = Guid.Parse ( "99FA0031-338A-1024-8A49-009C0215F78A" ) ;
 
-            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
+            return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
+
+        internal const string Ctrl1Key = "Ctrl1" ;
     }
 }

@@ -14,10 +14,8 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class DeskMovementMonitor
         : IDeskMovementMonitor
     {
-        internal const int MinimumNumberOfItems = 3;
-
-        public DeskMovementMonitor ( ILogger                logger ,
-                                     IScheduler             scheduler ,
+        public DeskMovementMonitor ( ILogger             logger ,
+                                     IScheduler          scheduler ,
                                      IDeskHeightAndSpeed heightAndSpeed )
         {
             Guard.ArgumentNotNull ( scheduler ,
@@ -49,10 +47,6 @@ namespace Idasen.BluetoothLE.Linak.Control
 
         public delegate IDeskMovementMonitor Factory ( IDeskHeightAndSpeed heightAndSpeed ) ;
 
-        internal const int    DefaultCapacity    = 5 ;
-        internal const string HeightDidNotChange = "Height didn't change when moving desk" ;
-        internal const string SpeedWasZero       = "Speed was zero when moving desk" ;
-
         private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
         {
             History.PushBack ( details ) ;
@@ -70,15 +64,21 @@ namespace Idasen.BluetoothLE.Linak.Control
 
             _logger.Debug ( "Good, height changed" ) ;
 
-            if ( History.Count() >= MinimumNumberOfItems &&
-                 History.All(x => x.Speed == 0 ) )
-                    throw new ApplicationException(SpeedWasZero);
+            if ( History.Count ( ) >= MinimumNumberOfItems &&
+                 History.All ( x => x.Speed == 0 ) )
+                throw new ApplicationException ( SpeedWasZero ) ;
 
             _logger.Debug ( "Good, speed changed" ) ;
         }
 
-        private readonly    IDeskHeightAndSpeed _heightAndSpeed ;
-        private readonly    ILogger             _logger ;
+        internal const int MinimumNumberOfItems = 3 ;
+
+        internal const int    DefaultCapacity    = 5 ;
+        internal const string HeightDidNotChange = "Height didn't change when moving desk" ;
+        internal const string SpeedWasZero       = "Speed was zero when moving desk" ;
+
+        private readonly IDeskHeightAndSpeed _heightAndSpeed ;
+        private readonly ILogger             _logger ;
         private readonly IScheduler          _scheduler ;
 
         private IDisposable ? _disposalHeightAndSpeed ;

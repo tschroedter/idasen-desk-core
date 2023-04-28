@@ -25,10 +25,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] ILogger               logger )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -41,10 +41,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] IDateTimeOffset       dateTimeOffset )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -57,10 +57,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] IDeviceMonitor        deviceMonitor )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -73,10 +73,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] IObservableTimerFactory factory )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -89,10 +89,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] IScheduler            scheduler )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -105,10 +105,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             [ BeNull ] ISubject < IDevice >  deviceExpired )
         {
             // ReSharper disable once UnusedVariable
-            Action action = ( ) =>
-                            {
-                                var test = sut.Value ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             var test = sut.Value ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )

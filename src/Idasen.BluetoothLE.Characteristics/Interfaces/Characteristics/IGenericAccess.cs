@@ -13,8 +13,6 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
     public interface IGenericAccess
         : ICharacteristicBase
     {
-        delegate IGenericAccess Factory ( IDevice device ) ;
-
         /// <summary>
         ///     Raw Central Address Resolution
         /// </summary>
@@ -59,5 +57,7 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
         ///     The UUID of the Gatt Service.
         /// </summary>
         Guid GattServiceUuid { get ; }
+
+        delegate IGenericAccess Factory ( IDevice device ) ;
     }
 }

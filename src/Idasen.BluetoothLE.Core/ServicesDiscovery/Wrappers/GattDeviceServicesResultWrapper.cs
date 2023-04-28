@@ -13,7 +13,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     {
         public GattDeviceServicesResultWrapper (
             IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
-            GattDeviceServicesResult              service )
+            GattDeviceServicesResult                 service )
         {
             Guard.ArgumentNotNull ( characteristicsFactory ,
                                     nameof ( characteristicsFactory ) ) ;
@@ -35,7 +35,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         public IEnumerable < IGattDeviceServiceWrapper > Services => _services ;
 
         /// <inheritdoc />
-        public byte? ProtocolError => _service.ProtocolError ;
+        public byte ? ProtocolError => _service.ProtocolError ;
 
         public delegate IGattDeviceServicesResultWrapper Factory ( GattDeviceServicesResult service ) ;
 

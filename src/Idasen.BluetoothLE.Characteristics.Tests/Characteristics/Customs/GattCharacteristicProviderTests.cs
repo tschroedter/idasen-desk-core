@@ -14,9 +14,6 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs
     [ TestClass ]
     public class GattCharacteristicProviderTests
     {
-        private const string Description1 = "Description1" ;
-        private const string Description2 = "Description2" ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -233,6 +230,9 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs
             return new GattCharacteristicProvider ( _logger ,
                                                     _gattCharacteristics ) ;
         }
+
+        private const string Description1 = "Description1" ;
+        private const string Description2 = "Description2" ;
 
         private readonly Guid _characteristics1Uuid = Guid.NewGuid ( ) ;
         private readonly Guid _characteristics2Uuid = Guid.NewGuid ( ) ;

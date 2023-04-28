@@ -46,8 +46,8 @@ namespace Idasen.BluetoothLE.Linak.Control
         {
             // ReSharper disable MathAbsMethodIsRedundant
             Delta = TargetHeight >= StoppingHeight
-                        ? ( uint ) Math.Abs ( TargetHeight   - StoppingHeight )
-                        : ( uint ) Math.Abs ( StoppingHeight - TargetHeight ) ;
+                        ? ( uint )Math.Abs ( TargetHeight   - StoppingHeight )
+                        : ( uint )Math.Abs ( StoppingHeight - TargetHeight ) ;
             // ReSharper restore MathAbsMethodIsRedundant
 
             if ( StartMovingIntoDirection != MoveIntoDirection )
@@ -86,10 +86,12 @@ namespace Idasen.BluetoothLE.Linak.Control
                 case Direction.Up :
                     if ( StoppingHeight >= TargetHeight )
                         return true ;
+
                     break ;
                 case Direction.Down :
                     if ( StoppingHeight <= TargetHeight )
                         return true ;
+
                     break ;
                 case Direction.None :
                     return true ;

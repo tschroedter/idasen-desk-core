@@ -82,7 +82,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns
         [ TestMethod ]
         public void Connect_ForInvoked_DoesNothing ( )
         {
-            Action action = ( ) => CreateSut ( ).Connect ( ) ;
+            var action = ( ) => CreateSut ( ).Connect ( ) ;
 
             action.Should ( )
                   .NotThrow < Exception > ( ) ;
@@ -91,7 +91,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns
         [ TestMethod ]
         public void Dispose_ForInvoked_DoesNothing ( )
         {
-            Action action = ( ) => CreateSut ( ).Dispose ( ) ;
+            var action = ( ) => CreateSut ( ).Dispose ( ) ;
 
             action.Should ( )
                   .NotThrow < Exception > ( ) ;

@@ -29,11 +29,11 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void Create_ForExecutorNull_Throws ( )
         {
-            Action action = ( ) =>
-                            {
-                                CreateSut ( ).Create ( null! ,
-                                                       _heightAndSpeed ) ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             CreateSut ( ).Create ( null! ,
+                                                    _heightAndSpeed ) ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )

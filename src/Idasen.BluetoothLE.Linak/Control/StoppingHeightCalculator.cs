@@ -12,7 +12,7 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class StoppingHeightCalculator
         : IStoppingHeightCalculator
     {
-        public StoppingHeightCalculator ( ILogger                              logger ,
+        public StoppingHeightCalculator ( ILogger                           logger ,
                                           IHasReachedTargetHeightCalculator calculator )
         {
             Guard.ArgumentNotNull ( logger ,
@@ -78,12 +78,9 @@ namespace Idasen.BluetoothLE.Linak.Control
             return this ;
         }
 
-        private const int DefaultMaxSpeedToStopMovement = 14 ;   // per notification, 16 notifications in 60 secs
-        private const int DefaultMaxSpeed               = 6200 ; // rpm/10
-
         private Direction CalculateMoveIntoDirection ( )
         {
-            if ( Math.Abs ( ( int ) Height - ( int ) TargetHeight ) <= MaxSpeedToStopMovement * FudgeFactor )
+            if ( Math.Abs ( ( int )Height - ( int )TargetHeight ) <= MaxSpeedToStopMovement * FudgeFactor )
                 return Direction.None ;
 
             return Height > TargetHeight
@@ -97,10 +94,12 @@ namespace Idasen.BluetoothLE.Linak.Control
 
             StoppingHeight = Height ;
 
-            MovementUntilStop = ( int ) ( ( float ) Speed / MaxSpeed *
-                                          MaxSpeedToStopMovement     * FudgeFactor ) ;
+            MovementUntilStop = ( int )( ( float )Speed /
+                                         MaxSpeed               *
+                                         MaxSpeedToStopMovement *
+                                         FudgeFactor ) ;
 
-            StoppingHeight = ( uint ) ( StoppingHeight + MovementUntilStop ) ;
+            StoppingHeight = ( uint )( StoppingHeight + MovementUntilStop ) ;
 
             var (hasReachedTargetHeight , delta) = CalculateHasReachedTargetHeight ( ) ;
 
@@ -145,6 +144,9 @@ namespace Idasen.BluetoothLE.Linak.Control
 
             return ( _calculator.HasReachedTargetHeight , _calculator.Delta ) ;
         }
+
+        private const int DefaultMaxSpeedToStopMovement = 14 ;   // per notification, 16 notifications in 60 secs
+        private const int DefaultMaxSpeed               = 6200 ; // rpm/10
 
         private readonly IHasReachedTargetHeightCalculator _calculator ;
 

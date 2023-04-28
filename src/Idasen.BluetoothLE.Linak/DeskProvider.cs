@@ -17,10 +17,10 @@ namespace Idasen.BluetoothLE.Linak
         : IDeskProvider
     {
         public DeskProvider (
-            ILogger          logger ,
-            ITaskRunner      taskRunner ,
-            IScheduler       scheduler ,
-            IDeskDetector    detector ,
+            ILogger       logger ,
+            ITaskRunner   taskRunner ,
+            IScheduler    scheduler ,
+            IDeskDetector detector ,
             IErrorManager errorManager )
         {
             Guard.ArgumentNotNull ( logger ,
@@ -42,7 +42,7 @@ namespace Idasen.BluetoothLE.Linak
         }
 
         /// <inheritdoc />
-        public async Task < (bool , IDesk?) > TryGetDesk ( CancellationToken token )
+        public async Task < (bool , IDesk ?) > TryGetDesk ( CancellationToken token )
         {
             Desk?.Dispose ( ) ;
             Desk = null ;
@@ -64,7 +64,8 @@ namespace Idasen.BluetoothLE.Linak
             catch ( Exception e )
             {
                 if ( e.IsBluetoothDisabledException ( ) )
-                    e.LogBluetoothStatusException ( _logger, string.Empty ) ;
+                    e.LogBluetoothStatusException ( _logger ,
+                                                    string.Empty ) ;
                 else
                     _logger.Error ( e ,
                                     "Failed to detect desk" ) ;
@@ -180,7 +181,7 @@ namespace Idasen.BluetoothLE.Linak
         private readonly IScheduler    _scheduler ;
         private readonly ITaskRunner   _taskRunner ;
 
-        internal readonly AutoResetEvent DeskDetectedEvent = new( false ) ;
+        internal readonly AutoResetEvent DeskDetectedEvent = new(false) ;
 
         private IDisposable ? _deskDetected ;
     }

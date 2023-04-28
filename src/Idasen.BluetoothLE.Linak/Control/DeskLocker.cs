@@ -13,11 +13,11 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class DeskLocker
         : IDeskLocker
     {
-        public DeskLocker ( ILogger                logger ,
-                            IScheduler             scheduler ,
-                            IDeskMover             deskMover ,
-                            IDeskCommandExecutor   executer ,
-                            IDeskHeightAndSpeed heightAndSpeed )
+        public DeskLocker ( ILogger              logger ,
+                            IScheduler           scheduler ,
+                            IDeskMover           deskMover ,
+                            IDeskCommandExecutor executer ,
+                            IDeskHeightAndSpeed  heightAndSpeed )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

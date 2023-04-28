@@ -92,7 +92,7 @@ namespace Idasen.BluetoothLE.Linak.Control
             _disposableTimer?.Dispose ( ) ;
 
             if ( _initialProvider == null )
-                _logger.Error ( $"{nameof(_initialProvider)} is null" );
+                _logger.Error ( $"{nameof ( _initialProvider )} is null" ) ;
 
             _initialProvider?.Start ( ) ;
         }
@@ -140,15 +140,15 @@ namespace Idasen.BluetoothLE.Linak.Control
             _monitor?.Dispose ( ) ;
             _disposableProvider?.Dispose ( ) ;
             _disposalHeightAndSpeed?.Dispose ( ) ;
-            _disposableTimer?.Dispose ( );         // todo testing
+            _disposableTimer?.Dispose ( ) ; // todo testing
         }
 
-        public delegate IDeskMover Factory ( IDeskCommandExecutor executor ,
-                                             IDeskHeightAndSpeed  heightAndSpeed ) ;
+        public bool IsAllowedToMove { get ; private set ; }
 
         public Direction StartMovingIntoDirection { get ; set ; }
 
-        public bool IsAllowedToMove { get ; private set ; }
+        public delegate IDeskMover Factory ( IDeskCommandExecutor executor ,
+                                             IDeskHeightAndSpeed  heightAndSpeed ) ;
 
         private void StartAfterReceivingCurrentHeight ( )
         {
@@ -158,7 +158,7 @@ namespace Idasen.BluetoothLE.Linak.Control
             {
                 _logger.Warning ( "TargetHeight is 0" ) ;
 
-                return;
+                return ;
             }
 
             Height = _heightAndSpeed.Height ;
@@ -179,7 +179,7 @@ namespace Idasen.BluetoothLE.Linak.Control
 
             _disposableTimer?.Dispose ( ) ;
             _disposableTimer = Observable.Interval ( TimerInterval )
-                                         .ObserveOn( _scheduler )
+                                         .ObserveOn ( _scheduler )
                                          .Subscribe ( OnTimerElapsed ) ;
 
             IsAllowedToMove = true ;
@@ -221,7 +221,7 @@ namespace Idasen.BluetoothLE.Linak.Control
                 _logger.Debug ( "*** TargetHeight = 0\r\n" +
                                 $"{Environment.StackTrace}" ) ;
 
-            _heightMonitor.AddHeight(Height);
+            _heightMonitor.AddHeight ( Height ) ;
 
             if ( ! _heightMonitor.IsHeightChanging ( ) ) // todo testing
             {
@@ -251,14 +251,17 @@ namespace Idasen.BluetoothLE.Linak.Control
             {
                 case Direction.Up :
                     await Up ( ) ;
+
                     break ;
                 case Direction.Down :
                     await Down ( ) ;
+
                     break ;
                 case Direction.None :
                     break ;
                 default :
                     await Stop ( ) ;
+
                     break ;
             }
         }
@@ -266,6 +269,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         private readonly IStoppingHeightCalculator _calculator ;
         private readonly IDeskCommandExecutor      _executor ;
         private readonly IDeskHeightAndSpeed       _heightAndSpeed ;
+        private readonly IDeskHeightMonitor        _heightMonitor ;
 
         private readonly ILogger                               _logger ;
         private readonly IDeskMovementMonitorFactory           _monitorFactory ;
@@ -273,9 +277,8 @@ namespace Idasen.BluetoothLE.Linak.Control
         private readonly IInitialHeightAndSpeedProviderFactory _providerFactory ;
         private readonly IScheduler                            _scheduler ;
         private readonly ISubject < uint >                     _subjectFinished ;
-        private readonly IDeskHeightMonitor                    _heightMonitor ;
 
-        public readonly TimeSpan    TimerInterval = TimeSpan.FromMilliseconds ( 100 ) ;
+        public readonly TimeSpan TimerInterval = TimeSpan.FromMilliseconds ( 100 ) ;
 
         private IDisposable ?            _disposableProvider ;
         private IDisposable ?            _disposableTimer ;

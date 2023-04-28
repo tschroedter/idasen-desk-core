@@ -1,33 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive;
-using System.Reactive.Subjects;
-using FluentAssertions;
-using Idasen.BluetoothLE.Core.DevicesDiscovery;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
-using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Serilog;
+﻿using System ;
+using System.Collections.Generic ;
+using System.Reactive ;
+using System.Reactive.Subjects ;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using Microsoft.Reactive.Testing ;
+using Microsoft.VisualStudio.TestTools.UnitTesting ;
+using NSubstitute ;
+using Serilog ;
 
 namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
 {
     [ TestClass ]
     public class DeviceMonitorTests
     {
-        private IDevice                        _device             = null! ;
-        private IDevice                        _deviceNewName      = null! ;
-        private IDevice                        _deviceOtherNewName = null! ;
-        private IDevices                       _devices            = null! ;
-        private Func < ISubject < IDevice > >  _factory            = null! ;
-        private ILogger                        _logger             = null! ;
-        private TestScheduler                  _scheduler          = null! ;
-        private Queue < ISubject < IDevice > > _subjects           = null! ;
-        private ISubject < IDevice >           _subjectStarted     = null! ;
-        private ISubject < IDevice >           _subjectStopped     = null! ;
-        private ISubject < IDevice >           _subjectUpdated     = null! ;
-        private IWatcher                       _watcher            = null! ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -37,7 +24,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
 
             _device = Substitute.For < IDevice > ( ) ;
             _device.Name
-                   .Returns ( ( string )null!) ;
+                   .Returns ( ( string )null! ) ;
 
             _deviceNewName = Substitute.For < IDevice > ( ) ;
             _deviceNewName.Name
@@ -96,7 +83,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
         {
             _logger = null! ;
 
-            Action action = ( ) => { CreateSut ( ) ; } ;
+            var action = ( ) => { CreateSut ( ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -108,7 +95,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
         {
             _factory = null! ;
 
-            Action action = ( ) => { CreateSut ( ) ; } ;
+            var action = ( ) => { CreateSut ( ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -120,7 +107,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
         {
             _devices = null! ;
 
-            Action action = ( ) => { CreateSut ( ) ; } ;
+            var action = ( ) => { CreateSut ( ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -132,7 +119,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
         {
             _watcher = null! ;
 
-            Action action = ( ) => { CreateSut ( ) ; } ;
+            var action = ( ) => { CreateSut ( ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -185,7 +172,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
             using var observer = sut.DeviceDiscovered
                                     .Subscribe ( x => discovered = x ) ;
 
-            sut.Start();
+            sut.Start ( ) ;
 
             _scheduler.Start ( ) ;
 
@@ -200,7 +187,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
 
             using var sut = CreateSut ( ) ;
 
-            sut.Start();
+            sut.Start ( ) ;
 
             _scheduler.Start ( ) ;
 
@@ -226,7 +213,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
             using var observer = sut.DeviceUpdated
                                     .Subscribe ( x => updated = x ) ;
 
-            sut.Start();
+            sut.Start ( ) ;
 
             _scheduler.Start ( ) ;
 
@@ -241,7 +228,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
 
             using var sut = CreateSut ( ) ;
 
-            sut.Start();
+            sut.Start ( ) ;
 
             _scheduler.Start ( ) ;
 
@@ -267,7 +254,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
             using var observer = sut.DeviceUpdated
                                     .Subscribe ( x => updated = x ) ;
 
-            sut.Start();
+            sut.Start ( ) ;
 
             _scheduler.Start ( ) ;
 
@@ -377,7 +364,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
         [ TestMethod ]
         public void DiscoveredDevices_ForInvoked_CallsDevices ( )
         {
-            var list = new List<IDevice>().AsReadOnly();
+            var list = new List < IDevice > ( ).AsReadOnly ( ) ;
 
             _devices = Substitute.For < IDevices > ( ) ;
             _devices.DiscoveredDevices
@@ -391,11 +378,11 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
         [ TestMethod ]
         public void RemoveDevice_ForInvoked_CallsDevices ( )
         {
-            _devices = Substitute.For<IDevices>();
+            _devices = Substitute.For < IDevices > ( ) ;
 
-            using var sut = CreateSut ( );
+            using var sut = CreateSut ( ) ;
 
-            sut.RemoveDevice(_device);
+            sut.RemoveDevice ( _device ) ;
 
             _devices.Received ( )
                     .RemoveDevice ( _device ) ;
@@ -411,5 +398,18 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
 
             return deviceMonitor ;
         }
+
+        private IDevice                        _device             = null! ;
+        private IDevice                        _deviceNewName      = null! ;
+        private IDevice                        _deviceOtherNewName = null! ;
+        private IDevices                       _devices            = null! ;
+        private Func < ISubject < IDevice > >  _factory            = null! ;
+        private ILogger                        _logger             = null! ;
+        private TestScheduler                  _scheduler          = null! ;
+        private Queue < ISubject < IDevice > > _subjects           = null! ;
+        private ISubject < IDevice >           _subjectStarted     = null! ;
+        private ISubject < IDevice >           _subjectStopped     = null! ;
+        private ISubject < IDevice >           _subjectUpdated     = null! ;
+        private IWatcher                       _watcher            = null! ;
     }
 }

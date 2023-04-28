@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
@@ -22,6 +23,6 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
         /// <summary>
         ///     Gets the protocol error.
         /// </summary>
-        byte? ProtocolError { get ; }
+        byte ? ProtocolError { get ; }
     }
 }

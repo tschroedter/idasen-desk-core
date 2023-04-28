@@ -18,6 +18,6 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         ///     The device providing the characteristics.
         /// </param>
         void Create ( IDeskCharacteristics characteristics ,
-                      IDevice           device ) ;
+                      IDevice              device ) ;
     }
 }

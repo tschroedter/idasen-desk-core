@@ -28,7 +28,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             IGattDeviceServicesResultWrapperFactory servicesFactory ,
             IGattServicesDictionary                 gattServicesDictionary ,
             ISubject < BluetoothConnectionStatus >  connectionStatusChanged ,
-            BluetoothLEDevice                    device )
+            BluetoothLEDevice                       device )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -81,25 +81,26 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         {
             try
             {
-                if (ConnectionStatus == BluetoothConnectionStatus.Connected)
+                if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
                 {
-                    _logger.Information($"[{DeviceId}] Already connected");
+                    _logger.Information ( $"[{DeviceId}] Already connected" ) ;
 
-                    return;
+                    return ;
                 }
 
-                if (!IsPaired)
+                if ( ! IsPaired )
                 {
-                    _logger.Information($"[{DeviceId}] Not paired");
+                    _logger.Information ( $"[{DeviceId}] Not paired" ) ;
 
-                    return;
+                    return ;
                 }
 
-                await CreateSession();
+                await CreateSession ( ) ;
             }
-            catch (Exception e)
+            catch ( Exception e )
             {
-                _logger.Error(e, $"Failed to connect to device {_device.BluetoothAddress}");
+                _logger.Error ( e ,
+                                $"Failed to connect to device {_device.BluetoothAddress}" ) ;
             }
         }
 

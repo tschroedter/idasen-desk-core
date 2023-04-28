@@ -2,6 +2,7 @@
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
@@ -20,12 +21,12 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 
         public GattCommunicationStatus Status => _result.Status ;
 
-        public byte?   ProtocolError => _result.ProtocolError ;
+        public byte ?  ProtocolError => _result.ProtocolError ;
         public IBuffer Value         => _result.Value ;
 
         public delegate IGattReadResultWrapper Factory ( GattReadResult result ) ;
 
-        public static readonly IGattReadResultWrapper NotSupported = new GattReadResultWrapperNotSupported ( ) ;
+        public readonly static IGattReadResultWrapper NotSupported = new GattReadResultWrapperNotSupported ( ) ;
 
         private readonly GattReadResult _result ;
     }

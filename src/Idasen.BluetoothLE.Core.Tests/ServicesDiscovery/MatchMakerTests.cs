@@ -30,14 +30,14 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
             ulong                     address )
         {
             deviceFactory.FromBluetoothAddressAsync ( Arg.Any < ulong > ( ) )
-                         .Returns ( ( IDevice ) null ) ;
+                         .Returns ( ( IDevice )null ) ;
 
-            Func < Task > action = async ( ) =>
-                                   {
-                                       await sut.Value
-                                                .PairToDeviceAsync ( address )
-                                                .ConfigureAwait ( false ) ;
-                                   } ;
+            var action = async ( ) =>
+                         {
+                             await sut.Value
+                                      .PairToDeviceAsync ( address )
+                                      .ConfigureAwait ( false ) ;
+                         } ;
 
             await action.Should ( )
                         .ThrowAsync < ArgumentNullException > ( ) ;

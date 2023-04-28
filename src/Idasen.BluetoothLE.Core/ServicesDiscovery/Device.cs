@@ -16,7 +16,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
     public class Device
         : IDevice
     {
-        public Device ( IScheduler                   scheduler ,
+        public Device ( IScheduler                scheduler ,
                         IBluetoothLeDeviceWrapper wrapper )
         {
             Guard.ArgumentNotNull ( wrapper ,

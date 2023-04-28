@@ -10,10 +10,6 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
     [ TestClass ]
     public class DeviceTests
     {
-        private const ulong  Address                = 197530862419747 ;
-        private const string Name                   = "Name" ;
-        private const short  RawSignalStrengthInDBm = - 50 ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -27,7 +23,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
         public void Constructor_ForDeviceIsNull_Throws ( )
         {
             // ReSharper disable once ObjectCreationAsStatement
-            Action action = ( ) => { new Device ( null! ) ; } ;
+            var action = ( ) => { new Device ( null! ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -40,7 +36,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             _broadcastTime = null! ;
 
             // ReSharper disable once ObjectCreationAsStatement
-            Action action = ( ) => { CreateSut ( ) ; } ;
+            var action = ( ) => { CreateSut ( ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -121,6 +117,10 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
                                 Name ,
                                 RawSignalStrengthInDBm ) ;
         }
+
+        private const ulong  Address                = 197530862419747 ;
+        private const string Name                   = "Name" ;
+        private const short  RawSignalStrengthInDBm = - 50 ;
 
         private IDateTimeOffset _broadcastTime = null! ;
         private DeviceComparer  _comparer      = null! ;

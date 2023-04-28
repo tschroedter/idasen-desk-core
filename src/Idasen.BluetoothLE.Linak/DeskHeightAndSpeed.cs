@@ -24,7 +24,7 @@ namespace Idasen.BluetoothLE.Linak
                                     IRawValueToHeightAndSpeedConverter converter ,
                                     ISubject < uint >                  subjectHeight ,
                                     ISubject < int >                   subjectSpeed ,
-                                    ISubject < HeightSpeedDetails > subjectHeightAndSpeed )
+                                    ISubject < HeightSpeedDetails >    subjectHeightAndSpeed )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

@@ -19,8 +19,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IGattCharacteristicValueChangedObservables
     {
         public GattCharacteristicValueChangedObservables (
-            ILogger                                               logger ,
-            IScheduler                                            scheduler ,
+            ILogger                                            logger ,
+            IScheduler                                         scheduler ,
             ISubject < GattCharacteristicValueChangedDetails > subject )
         {
             Guard.ArgumentNotNull ( logger ,
@@ -77,8 +77,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                                                                         h => characteristic.ValueChanged -= h )
                                      .SubscribeOn ( _scheduler )
                                      .Subscribe ( e => OnValueChanged ( e.Sender! ,
-                                                                              e.EventArgs ,
-                                                                              _subject ) ) ;
+                                                                        e.EventArgs ,
+                                                                        _subject ) ) ;
                     }
                     else
                     {
@@ -116,10 +116,10 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             {
                 var bytes = args.CharacteristicValue?.ToArray ( ) ?? Array.Empty < byte > ( ) ;
 
-                var details = new GattCharacteristicValueChangedDetails(sender.Uuid,
-                                                                        bytes,
-                                                                        args.Timestamp);
-                subject.OnNext(details);
+                var details = new GattCharacteristicValueChangedDetails ( sender.Uuid ,
+                                                                          bytes ,
+                                                                          args.Timestamp ) ;
+                subject.OnNext ( details ) ;
             }
             catch ( Exception e )
             {

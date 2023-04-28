@@ -7,14 +7,6 @@ namespace Idasen.BluetoothLE.Core.Tests
 {
     public static class GuardTestData
     {
-        public const string Empty      = "" ;
-        public const string Whitespace = " " ;
-
-        private const int Integer = 1 ;
-
-        private static readonly object Instance = new( ) ;
-
-
         public static IEnumerable < object [ ] > InstanceAndInteger ( )
         {
             yield return new [ ]
@@ -59,5 +51,12 @@ namespace Idasen.BluetoothLE.Core.Tests
                              typeof ( ArgumentException )
                          } ;
         }
+
+        public const string Empty      = "" ;
+        public const string Whitespace = " " ;
+
+        private const int Integer = 1 ;
+
+        private readonly static object Instance = new( ) ;
     }
 }

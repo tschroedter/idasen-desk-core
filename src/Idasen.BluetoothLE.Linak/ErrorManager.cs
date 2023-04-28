@@ -14,7 +14,7 @@ namespace Idasen.BluetoothLE.Linak
         : IErrorManager
     {
         public ErrorManager (
-            ILogger                       logger ,
+            ILogger                    logger ,
             ISubject < IErrorDetails > subject )
         {
             Guard.ArgumentNotNull ( logger ,

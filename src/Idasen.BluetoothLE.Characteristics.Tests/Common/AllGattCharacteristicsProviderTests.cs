@@ -8,9 +8,6 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
     [ TestClass ]
     public class AllGattCharacteristicsProviderTests
     {
-        private const string UnknownDescription = "Unknown" ;
-        private const string KnownDescription   = "Device Name" ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -107,6 +104,9 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
         {
             return new AllGattCharacteristicsProvider ( ) ;
         }
+
+        private const string UnknownDescription = "Unknown" ;
+        private const string KnownDescription   = "Device Name" ;
 
         private Guid _knownGuid ;
         private Guid _unknownGuid ;

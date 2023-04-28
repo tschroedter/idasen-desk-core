@@ -1,63 +1,62 @@
 ﻿#nullable disable
 
-using System;
-using System.Collections.Generic;
+using System ;
+using System.Collections.Generic ;
 
 namespace Idasen.BluetoothLE.Tests
 {
     public static class GuardTestData
     {
-        public const string Empty      = "";
-        public const string Whitespace = " ";
-
-        private const int Integer = 1;
-
-        private static readonly object Instance = new();
-
-
-        public static IEnumerable<object[]> InstanceAndInteger()
+        public static IEnumerable < object [ ] > InstanceAndInteger ( )
         {
-            yield return new[]
+            yield return new [ ]
                          {
                              Instance
-                         };
-            yield return new object[]
+                         } ;
+            yield return new object [ ]
                          {
                              Integer
-                         };
+                         } ;
         }
 
-        public static IEnumerable<object[]> NullEmptyOrWhitespace()
+        public static IEnumerable < object [ ] > NullEmptyOrWhitespace ( )
         {
-            yield return new object[]
+            yield return new object [ ]
                          {
-                             null,
-                             typeof(ArgumentNullException)
-                         };
-            yield return new object[]
+                             null ,
+                             typeof ( ArgumentNullException )
+                         } ;
+            yield return new object [ ]
                          {
-                             Empty,
-                             typeof(ArgumentException)
-                         };
-            yield return new object[]
+                             Empty ,
+                             typeof ( ArgumentException )
+                         } ;
+            yield return new object [ ]
                          {
-                             Whitespace,
-                             typeof(ArgumentException)
-                         };
+                             Whitespace ,
+                             typeof ( ArgumentException )
+                         } ;
         }
 
-        public static IEnumerable<object[]> NullOrEmpty()
+        public static IEnumerable < object [ ] > NullOrEmpty ( )
         {
-            yield return new object[]
+            yield return new object [ ]
                          {
-                             null,
-                             typeof(ArgumentNullException)
-                         };
-            yield return new object[]
+                             null ,
+                             typeof ( ArgumentNullException )
+                         } ;
+            yield return new object [ ]
                          {
-                             Empty,
-                             typeof(ArgumentException)
-                         };
+                             Empty ,
+                             typeof ( ArgumentException )
+                         } ;
         }
+
+        public const string Empty      = "" ;
+        public const string Whitespace = " " ;
+
+        private const int Integer = 1 ;
+
+        private readonly static object Instance = new( ) ;
     }
 }

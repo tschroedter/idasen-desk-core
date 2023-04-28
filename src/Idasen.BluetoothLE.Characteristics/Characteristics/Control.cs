@@ -44,19 +44,19 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                                               bytes ) ;
         }
 
-        public delegate IControl Factory ( IDevice device ) ;
-
-        internal const string Control2Key = "Ctrl2" ;
-        internal const string Control3Key = "Ctrl3" ;
-
         public override Guid GattServiceUuid { get ; } = Guid.Parse ( "99FA0001-338A-1024-8A49-009C0215F78A" ) ;
+
+        public delegate IControl Factory ( IDevice device ) ;
 
         protected override T WithMapping < T > ( ) where T : class
         {
             DescriptionToUuid [ Control2Key ] = Guid.Parse ( "99fa0002-338a-1024-8a49-009c0215f78a" ) ;
             DescriptionToUuid [ Control3Key ] = Guid.Parse ( "99fa0003-338a-1024-8a49-009c0215f78a" ) ;
 
-            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
+            return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
+
+        internal const string Control2Key = "Ctrl2" ;
+        internal const string Control3Key = "Ctrl3" ;
     }
 }

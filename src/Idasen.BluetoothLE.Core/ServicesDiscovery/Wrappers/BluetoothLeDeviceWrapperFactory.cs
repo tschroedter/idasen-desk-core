@@ -26,7 +26,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             Func < IGattServicesDictionary >                gattServicesDictionaryFactory ,
             IGattCharacteristicsResultWrapperFactory        characteristicsFactory ,
             Func < ISubject < BluetoothConnectionStatus > > connectionStatusChangedFactory ,
-            BluetoothLeDeviceWrapper.Factory             factory )
+            BluetoothLeDeviceWrapper.Factory                factory )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

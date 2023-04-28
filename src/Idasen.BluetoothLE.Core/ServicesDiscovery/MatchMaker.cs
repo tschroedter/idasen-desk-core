@@ -15,7 +15,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
     {
         public MatchMaker ( ILogger               logger ,
                             IOfficialGattServices bluetoothGattServices ,
-                            IDeviceFactory     deviceFactory )
+                            IDeviceFactory        deviceFactory )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

@@ -703,7 +703,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                                                   _calculator ) ;
         }
 
-        private IHasReachedTargetHeightCalculator _calculator = null!;
-        private ILogger                           _logger     = null!;
+        private IHasReachedTargetHeightCalculator _calculator = null! ;
+        private ILogger                           _logger     = null! ;
     }
 }

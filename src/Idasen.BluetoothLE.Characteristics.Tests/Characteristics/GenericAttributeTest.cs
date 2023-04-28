@@ -20,9 +20,9 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
             ServiceWrapper.Uuid
                           .Returns ( sut.GattServiceUuid ) ;
 
-            Action action = () => sut.Initialize < Dpg > ( ) ;
+            Action action = ( ) => sut.Initialize < Dpg > ( ) ;
 
-            action.Should (  )
+            action.Should ( )
                   .Throw < Exception > ( ) ;
         }
 

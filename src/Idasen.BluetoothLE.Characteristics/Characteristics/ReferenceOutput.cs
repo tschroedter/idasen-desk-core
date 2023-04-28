@@ -21,15 +21,15 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
           IReferenceOutput
     {
         public ReferenceOutput (
-            ILogger                                logger ,
-            IScheduler                             scheduler ,
-            IDevice                                device ,
-            IGattCharacteristicsProviderFactory    providerFactory ,
-            IRawValueReader                        rawValueReader ,
-            IRawValueWriter                        rawValueWriter ,
-            ICharacteristicBaseToStringConverter   toStringConverter ,
-            IDescriptionToUuid                     descriptionToUuid ,
-            ISubject < RawValueChangedDetails >    subjectHeightSpeed )
+            ILogger                              logger ,
+            IScheduler                           scheduler ,
+            IDevice                              device ,
+            IGattCharacteristicsProviderFactory  providerFactory ,
+            IRawValueReader                      rawValueReader ,
+            IRawValueWriter                      rawValueWriter ,
+            ICharacteristicBaseToStringConverter toStringConverter ,
+            IDescriptionToUuid                   descriptionToUuid ,
+            ISubject < RawValueChangedDetails >  subjectHeightSpeed )
             : base ( logger ,
                      scheduler ,
                      device ,
@@ -73,9 +73,9 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
             if ( Characteristics == null )
             {
-                Logger.Error ( $"{nameof(Characteristics)} is null" );
+                Logger.Error ( $"{nameof ( Characteristics )} is null" ) ;
 
-                return;
+                return ;
             }
 
             if ( ! Characteristics.Characteristics.TryGetValue ( HeightSpeed ,
@@ -105,17 +105,6 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
         public delegate IReferenceOutput Factory ( IDevice device ) ;
 
-        internal const string HeightSpeed = "Height Speed" ;
-        internal const string Two         = "TWO" ;
-        internal const string Three       = "THREE" ;
-        internal const string Four        = "FOUR" ;
-        internal const string Five        = "FIVE" ;
-        internal const string Six         = "SIX" ;
-        internal const string Seven       = "SEVEN" ;
-        internal const string Eight       = "EIGHT" ;
-        internal const string Mask        = "MASK" ;
-        internal const string DetectMask  = "DETECT MASK" ;
-
         protected override void Dispose ( bool disposing )
         {
             if ( _disposed ) return ;
@@ -133,7 +122,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             DescriptionToUuid [ Mask ]        = Guid.Parse ( "99FA0029-338A-1024-8A49-009C0215F78A" ) ;
             DescriptionToUuid [ DetectMask ]  = Guid.Parse ( "99FA002A-338A-1024-8A49-009C0215F78A" ) ;
 
-            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
+            return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
 
         private void OnValueChanged ( GattCharacteristicValueChangedDetails details )
@@ -145,6 +134,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             if ( details.Value.Count ( ) != 4 )
             {
                 Logger.Error ( $"Failed, expected 4 bytes but received {details.Value.Count ( )}" ) ;
+
                 return ;
             }
 
@@ -155,6 +145,17 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
             _subjectHeightSpeed.OnNext ( valueChanged ) ;
         }
+
+        internal const string HeightSpeed = "Height Speed" ;
+        internal const string Two         = "TWO" ;
+        internal const string Three       = "THREE" ;
+        internal const string Four        = "FOUR" ;
+        internal const string Five        = "FIVE" ;
+        internal const string Six         = "SIX" ;
+        internal const string Seven       = "SEVEN" ;
+        internal const string Eight       = "EIGHT" ;
+        internal const string Mask        = "MASK" ;
+        internal const string DetectMask  = "DETECT MASK" ;
 
         private readonly ISubject < RawValueChangedDetails > _subjectHeightSpeed ;
 

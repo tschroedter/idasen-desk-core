@@ -22,7 +22,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
                          Func < DateTimeOffset , IDateTimeOffset > dateTimeFactory ,
                          ISubject < IDevice >                      received ,
                          ISubject < DateTime >                     stopped ,
-                         IStatusMapper                          statusMapper )
+                         IStatusMapper                             statusMapper )
         {
             Guard.ArgumentNotNull ( scheduler ,
                                     nameof ( scheduler ) ) ;

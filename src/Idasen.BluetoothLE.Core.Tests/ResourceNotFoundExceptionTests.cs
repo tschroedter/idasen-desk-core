@@ -6,9 +6,6 @@ namespace Idasen.BluetoothLE.Core.Tests
     [ TestClass ]
     public class ResourceNotFoundExceptionTests
     {
-        private const string ResourceName = "ResourceName" ;
-        private const string Message      = "Message" ;
-
         [ TestMethod ]
         public void Constructor_ForInvoked_SetsMessage ( )
         {
@@ -30,5 +27,8 @@ namespace Idasen.BluetoothLE.Core.Tests
                .Should ( )
                .Be ( ResourceName ) ;
         }
+
+        private const string ResourceName = "ResourceName" ;
+        private const string Message      = "Message" ;
     }
 }

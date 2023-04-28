@@ -20,7 +20,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         public GattServicesProvider ( ILogger                              logger ,
                                       IGattServicesDictionary              services ,
                                       ISubject < GattCommunicationStatus > refreshed ,
-                                      IBluetoothLeDeviceWrapper         device )
+                                      IBluetoothLeDeviceWrapper            device )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

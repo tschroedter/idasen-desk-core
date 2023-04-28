@@ -2,7 +2,7 @@
 {
     public interface IDeskMoverFactory
     {
-        IDeskMover Create ( IDeskCommandExecutor   executor ,
-                            IDeskHeightAndSpeed heightAndSpeed ) ;
+        IDeskMover Create ( IDeskCommandExecutor executor ,
+                            IDeskHeightAndSpeed  heightAndSpeed ) ;
     }
 }

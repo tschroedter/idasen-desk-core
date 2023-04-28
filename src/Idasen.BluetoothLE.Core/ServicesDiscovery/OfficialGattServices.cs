@@ -56,8 +56,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
             try
             {
-                assignedNumber = ( ushort ) Convert.ToInt32 ( number ,
-                                                              16 ) ;
+                assignedNumber = ( ushort )Convert.ToInt32 ( number ,
+                                                             16 ) ;
             }
             catch ( Exception )
             {
@@ -67,8 +67,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
             return _dictionary.TryGetValue ( assignedNumber ,
                                              out gattService ) ;
         }
-
-        private const string FileName = "OfficialGattServices.txt" ;
 
         public string ResourceName { get ; }
 
@@ -93,7 +91,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
             var config = new CsvConfiguration ( CultureInfo.InvariantCulture )
                          {
-                             Delimiter = "," ,
+                             Delimiter       = "," ,
                              HasHeaderRecord = true
                          } ;
 
@@ -108,6 +106,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
             return readCsvFile ;
         }
+
+        private const string FileName = "OfficialGattServices.txt" ;
 
         private readonly Dictionary < ushort , OfficialGattService > _dictionary = new( ) ;
     }

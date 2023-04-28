@@ -21,7 +21,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void Create_ForReferenceOutputNull_Throws ( )
         {
-            Action action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
+            var action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )

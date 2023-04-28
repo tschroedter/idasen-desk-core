@@ -20,7 +20,7 @@ namespace Idasen.BluetoothLE.Linak
                               IScheduler               scheduler ,
                               IDeviceMonitorWithExpiry monitor ,
                               IDeskFactory             factory ,
-                              ISubject < IDesk >    deskDetected )
+                              ISubject < IDesk >       deskDetected )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -82,7 +82,8 @@ namespace Idasen.BluetoothLE.Linak
                                  .ObserveOn ( _scheduler )
                                  .Where ( device => ( device.Name != null &&
                                                       device.Name.StartsWith ( deviceName ,
-                                                                               StringComparison.InvariantCultureIgnoreCase ) ) ||
+                                                                               StringComparison
+                                                                                  .InvariantCultureIgnoreCase ) ) ||
                                                     device.Address == deviceAddress )
                                  .SubscribeAsync ( OnDeskDiscovered ) ;
 
@@ -104,12 +105,14 @@ namespace Idasen.BluetoothLE.Linak
             _monitor.Stop ( ) ;
         }
 
+        public bool IsConnecting { get ; private set ; }
+
         private async Task OnDeskDiscovered ( IDevice device )
         {
-            lock (this)
+            lock ( this )
             {
                 if ( _desk != null || IsConnecting )
-                    return;
+                    return ;
 
                 IsConnecting = true ;
             }
@@ -127,13 +130,11 @@ namespace Idasen.BluetoothLE.Linak
             }
             catch ( Exception e )
             {
-                _logger.Error( $"[{device.MacAddress}] Failed to connect to desk '{device.Name}' ({e.Message})" );
+                _logger.Error ( $"[{device.MacAddress}] Failed to connect to desk '{device.Name}' ({e.Message})" ) ;
 
                 IsConnecting = false ;
             }
         }
-
-        public bool IsConnecting { get; private set; }
 
         private void OnDeviceUpdated ( IDevice device )
         {
@@ -152,10 +153,10 @@ namespace Idasen.BluetoothLE.Linak
 
         private void OnRefreshedChanged ( bool status )
         {
-            if (_desk != null )
+            if ( _desk != null )
                 _deskDetected.OnNext ( _desk ) ;
             else
-                _logger.Warning ( "Desk is null" );
+                _logger.Warning ( "Desk is null" ) ;
         }
 
         private readonly ISubject < IDesk > _deskDetected ;

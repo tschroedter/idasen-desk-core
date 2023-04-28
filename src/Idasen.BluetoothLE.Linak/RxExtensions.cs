@@ -18,6 +18,7 @@ namespace Idasen.BluetoothLE.Linak
             async Task < Unit > Wrapped ( T t )
             {
                 await asyncAction ( ) ;
+
                 return Unit.Default ;
             }
 
@@ -35,6 +36,7 @@ namespace Idasen.BluetoothLE.Linak
             async Task < Unit > Wrapped ( T t )
             {
                 await asyncAction ( t ) ;
+
                 return Unit.Default ;
             }
 

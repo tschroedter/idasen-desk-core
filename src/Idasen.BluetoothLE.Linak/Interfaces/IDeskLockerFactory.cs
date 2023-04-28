@@ -2,8 +2,8 @@
 {
     public interface IDeskLockerFactory
     {
-        IDeskLocker Create ( IDeskMover             deskMover ,
-                             IDeskCommandExecutor   executer ,
-                             IDeskHeightAndSpeed heightAndSpeed ) ;
+        IDeskLocker Create ( IDeskMover           deskMover ,
+                             IDeskCommandExecutor executer ,
+                             IDeskHeightAndSpeed  heightAndSpeed ) ;
     }
 }

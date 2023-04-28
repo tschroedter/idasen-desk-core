@@ -50,10 +50,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             return ( false , ArrayEmpty ) ;
         }
 
-        private static readonly byte [ ] ArrayEmpty = Enumerable.Empty < byte > ( )
-                                                                .ToArray ( ) ;
-
-        public byte?                   ProtocolError { get ; private set ; }
+        public byte ?                  ProtocolError { get ; private set ; }
         public GattCommunicationStatus Status        { get ; private set ; } = GattCommunicationStatus.Unreachable ;
 
         private static bool SupportsRead ( IGattCharacteristicWrapper characteristic )
@@ -82,14 +79,17 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             if ( GattCommunicationStatus.Success != Status )
                 return ( false , ArrayEmpty ) ;
 
-            if (readValue.Value == null)    // todo testing for this if
+            if ( readValue.Value == null ) // todo testing for this if
                 return ( false , ArrayEmpty ) ;
 
-            return _reader.TryReadValue ( readValue.Value,
+            return _reader.TryReadValue ( readValue.Value ,
                                           out var bytes )
                        ? ( true , bytes )
                        : ( false , ArrayEmpty ) ;
         }
+
+        private readonly static byte [ ] ArrayEmpty = Enumerable.Empty < byte > ( )
+                                                                .ToArray ( ) ;
 
         private readonly ILogger       _logger ;
         private readonly IBufferReader _reader ;

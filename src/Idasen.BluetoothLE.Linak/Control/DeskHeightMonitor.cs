@@ -8,12 +8,7 @@ namespace Idasen.BluetoothLE.Linak.Control
     public class DeskHeightMonitor
         : IDeskHeightMonitor
     {
-        private readonly ILogger _logger ;
-        public const     int     MinimumNumberOfItems = 5;
-
-        private CircularBuffer<ulong> _history = new(MinimumNumberOfItems);
-
-        public DeskHeightMonitor ( ILogger logger)
+        public DeskHeightMonitor ( ILogger logger )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -21,20 +16,20 @@ namespace Idasen.BluetoothLE.Linak.Control
             _logger = logger ;
         }
 
-        public bool IsHeightChanging()
+        public bool IsHeightChanging ( )
         {
             if ( _history.Count ( ) < MinimumNumberOfItems )
                 return true ;
 
             var lastNValues = _history.Skip ( _history.Count ( ) - MinimumNumberOfItems )
-                                      .ToArray (  ) ;
+                                      .ToArray ( ) ;
 
             var differentValues = lastNValues.Distinct ( )
                                              .Count ( ) ;
 
-            _logger.Debug ( $"History: {string.Join ( ",", differentValues )}") ;
+            _logger.Debug ( $"History: {string.Join ( "," , differentValues )}" ) ;
 
-            return differentValues > 1;
+            return differentValues > 1 ;
         }
 
         public void Reset ( )
@@ -44,7 +39,12 @@ namespace Idasen.BluetoothLE.Linak.Control
 
         public void AddHeight ( uint height )
         {
-            _history.PushBack ( height );
+            _history.PushBack ( height ) ;
         }
+
+        public const     int     MinimumNumberOfItems = 5 ;
+        private readonly ILogger _logger ;
+
+        private CircularBuffer < ulong > _history = new(MinimumNumberOfItems) ;
     }
 }

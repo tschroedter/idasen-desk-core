@@ -20,11 +20,11 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
             RawValueWriter sut ,
             IBuffer        buffer )
         {
-            Func < Task > action = async ( ) =>
-                                   {
-                                       await sut.TryWriteValueAsync ( null! ,
-                                                                      buffer ) ;
-                                   } ;
+            var action = async ( ) =>
+                         {
+                             await sut.TryWriteValueAsync ( null! ,
+                                                            buffer ) ;
+                         } ;
 
             await action.Should ( )
                         .ThrowAsync < ArgumentNullException > ( )
@@ -36,11 +36,11 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
             RawValueWriter             sut ,
             IGattCharacteristicWrapper characteristic )
         {
-            Func < Task > action = async ( ) =>
-                                   {
-                                       await sut.TryWriteValueAsync ( characteristic ,
-                                                                      null! ) ;
-                                   } ;
+            var action = async ( ) =>
+                         {
+                             await sut.TryWriteValueAsync ( characteristic ,
+                                                            null! ) ;
+                         } ;
 
             action.Should ( )
                   .ThrowAsync < ArgumentNullException > ( )
@@ -145,14 +145,14 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
             RawValueWriter sut ,
             IBuffer        buffer )
         {
-            Func < Task > action = async ( ) =>
-                                   {
-                                       await sut.TryWritableAuxiliariesValueAsync ( null! ,
-                                                                                    buffer ) ;
-                                   } ;
+            var action = async ( ) =>
+                         {
+                             await sut.TryWritableAuxiliariesValueAsync ( null! ,
+                                                                          buffer ) ;
+                         } ;
 
             action.Should ( )
-                  .ThrowAsync< ArgumentNullException > ( )
+                  .ThrowAsync < ArgumentNullException > ( )
                   .WithParameter ( "characteristic" ) ;
         }
 
@@ -161,14 +161,14 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
             RawValueWriter             sut ,
             IGattCharacteristicWrapper characteristic )
         {
-            Func < Task > action = async ( ) =>
-                                   {
-                                       await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
-                                                                                    null! ) ;
-                                   } ;
+            var action = async ( ) =>
+                         {
+                             await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
+                                                                          null! ) ;
+                         } ;
 
             action.Should ( )
-                  .ThrowAsync< ArgumentNullException > ( )
+                  .ThrowAsync < ArgumentNullException > ( )
                   .WithParameter ( "buffer" ) ;
         }
 
@@ -272,14 +272,14 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
             RawValueWriter sut ,
             IBuffer        buffer )
         {
-            Func < Task > action = async ( ) =>
-                                   {
-                                       await sut.TryWriteWithoutResponseAsync ( null! ,
-                                                                                buffer ) ;
-                                   } ;
+            var action = async ( ) =>
+                         {
+                             await sut.TryWriteWithoutResponseAsync ( null! ,
+                                                                      buffer ) ;
+                         } ;
 
             action.Should ( )
-                  .ThrowAsync< ArgumentNullException > ( )
+                  .ThrowAsync < ArgumentNullException > ( )
                   .WithParameter ( "characteristic" ) ;
         }
 
@@ -288,15 +288,15 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
             RawValueWriter             sut ,
             IGattCharacteristicWrapper characteristic )
         {
-            Func < Task > action = async ( ) =>
-                                   {
-                                       await sut.TryWriteWithoutResponseAsync ( characteristic ,
-                                                                                null! ) ;
-                                   } ;
+            var action = async ( ) =>
+                         {
+                             await sut.TryWriteWithoutResponseAsync ( characteristic ,
+                                                                      null! ) ;
+                         } ;
 
             await action.Should ( )
-                  .ThrowAsync < ArgumentNullException > ( )
-                  .WithParameter ( "buffer" ) ;
+                        .ThrowAsync < ArgumentNullException > ( )
+                        .WithParameter ( "buffer" ) ;
         }
 
         [ AutoDataTestMethod ]

@@ -4,7 +4,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
 {
     public interface IInitialHeightAndSpeedProviderFactory
     {
-        IInitialHeightProvider Create ( IDeskCommandExecutor   executor ,
-                                        IDeskHeightAndSpeed heightAndSpeed ) ;
+        IInitialHeightProvider Create ( IDeskCommandExecutor executor ,
+                                        IDeskHeightAndSpeed  heightAndSpeed ) ;
     }
 }

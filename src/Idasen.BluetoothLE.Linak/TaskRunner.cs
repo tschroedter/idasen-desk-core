@@ -12,11 +12,12 @@ namespace Idasen.BluetoothLE.Linak
         : ITaskRunner
     {
         public Task Run (
-            Action action ,
-            CancellationToken                        token )
+            Action            action ,
+            CancellationToken token )
         {
             Guard.ArgumentNotNull ( action ,
                                     nameof ( action ) ) ;
+
             return Task.Run ( action ,
                               token ) ;
         }

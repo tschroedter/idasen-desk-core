@@ -26,7 +26,7 @@ namespace Idasen.BluetoothLE.Core
         public long Ticks => _dateTimeOffset.Ticks ;
 
         /// <inheritdoc />
-        public string ToString ( string             format ,
+        public string ToString ( string          format ,
                                  IFormatProvider formatProvider )
         {
             Guard.ArgumentNotNull ( format ,

@@ -7,10 +7,10 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 {
     public class RawValueChangedDetails
     {
-        public RawValueChangedDetails ( string                  description ,
+        public RawValueChangedDetails ( string               description ,
                                         IEnumerable < byte > value ,
-                                        DateTimeOffset          timestamp ,
-                                        Guid                    uuid )
+                                        DateTimeOffset       timestamp ,
+                                        Guid                 uuid )
         {
             Guard.ArgumentNotNull ( description ,
                                     nameof ( description ) ) ;

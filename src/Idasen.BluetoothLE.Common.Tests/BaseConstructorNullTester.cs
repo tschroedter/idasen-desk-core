@@ -77,6 +77,6 @@ namespace Idasen.BluetoothLE.Common.Tests
             return _container.Resolve < INotNullTester > ( ) ;
         }
 
-        private IContainer _container = null!;
+        private IContainer _container = null! ;
     }
 }

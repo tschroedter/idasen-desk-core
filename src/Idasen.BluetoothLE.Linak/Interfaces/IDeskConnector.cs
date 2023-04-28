@@ -25,7 +25,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <summary>
         ///     Notifies when the desk finished moving.
         /// </summary>
-        IObservable < uint >  FinishedChanged { get ; }
+        IObservable < uint > FinishedChanged { get ; }
 
         /// <summary>
         ///     Notifies when the desk's internal components have changed.
@@ -70,19 +70,19 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         ///     Move the desk up.
         /// </summary>
         /// <returns>'true' if successful otherwise 'false'.</returns>
-        Task< bool > MoveUp ( ) ;
+        Task < bool > MoveUp ( ) ;
 
         /// <summary>
         ///     Move the desk down.
         /// </summary>
         /// <returns>'true' if successful otherwise 'false'.</returns>
-        Task< bool > MoveDown ( ) ;
+        Task < bool > MoveDown ( ) ;
 
         /// <summary>
         ///     Stop moving the desk.
         /// </summary>
         /// <returns>'true' if successful otherwise 'false'.</returns>
-        Task< bool > MoveStop ( ) ;
+        Task < bool > MoveStop ( ) ;
 
         /// <summary>
         ///     Lock the desk which means manual movement is blocked.
@@ -94,6 +94,6 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         ///     Unlock the desk which means manual movement is allowed.
         /// </summary>
         /// <returns>'true' if successful otherwise 'false'.</returns>
-        Task< bool > MoveUnlock ( );
+        Task < bool > MoveUnlock ( ) ;
     }
 }

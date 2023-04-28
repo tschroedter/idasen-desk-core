@@ -2,10 +2,10 @@
 using System.IO ;
 using System.Threading ;
 using System.Threading.Tasks ;
-using Microsoft.Extensions.Configuration;
 using Autofac ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Idasen.Launcher ;
+using Microsoft.Extensions.Configuration ;
 using Serilog ;
 using static System.Console ;
 
@@ -13,10 +13,6 @@ namespace Idasen.ConsoleApp
 {
     internal sealed class Program
     {
-        private const string DefaultDeviceName              = "Desk" ;
-        private const ulong  DefaultDeviceAddress           = 250635178951455u ;
-        private const uint   DefaultDeviceMonitoringTimeout = 600u ;
-
         /// <summary>
         ///     Test Application
         /// </summary>
@@ -44,7 +40,11 @@ namespace Idasen.ConsoleApp
             else
                 logger.Error ( "Failed to detect desk" ) ;
 
-            ReadLine( ) ;
+            ReadLine ( ) ;
         }
+
+        private const string DefaultDeviceName              = "Desk" ;
+        private const ulong  DefaultDeviceAddress           = 250635178951455u ;
+        private const uint   DefaultDeviceMonitoringTimeout = 600u ;
     }
 }

@@ -225,7 +225,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
         }
 
         [ TestMethod ]
-        [Ignore( "Existing Characteristic will always return a value")]
+        [ Ignore ( "Existing Characteristic will always return a value" ) ]
         public async Task TryWriteRawValue_ForKnownCharacteristicsIsNull_ReturnsFalse ( )
         {
             Wrappers.Clear ( ) ;
@@ -248,7 +248,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
         }
 
         [ TestMethod ]
-        [Ignore("Existing Characteristic will always return a value")]
+        [ Ignore ( "Existing Characteristic will always return a value" ) ]
         public async Task TryWriteRawValue_ForKnownCharacteristicsIsNull_LogsError ( )
         {
             Wrappers.Clear ( ) ;

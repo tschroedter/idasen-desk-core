@@ -19,6 +19,7 @@ namespace Idasen.Launcher
                 {
                     logEvent.AddPropertyIfAbsent ( new LogEventProperty ( "Caller" ,
                                                                           new ScalarValue ( "<unknown method>" ) ) ) ;
+
                     return ;
                 }
 
@@ -32,6 +33,7 @@ namespace Idasen.Launcher
                             $"{method.DeclaringType.FullName}.{method.Name}({string.Join ( ", " , method.GetParameters ( ).Select ( pi => pi.ParameterType.FullName ) )})" ;
                         logEvent.AddPropertyIfAbsent ( new LogEventProperty ( "Caller" ,
                                                                               new ScalarValue ( caller ) ) ) ;
+
                         return ;
                     }
 

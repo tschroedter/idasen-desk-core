@@ -1,4 +1,5 @@
 ﻿using Idasen.BluetoothLE.Linak.Control ;
+
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Linak.Interfaces

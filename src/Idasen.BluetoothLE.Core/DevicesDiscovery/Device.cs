@@ -50,10 +50,13 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         public string MacAddress { get ; } = string.Empty ;
 
         /// <inheritdoc />
-        public string? Name { get ; set ; }
+        public string ? Name { get ; set ; }
 
         /// <inheritdoc />
         public short RawSignalStrengthInDBm { get ; set ; }
+
+        /// <inheritdoc />
+        public string Details => ToString ( ) ;
 
         public delegate IDevice Factory ( IDateTimeOffset broadcastTime ,
                                           ulong           address ,
@@ -74,8 +77,5 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
                 $"BroadcastTime = {BroadcastTime.ToString ( "O" , CultureInfo.InvariantCulture )}, " +
                 $"RawSignalStrengthInDBm = {RawSignalStrengthInDBm}dB" ;
         }
-
-        /// <inheritdoc />
-        public string Details => ToString ( ) ;
     }
 }

@@ -35,8 +35,8 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         ///     Returns itself.
         /// </returns>
         IDeskProvider Initialize ( string deviceName ,
-                                   ulong     deviceAddress ,
-                                   uint      deviceTimeout ) ;
+                                   ulong  deviceAddress ,
+                                   uint   deviceTimeout ) ;
 
         /// <summary>
         ///     Start the desk detection process.

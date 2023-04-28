@@ -21,7 +21,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             IDeviceMonitor          deviceMonitor ,
             ISubject < IDevice >    deviceExpired ,
             IObservableTimerFactory factory ,
-            IScheduler           scheduler )
+            IScheduler              scheduler )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -107,8 +107,6 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             _deviceMonitor.RemoveDevice ( device ) ;
         }
 
-        internal const int SixtySeconds = 60 ;
-
         private void OnCompleted ( )
         {
             Stop ( ) ;
@@ -135,6 +133,8 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
                 _deviceExpired.Publish ( device ) ;
             }
         }
+
+        internal const int SixtySeconds = 60 ;
 
         private readonly IDateTimeOffset _dateTimeOffset ;
 

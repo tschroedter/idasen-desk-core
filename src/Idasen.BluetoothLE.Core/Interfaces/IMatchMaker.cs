@@ -11,7 +11,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces
         /// </summary>
         /// <param name="address">The BLE device address.</param>
         /// <returns></returns>
-        [UsedImplicitly]
+        [ UsedImplicitly ]
         Task < IDevice > PairToDeviceAsync ( ulong address ) ;
     }
 }

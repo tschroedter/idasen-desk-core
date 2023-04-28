@@ -4,9 +4,9 @@ using Autofac.Core ;
 using AutofacSerilogIntegration ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak ;
+using Microsoft.Extensions.Configuration ;
 using Serilog ;
 using Serilog.Configuration ;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Idasen.Launcher
 {
@@ -25,41 +25,41 @@ namespace Idasen.Launcher
             return Register ( otherModules ) ;
         }
 
-        public static IContainer Create ( ILoggerSettings        settings,
-                                          IEnumerable<IModule> ? otherModules = null)
+        public static IContainer Create ( ILoggerSettings           settings ,
+                                          IEnumerable < IModule > ? otherModules = null )
         {
             Log.Logger = new LoggerConfiguration ( ).ReadFrom
                                                     .Settings ( settings )
                                                     .CreateLogger ( ) ;
 
-            return Register(otherModules);
+            return Register ( otherModules ) ;
         }
 
-        public static IContainer Create(IConfiguration         configuration,
-                                        IEnumerable<IModule> ? otherModules = null)
+        public static IContainer Create ( IConfiguration            configuration ,
+                                          IEnumerable < IModule > ? otherModules = null )
         {
             Log.Logger = Log.Logger = new LoggerConfiguration ( ).ReadFrom
                                                                  .Configuration ( configuration )
                                                                  .CreateLogger ( ) ;
 
-            return Register(otherModules);
+            return Register ( otherModules ) ;
         }
 
-        private static IContainer Register(IEnumerable<IModule> ? otherModules)
+        private static IContainer Register ( IEnumerable < IModule > ? otherModules )
         {
-            Builder.RegisterLogger();
-            Builder.RegisterModule<BluetoothLECoreModule>();
-            Builder.RegisterModule<BluetoothLELinakModule>();
+            Builder.RegisterLogger ( ) ;
+            Builder.RegisterModule < BluetoothLECoreModule > ( ) ;
+            Builder.RegisterModule < BluetoothLELinakModule > ( ) ;
 
-            if (otherModules == null)
-                return Builder.Build();
+            if ( otherModules == null )
+                return Builder.Build ( ) ;
 
-            foreach (var otherModule in otherModules)
+            foreach ( var otherModule in otherModules )
             {
-                Builder.RegisterModule(otherModule);
+                Builder.RegisterModule ( otherModule ) ;
             }
 
-            return Builder.Build();
+            return Builder.Build ( ) ;
         }
     }
 }

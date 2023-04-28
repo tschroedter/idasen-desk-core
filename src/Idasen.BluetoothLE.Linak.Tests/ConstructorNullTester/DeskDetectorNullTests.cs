@@ -1,12 +1,12 @@
-﻿using Idasen.BluetoothLE.Common.Tests;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Idasen.BluetoothLE.Common.Tests ;
+using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester
 {
-    [TestClass]
+    [ TestClass ]
     public class DeskDetectorNullTests
-        : BaseConstructorNullTester<Desk>
+        : BaseConstructorNullTester < Desk >
     {
-        public override int NumberOfConstructorsPassed { get; } = 1;
+        public override int NumberOfConstructorsPassed { get ; } = 1 ;
     }
 }

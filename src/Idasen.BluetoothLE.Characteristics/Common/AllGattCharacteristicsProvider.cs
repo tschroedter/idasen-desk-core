@@ -44,8 +44,6 @@ namespace Idasen.BluetoothLE.Characteristics.Common
                                                     out uuid ) ;
         }
 
-        internal const string Filename = "OfficialGattCharacteristics.txt" ;
-
         public string OfficialGattCharacteristics { get ; }
 
         private void Populate ( IEnumerable < CsvGattCharacteristic > records )
@@ -74,7 +72,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common
 
             var config = new CsvConfiguration ( CultureInfo.InvariantCulture )
                          {
-                             Delimiter = "," ,
+                             Delimiter       = "," ,
                              HasHeaderRecord = true
                          } ;
 
@@ -86,6 +84,8 @@ namespace Idasen.BluetoothLE.Characteristics.Common
 
             return readCsvFile ;
         }
+
+        internal const string Filename = "OfficialGattCharacteristics.txt" ;
 
         private readonly Dictionary < string , Guid > _descriptionToUuid = new( ) ;
         private readonly Dictionary < Guid , string > _uuidToDescription = new( ) ;

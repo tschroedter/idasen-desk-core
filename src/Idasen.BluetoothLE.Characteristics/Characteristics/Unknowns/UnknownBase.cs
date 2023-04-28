@@ -23,15 +23,15 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns
             Dispose ( true ) ;
         }
 
-        protected static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
-                                                                                 .ToArray ( ) ;
-
         protected virtual void Dispose ( bool disposing )
         {
             if ( _disposed ) return ;
 
             _disposed = true ;
         }
+
+        protected readonly static IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+                                                                                 .ToArray ( ) ;
 
         private bool _disposed ;
     }

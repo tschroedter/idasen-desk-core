@@ -8,12 +8,6 @@ namespace Idasen.Launcher
 {
     public static class LoggerProvider
     {
-        private const string LogTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.ffff} " +
-                                           "{Level:u3}] {Message} "                 +
-                                           "(at {Caller}){NewLine}{Exception}" ;
-
-        private static ILogger ? _logger ;
-
         public static ILogger CreateLogger ( string appName ,
                                              string appLogFileName )
         {
@@ -39,7 +33,7 @@ namespace Idasen.Launcher
         private static ILogger DoCreateLogger ( string appLogFileName )
         {
             var logFolder = AppDomain.CurrentDomain.BaseDirectory + "\\logs\\" ;
-            var logFile = CreateFullPathLogFileName ( logFolder,
+            var logFile = CreateFullPathLogFileName ( logFolder ,
                                                       appLogFileName ) ;
 
             if ( ! Directory.Exists ( logFolder ) )
@@ -66,7 +60,14 @@ namespace Idasen.Launcher
         {
             var fullPath = Path.Combine ( folder ,
                                           fileName ) ;
+
             return fullPath ;
         }
+
+        private const string LogTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.ffff} " +
+                                           "{Level:u3}] {Message} "                 +
+                                           "(at {Caller}){NewLine}{Exception}" ;
+
+        private static ILogger ? _logger ;
     }
 }

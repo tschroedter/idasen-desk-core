@@ -11,7 +11,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
     public class Watcher
         : IWatcher
     {
-        public Watcher ( IWrapper                 wrapper ,
+        public Watcher ( IWrapper              wrapper ,
                          ISubject < DateTime > started )
         {
             Guard.ArgumentNotNull ( wrapper ,

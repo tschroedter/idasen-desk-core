@@ -110,7 +110,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns
         [ TestMethod ]
         public void Dispose_ForInvoked_DoesNothing ( )
         {
-            Action action = ( ) => CreateSut ( ).Dispose ( ) ;
+            var action = ( ) => CreateSut ( ).Dispose ( ) ;
 
             action.Should ( )
                   .NotThrow < Exception > ( ) ;

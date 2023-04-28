@@ -34,13 +34,11 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
         {
         }
 
-        public delegate ITestCharacteristicBase Factory ( IDevice device ) ;
-
-        public const string RawValueKey = "RawValueKey" ;
-
         public override Guid GattServiceUuid { get ; } = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
 
         public IEnumerable < byte > RawValue => GetValueOrEmpty ( RawValueKey ) ;
+
+        public delegate ITestCharacteristicBase Factory ( IDevice device ) ;
 
         public async Task < bool > TryWriteRawValue ( IEnumerable < byte > bytes )
         {
@@ -52,7 +50,9 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
         {
             DescriptionToUuid [ RawValueKey ] = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
 
-            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
+            return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
+
+        public const string RawValueKey = "RawValueKey" ;
     }
 }

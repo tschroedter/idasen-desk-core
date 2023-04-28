@@ -13,8 +13,6 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
     [ TestClass ]
     public class OfficialGattServiceConverterTests
     {
-        private const string NotANumber = "not a number" ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -42,12 +40,12 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
         [ TestMethod ]
         public void ConvertFromString_ForReaderRowNull_Throws ( )
         {
-            Action action = ( ) =>
-                            {
-                                CreateSut ( ).ConvertFromString ( _text ,
-                                                                  null! ,
-                                                                  _memberMapData ) ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             CreateSut ( ).ConvertFromString ( _text ,
+                                                               null! ,
+                                                               _memberMapData ) ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -57,12 +55,12 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
         [ TestMethod ]
         public void ConvertFromString_ForMemberMapDataNull_Throws ( )
         {
-            Action action = ( ) =>
-                            {
-                                CreateSut ( ).ConvertFromString ( _text ,
-                                                                  _readerRow ,
-                                                                  null! ) ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             CreateSut ( ).ConvertFromString ( _text ,
+                                                               _readerRow ,
+                                                               null! ) ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -102,12 +100,12 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
         [ TestMethod ]
         public void ConvertToString_ForWriterRowNull_Throws ( )
         {
-            Action action = ( ) =>
-                            {
-                                CreateSut ( ).ConvertToString ( _value ,
-                                                                null! ,
-                                                                _memberMapData ) ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             CreateSut ( ).ConvertToString ( _value ,
+                                                             null! ,
+                                                             _memberMapData ) ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -117,12 +115,12 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
         [ TestMethod ]
         public void ConvertToString_ForMemberMapDataNull_Throws ( )
         {
-            Action action = ( ) =>
-                            {
-                                CreateSut ( ).ConvertToString ( _value ,
-                                                                _writerRow ,
-                                                                null! ) ;
-                            } ;
+            var action = ( ) =>
+                         {
+                             CreateSut ( ).ConvertToString ( _value ,
+                                                             _writerRow ,
+                                                             null! ) ;
+                         } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )
@@ -153,6 +151,8 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
         {
             return new OfficialGattServiceConverter ( ) ;
         }
+
+        private const string NotANumber = "not a number" ;
 
         private MemberMapData _memberMapData = null! ;
         private IReaderRow    _readerRow     = null! ;

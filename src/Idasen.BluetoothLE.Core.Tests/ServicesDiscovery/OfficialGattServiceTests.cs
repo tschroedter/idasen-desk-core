@@ -7,11 +7,6 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
     [ TestClass ]
     public class OfficialGattServiceTests
     {
-        public const string Name                  = nameof ( Name ) ;
-        public const string UniformTypeIdentifier = nameof ( UniformTypeIdentifier ) ;
-        public const ushort AssignedNumber        = 1 ;
-        public const string ProfileSpecification  = nameof ( ProfileSpecification ) ;
-
         [ TestMethod ]
         public void Constructor_ForInvoke_SetsName ( )
         {
@@ -54,5 +49,10 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
                        ProfileSpecification  = ProfileSpecification
                    } ;
         }
+
+        public const string Name                  = nameof ( Name ) ;
+        public const string UniformTypeIdentifier = nameof ( UniformTypeIdentifier ) ;
+        public const ushort AssignedNumber        = 1 ;
+        public const string ProfileSpecification  = nameof ( ProfileSpecification ) ;
     }
 }

@@ -18,11 +18,11 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 
         public GattCommunicationStatus Status => _result.Status ;
 
-        public byte? ProtocolError => _result.ProtocolError ;
+        public byte ? ProtocolError => _result.ProtocolError ;
 
         public delegate IGattWriteResultWrapper Factory ( GattWriteResult result ) ;
 
-        public static readonly IGattWriteResultWrapper NotSupported = new GattWriteResultWrapperNotSupported ( ) ;
+        public readonly static IGattWriteResultWrapper NotSupported = new GattWriteResultWrapperNotSupported ( ) ;
 
         private readonly GattWriteResult _result ;
     }

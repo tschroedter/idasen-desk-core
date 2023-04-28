@@ -21,7 +21,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         /// <inheritdoc />
         public IDevice Create ( IDateTimeOffset broadcastTime ,
                                 ulong           address ,
-                                string ?        name,
+                                string ?        name ,
                                 short           rawSignalStrengthInDBm )
         {
             Guard.ArgumentNotNull ( broadcastTime ,

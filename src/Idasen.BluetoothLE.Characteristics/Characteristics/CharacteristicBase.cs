@@ -74,13 +74,14 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             {
                 foreach ( var service1 in Device.GattServices )
                 {
-                    Logger.Information ( $"Service: DeviceId = {service1.Key.DeviceId}, Uuid = {service1.Key.Uuid}" );
+                    Logger.Information ( $"Service: DeviceId = {service1.Key.DeviceId}, Uuid = {service1.Key.Uuid}" ) ;
 
-                    foreach ( var characteristic in service1.Value.Characteristics)
+                    foreach ( var characteristic in service1.Value.Characteristics )
                     {
-                        Logger.Information($"Characteristic: {characteristic.ServiceUuid} {characteristic.Uuid} {characteristic.UserDescription}");
+                        Logger.Information ( $"Characteristic: {characteristic.ServiceUuid} {characteristic.Uuid} {characteristic.UserDescription}" ) ;
                     }
                 }
+
                 throw new ArgumentException ( "Failed, can't find GattDeviceService for " +
                                               $"UUID {GattServiceUuid}" ,
                                               nameof ( GattServiceUuid ) ) ;
@@ -99,9 +100,9 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         {
             if ( Characteristics == null )
             {
-                Logger.Error ( $"{nameof(Characteristics)} is null" );
+                Logger.Error ( $"{nameof ( Characteristics )} is null" ) ;
 
-                return;
+                return ;
             }
 
             Characteristics.Refresh ( DescriptionToUuid.ReadOnlyDictionary ) ;
@@ -134,9 +135,6 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         {
             Dispose ( true ) ;
         }
-
-        internal static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
-                                                                                .ToArray ( ) ;
 
         public abstract Guid GattServiceUuid { get ; }
 
@@ -171,11 +169,11 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         private async Task < bool > DoTryWriteValueAsync ( string               key ,
                                                            IEnumerable < byte > bytes )
         {
-            if (Characteristics == null)
+            if ( Characteristics == null )
             {
-                Logger.Error($"{nameof(Characteristics)} is null");
+                Logger.Error ( $"{nameof ( Characteristics )} is null" ) ;
 
-                return false;
+                return false ;
             }
 
             if ( ! Characteristics.Characteristics.TryGetValue ( key ,
@@ -210,6 +208,9 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
             _disposed = true ;
         }
+
+        internal readonly static IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+                                                                                .ToArray ( ) ;
 
         private readonly ICharacteristicBaseToStringConverter _toStringConverter ;
 

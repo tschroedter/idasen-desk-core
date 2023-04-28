@@ -9,6 +9,6 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         string Message { get ; }
 
         Exception ? Exception { get ; }
-        string                    Caller    { get ; }
+        string      Caller    { get ; }
     }
 }

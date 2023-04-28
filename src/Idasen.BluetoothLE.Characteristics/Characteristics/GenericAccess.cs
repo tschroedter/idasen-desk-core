@@ -26,7 +26,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             ICharacteristicBaseToStringConverter       toStringConverter ,
             IDescriptionToUuid                         descriptionToUuid ,
             Func < ISubject < IEnumerable < byte > > > subjectFactory ,
-            IAllGattCharacteristicsProvider         allGattCharacteristicsProvider )
+            IAllGattCharacteristicsProvider            allGattCharacteristicsProvider )
             : base ( logger ,
                      scheduler ,
                      device ,
@@ -87,11 +87,6 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             DeviceNameChanged.OnNext ( RawDeviceName ) ;
         }
 
-        internal const string CharacteristicDeviceName = "Device Name" ;
-        internal const string CharacteristicAppearance = "Appearance" ;
-        internal const string CharacteristicParameters = "Peripheral Preferred Connection Parameters" ;
-        internal const string CharacteristicResolution = "Central Address Resolution" ;
-
         protected override T WithMapping < T > ( ) where T : class
         {
             if ( _allGattCharacteristicsProvider.TryGetUuid ( CharacteristicDeviceName ,
@@ -110,8 +105,13 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                                                               out uuid ) )
                 DescriptionToUuid [ CharacteristicResolution ] = uuid ;
 
-            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
+            return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
+
+        internal const string CharacteristicDeviceName = "Device Name" ;
+        internal const string CharacteristicAppearance = "Appearance" ;
+        internal const string CharacteristicParameters = "Peripheral Preferred Connection Parameters" ;
+        internal const string CharacteristicResolution = "Central Address Resolution" ;
 
         private readonly IAllGattCharacteristicsProvider _allGattCharacteristicsProvider ;
     }

@@ -22,7 +22,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             IScheduler                    scheduler ,
             Func < ISubject < IDevice > > factory ,
             IDevices                      devices ,
-            IWatcher                   watcher )
+            IWatcher                      watcher )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -169,14 +169,13 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             return storedDevice.Name != device.Name ;
         }
 
-        private readonly    ISubject < IDevice > _deviceDiscovered ;
-        private readonly    ISubject < IDevice > _deviceNameUpdated ;
-        private readonly    IDevices             _devices ;
-        private readonly    ISubject < IDevice > _deviceUpdated ;
-        private readonly    ILogger              _logger ;
+        private readonly ISubject < IDevice > _deviceDiscovered ;
+        private readonly ISubject < IDevice > _deviceNameUpdated ;
+        private readonly IDevices             _devices ;
+        private readonly ISubject < IDevice > _deviceUpdated ;
+        private readonly ILogger              _logger ;
         private readonly IScheduler           _scheduler ;
-
-        private readonly IWatcher _watcher ;
+        private readonly IWatcher             _watcher ;
 
         private IDisposable ? _disposableStarted ;
         private IDisposable ? _disposableStopped ;

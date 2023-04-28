@@ -1,37 +1,20 @@
-﻿using System;
-using System.Reactive.Subjects;
-using FluentAssertions;
-using Idasen.BluetoothLE.Common.Tests;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
-using Idasen.BluetoothLE.Linak.Interfaces;
+﻿using System ;
+using System.Reactive.Subjects ;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using JetBrains.Annotations ;
-using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Serilog;
+using Microsoft.Reactive.Testing ;
+using Microsoft.VisualStudio.TestTools.UnitTesting ;
+using NSubstitute ;
+using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Tests
 {
     [ TestClass ]
     public class DeskDetectorTests
     {
-        private const string DeviceName    = nameof ( DeviceName ) ;
-        private const uint   DeviceAddress = 123 ;
-        private const uint   DeviceTimeout = 456 ;
-
-        private                    ILogger                  _logger       = null! ;
-        private                    TestScheduler            _scheduler    = null! ;
-        private                    IDeviceMonitorWithExpiry _monitor      = null! ;
-        private                    IDeskFactory             _factory      = null! ;
-        private                    ISubject < IDesk >       _deskDetected = null! ;
-        private                    ISubject < IDevice >     _updated      = null! ;
-        private                    Subject < IDevice >      _discovered   = null! ;
-        [ UsedImplicitly ] private Subject < IDevice >      _nameChanged  = null! ;
-        private                    Subject < IDevice >      _deskFound    = null! ;
-        private                    IDesk                    _desk         = null! ;
-        private                    IDevice                  _device       = null! ;
-        private                    IDesk                    _deskOther    = null! ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -132,5 +115,21 @@ namespace Idasen.BluetoothLE.Linak.Tests
                                       _deskDetected ) ;
         }
 
+        private const string              DeviceName    = nameof ( DeviceName ) ;
+        private const uint                DeviceAddress = 123 ;
+        private const uint                DeviceTimeout = 456 ;
+        private       IDesk               _desk         = null! ;
+        private       ISubject < IDesk >  _deskDetected = null! ;
+        private       Subject < IDevice > _deskFound    = null! ;
+        private       IDesk               _deskOther    = null! ;
+        private       IDevice             _device       = null! ;
+        private       Subject < IDevice > _discovered   = null! ;
+        private       IDeskFactory        _factory      = null! ;
+
+        private                    ILogger                  _logger      = null! ;
+        private                    IDeviceMonitorWithExpiry _monitor     = null! ;
+        [ UsedImplicitly ] private Subject < IDevice >      _nameChanged = null! ;
+        private                    TestScheduler            _scheduler   = null! ;
+        private                    ISubject < IDevice >     _updated     = null! ;
     }
 }

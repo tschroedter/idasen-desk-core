@@ -10,8 +10,6 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
     public interface IReferenceOutput
         : ICharacteristicBase
     {
-        delegate IReferenceOutput Factory ( IDevice device ) ;
-
         Guid                                   GattServiceUuid    { get ; }
         IEnumerable < byte >                   RawHeightSpeed     { get ; }
         IEnumerable < byte >                   RawTwo             { get ; }
@@ -24,5 +22,7 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
         IEnumerable < byte >                   RawMask            { get ; }
         IEnumerable < byte >                   RawDetectMask      { get ; }
         IObservable < RawValueChangedDetails > HeightSpeedChanged { get ; }
+
+        delegate IReferenceOutput Factory ( IDevice device ) ;
     }
 }

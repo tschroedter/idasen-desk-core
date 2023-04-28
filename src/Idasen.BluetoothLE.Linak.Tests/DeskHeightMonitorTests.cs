@@ -8,75 +8,98 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Tests
 {
-    [TestClass]
+    [ TestClass ]
     public class DeskHeightMonitorTests
     {
-        [TestInitialize]
-        public void Initialize()
+        [ TestInitialize ]
+        public void Initialize ( )
         {
-            _logger                = Substitute.For<ILogger>();
+            _logger = Substitute.For < ILogger > ( ) ;
         }
 
-        private DeskHeightMonitor CreateSut()
+        private DeskHeightMonitor CreateSut ( )
         {
-            return new DeskHeightMonitor(_logger);
+            return new DeskHeightMonitor ( _logger ) ;
         }
 
-        [DataTestMethod]
-        [DataRow( "0",                   true)]
-        [DataRow( "0,1",                 true)]
-        [DataRow( "0,1,2",               true)]
-        [DataRow( "0,1,2,3,4",           true)]
-        [DataRow( "0,1,2,3,4,5",         true)]
-        [DataRow( "0,1,2,3,4,5,6",       true)]
-        [DataRow( "0,1,2,3,4,5,6,7",     true)]
-        [DataRow( "0,1,2,3,4,5,6,7,8",   true)]
-        [DataRow( "0,1,2,3,4,5,6,7,8,9", true)]
-        [DataRow( "0,1,2,3,4,5,6,7,9,9", true)]
-        [DataRow( "0,1,2,3,4,5,6,9,9,9", true)]
-        [DataRow( "0,1,2,3,4,5,9,9,9,9", true)]
-        [DataRow( "0,1,2,3,4,9,9,9,9,9", false)]
-        [DataRow( "0,1,2,3,9,9,9,9,9,9", false)]
-        [DataRow( "0,1,2,9,9,9,9,9,9,9", false)]
-        [DataRow( "0,1,9,9,9,9,9,9,9,9", false)]
-        [DataRow( "0,9,9,9,9,9,9,9,9,9", false)]
-        [DataRow( "9,9,9,9,9,9,9,9,9,9", false)]
-        [DataRow( "9,9,9,9,9",           false)]
-        [DataRow( "9,9,9,9",             true)]
-        [DataRow( "9,9,9",               true)]
-        [DataRow( "9,9",                 true)]
-        [DataRow( "9",                   true)]
-        public void IsHeightChanging_ForValues_Expected(string values,
-                                                        bool expected)
+        [ DataTestMethod ]
+        [ DataRow ( "0" ,
+                    true ) ]
+        [ DataRow ( "0,1" ,
+                    true ) ]
+        [ DataRow ( "0,1,2" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,5" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,5,6" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,5,6,7" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,5,6,7,8" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,5,6,7,8,9" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,5,6,7,9,9" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,5,6,9,9,9" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,5,9,9,9,9" ,
+                    true ) ]
+        [ DataRow ( "0,1,2,3,4,9,9,9,9,9" ,
+                    false ) ]
+        [ DataRow ( "0,1,2,3,9,9,9,9,9,9" ,
+                    false ) ]
+        [ DataRow ( "0,1,2,9,9,9,9,9,9,9" ,
+                    false ) ]
+        [ DataRow ( "0,1,9,9,9,9,9,9,9,9" ,
+                    false ) ]
+        [ DataRow ( "0,9,9,9,9,9,9,9,9,9" ,
+                    false ) ]
+        [ DataRow ( "9,9,9,9,9,9,9,9,9,9" ,
+                    false ) ]
+        [ DataRow ( "9,9,9,9,9" ,
+                    false ) ]
+        [ DataRow ( "9,9,9,9" ,
+                    true ) ]
+        [ DataRow ( "9,9,9" ,
+                    true ) ]
+        [ DataRow ( "9,9" ,
+                    true ) ]
+        [ DataRow ( "9" ,
+                    true ) ]
+        public void IsHeightChanging_ForValues_Expected ( string values ,
+                                                          bool   expected )
         {
-            var heights = values.Split(',')
-                                .Select(uint.Parse)
-                                .ToArray();
+            var heights = values.Split ( ',' )
+                                .Select ( uint.Parse )
+                                .ToArray ( ) ;
 
             var sut = CreateSut ( ) ;
 
-            foreach ( var height in heights)
+            foreach ( var height in heights )
             {
-                sut.AddHeight ( height );
+                sut.AddHeight ( height ) ;
             }
 
             sut.IsHeightChanging ( )
                .Should ( )
-               .Be (expected) ;
+               .Be ( expected ) ;
         }
 
-        [TestMethod]
-        public void Reset_ForInvoked_ResetsValues()
+        [ TestMethod ]
+        public void Reset_ForInvoked_ResetsValues ( )
         {
-            var sut = CreateSut();
+            var sut = CreateSut ( ) ;
 
             PopulateWithSameHeight ( sut ) ;
 
-            sut.Reset (  );
+            sut.Reset ( ) ;
 
-            sut.IsHeightChanging()
-               .Should()
-               .BeTrue();
+            sut.IsHeightChanging ( )
+               .Should ( )
+               .BeTrue ( ) ;
         }
 
         private static void PopulateWithSameHeight ( IDeskHeightMonitor sut )
@@ -87,6 +110,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
             }
         }
 
-        private ILogger _logger = null!;
+        private ILogger _logger = null! ;
     }
 }

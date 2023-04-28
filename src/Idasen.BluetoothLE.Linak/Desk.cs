@@ -85,7 +85,7 @@ namespace Idasen.BluetoothLE.Linak
         }
 
         /// <inheritdoc />
-        public void MoveUnlock()
+        public void MoveUnlock ( )
         {
             _connector.MoveUnlock ( ) ;
         }

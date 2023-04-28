@@ -8,8 +8,6 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
     [ TestClass ]
     public class RawValueChangedDetailsTests
     {
-        private const string Description = "Description" ;
-
         [ TestMethod ]
         public void Constructor_ForInvoked_SetsDescription ( )
         {
@@ -62,6 +60,8 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
                                                 _timestamp ,
                                                 _uuid ) ;
         }
+
+        private const string Description = "Description" ;
 
         private readonly DateTimeOffset _timestamp = DateTimeOffset.Parse ( "2007-10-02T13:02:03.0000000-07:30" ) ;
         private readonly Guid           _uuid      = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;

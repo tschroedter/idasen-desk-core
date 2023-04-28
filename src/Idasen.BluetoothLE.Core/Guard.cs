@@ -7,12 +7,9 @@ namespace Idasen.BluetoothLE.Core
 {
     public static class Guard
     {
-        private const string ValueCannotBeNullOrEmpty = "Value cannot be null or empty" ;
-        private const string ValueCannotBeWhitespace  = "Value cannot be null, empty or whitespace" ;
-
         [ UsedImplicitly ]
         [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-        public static void ArgumentNotEmptyOrWhitespace ( object    parameter ,
+        public static void ArgumentNotEmptyOrWhitespace ( object parameter ,
                                                           string parameterName )
         {
             ArgumentNotNullOrEmpty ( parameter ,
@@ -31,7 +28,7 @@ namespace Idasen.BluetoothLE.Core
 
         [ UsedImplicitly ]
         [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-        public static void ArgumentNotNull ( object    parameter ,
+        public static void ArgumentNotNull ( object parameter ,
                                              string parameterName )
         {
             if ( parameter == null )
@@ -40,7 +37,7 @@ namespace Idasen.BluetoothLE.Core
 
         [ UsedImplicitly ]
         [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-        public static void ArgumentNotNullOrEmpty ( object    parameter ,
+        public static void ArgumentNotNullOrEmpty ( object parameter ,
                                                     string parameterName )
         {
             ArgumentNotNull ( parameter ,
@@ -56,5 +53,8 @@ namespace Idasen.BluetoothLE.Core
             throw new ArgumentException ( message ,
                                           parameterName ) ;
         }
+
+        private const string ValueCannotBeNullOrEmpty = "Value cannot be null or empty" ;
+        private const string ValueCannotBeWhitespace  = "Value cannot be null, empty or whitespace" ;
     }
 }

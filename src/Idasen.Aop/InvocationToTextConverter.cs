@@ -35,7 +35,7 @@ namespace Idasen.Aop
                 var argumentDescription = DumpObject ( argument ) ;
 
                 builder.Append ( argumentDescription )
-                    .Append ( "," ) ;
+                       .Append ( "," ) ;
             }
 
             if ( arguments.Any ( ) ) builder.Length -- ;
@@ -60,7 +60,7 @@ namespace Idasen.Aop
                                 $"'{argument.GetType ( ).FullName}' to json - " +
                                 $"Message: '{e.Message}'" ) ;
 
-                return argument.ToString ( ) ?? "null";
+                return argument.ToString ( ) ?? "null" ;
             }
         }
 

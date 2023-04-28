@@ -16,11 +16,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
     [ TestClass ]
     public class DeskMoverTests
     {
-        private const uint InitialHeight       = 100u ;
-        private const uint DefaultTargetHeight = 1500 ;
-        private const uint DefaultHeight       = 1000 ;
-        private const int  DefaultSpeed        = 200 ;
-
         [ TestInitialize ]
         public void Initialize ( )
         {
@@ -398,7 +393,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void Dispose_ForInvoked_DisposesDisposableProvider ( )
         {
-
             _providerFactory.Create ( _executor ,
                                       _heightAndSpeed )
                             .Returns ( _disposableProvider ) ;
@@ -414,7 +408,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void Dispose_ForInvoked_DisposalHeightAndSpeed ( )
         {
-            IDisposable disposable = Substitute.For < IDisposable > ( ) ;
+            var disposable = Substitute.For < IDisposable > ( ) ;
 
             var subject = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
 
@@ -432,22 +426,27 @@ namespace Idasen.BluetoothLE.Linak.Tests
                       .Dispose ( ) ;
         }
 
-        private IStoppingHeightCalculator _calculator     = null! ;
-        private HeightSpeedDetails        _details1       = null! ;
-        private IDeskCommandExecutor      _executor       = null! ;
-        private IDeskHeightAndSpeed       _heightAndSpeed = null! ;
+        private const uint InitialHeight       = 100u ;
+        private const uint DefaultTargetHeight = 1500 ;
+        private const uint DefaultHeight       = 1000 ;
+        private const int  DefaultSpeed        = 200 ;
+
+        private IStoppingHeightCalculator _calculator         = null! ;
+        private HeightSpeedDetails        _details1           = null! ;
+        private IDisposable               _disposable         = null! ;
+        private IInitialHeightProvider    _disposableProvider = null! ;
+        private IDeskCommandExecutor      _executor           = null! ;
+        private IObservable < uint >      _finished           = null! ;
+        private IDeskHeightAndSpeed       _heightAndSpeed     = null! ;
+        private IDeskHeightMonitor        _heightMonitor      = null! ;
 
         private ILogger                               _logger                = null! ;
+        private IDeskMovementMonitor                  _monitor               = null! ;
         private IDeskMovementMonitorFactory           _monitorFactory        = null! ;
         private IInitialHeightProvider                _provider              = null! ;
         private IInitialHeightAndSpeedProviderFactory _providerFactory       = null! ;
         private TestScheduler                         _scheduler             = null! ;
         private Subject < uint >                      _subjectFinished       = null! ;
         private Subject < HeightSpeedDetails >        _subjectHeightAndSpeed = null! ;
-        private IDeskHeightMonitor                    _heightMonitor         = null! ;
-        private IDeskMovementMonitor                  _monitor               = null! ;
-        private IInitialHeightProvider                _disposableProvider    = null! ;
-        private IObservable < uint >                  _finished              = null! ;
-        private IDisposable                           _disposable            = null! ;
     }
 }

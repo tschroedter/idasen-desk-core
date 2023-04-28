@@ -22,7 +22,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             GattCharacteristic                         characteristic ,
             IGattCharacteristicValueChangedObservables observables ,
             IGattWriteResultWrapperFactory             writeResultFactory ,
-            IGatReadResultWrapperFactory            readResultFactory )
+            IGatReadResultWrapperFactory               readResultFactory )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

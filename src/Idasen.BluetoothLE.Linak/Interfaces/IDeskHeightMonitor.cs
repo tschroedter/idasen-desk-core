@@ -2,7 +2,7 @@
 {
     public interface IDeskHeightMonitor
     {
-        bool IsHeightChanging() ;
+        bool IsHeightChanging ( ) ;
         void Reset ( ) ;
         void AddHeight ( uint height ) ;
     }

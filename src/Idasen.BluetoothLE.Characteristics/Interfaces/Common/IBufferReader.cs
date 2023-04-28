@@ -5,7 +5,7 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common
     public interface IBufferReader
     {
         bool TryReadValue (
-            IBuffer  buffer ,
-            out         byte [ ] bytes ) ;
+            IBuffer      buffer ,
+            out byte [ ] bytes ) ;
     }
 }

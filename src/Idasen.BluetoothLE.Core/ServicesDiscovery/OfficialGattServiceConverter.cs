@@ -13,8 +13,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         : DefaultTypeConverter
     {
         public override object ConvertFromString (
-            string ?           text ,
-            IReaderRow       readerRow ,
+            string ?      text ,
+            IReaderRow    readerRow ,
             MemberMapData memberMapData )
         {
             Guard.ArgumentNotNull ( readerRow ,
@@ -24,7 +24,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
             var number = text?.Replace ( "0x" ,
                                          "" ,
-                                         StringComparison.InvariantCulture ) ?? string.Empty ;
+                                         StringComparison.InvariantCulture ) ??
+                         string.Empty ;
 
             if ( string.IsNullOrWhiteSpace ( text ) )
                 return 0u ;
@@ -38,8 +39,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         }
 
         public override string ConvertToString (
-            object ?           value ,
-            IWriterRow       writerRow ,
+            object ?      value ,
+            IWriterRow    writerRow ,
             MemberMapData memberMapData )
         {
             Guard.ArgumentNotNull ( writerRow ,
