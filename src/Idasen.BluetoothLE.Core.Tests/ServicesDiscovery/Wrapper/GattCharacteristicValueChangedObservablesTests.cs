@@ -49,9 +49,9 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper
                 .Be ( _details.Uuid ) ;
         }
 
-        private GattCharacteristicValueChangedDetails              _details ;
-        private ILogger                                            _logger ;
-        private IScheduler                                         _scheduler ;
-        private ISubject < GattCharacteristicValueChangedDetails > _subject ;
+        private GattCharacteristicValueChangedDetails              _details   = null! ;
+        private ILogger                                            _logger    = null! ;
+        private IScheduler                                         _scheduler = null! ;
+        private ISubject < GattCharacteristicValueChangedDetails > _subject   = null! ;
     }
 }

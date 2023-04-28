@@ -174,7 +174,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
                                  _subject ) ;
         }
 
-        private ISubject < DateTime > _subject ;
-        private IWrapper              _wrapper ;
+        private ISubject < DateTime > _subject = null! ;
+        private IWrapper              _wrapper = null! ;
     }
 }

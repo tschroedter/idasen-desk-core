@@ -375,15 +375,15 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return deviceMonitor ;
         }
 
-        private HeightSpeedDetails _details1 ;
-        private HeightSpeedDetails _details2 ;
-        private HeightSpeedDetails _detailsZeroHeight ;
+        private HeightSpeedDetails _details1          = null!;
+        private HeightSpeedDetails _details2          = null!;
+        private HeightSpeedDetails _detailsZeroHeight = null!;
 
-        private IDeskCommandExecutor           _executor ;
-        private IDeskHeightAndSpeed            _heightAndSpeed ;
-        private ILogger                        _logger ;
-        private TestScheduler                  _scheduler ;
-        private Subject < uint >               _subjectFinished ;
-        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed ;
+        private IDeskCommandExecutor           _executor              = null! ;
+        private IDeskHeightAndSpeed            _heightAndSpeed        = null!;
+        private ILogger                        _logger                = null!;
+        private TestScheduler                  _scheduler             = null!;
+        private Subject < uint >               _subjectFinished       = null!;
+        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null!;
     }
 }

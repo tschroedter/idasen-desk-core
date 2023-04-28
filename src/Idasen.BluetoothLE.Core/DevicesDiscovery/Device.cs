@@ -25,10 +25,10 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
         }
 
-        public Device ( IDateTimeOffset broadcastTime ,
-                        ulong                       address ,
-                        [ GuardIgnore ] string      name ,
-                        short                       rawSignalStrengthInDBm )
+        public Device ( IDateTimeOffset          broadcastTime ,
+                        ulong                    address ,
+                        [ GuardIgnore ] string ? name ,
+                        short                    rawSignalStrengthInDBm )
         {
             Guard.ArgumentNotNull ( broadcastTime ,
                                     nameof ( broadcastTime ) ) ;
@@ -50,7 +50,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         public string MacAddress { get ; } = string.Empty ;
 
         /// <inheritdoc />
-        public string Name { get ; set ; }
+        public string? Name { get ; set ; }
 
         /// <inheritdoc />
         public short RawSignalStrengthInDBm { get ; set ; }

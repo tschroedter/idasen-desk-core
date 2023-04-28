@@ -65,7 +65,7 @@ namespace Idasen.BluetoothLE.Core.Tests
         public void ArgumentNotNull_ForValueNull_Throws ( )
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            var action = new Action ( ( ) => Guard.ArgumentNotNull ( null ,
+            var action = new Action ( ( ) => Guard.ArgumentNotNull ( null! ,
                                                                      "parameter" ) ) ;
 
             action.Should ( )

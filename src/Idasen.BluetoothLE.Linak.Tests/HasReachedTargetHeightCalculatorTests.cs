@@ -335,6 +335,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return new HasReachedTargetHeightCalculator ( _logger ) ;
         }
 
-        private ILogger _logger ;
+        private ILogger _logger = null!;
     }
 }

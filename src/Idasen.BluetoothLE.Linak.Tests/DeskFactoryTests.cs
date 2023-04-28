@@ -35,8 +35,8 @@ namespace Idasen.BluetoothLE.Linak.Tests
                                      _deskFactory ) ;
         }
 
-        private Func < IDevice , IDeskConnector > _deskConnectorFactory ;
-        private Func < IDeskConnector , IDesk >   _deskFactory ;
-        private IDeviceFactory                    _deviceFactory ;
+        private Func < IDevice , IDeskConnector > _deskConnectorFactory = null! ;
+        private Func < IDeskConnector , IDesk >   _deskFactory          = null! ;
+        private IDeviceFactory                    _deviceFactory        = null! ;
     }
 }

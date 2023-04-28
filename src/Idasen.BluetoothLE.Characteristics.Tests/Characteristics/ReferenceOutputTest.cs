@@ -369,7 +369,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
             var sut = CreateSut ( scheduler ,
                                   subject ) ;
 
-            RawValueChangedDetails heightAndSpeed = null ;
+            RawValueChangedDetails heightAndSpeed = null! ;
 
             subject
                .ObserveOn ( scheduler )
@@ -456,6 +456,6 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
                            CharacteristicWrapper10 ) ;
         }
 
-        private ISubject < RawValueChangedDetails > _subjectHeightSpeed ;
+        private ISubject < RawValueChangedDetails > _subjectHeightSpeed = null! ;
     }
 }

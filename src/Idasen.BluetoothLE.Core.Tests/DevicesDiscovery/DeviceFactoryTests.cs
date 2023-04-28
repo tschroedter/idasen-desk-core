@@ -25,7 +25,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
 
         private IDevice TestFactory ( IDateTimeOffset broadcastTime ,
                                       ulong           address ,
-                                      string          name ,
+                                      string ?        name ,
                                       short           rawSignalStrengthInDBm )
         {
             return new Device ( broadcastTime ,
@@ -84,9 +84,9 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
         }
 
         private ulong           _address ;
-        private IDateTimeOffset _broadcastTime ;
-        private Device.Factory  _factory ;
-        private string          _name ;
+        private IDateTimeOffset _broadcastTime = null! ;
+        private Device.Factory  _factory       = null! ;
+        private string          _name          = null! ;
         private short           _rawSignalStrengthInDBm ;
     }
 }

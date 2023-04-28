@@ -12,11 +12,11 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
     [TestClass]
     public class DeviceFactoryTests
     {
-        private ulong           _address;
-        private IDateTimeOffset _broadcastTime;
-        private Device.Factory  _factory;
-        private string          _name;
-        private short           _rawSignalStrengthInDBm;
+        private ulong           _address ;
+        private IDateTimeOffset _broadcastTime = null! ;
+        private Device.Factory  _factory       = null! ;
+        private string          _name          = null! ;
+        private short           _rawSignalStrengthInDBm ;
 
         [TestInitialize]
         public void Initialize()
@@ -31,7 +31,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
 
         private IDevice TestFactory(IDateTimeOffset broadcastTime,
                                     ulong           address,
-                                    string          name,
+                                    string ?        name,
                                     short           rawSignalStrengthInDBm)
         {
             return new Device(broadcastTime,

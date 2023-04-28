@@ -46,7 +46,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return new DeskHeightAndSpeedFactory ( _factory ) ;
         }
 
-        private DeskHeightAndSpeed.Factory _factory ;
-        private IReferenceOutput           _referenceOutput ;
+        private DeskHeightAndSpeed.Factory _factory         = null! ;
+        private IReferenceOutput           _referenceOutput = null! ;
     }
 }

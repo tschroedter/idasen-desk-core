@@ -111,12 +111,12 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return CreateSut ( ).Initialize ( ) ;
         }
 
-        private IDeskMover                     _deskMover ;
-        private HeightSpeedDetails             _details ;
-        private IDeskCommandExecutor           _executer ;
-        private IDeskHeightAndSpeed            _heightAndSpeed ;
-        private ILogger                        _logger ;
-        private TestScheduler                  _scheduler ;
-        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed ;
+        private IDeskMover                     _deskMover             = null! ;
+        private HeightSpeedDetails             _details               = null! ;
+        private IDeskCommandExecutor           _executer              = null! ;
+        private IDeskHeightAndSpeed            _heightAndSpeed        = null! ;
+        private ILogger                        _logger                = null! ;
+        private TestScheduler                  _scheduler             = null! ;
+        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
     }
 }

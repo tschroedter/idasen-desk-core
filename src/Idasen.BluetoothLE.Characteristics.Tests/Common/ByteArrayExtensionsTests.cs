@@ -12,10 +12,10 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
         [ TestMethod ]
         public void ToHex_ForBytesNull_Throws ( )
         {
-            byte [ ] bytes = null ;
+            byte [ ] bytes = null! ;
 
             // ReSharper disable once AssignNullToNotNullAttribute
-            Action action = ( ) => { bytes.ToHex ( ) ; } ;
+            var action = ( ) => { bytes.ToHex ( ) ; } ;
 
             action.Should ( )
                   .Throw < ArgumentNullException > ( )

@@ -54,8 +54,8 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return new DeskMoverFactory ( _factory ) ;
         }
 
-        private IDeskCommandExecutor _executor ;
-        private DeskMover.Factory    _factory ;
-        private IDeskHeightAndSpeed  _heightAndSpeed ;
+        private IDeskCommandExecutor _executor       = null! ;
+        private DeskMover.Factory    _factory        = null! ;
+        private IDeskHeightAndSpeed  _heightAndSpeed = null! ;
     }
 }

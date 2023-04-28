@@ -363,14 +363,14 @@ namespace Idasen.BluetoothLE.Linak.Tests
                .BeFalse ( ) ;
         }
 
-        private IRawValueToHeightAndSpeedConverter _converter ;
-        private ILogger                            _logger ;
-        private RawValueChangedDetails             _rawDetailsDummy ;
-        private IReferenceOutput                   _referenceOutput ;
-        private TestScheduler                      _scheduler ;
-        private ISubject < uint >                  _subjectHeight ;
-        private Subject < HeightSpeedDetails >     _subjectHeightAndSpeed ;
-        private Subject < RawValueChangedDetails > _subjectRawHeightAndSpeed ;
-        private ISubject < int >                   _subjectSpeed ;
+        private IRawValueToHeightAndSpeedConverter _converter                = null! ;
+        private ILogger                            _logger                   = null! ;
+        private RawValueChangedDetails             _rawDetailsDummy          = null! ;
+        private IReferenceOutput                   _referenceOutput          = null! ;
+        private TestScheduler                      _scheduler                = null! ;
+        private ISubject < uint >                  _subjectHeight            = null! ;
+        private Subject < HeightSpeedDetails >     _subjectHeightAndSpeed    = null! ;
+        private Subject < RawValueChangedDetails > _subjectRawHeightAndSpeed = null! ;
+        private ISubject < int >                   _subjectSpeed             = null! ;
     }
 }

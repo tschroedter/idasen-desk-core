@@ -22,7 +22,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void Constructor_ForLoggerNull_Throws ( )
         {
-            _logger = null ;
+            _logger = null! ;
 
             Action action = ( ) => CreateSut ( ) ;
 
@@ -34,7 +34,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void Constructor_ForCalculatorNull_Throws ( )
         {
-            _calculator = null ;
+            _calculator = null! ;
 
             Action action = ( ) => CreateSut ( ) ;
 
@@ -703,7 +703,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                                                   _calculator ) ;
         }
 
-        private IHasReachedTargetHeightCalculator _calculator ;
-        private ILogger                           _logger ;
+        private IHasReachedTargetHeightCalculator _calculator = null!;
+        private ILogger                           _logger     = null!;
     }
 }

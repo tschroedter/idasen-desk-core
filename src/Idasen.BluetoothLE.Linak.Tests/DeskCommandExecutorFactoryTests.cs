@@ -48,7 +48,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return new DeskCommandExecutorFactory ( _factory ) ;
         }
 
-        private IControl                    _control ;
-        private DeskCommandExecutor.Factory _factory ;
+        private IControl                    _control = null! ;
+        private DeskCommandExecutor.Factory _factory = null! ;
     }
 }

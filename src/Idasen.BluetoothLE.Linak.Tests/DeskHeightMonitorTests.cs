@@ -87,6 +87,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
             }
         }
 
-        private ILogger                               _logger;
+        private ILogger _logger = null!;
     }
 }

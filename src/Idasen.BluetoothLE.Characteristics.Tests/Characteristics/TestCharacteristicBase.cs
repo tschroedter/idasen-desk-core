@@ -52,7 +52,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
         {
             DescriptionToUuid [ RawValueKey ] = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
 
-            return this as T ;
+            return this as T ?? throw new Exception($"Can't cast {this} to {typeof(T)}");
         }
     }
 }

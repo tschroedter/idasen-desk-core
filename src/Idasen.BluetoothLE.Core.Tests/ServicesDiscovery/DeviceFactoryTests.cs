@@ -29,7 +29,7 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
                                        _wrapperFactory ) ;
         }
 
-        private Device.Factory                   _deviceFactory ;
-        private IBluetoothLeDeviceWrapperFactory _wrapperFactory ;
+        private Device.Factory                   _deviceFactory  = null!;
+        private IBluetoothLeDeviceWrapperFactory _wrapperFactory = null!;
     }
 }

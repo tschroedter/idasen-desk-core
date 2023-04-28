@@ -12,8 +12,8 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
     [AutoDataTestClass]
     public class WatcherTests
     {
-        private ISubject<DateTime> _subject;
-        private IWrapper           _wrapper;
+        private ISubject<DateTime> _subject = null!;
+        private IWrapper           _wrapper = null!;
 
         [TestInitialize]
         public void Initialize()

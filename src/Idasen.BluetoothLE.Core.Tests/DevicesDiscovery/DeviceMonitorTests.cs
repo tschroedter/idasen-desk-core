@@ -26,7 +26,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
 
             _device = Substitute.For < IDevice > ( ) ;
             _device.Name
-                   .Returns ( ( string ) null ) ;
+                   .Returns ( ( string )null! ) ;
 
             _deviceNewName = Substitute.For < IDevice > ( ) ;
             _deviceNewName.Name
@@ -187,7 +187,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
 
             using var sut = CreateSutSubscribed ( ) ;
 
-            IDevice discovered = null ;
+            IDevice discovered = null! ;
 
             using var observer = sut.DeviceDiscovered
                                     .Subscribe ( x => discovered = x ) ;
@@ -224,7 +224,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
 
             using var sut = CreateSutSubscribed ( ) ;
 
-            IDevice updated = null ;
+            IDevice updated = null! ;
 
             using var observer = sut.DeviceUpdated
                                     .Subscribe ( x => updated = x ) ;
@@ -269,7 +269,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
 
             using var sut = CreateSutSubscribed ( ) ;
 
-            IDevice updated = null ;
+            IDevice updated = null! ;
 
             using var observer = sut.DeviceUpdated
                                     .Subscribe ( x => updated = x ) ;
@@ -335,7 +335,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
 
             using var sut = CreateSutSubscribed ( ) ;
 
-            IDevice updated = null ;
+            IDevice updated = null! ;
 
             using var observer = sut.DeviceNameUpdated
                                     .Subscribe ( x => updated = x ) ;
@@ -353,7 +353,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
 
             using var sut = CreateSutSubscribed ( ) ;
 
-            IDevice updated = null ;
+            IDevice updated = null! ;
 
             using var observer = sut.DeviceUpdated
                                     .Subscribe ( x => updated = x ) ;
@@ -413,17 +413,17 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             return deviceMonitor ;
         }
 
-        private IDevice                        _device ;
-        private IDevice                        _deviceNewName ;
-        private IDevice                        _deviceOtherNewName ;
-        private IDevices                       _devices ;
-        private Func < ISubject < IDevice > >  _factory ;
-        private ILogger                        _logger ;
-        private TestScheduler                  _scheduler ;
-        private Queue < ISubject < IDevice > > _subjects ;
-        private ISubject < IDevice >           _subjectStarted ;
-        private ISubject < IDevice >           _subjectStopped ;
-        private ISubject < IDevice >           _subjectUpdated ;
-        private IWatcher                       _watcher ;
+        private IDevice                        _device             = null! ;
+        private IDevice                        _deviceNewName      = null! ;
+        private IDevice                        _deviceOtherNewName = null! ;
+        private IDevices                       _devices            = null! ;
+        private Func < ISubject < IDevice > >  _factory            = null! ;
+        private ILogger                        _logger             = null! ;
+        private TestScheduler                  _scheduler          = null! ;
+        private Queue < ISubject < IDevice > > _subjects           = null! ;
+        private ISubject < IDevice >           _subjectStarted     = null! ;
+        private ISubject < IDevice >           _subjectStopped     = null! ;
+        private ISubject < IDevice >           _subjectUpdated     = null! ;
+        private IWatcher                       _watcher            = null! ;
     }
 }

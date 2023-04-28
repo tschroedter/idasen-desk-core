@@ -242,10 +242,10 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
                            CharacteristicWrapper4 ) ;
         }
 
-        private ISubject < IEnumerable < byte > >          _subjectAppearanceChanged ;
-        private ISubject < IEnumerable < byte > >          _subjectDeviceNameChanged ;
-        private Func < ISubject < IEnumerable < byte > > > _subjectFactory ;
-        private ISubject < IEnumerable < byte > >          _subjectParametersChanged ;
-        private ISubject < IEnumerable < byte > >          _subjectResolutionChanged ;
+        private ISubject < IEnumerable < byte > >          _subjectAppearanceChanged = null!;
+        private ISubject < IEnumerable < byte > >          _subjectDeviceNameChanged = null!;
+        private Func < ISubject < IEnumerable < byte > > > _subjectFactory           = null!;
+        private ISubject < IEnumerable < byte > >          _subjectParametersChanged = null!;
+        private ISubject < IEnumerable < byte > >          _subjectResolutionChanged = null!;
     }
 }

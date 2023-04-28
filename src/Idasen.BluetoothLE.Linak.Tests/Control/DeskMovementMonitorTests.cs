@@ -113,18 +113,18 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control
                   .WithMessage ( DeskMovementMonitor.SpeedWasZero ) ;
         }
 
-        private HeightSpeedDetails  _details1 ;
-        private HeightSpeedDetails  _details2 ;
-        private HeightSpeedDetails  _details3 ;
-        private HeightSpeedDetails  _details4SameHeightAsDetails1 ;
-        private HeightSpeedDetails  _details5SameHeightAsDetails1 ;
-        private HeightSpeedDetails  _details6WithSpeedZero ;
-        private HeightSpeedDetails  _details7WithSpeedZero ;
-        private HeightSpeedDetails  _details8WithSpeedZero ;
-        private IDeskHeightAndSpeed _heightAndSpeed ;
+        private HeightSpeedDetails  _details1                     = null!;
+        private HeightSpeedDetails  _details2                     = null!;
+        private HeightSpeedDetails  _details3                     = null!;
+        private HeightSpeedDetails  _details4SameHeightAsDetails1 = null!;
+        private HeightSpeedDetails  _details5SameHeightAsDetails1 = null!;
+        private HeightSpeedDetails  _details6WithSpeedZero        = null! ;
+        private HeightSpeedDetails  _details7WithSpeedZero        = null! ;
+        private HeightSpeedDetails  _details8WithSpeedZero        = null!;
+        private IDeskHeightAndSpeed _heightAndSpeed               = null!;
 
-        private ILogger                        _logger ;
-        private TestScheduler                  _scheduler ;
-        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed ;
+        private ILogger                        _logger                = null!;
+        private TestScheduler                  _scheduler             = null!;
+        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null!;
     }
 }

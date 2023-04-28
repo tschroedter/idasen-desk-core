@@ -26,7 +26,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             SetSubscription ( sut ,
                               scheduler ) ;
 
-            subject.OnNext ( default ) ;
+            subject.OnNext ( default! ) ;
 
             scheduler.Start ( ) ;
 

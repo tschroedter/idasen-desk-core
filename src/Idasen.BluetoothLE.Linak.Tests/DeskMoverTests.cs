@@ -178,13 +178,13 @@ namespace Idasen.BluetoothLE.Linak.Tests
                                                   .Be ( _calculator.MoveIntoDirection ) ;
         }
 
-        [TestMethod]
-        public void Start_Invoked_CallsHeightMonitorResets()
+        [ TestMethod ]
+        public void Start_Invoked_CallsHeightMonitorResets ( )
         {
-            _executor.Up()
-                     .Returns(true);
+            _executor.Up ( )
+                     .Returns ( true ) ;
 
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue();
+            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
             _heightMonitor.Received ( )
                           .Reset ( ) ;
@@ -399,9 +399,9 @@ namespace Idasen.BluetoothLE.Linak.Tests
         public void Dispose_ForInvoked_DisposesDisposableProvider ( )
         {
 
-            _providerFactory.Create(_executor,
-                                    _heightAndSpeed)
-                            .Returns(_disposableProvider);
+            _providerFactory.Create ( _executor ,
+                                      _heightAndSpeed )
+                            .Returns ( _disposableProvider ) ;
 
             var sut = CreateSutInitialized ( ) ;
 
@@ -411,10 +411,10 @@ namespace Idasen.BluetoothLE.Linak.Tests
                        .Dispose ( ) ;
         }
 
-        [TestMethod]
-        public void Dispose_ForInvoked_DisposalHeightAndSpeed()
+        [ TestMethod ]
+        public void Dispose_ForInvoked_DisposalHeightAndSpeed ( )
         {
-            IDisposable disposable = Substitute.For<IDisposable>();
+            IDisposable disposable = Substitute.For < IDisposable > ( ) ;
 
             var subject = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
 
@@ -422,32 +422,32 @@ namespace Idasen.BluetoothLE.Linak.Tests
                    .Returns ( disposable ) ;
 
             _heightAndSpeed.HeightAndSpeedChanged
-                           .Returns(subject);
+                           .Returns ( subject ) ;
 
-            var sut = CreateSutWithIsAllowedToMoveIsTrue();
+            var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
-            sut.Dispose();
+            sut.Dispose ( ) ;
 
-            disposable.Received()
-                      .Dispose();
+            disposable.Received ( )
+                      .Dispose ( ) ;
         }
 
-        private IStoppingHeightCalculator _calculator ;
-        private HeightSpeedDetails        _details1 ;
-        private IDeskCommandExecutor      _executor ;
-        private IDeskHeightAndSpeed       _heightAndSpeed ;
+        private IStoppingHeightCalculator _calculator     = null! ;
+        private HeightSpeedDetails        _details1       = null! ;
+        private IDeskCommandExecutor      _executor       = null! ;
+        private IDeskHeightAndSpeed       _heightAndSpeed = null! ;
 
-        private ILogger                               _logger ;
-        private IDeskMovementMonitorFactory           _monitorFactory ;
-        private IInitialHeightProvider                _provider ;
-        private IInitialHeightAndSpeedProviderFactory _providerFactory ;
-        private TestScheduler                         _scheduler ;
-        private Subject < uint >                      _subjectFinished ;
-        private Subject < HeightSpeedDetails >        _subjectHeightAndSpeed ;
-        private IDeskHeightMonitor                    _heightMonitor ;
-        private IDeskMovementMonitor                  _monitor ;
-        private IInitialHeightProvider                _disposableProvider ;
-        private IObservable < uint >                  _finished ;
-        private IDisposable                           _disposable ;
+        private ILogger                               _logger                = null! ;
+        private IDeskMovementMonitorFactory           _monitorFactory        = null! ;
+        private IInitialHeightProvider                _provider              = null! ;
+        private IInitialHeightAndSpeedProviderFactory _providerFactory       = null! ;
+        private TestScheduler                         _scheduler             = null! ;
+        private Subject < uint >                      _subjectFinished       = null! ;
+        private Subject < HeightSpeedDetails >        _subjectHeightAndSpeed = null! ;
+        private IDeskHeightMonitor                    _heightMonitor         = null! ;
+        private IDeskMovementMonitor                  _monitor               = null! ;
+        private IInitialHeightProvider                _disposableProvider    = null! ;
+        private IObservable < uint >                  _finished              = null! ;
+        private IDisposable                           _disposable            = null! ;
     }
 }

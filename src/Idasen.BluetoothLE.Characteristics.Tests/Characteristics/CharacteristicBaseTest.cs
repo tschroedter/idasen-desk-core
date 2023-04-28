@@ -230,7 +230,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
             Wrappers.Clear ( ) ;
 
             Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                           null ) ;
+                           null! ) ;
 
             var sut = CreateSut ( ) ;
 

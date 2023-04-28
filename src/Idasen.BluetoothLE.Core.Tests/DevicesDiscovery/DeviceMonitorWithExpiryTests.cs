@@ -383,7 +383,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
                                                     factory ,
                                                     scheduler ) ;
 
-            IDevice expiredDevice = null ;
+            IDevice expiredDevice = null! ;
 
             using var disposable = sut.DeviceExpired
                                       .Subscribe ( expired => expiredDevice = expired ) ;

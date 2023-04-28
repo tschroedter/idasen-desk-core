@@ -18,7 +18,7 @@
         /// <summary>
         ///     The name of the device.
         /// </summary>
-        public string Name { get ; }
+        public string? Name { get ; }
 
         /// <summary>
         ///     The signal strength in dB.

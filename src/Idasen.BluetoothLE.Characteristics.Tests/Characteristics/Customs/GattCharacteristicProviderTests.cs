@@ -239,12 +239,12 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs
 
         private readonly List < IGattCharacteristicWrapper > _expectedCharacteristics = new( ) ;
 
-        private IGattCharacteristicWrapper            _characteristic1 ;
-        private IGattCharacteristicWrapper            _characteristic2 ;
-        private IGattCharacteristicWrapper            _customCharacteristic1 ;
-        private IReadOnlyDictionary < string , Guid > _customs ;
-        private Dictionary < string , Guid >          _foundCharacteristicsDictionary ;
-        private IGattCharacteristicsResultWrapper     _gattCharacteristics ;
-        private ILogger                               _logger ;
+        private IGattCharacteristicWrapper            _characteristic1                = null! ;
+        private IGattCharacteristicWrapper            _characteristic2                = null! ;
+        private IGattCharacteristicWrapper            _customCharacteristic1          = null! ;
+        private IReadOnlyDictionary < string , Guid > _customs                        = null! ;
+        private Dictionary < string , Guid >          _foundCharacteristicsDictionary = null! ;
+        private IGattCharacteristicsResultWrapper     _gattCharacteristics            = null! ;
+        private ILogger                               _logger                         = null! ;
     }
 }

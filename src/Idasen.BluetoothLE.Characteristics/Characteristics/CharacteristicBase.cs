@@ -119,7 +119,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                 }
 
                 Logger.Debug ( $"Reading raw value for {key} " +
-                               $"and and characteristic {characteristic?.Uuid}" ) ;
+                               $"and and characteristic {characteristic.Uuid}" ) ;
 
                 (bool success , byte [ ] value) result =
                     await RawValueReader.TryReadValueAsync ( characteristic ) ;

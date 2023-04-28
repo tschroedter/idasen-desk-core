@@ -82,7 +82,10 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             if ( GattCommunicationStatus.Success != Status )
                 return ( false , ArrayEmpty ) ;
 
-            return _reader.TryReadValue ( readValue.Value ,
+            if (readValue.Value == null)    // todo testing for this if
+                return ( false , ArrayEmpty ) ;
+
+            return _reader.TryReadValue ( readValue.Value,
                                           out var bytes )
                        ? ( true , bytes )
                        : ( false , ArrayEmpty ) ;

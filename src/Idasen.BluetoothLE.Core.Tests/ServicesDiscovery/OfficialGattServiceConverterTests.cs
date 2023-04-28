@@ -154,11 +154,11 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
             return new OfficialGattServiceConverter ( ) ;
         }
 
-        private MemberMapData _memberMapData ;
-        private IReaderRow    _readerRow ;
-        private string        _text ;
+        private MemberMapData _memberMapData = null! ;
+        private IReaderRow    _readerRow     = null! ;
+        private string        _text          = null! ;
         private uint          _value ;
-        private IWriterRow    _writerRow ;
+        private IWriterRow    _writerRow = null! ;
 
         public class TestClass
         {

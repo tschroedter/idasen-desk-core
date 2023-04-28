@@ -14,8 +14,8 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
         private const string Name                   = "Name";
         private const short  RawSignalStrengthInDBm = -50;
 
-        private IDateTimeOffset _broadcastTime;
-        private DeviceComparer  _comparer;
+        private IDateTimeOffset _broadcastTime = null!;
+        private DeviceComparer  _comparer = null!;
 
         [TestInitialize]
         public void Initialize()
@@ -40,7 +40,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
         [TestMethod]
         public void Constructor_ForBroadcastTimeNull_Throws()
         {
-            _broadcastTime = null;
+            _broadcastTime = null!;
 
             // ReSharper disable once ObjectCreationAsStatement
             Action action = () => { CreateSut(); };
