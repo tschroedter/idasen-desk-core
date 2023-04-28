@@ -80,12 +80,13 @@ namespace Idasen.BluetoothLE.Linak
 
             _deskFound = _monitor.DeviceNameUpdated
                                  .ObserveOn ( _scheduler )
-                                 .Where ( device => device.Name.StartsWith ( deviceName,
-                                                                             StringComparison.InvariantCultureIgnoreCase ) ||
+                                 .Where ( device => ( device.Name != null &&
+                                                      device.Name.StartsWith ( deviceName ,
+                                                                               StringComparison.InvariantCultureIgnoreCase ) ) ||
                                                     device.Address == deviceAddress )
                                  .SubscribeAsync ( OnDeskDiscovered ) ;
 
-            return this;
+            return this ;
         }
 
         /// <inheritdoc />
