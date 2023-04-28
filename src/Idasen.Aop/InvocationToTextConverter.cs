@@ -11,7 +11,7 @@ namespace Idasen.Aop
 {
     public class InvocationToTextConverter : IInvocationToTextConverter
     {
-        public InvocationToTextConverter ( [ NotNull ] ILogger logger )
+        public InvocationToTextConverter ( ILogger logger )
         {
             _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
         }
@@ -26,17 +26,16 @@ namespace Idasen.Aop
         }
 
         [ UsedImplicitly ]
-        internal string ConvertArgumentsToString ( [ NotNull ] object [ ] arguments )
+        internal string ConvertArgumentsToString ( object [ ] arguments )
         {
             var builder = new StringBuilder ( ) ;
 
             foreach ( var argument in arguments )
             {
-                var argumentDescription = argument == null
-                                              ? "null"
-                                              : DumpObject ( argument ) ;
+                var argumentDescription = DumpObject ( argument ) ;
 
-                builder.Append ( argumentDescription ).Append ( "," ) ;
+                builder.Append ( argumentDescription )
+                    .Append ( "," ) ;
             }
 
             if ( arguments.Any ( ) ) builder.Length -- ;
@@ -46,13 +45,10 @@ namespace Idasen.Aop
 
         private string DumpObject ( object argument )
         {
-            if ( argument == null )
-                return "null" ;
-
             try
             {
                 if ( IsWindowsBluetoothInstance ( argument ) )
-                    return argument.ToString ( ) ;
+                    return argument.ToString ( ) ?? "null" ;
 
                 var json = JsonSerializer.Serialize ( argument ) ;
 
@@ -64,7 +60,7 @@ namespace Idasen.Aop
                                 $"'{argument.GetType ( ).FullName}' to json - " +
                                 $"Message: '{e.Message}'" ) ;
 
-                return argument.ToString ( ) ;
+                return argument.ToString ( ) ?? "null";
             }
         }
 

@@ -1,6 +1,5 @@
 ﻿using Castle.DynamicProxy ;
 using Idasen.Aop.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 using Serilog.Events ;
 
@@ -8,8 +7,8 @@ namespace Idasen.Aop.Aspects
 {
     public class LogAspect : IInterceptor
     {
-        public LogAspect ( [ NotNull ] ILogger                    logger ,
-                           [ NotNull ] IInvocationToTextConverter converter )
+        public LogAspect ( ILogger                    logger ,
+                           IInvocationToTextConverter converter )
         {
             _logger    = logger ;
             _converter = converter ;

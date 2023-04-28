@@ -1,7 +1,6 @@
 ﻿using System ;
 using Castle.DynamicProxy ;
 using Idasen.Aop.Interfaces ;
-using JetBrains.Annotations ;
 using Serilog ;
 // ReSharper disable UnusedMember.Global
 
@@ -10,8 +9,8 @@ namespace Idasen.Aop.Aspects
     public class LogExceptionAspect : IInterceptor
     {
         // todo move ErrorManager to common space
-        public LogExceptionAspect ( [ NotNull ] ILogger                    logger ,
-                                    [ NotNull ] IInvocationToTextConverter converter )
+        public LogExceptionAspect ( ILogger                    logger ,
+                                    IInvocationToTextConverter converter )
         {
             _logger    = logger ;
             _converter = converter ;
