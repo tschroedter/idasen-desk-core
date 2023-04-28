@@ -12,8 +12,8 @@ namespace Idasen.BluetoothLE.Core
 
         [ UsedImplicitly ]
         [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-        public static void ArgumentNotEmptyOrWhitespace ( [ NotNull ] object parameter ,
-                                                          [ NotNull ] string parameterName )
+        public static void ArgumentNotEmptyOrWhitespace ( object    parameter ,
+                                                          string parameterName )
         {
             ArgumentNotNullOrEmpty ( parameter ,
                                      parameterName ) ;
@@ -31,8 +31,8 @@ namespace Idasen.BluetoothLE.Core
 
         [ UsedImplicitly ]
         [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-        public static void ArgumentNotNull ( [ NotNull ] object parameter ,
-                                             [ NotNull ] string parameterName )
+        public static void ArgumentNotNull ( object    parameter ,
+                                             string parameterName )
         {
             if ( parameter == null )
                 throw new ArgumentNullException ( parameterName ) ;
@@ -40,8 +40,8 @@ namespace Idasen.BluetoothLE.Core
 
         [ UsedImplicitly ]
         [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-        public static void ArgumentNotNullOrEmpty ( [ NotNull ] object parameter ,
-                                                    [ NotNull ] string parameterName )
+        public static void ArgumentNotNullOrEmpty ( object    parameter ,
+                                                    string parameterName )
         {
             ArgumentNotNull ( parameter ,
                               parameterName ) ;

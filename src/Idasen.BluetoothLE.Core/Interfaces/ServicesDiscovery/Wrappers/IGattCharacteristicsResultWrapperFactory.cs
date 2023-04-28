@@ -1,5 +1,4 @@
 ﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
 {
@@ -18,6 +17,6 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
         /// <returns>
         ///     The wrapper.
         /// </returns>
-        IGattCharacteristicsResultWrapper Create ( [ NotNull ] GattCharacteristicsResult result ) ;
+        IGattCharacteristicsResultWrapper Create ( GattCharacteristicsResult result ) ;
     }
 }

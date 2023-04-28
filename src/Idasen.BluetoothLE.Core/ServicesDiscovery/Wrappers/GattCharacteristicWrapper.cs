@@ -1,7 +1,6 @@
 ﻿using System ;
 using System.Collections.Generic ;
 using System.Diagnostics.CodeAnalysis ;
-using System.Reactive.Subjects ;
 using System.Threading.Tasks ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
@@ -19,11 +18,11 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IGattCharacteristicWrapper
     {
         public GattCharacteristicWrapper (
-            [ JetBrains.Annotations.NotNull ] ILogger                                            logger ,
-            [ JetBrains.Annotations.NotNull ] GattCharacteristic                                 characteristic ,
-            [ JetBrains.Annotations.NotNull ] IGattCharacteristicValueChangedObservables         observables ,
-            [ JetBrains.Annotations.NotNull ] IGattWriteResultWrapperFactory                     writeResultFactory ,
-            [ JetBrains.Annotations.NotNull ] IGatReadResultWrapperFactory                       readResultFactory )
+            ILogger                                    logger ,
+            GattCharacteristic                         characteristic ,
+            IGattCharacteristicValueChangedObservables observables ,
+            IGattWriteResultWrapperFactory             writeResultFactory ,
+            IGatReadResultWrapperFactory            readResultFactory )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

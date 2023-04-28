@@ -3,7 +3,6 @@ using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery
 {
@@ -12,8 +11,8 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
     public class Watcher
         : IWatcher
     {
-        public Watcher ( [ NotNull ] IWrapper              wrapper ,
-                         [ NotNull ] ISubject < DateTime > started )
+        public Watcher ( IWrapper                 wrapper ,
+                         ISubject < DateTime > started )
         {
             Guard.ArgumentNotNull ( wrapper ,
                                     nameof ( wrapper ) ) ;

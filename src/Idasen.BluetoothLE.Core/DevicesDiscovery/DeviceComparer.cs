@@ -9,8 +9,8 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         : IDeviceComparer
     {
         /// <inheritdoc />
-        public bool Equals ( IDevice deviceA ,
-                             IDevice deviceB )
+        public bool Equals ( IDevice ? deviceA ,
+                             IDevice ? deviceB )
         {
             if ( deviceA == null ||
                  deviceB == null )
@@ -23,8 +23,8 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         }
 
         /// <inheritdoc />
-        public bool IsEquivalentTo ( IDevice deviceA ,
-                                     IDevice deviceB )
+        public bool IsEquivalentTo ( IDevice ? deviceA ,
+                                     IDevice ? deviceB )
         {
             if ( deviceA == null ||
                  deviceB == null )

@@ -6,7 +6,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using JetBrains.Annotations ;
 using AdvertisementWatcher = Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher ;
 using ExcludeFromCodeCoverage = System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute ;
 
@@ -18,12 +17,12 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
     public sealed class Wrapper
         : IWrapper
     {
-        public Wrapper ( [ NotNull ] IScheduler                                scheduler ,
-                         [ NotNull ] IDeviceFactory                            deviceFactory ,
-                         [ NotNull ] Func < DateTimeOffset , IDateTimeOffset > dateTimeFactory ,
-                         [ NotNull ] ISubject < IDevice >                      received ,
-                         [ NotNull ] ISubject < DateTime >                     stopped ,
-                         [ NotNull ] IStatusMapper                             statusMapper )
+        public Wrapper ( IScheduler                                scheduler ,
+                         IDeviceFactory                            deviceFactory ,
+                         Func < DateTimeOffset , IDateTimeOffset > dateTimeFactory ,
+                         ISubject < IDevice >                      received ,
+                         ISubject < DateTime >                     stopped ,
+                         IStatusMapper                          statusMapper )
         {
             Guard.ArgumentNotNull ( scheduler ,
                                     nameof ( scheduler ) ) ;

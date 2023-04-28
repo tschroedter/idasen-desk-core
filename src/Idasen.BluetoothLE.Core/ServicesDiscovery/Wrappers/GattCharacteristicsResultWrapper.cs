@@ -18,8 +18,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IGattCharacteristicsResultWrapper
     {
         public GattCharacteristicsResultWrapper (
-            [ NotNull ] IGattCharacteristicWrapperFactory factory ,
-            [ NotNull ] GattCharacteristicsResult         result )
+            IGattCharacteristicWrapperFactory factory ,
+            GattCharacteristicsResult      result )
         {
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;
@@ -37,7 +37,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         public byte? ProtocolError => _result.ProtocolError ;
 
         /// <inheritdoc />
-        public IReadOnlyList < IGattCharacteristicWrapper > Characteristics { get ; private set ; }
+        public IReadOnlyList < IGattCharacteristicWrapper > Characteristics { get ; private set ; } = new List< IGattCharacteristicWrapper >();
 
         public async Task < IGattCharacteristicsResultWrapper > Initialize ( )
         {

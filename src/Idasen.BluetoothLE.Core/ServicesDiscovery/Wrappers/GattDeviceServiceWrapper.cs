@@ -12,8 +12,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IGattDeviceServiceWrapper
     {
         public GattDeviceServiceWrapper (
-            [ JetBrains.Annotations.NotNull ] IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
-            [ JetBrains.Annotations.NotNull ] GattDeviceService                        gattDeviceService )
+            IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
+            GattDeviceService                     gattDeviceService )
         {
             Guard.ArgumentNotNull ( characteristicsFactory ,
                                     nameof ( characteristicsFactory ) ) ;

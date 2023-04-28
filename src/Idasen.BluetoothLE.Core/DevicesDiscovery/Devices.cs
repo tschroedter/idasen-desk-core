@@ -3,7 +3,6 @@ using System.Linq ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery
@@ -13,7 +12,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
     public class Devices
         : IDevices
     {
-        public Devices ( [ NotNull ] ILogger logger )
+        public Devices ( ILogger logger )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -88,8 +87,8 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         }
 
         /// <inheritdoc />
-        public bool TryGetDevice ( ulong       address ,
-                                   out IDevice device )
+        public bool TryGetDevice ( ulong         address ,
+                                   out IDevice ? device )
         {
             lock ( _padLock )
             {

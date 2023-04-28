@@ -11,7 +11,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IGattCharacteristicWrapperFactory
     {
         public GattCharacteristicWrapperFactory (
-            [ NotNull ] GattCharacteristicWrapper.Factory factory )
+            GattCharacteristicWrapper.Factory factory )
         {
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;

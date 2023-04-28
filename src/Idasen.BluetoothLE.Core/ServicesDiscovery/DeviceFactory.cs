@@ -15,8 +15,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         : IDeviceFactory
     {
         public DeviceFactory (
-            [ JetBrains.Annotations.NotNull ] Device.Factory                   deviceFactory ,
-            [ JetBrains.Annotations.NotNull ] IBluetoothLeDeviceWrapperFactory deviceWrapperFactory )
+            Device.Factory                      deviceFactory ,
+            IBluetoothLeDeviceWrapperFactory deviceWrapperFactory )
         {
             Guard.ArgumentNotNull ( deviceFactory ,
                                     nameof ( deviceFactory ) ) ;

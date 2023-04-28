@@ -4,7 +4,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using JetBrains.Annotations ;
 using Selkie.DefCon.One.Common ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery
@@ -15,7 +14,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
     public class Device
         : IDevice
     {
-        public Device ( [ NotNull ] IDevice device )
+        public Device ( IDevice device )
         {
             Guard.ArgumentNotNull ( device ,
                                     nameof ( device ) ) ;
@@ -24,9 +23,10 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             Address                = device.Address ;
             Name                   = device.Name ;
             RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
+            Name                   = string.Empty ;
         }
 
-        public Device ( [ NotNull ] IDateTimeOffset broadcastTime ,
+        public Device ( IDateTimeOffset broadcastTime ,
                         ulong                       address ,
                         [ GuardIgnore ] string      name ,
                         short                       rawSignalStrengthInDBm )
@@ -37,7 +37,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             BroadcastTime          = broadcastTime ;
             Address                = address ;
             MacAddress             = address.ToMacAddress ( ) ;
-            Name                   = name ?? string.Empty ;
+            Name                   = name ;
             RawSignalStrengthInDBm = rawSignalStrengthInDBm ;
         }
 
@@ -48,21 +48,17 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         public ulong Address { get ; }
 
         /// <inheritdoc />
-        public string MacAddress { get ; }
+        public string MacAddress { get ; } = string.Empty ;
 
         /// <inheritdoc />
-        public string Name
-        {
-            get => _name ;
-            set => _name = value ?? string.Empty ;
-        }
+        public string Name { get ; set ; }
 
         /// <inheritdoc />
         public short RawSignalStrengthInDBm { get ; set ; }
 
         public delegate IDevice Factory ( IDateTimeOffset broadcastTime ,
                                           ulong           address ,
-                                          string          name ,
+                                          string ?        name ,
                                           short           rawSignalStrengthInDBm ) ;
 
         /// <inheritdoc />
@@ -82,7 +78,5 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
 
         /// <inheritdoc />
         public string Details => ToString ( ) ;
-
-        private string _name ;
     }
 }

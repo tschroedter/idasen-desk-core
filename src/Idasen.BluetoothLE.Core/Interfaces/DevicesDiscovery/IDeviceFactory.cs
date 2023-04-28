@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations ;
-
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
 {
     /// <summary>
     ///     Factory to create devices.
@@ -25,9 +23,9 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         /// <returns>
         ///     A new device.
         /// </returns>
-        IDevice Create ( [ NotNull ] IDateTimeOffset broadcastTime ,
-                         ulong                       address ,
-                         [ CanBeNull ] string        name ,
-                         short                       rawSignalStrengthInDBm ) ;
+        IDevice Create ( IDateTimeOffset broadcastTime ,
+                         ulong              address ,
+                         string ?           name ,
+                         short              rawSignalStrengthInDBm ) ;
     }
 }

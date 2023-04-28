@@ -11,7 +11,6 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         /// <summary>
         ///     Collection of discovered devices.
         /// </summary>
-        [ NotNull ]
         IReadOnlyCollection < IDevice > DiscoveredDevices { get ; }
 
         /// <summary>
@@ -19,7 +18,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         /// </summary>
         /// <param name="device"></param>
         /// <returns>The added or updated device.</returns>
-        void AddOrUpdateDevice ( [ NotNull ] IDevice device ) ;
+        void AddOrUpdateDevice ( IDevice device ) ;
 
         /// <summary>
         ///     Determines if the collection contains a specific device.
@@ -29,7 +28,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         ///     'true' if the device was found, otherwise 'false'.
         /// </returns>
         [ UsedImplicitly ]
-        bool ContainsDevice ( [ NotNull ] IDevice device ) ;
+        bool ContainsDevice ( IDevice device ) ;
 
         /// <summary>
         ///     Gets the value associated with the specified key.
@@ -40,8 +39,8 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         ///     address is found; otherwise, the default null. This parameter is passed uninitialized.
         /// </param>
         /// <returns>true if the dictionary contains an element with the specified key; otherwise, false.</returns>
-        bool TryGetDevice ( ulong                     address ,
-                            [ CanBeNull ] out IDevice device ) ;
+        bool TryGetDevice ( ulong         address ,
+                            out IDevice ? device ) ;
 
         /// <summary>
         ///     Remove the given device from the collection.
@@ -49,7 +48,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         /// <param name="device">
         ///     The device to be removed.
         /// </param>
-        void RemoveDevice ( [ NotNull ] IDevice device ) ;
+        void RemoveDevice ( IDevice device ) ;
 
         /// <summary>
         ///     Clear the collection.

@@ -65,7 +65,7 @@ namespace Idasen.BluetoothLE.Linak
             catch ( Exception e )
             {
                 if ( e.IsBluetoothDisabledException ( ) )
-                    e.LogBluetoothStatusException ( _logger ) ;
+                    e.LogBluetoothStatusException ( _logger, string.Empty ) ;
                 else
                     _logger.Error ( e ,
                                     "Failed to detect desk" ) ;

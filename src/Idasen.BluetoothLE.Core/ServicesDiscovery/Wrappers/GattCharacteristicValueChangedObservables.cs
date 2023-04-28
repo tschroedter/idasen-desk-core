@@ -19,9 +19,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IGattCharacteristicValueChangedObservables
     {
         public GattCharacteristicValueChangedObservables (
-            [ JetBrains.Annotations.NotNull ] ILogger                                            logger ,
-            [ JetBrains.Annotations.NotNull ] IScheduler                                         scheduler ,
-            [ JetBrains.Annotations.NotNull ] ISubject < GattCharacteristicValueChangedDetails > subject )
+            ILogger                                               logger ,
+            IScheduler                                            scheduler ,
+            ISubject < GattCharacteristicValueChangedDetails > subject )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -76,9 +76,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                                           GattValueChangedEventArgs > ( h => characteristic.ValueChanged += h ,
                                                                         h => characteristic.ValueChanged -= h )
                                      .SubscribeOn ( _scheduler )
-                                     .Subscribe ( e => OnValueChanged ( e.Sender ,
-                                                                        e.EventArgs ,
-                                                                        _subject ) ) ;
+                                     .Subscribe ( e => OnValueChanged ( e.Sender! ,
+                                                                              e.EventArgs ,
+                                                                              _subject ) ) ;
                     }
                     else
                     {
@@ -137,6 +137,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         private readonly ILogger                                            _logger ;
         private readonly IScheduler                                         _scheduler ;
         private readonly ISubject < GattCharacteristicValueChangedDetails > _subject ;
-        private          IDisposable                                        _observable ;
+        private          IDisposable ?                                      _observable ;
     }
 }

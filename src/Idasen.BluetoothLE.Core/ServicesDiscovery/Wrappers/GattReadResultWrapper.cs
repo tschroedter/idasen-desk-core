@@ -10,7 +10,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     public class GattReadResultWrapper
         : IGattReadResultWrapper
     {
-        public GattReadResultWrapper ( [ JetBrains.Annotations.NotNull ] GattReadResult result )
+        public GattReadResultWrapper ( GattReadResult result )
         {
             Guard.ArgumentNotNull ( result ,
                                     nameof ( result ) ) ;

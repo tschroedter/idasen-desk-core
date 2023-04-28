@@ -9,7 +9,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     {
         public GattCommunicationStatus Status { get ; } = GattCommunicationStatus.Unreachable ;
 
-        public byte?   ProtocolError { get ; } = null ;
-        public IBuffer Value         { get ; } = null ;
+        public byte ?    ProtocolError { get ; } = null ;
+        public IBuffer ? Value         { get ; } = null ;
     }
 }

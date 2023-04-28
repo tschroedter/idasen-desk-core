@@ -8,7 +8,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 {
@@ -17,8 +16,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
     public class Device
         : IDevice
     {
-        public Device ( [ NotNull ] IScheduler                scheduler ,
-                        [ NotNull ] IBluetoothLeDeviceWrapper wrapper )
+        public Device ( IScheduler                   scheduler ,
+                        IBluetoothLeDeviceWrapper wrapper )
         {
             Guard.ArgumentNotNull ( wrapper ,
                                     nameof ( wrapper ) ) ;
@@ -75,8 +74,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         /// <inheritdoc />
         public void Dispose ( )
         {
-            _wrapper?.Dispose ( ) ;
-            _subscriber?.Dispose ( ) ;
+            _wrapper.Dispose ( ) ;
+            _subscriber.Dispose ( ) ;
         }
 
         public delegate IDevice Factory ( IBluetoothLeDeviceWrapper wrapper ) ;

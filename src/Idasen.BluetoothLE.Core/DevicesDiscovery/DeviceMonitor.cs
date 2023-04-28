@@ -6,7 +6,6 @@ using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 // [assembly: InternalsVisibleTo("Idasen.BluetoothLE.Tests")]
@@ -19,11 +18,11 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         : IDeviceMonitor
     {
         public DeviceMonitor (
-            [ NotNull ] ILogger                       logger ,
-            [ NotNull ] IScheduler                    scheduler ,
-            [ NotNull ] Func < ISubject < IDevice > > factory ,
-            [ NotNull ] IDevices                      devices ,
-            [ NotNull ] IWatcher                      watcher )
+            ILogger                       logger ,
+            IScheduler                    scheduler ,
+            Func < ISubject < IDevice > > factory ,
+            IDevices                      devices ,
+            IWatcher                   watcher )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -133,7 +132,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
                                       $"Address = {device.Address})" ) ;
 
                 var hasNameChanged = HasDeviceNameChanged ( device ,
-                                                            storedDevice ) ;
+                                                            storedDevice! ) ;
 
                 _devices.AddOrUpdateDevice ( device ) ;
 
@@ -170,17 +169,17 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             return storedDevice.Name != device.Name ;
         }
 
-        private readonly             ISubject < IDevice > _deviceDiscovered ;
-        private readonly             ISubject < IDevice > _deviceNameUpdated ;
-        private readonly             IDevices             _devices ;
-        private readonly             ISubject < IDevice > _deviceUpdated ;
-        private readonly             ILogger              _logger ;
-        [ NotNull ] private readonly IScheduler           _scheduler ;
+        private readonly    ISubject < IDevice > _deviceDiscovered ;
+        private readonly    ISubject < IDevice > _deviceNameUpdated ;
+        private readonly    IDevices             _devices ;
+        private readonly    ISubject < IDevice > _deviceUpdated ;
+        private readonly    ILogger              _logger ;
+        private readonly IScheduler           _scheduler ;
 
         private readonly IWatcher _watcher ;
 
-        private IDisposable _disposableStarted ;
-        private IDisposable _disposableStopped ;
-        private IDisposable _disposableUpdated ;
+        private IDisposable ? _disposableStarted ;
+        private IDisposable ? _disposableStopped ;
+        private IDisposable ? _disposableUpdated ;
     }
 }

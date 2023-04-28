@@ -22,13 +22,13 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IBluetoothLeDeviceWrapper
     {
         public BluetoothLeDeviceWrapper (
-            [ JetBrains.Annotations.NotNull ] ILogger                                 logger ,
-            [ JetBrains.Annotations.NotNull ] IScheduler                              scheduler ,
-            [ JetBrains.Annotations.NotNull ] IGattServicesProviderFactory            providerFactory ,
-            [ JetBrains.Annotations.NotNull ] IGattDeviceServicesResultWrapperFactory servicesFactory ,
-            [ JetBrains.Annotations.NotNull ] IGattServicesDictionary                 gattServicesDictionary ,
-            [ JetBrains.Annotations.NotNull ] ISubject < BluetoothConnectionStatus >  connectionStatusChanged ,
-            [ JetBrains.Annotations.NotNull ] BluetoothLEDevice                       device )
+            ILogger                                 logger ,
+            IScheduler                              scheduler ,
+            IGattServicesProviderFactory            providerFactory ,
+            IGattDeviceServicesResultWrapperFactory servicesFactory ,
+            IGattServicesDictionary                 gattServicesDictionary ,
+            ISubject < BluetoothConnectionStatus >  connectionStatusChanged ,
+            BluetoothLEDevice                    device )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -99,7 +99,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             }
             catch (Exception e)
             {
-                _logger.Error(e, $"Failed to connect to device {_device?.BluetoothAddress}");
+                _logger.Error(e, $"Failed to connect to device {_device.BluetoothAddress}");
             }
         }
 
@@ -134,7 +134,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         {
             _provider.Dispose ( ) ;
             _gattServicesDictionary.Dispose ( ) ;
-            _session.Dispose ( ) ;
+            _session?.Dispose ( ) ;
             _subscriberConnectionStatus.Dispose ( ) ;
             _device.Dispose ( ) ;
         }
@@ -176,6 +176,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         private readonly IGattServicesProvider                   _provider ;
         private readonly IGattDeviceServicesResultWrapperFactory _servicesFactory ;
         private readonly IDisposable                             _subscriberConnectionStatus ;
-        private          GattSession                             _session ;
+        private          GattSession ?                           _session ;
     }
 }

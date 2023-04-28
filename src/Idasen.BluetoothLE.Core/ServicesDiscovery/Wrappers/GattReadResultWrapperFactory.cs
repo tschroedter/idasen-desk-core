@@ -2,7 +2,6 @@
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 {
@@ -11,7 +10,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     public class GattReadResultWrapperFactory
         : IGatReadResultWrapperFactory
     {
-        public GattReadResultWrapperFactory ( [ NotNull ] GattReadResultWrapper.Factory factory )
+        public GattReadResultWrapperFactory ( GattReadResultWrapper.Factory factory )
         {
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;

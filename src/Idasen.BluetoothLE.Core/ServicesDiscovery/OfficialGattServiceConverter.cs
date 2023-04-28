@@ -5,7 +5,6 @@ using CsvHelper ;
 using CsvHelper.Configuration ;
 using CsvHelper.TypeConversion ;
 using Idasen.Aop.Aspects ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 {
@@ -14,20 +13,18 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         : DefaultTypeConverter
     {
         public override object ConvertFromString (
-            [ NotNull ] string        text ,
-            [ NotNull ] IReaderRow    readerRow ,
-            [ NotNull ] MemberMapData memberMapData )
+            string ?           text ,
+            IReaderRow       readerRow ,
+            MemberMapData memberMapData )
         {
-            Guard.ArgumentNotNull ( text ,
-                                    nameof ( text ) ) ;
             Guard.ArgumentNotNull ( readerRow ,
                                     nameof ( readerRow ) ) ;
             Guard.ArgumentNotNull ( memberMapData ,
                                     nameof ( memberMapData ) ) ;
 
-            var number = text.Replace ( "0x" ,
-                                        "" ,
-                                        StringComparison.InvariantCulture ) ;
+            var number = text?.Replace ( "0x" ,
+                                         "" ,
+                                         StringComparison.InvariantCulture ) ?? string.Empty ;
 
             return ushort.TryParse ( number ,
                                      NumberStyles.HexNumber ,
@@ -38,18 +35,18 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         }
 
         public override string ConvertToString (
-            [ NotNull ] object        value ,
-            [ NotNull ] IWriterRow    writerRow ,
-            [ NotNull ] MemberMapData memberMapData )
+            object ?           value ,
+            IWriterRow       writerRow ,
+            MemberMapData memberMapData )
         {
-            Guard.ArgumentNotNull ( value ,
-                                    nameof ( value ) ) ;
             Guard.ArgumentNotNull ( writerRow ,
                                     nameof ( writerRow ) ) ;
             Guard.ArgumentNotNull ( memberMapData ,
                                     nameof ( memberMapData ) ) ;
 
-            return value.ToString ( ) ;
+            return value != null
+                       ? value.ToString ( ) ?? "null"
+                       : "null" ;
         }
     }
 }

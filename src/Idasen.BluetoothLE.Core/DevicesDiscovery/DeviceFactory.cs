@@ -2,7 +2,6 @@
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery
 {
@@ -11,7 +10,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
     public class DeviceFactory
         : IDeviceFactory
     {
-        public DeviceFactory ( [ NotNull ] Device.Factory factory )
+        public DeviceFactory ( Device.Factory factory )
         {
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;
@@ -22,7 +21,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         /// <inheritdoc />
         public IDevice Create ( IDateTimeOffset broadcastTime ,
                                 ulong           address ,
-                                string          name ,
+                                string ?        name,
                                 short           rawSignalStrengthInDBm )
         {
             Guard.ArgumentNotNull ( broadcastTime ,

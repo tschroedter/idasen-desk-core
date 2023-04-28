@@ -5,7 +5,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery
@@ -14,9 +13,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
     public class MatchMaker
         : IMatchMaker
     {
-        public MatchMaker ( [ NotNull ] ILogger               logger ,
-                            [ NotNull ] IOfficialGattServices bluetoothGattServices ,
-                            [ NotNull ] IDeviceFactory        deviceFactory )
+        public MatchMaker ( ILogger               logger ,
+                            IOfficialGattServices bluetoothGattServices ,
+                            IDeviceFactory     deviceFactory )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

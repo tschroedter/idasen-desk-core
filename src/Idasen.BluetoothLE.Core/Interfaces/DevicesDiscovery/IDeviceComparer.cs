@@ -18,8 +18,8 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         ///     'true' if the devices are equivalent, otherwise 'false'.
         /// </returns>
         [ UsedImplicitly ]
-        bool IsEquivalentTo ( [ CanBeNull ] IDevice deviceA ,
-                              [ CanBeNull ] IDevice deviceB ) ;
+        bool IsEquivalentTo ( IDevice ? deviceA ,
+                              IDevice ? deviceB ) ;
 
         /// <summary>
         ///     Checks if the given devices have the same property values.
@@ -34,7 +34,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
         ///     'true' if the devices have the same property values, otherwise 'false'.
         /// </returns>
         [ UsedImplicitly ]
-        bool Equals ( [ CanBeNull ] IDevice deviceA ,
-                      [ CanBeNull ] IDevice deviceB ) ;
+        bool Equals ( IDevice ? deviceA ,
+                      IDevice ? deviceB ) ;
     }
 }

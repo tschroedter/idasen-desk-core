@@ -7,7 +7,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery
@@ -17,12 +16,12 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         : IDeviceMonitorWithExpiry
     {
         public DeviceMonitorWithExpiry (
-            [ NotNull ] ILogger                 logger ,
-            [ NotNull ] IDateTimeOffset         dateTimeOffset ,
-            [ NotNull ] IDeviceMonitor          deviceMonitor ,
-            [ NotNull ] ISubject < IDevice >    deviceExpired ,
-            [ NotNull ] IObservableTimerFactory factory ,
-            [ NotNull ] IScheduler              scheduler )
+            ILogger                 logger ,
+            IDateTimeOffset         dateTimeOffset ,
+            IDeviceMonitor          deviceMonitor ,
+            ISubject < IDevice >    deviceExpired ,
+            IObservableTimerFactory factory ,
+            IScheduler           scheduler )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;

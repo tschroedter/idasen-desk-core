@@ -8,7 +8,6 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery
@@ -18,10 +17,10 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
     public class GattServicesProvider
         : IGattServicesProvider
     {
-        public GattServicesProvider ( [ NotNull ] ILogger                              logger ,
-                                      [ NotNull ] IGattServicesDictionary              services ,
-                                      [ NotNull ] ISubject < GattCommunicationStatus > refreshed ,
-                                      [ NotNull ] IBluetoothLeDeviceWrapper            device )
+        public GattServicesProvider ( ILogger                              logger ,
+                                      IGattServicesDictionary              services ,
+                                      ISubject < GattCommunicationStatus > refreshed ,
+                                      IBluetoothLeDeviceWrapper         device )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -80,7 +79,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
             _services.Dispose ( ) ;
         }
 
-        public delegate IGattServicesProvider Factory ( [ NotNull ] IBluetoothLeDeviceWrapper device ) ;
+        public delegate IGattServicesProvider Factory ( IBluetoothLeDeviceWrapper device ) ;
 
         private async Task GetCharacteristicsAsync ( IGattDeviceServicesResultWrapper gatt )
         {
@@ -104,6 +103,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         private readonly ILogger                              _logger ;
         private readonly ISubject < GattCommunicationStatus > _refreshed ;
         private readonly IGattServicesDictionary              _services ;
-        private          IGattDeviceServicesResultWrapper     _gattResult ;
+        private          IGattDeviceServicesResultWrapper ?   _gattResult ;
     }
 }

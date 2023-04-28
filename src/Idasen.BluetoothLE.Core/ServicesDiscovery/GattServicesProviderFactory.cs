@@ -2,7 +2,6 @@
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 {
@@ -11,7 +10,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
     public class GattServicesProviderFactory
         : IGattServicesProviderFactory
     {
-        public GattServicesProviderFactory ( [ NotNull ] GattServicesProvider.Factory factory )
+        public GattServicesProviderFactory ( GattServicesProvider.Factory factory )
         {
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;

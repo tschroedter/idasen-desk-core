@@ -43,8 +43,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         public int Count => _dictionary.Count ;
 
         /// <inheritdoc />
-        public bool TryFindByUuid ( Guid                    guid ,
-                                    out OfficialGattService gattService )
+        public bool TryFindByUuid ( Guid                      guid ,
+                                    out OfficialGattService ? gattService )
         {
             gattService = null ;
 

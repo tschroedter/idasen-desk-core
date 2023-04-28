@@ -8,7 +8,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     public class GattWriteResultWrapper
         : IGattWriteResultWrapper
     {
-        public GattWriteResultWrapper ( [ JetBrains.Annotations.NotNull ] GattWriteResult result )
+        public GattWriteResultWrapper ( GattWriteResult result )
         {
             Guard.ArgumentNotNull ( result ,
                                     nameof ( result ) ) ;

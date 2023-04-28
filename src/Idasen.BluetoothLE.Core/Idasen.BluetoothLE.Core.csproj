@@ -4,6 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
         <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+	    <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
