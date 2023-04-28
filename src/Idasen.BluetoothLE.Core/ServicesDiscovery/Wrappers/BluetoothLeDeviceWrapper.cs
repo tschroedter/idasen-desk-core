@@ -79,21 +79,28 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         /// <inheritdoc />
         public async void Connect ( )
         {
-            if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
+            try
             {
-                _logger.Information ( $"[{DeviceId}] Already connected" ) ;
+                if (ConnectionStatus == BluetoothConnectionStatus.Connected)
+                {
+                    _logger.Information($"[{DeviceId}] Already connected");
 
-                return ;
+                    return;
+                }
+
+                if (!IsPaired)
+                {
+                    _logger.Information($"[{DeviceId}] Not paired");
+
+                    return;
+                }
+
+                await CreateSession();
             }
-
-            if ( ! IsPaired )
+            catch (Exception e)
             {
-                _logger.Information ( $"[{DeviceId}] Not paired" ) ;
-
-                return ;
+                _logger.Error(e, $"Failed to connect to device {_device?.BluetoothAddress}");
             }
-
-            await CreateSession ( ) ;
         }
 
         /// <inheritdoc />
