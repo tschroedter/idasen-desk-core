@@ -15,9 +15,9 @@ namespace Idasen.Launcher
         public static ContainerBuilder Builder { get ; } = new( ) ;
 
         public static IContainer Create (
-            string                  appName ,
-            string                  appLogFileName ,
-            IEnumerable < IModule > otherModules = null )
+            string                    appName ,
+            string                    appLogFileName ,
+            IEnumerable < IModule > ? otherModules = null )
         {
             Log.Logger = LoggerProvider.CreateLogger ( appName ,
                                                        appLogFileName ) ;
@@ -25,8 +25,8 @@ namespace Idasen.Launcher
             return Register ( otherModules ) ;
         }
 
-        public static IContainer Create ( ILoggerSettings      settings,
-                                          IEnumerable<IModule> otherModules = null)
+        public static IContainer Create ( ILoggerSettings        settings,
+                                          IEnumerable<IModule> ? otherModules = null)
         {
             Log.Logger = new LoggerConfiguration ( ).ReadFrom
                                                     .Settings ( settings )
@@ -35,8 +35,8 @@ namespace Idasen.Launcher
             return Register(otherModules);
         }
 
-        public static IContainer Create(IConfiguration       configuration,
-                                        IEnumerable<IModule> otherModules = null)
+        public static IContainer Create(IConfiguration         configuration,
+                                        IEnumerable<IModule> ? otherModules = null)
         {
             Log.Logger = Log.Logger = new LoggerConfiguration ( ).ReadFrom
                                                                  .Configuration ( configuration )
@@ -45,7 +45,7 @@ namespace Idasen.Launcher
             return Register(otherModules);
         }
 
-        private static IContainer Register(IEnumerable<IModule> otherModules)
+        private static IContainer Register(IEnumerable<IModule> ? otherModules)
         {
             Builder.RegisterLogger();
             Builder.RegisterModule<BluetoothLECoreModule>();

@@ -1,7 +1,6 @@
 ﻿using System ;
 using System.IO ;
 using Idasen.BluetoothLE.Core ;
-using JetBrains.Annotations ;
 using Serilog ;
 using Serilog.Events ;
 
@@ -13,41 +12,40 @@ namespace Idasen.Launcher
                                            "{Level:u3}] {Message} "                 +
                                            "(at {Caller}){NewLine}{Exception}" ;
 
-        private static ILogger Logger ;
+        private static ILogger ? _logger ;
 
-        public static ILogger CreateLogger (
-            [ NotNull ] string appName ,
-            [ NotNull ] string appLogFileName )
+        public static ILogger CreateLogger ( string appName ,
+                                             string appLogFileName )
         {
             Guard.ArgumentNotNull ( appName ,
                                     nameof ( appName ) ) ;
             Guard.ArgumentNotNull ( appLogFileName ,
                                     nameof ( appLogFileName ) ) ;
 
-            if ( Logger != null )
+            if ( _logger != null )
             {
-                Logger.Debug ( $"Using existing logger for '{appName}' in folder {appLogFileName}" ) ;
+                _logger.Debug ( $"Using existing logger for '{appName}' in folder {appLogFileName}" ) ;
 
-                return Logger ;
+                return _logger ;
             }
 
-            Logger = DoCreateLogger ( appLogFileName ) ;
+            _logger = DoCreateLogger ( appLogFileName ) ;
 
-            Logger.Debug ( $"Created logger for '{appName}' in folder '{appLogFileName}'" ) ;
+            _logger.Debug ( $"Created logger for '{appName}' in folder '{appLogFileName}'" ) ;
 
-            return Logger ;
+            return _logger ;
         }
 
         private static ILogger DoCreateLogger ( string appLogFileName )
         {
             var logFolder = AppDomain.CurrentDomain.BaseDirectory + "\\logs\\" ;
-
             var logFile = CreateFullPathLogFileName ( logFolder,
                                                       appLogFileName ) ;
 
             if ( ! Directory.Exists ( logFolder ) )
                 Directory.CreateDirectory ( logFolder ) ;
 
+#pragma warning disable CA1305
             var loggerConfiguration = new LoggerConfiguration ( )
                                      .MinimumLevel
                                      .Debug ( )
@@ -58,6 +56,7 @@ namespace Idasen.Launcher
                                      .WriteTo.File ( logFile ,
                                                      LogEventLevel.Debug ,
                                                      LogTemplate ) ;
+#pragma warning restore CA1305
 
             return loggerConfiguration.CreateLogger ( ) ;
         }
