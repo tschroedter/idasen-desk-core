@@ -28,13 +28,13 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common
         }
 
         [ TestMethod ]
-        public void TryGetDescription_ForUnknownGuid_Null ( )
+        public void TryGetDescription_ForUnknownGuid_Empty ( )
         {
             CreateSut ( ).TryGetDescription ( _unknownGuid ,
                                               out var description ) ;
 
             description.Should ( )
-                       .BeNull ( ) ;
+                       .BeEmpty ( ) ;
         }
 
         [ TestMethod ]

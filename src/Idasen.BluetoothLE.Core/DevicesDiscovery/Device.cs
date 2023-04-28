@@ -23,7 +23,6 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             Address                = device.Address ;
             Name                   = device.Name ;
             RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
-            Name                   = string.Empty ;
         }
 
         public Device ( IDateTimeOffset broadcastTime ,

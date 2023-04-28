@@ -30,18 +30,13 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
         }
 
         [ TestMethod ]
-        public void ConvertFromString_ForTextNull_Throws ( )
+        public void ConvertFromString_ForTextNull_Zero ( )
         {
-            Action action = ( ) =>
-                            {
-                                CreateSut ( ).ConvertFromString ( null! ,
-                                                                  _readerRow ,
-                                                                  _memberMapData ) ;
-                            } ;
-
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( "text" ) ;
+            CreateSut ( ).ConvertFromString ( null! ,
+                                              _readerRow ,
+                                              _memberMapData )
+                         .Should ( )
+                         .Be ( 0 ) ;
         }
 
         [ TestMethod ]
@@ -95,18 +90,13 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
         }
 
         [ TestMethod ]
-        public void ConvertToString_ForValueNull_Throws ( )
+        public void ConvertToString_ForValueNull_NullText ( )
         {
-            Action action = ( ) =>
-                            {
-                                CreateSut ( ).ConvertToString ( null! ,
-                                                                _writerRow ,
-                                                                _memberMapData ) ;
-                            } ;
-
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( "value" ) ;
+            CreateSut ( ).ConvertToString ( null! ,
+                                            _writerRow ,
+                                            _memberMapData )
+                         .Should ( )
+                         .Be ( "null" ) ;
         }
 
         [ TestMethod ]

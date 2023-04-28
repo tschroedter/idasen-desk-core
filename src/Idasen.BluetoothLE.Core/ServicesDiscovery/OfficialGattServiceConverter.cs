@@ -26,6 +26,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
                                          "" ,
                                          StringComparison.InvariantCulture ) ?? string.Empty ;
 
+            if ( string.IsNullOrWhiteSpace ( text ) )
+                return 0u ;
+
             return ushort.TryParse ( number ,
                                      NumberStyles.HexNumber ,
                                      CultureInfo.InvariantCulture ,

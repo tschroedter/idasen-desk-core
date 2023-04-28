@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks ;
+﻿using System ;
+using System.Threading.Tasks ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Common ;
@@ -19,11 +20,10 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
             ServiceWrapper.Uuid
                           .Returns ( sut.GattServiceUuid ) ;
 
-            sut.Initialize < Dpg > ( ) ;
+            Action action = () => sut.Initialize < Dpg > ( ) ;
 
-            sut.RawServiceChanged
-               .Should ( )
-               .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
+            action.Should (  )
+                  .Throw < Exception > ( ) ;
         }
 
         [ TestMethod ]
