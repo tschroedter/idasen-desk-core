@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net6.0-windows10.0.19041": {
+    "net8.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
         "requested": "[7.0.1, )",
