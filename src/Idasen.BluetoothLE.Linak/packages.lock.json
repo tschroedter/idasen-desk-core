@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "dependencies": {
     "net8.0-windows10.0.19041": {
       "Autofac": {
@@ -23,15 +23,6 @@
         "resolved": "6.0.1",
         "contentHash": "rHaWtKDwCi9qJ3ObKo8LHPMuuwv33YbmQi7TcUK1C264V3MFnOr5Im7QgCTdLniztP3GJyeiSg5x8NqYJFqRmg=="
       },
-      "Autofac.Extras.DynamicProxy": {
-        "type": "Transitive",
-        "resolved": "7.1.0",
-        "contentHash": "Da6Szv7A1LK/cTdeoyqS45zb/BC5vep8+86f6C1oh2UhZaYtiijlNfLWamp3lxe0uUQ33kFe1dDCjsvfwJWzLg==",
-        "dependencies": {
-          "Autofac": "6.5.0",
-          "Castle.Core": "5.1.1"
-        }
-      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "5.1.1",
@@ -39,21 +30,6 @@
         "dependencies": {
           "System.Diagnostics.EventLog": "6.0.0"
         }
-      },
-      "CsvHelper": {
-        "type": "Transitive",
-        "resolved": "33.0.1",
-        "contentHash": "fev4lynklAU2A9GVMLtwarkwaanjSYB4wUqO2nOJX5hnzObORzUqVLe+bDYCUyIIRQM4o5Bsq3CcyJR89iMmEQ=="
-      },
-      "JetBrains.Annotations": {
-        "type": "Transitive",
-        "resolved": "2024.2.0",
-        "contentHash": "GNnqCFW/163p1fOehKx0CnAqjmpPrUSqrgfHM6qca+P+RN39C9rhlfZHQpJhxmQG/dkOYe/b3Z0P8b6Kv5m1qw=="
-      },
-      "Selkie.DefCon.One.Common": {
-        "type": "Transitive",
-        "resolved": "0.0.17",
-        "contentHash": "CExlQXlmWzpbpuFv6dYDvPJv3sUe30Zjcx2rXDv0vQXJjmMlEMJln5OxPdSATxwsWwHQJj9TXGylPm5DtYuL/Q=="
       },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
@@ -90,6 +66,34 @@
           "Selkie.DefCon.One.Common": "[0.0.17, )",
           "System.Reactive": "[6.0.1, )"
         }
+      },
+      "Autofac.Extras.DynamicProxy": {
+        "type": "CentralTransitive",
+        "requested": "[7.1.0, )",
+        "resolved": "7.1.0",
+        "contentHash": "Da6Szv7A1LK/cTdeoyqS45zb/BC5vep8+86f6C1oh2UhZaYtiijlNfLWamp3lxe0uUQ33kFe1dDCjsvfwJWzLg==",
+        "dependencies": {
+          "Autofac": "6.5.0",
+          "Castle.Core": "5.1.1"
+        }
+      },
+      "CsvHelper": {
+        "type": "CentralTransitive",
+        "requested": "[33.0.1, )",
+        "resolved": "33.0.1",
+        "contentHash": "fev4lynklAU2A9GVMLtwarkwaanjSYB4wUqO2nOJX5hnzObORzUqVLe+bDYCUyIIRQM4o5Bsq3CcyJR89iMmEQ=="
+      },
+      "JetBrains.Annotations": {
+        "type": "CentralTransitive",
+        "requested": "[2024.2.0, )",
+        "resolved": "2024.2.0",
+        "contentHash": "GNnqCFW/163p1fOehKx0CnAqjmpPrUSqrgfHM6qca+P+RN39C9rhlfZHQpJhxmQG/dkOYe/b3Z0P8b6Kv5m1qw=="
+      },
+      "Selkie.DefCon.One.Common": {
+        "type": "CentralTransitive",
+        "requested": "[0.0.17, )",
+        "resolved": "0.0.17",
+        "contentHash": "CExlQXlmWzpbpuFv6dYDvPJv3sUe30Zjcx2rXDv0vQXJjmMlEMJln5OxPdSATxwsWwHQJj9TXGylPm5DtYuL/Q=="
       }
     }
   }

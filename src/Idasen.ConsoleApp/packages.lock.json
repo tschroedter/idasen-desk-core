@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "dependencies": {
     "net8.0-windows10.0.19041": {
       "Autofac": {
@@ -55,25 +55,25 @@
       },
       "Microsoft.Extensions.Configuration.EnvironmentVariables": {
         "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "plvZ0ZIpq+97gdPNNvhwvrEZ92kNml9hd1pe3idMA7svR0PztdzVLkoWLcRFgySYXUJc3kSM3Xw3mNFMo/bxRA==",
+        "requested": "[7.0.0, )",
+        "resolved": "7.0.0",
+        "contentHash": "RIkfqCkvrAogirjsqSrG1E1FxgrLsOZU2nhRbl07lrajnxzSU2isj2lwQah0CtCbLWo/pOIukQzM1GfneBUnxA==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration": "8.0.0",
-          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0"
+          "Microsoft.Extensions.Configuration": "7.0.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0"
         }
       },
       "Microsoft.Extensions.Configuration.Json": {
         "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "C2wqUoh9OmRL1akaCcKSTmRU8z0kckfImG7zLNI8uyi47Lp+zd5LWAD17waPQEqCz3ioWOCrFUo+JJuoeZLOBw==",
+        "requested": "[7.0.0, )",
+        "resolved": "7.0.0",
+        "contentHash": "LDNYe3uw76W35Jci+be4LDf2lkQZe0A7EEYQVChFbc509CpZ4Iupod8li4PUXPBhEUOFI/rlQNf5xkzJRQGvtA==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration": "8.0.0",
-          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Configuration.FileExtensions": "8.0.0",
-          "Microsoft.Extensions.FileProviders.Abstractions": "8.0.0",
-          "System.Text.Json": "8.0.0"
+          "Microsoft.Extensions.Configuration": "7.0.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Configuration.FileExtensions": "7.0.0",
+          "Microsoft.Extensions.FileProviders.Abstractions": "7.0.0",
+          "System.Text.Json": "7.0.0"
         }
       },
       "Selkie.DefCon.One.Common": {
@@ -125,40 +125,57 @@
           "Microsoft.Extensions.Primitives": "8.0.0"
         }
       },
-      "Microsoft.Extensions.Configuration.FileExtensions": {
+      "Microsoft.Extensions.Configuration.Binder": {
         "type": "Transitive",
         "resolved": "8.0.0",
-        "contentHash": "McP+Lz/EKwvtCv48z0YImw+L1gi1gy5rHhNaNIY2CrjloV+XY8gydT8DjMR6zWeL13AFK+DioVpppwAuO1Gi1w==",
+        "contentHash": "mBMoXLsr5s1y2zOHWmKsE9veDcx8h1x/c3rz4baEdQKTeDcmQAPNbB54Pi/lhFO3K431eEq6PFbMgLaa6PHFfA==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration": "8.0.0",
-          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
-          "Microsoft.Extensions.FileProviders.Abstractions": "8.0.0",
-          "Microsoft.Extensions.FileProviders.Physical": "8.0.0",
-          "Microsoft.Extensions.Primitives": "8.0.0"
+          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Configuration.FileExtensions": {
+        "type": "Transitive",
+        "resolved": "7.0.0",
+        "contentHash": "xk2lRJ1RDuqe57BmgvRPyCt6zyePKUmvT6iuXqiHR+/OIIgWVR8Ff5k2p6DwmqY8a17hx/OnrekEhziEIeQP6Q==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "7.0.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
+          "Microsoft.Extensions.FileProviders.Abstractions": "7.0.0",
+          "Microsoft.Extensions.FileProviders.Physical": "7.0.0",
+          "Microsoft.Extensions.Primitives": "7.0.0"
+        }
+      },
+      "Microsoft.Extensions.DependencyModel": {
+        "type": "Transitive",
+        "resolved": "8.0.1",
+        "contentHash": "5Ou6varcxLBzQ+Agfm0k0pnH7vrEITYlXMDuE6s7ZHlZHz6/G8XJ3iISZDr5rfwfge6RnXJ1+Wc479mMn52vjA==",
+        "dependencies": {
+          "System.Text.Encodings.Web": "8.0.0",
+          "System.Text.Json": "8.0.4"
         }
       },
       "Microsoft.Extensions.FileProviders.Abstractions": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "ZbaMlhJlpisjuWbvXr4LdAst/1XxH3vZ6A0BsgTphZ2L4PGuxRLz7Jr/S7mkAAnOn78Vu0fKhEgNF5JO3zfjqQ==",
+        "resolved": "7.0.0",
+        "contentHash": "NyawiW9ZT/liQb34k9YqBSNPLuuPkrjMgQZ24Y/xXX1RoiBkLUdPMaQTmxhZ5TYu8ZKZ9qayzil75JX95vGQUg==",
         "dependencies": {
-          "Microsoft.Extensions.Primitives": "8.0.0"
+          "Microsoft.Extensions.Primitives": "7.0.0"
         }
       },
       "Microsoft.Extensions.FileProviders.Physical": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "UboiXxpPUpwulHvIAVE36Knq0VSHaAmfrFkegLyBZeaADuKezJ/AIXYAW8F5GBlGk/VaibN2k/Zn1ca8YAfVdA==",
+        "resolved": "7.0.0",
+        "contentHash": "K8D2MTR+EtzkbZ8z80LrG7Ur64R7ZZdRLt1J5cgpc/pUWl0C6IkAUapPuK28oionHueCPELUqq0oYEvZfalNdg==",
         "dependencies": {
-          "Microsoft.Extensions.FileProviders.Abstractions": "8.0.0",
-          "Microsoft.Extensions.FileSystemGlobbing": "8.0.0",
-          "Microsoft.Extensions.Primitives": "8.0.0"
+          "Microsoft.Extensions.FileProviders.Abstractions": "7.0.0",
+          "Microsoft.Extensions.FileSystemGlobbing": "7.0.0",
+          "Microsoft.Extensions.Primitives": "7.0.0"
         }
       },
       "Microsoft.Extensions.FileSystemGlobbing": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "OK+670i7esqlQrPjdIKRbsyMCe9g5kSLpRRQGSr4Q58AOYEe/hCnfLZprh7viNisSUUQZmMrbbuDaIrP+V1ebQ=="
+        "resolved": "7.0.0",
+        "contentHash": "2jONjKHiF+E92ynz2ZFcr9OvxIw+rTGMPEH+UZGeHTEComVav93jQUWGkso8yWwVBcEJGcNcZAaqY01FFJcj7w=="
       },
       "Microsoft.Extensions.Primitives": {
         "type": "Transitive",
@@ -182,8 +199,8 @@
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "OdrZO2WjkiEG6ajEFRABTRCi/wuXQPxeV6g8xvUJqdxMvvuCCEk86zPla8UiIQJz3durtUEbNyY/3lIhS0yZvQ==",
+        "resolved": "8.0.4",
+        "contentHash": "bAkhgDJ88XTsqczoxEMliSrpijKZHhbJQldhAmObj/RbrN3sU5dcokuXmWJWsdQAhiMJ9bTayWsL1C9fbbCRhw==",
         "dependencies": {
           "System.Text.Encodings.Web": "8.0.0"
         }
@@ -228,19 +245,39 @@
       "Idasen.Desk.Core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "(, )",
-          "Autofac.Extras.DynamicProxy": "(, )",
-          "AutofacSerilogIntegration": "(, )",
-          "CsvHelper": "(, )",
-          "JetBrains.Annotations": "(, )",
-          "Microsoft.Extensions.Configuration": "(, )",
-          "Selkie.DefCon.One.Common": "(, )",
-          "Serilog": "(, )",
-          "Serilog.Settings.Configuration": "(, )",
-          "Serilog.Sinks.Console": "(, )",
-          "Serilog.Sinks.File": "(, )",
-          "System.Reactive": "(, )",
-          "System.ValueTuple": "(, )"
+          "Autofac": "[8.0.0, )",
+          "Autofac.Extras.DynamicProxy": "[7.1.0, )",
+          "AutofacSerilogIntegration": "[5.0.0, )",
+          "CsvHelper": "[33.0.1, )",
+          "JetBrains.Annotations": "[2024.2.0, )",
+          "Microsoft.Extensions.Configuration": "[8.0.0, )",
+          "Selkie.DefCon.One.Common": "[0.0.17, )",
+          "Serilog": "[4.0.1, )",
+          "Serilog.Settings.Configuration": "[8.0.2, )",
+          "Serilog.Sinks.Console": "[6.0.0, )",
+          "Serilog.Sinks.File": "[6.0.0, )",
+          "System.Reactive": "[6.0.1, )",
+          "System.ValueTuple": "[4.5.0, )"
+        }
+      },
+      "Serilog.Settings.Configuration": {
+        "type": "CentralTransitive",
+        "requested": "[8.0.2, )",
+        "resolved": "8.0.2",
+        "contentHash": "hn8HCAmupon7N0to20EwGeNJ+L3iRzjGzAHIl8+8CCFlEkVedHvS6NMYMb0VPNMsDgDwOj4cPBPV6Fc2hb0/7w==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Binder": "8.0.0",
+          "Microsoft.Extensions.DependencyModel": "8.0.1",
+          "Serilog": "3.1.1"
+        }
+      },
+      "Serilog.Sinks.File": {
+        "type": "CentralTransitive",
+        "requested": "[6.0.0, )",
+        "resolved": "6.0.0",
+        "contentHash": "lxjg89Y8gJMmFxVkbZ+qDgjl+T4yC5F7WSLTvA+5q0R04tfKVLRL/EHpYoJ/MEQd2EeCKDuylBIVnAYMotmh2A==",
+        "dependencies": {
+          "Serilog": "4.0.0"
         }
       }
     }
