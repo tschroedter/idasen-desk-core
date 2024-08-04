@@ -19,6 +19,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="33.0.1" />
+      <PackageReference Include="Selkie.DefCon.One.Common" Version="0.0.17" />
+      <PackageReference Include="System.Reactive" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageVersion Include="Autofac" Version="8.0.0" />
         <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
         <PackageVersion Include="AutofacSerilogIntegration" Version="5.0.0" />
