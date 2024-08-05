@@ -30,7 +30,7 @@ namespace Idasen.Launcher
             return _logger ;
         }
 
-        private static ILogger DoCreateLogger ( string appLogFileName )
+        private static Serilog.Core.Logger DoCreateLogger ( string appLogFileName )
         {
             var logFolder = AppDomain.CurrentDomain.BaseDirectory + "\\logs\\" ;
             var logFile = CreateFullPathLogFileName ( logFolder ,
@@ -68,6 +68,6 @@ namespace Idasen.Launcher
                                            "{Level:u3}] {Message} "                 +
                                            "(at {Caller}){NewLine}{Exception}" ;
 
-        private static ILogger ? _logger ;
+        private static Serilog.Core.Logger ? _logger ;
     }
 }
