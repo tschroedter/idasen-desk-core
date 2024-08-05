@@ -6,25 +6,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageVersion Include="AutofacSerilogIntegration"  />
-        <PackageVersion Include="FluentAssertions"  />
-        <PackageVersion Include="Microsoft.NET.Test.Sdk"  />
-        <PackageVersion Include="Microsoft.Reactive.Testing"  />
-        <PackageVersion Include="MSTest.TestAdapter"  />
-        <PackageVersion Include="MSTest.TestFramework"  />
-        <PackageVersion Include="NSubstitute"  />
-        <PackageVersion Include="Selkie.AutoMocking"  />
-        <PackageVersion Include="Serilog"  />
+        <PackageReference Include="AutofacSerilogIntegration"  />
+        <PackageReference Include="FluentAssertions"  />
+        <PackageReference Include="Microsoft.NET.Test.Sdk"  />
+        <PackageReference Include="Microsoft.Reactive.Testing"  />
+        <PackageReference Include="MSTest.TestAdapter"  />
+        <PackageReference Include="MSTest.TestFramework"  />
+        <PackageReference Include="NSubstitute" VersionOverride="4.2.2" />
+        <PackageReference Include="Selkie.AutoMocking"  />
+        <PackageReference Include="Serilog"  />
     </ItemGroup>
 
     <ItemGroup>
         <Folder Include="ServicesDiscovery\Wrapper\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="FluentAssertions"  />
-      <PackageReference Include="Microsoft.Reactive.Testing"  />
-      <PackageReference Include="Selkie.AutoMocking"  />
     </ItemGroup>
 
     <ItemGroup>

@@ -19,21 +19,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CsvHelper"  />
-      <PackageReference Include="Selkie.DefCon.One.Common"  />
-      <PackageReference Include="System.Reactive"  />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageVersion Include="Autofac"  />
-        <PackageVersion Include="Autofac.Extras.DynamicProxy"  />
-        <PackageVersion Include="AutofacSerilogIntegration"  />
-        <PackageVersion Include="CsvHelper"  />
-        <PackageVersion Include="JetBrains.Annotations"  />
-        <PackageVersion Include="Selkie.DefCon.One.Common"  />
-        <PackageVersion Include="Serilog"  />
-        <PackageVersion Include="System.Reactive"  />
-        <PackageVersion Include="System.ValueTuple"  />
+        <PackageReference Include="Autofac" />
+        <PackageReference Include="Autofac.Extras.DynamicProxy" />
+        <PackageReference Include="AutofacSerilogIntegration" />
+        <PackageReference Include="CsvHelper" />
+        <PackageReference Include="JetBrains.Annotations" />
+        <PackageReference Include="Selkie.DefCon.One.Common" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="System.Reactive" />
+        <PackageReference Include="System.ValueTuple" />
     </ItemGroup>
 
     <ItemGroup>
