@@ -19,6 +19,13 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="..\..\LICENSE">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Autofac" />
         <PackageReference Include="Autofac.Extras.DynamicProxy" />
         <PackageReference Include="AutofacSerilogIntegration" />
@@ -36,6 +43,8 @@
 
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
     </PropertyGroup>
 
 </Project>
