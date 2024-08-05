@@ -176,16 +176,16 @@
       "idasen.aop": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "[7.1.0, )",
-          "JetBrains.Annotations": "[2024.2.0, )",
-          "Serilog": "[4.0.1, )"
+          "Autofac.Extras.DynamicProxy": "(, )",
+          "JetBrains.Annotations": "(, )",
+          "Serilog": "(, )"
         }
       },
       "idasen.bluetoothle.characteristics": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "[7.1.0, )",
-          "CsvHelper": "[33.0.1, )",
+          "Autofac.Extras.DynamicProxy": "(, )",
+          "CsvHelper": "(, )",
           "Idasen.Aop": "[1.0.0, )",
           "Idasen.BluetoothLE.Core": "[1.0.0, )"
         }
@@ -193,27 +193,27 @@
       "idasen.bluetoothle.core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[8.0.0, )",
-          "Autofac.Extras.DynamicProxy": "[7.1.0, )",
-          "AutofacSerilogIntegration": "[5.0.0, )",
-          "CsvHelper": "[33.0.1, )",
+          "Autofac": "(, )",
+          "Autofac.Extras.DynamicProxy": "(, )",
+          "AutofacSerilogIntegration": "(, )",
+          "CsvHelper": "(, )",
           "Idasen.Aop": "[1.0.0, )",
-          "JetBrains.Annotations": "[2024.2.0, )",
-          "Selkie.DefCon.One.Common": "[0.0.17, )",
-          "Serilog": "[4.0.1, )",
-          "System.Reactive": "[6.0.1, )",
-          "System.ValueTuple": "[4.5.0, )"
+          "JetBrains.Annotations": "(, )",
+          "Selkie.DefCon.One.Common": "(, )",
+          "Serilog": "(, )",
+          "System.Reactive": "(, )",
+          "System.ValueTuple": "(, )"
         }
       },
       "idasen.bluetoothle.linak": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[8.0.0, )",
+          "Autofac": "(, )",
           "Idasen.Aop": "[1.0.0, )",
           "Idasen.BluetoothLE.Characteristics": "[1.0.0, )",
           "Idasen.BluetoothLE.Core": "[1.0.0, )",
-          "Serilog": "[4.0.1, )",
-          "System.Reactive": "[6.0.1, )"
+          "Serilog": "(, )",
+          "System.Reactive": "(, )"
         }
       }
     }
