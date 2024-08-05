@@ -22,7 +22,7 @@ namespace Idasen.ConsoleApp
             var token       = tokenSource.Token ;
 
             var builder = new ConfigurationBuilder ( ).SetBasePath ( Directory.GetCurrentDirectory ( ) )
-                                                      .AddJsonFile ( "appsettings.json" ) ;
+                                                      .AddJsonFile ( "Appsettings.json" ) ;
 
             var container = ContainerProvider.Create ( builder.Build ( ) ) ;
 

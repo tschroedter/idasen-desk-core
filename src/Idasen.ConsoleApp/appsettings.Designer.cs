@@ -13,11 +13,11 @@ namespace Idasen.ConsoleApp {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.3.0.0")]
-    internal sealed partial class appsettings : global::System.Configuration.ApplicationSettingsBase {
+    internal sealed partial class Appsettings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static appsettings defaultInstance = ((appsettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new appsettings())));
+        private static Appsettings defaultInstance = ((Appsettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Appsettings())));
         
-        public static appsettings Default {
+        public static Appsettings Default {
             get {
                 return defaultInstance;
             }
