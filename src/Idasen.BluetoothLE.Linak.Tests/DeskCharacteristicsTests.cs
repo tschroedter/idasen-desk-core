@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Threading.Tasks ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Common.Tests ;

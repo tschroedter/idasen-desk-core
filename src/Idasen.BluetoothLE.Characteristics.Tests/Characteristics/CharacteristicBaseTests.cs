@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
@@ -67,17 +66,17 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
             CharacteristicProvider.Properties
                                   .Returns ( Properties ) ;
 
-            RawValue1  = new byte [ ] { 1 , 2 , 3 } ;
-            RawValue2  = new byte [ ] { 4 , 5 , 6 } ;
-            RawValue3  = new byte [ ] { 7 , 8 , 9 } ;
-            RawValue4  = new byte [ ] { 10 , 11 , 12 } ;
-            RawValue4  = new byte [ ] { 13 , 14 , 15 } ;
-            RawValue5  = new byte [ ] { 16 , 17 , 18 } ;
-            RawValue6  = new byte [ ] { 19 , 20 , 21 } ;
-            RawValue7  = new byte [ ] { 22 , 23 , 24 } ;
-            RawValue8  = new byte [ ] { 25 , 25 , 27 } ;
-            RawValue9  = new byte [ ] { 28 , 29 , 30 } ;
-            RawValue10 = new byte [ ] { 31 , 32 , 33 } ;
+            RawValue1  = [1 , 2 , 3] ;
+            RawValue2  = [4 , 5 , 6] ;
+            RawValue3  = [7 , 8 , 9] ;
+            RawValue4  = [10 , 11 , 12] ;
+            RawValue4  = [13 , 14 , 15] ;
+            RawValue5  = [16 , 17 , 18] ;
+            RawValue6  = [19 , 20 , 21] ;
+            RawValue7  = [22 , 23 , 24] ;
+            RawValue8  = [25 , 25 , 27] ;
+            RawValue9  = [28 , 29 , 30] ;
+            RawValue10 = [31 , 32 , 33] ;
 
             RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
                           .Returns ( ( true , RawValue1 ) ) ;

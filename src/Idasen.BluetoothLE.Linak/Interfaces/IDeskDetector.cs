@@ -1,6 +1,4 @@
-﻿using System ;
-
-namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces
 {
     public interface IDeskDetector
         : IDisposable

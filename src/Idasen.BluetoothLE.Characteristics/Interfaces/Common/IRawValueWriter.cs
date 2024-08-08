@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks ;
-using Windows.Storage.Streams ;
+﻿using Windows.Storage.Streams ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 // ReSharper disable UnusedMemberInSuper.Global

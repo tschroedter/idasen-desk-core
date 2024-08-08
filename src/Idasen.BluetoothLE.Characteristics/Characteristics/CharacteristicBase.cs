@@ -1,10 +1,6 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Linq ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Runtime.CompilerServices ;
 using System.Runtime.InteropServices.WindowsRuntime ;
-using System.Threading.Tasks ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
@@ -96,7 +92,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
 
-        public virtual async Task Refresh ( )
+        public async virtual Task Refresh ( )
         {
             if ( Characteristics == null )
             {
@@ -191,10 +187,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
 
         protected IEnumerable < byte > GetValueOrEmpty ( string key )
         {
-            return RawValues.TryGetValue ( key ,
-                                           out var values )
-                       ? values
-                       : RawArrayEmpty ;
+            return RawValues.GetValueOrDefault ( key , RawArrayEmpty ) ;
         }
 
         public override string ToString ( )
@@ -209,7 +202,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             _disposed = true ;
         }
 
-        internal readonly static IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+        internal static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
                                                                                 .ToArray ( ) ;
 
         private readonly ICharacteristicBaseToStringConverter _toStringConverter ;

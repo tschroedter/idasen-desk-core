@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;

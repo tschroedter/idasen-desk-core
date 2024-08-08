@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Threading.Tasks ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Common ;

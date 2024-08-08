@@ -1,10 +1,8 @@
-﻿using System ;
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using System.Runtime.InteropServices.WindowsRuntime ;
-using System.Threading.Tasks ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Foundation ;
 using Autofac.Extras.DynamicProxy ;
@@ -114,7 +112,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         {
             try
             {
-                var bytes = args.CharacteristicValue?.ToArray ( ) ?? Array.Empty < byte > ( ) ;
+                var bytes = args.CharacteristicValue?.ToArray ( ) ?? [] ;
 
                 var details = new GattCharacteristicValueChangedDetails ( sender.Uuid ,
                                                                           bytes ,

@@ -1,5 +1,4 @@
-﻿using System ;
-using JetBrains.Annotations ;
+﻿using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
 {

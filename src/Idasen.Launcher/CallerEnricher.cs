@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics ;
-using System.Linq ;
 using Serilog ;
 using Serilog.Core ;
 using Serilog.Events ;
@@ -12,9 +11,11 @@ namespace Idasen.Launcher
                              ILogEventPropertyFactory propertyFactory )
         {
             var skip = 3 ;
+
             while ( true )
             {
                 var stack = new StackFrame ( skip ) ;
+
                 if ( ! stack.HasMethod ( ) )
                 {
                     logEvent.AddPropertyIfAbsent ( new LogEventProperty ( "Caller" ,

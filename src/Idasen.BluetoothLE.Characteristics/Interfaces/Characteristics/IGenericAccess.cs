@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Reactive.Subjects ;
+﻿using System.Reactive.Subjects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 // ReSharper disable UnusedMemberInSuper.Global
@@ -39,7 +37,7 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
         ISubject < IEnumerable < byte > > AppearanceChanged { get ; }
 
         /// <summary>
-        ///     Raised when the Parameters changes.
+        ///     Raised when the Parameters change.
         /// </summary>
         ISubject < IEnumerable < byte > > ParametersChanged { get ; }
 

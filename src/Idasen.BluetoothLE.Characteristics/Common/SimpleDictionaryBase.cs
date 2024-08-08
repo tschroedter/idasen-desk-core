@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic ;
-using System.Linq ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common

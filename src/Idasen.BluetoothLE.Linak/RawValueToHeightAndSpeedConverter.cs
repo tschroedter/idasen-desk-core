@@ -1,7 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Linq ;
-using Autofac.Extras.DynamicProxy ;
+﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Core ;

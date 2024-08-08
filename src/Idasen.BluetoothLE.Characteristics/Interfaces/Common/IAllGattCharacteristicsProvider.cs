@@ -1,5 +1,4 @@
-﻿using System ;
-using JetBrains.Annotations ;
+﻿using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common
 {

@@ -1,8 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Threading.Tasks ;
-
-namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces
 {
     public interface IDeskConnector
         : IDisposable

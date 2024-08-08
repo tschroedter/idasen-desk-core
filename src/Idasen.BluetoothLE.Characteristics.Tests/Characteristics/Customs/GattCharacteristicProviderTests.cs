@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
@@ -237,7 +235,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs
         private readonly Guid _characteristics1Uuid = Guid.NewGuid ( ) ;
         private readonly Guid _characteristics2Uuid = Guid.NewGuid ( ) ;
 
-        private readonly List < IGattCharacteristicWrapper > _expectedCharacteristics = new( ) ;
+        private readonly List < IGattCharacteristicWrapper > _expectedCharacteristics = [] ;
 
         private IGattCharacteristicWrapper            _characteristic1                = null! ;
         private IGattCharacteristicWrapper            _characteristic2                = null! ;

@@ -24,8 +24,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac.Extras.DynamicProxy"  />
-        <PackageReference Include="CsvHelper"  />
+        <PackageReference Include="Autofac.Extras.DynamicProxy" />
+        <PackageReference Include="CsvHelper" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,6 +36,7 @@
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
 </Project>

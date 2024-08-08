@@ -55,6 +55,7 @@
         <!-- You can choose between detailed or d, normal or n and false to disable verbosity. -->
         <ProjectBuildInPackageVerbosity>normal</ProjectBuildInPackageVerbosity>
         <EnableNETAnalyzers>True</EnableNETAnalyzers>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
 </Project>

@@ -1,6 +1,4 @@
-﻿using System ;
-using System.IO ;
-using Idasen.BluetoothLE.Core ;
+﻿using Idasen.BluetoothLE.Core ;
 using Serilog ;
 using Serilog.Events ;
 

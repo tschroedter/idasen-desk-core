@@ -22,7 +22,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 
         public delegate IGattWriteResultWrapper Factory ( GattWriteResult result ) ;
 
-        public readonly static IGattWriteResultWrapper NotSupported = new GattWriteResultWrapperNotSupported ( ) ;
+        public static readonly IGattWriteResultWrapper NotSupported = new GattWriteResultWrapperNotSupported ( ) ;
 
         private readonly GattWriteResult _result ;
     }

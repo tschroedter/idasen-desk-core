@@ -1,7 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
+﻿using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;

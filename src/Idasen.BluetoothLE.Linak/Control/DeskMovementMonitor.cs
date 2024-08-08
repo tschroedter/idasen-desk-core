@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Linq ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;

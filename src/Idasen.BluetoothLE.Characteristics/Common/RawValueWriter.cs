@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;

@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Threading ;
-using System.Threading.Tasks ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
@@ -29,7 +27,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         ///     The device address used to detect a desk.
         /// </param>
         /// <param name="deviceTimeout">
-        ///     The devices timeout when its removed from the cache.
+        ///     The devices timeout when it's removed from the cache.
         /// </param>
         /// <returns>
         ///     Returns itself.

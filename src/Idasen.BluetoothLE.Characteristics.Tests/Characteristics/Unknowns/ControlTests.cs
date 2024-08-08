@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Threading.Tasks ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;
 

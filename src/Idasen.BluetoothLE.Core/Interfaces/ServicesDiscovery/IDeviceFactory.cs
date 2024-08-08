@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks ;
-
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
 {
     /// <summary>
     ///     Factory to create <see cref="IDevice" /> instances.

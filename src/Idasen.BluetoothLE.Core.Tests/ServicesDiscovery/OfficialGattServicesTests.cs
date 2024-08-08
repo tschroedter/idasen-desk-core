@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;
 

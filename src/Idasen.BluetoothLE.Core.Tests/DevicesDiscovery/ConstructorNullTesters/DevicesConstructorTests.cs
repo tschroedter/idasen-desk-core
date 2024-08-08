@@ -6,7 +6,5 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters
 {
     [ TestClass ]
     public class DevicesConstructorTests
-        : BaseConstructorNullTester < Devices >
-    {
-    }
+        : BaseConstructorNullTester < Devices > ;
 }

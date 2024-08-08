@@ -1,21 +1,12 @@
-﻿using System ;
-
-namespace Idasen.BluetoothLE.Linak
+﻿namespace Idasen.BluetoothLE.Linak
 {
-    public class HeightSpeedDetails
+    public class HeightSpeedDetails ( DateTimeOffset timestamp ,
+                                      uint height ,
+                                      int speed )
     {
-        public HeightSpeedDetails ( DateTimeOffset timestamp ,
-                                    uint           height ,
-                                    int            speed )
-        {
-            Timestamp = timestamp ;
-            Height    = height ;
-            Speed     = speed ;
-        }
-
-        public DateTimeOffset Timestamp { get ; }
-        public uint           Height    { get ; }
-        public int            Speed     { get ; }
+        public DateTimeOffset Timestamp { get ; } = timestamp ;
+        public uint           Height    { get ; } = height ;
+        public int            Speed     { get ; } = speed ;
 
         public override string ToString ( )
         {

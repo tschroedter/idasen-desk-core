@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic ;
-using System.Threading.Tasks ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns
 {

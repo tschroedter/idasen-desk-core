@@ -1,6 +1,4 @@
-﻿using System ;
-
-namespace Idasen.BluetoothLE.Core.Interfaces
+﻿namespace Idasen.BluetoothLE.Core.Interfaces
 {
     /// <summary>
     ///     Represents a point in time, typically expressed as a date and time

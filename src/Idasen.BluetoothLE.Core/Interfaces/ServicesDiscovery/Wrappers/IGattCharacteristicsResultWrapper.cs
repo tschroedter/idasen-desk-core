@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic ;
-using System.Threading.Tasks ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
 // ReSharper disable UnusedMember.Global
 

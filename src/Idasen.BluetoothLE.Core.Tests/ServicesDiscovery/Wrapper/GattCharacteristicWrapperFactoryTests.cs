@@ -1,5 +1,4 @@
-﻿using System ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 using Selkie.AutoMocking ;
 

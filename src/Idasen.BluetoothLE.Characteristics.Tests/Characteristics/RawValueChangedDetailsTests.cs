@@ -1,5 +1,4 @@
-﻿using System ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
@@ -66,6 +65,6 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
         private readonly DateTimeOffset _timestamp = DateTimeOffset.Parse ( "2007-10-02T13:02:03.0000000-07:30" ) ;
         private readonly Guid           _uuid      = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
 
-        private readonly byte [ ] _value = { 1 , 2 , 3 } ;
+        private readonly byte [ ] _value = [1 , 2 , 3] ;
     }
 }

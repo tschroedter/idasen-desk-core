@@ -1,8 +1,5 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
@@ -77,7 +74,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         /// <inheritdoc />
         public IEnumerable < byte > RawDeviceName => GetValueOrEmpty ( CharacteristicDeviceName ) ;
 
-        public override async Task Refresh ( )
+        public async override Task Refresh ( )
         {
             await base.Refresh ( ) ;
 

@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using Autofac.Extras.DynamicProxy ;
+﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 

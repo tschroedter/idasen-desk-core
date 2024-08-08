@@ -1,5 +1,4 @@
-﻿using System ;
-using Windows.Devices.Bluetooth.Advertisement ;
+﻿using Windows.Devices.Bluetooth.Advertisement ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery

@@ -9,76 +9,38 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Characteristics
+namespace Idasen.BluetoothLE.Characteristics ;
+
+// ReSharper disable once InconsistentNaming
+[ ExcludeFromCodeCoverage ]
+public class BluetoothLEDeskCharacteristics : Module
 {
-    // ReSharper disable once InconsistentNaming
-    [ ExcludeFromCodeCoverage ]
-    public class BluetoothLEDeskCharacteristics
-        : Module
+    protected override void Load ( ContainerBuilder builder )
     {
-        protected override void Load ( ContainerBuilder builder )
-        {
-            builder.RegisterModule < BluetoothLECoreModule > ( ) ;
+        builder.RegisterModule < BluetoothLECoreModule > ( ) ;
 
-            builder.RegisterType < AllGattCharacteristicsProvider > ( )
-                   .As < IAllGattCharacteristicsProvider > ( )
-                   .EnableInterfaceInterceptors ( ) ;
+        RegisterWithInterceptors < IAllGattCharacteristicsProvider , AllGattCharacteristicsProvider > ( builder ) ;
+        RegisterWithInterceptors < IGattCharacteristicProvider , GattCharacteristicProvider > ( builder ) ;
+        RegisterWithInterceptors < IGattCharacteristicsProviderFactory , GattCharacteristicsProviderFactory > ( builder ) ;
+        RegisterWithInterceptors < IRawValueReader , RawValueReader > ( builder ) ;
+        RegisterWithInterceptors < IRawValueWriter , RawValueWriter > ( builder ) ;
+        RegisterWithInterceptors < IGenericAccess , GenericAccess > ( builder ) ;
+        RegisterWithInterceptors < IGenericAttribute , GenericAttribute > ( builder ) ;
+        RegisterWithInterceptors < IReferenceInput , ReferenceInput > ( builder ) ;
+        RegisterWithInterceptors < IReferenceOutput , ReferenceOutput > ( builder ) ;
+        RegisterWithInterceptors < IDpg , Dpg > ( builder ) ;
+        RegisterWithInterceptors < IControl , Control > ( builder ) ;
+        RegisterWithInterceptors < ICharacteristicBaseToStringConverter , CharacteristicBaseToStringConverter > ( builder ) ;
+        RegisterWithInterceptors < IBufferReader , BufferReader > ( builder ) ;
+        RegisterWithInterceptors < IDescriptionToUuid , DescriptionToUuid > ( builder ) ;
+        RegisterWithInterceptors < ICharacteristicBaseFactory , CharacteristicBaseFactory > ( builder ) ;
+    }
 
-            builder.RegisterType < GattCharacteristicProvider > ( )
-                   .As < IGattCharacteristicProvider > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < GattCharacteristicsProviderFactory > ( )
-                   .As < IGattCharacteristicsProviderFactory > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < RawValueReader > ( )
-                   .As < IRawValueReader > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < RawValueWriter > ( )
-                   .As < IRawValueWriter > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < GenericAccess > ( )
-                   .As < IGenericAccess > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < GenericAttribute > ( )
-                   .As < IGenericAttribute > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < ReferenceInput > ( )
-                   .As < IReferenceInput > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < ReferenceOutput > ( )
-                   .As < IReferenceOutput > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < Dpg > ( )
-                   .As < IDpg > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < Control > ( )
-                   .As < IControl > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < CharacteristicBaseToStringConverter > ( )
-                   .As < ICharacteristicBaseToStringConverter > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < BufferReader > ( )
-                   .As < IBufferReader > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType < DescriptionToUuid > ( )
-                   .As < IDescriptionToUuid > ( )
-                   .EnableInterfaceInterceptors ( ) ;
-
-            builder.RegisterType ( typeof ( CharacteristicBaseFactory ) )
-                   .As ( typeof ( ICharacteristicBaseFactory ) )
-                   .EnableInterfaceInterceptors ( ) ;
-        }
+    private void RegisterWithInterceptors<TInterface , TImplementation> ( ContainerBuilder builder )
+        where TImplementation : TInterface where TInterface : notnull
+    {
+        builder.RegisterType < TImplementation > ( )
+               .As < TInterface > ( )
+               .EnableInterfaceInterceptors ( ) ;
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;

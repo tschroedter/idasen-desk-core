@@ -1,8 +1,6 @@
 ﻿#nullable disable
 
-using System ;
 using System.Collections ;
-using System.Collections.Generic ;
 
 namespace Idasen.BluetoothLE.Linak.Control
 {
@@ -28,7 +26,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         /// </param>
         public CircularBuffer ( int capacity )
             : this ( capacity ,
-                     new T [ ] { } )
+                     [] )
         {
         }
 
@@ -118,7 +116,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         public bool IsFull => Size == Capacity ;
 
         /// <summary>
-        ///     True if has no elements.
+        ///     True, if has no elements.
         /// </summary>
         public bool IsEmpty => Size == 0 ;
 
@@ -132,8 +130,12 @@ namespace Idasen.BluetoothLE.Linak.Control
         ///     Index does not loop around like when adding elements,
         ///     valid interval is [0;Size[
         /// </summary>
-        /// <param name="index">Index of element to access.</param>
-        /// <exception cref="IndexOutOfRangeException">Thrown when index is outside of [; Size[ interval.</exception>
+        /// <param name="index">
+        ///     Index of element to access.
+        /// </param>
+        /// <exception cref="IndexOutOfRangeException">
+        ///     Thrown when index is outside of [; Size[ interval.
+        /// </exception>
         public T this [ int index ]
         {
             get
@@ -265,6 +267,7 @@ namespace Idasen.BluetoothLE.Linak.Control
             var newArray       = new T[ Size ] ;
             var newArrayOffset = 0 ;
             var segments       = new [ ] { ArrayOne ( ) , ArrayTwo ( ) } ;
+
             foreach ( var segment in segments )
             {
                 if ( segment.Array == null )
@@ -357,7 +360,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         private ArraySegment < T > ArrayOne ( )
         {
             if ( IsEmpty )
-                return new ArraySegment < T > ( Array.Empty < T > ( ) ) ;
+                return new ArraySegment < T > ( [] ) ;
             if ( _start < _end )
                 return new ArraySegment < T > ( _buffer ,
                                                 _start ,
@@ -371,7 +374,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         private ArraySegment < T > ArrayTwo ( )
         {
             if ( IsEmpty )
-                return new ArraySegment < T > ( Array.Empty < T > ( ) ) ;
+                return new ArraySegment < T > ( [] ) ;
             if ( _start < _end )
                 return new ArraySegment < T > ( _buffer ,
                                                 _end ,

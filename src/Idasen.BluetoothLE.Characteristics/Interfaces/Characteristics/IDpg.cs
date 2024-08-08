@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 // ReSharper disable UnusedMemberInSuper.Global
 

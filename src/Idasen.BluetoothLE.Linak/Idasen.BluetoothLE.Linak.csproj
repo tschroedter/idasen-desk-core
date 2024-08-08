@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac"  />
-        <PackageReference Include="Serilog"  />
-        <PackageReference Include="System.Reactive"  />
+        <PackageReference Include="Autofac" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="System.Reactive" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,6 +20,7 @@
 
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
 </Project>

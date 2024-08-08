@@ -1,5 +1,4 @@
-﻿using System ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;

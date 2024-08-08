@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Reactive.Subjects ;
+﻿using System.Reactive.Subjects ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
@@ -18,7 +17,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             _logger         = Substitute.For < ILogger > ( ) ;
             _scheduler      = new TestScheduler ( ) ;
             _deskMover      = Substitute.For < IDeskMover > ( ) ;
-            _executer       = Substitute.For < IDeskCommandExecutor > ( ) ;
+            _executor       = Substitute.For < IDeskCommandExecutor > ( ) ;
             _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
 
             _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
@@ -45,7 +44,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
             _scheduler.Start ( ) ;
 
-            _executer.DidNotReceive ( )
+            _executor.DidNotReceive ( )
                      .Stop ( ) ;
         }
 
@@ -55,13 +54,13 @@ namespace Idasen.BluetoothLE.Linak.Tests
             _deskMover.IsAllowedToMove
                       .Returns ( true ) ;
 
-            var _ = CreateSutInitialized ( ).Unlock ( ) ;
+            _ = CreateSutInitialized ( ).Unlock ( ) ;
 
             _subjectHeightAndSpeed.OnNext ( _details ) ;
 
             _scheduler.Start ( ) ;
 
-            _executer.DidNotReceive ( )
+            _executor.DidNotReceive ( )
                      .Stop ( ) ;
         }
 
@@ -71,13 +70,13 @@ namespace Idasen.BluetoothLE.Linak.Tests
             _deskMover.IsAllowedToMove
                       .Returns ( true ) ;
 
-            var _ = CreateSutInitialized ( ).Lock ( ) ;
+            _ = CreateSutInitialized ( ).Lock ( ) ;
 
             _subjectHeightAndSpeed.OnNext ( _details ) ;
 
             _scheduler.Start ( ) ;
 
-            _executer.DidNotReceive ( )
+            _executor.DidNotReceive ( )
                      .Stop ( ) ;
         }
 
@@ -87,13 +86,13 @@ namespace Idasen.BluetoothLE.Linak.Tests
             _deskMover.IsAllowedToMove
                       .Returns ( false ) ;
 
-            var _ = CreateSutInitialized ( ).Lock ( ) ;
+            _ = CreateSutInitialized ( ).Lock ( ) ;
 
             _subjectHeightAndSpeed.OnNext ( _details ) ;
 
             _scheduler.Start ( ) ;
 
-            _executer.Received ( )
+            _executor.Received ( )
                      .Stop ( ) ;
         }
 
@@ -102,7 +101,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return new DeskLocker ( _logger ,
                                     _scheduler ,
                                     _deskMover ,
-                                    _executer ,
+                                    _executor ,
                                     _heightAndSpeed ) ;
         }
 
@@ -113,7 +112,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
 
         private IDeskMover                     _deskMover             = null! ;
         private HeightSpeedDetails             _details               = null! ;
-        private IDeskCommandExecutor           _executer              = null! ;
+        private IDeskCommandExecutor           _executor              = null! ;
         private IDeskHeightAndSpeed            _heightAndSpeed        = null! ;
         private ILogger                        _logger                = null! ;
         private TestScheduler                  _scheduler             = null! ;

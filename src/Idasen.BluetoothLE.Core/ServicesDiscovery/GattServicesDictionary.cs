@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic ;
-using Autofac.Extras.DynamicProxy ;
+﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;

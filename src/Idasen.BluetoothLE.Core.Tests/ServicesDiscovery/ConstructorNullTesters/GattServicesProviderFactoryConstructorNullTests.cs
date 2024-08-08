@@ -6,7 +6,5 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters
 {
     [ TestClass ]
     public class GattServicesProviderFactoryConstructorNullTests
-        : BaseConstructorNullTester < GattServicesProviderFactory >
-    {
-    }
+        : BaseConstructorNullTester < GattServicesProviderFactory > ;
 }

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks ;
-using Windows.Storage.Streams ;
+﻿using Windows.Storage.Streams ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;

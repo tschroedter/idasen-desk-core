@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic ;
-using System.Linq ;
-using Autofac.Extras.DynamicProxy ;
+﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Serilog ;

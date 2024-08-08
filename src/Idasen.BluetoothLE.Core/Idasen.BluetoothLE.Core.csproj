@@ -45,6 +45,7 @@
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
 </Project>

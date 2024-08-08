@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
 {

@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Threading.Tasks ;
-using Autofac.Extras.DynamicProxy ;
+﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;

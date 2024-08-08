@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Collections.Immutable ;
+﻿using System.Collections.Immutable ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Idasen.BluetoothLE.Characteristics.Common ;

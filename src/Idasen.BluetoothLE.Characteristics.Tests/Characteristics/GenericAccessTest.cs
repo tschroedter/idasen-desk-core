@@ -1,7 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
+﻿using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Common ;

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;

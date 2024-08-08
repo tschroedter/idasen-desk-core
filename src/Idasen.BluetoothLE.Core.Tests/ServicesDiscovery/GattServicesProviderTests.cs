@@ -1,7 +1,5 @@
-﻿using System ;
-using System.Reactive ;
+﻿using System.Reactive ;
 using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using FluentAssertions ;

@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Reactive.Subjects ;
+﻿using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;

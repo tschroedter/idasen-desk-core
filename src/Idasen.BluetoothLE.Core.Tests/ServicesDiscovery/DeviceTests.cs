@@ -1,5 +1,4 @@
-﻿using System ;
-using Windows.Devices.Bluetooth ;
+﻿using Windows.Devices.Bluetooth ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;

@@ -1,10 +1,7 @@
-﻿using System ;
-using System.IO ;
-using System.Threading ;
-using System.Threading.Tasks ;
-using Autofac ;
+﻿using Autofac ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Idasen.Launcher ;
+using JetBrains.Annotations ;
 using Microsoft.Extensions.Configuration ;
 using Serilog ;
 using static System.Console ;
@@ -16,7 +13,8 @@ namespace Idasen.ConsoleApp
         /// <summary>
         ///     Test Application
         /// </summary>
-        private static async Task Main ( )
+        [ UsedImplicitly ]
+        private async static Task Main ( )
         {
             var tokenSource = new CancellationTokenSource ( TimeSpan.FromSeconds ( 60 ) ) ;
             var token       = tokenSource.Token ;

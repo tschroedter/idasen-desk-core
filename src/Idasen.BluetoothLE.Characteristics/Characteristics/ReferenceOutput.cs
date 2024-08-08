@@ -1,10 +1,6 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Linq ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
@@ -67,7 +63,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
             return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
         }
 
-        public override async Task Refresh ( )
+        public async override Task Refresh ( )
         {
             await base.Refresh ( ) ;
 
@@ -87,7 +83,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
                 return ;
             }
 
-            _subscriber?.Dispose ( ) ; // Attention: this is to hard to test
+            _subscriber?.Dispose ( ) ; // Attention: this is too hard to test
 
             _subscriber = heightAndSpeed.ValueChanged
                                         .SubscribeOn ( Scheduler )

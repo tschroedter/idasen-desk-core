@@ -12,7 +12,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         ///     and add them to the given characteristics.
         /// </summary>
         /// <param name="characteristics">
-        ///     The characteristics to add the create desk characteristics to.
+        ///     The characteristics to add the created desk characteristics to.
         /// </param>
         /// <param name="device">
         ///     The device providing the characteristics.

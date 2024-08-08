@@ -1,5 +1,4 @@
-﻿using System ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;
@@ -26,7 +25,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_ConstructorSizeIndexAccess_CorrectContent ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 } ) ;
+                                                      [0 , 1 , 2 , 3] ) ;
 
             using var scope = new AssertionScope ( ) ;
 
@@ -49,7 +48,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         {
             // ReSharper disable once ObjectCreationAsStatement
             Action action = ( ) => new CircularBuffer < int > ( 3 ,
-                                                                new [ ] { 0 , 1 , 2 , 3 } ) ;
+                                                                [0 , 1 , 2 , 3] ) ;
 
             action.Should ( )
                   .Throw < ArgumentException > ( )
@@ -60,11 +59,12 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_GetEnumeratorConstructorDefinedArray_CorrectContent ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 } ) ;
+                                                      [0 , 1 , 2 , 3] ) ;
 
             using var scope = new AssertionScope ( ) ;
 
             var x = 0 ;
+
             foreach ( var item in buffer )
             {
                 item.Should ( )
@@ -125,6 +125,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 
             // buffer should have [5,6,7,8,9]
             var x = 5 ;
+
             foreach ( var item in buffer )
             {
                 item.Should ( )
@@ -137,7 +138,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_ToArrayConstructorDefinedArray_CorrectContent ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 } ) ;
+                                                      [0 , 1 , 2 , 3] ) ;
 
             buffer.ToArray ( )
                   .Should ( )
@@ -193,7 +194,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_Front_CorrectItem ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) ;
+                                                      [0 , 1 , 2 , 3 , 4] ) ;
 
             buffer.Front ( )
                   .Should ( )
@@ -204,7 +205,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_Back_CorrectItem ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) ;
+                                                      [0 , 1 , 2 , 3 , 4] ) ;
 
             buffer.Back ( )
                   .Should ( )
@@ -215,7 +216,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_BackOfBufferOverflowByOne_CorrectItem ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) ;
+                                                      [0 , 1 , 2 , 3 , 4] ) ;
             buffer.PushBack ( 42 ) ;
 
             using var scope = new AssertionScope ( ) ;
@@ -256,7 +257,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_PopBack_RemovesBackElement ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) ;
+                                                      [0 , 1 , 2 , 3 , 4] ) ;
 
             buffer.Size
                   .Should ( )
@@ -278,7 +279,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_PopBackInOverflowBuffer_RemovesBackElement ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) ;
+                                                      [0 , 1 , 2 , 3 , 4] ) ;
             buffer.PushBack ( 5 ) ;
 
             using var scope = new AssertionScope ( ) ;
@@ -304,7 +305,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_PopFront_RemovesBackElement ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) ;
+                                                      [0 , 1 , 2 , 3 , 4] ) ;
 
             using var scope = new AssertionScope ( ) ;
 
@@ -326,7 +327,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_PopFrontInOverflowBuffer_RemovesBackElement ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) ;
+                                                      [0 , 1 , 2 , 3 , 4] ) ;
             buffer.PushFront ( 5 ) ;
 
             using var scope = new AssertionScope ( ) ;
@@ -352,7 +353,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
         public void CircularBuffer_SetIndex_ReplacesElement ( )
         {
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) { [ 1 ] = 10 , [ 3 ] = 30 } ;
+                                                      [0 , 1 , 2 , 3 , 4] ) { [ 1 ] = 10 , [ 3 ] = 30 } ;
 
 
             buffer.ToArray ( )
@@ -367,7 +368,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
             // https://github.com/joaoportela/CircularBuffer-CSharp/issues/2
 
             var buffer = new CircularBuffer < int > ( 5 ,
-                                                      new [ ] { 0 , 1 , 2 , 3 , 4 } ) ;
+                                                      [0 , 1 , 2 , 3 , 4] ) ;
 
             buffer.PopFront ( ) ; // (make size and capacity different)
 

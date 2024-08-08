@@ -3,28 +3,23 @@ using Idasen.Aop.Interfaces ;
 using Serilog ;
 using Serilog.Events ;
 
-namespace Idasen.Aop.Aspects
+namespace Idasen.Aop.Aspects ;
+
+public class LogAspect ( ILogger logger ,
+                         IInvocationToTextConverter converter )
+    : IInterceptor
 {
-    public class LogAspect : IInterceptor
+    private readonly IInvocationToTextConverter _converter = converter ?? throw new ArgumentNullException ( nameof ( converter ) ) ;
+    private readonly ILogger _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
+
+    public void Intercept ( IInvocation invocation )
     {
-        public LogAspect ( ILogger                    logger ,
-                           IInvocationToTextConverter converter )
+        if ( _logger.IsEnabled ( LogEventLevel.Debug ) )
         {
-            _logger    = logger ;
-            _converter = converter ;
+            var message = $"[LogAspect] ({invocation.InvocationTarget.GetHashCode ( ):D10}) {_converter.Convert ( invocation )}" ;
+            _logger.Debug ( message ) ;
         }
 
-        public void Intercept ( IInvocation invocation )
-        {
-            if ( Log.IsEnabled ( LogEventLevel.Debug ) )
-                _logger.Debug ( "[LogAspect] "                                          +
-                                $"({invocation.InvocationTarget.GetHashCode ( ):D10}) " +
-                                _converter.Convert ( invocation ) ) ;
-
-            invocation.Proceed ( ) ;
-        }
-
-        private readonly IInvocationToTextConverter _converter ;
-        private readonly ILogger                    _logger ;
+        invocation.Proceed ( ) ;
     }
 }

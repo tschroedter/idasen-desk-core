@@ -54,7 +54,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                .BeFalse ( ) ;
         }
 
-        private readonly byte [ ] _invalidHeightAndSpeed = { 1 , 0 , 2 } ;
-        private readonly byte [ ] _validHeightAndSpeed   = { 1 , 0 , 2 , 0 } ;
+        private readonly byte [ ] _invalidHeightAndSpeed = [1 , 0 , 2] ;
+        private readonly byte [ ] _validHeightAndSpeed   = [1 , 0 , 2 , 0] ;
     }
 }

@@ -1,12 +1,11 @@
-﻿using System ;
-using System.Threading.Tasks ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Linak.Control
 {
     /// <summary>
-    ///     The desk doesn't always provide the current height so we have to
+    ///     The desk doesn't always provide the current height, so we have to
     ///     move the desk to get a reading.
     /// </summary>
     public interface IInitialHeightProvider

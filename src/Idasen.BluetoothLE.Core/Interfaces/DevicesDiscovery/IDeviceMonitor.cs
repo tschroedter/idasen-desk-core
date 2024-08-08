@@ -1,7 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
 {
     /// <summary>
     ///     Monitors discovered devices.

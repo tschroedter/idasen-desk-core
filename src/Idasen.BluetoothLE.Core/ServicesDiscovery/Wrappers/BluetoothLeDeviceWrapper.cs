@@ -1,10 +1,7 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;

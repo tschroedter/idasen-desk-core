@@ -1,7 +1,5 @@
 ﻿#nullable disable
 
-using System ;
-using System.Threading.Tasks ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;

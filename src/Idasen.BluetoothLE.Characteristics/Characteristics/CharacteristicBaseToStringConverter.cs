@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic ;
-using System.Linq ;
-using System.Text ;
+﻿using System.Text ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
@@ -50,10 +48,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         protected IEnumerable < byte > TryGetValueOrEmpty ( CharacteristicBase characteristic ,
                                                             string             key )
         {
-            return characteristic.RawValues.TryGetValue ( key ,
-                                                          out var values )
-                       ? values
-                       : RawArrayEmpty ;
+            return characteristic.RawValues.GetValueOrDefault ( key , RawArrayEmpty ) ;
         }
 
         protected string RawValueOrUnavailable ( CharacteristicBase   characteristic ,
@@ -68,7 +63,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics
         }
 
 
-        internal readonly static IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+        internal static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
                                                                                 .ToArray ( ) ;
     }
 }

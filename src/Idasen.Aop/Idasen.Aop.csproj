@@ -5,12 +5,13 @@
         <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
 	    <Nullable>enable</Nullable>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac.Extras.DynamicProxy"  />
-        <PackageReference Include="JetBrains.Annotations"  />
-        <PackageReference Include="Serilog"  />
+        <PackageReference Include="Autofac.Extras.DynamicProxy" />
+        <PackageReference Include="JetBrains.Annotations" />
+        <PackageReference Include="Serilog" />
     </ItemGroup>
 
 </Project>

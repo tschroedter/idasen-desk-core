@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+﻿using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 namespace Idasen.BluetoothLE.Linak
@@ -23,7 +21,7 @@ namespace Idasen.BluetoothLE.Linak
                                           nameof ( key ) ) ;
         }
 
-        public readonly static Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
+        public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
             new( )
             {
                 { DeskCharacteristicKey.GenericAccess , new GenericAccess ( ) } ,

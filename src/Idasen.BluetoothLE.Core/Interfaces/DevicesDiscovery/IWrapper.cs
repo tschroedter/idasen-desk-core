@@ -1,5 +1,4 @@
-﻿using System ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+﻿using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
 {

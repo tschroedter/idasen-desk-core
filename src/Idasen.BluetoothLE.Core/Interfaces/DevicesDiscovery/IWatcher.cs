@@ -1,6 +1,4 @@
-﻿using System ;
-
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery
 {
     /// <summary>
     ///     Wraps and makes use of the <see cref="Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher" />

@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using FluentAssertions ;

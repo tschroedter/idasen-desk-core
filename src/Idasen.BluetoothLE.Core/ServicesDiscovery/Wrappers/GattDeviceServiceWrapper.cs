@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Diagnostics.CodeAnalysis ;
-using System.Threading.Tasks ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 

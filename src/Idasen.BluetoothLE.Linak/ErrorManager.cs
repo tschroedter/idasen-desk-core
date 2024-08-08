@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Reactive.Subjects ;
+﻿using System.Reactive.Subjects ;
 using System.Runtime.CompilerServices ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;

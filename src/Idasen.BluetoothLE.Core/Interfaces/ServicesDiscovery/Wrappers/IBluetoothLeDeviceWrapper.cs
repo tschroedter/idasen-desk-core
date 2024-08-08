@@ -1,7 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Threading.Tasks ;
-using Windows.Devices.Bluetooth ;
+﻿using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers

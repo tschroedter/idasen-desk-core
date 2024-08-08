@@ -1,12 +1,11 @@
-﻿using System ;
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 
 namespace Idasen.BluetoothLE.Core
 {
     /// <inheritdoc />
     [ ExcludeFromCodeCoverage ]
-    public class DateTimeOffsetWrapper
+    public class DateTimeOffsetWrapper ( DateTimeOffset dateTimeOffset )
         : IDateTimeOffset
     {
         public DateTimeOffsetWrapper ( )
@@ -14,16 +13,11 @@ namespace Idasen.BluetoothLE.Core
         {
         }
 
-        public DateTimeOffsetWrapper ( DateTimeOffset dateTimeOffset )
-        {
-            _dateTimeOffset = dateTimeOffset ;
-        }
-
         /// <inheritdoc />
         public IDateTimeOffset Now => new DateTimeOffsetWrapper ( DateTimeOffset.Now ) ;
 
         /// <inheritdoc />
-        public long Ticks => _dateTimeOffset.Ticks ;
+        public long Ticks => dateTimeOffset.Ticks ;
 
         /// <inheritdoc />
         public string ToString ( string          format ,
@@ -34,16 +28,14 @@ namespace Idasen.BluetoothLE.Core
             Guard.ArgumentNotNull ( formatProvider ,
                                     nameof ( formatProvider ) ) ;
 
-            return _dateTimeOffset.ToString ( format ,
+            return dateTimeOffset.ToString ( format ,
                                               formatProvider ) ;
         }
 
         /// <inheritdoc />
         public override string ToString ( )
         {
-            return _dateTimeOffset.ToString ( ) ;
+            return dateTimeOffset.ToString ( ) ;
         }
-
-        private readonly DateTimeOffset _dateTimeOffset ;
     }
 }

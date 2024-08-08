@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Linq ;
-using CsvHelper ;
+﻿using CsvHelper ;
 using CsvHelper.Configuration ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;

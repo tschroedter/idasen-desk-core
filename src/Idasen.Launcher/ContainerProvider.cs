@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic ;
-using Autofac ;
+﻿using Autofac ;
 using Autofac.Core ;
 using AutofacSerilogIntegration ;
 using Idasen.BluetoothLE.Core ;

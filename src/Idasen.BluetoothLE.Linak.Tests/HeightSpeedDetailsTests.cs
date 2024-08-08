@@ -1,5 +1,4 @@
-﻿using System ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Linak.Tests

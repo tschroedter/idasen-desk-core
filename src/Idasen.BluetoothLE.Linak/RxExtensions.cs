@@ -1,8 +1,6 @@
-﻿using System ;
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using System.Reactive ;
 using System.Reactive.Linq ;
-using System.Threading.Tasks ;
 using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak

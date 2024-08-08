@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Globalization ;
+﻿using System.Globalization ;
 using Autofac.Extras.DynamicProxy ;
 using CsvHelper ;
 using CsvHelper.Configuration ;

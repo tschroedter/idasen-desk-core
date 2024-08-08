@@ -1,8 +1,4 @@
-﻿using System ;
-using System.Threading ;
-using System.Threading.Tasks ;
-
-namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces
 {
     public interface ITaskRunner
     {

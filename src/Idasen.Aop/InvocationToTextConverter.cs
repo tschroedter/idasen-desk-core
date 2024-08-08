@@ -1,77 +1,60 @@
-﻿using System ;
-using System.Linq ;
-using System.Text ;
+﻿using System.Text ;
 using System.Text.Json ;
 using Castle.DynamicProxy ;
 using Idasen.Aop.Interfaces ;
 using JetBrains.Annotations ;
 using Serilog ;
 
-namespace Idasen.Aop
+namespace Idasen.Aop ;
+
+public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextConverter
 {
-    public class InvocationToTextConverter : IInvocationToTextConverter
+    private readonly ILogger _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
+
+    public string Convert ( IInvocation invocation )
     {
-        public InvocationToTextConverter ( ILogger logger )
+        var arguments = ConvertArgumentsToString ( invocation.Arguments ) ;
+
+        return $"{invocation.TargetType.FullName}.{invocation.Method.Name}({arguments})" ;
+    }
+
+    [ UsedImplicitly ]
+    internal string ConvertArgumentsToString ( object [ ] arguments )
+    {
+        var builder = new StringBuilder ( ) ;
+
+        foreach (var argument in arguments)
         {
-            _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
+            builder.Append ( DumpObject ( argument ) ).Append ( "," ) ;
         }
 
-        public string Convert ( IInvocation invocation )
+        if ( builder.Length > 0 )
+            builder.Length-- ; // Remove the trailing comma
+
+        return builder.ToString ( ) ;
+    }
+
+    private string DumpObject ( object argument )
+    {
+        try
         {
-            var arguments = ConvertArgumentsToString ( invocation.Arguments ) ;
-
-            var called = $"{invocation.TargetType.FullName}.{invocation.Method.Name}({arguments})" ;
-
-            return called ;
-        }
-
-        [ UsedImplicitly ]
-        internal string ConvertArgumentsToString ( object [ ] arguments )
-        {
-            var builder = new StringBuilder ( ) ;
-
-            foreach ( var argument in arguments )
-            {
-                var argumentDescription = DumpObject ( argument ) ;
-
-                builder.Append ( argumentDescription )
-                       .Append ( "," ) ;
-            }
-
-            if ( arguments.Any ( ) ) builder.Length -- ;
-
-            return builder.ToString ( ) ;
-        }
-
-        private string DumpObject ( object argument )
-        {
-            try
-            {
-                if ( IsWindowsBluetoothInstance ( argument ) )
-                    return argument.ToString ( ) ?? "null" ;
-
-                var json = JsonSerializer.Serialize ( argument ) ;
-
-                return json ;
-            }
-            catch ( Exception e )
-            {
-                _logger.Debug ( "Failed to convert object "                     +
-                                $"'{argument.GetType ( ).FullName}' to json - " +
-                                $"Message: '{e.Message}'" ) ;
-
+            if ( IsWindowsBluetoothInstance ( argument ) )
                 return argument.ToString ( ) ?? "null" ;
-            }
-        }
 
-        private static bool IsWindowsBluetoothInstance ( object argument )
+            return JsonSerializer.Serialize ( argument ) ;
+        }
+        catch ( Exception e )
         {
-            var ns = argument.GetType ( ).Namespace ;
+            _logger.Debug ( "Failed to convert object '{Type}' to JSON - Message: '{Message}'" ,
+                argument.GetType ( ).FullName ,
+                e.Message ) ;
 
-            return ns != null &&
-                   ns.StartsWith ( "Windows.Devices.Bluetooth" ) ;
+            return argument.ToString ( ) ?? "null" ;
         }
+    }
 
-        private readonly ILogger _logger ;
+    private static bool IsWindowsBluetoothInstance ( object argument )
+    {
+        return argument.GetType ( ).Namespace?.StartsWith ( "Windows.Devices.Bluetooth" ) == true ;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Threading.Tasks ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;

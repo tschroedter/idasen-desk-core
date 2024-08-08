@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;

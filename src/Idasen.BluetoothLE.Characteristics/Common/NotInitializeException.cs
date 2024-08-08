@@ -1,5 +1,4 @@
-﻿using System ;
-using Idasen.BluetoothLE.Core ;
+﻿using Idasen.BluetoothLE.Core ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common
 {

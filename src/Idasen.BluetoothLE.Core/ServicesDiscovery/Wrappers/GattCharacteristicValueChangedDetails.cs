@@ -1,7 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 {
     public class GattCharacteristicValueChangedDetails
     {

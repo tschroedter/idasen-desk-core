@@ -26,7 +26,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 
         public delegate IGattReadResultWrapper Factory ( GattReadResult result ) ;
 
-        public readonly static IGattReadResultWrapper NotSupported = new GattReadResultWrapperNotSupported ( ) ;
+        public static readonly IGattReadResultWrapper NotSupported = new GattReadResultWrapperNotSupported ( ) ;
 
         private readonly GattReadResult _result ;
     }

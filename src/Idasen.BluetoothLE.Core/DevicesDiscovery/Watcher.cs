@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Reactive.Subjects ;
+﻿using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;

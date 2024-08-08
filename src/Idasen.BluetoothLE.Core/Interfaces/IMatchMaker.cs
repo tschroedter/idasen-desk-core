@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces

@@ -1,8 +1,6 @@
-﻿using System ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Microsoft.Reactive.Testing ;

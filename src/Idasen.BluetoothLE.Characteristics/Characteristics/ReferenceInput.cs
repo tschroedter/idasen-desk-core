@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
@@ -9,30 +7,24 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics
 {
-    public class ReferenceInput
-        : CharacteristicBase ,
+    public class ReferenceInput ( ILogger logger ,
+                                  IScheduler scheduler ,
+                                  IDevice device ,
+                                  IGattCharacteristicsProviderFactory providerFactory ,
+                                  IRawValueReader rawValueReader ,
+                                  IRawValueWriter rawValueWriter ,
+                                  ICharacteristicBaseToStringConverter toStringConverter ,
+                                  IDescriptionToUuid descriptionToUuid )
+        : CharacteristicBase ( logger ,
+                               scheduler ,
+                               device ,
+                               providerFactory ,
+                               rawValueReader ,
+                               rawValueWriter ,
+                               toStringConverter ,
+                               descriptionToUuid ) ,
           IReferenceInput
     {
-        public ReferenceInput (
-            ILogger                              logger ,
-            IScheduler                           scheduler ,
-            IDevice                              device ,
-            IGattCharacteristicsProviderFactory  providerFactory ,
-            IRawValueReader                      rawValueReader ,
-            IRawValueWriter                      rawValueWriter ,
-            ICharacteristicBaseToStringConverter toStringConverter ,
-            IDescriptionToUuid                   descriptionToUuid )
-            : base ( logger ,
-                     scheduler ,
-                     device ,
-                     providerFactory ,
-                     rawValueReader ,
-                     rawValueWriter ,
-                     toStringConverter ,
-                     descriptionToUuid )
-        {
-        }
-
         public IEnumerable < byte > Ctrl1 => GetValueOrEmpty ( Ctrl1Key ) ;
 
         public override Guid GattServiceUuid { get ; } = Guid.Parse ( "99FA0030-338A-1024-8A49-009C0215F78A" ) ;

@@ -1,5 +1,4 @@
-﻿using System ;
-using Castle.DynamicProxy ;
+﻿using Castle.DynamicProxy ;
 using Idasen.Aop.Interfaces ;
 using Serilog ;
 
@@ -7,16 +6,10 @@ using Serilog ;
 
 namespace Idasen.Aop.Aspects
 {
-    public class LogExceptionAspect : IInterceptor
+    public class LogExceptionAspect ( ILogger logger ,
+                                      IInvocationToTextConverter converter )
+        : IInterceptor
     {
-        // todo move ErrorManager to common space
-        public LogExceptionAspect ( ILogger                    logger ,
-                                    IInvocationToTextConverter converter )
-        {
-            _logger    = logger ;
-            _converter = converter ;
-        }
-
         public void Intercept ( IInvocation invocation )
         {
             try
@@ -25,12 +18,9 @@ namespace Idasen.Aop.Aspects
             }
             catch ( Exception exception )
             {
-                _logger.Error ( $"{_converter.Convert ( invocation )} " +
+                logger.Error ( $"{converter.Convert ( invocation )} " +
                                 exception ) ;
             }
         }
-
-        private readonly IInvocationToTextConverter _converter ;
-        private readonly ILogger                    _logger ;
     }
 }

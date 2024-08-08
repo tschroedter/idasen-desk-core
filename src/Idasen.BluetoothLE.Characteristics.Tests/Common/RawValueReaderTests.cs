@@ -1,6 +1,4 @@
-﻿using System ;
-using System.Collections ;
-using System.Threading.Tasks ;
+﻿using System.Collections ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
 using FluentAssertions ;

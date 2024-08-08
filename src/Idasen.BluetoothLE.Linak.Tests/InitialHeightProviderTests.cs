@@ -1,7 +1,5 @@
-﻿using System ;
-using System.Reactive.Linq ;
+﻿using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Characteristics.Common ;
@@ -352,7 +350,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             _heightAndSpeed.HeightAndSpeedChanged
                            .Returns ( subject ) ;
 
-            using var sut = CreateSut ( ) ;
+            var sut = CreateSut ( ) ;
 
             sut.Initialize ( ) ;
 

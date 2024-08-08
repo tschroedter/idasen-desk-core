@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Text.Json ;
+﻿using System.Text.Json ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;

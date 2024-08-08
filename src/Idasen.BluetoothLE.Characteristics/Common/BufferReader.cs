@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Storage.Streams ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
@@ -45,7 +44,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common
                                 message ) ;
             }
 
-            bytes = Array.Empty < byte > ( ) ;
+            bytes = [] ;
 
             return false ;
         }

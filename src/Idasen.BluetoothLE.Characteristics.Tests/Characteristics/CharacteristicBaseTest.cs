@@ -1,7 +1,4 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Threading.Tasks ;
-using Windows.Storage.Streams ;
+﻿using Windows.Storage.Streams ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Common.Tests ;

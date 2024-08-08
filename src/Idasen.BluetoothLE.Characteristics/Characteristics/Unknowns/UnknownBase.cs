@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic ;
-using System.Linq ;
-using System.Threading.Tasks ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns
 {
@@ -30,7 +27,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns
             _disposed = true ;
         }
 
-        protected readonly static IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+        protected static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
                                                                                  .ToArray ( ) ;
 
         private bool _disposed ;

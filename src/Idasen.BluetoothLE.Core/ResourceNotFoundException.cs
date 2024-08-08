@@ -1,5 +1,4 @@
-﻿using System ;
-using Selkie.DefCon.One.Common ;
+﻿using Selkie.DefCon.One.Common ;
 
 namespace Idasen.BluetoothLE.Core
 {

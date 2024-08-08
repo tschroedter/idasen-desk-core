@@ -1,8 +1,5 @@
-﻿using System ;
-using System.Collections.Generic ;
-using System.Reactive.Linq ;
+﻿using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using System.Threading.Tasks ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
@@ -51,7 +48,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             _referenceOutput.HeightSpeedChanged
                             .Returns ( subject ) ;
 
-            using var sut = CreateSut ( ) ;
+            var sut = CreateSut ( ) ;
 
             sut.Initialize ( ) ;
 
@@ -64,10 +61,11 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void Dispose_ForInvokedTwice_DisposesReferenceOutput ( )
         {
-            using var sut = CreateSut ( ) ;
+            var sut = CreateSut ( ) ;
 
             sut.Initialize ( ) ;
 
+            sut.Dispose ( ) ;
             sut.Dispose ( ) ;
 
             _referenceOutput.Received ( )

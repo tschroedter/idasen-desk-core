@@ -18,18 +18,18 @@ namespace Idasen.BluetoothLE.Linak.Control
         }
 
         public IDeskLocker Create ( IDeskMover           deskMover ,
-                                    IDeskCommandExecutor executer ,
+                                    IDeskCommandExecutor executor ,
                                     IDeskHeightAndSpeed  heightAndSpeed )
         {
             Guard.ArgumentNotNull ( deskMover ,
                                     nameof ( deskMover ) ) ;
-            Guard.ArgumentNotNull ( executer ,
-                                    nameof ( executer ) ) ;
+            Guard.ArgumentNotNull ( executor ,
+                                    nameof ( executor ) ) ;
             Guard.ArgumentNotNull ( heightAndSpeed ,
                                     nameof ( heightAndSpeed ) ) ;
 
             return _factory ( deskMover ,
-                              executer ,
+                              executor ,
                               heightAndSpeed ) ;
         }
 

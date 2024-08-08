@@ -1,5 +1,4 @@
-﻿using System ;
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
@@ -16,7 +15,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         public DeskLocker ( ILogger              logger ,
                             IScheduler           scheduler ,
                             IDeskMover           deskMover ,
-                            IDeskCommandExecutor executer ,
+                            IDeskCommandExecutor executor ,
                             IDeskHeightAndSpeed  heightAndSpeed )
         {
             Guard.ArgumentNotNull ( logger ,
@@ -25,15 +24,15 @@ namespace Idasen.BluetoothLE.Linak.Control
                                     nameof ( scheduler ) ) ;
             Guard.ArgumentNotNull ( deskMover ,
                                     nameof ( deskMover ) ) ;
-            Guard.ArgumentNotNull ( executer ,
-                                    nameof ( executer ) ) ;
+            Guard.ArgumentNotNull ( executor ,
+                                    nameof ( executor ) ) ;
             Guard.ArgumentNotNull ( heightAndSpeed ,
                                     nameof ( heightAndSpeed ) ) ;
 
             _logger         = logger ;
             _scheduler      = scheduler ;
             _deskMover      = deskMover ;
-            _executer       = executer ;
+            _executor       = executor ;
             _heightAndSpeed = heightAndSpeed ;
         }
 
@@ -74,7 +73,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         }
 
         public delegate IDeskLocker Factory ( IDeskMover           deskMover ,
-                                              IDeskCommandExecutor executer ,
+                                              IDeskCommandExecutor executor ,
                                               IDeskHeightAndSpeed  heightAndSpeed ) ;
 
         private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
@@ -89,11 +88,11 @@ namespace Idasen.BluetoothLE.Linak.Control
 
             _logger.Debug ( $"{details}" ) ;
 
-            _executer.Stop ( ) ;
+            _executor.Stop ( ) ;
         }
 
         private readonly IDeskMover           _deskMover ;
-        private readonly IDeskCommandExecutor _executer ;
+        private readonly IDeskCommandExecutor _executor ;
         private readonly IDeskHeightAndSpeed  _heightAndSpeed ;
 
         private readonly ILogger    _logger ;

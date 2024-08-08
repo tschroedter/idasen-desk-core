@@ -1,5 +1,4 @@
-﻿using System ;
-using Windows.Devices.Bluetooth ;
+﻿using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
