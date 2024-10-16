@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 1,
   "dependencies": {
     "net8.0-windows10.0.19041": {
       "Autofac.Extras.DynamicProxy": {
@@ -18,6 +18,23 @@
         "resolved": "33.0.1",
         "contentHash": "fev4lynklAU2A9GVMLtwarkwaanjSYB4wUqO2nOJX5hnzObORzUqVLe+bDYCUyIIRQM4o5Bsq3CcyJR89iMmEQ=="
       },
+      "Autofac": {
+        "type": "Transitive",
+        "resolved": "8.1.1",
+        "contentHash": "lhHjVB/XJtxPDUQ/FAHWAC7Spu+P9TNfDbyx2W0ABqD1eTRo7TkcZ7l7Oq1S5pKNg7NXswdk9uH73qbOzSwQFA==",
+        "dependencies": {
+          "System.Diagnostics.DiagnosticSource": "8.0.1"
+        }
+      },
+      "AutofacSerilogIntegration": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "L0QyvG1hxDbSi6nrLoEAig+WBF1NvTLuhVMKbHhPT/lyB3SBZvudRs4DjTnU8fBxPtmZo+97Bzf8pMz7W3iXBw==",
+        "dependencies": {
+          "Autofac": "6.0.0",
+          "Serilog": "2.9.0"
+        }
+      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "5.1.1",
@@ -26,87 +43,63 @@
           "System.Diagnostics.EventLog": "6.0.0"
         }
       },
+      "JetBrains.Annotations": {
+        "type": "Transitive",
+        "resolved": "2024.2.0",
+        "contentHash": "GNnqCFW/163p1fOehKx0CnAqjmpPrUSqrgfHM6qca+P+RN39C9rhlfZHQpJhxmQG/dkOYe/b3Z0P8b6Kv5m1qw=="
+      },
+      "Selkie.DefCon.One.Common": {
+        "type": "Transitive",
+        "resolved": "0.0.17",
+        "contentHash": "CExlQXlmWzpbpuFv6dYDvPJv3sUe30Zjcx2rXDv0vQXJjmMlEMJln5OxPdSATxwsWwHQJj9TXGylPm5DtYuL/Q=="
+      },
+      "Serilog": {
+        "type": "Transitive",
+        "resolved": "4.0.2",
+        "contentHash": "Vehq4uNYtURe/OnHEpWGvMgrvr5Vou7oZLdn3BuEH5FSCeHXDpNJtpzWoqywXsSvCTuiv0I65mZDRnJSeUvisA=="
+      },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
-        "resolved": "7.0.2",
-        "contentHash": "hYr3I9N9811e0Bjf2WNwAGGyTuAFbbTgX1RPLt/3Wbm68x3IGcX5Cl75CMmgT6WlNwLQ2tCCWfqYPpypjaf2xA=="
+        "resolved": "8.0.1",
+        "contentHash": "vaoWjvkG1aenR2XdjaVivlCV9fADfgyhW5bZtXT23qaEea0lWiUljdQuze4E31vKM7ZWJaSUsbYIKE3rnzfZUg=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
         "resolved": "6.0.0",
         "contentHash": "lcyUiXTsETK2ALsZrX+nWuHSIQeazhqPphLfaRxzdGaG93+0kELqpgEHtwWOlQe7+jSFnKwaCAgL4kjeZCQJnw=="
       },
+      "System.Reactive": {
+        "type": "Transitive",
+        "resolved": "6.0.1",
+        "contentHash": "rHaWtKDwCi9qJ3ObKo8LHPMuuwv33YbmQi7TcUK1C264V3MFnOr5Im7QgCTdLniztP3GJyeiSg5x8NqYJFqRmg=="
+      },
+      "System.ValueTuple": {
+        "type": "Transitive",
+        "resolved": "4.5.0",
+        "contentHash": "okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ=="
+      },
       "idasen.aop": {
         "type": "Project",
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
           "JetBrains.Annotations": "[2024.2.0, )",
-          "Serilog": "[4.0.1, )"
+          "Serilog": "[4.0.2, )"
         }
       },
       "idasen.bluetoothle.core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[8.0.0, )",
+          "Autofac": "[8.1.1, )",
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
           "AutofacSerilogIntegration": "[5.0.0, )",
           "CsvHelper": "[33.0.1, )",
           "Idasen.Aop": "[1.0.0, )",
           "JetBrains.Annotations": "[2024.2.0, )",
           "Selkie.DefCon.One.Common": "[0.0.17, )",
-          "Serilog": "[4.0.1, )",
+          "Serilog": "[4.0.2, )",
           "System.Reactive": "[6.0.1, )",
           "System.ValueTuple": "[4.5.0, )"
         }
-      },
-      "Autofac": {
-        "type": "CentralTransitive",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "qxVqJcl3fixxa5aZc9TmIuYTwooI9GCL5RzfUiTZtTlbAF3NcWz7bPeEyJEAyS/0qGhSyGnXeku2eiu/7L+3qw==",
-        "dependencies": {
-          "System.Diagnostics.DiagnosticSource": "7.0.2"
-        }
-      },
-      "AutofacSerilogIntegration": {
-        "type": "CentralTransitive",
-        "requested": "[5.0.0, )",
-        "resolved": "5.0.0",
-        "contentHash": "L0QyvG1hxDbSi6nrLoEAig+WBF1NvTLuhVMKbHhPT/lyB3SBZvudRs4DjTnU8fBxPtmZo+97Bzf8pMz7W3iXBw==",
-        "dependencies": {
-          "Autofac": "6.0.0",
-          "Serilog": "2.9.0"
-        }
-      },
-      "JetBrains.Annotations": {
-        "type": "CentralTransitive",
-        "requested": "[2024.2.0, )",
-        "resolved": "2024.2.0",
-        "contentHash": "GNnqCFW/163p1fOehKx0CnAqjmpPrUSqrgfHM6qca+P+RN39C9rhlfZHQpJhxmQG/dkOYe/b3Z0P8b6Kv5m1qw=="
-      },
-      "Selkie.DefCon.One.Common": {
-        "type": "CentralTransitive",
-        "requested": "[0.0.17, )",
-        "resolved": "0.0.17",
-        "contentHash": "CExlQXlmWzpbpuFv6dYDvPJv3sUe30Zjcx2rXDv0vQXJjmMlEMJln5OxPdSATxwsWwHQJj9TXGylPm5DtYuL/Q=="
-      },
-      "Serilog": {
-        "type": "CentralTransitive",
-        "requested": "[4.0.1, )",
-        "resolved": "4.0.1",
-        "contentHash": "pzeDRXdpSLSsgBHpZcmpIDxqMy845Ab4s+dfnBg0sN9h8q/4Wo3vAoe0QCGPze1Q06EVtEPupS+UvLm8iXQmTQ=="
-      },
-      "System.Reactive": {
-        "type": "CentralTransitive",
-        "requested": "[6.0.1, )",
-        "resolved": "6.0.1",
-        "contentHash": "rHaWtKDwCi9qJ3ObKo8LHPMuuwv33YbmQi7TcUK1C264V3MFnOr5Im7QgCTdLniztP3GJyeiSg5x8NqYJFqRmg=="
-      },
-      "System.ValueTuple": {
-        "type": "CentralTransitive",
-        "requested": "[4.5.0, )",
-        "resolved": "4.5.0",
-        "contentHash": "okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ=="
       }
     }
   }

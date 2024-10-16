@@ -1,14 +1,14 @@
 {
-  "version": 2,
+  "version": 1,
   "dependencies": {
     "net8.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "qxVqJcl3fixxa5aZc9TmIuYTwooI9GCL5RzfUiTZtTlbAF3NcWz7bPeEyJEAyS/0qGhSyGnXeku2eiu/7L+3qw==",
+        "requested": "[8.1.1, )",
+        "resolved": "8.1.1",
+        "contentHash": "lhHjVB/XJtxPDUQ/FAHWAC7Spu+P9TNfDbyx2W0ABqD1eTRo7TkcZ7l7Oq1S5pKNg7NXswdk9uH73qbOzSwQFA==",
         "dependencies": {
-          "System.Diagnostics.DiagnosticSource": "7.0.2"
+          "System.Diagnostics.DiagnosticSource": "8.0.1"
         }
       },
       "Autofac.Extras.DynamicProxy": {
@@ -51,9 +51,9 @@
       },
       "Serilog": {
         "type": "Direct",
-        "requested": "[4.0.1, )",
-        "resolved": "4.0.1",
-        "contentHash": "pzeDRXdpSLSsgBHpZcmpIDxqMy845Ab4s+dfnBg0sN9h8q/4Wo3vAoe0QCGPze1Q06EVtEPupS+UvLm8iXQmTQ=="
+        "requested": "[4.0.2, )",
+        "resolved": "4.0.2",
+        "contentHash": "Vehq4uNYtURe/OnHEpWGvMgrvr5Vou7oZLdn3BuEH5FSCeHXDpNJtpzWoqywXsSvCTuiv0I65mZDRnJSeUvisA=="
       },
       "System.Reactive": {
         "type": "Direct",
@@ -77,8 +77,8 @@
       },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
-        "resolved": "7.0.2",
-        "contentHash": "hYr3I9N9811e0Bjf2WNwAGGyTuAFbbTgX1RPLt/3Wbm68x3IGcX5Cl75CMmgT6WlNwLQ2tCCWfqYPpypjaf2xA=="
+        "resolved": "8.0.1",
+        "contentHash": "vaoWjvkG1aenR2XdjaVivlCV9fADfgyhW5bZtXT23qaEea0lWiUljdQuze4E31vKM7ZWJaSUsbYIKE3rnzfZUg=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
@@ -90,7 +90,7 @@
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
           "JetBrains.Annotations": "[2024.2.0, )",
-          "Serilog": "[4.0.1, )"
+          "Serilog": "[4.0.2, )"
         }
       }
     }

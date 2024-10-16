@@ -13,10 +13,9 @@ namespace Idasen.Launcher
     {
         public static ContainerBuilder Builder { get ; } = new( ) ;
 
-        public static IContainer Create (
-            string                    appName ,
-            string                    appLogFileName ,
-            IEnumerable < IModule > ? otherModules = null )
+        public static IContainer Create ( string                    appName ,
+                                          string                    appLogFileName ,
+                                          IEnumerable < IModule > ? otherModules = null )
         {
             Log.Logger = LoggerProvider.CreateLogger ( appName ,
                                                        appLogFileName ) ;
@@ -29,6 +28,7 @@ namespace Idasen.Launcher
         {
             Log.Logger = new LoggerConfiguration ( ).ReadFrom
                                                     .Settings ( settings )
+                                                    .Enrich.WithCaller()
                                                     .CreateLogger ( ) ;
 
             return Register ( otherModules ) ;
@@ -37,9 +37,11 @@ namespace Idasen.Launcher
         public static IContainer Create ( IConfiguration            configuration ,
                                           IEnumerable < IModule > ? otherModules = null )
         {
-            Log.Logger = Log.Logger = new LoggerConfiguration ( ).ReadFrom
+            var loggerConfiguration = new LoggerConfiguration ( ).ReadFrom
                                                                  .Configuration ( configuration )
-                                                                 .CreateLogger ( ) ;
+                                                                 .Enrich.WithCaller ( ) ;
+
+            Log.Logger = Log.Logger = loggerConfiguration.CreateLogger ( ) ;
 
             return Register ( otherModules ) ;
         }
