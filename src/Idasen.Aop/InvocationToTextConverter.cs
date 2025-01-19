@@ -11,8 +11,11 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
 {
     private readonly ILogger _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
 
-    public string Convert ( IInvocation invocation )
+    public string Convert ( IInvocation?  invocation )
     {
+        if (invocation == null)
+            throw new ArgumentNullException(nameof(invocation));
+
         var arguments = ConvertArgumentsToString ( invocation.Arguments ) ;
 
         return $"{invocation.TargetType.FullName}.{invocation.Method.Name}({arguments})" ;
@@ -34,8 +37,11 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
         return builder.ToString ( ) ;
     }
 
-    private string DumpObject ( object argument )
+    private string DumpObject ( object? argument )
     {
+        if (argument == null)
+            return "null";
+
         try
         {
             if ( IsWindowsBluetoothInstance ( argument ) )
