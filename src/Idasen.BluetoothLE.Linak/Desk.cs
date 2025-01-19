@@ -53,40 +53,22 @@ namespace Idasen.BluetoothLE.Linak
         public string Name => _connector.DeviceName ;
 
         /// <inheritdoc />
-        public void MoveTo ( uint targetHeight )
-        {
-            _connector.MoveTo ( targetHeight ) ;
-        }
+        public void MoveTo ( uint targetHeight ) => _connector.MoveTo ( targetHeight ) ; // todo these methods should be async too
 
         /// <inheritdoc />
-        public void MoveUp ( )
-        {
-            _connector.MoveUp ( ) ;
-        }
+        public void MoveUp ( ) => _connector.MoveUp ( ) ;
 
         /// <inheritdoc />
-        public void MoveDown ( )
-        {
-            _connector.MoveDown ( ) ;
-        }
+        public void MoveDown ( ) => _connector.MoveDown ( ) ;
 
         /// <inheritdoc />
-        public void MoveStop ( )
-        {
-            _connector.MoveStop ( ) ;
-        }
+        public void MoveStop ( ) => _connector.MoveStop ( ) ;
 
         /// <inheritdoc />
-        public void MoveLock ( )
-        {
-            _connector.MoveLock ( ) ;
-        }
+        public void MoveLock ( ) => _connector.MoveLock ( ) ;
 
         /// <inheritdoc />
-        public void MoveUnlock ( )
-        {
-            _connector.MoveUnlock ( ) ;
-        }
+        public void MoveUnlock ( ) => _connector.MoveUnlock ( ) ;
 
         /// <inheritdoc />
         public void Dispose ( )
