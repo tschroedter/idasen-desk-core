@@ -1,13 +1,18 @@
 ﻿using Idasen.BluetoothLE.Core ;
 using Serilog ;
+using Serilog.Core ;
 using Serilog.Events ;
-using Serilog.Sinks.File;
-using System.Text;
 
-namespace Idasen.Launcher;
+namespace Idasen.Launcher ;
 
 public static class LoggerProvider
 {
+    private const string LogTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.ffff} " +
+                                       "{Level:u3}] {Message} " +
+                                       "(at {Caller}){NewLine}{Exception}" ;
+
+    private static Lazy < Logger >? _logger ;
+
     public static ILogger CreateLogger ( string appName ,
                                          string appLogFileName )
     {
@@ -18,19 +23,19 @@ public static class LoggerProvider
 
         if ( _logger != null )
         {
-            _logger.Debug ( $"Using existing logger for '{appName}' in folder {appLogFileName}" ) ;
+            _logger.Value.Debug ( $"Using existing logger for '{appName}' in folder {appLogFileName}" ) ;
 
-            return _logger ;
+            return _logger.Value ;
         }
 
         _logger = DoCreateLogger ( appLogFileName ) ;
 
-        _logger.Debug ( $"Created logger for '{appName}' in folder '{appLogFileName}'" ) ;
+        _logger.Value.Debug ( $"Created logger for '{appName}' in folder '{appLogFileName}'" ) ;
 
-        return _logger ;
+        return _logger.Value ;
     }
 
-    private static Serilog.Core.Logger DoCreateLogger ( string appLogFileName )
+    private static Lazy < Logger > DoCreateLogger ( string appLogFileName )
     {
         var logFolder = AppDomain.CurrentDomain.BaseDirectory + "\\logs\\" ;
         var logFile = CreateFullPathLogFileName ( logFolder ,
@@ -50,14 +55,14 @@ public static class LoggerProvider
                                  .WriteTo.File ( logFile ,
                                                  LogEventLevel.Debug ,
                                                  LogTemplate ,
-                                                 hooks : new LoggingFileHooks() ) ;
+                                                 hooks : new LoggingFileHooks ( ) ) ;
 #pragma warning restore CA1305
 
         var logger = loggerConfiguration.CreateLogger ( ) ;
 
-        Console.WriteLine($"Log file name: {LoggingFile.FullPath} {LoggingFile.Path}" ) ;
+        Console.WriteLine ( $"Log file name: {LoggingFile.FullPath} {LoggingFile.Path}" ) ;
 
-        return logger ;
+        return new Lazy < Logger > ( logger ) ;
     }
 
     public static string CreateFullPathLogFileName ( string folder ,
@@ -68,10 +73,4 @@ public static class LoggerProvider
 
         return fullPath ;
     }
-
-    private const string LogTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.ffff} " +
-                                       "{Level:u3}] {Message} " +
-                                       "(at {Caller}){NewLine}{Exception}" ;
-
-    private static Serilog.Core.Logger? _logger ;
 }
