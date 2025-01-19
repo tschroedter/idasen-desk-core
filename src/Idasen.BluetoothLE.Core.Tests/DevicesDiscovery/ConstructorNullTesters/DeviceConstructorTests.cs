@@ -1,13 +1,12 @@
-﻿using FluentAssertions.Execution ;
-using Idasen.BluetoothLE.Common.Tests ;
+﻿using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters
+namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters ;
+
+[ TestClass ]
+public class DeviceConstructorTests
+    : BaseConstructorNullTester < Device >
 {
-    [ TestClass ]
-    public class DeviceConstructorTests
-        : BaseConstructorNullTester < AssertionScope >
-    {
-        public override int NumberOfConstructorsPassed { get ; } = 2 ;
-    }
+    public override int NumberOfConstructorsPassed { get ; } = 2 ;
 }
