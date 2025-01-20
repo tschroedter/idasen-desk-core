@@ -17,7 +17,7 @@
     <PackageVersion Include="Serilog" Version="4.2.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
     <PackageVersion Include="CsvHelper" Version="33.0.1" />
-    <PackageVersion Include="Selkie.DefCon.One.Common" Version="0.0.17" />
+    <PackageVersion Include="Selkie.DefCon.One.Common" Version="0.0.22" />
     <PackageVersion Include="System.Reactive" Version="6.0.1" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
@@ -25,6 +25,7 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="[7.0.0,)" />
     <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="[6.0.0,)" />
+    <PackageVersion Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage" Version="2.0.0" />
     <PackageVersion Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.2" />
   </ItemGroup>
 </Project>

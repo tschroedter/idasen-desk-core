@@ -78,9 +78,9 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
-        "requested": "[0.0.17, )",
-        "resolved": "0.0.17",
-        "contentHash": "CExlQXlmWzpbpuFv6dYDvPJv3sUe30Zjcx2rXDv0vQXJjmMlEMJln5OxPdSATxwsWwHQJj9TXGylPm5DtYuL/Q=="
+        "requested": "[0.0.22, )",
+        "resolved": "0.0.22",
+        "contentHash": "zUsR+NhM4yithnk+o8ASSwhtmRtIcRwEyg8h6PtQHA411MBvRwrw00PdizyKg0x3RMhM+JP9pjataRmewGaLVw=="
       },
       "Serilog": {
         "type": "Direct",
@@ -255,7 +255,7 @@
           "CsvHelper": "[33.0.1, )",
           "Idasen.Aop": "[1.0.0, )",
           "JetBrains.Annotations": "[2024.3.0, )",
-          "Selkie.DefCon.One.Common": "[0.0.17, )",
+          "Selkie.DefCon.One.Common": "[0.0.22, )",
           "Serilog": "[4.2.0, )",
           "System.Reactive": "[6.0.1, )",
           "System.ValueTuple": "[4.5.0, )"
@@ -281,7 +281,7 @@
           "CsvHelper": "[33.0.1, )",
           "JetBrains.Annotations": "[2024.3.0, )",
           "Microsoft.Extensions.Configuration": "[9.0.1, )",
-          "Selkie.DefCon.One.Common": "[0.0.17, )",
+          "Selkie.DefCon.One.Common": "[0.0.22, )",
           "Serilog": "[4.2.0, )",
           "Serilog.Settings.Configuration": "[9.0.0, )",
           "Serilog.Sinks.Console": "[6.0.0, )",

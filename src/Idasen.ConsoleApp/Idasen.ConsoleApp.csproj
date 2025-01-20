@@ -20,7 +20,7 @@
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-        <PackageReference Include="Selkie.DefCon.One.Common" Version="0.0.17" />
+        <PackageReference Include="Selkie.DefCon.One.Common" Version="0.0.22" />
         <!-- Add other PackageReference items as needed -->
     </ItemGroup>
 

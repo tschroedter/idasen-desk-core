@@ -55,9 +55,9 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
-        "requested": "[0.0.17, )",
-        "resolved": "0.0.17",
-        "contentHash": "CExlQXlmWzpbpuFv6dYDvPJv3sUe30Zjcx2rXDv0vQXJjmMlEMJln5OxPdSATxwsWwHQJj9TXGylPm5DtYuL/Q=="
+        "requested": "[0.0.22, )",
+        "resolved": "0.0.22",
+        "contentHash": "zUsR+NhM4yithnk+o8ASSwhtmRtIcRwEyg8h6PtQHA411MBvRwrw00PdizyKg0x3RMhM+JP9pjataRmewGaLVw=="
       },
       "Serilog": {
         "type": "Direct",
@@ -106,11 +106,11 @@
         "resolved": "4.5.0",
         "contentHash": "okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ=="
       },
-      "Teronis.MSBuild.Packaging.ProjectBuildInPackage": {
+      "Tenekon.MSBuild.Packaging.ProjectBuildInPackage": {
         "type": "Direct",
-        "requested": "[1.0.2, )",
-        "resolved": "1.0.2",
-        "contentHash": "GsHBebwu0oNPaa17xgUFLMrzlRhaDifsxvazwoMZYqMqsfjSQdGc9iEH1GJrJtZqywWasgrWOlh4a0o5/MrL/Q=="
+        "requested": "[2.0.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "Ow37PSUBuOI+y34MpTlpMSnnAAX40RC+SP3ZH1ud8D38dR5fH/IwKGsLAfPK0mQTqM8GyNIfcJ5uq1/p2X5wiQ=="
       },
       "Castle.Core": {
         "type": "Transitive",
@@ -205,7 +205,7 @@
           "CsvHelper": "[33.0.1, )",
           "Idasen.Aop": "[1.0.0, )",
           "JetBrains.Annotations": "[2024.3.0, )",
-          "Selkie.DefCon.One.Common": "[0.0.17, )",
+          "Selkie.DefCon.One.Common": "[0.0.22, )",
           "Serilog": "[4.2.0, )",
           "System.Reactive": "[6.0.1, )",
           "System.ValueTuple": "[4.5.0, )"

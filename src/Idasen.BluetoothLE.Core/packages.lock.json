@@ -45,9 +45,9 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
-        "requested": "[0.0.17, )",
-        "resolved": "0.0.17",
-        "contentHash": "CExlQXlmWzpbpuFv6dYDvPJv3sUe30Zjcx2rXDv0vQXJjmMlEMJln5OxPdSATxwsWwHQJj9TXGylPm5DtYuL/Q=="
+        "requested": "[0.0.22, )",
+        "resolved": "0.0.22",
+        "contentHash": "zUsR+NhM4yithnk+o8ASSwhtmRtIcRwEyg8h6PtQHA411MBvRwrw00PdizyKg0x3RMhM+JP9pjataRmewGaLVw=="
       },
       "Serilog": {
         "type": "Direct",

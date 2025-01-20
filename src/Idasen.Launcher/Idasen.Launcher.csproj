@@ -20,7 +20,7 @@
         <PackageReference Include="System.Reactive" />
         <PackageReference Include="System.ValueTuple" />
         <PackageReference Include="Selkie.DefCon.One.Common" />
-        <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage">
+        <PackageReference Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
