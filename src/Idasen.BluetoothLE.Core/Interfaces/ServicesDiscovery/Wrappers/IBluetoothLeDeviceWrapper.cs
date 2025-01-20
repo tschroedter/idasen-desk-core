@@ -7,7 +7,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
         : IDisposable
     {
         /// <summary>
-        ///     Gets the device Id.
+        ///     Gets the device ID.
         /// </summary>
         string DeviceId { get ; }
 
@@ -28,7 +28,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
 
         /// <summary>
         ///     Defines a provider for push-based notification about the
-        ///     connection status..
+        ///     connection status...
         /// </summary>
         IObservable < BluetoothConnectionStatus > ConnectionStatusChanged { get ; }
 

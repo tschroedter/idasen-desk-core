@@ -16,7 +16,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
     {
         /// <summary>
         ///     Defines a provider for push-based notification about the
-        ///     connection status..
+        ///     connection status...
         /// </summary>
         IObservable < BluetoothConnectionStatus > ConnectionStatusChanged { get ; }
 
@@ -31,7 +31,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
         string Name { get ; }
 
         /// <summary>
-        ///     Gets the device Id.
+        ///     Gets the device ID.
         /// </summary>
         string Id { get ; }
 

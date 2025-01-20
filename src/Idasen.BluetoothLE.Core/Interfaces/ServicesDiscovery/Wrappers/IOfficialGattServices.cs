@@ -6,7 +6,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
 {
     /// <summary>
     ///     Known list of Gatt Services.
-    ///     "GATT Services are collections of characteristics and relationships
+    ///     GATT Services are collections of characteristics and relationships
     ///     to other services that encapsulate the behavior of part of a device.
     ///     All Service Assigned Numbers values on this page are normative.All
     ///     other materials contained on this page is informative only.

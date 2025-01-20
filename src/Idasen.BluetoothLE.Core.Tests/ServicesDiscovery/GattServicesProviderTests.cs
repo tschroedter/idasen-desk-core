@@ -212,7 +212,7 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
                   .Returns ( GattCommunicationStatus.Success ) ;
 
             result.Services
-                  .Returns ( new [ ] { service } ) ;
+                  .Returns ( [service] ) ;
 
             device.ConnectionStatus
                   .Returns ( BluetoothConnectionStatus.Connected ) ;
@@ -247,7 +247,7 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
                   .Returns ( GattCommunicationStatus.Success ) ;
 
             result.Services
-                  .Returns ( new [ ] { service } ) ;
+                  .Returns ( [service] ) ;
 
             device.ConnectionStatus
                   .Returns ( BluetoothConnectionStatus.Connected ) ;

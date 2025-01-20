@@ -5,7 +5,7 @@ namespace Idasen.BluetoothLE.Core
     public static class ULongExtensions
     {
         /// <summary>
-        ///     Converts a ulong value into a Mac Address, e.g. 254682828386071
+        ///     Converts an ulong value into a Mac Address, e.g. 254682828386071
         ///     will be 'E7:A1:F7:84:2F:17'.
         /// </summary>
         /// <param name="value">

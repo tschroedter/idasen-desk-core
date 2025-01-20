@@ -11,11 +11,11 @@ namespace Idasen.BluetoothLE.Linak.Control
         public DeskCommandsProvider ( )
         {
             _dictionary.Add ( DeskCommands.MoveUp ,
-                              new byte [ ] { 0x47 , 0x00 } ) ;
+                              [0x47 , 0x00] ) ;
             _dictionary.Add ( DeskCommands.MoveDown ,
-                              new byte [ ] { 0x46 , 0x00 } ) ;
+                              [0x46 , 0x00] ) ;
             _dictionary.Add ( DeskCommands.MoveStop ,
-                              new byte [ ] { 0x48 , 0x00 } ) ;
+                              [0x48 , 0x00] ) ;
         }
 
         public bool TryGetValue ( DeskCommands             command ,

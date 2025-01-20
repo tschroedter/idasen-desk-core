@@ -270,7 +270,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
             IDevice                device )
         {
             deviceMonitor.DiscoveredDevices
-                         .Returns ( new [ ] { device } ) ;
+                         .Returns ( [device] ) ;
 
             var sut = new DeviceMonitorWithExpiry ( logger ,
                                                     dateTimeOffset ,
@@ -305,7 +305,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
             IDevice                device )
         {
             deviceMonitor.DiscoveredDevices
-                         .Returns ( new [ ] { device } ) ;
+                         .Returns ( [device] ) ;
 
             var sut = new DeviceMonitorWithExpiry ( logger ,
                                                     dateTimeOffset ,
@@ -340,7 +340,7 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
             IDevice                device )
         {
             deviceMonitor.DiscoveredDevices
-                         .Returns ( new [ ] { device } ) ;
+                         .Returns ( [device] ) ;
 
             var sut = new DeviceMonitorWithExpiry ( logger ,
                                                     dateTimeOffset ,

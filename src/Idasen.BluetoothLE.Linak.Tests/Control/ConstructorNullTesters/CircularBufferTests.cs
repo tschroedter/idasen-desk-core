@@ -108,7 +108,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 5 , 6 , 7 , 8 , 9 } ) ;
+                  .BeEquivalentTo ( [5 , 6 , 7 , 8 , 9] ) ;
         }
 
         [ TestMethod ]
@@ -142,7 +142,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 0 , 1 , 2 , 3 } ) ;
+                  .BeEquivalentTo ( [0 , 1 , 2 , 3] ) ;
         }
 
         [ TestMethod ]
@@ -157,7 +157,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 5 , 6 , 7 , 8 , 9 } ) ;
+                  .BeEquivalentTo ( [5 , 6 , 7 , 8 , 9] ) ;
         }
 
         [ TestMethod ]
@@ -172,7 +172,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 4 , 3 , 2 , 1 , 0 } ) ;
+                  .BeEquivalentTo ( [4 , 3 , 2 , 1 , 0] ) ;
         }
 
         [ TestMethod ]
@@ -187,7 +187,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 9 , 8 , 7 , 6 , 5 } ) ;
+                  .BeEquivalentTo ( [9 , 8 , 7 , 6 , 5] ) ;
         }
 
         [ TestMethod ]
@@ -223,7 +223,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 1 , 2 , 3 , 4 , 42 } ) ;
+                  .BeEquivalentTo ( [1 , 2 , 3 , 4 , 42] ) ;
             buffer.Back ( )
                   .Should ( )
                   .Be ( 42 ) ;
@@ -272,7 +272,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
                   .Be ( 4 ) ;
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 0 , 1 , 2 , 3 } ) ;
+                  .BeEquivalentTo ( [0 , 1 , 2 , 3] ) ;
         }
 
         [ TestMethod ]
@@ -289,7 +289,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
                   .Be ( 5 ) ;
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 1 , 2 , 3 , 4 , 5 } ) ;
+                  .BeEquivalentTo ( [1 , 2 , 3 , 4 , 5] ) ;
 
             buffer.PopBack ( ) ;
 
@@ -298,7 +298,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
                   .Be ( 4 ) ;
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 1 , 2 , 3 , 4 } ) ;
+                  .BeEquivalentTo ( [1 , 2 , 3 , 4] ) ;
         }
 
         [ TestMethod ]
@@ -320,7 +320,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
                   .Be ( 4 ) ;
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 1 , 2 , 3 , 4 } ) ;
+                  .BeEquivalentTo ( [1 , 2 , 3 , 4] ) ;
         }
 
         [ TestMethod ]
@@ -337,7 +337,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
                   .Be ( 5 ) ;
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 5 , 0 , 1 , 2 , 3 } ) ;
+                  .BeEquivalentTo ( [5 , 0 , 1 , 2 , 3] ) ;
 
             buffer.PopFront ( ) ;
 
@@ -346,7 +346,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
                   .Be ( 4 ) ;
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 0 , 1 , 2 , 3 } ) ;
+                  .BeEquivalentTo ( [0 , 1 , 2 , 3] ) ;
         }
 
         [ TestMethod ]
@@ -358,7 +358,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 
             buffer.ToArray ( )
                   .Should ( )
-                  .BeEquivalentTo ( new [ ] { 0 , 10 , 2 , 30 , 4 } ) ;
+                  .BeEquivalentTo ( [0 , 10 , 2 , 30 , 4] ) ;
         }
 
         [ TestMethod ]
