@@ -44,6 +44,12 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
 
         try
         {
+            if (argument is CancellationToken)
+                return nameof(CancellationToken);
+
+            if (argument is IntPtr)
+                return nameof(IntPtr);
+
             if ( IsWindowsBluetoothInstance ( argument ) )
                 return argument.ToString ( ) ?? "null" ;
 
