@@ -58,8 +58,8 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
         catch ( Exception e )
         {
             _logger.Debug ( "Failed to convert object '{Type}' to JSON - Message: '{Message}'" ,
-                argument.GetType ( ).FullName ,
-                e.Message ) ;
+                            argument.GetType ( ).FullName ,
+                            e.Message ) ;
 
             return argument.ToString ( ) ?? "null" ;
         }
@@ -67,6 +67,8 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
 
     private static bool IsWindowsBluetoothInstance ( object argument )
     {
-        return argument.GetType ( ).Namespace?.StartsWith ( "Windows.Devices.Bluetooth" ) == true ;
+        return argument.GetType ( )
+                       .Namespace?
+                       .StartsWith ( "Windows.Devices.Bluetooth" ) == true ;
     }
 }
