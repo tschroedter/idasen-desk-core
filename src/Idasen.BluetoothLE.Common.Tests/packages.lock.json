@@ -23,17 +23,17 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "qVCJIpukyFb9TO9W3vC4/sQF8lfrQksJbo4071uk3YfmHyKKlCZTTpyYhmCnnTZ2LVfFP1JgxM652nolCFjZDw=="
+        "requested": "[8.1.1, )",
+        "resolved": "8.1.1",
+        "contentHash": "tzrZ95x7TWY4panvAhVoHg5zIhg4768Cx+8ZPoKR2sDPu2oCvVeg3ts0TTL0aJlIfZ1NGxCtBP5s555AgXJozg=="
       },
       "MSTest.TestFramework": {
         "type": "Direct",
-        "requested": "[3.7.1, )",
-        "resolved": "3.7.1",
-        "contentHash": "E22Dkq+4AsRgPV36Zmf7FIYiB2jkInxg5xcyP2uJ+SP34QrEkEt7rJkD6En/W8rG3k8yDaLeGR35VVUhtdx0PA==",
+        "requested": "[3.8.2, )",
+        "resolved": "3.8.2",
+        "contentHash": "GE6TAA3yC6rYFZcUY7NprA4muVKtTCgoPwFPLu+Q0XgNjcIBa7C1O+hGT23mWwyiAyzVOH6G33pHsJS8mI2hqA==",
         "dependencies": {
-          "MSTest.Analyzers": "3.7.1"
+          "MSTest.Analyzers": "3.8.2"
         }
       },
       "Selkie.DefCon.One": {
@@ -123,8 +123,8 @@
       },
       "MSTest.Analyzers": {
         "type": "Transitive",
-        "resolved": "3.7.1",
-        "contentHash": "HmsRhCu8IV1bRKHMW+BIuye91Pw2dnl6Q7eTmn8eLpY15sSpMAe0F9L5nrsoehCHKvgi4HoOjJo7WDZJZS1ntg=="
+        "resolved": "3.8.2",
+        "contentHash": "ODWteXvnMEgCoZl1vAi2lOFIFFJSZkyQoQB9AFwBEUrzgJpy5J4ml3jLye4n85TA7gd+Qg2eWtqkvyEunB7B0g=="
       },
       "NETStandard.Library": {
         "type": "Transitive",

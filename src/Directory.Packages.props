@@ -20,7 +20,7 @@
     <PackageVersion Include="Selkie.DefCon.One.Common" Version="0.0.22" />
     <PackageVersion Include="System.Reactive" Version="6.0.1" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="[7.0.0,)" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="[7.0.0,)" />
     <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
