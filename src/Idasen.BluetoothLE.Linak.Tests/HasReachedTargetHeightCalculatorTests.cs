@@ -45,7 +45,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     Direction.Down ,
                     Direction.Down ,
                     true ) ]
-        [ DataRow ( 2000u ,
+        [ DataRow ( 2000u , //--
                     1000u ,
                     10 ,
                     Direction.Up ,
@@ -63,12 +63,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     Direction.Up ,
                     Direction.Down ,
                     true ) ]
-        [ DataRow ( 2000u ,
-                    1000u ,
-                    10 ,
-                    Direction.Up ,
-                    Direction.Up ,
-                    false ) ]
         [ DataRow ( 2000u ,
                     1989u ,
                     10 ,
@@ -158,12 +152,6 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     - 10 ,
                     Direction.Down ,
                     Direction.Down ,
-                    true ) ]
-        [ DataRow ( 2000u ,
-                    1000u ,
-                    10 ,
-                    Direction.None ,
-                    Direction.None ,
                     true ) ]
         [ DataRow ( 2000u ,
                     1989u ,
