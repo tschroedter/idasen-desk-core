@@ -19,13 +19,13 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IBluetoothLeDeviceWrapper
     {
         public BluetoothLeDeviceWrapper (
-            ILogger                                 logger ,
-            IScheduler                              scheduler ,
-            IGattServicesProviderFactory            providerFactory ,
+            ILogger logger ,
+            IScheduler scheduler ,
+            IGattServicesProviderFactory providerFactory ,
             IGattDeviceServicesResultWrapperFactory servicesFactory ,
-            IGattServicesDictionary                 gattServicesDictionary ,
-            ISubject < BluetoothConnectionStatus >  connectionStatusChanged ,
-            BluetoothLEDevice                       device )
+            IGattServicesDictionary gattServicesDictionary ,
+            ISubject < BluetoothConnectionStatus > connectionStatusChanged ,
+            BluetoothLEDevice device )
         {
             Guard.ArgumentNotNull ( logger ,
                                     nameof ( logger ) ) ;
@@ -42,12 +42,13 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             Guard.ArgumentNotNull ( device ,
                                     nameof ( device ) ) ;
 
-            _logger                  = logger ;
-            _servicesFactory         = servicesFactory ;
-            _provider                = providerFactory.Create ( this ) ;
-            _gattServicesDictionary  = gattServicesDictionary ;
+            _logger = logger ;
+            _providerFactory = providerFactory ;
+            _servicesFactory = servicesFactory ;
+            _provider = GetOrCreateProvider ( ) ;
+            _gattServicesDictionary = gattServicesDictionary ;
             _connectionStatusChanged = connectionStatusChanged ;
-            _device                  = device ;
+            _device = device ;
 
             var statusChanged =
                 Observable.FromEventPattern < object > ( _device ,
@@ -61,10 +62,10 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         public IObservable < BluetoothConnectionStatus > ConnectionStatusChanged => _connectionStatusChanged ;
 
         /// <inheritdoc />
-        public IObservable < GattCommunicationStatus > GattServicesRefreshed => _provider.Refreshed ;
+        public IObservable < GattCommunicationStatus > GattServicesRefreshed => GetOrCreateProvider().Refreshed ;
 
         /// <inheritdoc />
-        public GattCommunicationStatus GattCommunicationStatus => _provider.GattCommunicationStatus ;
+        public GattCommunicationStatus GattCommunicationStatus => GetOrCreateProvider().GattCommunicationStatus ;
 
         /// <inheritdoc />
         public ulong BluetoothAddress => _device.BluetoothAddress ;
@@ -80,14 +81,16 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             {
                 if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
                 {
-                    _logger.Information ( $"[{DeviceId}] Already connected" ) ;
+                    _logger.Information ( "[{DeviceId}] Already connected",
+                                          DeviceId) ;
 
                     return ;
                 }
 
                 if ( ! IsPaired )
                 {
-                    _logger.Information ( $"[{DeviceId}] Not paired" ) ;
+                    _logger.Information ( "[{DeviceId}] Not paired",
+                                          DeviceId) ;
 
                     return ;
                 }
@@ -97,7 +100,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             catch ( Exception e )
             {
                 _logger.Error ( e ,
-                                $"Failed to connect to device {_device.BluetoothAddress}" ) ;
+                                "Failed to connect to device {BluetoothAddress}",
+                                _device.BluetoothAddress) ;
             }
         }
 
@@ -125,12 +129,12 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 
         /// <inheritdoc />
         public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > GattServices =>
-            _provider.Services ;
+            GetOrCreateProvider (  ).Services ;
 
         /// <inheritdoc />
         public void Dispose ( )
         {
-            _provider.Dispose ( ) ;
+            _provider?.Dispose ( ) ;
             _gattServicesDictionary.Dispose ( ) ;
             _session?.Dispose ( ) ;
             _subscriberConnectionStatus.Dispose ( ) ;
@@ -138,42 +142,53 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         }
 
         public delegate IBluetoothLeDeviceWrapper Factory (
-            ILogger                                  logger ,
-            IGattServicesProviderFactory             providerFactory ,
-            IGattDeviceServicesResultWrapperFactory  servicesFactory ,
-            IGattServicesDictionary                  gattServicesDictionary ,
+            ILogger logger ,
+            IGattServicesProviderFactory providerFactory ,
+            IGattDeviceServicesResultWrapperFactory servicesFactory ,
+            IGattServicesDictionary gattServicesDictionary ,
             IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
-            ISubject < BluetoothConnectionStatus >   connectionStatusChanged ,
-            BluetoothLEDevice                        device ) ;
+            ISubject < BluetoothConnectionStatus > connectionStatusChanged ,
+            BluetoothLEDevice device ) ;
 
         private async Task CreateSession ( )
         {
             _session?.Dispose ( ) ;
 
-            _session                    = await GattSession.FromDeviceIdAsync ( _device.BluetoothDeviceId ) ;
+            _session = await GattSession.FromDeviceIdAsync ( _device.BluetoothDeviceId ) ;
             _session.MaintainConnection = true ;
         }
 
+        // ReSharper disable once AsyncVoidMethod
         private async void OnConnectionStatusChanged ( object args )
         {
             if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
             {
-                _logger.Information ( $"[{DeviceId}] BluetoothConnectionStatus = " +
-                                      $"{BluetoothConnectionStatus.Connected}" ) ;
+                _logger.Information ( "[{DeviceId}] BluetoothConnectionStatus = " +
+                                      "{BluetoothConnectionStatus}",
+                                      DeviceId,
+                                      BluetoothConnectionStatus.Connected) ;
 
-                await _provider.Refresh ( ) ;
+                await GetOrCreateProvider().Refresh ( ) ;
             }
 
             _connectionStatusChanged.OnNext ( _device.ConnectionStatus ) ;
         }
 
-        private readonly ISubject < BluetoothConnectionStatus >  _connectionStatusChanged ;
-        private readonly BluetoothLEDevice                       _device ;
-        private readonly IGattServicesDictionary                 _gattServicesDictionary ;
-        private readonly ILogger                                 _logger ;
-        private readonly IGattServicesProvider                   _provider ;
+        private readonly ISubject < BluetoothConnectionStatus > _connectionStatusChanged ;
+        private readonly BluetoothLEDevice _device ;
+        private readonly IGattServicesDictionary _gattServicesDictionary ;
+        private readonly ILogger _logger ;
+        private readonly IGattServicesProviderFactory _providerFactory ;
         private readonly IGattDeviceServicesResultWrapperFactory _servicesFactory ;
-        private readonly IDisposable                             _subscriberConnectionStatus ;
-        private          GattSession ?                           _session ;
+        private readonly IDisposable _subscriberConnectionStatus ;
+        private GattSession? _session ;
+        private IGattServicesProvider? _provider ;
+
+        private IGattServicesProvider GetOrCreateProvider ( )
+        {
+            // note the creation of the provider only once,
+            // but it might fail if the device is not connected
+            return _provider ??= _providerFactory.Create ( this );
+        }
     }
 }
