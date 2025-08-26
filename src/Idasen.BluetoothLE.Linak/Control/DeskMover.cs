@@ -121,6 +121,9 @@ namespace Idasen.BluetoothLE.Linak.Control
             _disposalHeightAndSpeed?.Dispose ( ) ;
             _disposableTimer?.Dispose ( ) ;
 
+            _disposalHeightAndSpeed = null ;
+            _disposableTimer = null ;
+
             var stop = await _executor.Stop ( ) ;
 
             if ( ! stop )
@@ -187,6 +190,9 @@ namespace Idasen.BluetoothLE.Linak.Control
 
         internal void OnTimerElapsed ( long time )
         {
+            if (_disposableTimer == null || ! IsAllowedToMove)
+                return ;
+
             if ( ! Move ( ).Wait ( TimerInterval * 10 ) )
                 _logger.Warning ( "Calling Move() timed-out" ) ;
         }
@@ -221,7 +227,7 @@ namespace Idasen.BluetoothLE.Linak.Control
 
             _heightMonitor.AddHeight ( Height ) ;
 
-            if ( ! _heightMonitor.IsHeightChanging ( ) ) // todo testing
+            if ( ! _heightMonitor.IsHeightChanging ( ) ) //\ todo testing
             {
                 _logger.Warning ( "Failed, desk not moving during last " +
                                   $"{DeskHeightMonitor.MinimumNumberOfItems} polls." ) ;
@@ -257,6 +263,7 @@ namespace Idasen.BluetoothLE.Linak.Control
                     break ;
                 case Direction.None :
                     break ;
+
                 default :
                     await Stop ( ) ;
 

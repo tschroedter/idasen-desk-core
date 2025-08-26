@@ -1,6 +1,5 @@
 ﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Linak.Tests
 {
@@ -19,6 +18,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void TryGetValue_ForDeskCommandsMoveDown_ReturnsBytes ( )
         {
+            // ReSharper disable once UseUtf8StringLiteral
             var expected = new byte [ ] { 0x46 , 0x00 } ;
 
             CreateSut ( ).TryGetValue ( DeskCommands.MoveDown ,
@@ -40,6 +40,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void TryGetValue_ForDeskCommandsMoveUp_ReturnsBytes ( )
         {
+            // ReSharper disable once UseUtf8StringLiteral
             var expected = new byte [ ] { 0x47 , 0x00 } ;
 
             CreateSut ( ).TryGetValue ( DeskCommands.MoveUp ,
@@ -61,6 +62,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
         [ TestMethod ]
         public void TryGetValue_ForDeskCommandsMoveStop_ReturnsBytes ( )
         {
+            // ReSharper disable once UseUtf8StringLiteral
             var expected = new byte [ ] { 0x48 , 0x00 } ;
 
             CreateSut ( ).TryGetValue ( DeskCommands.MoveStop ,

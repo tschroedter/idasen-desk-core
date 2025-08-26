@@ -4,7 +4,6 @@ using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Microsoft.Reactive.Testing ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics

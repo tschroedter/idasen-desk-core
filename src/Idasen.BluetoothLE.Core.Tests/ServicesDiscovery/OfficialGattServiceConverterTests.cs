@@ -3,7 +3,6 @@ using CsvHelper.Configuration ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery

@@ -5,7 +5,6 @@ using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 using Serilog ;
 
@@ -239,18 +238,20 @@ namespace Idasen.BluetoothLE.Linak.Tests
                .Be ( _details1.Speed ) ;
         }
 
-        [ TestMethod ]
-        public void OnTimerElapsed_ForMoveIntoDirectionUp_MovesUp ( )
+        [TestMethod]
+        public async Task OnTimerElapsed_ForTimerIsNull_DoNotMovesUp()
         {
             _calculator.MoveIntoDirection
-                       .Returns ( Direction.Up ) ;
+                       .Returns(Direction.Up);
 
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+            using var sut = CreateSutInitialized();
 
-            sut.OnTimerElapsed ( 1 ) ;
+            await sut.Stop ( ) ; // make sure timer is null
 
-            _executor.Received ( )
-                     .Up ( ) ;
+            sut.OnTimerElapsed(1);
+
+            await _executor.DidNotReceive ( )
+                           .Up ( ) ;
         }
 
         [ TestMethod ]

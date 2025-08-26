@@ -2,7 +2,6 @@
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
 {

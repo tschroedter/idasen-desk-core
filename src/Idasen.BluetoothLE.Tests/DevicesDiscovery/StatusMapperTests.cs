@@ -1,7 +1,6 @@
 ﻿using Windows.Devices.Bluetooth.Advertisement ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
 {

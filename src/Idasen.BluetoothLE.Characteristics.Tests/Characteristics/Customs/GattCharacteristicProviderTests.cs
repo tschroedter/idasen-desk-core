@@ -3,7 +3,6 @@ using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 using Serilog ;
 

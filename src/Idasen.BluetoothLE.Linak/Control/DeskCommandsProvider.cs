@@ -24,7 +24,7 @@ namespace Idasen.BluetoothLE.Linak.Control
             var tryGetValue = _dictionary.TryGetValue ( command ,
                                                         out var tempBytes ) ;
 
-            bytes = tempBytes ?? Array.Empty < byte > ( ) ;
+            bytes = tempBytes ?? [] ;
 
             return tryGetValue ;
         }

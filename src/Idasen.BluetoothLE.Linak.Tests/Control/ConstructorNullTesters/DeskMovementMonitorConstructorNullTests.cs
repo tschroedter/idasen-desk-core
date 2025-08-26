@@ -1,5 +1,4 @@
 ﻿using Idasen.BluetoothLE.Common.Tests ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 {

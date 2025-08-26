@@ -4,7 +4,6 @@ using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 

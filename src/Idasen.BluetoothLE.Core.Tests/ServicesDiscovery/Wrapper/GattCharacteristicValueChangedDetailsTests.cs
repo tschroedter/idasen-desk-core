@@ -1,6 +1,5 @@
 ﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper

@@ -1,6 +1,5 @@
 ﻿using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Tests

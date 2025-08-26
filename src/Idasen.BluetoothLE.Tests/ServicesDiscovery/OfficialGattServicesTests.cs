@@ -1,6 +1,5 @@
 ﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Tests.ServicesDiscovery
 {

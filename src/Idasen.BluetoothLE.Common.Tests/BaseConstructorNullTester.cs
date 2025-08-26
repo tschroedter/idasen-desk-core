@@ -2,7 +2,6 @@
 using AutofacSerilogIntegration ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using Selkie.DefCon.One ;
 using Selkie.DefCon.One.Common ;
 using Selkie.DefCon.One.Interfaces ;

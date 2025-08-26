@@ -5,7 +5,6 @@ using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using JetBrains.Annotations ;
 using Microsoft.Reactive.Testing ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 using Serilog ;
 

@@ -3,7 +3,6 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 using Serilog ;
 

@@ -2,7 +2,6 @@
 using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
@@ -19,7 +18,7 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper
             _subject   = new Subject < GattCharacteristicValueChangedDetails > ( ) ;
             _scheduler = Substitute.For < IScheduler > ( ) ;
             _details = new GattCharacteristicValueChangedDetails ( Guid.NewGuid ( ) ,
-                                                                   Array.Empty < byte > ( ) ,
+                                                                   [] ,
                                                                    DateTimeOffset.Now ) ;
         }
 

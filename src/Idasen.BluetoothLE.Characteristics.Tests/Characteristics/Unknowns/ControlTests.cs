@@ -1,6 +1,5 @@
 ﻿using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns
 {
@@ -26,7 +25,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns
         [ TestMethod ]
         public async Task TryWriteRawControl2_ForInvoked_ReturnsFalse ( )
         {
-            var result = await CreateSut ( ).TryWriteRawControl2 ( Array.Empty < byte > ( ) ) ;
+            var result = await CreateSut ( ).TryWriteRawControl2 ( [] ) ;
 
             result.Should ( )
                   .BeFalse ( ) ;

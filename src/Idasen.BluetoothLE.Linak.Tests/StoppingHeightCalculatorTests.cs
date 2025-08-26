@@ -2,7 +2,6 @@
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 using Serilog ;
 

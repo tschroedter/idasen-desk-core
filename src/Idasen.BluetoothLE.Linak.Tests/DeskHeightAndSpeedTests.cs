@@ -5,7 +5,6 @@ using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 using NSubstitute ;
 using Serilog ;
 
@@ -175,7 +174,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                             .Returns ( _subjectRawHeightAndSpeed ) ;
 
             _rawDetailsDummy = new RawValueChangedDetails ( string.Empty ,
-                                                            Array.Empty < byte > ( ) ,
+                                                            [] ,
                                                             DateTimeOffset.Now ,
                                                             Guid.Empty ) ;
         }

@@ -1,7 +1,6 @@
 ﻿using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Linak.Control ;
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters
 {
