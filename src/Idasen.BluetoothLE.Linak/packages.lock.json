@@ -4,9 +4,9 @@
     "net8.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[8.3.0, )",
-        "resolved": "8.3.0",
-        "contentHash": "0Bv8aSKuK4nQAiDKw3+pIv9hUhbPwS63ql9KhjR6DRgE14UNdXrMqO8YMI0PnffZPyCrMs85lNhZRI4eBgQO4w==",
+        "requested": "[8.4.0, )",
+        "resolved": "8.4.0",
+        "contentHash": "XMWHyO6fXTv8rwCfhm6+64mQS6CyL0rve/hWSODsUrVuEGtq1fjxSOlVTBqCRsW6L8K3OQDskJaPB1boVMI2eQ==",
         "dependencies": {
           "System.Diagnostics.DiagnosticSource": "8.0.1"
         }
@@ -56,8 +56,8 @@
       },
       "JetBrains.Annotations": {
         "type": "Transitive",
-        "resolved": "2024.3.0",
-        "contentHash": "ox5pkeLQXjvJdyAB4b2sBYAlqZGLh3PjSnP1bQNVx72ONuTJ9+34/+Rq91Fc0dG29XG9RgZur9+NcP4riihTug=="
+        "resolved": "2025.2.0",
+        "contentHash": "2BvMkOSW+50EbQFhWFIPWTqmcDLiyyjwkMN7lN386bhP2vN/7ts5t59qu11HtenmHFxqDzaD8J1fFoh+QTOzVA=="
       },
       "Selkie.DefCon.One.Common": {
         "type": "Transitive",
@@ -83,7 +83,7 @@
         "type": "Project",
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
-          "JetBrains.Annotations": "[2024.3.0, )",
+          "JetBrains.Annotations": "[2025.2.0, )",
           "Serilog": "[4.3.0, )"
         }
       },
@@ -99,12 +99,12 @@
       "idasen.bluetoothle.core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[8.3.0, )",
+          "Autofac": "[8.4.0, )",
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
           "AutofacSerilogIntegration": "[5.0.0, )",
           "CsvHelper": "[33.1.0, )",
           "Idasen.Aop": "[1.0.0, )",
-          "JetBrains.Annotations": "[2024.3.0, )",
+          "JetBrains.Annotations": "[2025.2.0, )",
           "Selkie.DefCon.One.Common": "[0.0.23, )",
           "Serilog": "[4.3.0, )",
           "System.Reactive": "[6.0.1, )",

@@ -8,7 +8,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
     [ TestClass ]
     public class StatusMapperTests
     {
-        [ DataTestMethod ]
+        [ TestMethod ]
         [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Started ,
                     Status.Started ) ]
         [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Aborted ,

@@ -21,7 +21,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
             return new DeskHeightMonitor ( _logger ) ;
         }
 
-        [ DataTestMethod ]
+        [ TestMethod ]
         [ DataRow ( "0" ,
                     true ) ]
         [ DataRow ( "0,1" ,

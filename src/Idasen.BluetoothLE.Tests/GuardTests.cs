@@ -22,7 +22,7 @@ namespace Idasen.BluetoothLE.Tests
             }
         }
 
-        [ DataTestMethod ]
+        [ TestMethod ]
         [ DynamicData ( nameof ( GuardTestData.NullEmptyOrWhitespace ) ,
                         typeof ( GuardTestData ) ,
                         DynamicDataSourceType.Method ) ]
@@ -35,7 +35,7 @@ namespace Idasen.BluetoothLE.Tests
                               "parameter" ) ;
         }
 
-        [ DataTestMethod ]
+        [ TestMethod ]
         [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
                         typeof ( GuardTestData ) ,
                         DynamicDataSourceType.Method ) ]
@@ -48,7 +48,7 @@ namespace Idasen.BluetoothLE.Tests
                   .NotThrow ( ) ;
         }
 
-        [ DataTestMethod ]
+        [ TestMethod ]
         [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
                         typeof ( GuardTestData ) ,
                         DynamicDataSourceType.Method ) ]
@@ -74,7 +74,7 @@ namespace Idasen.BluetoothLE.Tests
                   .Be ( "parameter" ) ;
         }
 
-        [ DataTestMethod ]
+        [ TestMethod ]
         [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
                         typeof ( GuardTestData ) ,
                         DynamicDataSourceType.Method ) ]
@@ -87,7 +87,7 @@ namespace Idasen.BluetoothLE.Tests
                   .NotThrow ( ) ;
         }
 
-        [ DataTestMethod ]
+        [ TestMethod ]
         [ DynamicData ( nameof ( GuardTestData.NullOrEmpty ) ,
                         typeof ( GuardTestData ) ,
                         DynamicDataSourceType.Method ) ]

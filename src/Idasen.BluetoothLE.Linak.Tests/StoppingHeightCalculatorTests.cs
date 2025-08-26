@@ -63,7 +63,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     10u ,
                     2.0f ,
                     980u ) ]
-        [ DataTestMethod ]
+        [ TestMethod ]
         public void Calculate_ForParameters_SetsStoppingHeight (
             uint  targetHeight ,
             uint  height ,
@@ -169,7 +169,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     10u ,
                     2.0f ,
                     980u ) ]
-        [ DataTestMethod ]
+        [ TestMethod ]
         public void Calculate_ForParameters_SetsDelta (
             Direction moveIntoDirection ,
             Direction startMovingIntoDirection ,
@@ -219,7 +219,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     10u ,
                     2.0f ,
                     - 20 ) ]
-        [ DataTestMethod ]
+        [ TestMethod ]
         public void Calculate_ForParameters_SetsMovementUntilStop (
             uint  targetHeight ,
             uint  height ,
@@ -534,7 +534,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     10u ,
                     1.0f ,
                     true ) ]
-        [ DataTestMethod ]
+        [ TestMethod ]
         public void Calculate_ForParameters_SetsHasReachedTargetHeight (
             Direction moveIntoDirection ,
             Direction startMovingIntoDirection ,
@@ -654,7 +654,7 @@ namespace Idasen.BluetoothLE.Linak.Tests
                     10u ,
                     2.0f ,
                     Direction.Down ) ]
-        [ DataTestMethod ]
+        [ TestMethod ]
         public void Calculate_ForParameters_SetsMoveIntoDirection (
             uint      targetHeight ,
             uint      height ,

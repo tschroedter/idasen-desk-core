@@ -4,9 +4,9 @@
     "net8.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[8.3.0, )",
-        "resolved": "8.3.0",
-        "contentHash": "0Bv8aSKuK4nQAiDKw3+pIv9hUhbPwS63ql9KhjR6DRgE14UNdXrMqO8YMI0PnffZPyCrMs85lNhZRI4eBgQO4w==",
+        "requested": "[8.4.0, )",
+        "resolved": "8.4.0",
+        "contentHash": "XMWHyO6fXTv8rwCfhm6+64mQS6CyL0rve/hWSODsUrVuEGtq1fjxSOlVTBqCRsW6L8K3OQDskJaPB1boVMI2eQ==",
         "dependencies": {
           "System.Diagnostics.DiagnosticSource": "8.0.1"
         }
@@ -23,17 +23,17 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[8.3.0, )",
-        "resolved": "8.3.0",
-        "contentHash": "iri1druxHPUAvaFqTUKJG7NOHwnOLmWwfDorgezZWpeBWBJmk2o8niI7jL7zW9TEFGnUpMJi/JLG6FXgr3cM3A=="
+        "requested": "[8.6.0, )",
+        "resolved": "8.6.0",
+        "contentHash": "h5tb0odkLRWuwjc5EhwHQZpZm7+5YmJBNn379tJPIK04FOv3tuOfhGZTPFSuj/MTgzfV6UlAjfbSEBcEGhGucQ=="
       },
       "MSTest.TestFramework": {
         "type": "Direct",
-        "requested": "[3.9.1, )",
-        "resolved": "3.9.1",
-        "contentHash": "qfcisTxYznujPUTmjIiezRxsCi3oLOAFSUBLQoo2g05nsZL/0ik0w9iy+92+ivS3cX7U1IGTacA13BtYYbdF7g==",
+        "requested": "[3.10.2, )",
+        "resolved": "3.10.2",
+        "contentHash": "8rigmjMCEGbpAjrRhl/vCW4b4SE9AENMu1Uzatdke+L88v4YjyUlU5336160+np5HkdC9hizXo73NVzlCj2bog==",
         "dependencies": {
-          "MSTest.Analyzers": "3.9.1"
+          "MSTest.Analyzers": "3.10.2"
         }
       },
       "Selkie.DefCon.One": {
@@ -123,8 +123,8 @@
       },
       "MSTest.Analyzers": {
         "type": "Transitive",
-        "resolved": "3.9.1",
-        "contentHash": "q7DIC3IpH5uOReVPvc9AbHUU9BuijecP0/n4J7JWqSlXafkXofCtcY6cbfhNBdLqspep2liDH+W43LFEqUu9Qw=="
+        "resolved": "3.10.2",
+        "contentHash": "WS9GHohjOzf653bqCSxplq3T25LAwFVeVrgLuotTiPDu+bO5bD7RgvXbkLqRqZGE2Qyuk/dbQpqa18PYAMXjMg=="
       },
       "NETStandard.Library": {
         "type": "Transitive",

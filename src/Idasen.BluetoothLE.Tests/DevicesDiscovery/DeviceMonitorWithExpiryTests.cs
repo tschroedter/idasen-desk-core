@@ -126,12 +126,14 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery
                .Be ( expected ) ;
         }
 
-        [ AutoDataTestMethod ]
-        [ ExpectedException ( typeof ( ArgumentException ) ) ]
-        public void TimeOut_ForValueLessThanZero_SetsTimeOut (
-            DeviceMonitorWithExpiry sut )
+        [AutoDataTestMethod]
+        public void TimeOut_ForValueLessThanZero_SetsTimeOut(
+            DeviceMonitorWithExpiry sut)
         {
-            sut.TimeOut = TimeSpan.FromHours ( - 0.1 ) ;
+            Action action = () => sut.TimeOut = TimeSpan.FromHours(-0.1);
+
+            action.Should()
+                  .Throw<ArgumentException>();
         }
 
         [ AutoDataTestMethod ]

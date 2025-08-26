@@ -18,7 +18,7 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
             _subject = Substitute.For < ISubject < DateTime > > ( ) ;
         }
 
-        [ DataTestMethod ]
+        [ TestMethod ]
         [ DataRow ( Status.Created ,
                     false ) ]
         [ DataRow ( Status.Started ,
