@@ -188,7 +188,16 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         {
             // note the creation of the provider only once,
             // but it might fail if the device is not connected
-            return _provider ??= _providerFactory.Create ( this );
+            if ( _provider != null )
+                return _provider ;
+
+            _provider ??= _providerFactory.Create ( this );
+
+            if ( _provider == null )
+                _logger.Warning ( "Failed to create GattServicesProvider for {DeviceId}" ,
+                                  DeviceId ) ;
+
+            return _provider!;
         }
     }
 }
