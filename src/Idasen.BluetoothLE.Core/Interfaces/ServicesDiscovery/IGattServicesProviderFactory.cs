@@ -4,6 +4,6 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
 {
     public interface IGattServicesProviderFactory
     {
-        IGattServicesProvider? Create ( IBluetoothLeDeviceWrapper wrapper ) ;
+        IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper ) ;
     }
 }

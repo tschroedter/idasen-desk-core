@@ -19,7 +19,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         }
 
         /// <inheritdoc />
-        public IGattServicesProvider? Create ( IBluetoothLeDeviceWrapper wrapper )
+        public IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper )
         {
             Guard.ArgumentNotNull ( wrapper ,
                                     nameof ( wrapper ) ) ;
