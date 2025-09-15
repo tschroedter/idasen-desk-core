@@ -38,9 +38,10 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         [ ExcludeFromCodeCoverage ]
         public async Task Initialise ( GattCharacteristic characteristic )
         {
-            var properties = characteristic.CharacteristicProperties ;
+            var properties  = characteristic.CharacteristicProperties ;
+            var serviceUuid = characteristic.Service?.Uuid ?? Guid.Empty ;
 
-            _logger.Information ( $"Service UUID = {characteristic.Service.Uuid} Characteristic UUID = {characteristic.Uuid} " +
+            _logger.Information ( $"Service UUID = {serviceUuid} Characteristic UUID = {characteristic.Uuid} " +
                                   $"Notify = {properties.HasFlag ( GattCharacteristicProperties.Notify )} " +
                                   $"Indicate = {properties.HasFlag ( GattCharacteristicProperties.Indicate )} " +
                                   $"Write = {properties.HasFlag ( GattCharacteristicProperties.Write )} " +
@@ -63,7 +64,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                     if ( status == GattCommunicationStatus.Success )
                     {
                         _logger.Information ( "Notify/Indicate "                                +
-                                              $"Service UUID = {characteristic.Service.Uuid} "  +
+                                              $"Service UUID = {serviceUuid} "  +
                                               $"Characteristic UUID = {characteristic.Uuid} - " +
                                               "Subscribing to ValueChanged" ) ;
 
@@ -80,7 +81,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                     }
                     else
                     {
-                        throw new Exception ( $"Service UUID = {characteristic.Service.Uuid} "  +
+                        throw new Exception ( $"Service UUID = {serviceUuid} "  +
                                               $"Characteristic UUID = {characteristic.Uuid} - " +
                                               "Failed to subscribe to ValueChanged" ) ;
                     }

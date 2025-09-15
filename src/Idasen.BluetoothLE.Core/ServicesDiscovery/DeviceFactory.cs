@@ -31,6 +31,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         {
             var device = await BluetoothLEDevice.FromBluetoothAddressAsync ( address ) ;
 
+            if ( device is null )
+                throw new InvalidOperationException ( $"Failed to get BluetoothLEDevice for address {address}" ) ;
+
             return _deviceFactory ( _deviceWrapperFactory.Create ( device ) ) ;
         }
 

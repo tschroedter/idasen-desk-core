@@ -44,9 +44,11 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         {
             gattService = null ;
 
-            var number = guid.ToString ( "N" )
-                             .Substring ( 4 ,
-                                          4 ) ;
+            var n = guid.ToString ( "N" ) ;
+            if ( n.Length < 8 )
+                return false ;
+
+            var number = n.Substring ( 4 , 4 ) ;
 
             ushort assignedNumber ;
 

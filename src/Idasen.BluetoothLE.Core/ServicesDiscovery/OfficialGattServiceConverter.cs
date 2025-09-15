@@ -27,7 +27,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
                          string.Empty ;
 
             if ( string.IsNullOrWhiteSpace ( text ) )
-                return 0u ;
+                return ( ushort )0 ;
 
             return ushort.TryParse ( number ,
                                      NumberStyles.HexNumber ,

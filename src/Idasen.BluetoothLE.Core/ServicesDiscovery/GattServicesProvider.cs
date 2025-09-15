@@ -52,13 +52,26 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
                 return ;
             }
 
-            _gattResult = await _device.GetGattServicesAsync ( ) ;
+            try
+            {
+                _gattResult = await _device.GetGattServicesAsync ( ) ;
+            }
+            catch ( Exception ex )
+            {
+                _logger.Error ( ex , $"[{_device.DeviceId}] Failed to get GATT services" ) ;
+                _refreshed.OnNext ( GattCommunicationStatus.Unreachable ) ;
+                return ;
+            }
 
             if ( _gattResult.Status == GattCommunicationStatus.Success )
+            {
                 await GetCharacteristicsAsync ( _gattResult ) ;
+            }
             else
+            {
                 _logger.Error ( $"[{_device.DeviceId}] Gatt communication status " +
                                 $"'{_gattResult.Status}'" ) ;
+            }
 
             _refreshed.OnNext ( _gattResult.Status ) ;
         }
@@ -82,7 +95,17 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         {
             foreach ( var service in gatt.Services )
             {
-                var characteristics = await service.GetCharacteristicsAsync ( ) ;
+                IGattCharacteristicsResultWrapper characteristics ;
+                try
+                {
+                    characteristics = await service.GetCharacteristicsAsync ( ) ;
+                }
+                catch ( Exception ex )
+                {
+                    _logger.Error ( ex , $"[{_device.DeviceId}] Exception getting Characteristics for device " +
+                                         $"'{service.DeviceId}' and service '{service.Uuid}'" ) ;
+                    continue ;
+                }
 
                 if ( characteristics.Status != GattCommunicationStatus.Success )
                 {

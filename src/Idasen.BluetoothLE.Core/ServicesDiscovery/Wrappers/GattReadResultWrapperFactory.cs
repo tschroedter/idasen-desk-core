@@ -24,7 +24,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             Guard.ArgumentNotNull ( result ,
                                     nameof ( result ) ) ;
 
-            return _factory.Invoke ( result ) ;
+            return _factory ( result ) ;
         }
 
         private readonly GattReadResultWrapper.Factory _factory ;
