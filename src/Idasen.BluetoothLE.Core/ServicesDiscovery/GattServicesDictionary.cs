@@ -7,7 +7,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 {
     [ Intercept ( typeof ( LogAspect ) ) ]
     public class GattServicesDictionary
-        : IGattServicesDictionary
+        : IGattServicesDictionary , IDisposable
     {
         public IGattCharacteristicsResultWrapper this [ IGattDeviceServiceWrapper service ]
         {
@@ -25,6 +25,12 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
                 lock ( _padlock )
                 {
+                    if ( _dictionary.TryGetValue ( service , out var existing ) )
+                    {
+                        // Dispose previously stored characteristics to avoid leaks
+                        existing.Dispose ( ) ;
+                    }
+
                     _dictionary [ service ] = value ;
                 }
             }
@@ -32,7 +38,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
         public void Clear ( )
         {
-            DisposeServices ( ) ;
+            DisposeEntries ( ) ;
 
             lock ( _padlock )
             {
@@ -42,7 +48,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
         public void Dispose ( )
         {
-            DisposeServices ( ) ;
+            DisposeEntries ( ) ;
         }
 
         public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper >
@@ -68,13 +74,15 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
             }
         }
 
-        private void DisposeServices ( )
+        private void DisposeEntries ( )
         {
             lock ( _padlock )
             {
-                foreach ( var service in _dictionary.Keys )
+                foreach ( var kvp in _dictionary )
                 {
-                    service.Dispose ( ) ;
+                    // Dispose value (characteristics) first, then the service
+                    kvp.Value.Dispose ( ) ;
+                    kvp.Key.Dispose ( ) ;
                 }
             }
         }
