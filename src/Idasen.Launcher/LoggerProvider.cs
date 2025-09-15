@@ -60,7 +60,7 @@ public static class LoggerProvider
 
         var logger = loggerConfiguration.CreateLogger ( ) ;
 
-        Console.WriteLine ( "Log file name: {FullPath} {Path}" , LoggingFile.FullPath , LoggingFile.Path ) ;
+        Console.WriteLine ( "Log file name: {0} {1}" , LoggingFile.FullPath , LoggingFile.Path ) ;
 
         return new Lazy < Logger > ( logger ) ;
     }

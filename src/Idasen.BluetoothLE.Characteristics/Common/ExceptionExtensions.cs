@@ -19,10 +19,6 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             Guard.ArgumentNotNull ( log ,
                                     nameof ( log ) ) ;
 
-            var text = Constants.CheckAndEnableBluetooth +
-                       $" (0x{exception.HResult:X}) "    +
-                       message ;
-
             // Prefer structured logging to preserve HResult as number and message pieces separately
             log.Information ( "{Base} (0x{HResult:X}) {Message}" ,
                               Constants.CheckAndEnableBluetooth ,
