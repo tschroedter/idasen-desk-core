@@ -18,6 +18,12 @@
         "resolved": "33.1.0",
         "contentHash": "kqfTOZGrn7NarNeXgjh86JcpTHUoeQDMB8t9NVa/ZtlSYiV1rxfRnQ49WaJsob4AiGrbK0XDzpyKkBwai4F8eg=="
       },
+      "SerilogAnalyzer": {
+        "type": "Direct",
+        "requested": "(, )",
+        "resolved": "0.7.0",
+        "contentHash": "8cu3aqmZqWSAGOkwQyNXfMhSR2eRlK9fb0bZG+eviPulqQhkOJ1jqHOkW6uXiwe/UYVjvq/Crb5u/mJ7IdJ7sw=="
+      },
       "Autofac": {
         "type": "Transitive",
         "resolved": "8.4.0",

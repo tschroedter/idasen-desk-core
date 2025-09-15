@@ -1,0 +1,16 @@
+root = true
+
+[*.{cs,vb}]
+dotnet_analyzer_diagnostic.severity = warning
+
+# Style and formatting
+csharp_prefer_braces = true:suggestion
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+
+# Enforce structured logging best practices
+dotnet_diagnostic.Serilog001.severity = warning
+
+# Treat common design issues as warnings (not errors) to avoid breaking builds initially
+dotnet_diagnostic.IDE0051.severity = suggestion

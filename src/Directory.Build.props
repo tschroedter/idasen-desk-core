@@ -1,5 +1,11 @@
 <Project>
     <PropertyGroup>
         <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <NoWarn>$(NoWarn);CA1303;CA1305</NoWarn>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="SerilogAnalyzer" PrivateAssets="all" />
+    </ItemGroup>
 </Project>

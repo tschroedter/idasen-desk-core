@@ -37,7 +37,7 @@ public static class LoggerProvider
 
     private static Lazy < Logger > DoCreateLogger ( string appLogFileName )
     {
-        var logFolder = AppDomain.CurrentDomain.BaseDirectory + "\\logs\\" ;
+        var logFolder = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory , "logs" ) ;
         var logFile = CreateFullPathLogFileName ( logFolder ,
                                                   appLogFileName ) ;
 

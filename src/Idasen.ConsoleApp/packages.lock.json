@@ -97,6 +97,12 @@
           "Serilog": "4.0.0"
         }
       },
+      "SerilogAnalyzer": {
+        "type": "Direct",
+        "requested": "(, )",
+        "resolved": "0.7.0",
+        "contentHash": "8cu3aqmZqWSAGOkwQyNXfMhSR2eRlK9fb0bZG+eviPulqQhkOJ1jqHOkW6uXiwe/UYVjvq/Crb5u/mJ7IdJ7sw=="
+      },
       "System.Reactive": {
         "type": "Direct",
         "requested": "[6.0.2, )",
