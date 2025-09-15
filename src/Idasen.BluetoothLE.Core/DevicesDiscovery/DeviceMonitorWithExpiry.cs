@@ -128,7 +128,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
 
                 RemoveDevice ( device ) ;
 
-                _deviceExpired.Publish ( device ) ;
+                _deviceExpired.OnNext ( device ) ;
             }
         }
 
