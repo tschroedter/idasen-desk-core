@@ -336,7 +336,7 @@ namespace Idasen.BluetoothLE.Linak
         private IDeskCommandExecutor ? _executor ;
 
         private IDisposable ? _finishedSubscription ;
-        private IDisposable ? _refreshedSubscription ;
+        private readonly IDisposable ? _refreshedSubscription ;
         private IDeskHeightAndSpeed ? _heightAndSpeed ;
         private IDisposable ?         _subscriber ;
     }

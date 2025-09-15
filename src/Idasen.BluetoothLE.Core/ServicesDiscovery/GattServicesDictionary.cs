@@ -7,7 +7,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 {
     [ Intercept ( typeof ( LogAspect ) ) ]
     public class GattServicesDictionary
-        : IGattServicesDictionary , IDisposable
+        : IGattServicesDictionary
     {
         public IGattCharacteristicsResultWrapper this [ IGattDeviceServiceWrapper service ]
         {

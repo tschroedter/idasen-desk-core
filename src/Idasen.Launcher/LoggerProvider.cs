@@ -11,7 +11,7 @@ public static class LoggerProvider
                                        "{Level:u3}] {Message} " +
                                        "(at {Caller}){NewLine}{Exception}" ;
 
-    private static readonly object _sync = new ( ) ;
+    private static readonly object Sync = new ( ) ;
     private static Lazy < Logger >? _logger ;
 
     public static ILogger CreateLogger ( string appName ,
@@ -22,7 +22,7 @@ public static class LoggerProvider
         Guard.ArgumentNotNull ( appLogFileName ,
                                 nameof ( appLogFileName ) ) ;
 
-        lock ( _sync )
+        lock ( Sync )
         {
             if ( _logger != null )
             {
@@ -71,7 +71,7 @@ public static class LoggerProvider
 
     public static void Shutdown ( )
     {
-        lock ( _sync )
+        lock ( Sync )
         {
             if ( _logger == null )
                 return ;

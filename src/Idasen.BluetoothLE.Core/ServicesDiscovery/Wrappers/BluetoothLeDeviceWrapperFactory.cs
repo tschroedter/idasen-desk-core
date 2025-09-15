@@ -1,11 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis ;
-using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Serilog ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 {
@@ -26,7 +23,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         /// <inheritdoc />
         public IBluetoothLeDeviceWrapper Create ( BluetoothLEDevice device )
         {
-            // With delegate factories, Autofac will resolve all other dependencies
+            // With delegate factories, Autofac will resolve all other dependencies,
             // and we only need to pass the varying parameter
             return _factory ( device ) ;
         }

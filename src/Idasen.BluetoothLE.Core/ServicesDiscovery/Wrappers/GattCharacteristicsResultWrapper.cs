@@ -12,7 +12,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     [ExcludeFromCodeCoverage]
     [Intercept(typeof(LogAspect))]
     public class GattCharacteristicsResultWrapper
-        : IGattCharacteristicsResultWrapper, IDisposable
+        : IGattCharacteristicsResultWrapper
     {
         public GattCharacteristicsResultWrapper(
             ILogger logger,
@@ -48,7 +48,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                 _result.Characteristics is null ||
                 _result.Characteristics.Count == 0)
             {
-                Characteristics = Array.Empty<IGattCharacteristicWrapper>();
+                Characteristics = [];
                 return this;
             }
 
@@ -82,7 +82,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             });
 
             var initialized = await Task.WhenAll(initTasks);
-            Characteristics = initialized.Where(w => w is not null)!.ToList()!;
+
+            Characteristics = initialized.Where(w => w is not null).ToList()!;
 
             return this;
         }
@@ -150,7 +151,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                 }
             }
 
-            Characteristics = Array.Empty<IGattCharacteristicWrapper>();
+            Characteristics = [];
         }
 
         private readonly ILogger _logger;

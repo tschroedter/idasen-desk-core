@@ -1,6 +1,5 @@
 using System.Reactive.Subjects;
 using FluentAssertions;
-using Idasen.BluetoothLE.Linak;
 using Idasen.BluetoothLE.Linak.Interfaces;
 using NSubstitute;
 using Serilog;
@@ -30,10 +29,11 @@ namespace Idasen.BluetoothLE.Linak.Tests
             var subject = Substitute.For<ISubject<IErrorDetails>>();
             var sut = new ErrorManager(logger, subject);
 
-            sut.PublishForMessage("message", caller: "caller");
+            const string caller = "caller" ;
+            sut.PublishForMessage("message", caller);
 
             subject.Received(1)
-                   .OnNext(Arg.Is<IErrorDetails>(d => d.Message == "message" && d.Caller == "caller"));
+                   .OnNext(Arg.Is<IErrorDetails>(d => d.Message == "message" && d.Caller == caller));
         }
 
         [TestMethod]

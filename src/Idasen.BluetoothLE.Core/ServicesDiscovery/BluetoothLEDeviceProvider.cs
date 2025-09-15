@@ -6,6 +6,7 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 {
     [Intercept(typeof(LogAspect))]
+    // ReSharper disable once InconsistentNaming
     public class BluetoothLEDeviceProvider : IBluetoothLEDeviceProvider
     {
         public async Task<BluetoothLEDevice?> FromBluetoothAddressAsync(ulong address)

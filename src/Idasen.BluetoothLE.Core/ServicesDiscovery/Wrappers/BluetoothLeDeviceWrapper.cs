@@ -29,6 +29,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     private readonly IDisposable _subscriberConnectionStatus ;
     private IGattServicesProvider? _provider ;
     private GattSession? _session ;
+    private bool _disposed ;
 
     public BluetoothLeDeviceWrapper (
         ILogger logger ,
@@ -89,7 +90,16 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     /// <inheritdoc />
     public async void Connect ( )
     {
-        await ConnectAsync ( ) ;
+        try
+        {
+            await ConnectAsync ( ) ;
+        }
+        catch ( Exception e )
+        {
+            _logger.Error ( e ,
+                            "Failed to connect to device {BluetoothAddress}" ,
+                            _device.BluetoothAddress ); 
+        }
     }
 
     public async Task ConnectAsync ( )
@@ -146,11 +156,27 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     /// <inheritdoc />
     public void Dispose ( )
     {
-        _provider?.Dispose ( ) ;
-        _gattServicesDictionary.Dispose ( ) ;
-        _session?.Dispose ( ) ;
-        _subscriberConnectionStatus.Dispose ( ) ;
-        _device.Dispose ( ) ;
+        Dispose ( true ) ;
+        GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+        {
+            return ;
+        }
+
+        if ( disposing )
+        {
+            _provider?.Dispose ( ) ;
+            _gattServicesDictionary.Dispose ( ) ;
+            _session?.Dispose ( ) ;
+            _subscriberConnectionStatus.Dispose ( ) ;
+            _device.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 
     private async Task CreateSession ( )
@@ -158,6 +184,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         _session?.Dispose ( ) ;
 
         _session = await GattSession.FromDeviceIdAsync ( _device.BluetoothDeviceId ) ;
+
         if ( _session != null )
         {
             _session.MaintainConnection = true ;

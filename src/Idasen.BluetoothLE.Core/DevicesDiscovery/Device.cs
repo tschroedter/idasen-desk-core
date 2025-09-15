@@ -48,7 +48,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         public ulong Address { get ; }
 
         /// <inheritdoc />
-        public string MacAddress { get ; private set ; } = string.Empty ;
+        public string MacAddress { get ; }
 
         /// <inheritdoc />
         public string ? Name { get ; set ; }

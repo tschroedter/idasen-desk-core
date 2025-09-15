@@ -97,6 +97,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
             foreach ( var service in gatt.Services )
             {
                 IGattCharacteristicsResultWrapper characteristics ;
+
                 try
                 {
                     characteristics = await service.GetCharacteristicsAsync ( ) ;

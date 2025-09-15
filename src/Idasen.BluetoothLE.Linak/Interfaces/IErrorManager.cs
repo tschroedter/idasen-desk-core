@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices ;
+using JetBrains.Annotations ;
 
 // ReSharper disable UnusedMember.Global
 
@@ -9,6 +10,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <summary>
         ///     Notify when an error happened.
         /// </summary>
+        [UsedImplicitly]
         IObservable < IErrorDetails > ErrorChanged { get ; }
 
         /// <summary>
@@ -17,6 +19,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces
         /// <param name="details">
         ///     The details about the error.
         /// </param>
+        [UsedImplicitly]
         void Publish ( IErrorDetails details ) ;
 
         /// <summary>

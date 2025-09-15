@@ -23,6 +23,7 @@ namespace Idasen.ConsoleApp
                                                       .AddJsonFile ( "Appsettings.json" ) ;
 
             IContainer? container = null ;
+
             try
             {
                 container = ContainerProvider.Create ( builder.Build ( ) ) ;

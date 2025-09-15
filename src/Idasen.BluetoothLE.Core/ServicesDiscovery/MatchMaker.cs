@@ -37,6 +37,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
             var macAddress = address.ToMacAddress ( ) ;
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if ( device == null )
             {
                 var message = $"Failed to find device with MAC Address '{macAddress}' " +

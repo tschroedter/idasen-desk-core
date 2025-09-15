@@ -116,7 +116,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         public bool IsFull => Size == Capacity ;
 
         /// <summary>
-        ///     True, if has no elements.
+        ///     True, if it has no elements.
         /// </summary>
         public bool IsEmpty => Size == 0 ;
 
@@ -134,16 +134,21 @@ namespace Idasen.BluetoothLE.Linak.Control
         ///     Index of element to access.
         /// </param>
         /// <exception cref="IndexOutOfRangeException">
-        ///     Thrown when index is outside of [; Size[ interval.
+        ///     Thrown when index is outside Size interval.
         /// </exception>
         public T this [ int index ]
         {
             get
             {
                 if ( IsEmpty )
+                {
                     throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer is empty" ) ;
+                }
+
                 if ( index >= _size )
+                {
                     throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer size is {_size}" ) ;
+                }
 
                 var actualIndex = InternalIndex ( index ) ;
 
