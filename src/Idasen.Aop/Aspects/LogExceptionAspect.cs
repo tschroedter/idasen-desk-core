@@ -4,23 +4,22 @@ using Serilog ;
 
 // ReSharper disable UnusedMember.Global
 
-namespace Idasen.Aop.Aspects
+namespace Idasen.Aop.Aspects ;
+
+public class LogExceptionAspect ( ILogger logger ,
+                                  IInvocationToTextConverter converter )
+    : IInterceptor
 {
-    public class LogExceptionAspect ( ILogger logger ,
-                                      IInvocationToTextConverter converter )
-        : IInterceptor
+    public void Intercept ( IInvocation invocation )
     {
-        public void Intercept ( IInvocation invocation )
+        try
         {
-            try
-            {
-                invocation.Proceed ( ) ;
-            }
-            catch ( Exception exception )
-            {
-                logger.Error ( $"{converter.Convert ( invocation )} " +
-                                exception ) ;
-            }
+            invocation.Proceed ( ) ;
+        }
+        catch ( Exception exception )
+        {
+            logger.Error ( $"{converter.Convert ( invocation )} " +
+                           exception ) ;
         }
     }
 }

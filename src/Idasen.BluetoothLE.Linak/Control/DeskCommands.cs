@@ -1,9 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Linak.Control
+﻿namespace Idasen.BluetoothLE.Linak.Control ;
+
+public enum DeskCommands
 {
-    public enum DeskCommands
-    {
-        MoveUp ,
-        MoveDown ,
-        MoveStop
-    }
+    MoveUp ,
+    MoveDown ,
+    MoveStop
 }

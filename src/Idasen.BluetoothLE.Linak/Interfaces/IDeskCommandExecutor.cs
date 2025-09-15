@@ -1,9 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface IDeskCommandExecutor
 {
-    public interface IDeskCommandExecutor
-    {
-        Task < bool > Up ( ) ;
-        Task < bool > Down ( ) ;
-        Task < bool > Stop ( ) ;
-    }
+    Task < bool > Up ( ) ;
+    Task < bool > Down ( ) ;
+    Task < bool > Stop ( ) ;
 }

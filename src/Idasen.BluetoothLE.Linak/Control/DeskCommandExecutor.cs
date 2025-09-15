@@ -6,81 +6,82 @@ using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak.Control
+namespace Idasen.BluetoothLE.Linak.Control ;
+
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class DeskCommandExecutor
+    : IDeskCommandExecutor
 {
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class DeskCommandExecutor
-        : IDeskCommandExecutor
+    public delegate IDeskCommandExecutor Factory ( IControl control ) ;
+
+    private readonly IControl _control ;
+    private readonly IErrorManager _errorManager ;
+
+    private readonly ILogger _logger ;
+    private readonly IDeskCommandsProvider _provider ;
+
+    public DeskCommandExecutor ( ILogger logger ,
+                                 IErrorManager errorManager ,
+                                 IDeskCommandsProvider provider ,
+                                 IControl control )
     {
-        public DeskCommandExecutor ( ILogger               logger ,
-                                     IErrorManager         errorManager ,
-                                     IDeskCommandsProvider provider ,
-                                     IControl              control )
-        {
-            Guard.ArgumentNotNull ( logger ,
-                                    nameof ( logger ) ) ;
-            Guard.ArgumentNotNull ( provider ,
-                                    nameof ( provider ) ) ;
-            Guard.ArgumentNotNull ( control ,
-                                    nameof ( control ) ) ;
-            Guard.ArgumentNotNull ( errorManager ,
-                                    nameof ( errorManager ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( provider ,
+                                nameof ( provider ) ) ;
+        Guard.ArgumentNotNull ( control ,
+                                nameof ( control ) ) ;
+        Guard.ArgumentNotNull ( errorManager ,
+                                nameof ( errorManager ) ) ;
 
-            _logger       = logger ;
-            _errorManager = errorManager ;
-            _provider     = provider ;
-            _control      = control ;
+        _logger = logger ;
+        _errorManager = errorManager ;
+        _provider = provider ;
+        _control = control ;
+    }
+
+    public async Task < bool > Up ( )
+    {
+        return await Execute ( DeskCommands.MoveUp ) ;
+    }
+
+    public async Task < bool > Down ( )
+    {
+        return await Execute ( DeskCommands.MoveDown ) ;
+    }
+
+    public async Task < bool > Stop ( )
+    {
+        return await Execute ( DeskCommands.MoveStop ) ;
+    }
+
+    private async Task < bool > Execute ( DeskCommands deskCommand )
+    {
+        if ( ! _provider.TryGetValue ( deskCommand ,
+                                       out var bytes ) )
+        {
+            _logger.Error ( $"Failed for unknown command '{deskCommand}'" ) ;
+
+            return false ;
         }
 
-        public async Task < bool > Up ( )
+        var result = await _control.TryWriteRawControl2 ( bytes ) ;
+
+        if ( ! result )
         {
-            return await Execute ( DeskCommands.MoveUp ) ;
+            ExecutionFailed ( deskCommand ) ; // to do testing
         }
 
-        public async Task < bool > Down ( )
-        {
-            return await Execute ( DeskCommands.MoveDown ) ;
-        }
+        return result ;
+    }
 
-        public async Task < bool > Stop ( )
-        {
-            return await Execute ( DeskCommands.MoveStop ) ;
-        }
+    private void ExecutionFailed ( DeskCommands deskCommand )
+    {
+        var message = $"Failed for '{deskCommand}' command. " +
+                      Constants.CheckAndEnableBluetooth ;
 
-        public delegate IDeskCommandExecutor Factory ( IControl control ) ;
+        _logger.Error ( message ) ;
 
-        private async Task < bool > Execute ( DeskCommands deskCommand )
-        {
-            if ( ! _provider.TryGetValue ( deskCommand ,
-                                           out var bytes ) )
-            {
-                _logger.Error ( $"Failed for unknown command '{deskCommand}'" ) ;
-
-                return false ;
-            }
-
-            var result = await _control.TryWriteRawControl2 ( bytes ) ;
-
-            if ( ! result )
-                ExecutionFailed ( deskCommand ) ; // to do testing
-
-            return result ;
-        }
-
-        private void ExecutionFailed ( DeskCommands deskCommand )
-        {
-            var message = $"Failed for '{deskCommand}' command. " +
-                          Constants.CheckAndEnableBluetooth ;
-
-            _logger.Error ( message ) ;
-
-            _errorManager.PublishForMessage ( Constants.CheckAndEnableBluetooth ) ;
-        }
-
-        private readonly IControl      _control ;
-        private readonly IErrorManager _errorManager ;
-
-        private readonly ILogger               _logger ;
-        private readonly IDeskCommandsProvider _provider ;
+        _errorManager.PublishForMessage ( Constants.CheckAndEnableBluetooth ) ;
     }
 }

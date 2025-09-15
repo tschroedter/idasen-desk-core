@@ -5,53 +5,53 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class MatchMaker
+    : IMatchMaker
 {
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class MatchMaker
-        : IMatchMaker
+    private readonly IDeviceFactory _deviceFactory ;
+    private readonly ILogger _logger ;
+
+    public MatchMaker ( ILogger logger ,
+                        IOfficialGattServices bluetoothGattServices ,
+                        IDeviceFactory deviceFactory )
     {
-        public MatchMaker ( ILogger               logger ,
-                            IOfficialGattServices bluetoothGattServices ,
-                            IDeviceFactory        deviceFactory )
-        {
-            Guard.ArgumentNotNull ( logger ,
-                                    nameof ( logger ) ) ;
-            Guard.ArgumentNotNull ( bluetoothGattServices ,
-                                    nameof ( bluetoothGattServices ) ) ;
-            Guard.ArgumentNotNull ( deviceFactory ,
-                                    nameof ( deviceFactory ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( bluetoothGattServices ,
+                                nameof ( bluetoothGattServices ) ) ;
+        Guard.ArgumentNotNull ( deviceFactory ,
+                                nameof ( deviceFactory ) ) ;
 
-            _logger        = logger ;
-            _deviceFactory = deviceFactory ;
+        _logger = logger ;
+        _deviceFactory = deviceFactory ;
+    }
+
+    /// <summary>
+    ///     Attempts to pair to BLE device by address.
+    /// </summary>
+    /// <param name="address">The BLE device address.</param>
+    /// <returns></returns>
+    public async Task < IDevice > PairToDeviceAsync ( ulong address )
+    {
+        var device = await _deviceFactory.FromBluetoothAddressAsync ( address ) ;
+
+        var macAddress = address.ToMacAddress ( ) ;
+
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if ( device == null )
+        {
+            var message = $"Failed to find device with MAC Address '{macAddress}' " +
+                          $"(Address {address})" ;
+
+            throw new ArgumentNullException ( message ) ;
         }
 
-        /// <summary>
-        ///     Attempts to pair to BLE device by address.
-        /// </summary>
-        /// <param name="address">The BLE device address.</param>
-        /// <returns></returns>
-        public async Task < IDevice > PairToDeviceAsync ( ulong address )
-        {
-            var device = await _deviceFactory.FromBluetoothAddressAsync ( address ) ;
+        _logger.Information ( $"[{macAddress}] DeviceId after FromBluetoothAddressAsync: {device.Id}" ) ;
+        _logger.Information ( $"[{macAddress}] ConnectionStatus after FromBluetoothAddressAsync: {device.ConnectionStatus}" ) ;
 
-            var macAddress = address.ToMacAddress ( ) ;
-
-            if ( device == null )
-            {
-                var message = $"Failed to find device with MAC Address '{macAddress}' " +
-                              $"(Address {address})" ;
-
-                throw new ArgumentNullException ( message ) ;
-            }
-
-            _logger.Information ( $"[{macAddress}] DeviceId after FromBluetoothAddressAsync: {device.Id}" ) ;
-            _logger.Information ( $"[{macAddress}] ConnectionStatus after FromBluetoothAddressAsync: {device.ConnectionStatus}" ) ;
-
-            return device ;
-        }
-
-        private readonly IDeviceFactory _deviceFactory ;
-        private readonly ILogger        _logger ;
+        return device ;
     }
 }

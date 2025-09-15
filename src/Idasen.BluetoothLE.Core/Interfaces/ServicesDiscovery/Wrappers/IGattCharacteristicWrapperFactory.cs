@@ -1,9 +1,8 @@
 ﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+public interface IGattCharacteristicWrapperFactory
 {
-    public interface IGattCharacteristicWrapperFactory
-    {
-        IGattCharacteristicWrapper Create ( GattCharacteristic characteristic ) ;
-    }
+    IGattCharacteristicWrapper Create ( GattCharacteristic characteristic ) ;
 }

@@ -7,83 +7,84 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common
+namespace Idasen.BluetoothLE.Characteristics.Common ;
+
+[ Intercept ( typeof ( LogAspect ) ) ]
+public sealed class AllGattCharacteristicsProvider
+    : IAllGattCharacteristicsProvider
 {
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public sealed class AllGattCharacteristicsProvider
-        : IAllGattCharacteristicsProvider
+    internal const string Filename = "OfficialGattCharacteristics.txt" ;
+
+    private readonly Dictionary < string , Guid > _descriptionToUuid = new ( ) ;
+    private readonly Dictionary < Guid , string > _uuidToDescription = new ( ) ;
+
+    public AllGattCharacteristicsProvider ( )
     {
-        public AllGattCharacteristicsProvider ( )
-        {
-            OfficialGattCharacteristics = GetType ( ).Namespace +
-                                          "."                   +
-                                          Filename ;
+        OfficialGattCharacteristics = GetType ( ).Namespace +
+                                      "." +
+                                      Filename ;
 
-            Populate ( ReadCsvFile ( ) ) ;
+        Populate ( ReadCsvFile ( ) ) ;
+    }
+
+    public string OfficialGattCharacteristics { get ; }
+
+    public bool TryGetDescription ( Guid uuid ,
+                                    out string description )
+    {
+        var success = _uuidToDescription.TryGetValue ( uuid ,
+                                                       out var tempDescription ) ;
+
+        description = tempDescription ?? string.Empty ;
+
+        return success ;
+    }
+
+    public bool TryGetUuid ( string description ,
+                             out Guid uuid )
+    {
+        return _descriptionToUuid.TryGetValue ( description ,
+                                                out uuid ) ;
+    }
+
+    private void Populate ( IEnumerable < CsvGattCharacteristic > records )
+    {
+        foreach (var record in records)
+        {
+            _uuidToDescription[Guid.Parse ( record.Uuid )] = record.Name ;
         }
 
-        public bool TryGetDescription ( Guid       uuid ,
-                                        out string description )
+        foreach (var (uuid , description) in _uuidToDescription)
         {
-            var success = _uuidToDescription.TryGetValue ( uuid ,
-                                                           out var tempDescription ) ;
+            _descriptionToUuid[description] = uuid ;
+        }
+    }
 
-            description = tempDescription ?? string.Empty ;
+    private IEnumerable < CsvGattCharacteristic > ReadCsvFile ( )
+    {
+        var stream = Assembly.GetExecutingAssembly ( )
+                             .GetManifestResourceStream ( OfficialGattCharacteristics ) ;
 
-            return success ;
+        if ( stream == null )
+        {
+            throw new ResourceNotFoundException ( OfficialGattCharacteristics ,
+                                                  $"Can't find resource {OfficialGattCharacteristics}" ) ;
         }
 
-        public bool TryGetUuid ( string   description ,
-                                 out Guid uuid )
+        using var reader = new StreamReader ( stream ) ;
+
+        var config = new CsvConfiguration ( CultureInfo.InvariantCulture )
         {
-            return _descriptionToUuid.TryGetValue ( description ,
-                                                    out uuid ) ;
-        }
+            Delimiter = "," ,
+            HasHeaderRecord = true
+        } ;
 
-        public string OfficialGattCharacteristics { get ; }
+        using var csv = new CsvReader ( reader ,
+                                        config ) ;
 
-        private void Populate ( IEnumerable < CsvGattCharacteristic > records )
-        {
-            foreach ( var record in records )
-            {
-                _uuidToDescription [ Guid.Parse ( record.Uuid ) ] = record.Name ;
-            }
+        var readCsvFile = csv.GetRecords < CsvGattCharacteristic > ( )
+                             .ToArray ( ) ;
 
-            foreach ( var (uuid , description) in _uuidToDescription )
-            {
-                _descriptionToUuid [ description ] = uuid ;
-            }
-        }
-
-        private IEnumerable < CsvGattCharacteristic > ReadCsvFile ( )
-        {
-            var stream = Assembly.GetExecutingAssembly ( )
-                                 .GetManifestResourceStream ( OfficialGattCharacteristics ) ;
-
-            if ( stream == null )
-                throw new ResourceNotFoundException ( OfficialGattCharacteristics ,
-                                                      $"Can't find resource {OfficialGattCharacteristics}" ) ;
-
-            using var reader = new StreamReader ( stream ) ;
-
-            var config = new CsvConfiguration ( CultureInfo.InvariantCulture )
-                         {
-                             Delimiter       = "," ,
-                             HasHeaderRecord = true
-                         } ;
-
-            using var csv = new CsvReader ( reader ,
-                                            config ) ;
-
-            var readCsvFile = csv.GetRecords < CsvGattCharacteristic > ( )
-                                 .ToArray ( ) ;
-
-            return readCsvFile ;
-        }
-
-        internal const string Filename = "OfficialGattCharacteristics.txt" ;
-
-        private readonly Dictionary < string , Guid > _descriptionToUuid = new( ) ;
-        private readonly Dictionary < Guid , string > _uuidToDescription = new( ) ;
+        return readCsvFile ;
     }
 }

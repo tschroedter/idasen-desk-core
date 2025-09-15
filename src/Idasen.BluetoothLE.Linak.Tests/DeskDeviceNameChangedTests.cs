@@ -5,25 +5,24 @@ using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 
-namespace Idasen.BluetoothLE.Linak.Tests
-{
-    [ AutoDataTestClass ]
-    public class DeskDeviceNameChangedTests
-        : DeskRaiseEventForDeskBase < IEnumerable < byte > >
-    {
-        protected override void SetSubscription ( IDesk         desk ,
-                                                  TestScheduler scheduler )
-        {
-            desk.DeviceNameChanged
-                .ObserveOn ( scheduler )
-                .Subscribe ( OnRaised ) ;
-        }
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
-        protected override void SetSubject ( IDeskConnector                   connector ,
-                                             Subject < IEnumerable < byte > > subject )
-        {
-            connector.DeviceNameChanged
-                     .Returns ( subject ) ;
-        }
+[ AutoDataTestClass ]
+public class DeskDeviceNameChangedTests
+    : DeskRaiseEventForDeskBase < IEnumerable < byte > >
+{
+    protected override void SetSubscription ( IDesk desk ,
+                                              TestScheduler scheduler )
+    {
+        desk.DeviceNameChanged
+            .ObserveOn ( scheduler )
+            .Subscribe ( OnRaised ) ;
+    }
+
+    protected override void SetSubject ( IDeskConnector connector ,
+                                         Subject < IEnumerable < byte > > subject )
+    {
+        connector.DeviceNameChanged
+                 .Returns ( subject ) ;
     }
 }

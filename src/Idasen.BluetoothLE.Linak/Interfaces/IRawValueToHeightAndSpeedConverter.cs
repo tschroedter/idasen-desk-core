@@ -1,9 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface IRawValueToHeightAndSpeedConverter
 {
-    public interface IRawValueToHeightAndSpeedConverter
-    {
-        bool TryConvert ( IEnumerable < byte > bytes ,
-                          out uint             height ,
-                          out int              speed ) ;
-    }
+    bool TryConvert ( IEnumerable < byte > bytes ,
+                      out uint height ,
+                      out int speed ) ;
 }

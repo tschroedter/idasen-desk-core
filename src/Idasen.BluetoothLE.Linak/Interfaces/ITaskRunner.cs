@@ -1,8 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface ITaskRunner
 {
-    public interface ITaskRunner
-    {
-        Task Run ( Action            action ,
-                   CancellationToken token ) ;
-    }
+    Task Run ( Action action ,
+               CancellationToken token ) ;
 }

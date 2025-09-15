@@ -1,7 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface IDeskFactory
 {
-    public interface IDeskFactory
-    {
-        Task < IDesk > CreateAsync ( ulong address ) ;
-    }
+    Task < IDesk > CreateAsync ( ulong address ) ;
 }

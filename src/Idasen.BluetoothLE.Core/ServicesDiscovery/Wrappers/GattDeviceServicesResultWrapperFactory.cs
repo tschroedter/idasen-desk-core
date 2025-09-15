@@ -4,32 +4,31 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+/// <inheritdoc />
+[ ExcludeFromCodeCoverage ]
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class GattDeviceServicesResultWrapperFactory
+    : IGattDeviceServicesResultWrapperFactory
 {
-    /// <inheritdoc />
-    [ ExcludeFromCodeCoverage ]
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class GattDeviceServicesResultWrapperFactory
-        : IGattDeviceServicesResultWrapperFactory
+    private readonly GattDeviceServicesResultWrapper.Factory _servicesFactory ;
+
+    public GattDeviceServicesResultWrapperFactory (
+        GattDeviceServicesResultWrapper.Factory servicesFactory )
     {
-        public GattDeviceServicesResultWrapperFactory (
-            GattDeviceServicesResultWrapper.Factory servicesFactory )
-        {
-            Guard.ArgumentNotNull ( servicesFactory ,
-                                    nameof ( servicesFactory ) ) ;
+        Guard.ArgumentNotNull ( servicesFactory ,
+                                nameof ( servicesFactory ) ) ;
 
-            _servicesFactory = servicesFactory ;
-        }
+        _servicesFactory = servicesFactory ;
+    }
 
-        /// <inheritdoc />
-        public IGattDeviceServicesResultWrapper Create ( GattDeviceServicesResult result )
-        {
-            Guard.ArgumentNotNull ( result ,
-                                    nameof ( result ) ) ;
+    /// <inheritdoc />
+    public IGattDeviceServicesResultWrapper Create ( GattDeviceServicesResult result )
+    {
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
-            return _servicesFactory.Invoke ( result ) ;
-        }
-
-        private readonly GattDeviceServicesResultWrapper.Factory _servicesFactory ;
+        return _servicesFactory.Invoke ( result ) ;
     }
 }

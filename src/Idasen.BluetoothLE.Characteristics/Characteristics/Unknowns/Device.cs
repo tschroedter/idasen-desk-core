@@ -5,47 +5,44 @@ using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns
+namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+
+public class Device
+    : IDevice
 {
-    public class Device
-        : IDevice
+    internal const ulong UnknownBluetoothAddress = 0u ;
+
+    internal const string UnknownBluetoothAddressType = "Unknown Address Type" ;
+    internal const string UnknownName = "Unknown Device" ;
+    internal const string UnknownId = "Unknown Device Id" ;
+    internal const string Message = "Can't use an unknown instance" ;
+
+    public void Dispose ( )
     {
-        public void Dispose ( )
-        {
-        }
+    }
 
-        public IObservable < BluetoothConnectionStatus > ConnectionStatusChanged =>
-            throw new NotInitializeException ( Message ) ;
+    public IObservable < BluetoothConnectionStatus > ConnectionStatusChanged =>
+        throw new NotInitializeException ( Message ) ;
 
-        public GattCommunicationStatus   GattCommunicationStatus { get ; } = GattCommunicationStatus.Unreachable ;
-        public string                    Name                    { get ; } = UnknownName ;
-        public string                    Id                      { get ; } = UnknownId ;
-        public bool                      IsPaired                { get ; } = false ;
-        public BluetoothConnectionStatus ConnectionStatus        { get ; } = BluetoothConnectionStatus.Disconnected ;
+    public GattCommunicationStatus GattCommunicationStatus { get ; } = GattCommunicationStatus.Unreachable ;
+    public string Name { get ; } = UnknownName ;
+    public string Id { get ; } = UnknownId ;
+    public bool IsPaired { get ; } = false ;
+    public BluetoothConnectionStatus ConnectionStatus { get ; } = BluetoothConnectionStatus.Disconnected ;
 
-        public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > GattServices
-        {
-            get ;
-        } = new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( )
+    public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > GattServices { get ; } =
+        new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( )
            .ToImmutableDictionary ( ) ;
 
-        public IObservable < GattCommunicationStatus > GattServicesRefreshed =>
-            throw new NotInitializeException ( Message ) ;
+    public IObservable < GattCommunicationStatus > GattServicesRefreshed =>
+        throw new NotInitializeException ( Message ) ;
 
-        public ulong BluetoothAddress => UnknownBluetoothAddress ;
+    public ulong BluetoothAddress => UnknownBluetoothAddress ;
 
-        public string BluetoothAddressType => UnknownBluetoothAddressType ;
+    public string BluetoothAddressType => UnknownBluetoothAddressType ;
 
-        public void Connect ( )
-        {
-            // do nothing
-        }
-
-        internal const ulong UnknownBluetoothAddress = 0u ;
-
-        internal const string UnknownBluetoothAddressType = "Unknown Address Type" ;
-        internal const string UnknownName                 = "Unknown Device" ;
-        internal const string UnknownId                   = "Unknown Device Id" ;
-        internal const string Message                     = "Can't use a anknown Instance" ;
+    public void Connect ( )
+    {
+        // do nothing
     }
 }

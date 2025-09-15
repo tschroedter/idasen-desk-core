@@ -1,9 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Common
-{
-    public sealed class CsvGattCharacteristic
-    {
-        public string Uuid { get ; set ; } = string.Empty ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-        public string Name { get ; set ; } = string.Empty ;
-    }
+public sealed class CsvGattCharacteristic
+{
+    public string Uuid { get ; set ; } = string.Empty ;
+
+    public string Name { get ; set ; } = string.Empty ;
 }

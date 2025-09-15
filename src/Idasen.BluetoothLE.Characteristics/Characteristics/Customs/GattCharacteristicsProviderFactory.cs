@@ -4,27 +4,26 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs
+namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
+
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class GattCharacteristicsProviderFactory
+    : IGattCharacteristicsProviderFactory
 {
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class GattCharacteristicsProviderFactory
-        : IGattCharacteristicsProviderFactory
+    private readonly GattCharacteristicProvider.Factory _factory ;
+
+    public GattCharacteristicsProviderFactory (
+        GattCharacteristicProvider.Factory factory )
     {
-        public GattCharacteristicsProviderFactory (
-            GattCharacteristicProvider.Factory factory )
-        {
-            Guard.ArgumentNotNull ( factory ,
-                                    nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
-            _factory = factory ;
-        }
+        _factory = factory ;
+    }
 
-        public IGattCharacteristicProvider Create (
-            IGattCharacteristicsResultWrapper wrapper )
-        {
-            return _factory ( wrapper ) ;
-        }
-
-        private readonly GattCharacteristicProvider.Factory _factory ;
+    public IGattCharacteristicProvider Create (
+        IGattCharacteristicsResultWrapper wrapper )
+    {
+        return _factory ( wrapper ) ;
     }
 }

@@ -3,43 +3,44 @@ using Serilog ;
 using Serilog.Core ;
 using Serilog.Events ;
 
-namespace Idasen.Launcher
+namespace Idasen.Launcher ;
+
+public class CallerEnricher : ILogEventEnricher
 {
-    public class CallerEnricher : ILogEventEnricher
+    public void Enrich ( LogEvent logEvent ,
+                         ILogEventPropertyFactory propertyFactory )
     {
-        public void Enrich ( LogEvent                 logEvent ,
-                             ILogEventPropertyFactory propertyFactory )
+        var skip = 3 ;
+
+        while (true)
         {
-            var skip = 3 ;
+            var stack = new StackFrame ( skip ) ;
 
-            while ( true )
+            if ( ! stack.HasMethod ( ) )
             {
-                var stack = new StackFrame ( skip ) ;
+                logEvent.AddPropertyIfAbsent ( new LogEventProperty ( "Caller" ,
+                                                                      new ScalarValue ( "<unknown method>" ) ) ) ;
 
-                if ( ! stack.HasMethod ( ) )
+                return ;
+            }
+
+            var method = stack.GetMethod ( ) ;
+
+            if ( method != null &&
+                 method.DeclaringType != null )
+            {
+                if ( method.DeclaringType.Assembly != typeof ( Log ).Assembly )
                 {
+                    var caller =
+                        $"{method.DeclaringType.FullName}.{method.Name}({string.Join ( ", " , method.GetParameters ( ).Select ( pi => pi.ParameterType.FullName ) )})" ;
                     logEvent.AddPropertyIfAbsent ( new LogEventProperty ( "Caller" ,
-                                                                          new ScalarValue ( "<unknown method>" ) ) ) ;
+                                                                          new ScalarValue ( caller ) ) ) ;
 
                     return ;
                 }
-
-                var method = stack.GetMethod ( ) ;
-
-                if ( method               != null &&
-                     method.DeclaringType != null )
-                    if ( method.DeclaringType.Assembly != typeof ( Log ).Assembly )
-                    {
-                        var caller =
-                            $"{method.DeclaringType.FullName}.{method.Name}({string.Join ( ", " , method.GetParameters ( ).Select ( pi => pi.ParameterType.FullName ) )})" ;
-                        logEvent.AddPropertyIfAbsent ( new LogEventProperty ( "Caller" ,
-                                                                              new ScalarValue ( caller ) ) ) ;
-
-                        return ;
-                    }
-
-                skip ++ ;
             }
+
+            skip++ ;
         }
     }
 }

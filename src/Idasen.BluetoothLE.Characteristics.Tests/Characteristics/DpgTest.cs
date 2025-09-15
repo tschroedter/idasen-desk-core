@@ -2,59 +2,58 @@
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+
+[ TestClass ]
+public class DpgTest
+    : CharacteristicBaseTests < Dpg >
 {
-    [ TestClass ]
-    public class DpgTest
-        : CharacteristicBaseTests < Dpg >
+    [ TestMethod ]
+    public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        [ TestMethod ]
-        public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
-        {
-            var sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            sut.Initialize < Dpg > ( ) ;
+        sut.Initialize < Dpg > ( ) ;
 
-            sut.RawDpg
-               .Should ( )
-               .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
-        }
+        sut.RawDpg
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
+    }
 
-        [ TestMethod ]
-        public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
-        {
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.Initialize < Dpg > ( )
-                     .Refresh ( ) ;
+        await sut.Initialize < Dpg > ( )
+                 .Refresh ( ) ;
 
-            sut.RawDpg
-               .Should ( )
-               .BeEquivalentTo ( RawValue1 ) ;
-        }
+        sut.RawDpg
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
+    }
 
-        protected override Dpg CreateSut ( )
-        {
-            return new Dpg ( Logger ,
-                             Scheduler ,
-                             Device ,
-                             ProviderFactory ,
-                             RawValueReader ,
-                             RawValueWriter ,
-                             ToStringConverter ,
-                             DescriptionToUuid ) ;
-        }
+    protected override Dpg CreateSut ( )
+    {
+        return new Dpg ( Logger ,
+                         Scheduler ,
+                         Device ,
+                         ProviderFactory ,
+                         RawValueReader ,
+                         RawValueWriter ,
+                         ToStringConverter ,
+                         DescriptionToUuid ) ;
+    }
 
-        protected override void PopulateWrappers ( )
-        {
-            Wrappers.Add ( Dpg.DpgKey ,
-                           CharacteristicWrapper1 ) ;
-        }
+    protected override void PopulateWrappers ( )
+    {
+        Wrappers.Add ( Dpg.DpgKey ,
+                       CharacteristicWrapper1 ) ;
     }
 }

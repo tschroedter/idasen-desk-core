@@ -1,7 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Common
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
+
+public class Constants
 {
-    public class Constants
-    {
-        public const string CheckAndEnableBluetooth = "Make sure Bluetooth is enabled!" ;
-    }
+    public const string CheckAndEnableBluetooth = "Make sure Bluetooth is enabled!" ;
 }

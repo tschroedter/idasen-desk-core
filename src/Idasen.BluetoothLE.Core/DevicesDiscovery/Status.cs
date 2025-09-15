@@ -1,11 +1,10 @@
-﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery
+﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+
+public enum Status
 {
-    public enum Status
-    {
-        Created ,
-        Started ,
-        Stopping ,
-        Stopped ,
-        Aborted
-    }
+    Created ,
+    Started ,
+    Stopping ,
+    Stopped ,
+    Aborted
 }

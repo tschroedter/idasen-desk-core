@@ -1,9 +1,8 @@
 ﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface IDeskCommandExecutorFactory
 {
-    public interface IDeskCommandExecutorFactory
-    {
-        IDeskCommandExecutor Create ( IControl control ) ;
-    }
+    IDeskCommandExecutor Create ( IControl control ) ;
 }

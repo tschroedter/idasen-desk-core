@@ -4,47 +4,46 @@ using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Linak.Tests
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
+[ TestClass ]
+public class DeskHeightAndSpeedFactoryTests
 {
-    [ TestClass ]
-    public class DeskHeightAndSpeedFactoryTests
+    private DeskHeightAndSpeed.Factory _factory = null! ;
+    private IReferenceOutput _referenceOutput = null! ;
+
+    [ TestInitialize ]
+    public void Initialize ( )
     {
-        [ TestInitialize ]
-        public void Initialize ( )
-        {
-            _referenceOutput = Substitute.For < IReferenceOutput > ( ) ;
-            _factory         = TestFactory ;
-        }
+        _referenceOutput = Substitute.For < IReferenceOutput > ( ) ;
+        _factory = TestFactory ;
+    }
 
-        [ TestMethod ]
-        public void Create_ForReferenceOutputNull_Throws ( )
-        {
-            var action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
+    [ TestMethod ]
+    public void Create_ForReferenceOutputNull_Throws ( )
+    {
+        var action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
 
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( "referenceOutput" ) ;
-        }
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( "referenceOutput" ) ;
+    }
 
-        [ TestMethod ]
-        public void Create_ForInvoked_ReturnsInstance ( )
-        {
-            CreateSut ( ).Create ( _referenceOutput )
-                         .Should ( )
-                         .NotBeNull ( ) ;
-        }
+    [ TestMethod ]
+    public void Create_ForInvoked_ReturnsInstance ( )
+    {
+        CreateSut ( ).Create ( _referenceOutput )
+                     .Should ( )
+                     .NotBeNull ( ) ;
+    }
 
-        private IDeskHeightAndSpeed TestFactory ( IReferenceOutput _ )
-        {
-            return Substitute.For < IDeskHeightAndSpeed > ( ) ;
-        }
+    private IDeskHeightAndSpeed TestFactory ( IReferenceOutput _ )
+    {
+        return Substitute.For < IDeskHeightAndSpeed > ( ) ;
+    }
 
-        private DeskHeightAndSpeedFactory CreateSut ( )
-        {
-            return new DeskHeightAndSpeedFactory ( _factory ) ;
-        }
-
-        private DeskHeightAndSpeed.Factory _factory         = null! ;
-        private IReferenceOutput           _referenceOutput = null! ;
+    private DeskHeightAndSpeedFactory CreateSut ( )
+    {
+        return new DeskHeightAndSpeedFactory ( _factory ) ;
     }
 }

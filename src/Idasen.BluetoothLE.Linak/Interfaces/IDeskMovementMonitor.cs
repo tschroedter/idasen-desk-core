@@ -1,10 +1,9 @@
 ﻿using Idasen.BluetoothLE.Linak.Control ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface IDeskMovementMonitor
+    : IDisposable
 {
-    public interface IDeskMovementMonitor
-        : IDisposable
-    {
-        void Initialize ( int capacity = DeskMovementMonitor.DefaultCapacity ) ;
-    }
+    void Initialize ( int capacity = DeskMovementMonitor.DefaultCapacity ) ;
 }

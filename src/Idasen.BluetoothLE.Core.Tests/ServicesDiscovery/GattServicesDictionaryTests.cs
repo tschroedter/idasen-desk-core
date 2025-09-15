@@ -5,144 +5,202 @@ using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+
+[ AutoDataTestClass ]
+public class GattServicesDictionaryTests
 {
-    [ AutoDataTestClass ]
-    public class GattServicesDictionaryTests
+    [ AutoDataTestMethod ]
+    public void Indexer_ForServiceAndResultNull_Throws (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service )
     {
-        [ AutoDataTestMethod ]
-        public void Indexer_ForServiceAndResultNull_Throws (
-            GattServicesDictionary    sut ,
-            IGattDeviceServiceWrapper service )
-        {
-            Action action = ( ) => sut [ service ] = null! ;
+        Action action = ( ) => sut[service] = null! ;
 
-            action.Should ( )
-                  .Throw < ArgumentException > ( )
-                  .WithParameter ( "value" ) ;
-        }
+        action.Should ( )
+              .Throw < ArgumentException > ( )
+              .WithParameter ( "value" ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Indexer_ForServiceAndResult_SetsKeyAndValue (
-            GattServicesDictionary            sut ,
-            IGattDeviceServiceWrapper         service ,
-            IGattCharacteristicsResultWrapper result )
-        {
-            sut [ service ] = result ;
+    [ AutoDataTestMethod ]
+    public void Indexer_ForServiceAndResult_SetsKeyAndValue (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service ,
+        IGattCharacteristicsResultWrapper result )
+    {
+        sut[service] = result ;
 
-            sut [ service ]
-               .Should ( )
-               .Be ( result ) ;
-        }
+        sut[service]
+           .Should ( )
+           .Be ( result ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Indexer_ForServiceAndResult_UpdatesCount (
-            GattServicesDictionary            sut ,
-            IGattDeviceServiceWrapper         service ,
-            IGattCharacteristicsResultWrapper result )
-        {
-            sut [ service ] = result ;
+    [ AutoDataTestMethod ]
+    public void Indexer_ForServiceAndResult_UpdatesCount (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service ,
+        IGattCharacteristicsResultWrapper result )
+    {
+        sut[service] = result ;
 
-            sut.Count
-               .Should ( )
-               .Be ( 1 ) ;
-        }
+        sut.Count
+           .Should ( )
+           .Be ( 1 ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Clear_ForInvoked_DisposesService1 (
-            GattServicesDictionary            sut ,
-            IGattDeviceServiceWrapper         service1 ,
-            IGattCharacteristicsResultWrapper result1 ,
-            IGattDeviceServiceWrapper         service2 ,
-            IGattCharacteristicsResultWrapper result2 )
-        {
-            sut [ service1 ] = result1 ;
-            sut [ service2 ] = result2 ;
+    [ AutoDataTestMethod ]
+    public void Indexer_ForExistingService_DisposesOldValueOnly (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service ,
+        IGattCharacteristicsResultWrapper first ,
+        IGattCharacteristicsResultWrapper second )
+    {
+        sut[service] = first ;
+        sut[service] = second ;
 
-            sut.Clear ( ) ;
+        sut[service]
+           .Should ( )
+           .Be ( second ) ;
 
-            service1.Received ( )
-                    .Dispose ( ) ;
-        }
+        first.Received ( 1 )
+             .Dispose ( ) ;
+        second.DidNotReceive ( )
+              .Dispose ( ) ;
+        service.DidNotReceive ( )
+               .Dispose ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Clear_ForInvoked_DisposesService2 (
-            GattServicesDictionary            sut ,
-            IGattDeviceServiceWrapper         service1 ,
-            IGattCharacteristicsResultWrapper result1 ,
-            IGattDeviceServiceWrapper         service2 ,
-            IGattCharacteristicsResultWrapper result2 )
-        {
-            sut [ service1 ] = result1 ;
-            sut [ service2 ] = result2 ;
+    [ AutoDataTestMethod ]
+    public void Clear_ForInvoked_DisposesService1 (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service1 ,
+        IGattCharacteristicsResultWrapper result1 ,
+        IGattDeviceServiceWrapper service2 ,
+        IGattCharacteristicsResultWrapper result2 )
+    {
+        sut[service1] = result1 ;
+        sut[service2] = result2 ;
 
-            sut.Clear ( ) ;
+        sut.Clear ( ) ;
 
-            sut [ service1 ] = result1 ;
-            sut [ service2 ] = result2 ;
-        }
+        service1.Received ( )
+                .Dispose ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Clear_ForInvoked_SetsCountToZero (
-            GattServicesDictionary            sut ,
-            IGattDeviceServiceWrapper         service ,
-            IGattCharacteristicsResultWrapper result )
-        {
-            sut [ service ] = result ;
+    [ AutoDataTestMethod ]
+    public void Clear_ForInvoked_DisposesService2 (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service1 ,
+        IGattCharacteristicsResultWrapper result1 ,
+        IGattDeviceServiceWrapper service2 ,
+        IGattCharacteristicsResultWrapper result2 )
+    {
+        sut[service1] = result1 ;
+        sut[service2] = result2 ;
 
-            sut.Clear ( ) ;
+        sut.Clear ( ) ;
 
-            sut.Count
-               .Should ( )
-               .Be ( 0 ) ;
-        }
+        service2.Received ( )
+                .Dispose ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Dispose_ForInvoked_DisposesService1 (
-            GattServicesDictionary            sut ,
-            IGattDeviceServiceWrapper         service1 ,
-            IGattCharacteristicsResultWrapper result1 ,
-            IGattDeviceServiceWrapper         service2 ,
-            IGattCharacteristicsResultWrapper result2 )
-        {
-            sut [ service1 ] = result1 ;
-            sut [ service2 ] = result2 ;
+    [ AutoDataTestMethod ]
+    public void Clear_ForInvoked_DisposesValues (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service1 ,
+        IGattCharacteristicsResultWrapper result1 ,
+        IGattDeviceServiceWrapper service2 ,
+        IGattCharacteristicsResultWrapper result2 )
+    {
+        sut[service1] = result1 ;
+        sut[service2] = result2 ;
 
-            sut.Dispose ( ) ;
+        sut.Clear ( ) ;
 
-            service1.Received ( )
-                    .Dispose ( ) ;
-        }
+        result1.Received ( )
+               .Dispose ( ) ;
+        result2.Received ( )
+               .Dispose ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Dispose_ForInvoked_DisposesService2 (
-            GattServicesDictionary            sut ,
-            IGattDeviceServiceWrapper         service1 ,
-            IGattCharacteristicsResultWrapper result1 ,
-            IGattDeviceServiceWrapper         service2 ,
-            IGattCharacteristicsResultWrapper result2 )
-        {
-            sut [ service1 ] = result1 ;
-            sut [ service2 ] = result2 ;
+    [ AutoDataTestMethod ]
+    public void Clear_ForInvoked_SetsCountToZero (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service ,
+        IGattCharacteristicsResultWrapper result )
+    {
+        sut[service] = result ;
 
-            sut.Dispose ( ) ;
+        sut.Clear ( ) ;
 
-            service2.Received ( )
-                    .Dispose ( ) ;
-        }
+        sut.Count
+           .Should ( )
+           .Be ( 0 ) ;
+    }
 
+    [ AutoDataTestMethod ]
+    public void Dispose_ForInvoked_DisposesService1 (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service1 ,
+        IGattCharacteristicsResultWrapper result1 ,
+        IGattDeviceServiceWrapper service2 ,
+        IGattCharacteristicsResultWrapper result2 )
+    {
+        sut[service1] = result1 ;
+        sut[service2] = result2 ;
 
-        [ AutoDataTestMethod ]
-        public void ReadOnlyDictionary_ForInvoked_ContainsService1 (
-            GattServicesDictionary            sut ,
-            IGattDeviceServiceWrapper         service ,
-            IGattCharacteristicsResultWrapper result )
-        {
-            sut [ service ] = result ;
+        sut.Dispose ( ) ;
 
-            sut.ReadOnlyDictionary [ service ]
-               .Should ( )
-               .Be ( result ) ;
-        }
+        service1.Received ( )
+                .Dispose ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Dispose_ForInvoked_DisposesService2 (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service1 ,
+        IGattCharacteristicsResultWrapper result1 ,
+        IGattDeviceServiceWrapper service2 ,
+        IGattCharacteristicsResultWrapper result2 )
+    {
+        sut[service1] = result1 ;
+        sut[service2] = result2 ;
+
+        sut.Dispose ( ) ;
+
+        service2.Received ( )
+                .Dispose ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Dispose_ForInvoked_DisposesValues (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service1 ,
+        IGattCharacteristicsResultWrapper result1 ,
+        IGattDeviceServiceWrapper service2 ,
+        IGattCharacteristicsResultWrapper result2 )
+    {
+        sut[service1] = result1 ;
+        sut[service2] = result2 ;
+
+        sut.Dispose ( ) ;
+
+        result1.Received ( )
+               .Dispose ( ) ;
+        result2.Received ( )
+               .Dispose ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void ReadOnlyDictionary_ForInvoked_ContainsService1 (
+        GattServicesDictionary sut ,
+        IGattDeviceServiceWrapper service ,
+        IGattCharacteristicsResultWrapper result )
+    {
+        sut[service] = result ;
+
+        sut.ReadOnlyDictionary[service]
+           .Should ( )
+           .Be ( result ) ;
     }
 }

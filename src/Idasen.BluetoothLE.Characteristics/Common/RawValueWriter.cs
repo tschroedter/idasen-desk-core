@@ -8,99 +8,89 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common
+namespace Idasen.BluetoothLE.Characteristics.Common ;
+
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class RawValueWriter
+    : IRawValueWriter
 {
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class RawValueWriter
-        : IRawValueWriter
+    public async Task < bool > TryWriteValueAsync (
+        IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
     {
-        public async Task < bool > TryWriteValueAsync (
-            IGattCharacteristicWrapper characteristic ,
-            IBuffer                    buffer )
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( buffer ,
+                                nameof ( buffer ) ) ;
+
+        if ( ! IsSupported ( characteristic ,
+                             GattCharacteristicProperties.Write ) )
         {
-            Guard.ArgumentNotNull ( characteristic ,
-                                    nameof ( characteristic ) ) ;
-            Guard.ArgumentNotNull ( buffer ,
-                                    nameof ( buffer ) ) ;
-
-            if ( SupportsWrite ( characteristic ) )
-            {
-                Log.Information ( $"GattCharacteristic '{characteristic.Uuid}' " +
-                                  "doesn't support 'Write/WritableAuxiliaries/"  +
-                                  "WriteWithoutResponse'" ) ;
-
-                return false ;
-            }
-
-            var status = await characteristic.WriteValueAsync ( buffer ) ;
-
-            return status == GattCommunicationStatus.Success ;
+            LogUnsupported ( characteristic ,
+                             "Write" ) ;
+            return false ;
         }
 
-        public async Task < bool > TryWritableAuxiliariesValueAsync (
-            IGattCharacteristicWrapper characteristic ,
-            IBuffer                    buffer )
+        var status = await characteristic.WriteValueAsync ( buffer ) ;
+
+        return status == GattCommunicationStatus.Success ;
+    }
+
+    public async Task < bool > TryWritableAuxiliariesValueAsync (
+        IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( buffer ,
+                                nameof ( buffer ) ) ;
+
+        if ( ! IsSupported ( characteristic ,
+                             GattCharacteristicProperties.WritableAuxiliaries ) )
         {
-            Guard.ArgumentNotNull ( characteristic ,
-                                    nameof ( characteristic ) ) ;
-            Guard.ArgumentNotNull ( buffer ,
-                                    nameof ( buffer ) ) ;
-
-            if ( SupportsWritableAuxiliaries ( characteristic ) )
-            {
-                Log.Information ( $"GattCharacteristic '{characteristic.Uuid}' " +
-                                  "doesn't support 'Write/WritableAuxiliaries/"  +
-                                  "WriteWithoutResponse'" ) ;
-
-                return false ;
-            }
-
-            var status = await characteristic.WriteValueAsync ( buffer ) ;
-
-            return status == GattCommunicationStatus.Success ;
+            LogUnsupported ( characteristic ,
+                             "WritableAuxiliaries" ) ;
+            return false ;
         }
 
-        public async Task < IGattWriteResultWrapper > TryWriteWithoutResponseAsync (
-            IGattCharacteristicWrapper characteristic ,
-            IBuffer                    buffer )
+        var status = await characteristic.WriteValueAsync ( buffer ) ;
+
+        return status == GattCommunicationStatus.Success ;
+    }
+
+    public async Task < IGattWriteResultWrapper > TryWriteWithoutResponseAsync (
+        IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( buffer ,
+                                nameof ( buffer ) ) ;
+
+        if ( ! IsSupported ( characteristic ,
+                             GattCharacteristicProperties.WriteWithoutResponse ) )
         {
-            Guard.ArgumentNotNull ( characteristic ,
-                                    nameof ( characteristic ) ) ;
-            Guard.ArgumentNotNull ( buffer ,
-                                    nameof ( buffer ) ) ;
-
-            if ( SupportsWriteWithoutResponse ( characteristic ) )
-            {
-                var message = $"GattCharacteristic '{characteristic.Uuid}' " +
-                              "doesn't support 'Write/WritableAuxiliaries/"  +
-                              "WriteWithoutResponse'" ;
-
-                Log.Information ( message ) ;
-
-                return GattWriteResultWrapper.NotSupported ;
-            }
-
-            var status = await characteristic.WriteValueWithResultAsync ( buffer ) ;
-
-            return status ;
+            LogUnsupported ( characteristic ,
+                             "WriteWithoutResponse" ) ;
+            return GattWriteResultWrapper.NotSupported ;
         }
 
-        private static bool SupportsWrite ( IGattCharacteristicWrapper characteristic )
-        {
-            return ( characteristic.CharacteristicProperties & GattCharacteristicProperties.Write ) !=
-                   GattCharacteristicProperties.Write ;
-        }
+        var status = await characteristic.WriteValueWithResultAsync ( buffer ) ;
 
-        private static bool SupportsWritableAuxiliaries ( IGattCharacteristicWrapper characteristic )
-        {
-            return ( characteristic.CharacteristicProperties & GattCharacteristicProperties.WritableAuxiliaries ) !=
-                   GattCharacteristicProperties.WritableAuxiliaries ;
-        }
+        return status ;
+    }
 
-        private static bool SupportsWriteWithoutResponse ( IGattCharacteristicWrapper characteristic )
-        {
-            return ( characteristic.CharacteristicProperties & GattCharacteristicProperties.WriteWithoutResponse ) !=
-                   GattCharacteristicProperties.WriteWithoutResponse ;
-        }
+    private static bool IsSupported ( IGattCharacteristicWrapper characteristic ,
+                                      GattCharacteristicProperties needed )
+    {
+        return ( characteristic.CharacteristicProperties & needed ) == needed ;
+    }
+
+    private static void LogUnsupported ( IGattCharacteristicWrapper characteristic ,
+                                         string capability )
+    {
+        Log.Information ( "GattCharacteristic '{Uuid}' doesn't support '{Capability}'" ,
+                          characteristic.Uuid ,
+                          capability ) ;
     }
 }

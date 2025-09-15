@@ -2,51 +2,48 @@
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+[ ExcludeFromCodeCoverage ]
+public class GattDeviceServicesResultWrapper
+    : IGattDeviceServicesResultWrapper , IDisposable
 {
-    /// <inheritdoc />
-    [ ExcludeFromCodeCoverage ]
-    public class GattDeviceServicesResultWrapper
-        : IGattDeviceServicesResultWrapper, IDisposable
+    public delegate IGattDeviceServicesResultWrapper Factory ( GattDeviceServicesResult service ) ;
+
+    private readonly GattDeviceServicesResult _service ;
+
+    public GattDeviceServicesResultWrapper (
+        GattDeviceServiceWrapper.Factory serviceWrapperFactory ,
+        GattDeviceServicesResult service )
     {
-        public GattDeviceServicesResultWrapper (
-            GattDeviceServiceWrapper.Factory serviceWrapperFactory ,
-            GattDeviceServicesResult         service )
-        {
-            Guard.ArgumentNotNull ( serviceWrapperFactory , nameof ( serviceWrapperFactory ) ) ;
-            Guard.ArgumentNotNull ( service , nameof ( service ) ) ;
+        Guard.ArgumentNotNull ( serviceWrapperFactory ,
+                                nameof ( serviceWrapperFactory ) ) ;
+        Guard.ArgumentNotNull ( service ,
+                                nameof ( service ) ) ;
 
-            _service               = service ;
-            _serviceWrapperFactory = serviceWrapperFactory ;
+        _service = service ;
+        var serviceWrapperFactory1 = serviceWrapperFactory ;
 
-            var services = _service.Services ?? Array.Empty<GattDeviceService>();
+        var services = _service.Services ?? [] ;
 
-            _services = services
-                                .Select ( s => _serviceWrapperFactory ( s ) )
-                                .ToArray ( ) ;
-        }
-
-        /// <inheritdoc />
-        public GattCommunicationStatus Status => _service.Status ;
-
-        /// <inheritdoc />
-        public IEnumerable < IGattDeviceServiceWrapper > Services => _services ;
-
-        /// <inheritdoc />
-        public byte ? ProtocolError => _service.ProtocolError ;
-
-        public delegate IGattDeviceServicesResultWrapper Factory ( GattDeviceServicesResult service ) ;
-
-        public void Dispose ( )
-        {
-            foreach ( var s in _services )
-            {
-                s.Dispose ( ) ;
-            }
-        }
-
-        private readonly GattDeviceServicesResult                  _service ;
-        private readonly GattDeviceServiceWrapper.Factory          _serviceWrapperFactory ;
-        private readonly IEnumerable < IGattDeviceServiceWrapper > _services ;
+        Services = services.Select ( s => serviceWrapperFactory1 ( s ) )
+                           .ToArray ( ) ;
     }
+
+    public void Dispose ( )
+    {
+        foreach (var s in Services)
+        {
+            s.Dispose ( ) ;
+        }
+    }
+
+    /// <inheritdoc />
+    public GattCommunicationStatus Status => _service.Status ;
+
+    /// <inheritdoc />
+    public IEnumerable < IGattDeviceServiceWrapper > Services { get ; }
+
+    /// <inheritdoc />
+    public byte? ProtocolError => _service.ProtocolError ;
 }

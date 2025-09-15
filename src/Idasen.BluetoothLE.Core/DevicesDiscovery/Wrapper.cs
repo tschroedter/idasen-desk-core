@@ -8,115 +8,115 @@ using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using AdvertisementWatcher = Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher ;
 using ExcludeFromCodeCoverage = System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute ;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+
+// ReSharper disable once InconsistentNaming
+[ ExcludeFromCodeCoverage ]
+[ Intercept ( typeof ( LogAspect ) ) ]
+public sealed class Wrapper
+    : IWrapper
 {
-    // ReSharper disable once InconsistentNaming
-    [ ExcludeFromCodeCoverage ]
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public sealed class Wrapper
-        : IWrapper
+    private readonly Func < DateTimeOffset , IDateTimeOffset > _dateTimeFactory ;
+    private readonly IDeviceFactory _deviceFactory ;
+    private readonly ISubject < IDevice > _received ;
+    private readonly IStatusMapper _statusMapper ;
+    private readonly ISubject < DateTime > _stopped ;
+    private readonly AdvertisementWatcher _watcher ;
+
+    public Wrapper ( IScheduler scheduler ,
+                     IDeviceFactory deviceFactory ,
+                     Func < DateTimeOffset , IDateTimeOffset > dateTimeFactory ,
+                     ISubject < IDevice > received ,
+                     ISubject < DateTime > stopped ,
+                     IStatusMapper statusMapper )
     {
-        public Wrapper ( IScheduler                                scheduler ,
-                         IDeviceFactory                            deviceFactory ,
-                         Func < DateTimeOffset , IDateTimeOffset > dateTimeFactory ,
-                         ISubject < IDevice >                      received ,
-                         ISubject < DateTime >                     stopped ,
-                         IStatusMapper                             statusMapper )
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( deviceFactory ,
+                                nameof ( deviceFactory ) ) ;
+        Guard.ArgumentNotNull ( dateTimeFactory ,
+                                nameof ( dateTimeFactory ) ) ;
+        Guard.ArgumentNotNull ( received ,
+                                nameof ( received ) ) ;
+        Guard.ArgumentNotNull ( stopped ,
+                                nameof ( stopped ) ) ;
+        Guard.ArgumentNotNull ( statusMapper ,
+                                nameof ( statusMapper ) ) ;
+
+        _deviceFactory = deviceFactory ;
+        _dateTimeFactory = dateTimeFactory ;
+        _received = received ;
+        _stopped = stopped ;
+        _statusMapper = statusMapper ;
+
+        _watcher = new AdvertisementWatcher
         {
-            Guard.ArgumentNotNull ( scheduler ,
-                                    nameof ( scheduler ) ) ;
-            Guard.ArgumentNotNull ( deviceFactory ,
-                                    nameof ( deviceFactory ) ) ;
-            Guard.ArgumentNotNull ( dateTimeFactory ,
-                                    nameof ( dateTimeFactory ) ) ;
-            Guard.ArgumentNotNull ( received ,
-                                    nameof ( received ) ) ;
-            Guard.ArgumentNotNull ( stopped ,
-                                    nameof ( stopped ) ) ;
-            Guard.ArgumentNotNull ( statusMapper ,
-                                    nameof ( statusMapper ) ) ;
+            ScanningMode = BluetoothLEScanningMode.Active
+        } ;
+    }
 
-            _deviceFactory   = deviceFactory ;
-            _dateTimeFactory = dateTimeFactory ;
-            _received        = received ;
-            _stopped         = stopped ;
-            _statusMapper    = statusMapper ;
+    /// <inheritdoc />
+    public IObservable < DateTime > Stopped => _stopped ;
 
-            _watcher = new AdvertisementWatcher
-                       {
-                           ScanningMode = BluetoothLEScanningMode.Active
-                       } ;
-        }
+    /// <inheritdoc />
+    public IObservable < IDevice > Received => _received ;
 
-        /// <inheritdoc />
-        public IObservable < DateTime > Stopped => _stopped ;
+    /// <inheritdoc />
+    public Status Status => _statusMapper.Map ( _watcher.Status ) ;
 
-        /// <inheritdoc />
-        public IObservable < IDevice > Received => _received ;
+    /// <inheritdoc />
+    public void Start ( )
+    {
+        Subscribe ( ) ;
 
-        /// <inheritdoc />
-        public Status Status => _statusMapper.Map ( _watcher.Status ) ;
+        _watcher.Start ( ) ;
+    }
 
-        /// <inheritdoc />
-        public void Start ( )
-        {
-            Subscribe ( ) ;
+    /// <inheritdoc />
+    public void Stop ( )
+    {
+        _watcher.Stop ( ) ;
 
-            _watcher.Start ( ) ;
-        }
+        Unsubscribe ( ) ;
+    }
 
-        /// <inheritdoc />
-        public void Stop ( )
-        {
-            _watcher.Stop ( ) ;
+    /// <inheritdoc />
+    public void Dispose ( )
+    {
+        Unsubscribe ( ) ;
+        _watcher.Stop ( ) ;
+    }
 
-            Unsubscribe ( ) ;
-        }
+    private void Subscribe ( )
+    {
+        Unsubscribe ( ) ;
 
-        /// <inheritdoc />
-        public void Dispose ( )
-        {
-            Unsubscribe ( ) ;
-        }
+        _watcher.Received += OnReceivedHandler ;
+        _watcher.Stopped += OnStoppedHandler ;
+    }
 
-        private void Subscribe ( )
-        {
-            Unsubscribe ( ) ;
+    private void Unsubscribe ( )
+    {
+        _watcher.Received -= OnReceivedHandler ;
+        _watcher.Stopped -= OnStoppedHandler ;
+    }
 
-            _watcher.Received += OnReceivedHandler ;
-            _watcher.Stopped  += OnStoppedHandler ;
-        }
+    private void OnStoppedHandler ( AdvertisementWatcher sender ,
+                                    BluetoothLEAdvertisementWatcherStoppedEventArgs args )
+    {
+        _stopped.OnNext ( DateTime.Now ) ;
+    }
 
-        private void Unsubscribe ( )
-        {
-            _watcher.Received -= OnReceivedHandler ;
-            _watcher.Stopped  -= OnStoppedHandler ;
-        }
+    private void OnReceivedHandler ( BluetoothLEAdvertisementWatcher sender ,
+                                     BluetoothLEAdvertisementReceivedEventArgs args )
+    {
+        var dateTimeOffset = _dateTimeFactory.Invoke ( args.Timestamp ) ;
 
-        private void OnStoppedHandler ( AdvertisementWatcher                            sender ,
-                                        BluetoothLEAdvertisementWatcherStoppedEventArgs args )
-        {
-            _stopped.OnNext ( DateTime.Now ) ;
-        }
+        var device = _deviceFactory.Create ( dateTimeOffset ,
+                                             args.BluetoothAddress ,
+                                             args.Advertisement.LocalName ,
+                                             args.RawSignalStrengthInDBm ) ;
 
-        private void OnReceivedHandler ( BluetoothLEAdvertisementWatcher           sender ,
-                                         BluetoothLEAdvertisementReceivedEventArgs args )
-        {
-            var dateTimeOffset = _dateTimeFactory.Invoke ( args.Timestamp ) ;
-
-            var device = _deviceFactory.Create ( dateTimeOffset ,
-                                                 args.BluetoothAddress ,
-                                                 args.Advertisement.LocalName ,
-                                                 args.RawSignalStrengthInDBm ) ;
-
-            _received.OnNext ( device ) ;
-        }
-
-        private readonly Func < DateTimeOffset , IDateTimeOffset > _dateTimeFactory ;
-        private readonly IDeviceFactory                            _deviceFactory ;
-        private readonly ISubject < IDevice >                      _received ;
-        private readonly IStatusMapper                             _statusMapper ;
-        private readonly ISubject < DateTime >                     _stopped ;
-        private readonly AdvertisementWatcher                      _watcher ;
+        _received.OnNext ( device ) ;
     }
 }

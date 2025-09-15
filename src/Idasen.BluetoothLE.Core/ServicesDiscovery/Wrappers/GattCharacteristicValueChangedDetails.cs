@@ -1,22 +1,21 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+public class GattCharacteristicValueChangedDetails
 {
-    public class GattCharacteristicValueChangedDetails
+    public GattCharacteristicValueChangedDetails (
+        Guid uuid ,
+        IEnumerable < byte > value ,
+        DateTimeOffset timestamp )
     {
-        public GattCharacteristicValueChangedDetails (
-            Guid                 uuid ,
-            IEnumerable < byte > value ,
-            DateTimeOffset       timestamp )
-        {
-            Guard.ArgumentNotNull ( value ,
-                                    nameof ( value ) ) ;
+        Guard.ArgumentNotNull ( value ,
+                                nameof ( value ) ) ;
 
-            Uuid      = uuid ;
-            Value     = value ;
-            Timestamp = timestamp ;
-        }
-
-        public Guid                 Uuid      { get ; }
-        public IEnumerable < byte > Value     { get ; }
-        public DateTimeOffset       Timestamp { get ; }
+        Uuid = uuid ;
+        Value = value ;
+        Timestamp = timestamp ;
     }
+
+    public Guid Uuid { get ; }
+    public IEnumerable < byte > Value { get ; }
+    public DateTimeOffset Timestamp { get ; }
 }

@@ -1,11 +1,10 @@
 ﻿using Idasen.BluetoothLE.Common.Tests ;
 
-namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester
+namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
+
+[ TestClass ]
+public class RawValueToHeightAndSpeedConverterConstructorNullTests
+    : BaseConstructorNullTester < RawValueToHeightAndSpeedConverter >
 {
-    [ TestClass ]
-    public class RawValueToHeightAndSpeedConverterConstructorNullTests
-        : BaseConstructorNullTester < RawValueToHeightAndSpeedConverter >
-    {
-        public override int NumberOfConstructorsPassed { get ; } = 1 ;
-    }
+    public override int NumberOfConstructorsPassed { get ; } = 1 ;
 }

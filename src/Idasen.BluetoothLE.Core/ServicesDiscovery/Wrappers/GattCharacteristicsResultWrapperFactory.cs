@@ -4,33 +4,32 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+/// <inheritdoc />
+[ ExcludeFromCodeCoverage ]
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class GattCharacteristicsResultWrapperFactory
+    : IGattCharacteristicsResultWrapperFactory
 {
-    /// <inheritdoc />
-    [ ExcludeFromCodeCoverage ]
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class GattCharacteristicsResultWrapperFactory
-        : IGattCharacteristicsResultWrapperFactory
+    private readonly GattCharacteristicsResultWrapper.Factory _factory ;
+
+    public GattCharacteristicsResultWrapperFactory (
+        GattCharacteristicsResultWrapper.Factory factory )
     {
-        public GattCharacteristicsResultWrapperFactory (
-            GattCharacteristicsResultWrapper.Factory factory )
-        {
-            Guard.ArgumentNotNull ( factory ,
-                                    nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
-            _factory = factory ;
-        }
+        _factory = factory ;
+    }
 
-        /// <inheritdoc />
-        public IGattCharacteristicsResultWrapper Create (
-            GattCharacteristicsResult result )
-        {
-            Guard.ArgumentNotNull ( result ,
-                                    nameof ( result ) ) ;
+    /// <inheritdoc />
+    public IGattCharacteristicsResultWrapper Create (
+        GattCharacteristicsResult result )
+    {
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
-            return _factory ( result ) ;
-        }
-
-        private readonly GattCharacteristicsResultWrapper.Factory _factory ;
+        return _factory ( result ) ;
     }
 }

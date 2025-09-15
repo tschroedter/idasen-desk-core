@@ -7,247 +7,246 @@ using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak.Tests
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
+[ AutoDataTestClass ]
+public class DeskCommandExecutorTests
 {
-    [ AutoDataTestClass ]
-    public class DeskCommandExecutorTests
+    [ AutoDataTestMethod ]
+    public void Constructor_ForLoggerNull_Throws (
+        Lazy < DeskCommandExecutor > sut ,
+        [ BeNull ] ILogger logger )
     {
-        [ AutoDataTestMethod ]
-        public void Constructor_ForLoggerNull_Throws (
-            Lazy < DeskCommandExecutor > sut ,
-            [ BeNull ] ILogger           logger )
-        {
-            // ReSharper disable once UnusedVariable
-            var action = ( ) =>
-                         {
-                             var test = sut.Value ;
-                         } ;
+        // ReSharper disable once UnusedVariable
+        var action = ( ) =>
+                     {
+                         var test = sut.Value ;
+                     } ;
 
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( nameof ( logger ) ) ;
-        }
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( nameof ( logger ) ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Constructor_ForProviderNull_Throws (
-            Lazy < DeskCommandExecutor >     sut ,
-            [ BeNull ] IDeskCommandsProvider provider )
-        {
-            // ReSharper disable once UnusedVariable
-            var action = ( ) =>
-                         {
-                             var test = sut.Value ;
-                         } ;
+    [ AutoDataTestMethod ]
+    public void Constructor_ForProviderNull_Throws (
+        Lazy < DeskCommandExecutor > sut ,
+        [ BeNull ] IDeskCommandsProvider provider )
+    {
+        // ReSharper disable once UnusedVariable
+        var action = ( ) =>
+                     {
+                         var test = sut.Value ;
+                     } ;
 
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( nameof ( provider ) ) ;
-        }
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( nameof ( provider ) ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Constructor_ForControlNull_Throws (
-            Lazy < DeskCommandExecutor > sut ,
-            [ BeNull ] IControl          control )
-        {
-            // ReSharper disable once UnusedVariable
-            var action = ( ) =>
-                         {
-                             var test = sut.Value ;
-                         } ;
+    [ AutoDataTestMethod ]
+    public void Constructor_ForControlNull_Throws (
+        Lazy < DeskCommandExecutor > sut ,
+        [ BeNull ] IControl control )
+    {
+        // ReSharper disable once UnusedVariable
+        var action = ( ) =>
+                     {
+                         var test = sut.Value ;
+                     } ;
 
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( nameof ( control ) ) ;
-        }
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( nameof ( control ) ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Up_ForInvokedWithUnknownCommand_ReturnsFalse (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider ,
-            [ Freeze ] IControl              control )
-        {
-            provider.TryGetValue ( DeskCommands.MoveUp ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = null ;
+    [ AutoDataTestMethod ]
+    public async Task Up_ForInvokedWithUnknownCommand_ReturnsFalse (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider ,
+        [ Freeze ] IControl control )
+    {
+        provider.TryGetValue ( DeskCommands.MoveUp ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = null ;
 
-                                   return false ;
-                               } ) ;
-            await sut.Up ( ) ;
+                               return false ;
+                           } ) ;
+        await sut.Up ( ) ;
 
-            await control.DidNotReceive ( )
-                         .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
-        }
+        await control.DidNotReceive ( )
+                     .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Up_ForInvoked_ReturnsTrueForSuccess (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider ,
-            [ Freeze ] IControl              control )
-        {
-            var bytes = new byte [ ] { 0 , 1 } ;
+    [ AutoDataTestMethod ]
+    public async Task Up_ForInvoked_ReturnsTrueForSuccess (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider ,
+        [ Freeze ] IControl control )
+    {
+        var bytes = new byte [ ] { 0 , 1 } ;
 
-            provider.TryGetValue ( DeskCommands.MoveUp ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = bytes ;
+        provider.TryGetValue ( DeskCommands.MoveUp ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = bytes ;
 
-                                   return true ;
-                               } ) ;
-            var actual = await sut.Up ( ) ;
+                               return true ;
+                           } ) ;
+        var actual = await sut.Up ( ) ;
 
-            actual.Should ( )
-                  .BeTrue ( ) ;
-        }
+        actual.Should ( )
+              .BeTrue ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Up_ForInvoked_CallsControl (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider ,
-            [ Freeze ] IControl              control )
-        {
-            var bytes = new byte [ ] { 0 , 1 } ;
+    [ AutoDataTestMethod ]
+    public async Task Up_ForInvoked_CallsControl (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider ,
+        [ Freeze ] IControl control )
+    {
+        var bytes = new byte [ ] { 0 , 1 } ;
 
-            provider.TryGetValue ( DeskCommands.MoveUp ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = bytes ;
+        provider.TryGetValue ( DeskCommands.MoveUp ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = bytes ;
 
-                                   return true ;
-                               } ) ;
-            await sut.Up ( ) ;
+                               return true ;
+                           } ) ;
+        await sut.Up ( ) ;
 
-            await control.Received ( )
-                         .TryWriteRawControl2 ( bytes ) ;
-        }
+        await control.Received ( )
+                     .TryWriteRawControl2 ( bytes ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Down_ForInvokedWithUnknownCommand_ReturnsFalse (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider ,
-            [ Freeze ] IControl              control )
-        {
-            provider.TryGetValue ( DeskCommands.MoveDown ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = null ;
+    [ AutoDataTestMethod ]
+    public async Task Down_ForInvokedWithUnknownCommand_ReturnsFalse (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider ,
+        [ Freeze ] IControl control )
+    {
+        provider.TryGetValue ( DeskCommands.MoveDown ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = null ;
 
-                                   return false ;
-                               } ) ;
-            await sut.Down ( ) ;
+                               return false ;
+                           } ) ;
+        await sut.Down ( ) ;
 
-            await control.DidNotReceive ( )
-                         .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
-        }
+        await control.DidNotReceive ( )
+                     .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Down_ForInvoked_ReturnsTrueForSuccess (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider )
-        {
-            var bytes = new byte [ ] { 0 , 1 } ;
+    [ AutoDataTestMethod ]
+    public async Task Down_ForInvoked_ReturnsTrueForSuccess (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider )
+    {
+        var bytes = new byte [ ] { 0 , 1 } ;
 
-            provider.TryGetValue ( DeskCommands.MoveDown ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = bytes ;
+        provider.TryGetValue ( DeskCommands.MoveDown ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = bytes ;
 
-                                   return true ;
-                               } ) ;
-            var actual = await sut.Down ( ) ;
+                               return true ;
+                           } ) ;
+        var actual = await sut.Down ( ) ;
 
-            actual.Should ( )
-                  .BeTrue ( ) ;
-        }
+        actual.Should ( )
+              .BeTrue ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Down_ForInvoked_CallsControl (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider ,
-            [ Freeze ] IControl              control )
-        {
-            var bytes = new byte [ ] { 0 , 1 } ;
+    [ AutoDataTestMethod ]
+    public async Task Down_ForInvoked_CallsControl (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider ,
+        [ Freeze ] IControl control )
+    {
+        var bytes = new byte [ ] { 0 , 1 } ;
 
-            provider.TryGetValue ( DeskCommands.MoveDown ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = bytes ;
+        provider.TryGetValue ( DeskCommands.MoveDown ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = bytes ;
 
-                                   return true ;
-                               } ) ;
-            await sut.Down ( ) ;
+                               return true ;
+                           } ) ;
+        await sut.Down ( ) ;
 
-            await control.Received ( )
-                         .TryWriteRawControl2 ( bytes ) ;
-        }
+        await control.Received ( )
+                     .TryWriteRawControl2 ( bytes ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Stop_ForInvokedWithUnknownCommand_ReturnsFalse (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider ,
-            [ Freeze ] IControl              control )
-        {
-            provider.TryGetValue ( DeskCommands.MoveStop ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = null ;
+    [ AutoDataTestMethod ]
+    public async Task Stop_ForInvokedWithUnknownCommand_ReturnsFalse (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider ,
+        [ Freeze ] IControl control )
+    {
+        provider.TryGetValue ( DeskCommands.MoveStop ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = null ;
 
-                                   return false ;
-                               } ) ;
-            await sut.Stop ( ) ;
+                               return false ;
+                           } ) ;
+        await sut.Stop ( ) ;
 
-            await control.DidNotReceive ( )
-                         .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
-        }
+        await control.DidNotReceive ( )
+                     .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Stop_ForInvoked_ReturnsTrueForSuccess (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider )
-        {
-            var bytes = new byte [ ] { 0 , 1 } ;
+    [ AutoDataTestMethod ]
+    public async Task Stop_ForInvoked_ReturnsTrueForSuccess (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider )
+    {
+        var bytes = new byte [ ] { 0 , 1 } ;
 
-            provider.TryGetValue ( DeskCommands.MoveStop ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = bytes ;
+        provider.TryGetValue ( DeskCommands.MoveStop ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = bytes ;
 
-                                   return true ;
-                               } ) ;
-            var actual = await sut.Stop ( ) ;
+                               return true ;
+                           } ) ;
+        var actual = await sut.Stop ( ) ;
 
-            actual.Should ( )
-                  .BeTrue ( ) ;
-        }
+        actual.Should ( )
+              .BeTrue ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task Stop_ForInvoked_CallsControl (
-            DeskCommandExecutor              sut ,
-            [ Freeze ] IDeskCommandsProvider provider ,
-            [ Freeze ] IControl              control )
-        {
-            var bytes = new byte [ ] { 0 , 1 } ;
+    [ AutoDataTestMethod ]
+    public async Task Stop_ForInvoked_CallsControl (
+        DeskCommandExecutor sut ,
+        [ Freeze ] IDeskCommandsProvider provider ,
+        [ Freeze ] IControl control )
+    {
+        var bytes = new byte [ ] { 0 , 1 } ;
 
-            provider.TryGetValue ( DeskCommands.MoveStop ,
-                                   out Arg.Any < IEnumerable < byte > > ( ) )
-                    .Returns ( x =>
-                               {
-                                   x [ 1 ] = bytes ;
+        provider.TryGetValue ( DeskCommands.MoveStop ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
+                               x[1] = bytes ;
 
-                                   return true ;
-                               } ) ;
-            await sut.Stop ( ) ;
+                               return true ;
+                           } ) ;
+        await sut.Stop ( ) ;
 
-            await control.Received ( )
-                         .TryWriteRawControl2 ( bytes ) ;
-        }
+        await control.Received ( )
+                     .TryWriteRawControl2 ( bytes ) ;
     }
 }

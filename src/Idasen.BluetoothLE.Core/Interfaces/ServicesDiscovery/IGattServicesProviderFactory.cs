@@ -1,9 +1,8 @@
 ﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+
+public interface IGattServicesProviderFactory
 {
-    public interface IGattServicesProviderFactory
-    {
-        IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper ) ;
-    }
+    IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper ) ;
 }

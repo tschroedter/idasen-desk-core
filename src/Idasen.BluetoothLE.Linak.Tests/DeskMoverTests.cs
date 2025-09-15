@@ -8,444 +8,456 @@ using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak.Tests
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
+[ TestClass ]
+public class DeskMoverTests : IDisposable
 {
-    [ TestClass ]
-    public class DeskMoverTests
+    private const uint InitialHeight = 100u ;
+    private const uint DefaultTargetHeight = 1500 ;
+    private const uint DefaultHeight = 1000 ;
+    private const int DefaultSpeed = 200 ;
+
+    private IStoppingHeightCalculator _calculator = null! ;
+    private HeightSpeedDetails _details1 = null! ;
+    private IDisposable _disposable = null! ;
+    private IInitialHeightProvider _disposableProvider = null! ;
+    private IDeskCommandExecutor _executor = null! ;
+    private IObservable < uint > _finished = null! ;
+    private IDeskHeightAndSpeed _heightAndSpeed = null! ;
+    private IDeskHeightMonitor _heightMonitor = null! ;
+
+    private ILogger _logger = null! ;
+    private IDeskMovementMonitor _monitor = null! ;
+    private IDeskMovementMonitorFactory _monitorFactory = null! ;
+    private IInitialHeightProvider _provider = null! ;
+    private IInitialHeightAndSpeedProviderFactory _providerFactory = null! ;
+    private TestScheduler _scheduler = null! ;
+    private Subject < uint > _subjectFinished = null! ;
+    private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
+
+    [ TestInitialize ]
+    public void Initialize ( )
     {
-        [ TestInitialize ]
-        public void Initialize ( )
-        {
-            _logger                = Substitute.For < ILogger > ( ) ;
-            _scheduler             = new TestScheduler ( ) ;
-            _providerFactory       = Substitute.For < IInitialHeightAndSpeedProviderFactory > ( ) ;
-            _monitorFactory        = Substitute.For < IDeskMovementMonitorFactory > ( ) ;
-            _executor              = Substitute.For < IDeskCommandExecutor > ( ) ;
-            _heightAndSpeed        = Substitute.For < IDeskHeightAndSpeed > ( ) ;
-            _calculator            = Substitute.For < IStoppingHeightCalculator > ( ) ;
-            _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
-            _subjectFinished       = new Subject < uint > ( ) ;
-            _provider              = Substitute.For < IInitialHeightProvider > ( ) ;
-            _heightMonitor         = Substitute.For < IDeskHeightMonitor > ( ) ;
-
-            _providerFactory.Create ( Arg.Any < IDeskCommandExecutor > ( ) ,
-                                      Arg.Any < IDeskHeightAndSpeed > ( ) )
-                            .Returns ( _provider ) ;
-
-            _provider.Finished
-                     .Returns ( _subjectFinished ) ;
-
-            _heightAndSpeed.HeightAndSpeedChanged
-                           .Returns ( _subjectHeightAndSpeed ) ;
-            _heightAndSpeed.Height
-                           .Returns ( DefaultHeight ) ;
-            _heightAndSpeed.Speed
-                           .Returns ( DefaultSpeed ) ;
-
-            _details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                                 123u ,
-                                                 321 ) ;
-
-            _heightMonitor.IsHeightChanging ( )
-                          .Returns ( true ) ;
-
-            _monitor = Substitute.For < IDeskMovementMonitor > ( ) ;
-
-            _monitorFactory.Create ( _heightAndSpeed )
-                           .Returns ( _monitor ) ;
-
-            _finished = Substitute.For < ISubject < uint > > ( ) ;
-
-            _disposable = Substitute.For < IDisposable > ( ) ;
-
-            _finished.Subscribe ( Arg.Any < IObserver < uint > > ( ) )
-                     .Returns ( _disposable ) ;
-
-            _disposableProvider = Substitute.For < IInitialHeightProvider > ( ) ;
-            _disposableProvider.Finished
-                               .Returns ( _finished ) ;
-        }
-
-        private DeskMover CreateSut ( )
-        {
-            return new DeskMover ( _logger ,
-                                   _scheduler ,
-                                   _providerFactory ,
-                                   _monitorFactory ,
-                                   _executor ,
-                                   _heightAndSpeed ,
-                                   _calculator ,
-                                   _subjectFinished ,
-                                   _heightMonitor ) ;
-        }
-
-        private DeskMover CreateSutInitialized ( )
-        {
-            var sut = CreateSut ( ) ;
-
-            sut.Initialize ( ) ;
-
-            return sut ;
-        }
-
-        private DeskMover CreateSutWithTargetHeight ( )
-        {
-            var sut = CreateSutInitialized ( ) ;
-
-            sut.TargetHeight = DefaultTargetHeight ;
-
-            return sut ;
-        }
-
-        private DeskMover CreateSutWithIsAllowedToMoveIsTrue ( )
-        {
-            var sut = CreateSutWithTargetHeight ( ) ;
-
-            _subjectFinished.OnNext ( InitialHeight ) ;
-
-            _scheduler.Start ( ) ;
-
-            return sut ;
-        }
-
-        [ TestMethod ]
-        public void StartAfterRefreshed_ForInvoked_SetsHeight ( )
-        {
-            CreateSutWithIsAllowedToMoveIsTrue ( ).Height
-                                                  .Should ( )
-                                                  .Be ( DefaultHeight ) ;
-        }
-
-        [ TestMethod ]
-        public void StartAfterRefreshed_ForInvoked_SetsSpeed ( )
-        {
-            CreateSutWithIsAllowedToMoveIsTrue ( ).Speed
-                                                  .Should ( )
-                                                  .Be ( DefaultSpeed ) ;
-        }
-
-        [ TestMethod ]
-        public void StartAfterRefreshed_ForInvoked_CallsCalculator ( )
-        {
-            using var _ = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            using var scope = new AssertionScope ( ) ;
-
-            _calculator.Height
-                       .Should ( )
-                       .Be ( DefaultHeight ,
-                             "Height" ) ;
-            _calculator.Speed
-                       .Should ( )
-                       .Be ( DefaultSpeed ,
-                             "Speed" ) ;
-
-            _calculator.StartMovingIntoDirection
-                       .Should ( )
-                       .Be ( Direction.None ,
-                             "StartMovingIntoDirection" ) ;
-
-            _calculator.TargetHeight
-                       .Should ( )
-                       .Be ( DefaultTargetHeight ,
-                             "TargetHeight" ) ;
-
-            _calculator.Received ( )
-                       .Calculate ( ) ;
-        }
-
-        [ TestMethod ]
-        public void StartAfterRefreshed_ForInvoked_SetsIsAllowedToMoveToTrue ( )
-        {
-            CreateSutWithIsAllowedToMoveIsTrue ( ).IsAllowedToMove
-                                                  .Should ( )
-                                                  .BeTrue ( ) ;
-        }
-
-        [ TestMethod ]
-        public void StartAfterRefreshed_ForIsAllowedToMoveIsTrueAndSuccess_SetsStartMovingIntoDirection ( )
-        {
-            CreateSutWithIsAllowedToMoveIsTrue ( ).StartMovingIntoDirection
-                                                  .Should ( )
-                                                  .Be ( _calculator.MoveIntoDirection ) ;
-        }
-
-        [ TestMethod ]
-        public void Start_Invoked_CallsHeightMonitorResets ( )
-        {
-            _executor.Up ( )
-                     .Returns ( true ) ;
-
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            _heightMonitor.Received ( )
-                          .Reset ( ) ;
-        }
-
-        [ TestMethod ]
-        public async Task Up_ForIsAllowedToMoveIsTrueAndSuccess_ReturnsTrue ( )
-        {
-            _executor.Up ( )
-                     .Returns ( true ) ;
-
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            var actual = await sut.Up ( ) ;
-
-            actual.Should ( )
-                  .BeTrue ( ) ;
-        }
-
-        [ TestMethod ]
-        public async Task Up_ForIsAllowedToMoveIsTrueAndFailed_ReturnsFalse ( )
-        {
-            _executor.Up ( )
-                     .Returns ( false ) ;
-
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            var actual = await sut.Up ( ) ;
-
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
-
-        [ TestMethod ]
-        public void Height_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesHeight ( )
-        {
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            _subjectHeightAndSpeed.OnNext ( _details1 ) ;
-
-            _scheduler.Start ( ) ;
-
-            sut.Height
-               .Should ( )
-               .Be ( _details1.Height ) ;
-        }
-
-        [ TestMethod ]
-        public void Speed_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesSpeed ( )
-        {
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            _subjectHeightAndSpeed.OnNext ( _details1 ) ;
-
-            _scheduler.Start ( ) ;
-
-            sut.Speed
-               .Should ( )
-               .Be ( _details1.Speed ) ;
-        }
-
-        [TestMethod]
-        public async Task OnTimerElapsed_ForTimerIsNull_DoNotMovesUp()
-        {
-            _calculator.MoveIntoDirection
-                       .Returns(Direction.Up);
-
-            using var sut = CreateSutInitialized();
-
-            await sut.Stop ( ) ; // make sure timer is null
-
-            sut.OnTimerElapsed(1);
-
-            await _executor.DidNotReceive ( )
-                           .Up ( ) ;
-        }
-
-        [ TestMethod ]
-        public void OnTimerElapsed_ForMoveIntoDirectionDown_MovesDown ( )
-        {
-            _calculator.MoveIntoDirection
-                       .Returns ( Direction.Down ) ;
-
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            sut.OnTimerElapsed ( 1 ) ;
-
-            _executor.Received ( )
-                     .Down ( ) ;
-        }
-
-        [ TestMethod ]
-        public void OnTimerElapsed_ForMoveIntoDirectionNone_MoveStop ( )
-        {
-            _calculator.MoveIntoDirection
-                       .Returns ( Direction.None ) ;
-
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            sut.OnTimerElapsed ( 1 ) ;
-
-            using var scope = new AssertionScope ( ) ;
-
-            _executor.Received ( )
-                     .Stop ( ) ;
-        }
-
-        [ TestMethod ]
-        public void OnTimerElapsed_ForIsAllowedToMoveIsFalse_DoesNotMove ( )
-        {
-            _calculator.MoveIntoDirection
-                       .Returns ( Direction.None ) ;
-
-            using var sut = CreateSutInitialized ( ) ;
-
-            sut.OnTimerElapsed ( 1 ) ;
-
-            using var scope = new AssertionScope ( ) ;
-
-            _executor.DidNotReceive ( )
+        _logger = Substitute.For < ILogger > ( ) ;
+        _scheduler = new TestScheduler ( ) ;
+        _providerFactory = Substitute.For < IInitialHeightAndSpeedProviderFactory > ( ) ;
+        _monitorFactory = Substitute.For < IDeskMovementMonitorFactory > ( ) ;
+        _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
+        _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
+        _calculator = Substitute.For < IStoppingHeightCalculator > ( ) ;
+        _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
+        _subjectFinished = new Subject < uint > ( ) ;
+        _provider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _heightMonitor = Substitute.For < IDeskHeightMonitor > ( ) ;
+
+        _providerFactory.Create ( Arg.Any < IDeskCommandExecutor > ( ) ,
+                                  Arg.Any < IDeskHeightAndSpeed > ( ) )
+                        .Returns ( _provider ) ;
+
+        _provider.Finished
+                 .Returns ( _subjectFinished ) ;
+
+        _heightAndSpeed.HeightAndSpeedChanged
+                       .Returns ( _subjectHeightAndSpeed ) ;
+        _heightAndSpeed.Height
+                       .Returns ( DefaultHeight ) ;
+        _heightAndSpeed.Speed
+                       .Returns ( DefaultSpeed ) ;
+
+        _details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                             123u ,
+                                             321 ) ;
+
+        _heightMonitor.IsHeightChanging ( )
+                      .Returns ( true ) ;
+
+        _monitor = Substitute.For < IDeskMovementMonitor > ( ) ;
+
+        _monitorFactory.Create ( _heightAndSpeed )
+                       .Returns ( _monitor ) ;
+
+        _finished = Substitute.For < ISubject < uint > > ( ) ;
+
+        // initialise the subscription disposable used in assertions
+        _disposable = Substitute.For < IDisposable > ( ) ;
+        _finished.Subscribe ( null! )
+                 .ReturnsForAnyArgs ( _disposable ) ;
+
+        _disposableProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _disposableProvider.Finished
+                           .Returns ( _finished ) ;
+    }
+
+    private DeskMover CreateSut ( )
+    {
+        return new DeskMover ( _logger ,
+                               _scheduler ,
+                               _providerFactory ,
+                               _monitorFactory ,
+                               _executor ,
+                               _heightAndSpeed ,
+                               _calculator ,
+                               _subjectFinished ,
+                               _heightMonitor ) ;
+    }
+
+    private DeskMover CreateSutInitialized ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        sut.Initialize ( ) ;
+
+        return sut ;
+    }
+
+    private DeskMover CreateSutWithTargetHeight ( )
+    {
+        var sut = CreateSutInitialized ( ) ;
+
+        sut.TargetHeight = DefaultTargetHeight ;
+
+        return sut ;
+    }
+
+    private DeskMover CreateSutWithIsAllowedToMoveIsTrue ( )
+    {
+        var sut = CreateSutWithTargetHeight ( ) ;
+
+        _subjectFinished.OnNext ( InitialHeight ) ;
+
+        _scheduler.Start ( ) ;
+
+        return sut ;
+    }
+
+    private DeskMover CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( )
+    {
+        var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+
+        _scheduler.Start ( ) ;
+
+        return sut ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterRefreshed_ForInvoked_SetsHeight ( )
+    {
+        CreateSutWithIsAllowedToMoveIsTrue ( ).Height
+                                              .Should ( )
+                                              .Be ( DefaultHeight ) ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterRefreshed_ForInvoked_SetsSpeed ( )
+    {
+        CreateSutWithIsAllowedToMoveIsTrue ( ).Speed
+                                              .Should ( )
+                                              .Be ( DefaultSpeed ) ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterRefreshed_ForInvoked_CallsCalculator ( )
+    {
+        using var _ = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        using var scope = new AssertionScope ( ) ;
+
+        _calculator.Height
+                   .Should ( )
+                   .Be ( DefaultHeight ,
+                         "Height" ) ;
+        _calculator.Speed
+                   .Should ( )
+                   .Be ( DefaultSpeed ,
+                         "Speed" ) ;
+
+        _calculator.StartMovingIntoDirection
+                   .Should ( )
+                   .Be ( Direction.None ,
+                         "StartMovingIntoDirection" ) ;
+
+        _calculator.TargetHeight
+                   .Should ( )
+                   .Be ( DefaultTargetHeight ,
+                         "TargetHeight" ) ;
+
+        _calculator.Received ( )
+                   .Calculate ( ) ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterRefreshed_ForInvoked_SetsIsAllowedToMoveToTrue ( )
+    {
+        CreateSutWithIsAllowedToMoveIsTrue ( ).IsAllowedToMove
+                                              .Should ( )
+                                              .BeTrue ( ) ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterRefreshed_ForIsAllowedToMoveIsTrueAndSuccess_SetsStartMovingIntoDirection ( )
+    {
+        CreateSutWithIsAllowedToMoveIsTrue ( ).StartMovingIntoDirection
+                                              .Should ( )
+                                              .Be ( _calculator.MoveIntoDirection ) ;
+    }
+
+    [ TestMethod ]
+    public void Start_Invoked_CallsHeightMonitorResets ( )
+    {
+        _executor.Up ( )
+                 .Returns ( true ) ;
+
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        _heightMonitor.Received ( )
+                      .Reset ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task Up_ForIsAllowedToMoveIsTrueAndSuccess_ReturnsTrue ( )
+    {
+        _executor.Up ( )
+                 .Returns ( true ) ;
+
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        var actual = await sut.Up ( ) ;
+
+        actual.Should ( )
+              .BeTrue ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task Up_ForIsAllowedToMoveIsTrueAndFailed_ReturnsFalse ( )
+    {
+        _executor.Up ( )
+                 .Returns ( false ) ;
+
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        var actual = await sut.Up ( ) ;
+
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
+
+    [ TestMethod ]
+    public void Height_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesHeight ( )
+    {
+        using var sut = CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( ) ;
+
+        sut.Height
+           .Should ( )
+           .Be ( _details1.Height ) ;
+    }
+
+    [ TestMethod ]
+    public void Speed_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesSpeed ( )
+    {
+        using var sut = CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( ) ;
+
+        sut.Speed
+           .Should ( )
+           .Be ( _details1.Speed ) ;
+    }
+
+    [ TestMethod ]
+    public async Task OnTimerElapsed_ForTimerIsNull_DoNotMovesUp ( )
+    {
+        _calculator.MoveIntoDirection
+                   .Returns ( Direction.Up ) ;
+
+        using var sut = CreateSutInitialized ( ) ;
+
+        await sut.Stop ( ) ; // make sure timer is null
+
+        await sut.OnTimerElapsed ( 1 ) ;
+
+        await _executor.DidNotReceive ( )
+                       .Up ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task OnTimerElapsed_ForMoveIntoDirectionDown_MovesDown ( )
+    {
+        _calculator.MoveIntoDirection
+                   .Returns ( Direction.Down ) ;
+
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        await sut.OnTimerElapsed ( 1 ) ;
+
+        await _executor.Received ( )
+                       .Down ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task OnTimerElapsed_ForMoveIntoDirectionNone_MoveStop ( )
+    {
+        _calculator.MoveIntoDirection
+                   .Returns ( Direction.None ) ;
+
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        await sut.OnTimerElapsed ( 1 ) ;
+
+        using var scope = new AssertionScope ( ) ;
+
+        await _executor.Received ( )
+                       .Stop ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task OnTimerElapsed_ForIsAllowedToMoveIsFalse_DoesNotMove ( )
+    {
+        _calculator.MoveIntoDirection
+                   .Returns ( Direction.None ) ;
+
+        using var sut = CreateSutInitialized ( ) ;
+
+        await sut.OnTimerElapsed ( 1 ) ;
+
+        using var scope = new AssertionScope ( ) ;
+
+        await _executor.DidNotReceive ( )
+                       .Up ( ) ;
+        await _executor.DidNotReceive ( )
+                       .Down ( ) ;
+        await _executor.DidNotReceive ( )
+                       .Stop ( ) ;
+    }
+
+
+    [ TestMethod ]
+    public async Task Finished_ForMoveFinished_Notifies ( )
+    {
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        var wasNotified = false ;
+
+        sut.Finished.ObserveOn ( _scheduler )
+           .Subscribe ( _ => wasNotified = true ) ;
+
+        await sut.Stop ( ) ;
+
+        _scheduler.Start ( ) ;
+
+        wasNotified.Should ( )
+                   .BeTrue ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task Up_ForIsAllowedToMoveIsTrue_DoesNotMoveUp ( )
+    {
+        using var sut = CreateSutInitialized ( ) ;
+
+        await sut.Up ( ) ;
+
+        _ = _executor.DidNotReceive ( )
                      .Up ( ) ;
-            _executor.DidNotReceive ( )
+    }
+
+    [ TestMethod ]
+    public async Task Up_ForIsAllowedToMoveIsTrue_ReturnsFalse ( )
+    {
+        using var sut = CreateSutInitialized ( ) ;
+
+        var actual = await sut.Up ( ) ;
+
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task Down_ForIsAllowedToMoveIsTrue_DoesNotMoveDown ( )
+    {
+        using var sut = CreateSutInitialized ( ) ;
+
+        await sut.Down ( ) ;
+
+        _ = _executor.DidNotReceive ( )
                      .Down ( ) ;
-            _executor.DidNotReceive ( )
-                     .Stop ( ) ;
-        }
+    }
 
+    [ TestMethod ]
+    public async Task Down_ForIsAllowedToMoveIsTrue_ReturnsFalse ( )
+    {
+        using var sut = CreateSutInitialized ( ) ;
 
-        [ TestMethod ]
-        public async Task Finished_ForMoveFinished_Notifies ( )
-        {
-            using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        var actual = await sut.Down ( ) ;
 
-            var wasNotified = false ;
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
 
-            sut.Finished.ObserveOn ( _scheduler )
-               .Subscribe ( _ => wasNotified = true ) ;
+    [ TestMethod ]
+    public void Start_ForInvoked_CallsProvider ( )
+    {
+        using var sut = CreateSutInitialized ( ) ;
 
-            await sut.Stop ( ) ;
+        sut.Start ( ) ;
 
-            _scheduler.Start ( ) ;
+        _provider.Received ( )
+                 .Start ( ) ;
+    }
 
-            wasNotified.Should ( )
-                       .BeTrue ( ) ;
-        }
+    [ TestMethod ]
+    public void Dispose_ForInvoked_DisposesMonitor ( )
+    {
+        var sut = CreateSutInitialized ( ) ;
 
-        [ TestMethod ]
-        public async Task Up_ForIsAllowedToMoveIsTrue_DoesNotMoveUp ( )
-        {
-            using var sut = CreateSutInitialized ( ) ;
+        sut.Dispose ( ) ;
 
-            await sut.Up ( ) ;
+        _monitor.Received ( )
+                .Dispose ( ) ;
+    }
 
-            _ = _executor.DidNotReceive ( )
-                         .Up ( ) ;
-        }
+    [ TestMethod ]
+    public void Dispose_ForInvoked_DisposesDisposableProvider ( )
+    {
+        _providerFactory.Create ( _executor ,
+                                  _heightAndSpeed )
+                        .Returns ( _disposableProvider ) ;
 
-        [ TestMethod ]
-        public async Task Up_ForIsAllowedToMoveIsTrue_ReturnsFalse ( )
-        {
-            using var sut = CreateSutInitialized ( ) ;
+        var sut = CreateSutInitialized ( ) ;
 
-            var actual = await sut.Up ( ) ;
+        sut.Dispose ( ) ;
 
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
+        _disposable.Received ( )
+                   .Dispose ( ) ;
+    }
 
-        [ TestMethod ]
-        public async Task Down_ForIsAllowedToMoveIsTrue_DoesNotMoveDown ( )
-        {
-            using var sut = CreateSutInitialized ( ) ;
+    [ TestMethod ]
+    public void Dispose_ForInvoked_DisposalHeightAndSpeed ( )
+    {
+        var disposable = Substitute.For < IDisposable > ( ) ;
 
-            await sut.Down ( ) ;
+        var subject = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
 
-            _ = _executor.DidNotReceive ( )
-                         .Down ( ) ;
-        }
+        subject.Subscribe ( Arg.Any < IObserver < HeightSpeedDetails > > ( ) )
+               .Returns ( disposable ) ;
 
-        [ TestMethod ]
-        public async Task Down_ForIsAllowedToMoveIsTrue_ReturnsFalse ( )
-        {
-            using var sut = CreateSutInitialized ( ) ;
+        _heightAndSpeed.HeightAndSpeedChanged
+                       .Returns ( subject ) ;
 
-            var actual = await sut.Down ( ) ;
+        var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
+        sut.Dispose ( ) ;
 
-        [ TestMethod ]
-        public void Start_ForInvoked_CallsProvider ( )
-        {
-            using var sut = CreateSutInitialized ( ) ;
+        disposable.Received ( )
+                  .Dispose ( ) ;
+    }
 
-            sut.Start ( ) ;
+    public void Dispose ( )
+    {
+        _subjectFinished.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
 
-            _provider.Received ( )
-                     .Start ( ) ;
-        }
-
-        [ TestMethod ]
-        public void Dispose_ForInvoked_DisposesMonitor ( )
-        {
-            var sut = CreateSutInitialized ( ) ;
-
-            sut.Dispose ( ) ;
-
-            _monitor.Received ( )
-                    .Dispose ( ) ;
-        }
-
-        [ TestMethod ]
-        public void Dispose_ForInvoked_DisposesDisposableProvider ( )
-        {
-            _providerFactory.Create ( _executor ,
-                                      _heightAndSpeed )
-                            .Returns ( _disposableProvider ) ;
-
-            var sut = CreateSutInitialized ( ) ;
-
-            sut.Dispose ( ) ;
-
-            _disposable.Received ( )
-                       .Dispose ( ) ;
-        }
-
-        [ TestMethod ]
-        public void Dispose_ForInvoked_DisposalHeightAndSpeed ( )
-        {
-            var disposable = Substitute.For < IDisposable > ( ) ;
-
-            var subject = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
-
-            subject.Subscribe ( Arg.Any < IObserver < HeightSpeedDetails > > ( ) )
-                   .Returns ( disposable ) ;
-
-            _heightAndSpeed.HeightAndSpeedChanged
-                           .Returns ( subject ) ;
-
-            var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-            sut.Dispose ( ) ;
-
-            disposable.Received ( )
-                      .Dispose ( ) ;
-        }
-
-        private const uint InitialHeight       = 100u ;
-        private const uint DefaultTargetHeight = 1500 ;
-        private const uint DefaultHeight       = 1000 ;
-        private const int  DefaultSpeed        = 200 ;
-
-        private IStoppingHeightCalculator _calculator         = null! ;
-        private HeightSpeedDetails        _details1           = null! ;
-        private IDisposable               _disposable         = null! ;
-        private IInitialHeightProvider    _disposableProvider = null! ;
-        private IDeskCommandExecutor      _executor           = null! ;
-        private IObservable < uint >      _finished           = null! ;
-        private IDeskHeightAndSpeed       _heightAndSpeed     = null! ;
-        private IDeskHeightMonitor        _heightMonitor      = null! ;
-
-        private ILogger                               _logger                = null! ;
-        private IDeskMovementMonitor                  _monitor               = null! ;
-        private IDeskMovementMonitorFactory           _monitorFactory        = null! ;
-        private IInitialHeightProvider                _provider              = null! ;
-        private IInitialHeightAndSpeedProviderFactory _providerFactory       = null! ;
-        private TestScheduler                         _scheduler             = null! ;
-        private Subject < uint >                      _subjectFinished       = null! ;
-        private Subject < HeightSpeedDetails >        _subjectHeightAndSpeed = null! ;
+        _subjectFinished.Dispose ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 }

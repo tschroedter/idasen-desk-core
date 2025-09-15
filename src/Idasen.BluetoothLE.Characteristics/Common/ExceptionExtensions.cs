@@ -1,29 +1,28 @@
 ﻿using Idasen.BluetoothLE.Core ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common
+namespace Idasen.BluetoothLE.Characteristics.Common ;
+
+public static class ExceptionExtensions
 {
-    public static class ExceptionExtensions
+    public static bool IsBluetoothDisabledException ( this Exception e )
     {
-        public static bool IsBluetoothDisabledException ( this Exception e )
-        {
-            return ( uint )e.HResult == 0x8007048F ||
-                   ( uint )e.HResult == 0x800710DF ||
-                   ( uint )e.HResult == 0x8000FFFF ;
-        }
+        return ( uint ) e.HResult == 0x8007048F ||
+               ( uint ) e.HResult == 0x800710DF ||
+               ( uint ) e.HResult == 0x8000FFFF ;
+    }
 
-        public static void LogBluetoothStatusException ( this Exception exception ,
-                                                         ILogger        log ,
-                                                         string ?       message )
-        {
-            Guard.ArgumentNotNull ( log ,
-                                    nameof ( log ) ) ;
+    public static void LogBluetoothStatusException ( this Exception exception ,
+                                                     ILogger log ,
+                                                     string? message )
+    {
+        Guard.ArgumentNotNull ( log ,
+                                nameof ( log ) ) ;
 
-            // Prefer structured logging to preserve HResult as number and message pieces separately
-            log.Information ( "{Base} (0x{HResult:X}) {Message}" ,
-                              Constants.CheckAndEnableBluetooth ,
-                              exception.HResult ,
-                              message ) ;
-        }
+        // Prefer structured logging to preserve HResult as number and message pieces separately
+        log.Information ( "{Base} (0x{HResult:X}) {Message}" ,
+                          Constants.CheckAndEnableBluetooth ,
+                          exception.HResult ,
+                          message ) ;
     }
 }

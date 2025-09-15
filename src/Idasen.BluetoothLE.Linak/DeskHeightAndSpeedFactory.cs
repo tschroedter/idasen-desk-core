@@ -4,28 +4,27 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 
-namespace Idasen.BluetoothLE.Linak
+namespace Idasen.BluetoothLE.Linak ;
+
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class DeskHeightAndSpeedFactory
+    : IDeskHeightAndSpeedFactory
 {
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class DeskHeightAndSpeedFactory
-        : IDeskHeightAndSpeedFactory
+    private readonly DeskHeightAndSpeed.Factory _factory ;
+
+    public DeskHeightAndSpeedFactory ( DeskHeightAndSpeed.Factory factory )
     {
-        public DeskHeightAndSpeedFactory ( DeskHeightAndSpeed.Factory factory )
-        {
-            Guard.ArgumentNotNull ( factory ,
-                                    nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
-            _factory = factory ;
-        }
+        _factory = factory ;
+    }
 
-        public IDeskHeightAndSpeed Create ( IReferenceOutput referenceOutput )
-        {
-            Guard.ArgumentNotNull ( referenceOutput ,
-                                    nameof ( referenceOutput ) ) ;
+    public IDeskHeightAndSpeed Create ( IReferenceOutput referenceOutput )
+    {
+        Guard.ArgumentNotNull ( referenceOutput ,
+                                nameof ( referenceOutput ) ) ;
 
-            return _factory ( referenceOutput ) ;
-        }
-
-        private readonly DeskHeightAndSpeed.Factory _factory ;
+        return _factory ( referenceOutput ) ;
     }
 }

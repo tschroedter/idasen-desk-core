@@ -9,418 +9,417 @@ using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
+namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
+
+[ AutoDataTestClass ]
+public class DeviceMonitorTests
 {
-    [ AutoDataTestClass ]
-    public class DeviceMonitorTests
+    private IDevice _device = null! ;
+    private IDevice _deviceNewName = null! ;
+    private IDevice _deviceOtherNewName = null! ;
+    private IDevices _devices = null! ;
+    private Func < ISubject < IDevice > > _factory = null! ;
+    private ILogger _logger = null! ;
+    private TestScheduler _scheduler = null! ;
+    private Queue < ISubject < IDevice > > _subjects = null! ;
+    private ISubject < IDevice > _subjectStarted = null! ;
+    private ISubject < IDevice > _subjectStopped = null! ;
+    private ISubject < IDevice > _subjectUpdated = null! ;
+    private IWatcher _watcher = null! ;
+
+    [ TestInitialize ]
+    public void Initialize ( )
     {
-        [ TestInitialize ]
-        public void Initialize ( )
+        _scheduler = new TestScheduler ( ) ;
+
+        _logger = Substitute.For < ILogger > ( ) ;
+
+        _device = Substitute.For < IDevice > ( ) ;
+        _device.Name
+               .Returns ( ( string ) null! ) ;
+
+        _deviceNewName = Substitute.For < IDevice > ( ) ;
+        _deviceNewName.Name
+                      .Returns ( "New Name" ) ;
+
+        _deviceOtherNewName = Substitute.For < IDevice > ( ) ;
+        _deviceOtherNewName.Name
+                           .Returns ( "Other New Name" ) ;
+
+        _factory = Factory ;
+
+        _subjectStarted = new Subject < IDevice > ( ) ;
+        _subjectStopped = new Subject < IDevice > ( ) ;
+        _subjectUpdated = new Subject < IDevice > ( ) ;
+
+        _devices = new Devices ( _logger ) ;
+        _watcher = Substitute.For < IWatcher > ( ) ;
+
+        _subjects = new Queue < ISubject < IDevice > > ( ) ;
+        _subjects.Enqueue ( _subjectStarted ) ;
+        _subjects.Enqueue ( _subjectStopped ) ;
+        _subjects.Enqueue ( _subjectUpdated ) ;
+    }
+
+    private static Recorded < Notification < IDevice > > [ ] OnMultipleNext ( IEnumerable < IDevice > devices )
+    {
+        var list = new List < Recorded < Notification < IDevice > > > ( ) ;
+
+        var time = 0 ;
+
+        foreach (var device in devices)
         {
-            _scheduler = new TestScheduler ( ) ;
-
-            _logger = Substitute.For < ILogger > ( ) ;
-
-            _device = Substitute.For < IDevice > ( ) ;
-            _device.Name
-                   .Returns ( ( string )null! ) ;
-
-            _deviceNewName = Substitute.For < IDevice > ( ) ;
-            _deviceNewName.Name
-                          .Returns ( "New Name" ) ;
-
-            _deviceOtherNewName = Substitute.For < IDevice > ( ) ;
-            _deviceOtherNewName.Name
-                               .Returns ( "Other New Name" ) ;
-
-            _factory = Factory ;
-
-            _subjectStarted = new Subject < IDevice > ( ) ;
-            _subjectStopped = new Subject < IDevice > ( ) ;
-            _subjectUpdated = new Subject < IDevice > ( ) ;
-
-            _devices = new Devices ( _logger ) ;
-            _watcher = Substitute.For < IWatcher > ( ) ;
-
-            _subjects = new Queue < ISubject < IDevice > > ( ) ;
-            _subjects.Enqueue ( _subjectStarted ) ;
-            _subjects.Enqueue ( _subjectStopped ) ;
-            _subjects.Enqueue ( _subjectUpdated ) ;
+            list.Add ( OnNext ( time++ ,
+                                device ) ) ;
         }
 
-        private Recorded < Notification < IDevice > > [ ] OnMultipleNext ( IEnumerable < IDevice > devices )
-        {
-            var list = new List < Recorded < Notification < IDevice > > > ( ) ;
-
-            var time = 0 ;
-
-            foreach ( var device in devices )
-            {
-                list.Add ( OnNext ( time ++ ,
-                                    device ) ) ;
-            }
-
-            return list.ToArray ( ) ;
-        }
-
-
-        private Recorded < Notification < IDevice > > OnNext (
-            long    time ,
-            IDevice device )
-        {
-            return new Recorded < Notification < IDevice > > ( time ,
-                                                               Notification.CreateOnNext ( device ) ) ;
-        }
-
-        private ISubject < IDevice > Factory ( )
-        {
-            return _subjects.Dequeue ( ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public void Constructor_ForLoggerNull_Throws (
-            Lazy < DeviceMonitor > sut ,
-            [ BeNull ] ILogger     logger )
-        {
-            // ReSharper disable once UnusedVariable
-            var action = ( ) =>
-                         {
-                             var test = sut.Value ;
-                         } ;
-
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( nameof ( logger ) ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public void Constructor_ForFactoryNull_Throws (
-            Lazy < DeviceMonitor >                   sut ,
-            [ BeNull ] Func < ISubject < IDevice > > factory )
-        {
-            // ReSharper disable once UnusedVariable
-            var action = ( ) =>
-                         {
-                             var test = sut.Value ;
-                         } ;
-
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( nameof ( factory ) ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public void Constructor_ForDevicesNull_Throws (
-            Lazy < DeviceMonitor > sut ,
-            [ BeNull ] IDevices    devices )
-        {
-            // ReSharper disable once UnusedVariable
-            var action = ( ) =>
-                         {
-                             var test = sut.Value ;
-                         } ;
-
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( nameof ( devices ) ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public void Constructor_ForWatcherNull_Throws (
-            Lazy < DeviceMonitor > sut ,
-            [ BeNull ] IWatcher    watcher )
-        {
-            // ReSharper disable once UnusedVariable
-            var action = ( ) =>
-                         {
-                             var test = sut.Value ;
-                         } ;
-
-            action.Should ( )
-                  .Throw < ArgumentNullException > ( )
-                  .WithParameter ( nameof ( watcher ) ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public void Start_ForInvoked_CallsStart (
-            DeviceMonitor       sut ,
-            [ Freeze ] IWatcher watcher )
-        {
-            sut.Start ( ) ;
-
-            watcher.Received ( )
-                   .Start ( ) ;
-        }
+        return list.ToArray ( ) ;
+    }
+
+
+    private static Recorded < Notification < IDevice > > OnNext (
+        long time ,
+        IDevice device )
+    {
+        return new Recorded < Notification < IDevice > > ( time ,
+                                                           Notification.CreateOnNext ( device ) ) ;
+    }
+
+    private ISubject < IDevice > Factory ( )
+    {
+        return _subjects.Dequeue ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Constructor_ForLoggerNull_Throws (
+        Lazy < DeviceMonitor > sut ,
+        [ BeNull ] ILogger logger )
+    {
+        // ReSharper disable once UnusedVariable
+        var action = ( ) =>
+                     {
+                         var test = sut.Value ;
+                     } ;
+
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( nameof ( logger ) ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Constructor_ForFactoryNull_Throws (
+        Lazy < DeviceMonitor > sut ,
+        [ BeNull ] Func < ISubject < IDevice > > factory )
+    {
+        // ReSharper disable once UnusedVariable
+        var action = ( ) =>
+                     {
+                         var test = sut.Value ;
+                     } ;
+
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( nameof ( factory ) ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Constructor_ForDevicesNull_Throws (
+        Lazy < DeviceMonitor > sut ,
+        [ BeNull ] IDevices devices )
+    {
+        // ReSharper disable once UnusedVariable
+        var action = ( ) =>
+                     {
+                         var test = sut.Value ;
+                     } ;
+
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( nameof ( devices ) ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Constructor_ForWatcherNull_Throws (
+        Lazy < DeviceMonitor > sut ,
+        [ BeNull ] IWatcher watcher )
+    {
+        // ReSharper disable once UnusedVariable
+        var action = ( ) =>
+                     {
+                         var test = sut.Value ;
+                     } ;
+
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( nameof ( watcher ) ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Start_ForInvoked_CallsStart (
+        DeviceMonitor sut ,
+        [ Freeze ] IWatcher watcher )
+    {
+        sut.Start ( ) ;
+
+        watcher.Received ( )
+               .Start ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Stop_ForInvoked_CallsStop (
+        DeviceMonitor sut ,
+        [ Freeze ] IWatcher watcher )
+    {
+        sut.Stop ( ) ;
+
+        watcher.Received ( )
+               .Stop ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void Stop_ForInvoked_CallsStop (
-            DeviceMonitor       sut ,
-            [ Freeze ] IWatcher watcher )
-        {
-            sut.Stop ( ) ;
+    [ TestMethod ]
+    public void OnDeviceUpdated_ForNewDevice_AddsDevice ( )
+    {
+        ConfigureDeviceDiscovered ( ) ;
 
-            watcher.Received ( )
-                   .Stop ( ) ;
-        }
+        using var sut = CreateSutSubscribed ( ) ;
 
-        [ TestMethod ]
-        public void OnDeviceUpdated_ForNewDevice_AddsDevice ( )
-        {
-            ConfigureDeviceDiscovered ( ) ;
+        _scheduler.Start ( ) ;
 
-            using var sut = CreateSutSubscribed ( ) ;
+        _devices.ContainsDevice ( _device )
+                .Should ( )
+                .BeTrue ( ) ;
+    }
 
-            _scheduler.Start ( ) ;
+    [ TestMethod ]
+    public void OnDeviceUpdated_ForNewDevice_RaisesDeviceDiscovered ( )
+    {
+        ConfigureDeviceDiscovered ( ) ;
 
-            _devices.ContainsDevice ( _device )
-                    .Should ( )
-                    .BeTrue ( ) ;
-        }
+        using var sut = CreateSutSubscribed ( ) ;
 
-        [ TestMethod ]
-        public void OnDeviceUpdated_ForNewDevice_RaisesDeviceDiscovered ( )
-        {
-            ConfigureDeviceDiscovered ( ) ;
+        IDevice discovered = null! ;
 
-            using var sut = CreateSutSubscribed ( ) ;
+        using var observer = sut.DeviceDiscovered
+                                .Subscribe ( x => discovered = x ) ;
 
-            IDevice discovered = null! ;
+        _scheduler.Start ( ) ;
 
-            using var observer = sut.DeviceDiscovered
-                                    .Subscribe ( x => discovered = x ) ;
+        discovered.Should ( )
+                  .Be ( _device ) ;
+    }
 
-            _scheduler.Start ( ) ;
+    [ TestMethod ]
+    public void OnDeviceUpdated_ForExistingDevice_UpdatesDevices ( )
+    {
+        ConfigureNameUpdated ( ) ;
 
-            discovered.Should ( )
-                      .Be ( _device ) ;
-        }
+        using var sut = CreateSutSubscribed ( ) ;
 
-        [ TestMethod ]
-        public void OnDeviceUpdated_ForExistingDevice_UpdatesDevices ( )
-        {
-            ConfigureNameUpdated ( ) ;
+        _scheduler.Start ( ) ;
 
-            using var sut = CreateSutSubscribed ( ) ;
+        _devices.TryGetDevice ( _device.Address ,
+                                out var device )
+                .Should ( )
+                .BeTrue ( ) ;
 
-            _scheduler.Start ( ) ;
-
-            _devices.TryGetDevice ( _device.Address ,
-                                    out var device )
-                    .Should ( )
-                    .BeTrue ( ) ;
-
-            device?.Name
-                   .Should ( )
-                   .Be ( _deviceNewName.Name ) ;
-        }
-
-        [ TestMethod ]
-        public void OnDeviceUpdated_ForExistingDevice_RaisesDeviceUpdated ( )
-        {
-            ConfigureSameDevice ( ) ;
-
-            using var sut = CreateSutSubscribed ( ) ;
-
-            IDevice updated = null! ;
-
-            using var observer = sut.DeviceUpdated
-                                    .Subscribe ( x => updated = x ) ;
-
-            _scheduler.Start ( ) ;
-
-            updated.Should ( )
-                   .Be ( _device ) ;
-        }
-
-        [ TestMethod ]
-        public void OnDeviceUpdated_ForExistingDeviceWithNewName_KeepsFirstName ( )
-        {
-            ConfigureNameUpdatedTwice ( ) ; // maybe, later allow name change?
-
-            using var sut = CreateSutSubscribed ( ) ;
-
-            _scheduler.Start ( ) ;
-
-            _devices.TryGetDevice ( _device.Address ,
-                                    out var device )
-                    .Should ( )
-                    .BeTrue ( ) ;
-
-            device?.Name
-                   .Should ( )
-                   .Be ( _deviceNewName.Name ) ;
-        }
-
-        private DeviceMonitor CreateSutSubscribed ( )
-        {
-            var sut = CreateSut ( ) ;
-            sut.Start ( ) ;
-
-            return sut ;
-        }
-
-        [ TestMethod ]
-        public void OnDeviceUpdated_ForExistingDeviceWithNewName_RaisesDeviceUpdated ( )
-        {
-            ConfigureNameUpdated ( ) ;
-
-            using var sut = CreateSutSubscribed ( ) ;
-
-            IDevice updated = null! ;
-
-            using var observer = sut.DeviceUpdated
-                                    .Subscribe ( x => updated = x ) ;
-
-            _scheduler.Start ( ) ;
-
-            updated.Should ( )
-                   .Be ( _deviceNewName ) ;
-        }
-
-        private void ConfigureNameUpdatedTwice ( )
-        {
-            var messages = new [ ]
-                           {
-                               _device ,
-                               _deviceNewName ,
-                               _deviceOtherNewName
-                           } ;
-
-            _watcher.Received
-                    .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
-        }
-
-        private void ConfigureNameUpdated ( )
-        {
-            var messages = new [ ]
-                           {
-                               _device ,
-                               _deviceNewName
-                           } ;
-
-            _watcher.Received
-                    .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
-        }
-
-        private void ConfigureDeviceDiscovered ( )
-        {
-            var messages = new [ ]
-                           {
-                               _device
-                           } ;
-
-            _watcher.Received
-                    .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
-        }
-
-        private void ConfigureSameDevice ( )
-        {
-            var messages = new [ ]
-                           {
-                               _device ,
-                               _device
-                           } ;
-
-            _watcher.Received
-                    .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
-        }
-
-        [ TestMethod ]
-        public void OnDeviceUpdated_ForExistingDeviceWithNewName_RaisesDeviceNameUpdated ( )
-        {
-            ConfigureNameUpdated ( ) ;
-
-            using var sut = CreateSutSubscribed ( ) ;
-
-            IDevice updated = null! ;
-
-            using var observer = sut.DeviceNameUpdated
-                                    .Subscribe ( x => updated = x ) ;
-
-            _scheduler.Start ( ) ;
-
-            updated.Should ( )
-                   .Be ( _deviceNewName ) ;
-        }
-
-        [ TestMethod ]
-        public void OnDeviceUpdated_ForExistingDevice_Notifies ( )
-        {
-            ConfigureSameDevice ( ) ;
-
-            using var sut = CreateSutSubscribed ( ) ;
-
-            IDevice updated = null! ;
-
-            using var observer = sut.DeviceUpdated
-                                    .Subscribe ( x => updated = x ) ;
-
-            _scheduler.Start ( ) ;
-
-            updated.Should ( )
-                   .Be ( _device ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public void IsListening_ForInvoked_CallsWatcher (
-            DeviceMonitor       sut ,
-            [ Freeze ] IWatcher watcher )
-        {
-            watcher.IsListening
-                   .Returns ( true ) ;
-
-            sut.IsListening
+        device?.Name
                .Should ( )
-               .BeTrue ( ) ;
-        }
+               .Be ( _deviceNewName.Name ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void DiscoveredDevices_ForInvoked_CallsDevices (
-            DeviceMonitor       sut ,
-            [ Freeze ] IDevices devices )
-        {
-            devices.DiscoveredDevices
-                   .Returns ( new List < IDevice > ( ).AsReadOnly ( ) ) ;
+    [ TestMethod ]
+    public void OnDeviceUpdated_ForExistingDevice_RaisesDeviceUpdated ( )
+    {
+        ConfigureSameDevice ( ) ;
 
-            sut.DiscoveredDevices
+        using var sut = CreateSutSubscribed ( ) ;
+
+        IDevice updated = null! ;
+
+        using var observer = sut.DeviceUpdated
+                                .Subscribe ( x => updated = x ) ;
+
+        _scheduler.Start ( ) ;
+
+        updated.Should ( )
+               .Be ( _device ) ;
+    }
+
+    [ TestMethod ]
+    public void OnDeviceUpdated_ForExistingDeviceWithNewName_KeepsFirstName ( )
+    {
+        ConfigureNameUpdatedTwice ( ) ; // maybe, later allow name change?
+
+        using var sut = CreateSutSubscribed ( ) ;
+
+        _scheduler.Start ( ) ;
+
+        _devices.TryGetDevice ( _device.Address ,
+                                out var device )
+                .Should ( )
+                .BeTrue ( ) ;
+
+        device?.Name
                .Should ( )
-               .BeEmpty ( ) ;
-        }
+               .Be ( _deviceNewName.Name ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void RemoveDevice_ForInvoked_CallsDevices (
-            DeviceMonitor       sut ,
-            [ Freeze ] IDevices devices ,
-            IDevice             device )
+    private DeviceMonitor CreateSutSubscribed ( )
+    {
+        var sut = CreateSut ( ) ;
+        sut.Start ( ) ;
+
+        return sut ;
+    }
+
+    [ TestMethod ]
+    public void OnDeviceUpdated_ForExistingDeviceWithNewName_RaisesDeviceUpdated ( )
+    {
+        ConfigureNameUpdated ( ) ;
+
+        using var sut = CreateSutSubscribed ( ) ;
+
+        IDevice updated = null! ;
+
+        using var observer = sut.DeviceUpdated
+                                .Subscribe ( x => updated = x ) ;
+
+        _scheduler.Start ( ) ;
+
+        updated.Should ( )
+               .Be ( _deviceNewName ) ;
+    }
+
+    private void ConfigureNameUpdatedTwice ( )
+    {
+        var messages = new [ ]
         {
-            sut.RemoveDevice ( device ) ;
+            _device ,
+            _deviceNewName ,
+            _deviceOtherNewName
+        } ;
 
-            devices.Received ( )
-                   .RemoveDevice ( device ) ;
-        }
+        _watcher.Received
+                .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
+    }
 
-        private DeviceMonitor CreateSut ( )
+    private void ConfigureNameUpdated ( )
+    {
+        var messages = new [ ]
         {
-            var deviceMonitor = new DeviceMonitor ( _logger ,
-                                                    _scheduler ,
-                                                    _factory ,
-                                                    _devices ,
-                                                    _watcher ) ;
+            _device ,
+            _deviceNewName
+        } ;
 
-            return deviceMonitor ;
-        }
+        _watcher.Received
+                .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
+    }
 
-        private IDevice                        _device             = null! ;
-        private IDevice                        _deviceNewName      = null! ;
-        private IDevice                        _deviceOtherNewName = null! ;
-        private IDevices                       _devices            = null! ;
-        private Func < ISubject < IDevice > >  _factory            = null! ;
-        private ILogger                        _logger             = null! ;
-        private TestScheduler                  _scheduler          = null! ;
-        private Queue < ISubject < IDevice > > _subjects           = null! ;
-        private ISubject < IDevice >           _subjectStarted     = null! ;
-        private ISubject < IDevice >           _subjectStopped     = null! ;
-        private ISubject < IDevice >           _subjectUpdated     = null! ;
-        private IWatcher                       _watcher            = null! ;
+    private void ConfigureDeviceDiscovered ( )
+    {
+        var messages = new [ ]
+        {
+            _device
+        } ;
+
+        _watcher.Received
+                .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
+    }
+
+    private void ConfigureSameDevice ( )
+    {
+        var messages = new [ ]
+        {
+            _device ,
+            _device
+        } ;
+
+        _watcher.Received
+                .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
+    }
+
+    [ TestMethod ]
+    public void OnDeviceUpdated_ForExistingDeviceWithNewName_RaisesDeviceNameUpdated ( )
+    {
+        ConfigureNameUpdated ( ) ;
+
+        using var sut = CreateSutSubscribed ( ) ;
+
+        IDevice updated = null! ;
+
+        using var observer = sut.DeviceNameUpdated
+                                .Subscribe ( x => updated = x ) ;
+
+        _scheduler.Start ( ) ;
+
+        updated.Should ( )
+               .Be ( _deviceNewName ) ;
+    }
+
+    [ TestMethod ]
+    public void OnDeviceUpdated_ForExistingDevice_Notifies ( )
+    {
+        ConfigureSameDevice ( ) ;
+
+        using var sut = CreateSutSubscribed ( ) ;
+
+        IDevice updated = null! ;
+
+        using var observer = sut.DeviceUpdated
+                                .Subscribe ( x => updated = x ) ;
+
+        _scheduler.Start ( ) ;
+
+        updated.Should ( )
+               .Be ( _device ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void IsListening_ForInvoked_CallsWatcher (
+        DeviceMonitor sut ,
+        [ Freeze ] IWatcher watcher )
+    {
+        watcher.IsListening
+               .Returns ( true ) ;
+
+        sut.IsListening
+           .Should ( )
+           .BeTrue ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void DiscoveredDevices_ForInvoked_CallsDevices (
+        DeviceMonitor sut ,
+        [ Freeze ] IDevices devices )
+    {
+        devices.DiscoveredDevices
+               .Returns ( new List < IDevice > ( ).AsReadOnly ( ) ) ;
+
+        sut.DiscoveredDevices
+           .Should ( )
+           .BeEmpty ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void RemoveDevice_ForInvoked_CallsDevices (
+        DeviceMonitor sut ,
+        [ Freeze ] IDevices devices ,
+        IDevice device )
+    {
+        sut.RemoveDevice ( device ) ;
+
+        devices.Received ( )
+               .RemoveDevice ( device ) ;
+    }
+
+    private DeviceMonitor CreateSut ( )
+    {
+        var deviceMonitor = new DeviceMonitor ( _logger ,
+                                                _scheduler ,
+                                                _factory ,
+                                                _devices ,
+                                                _watcher ) ;
+
+        return deviceMonitor ;
     }
 }

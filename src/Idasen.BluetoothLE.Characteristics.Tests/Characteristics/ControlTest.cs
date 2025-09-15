@@ -3,112 +3,111 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+
+[ TestClass ]
+public class ControlTest
+    : CharacteristicBaseTests < Control >
 {
-    [ TestClass ]
-    public class ControlTest
-        : CharacteristicBaseTests < Control >
+    [ TestMethod ]
+    public void RawControl2_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        [ TestMethod ]
-        public void RawControl2_ForNotRefreshedAndInvoked_EmptyBytes ( )
-        {
-            var sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            sut.Initialize < Control > ( ) ;
+        sut.Initialize < Control > ( ) ;
 
-            sut.RawControl2
-               .Should ( )
-               .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
-        }
+        sut.RawControl2
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
+    }
 
-        [ TestMethod ]
-        public async Task RawControl2_ForRefreshedAndInvoked_Bytes ( )
-        {
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task RawControl2_ForRefreshedAndInvoked_Bytes ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.Initialize < Control > ( )
-                     .Refresh ( ) ;
+        await sut.Initialize < Control > ( )
+                 .Refresh ( ) ;
 
-            sut.RawControl2
-               .Should ( )
-               .BeEquivalentTo ( RawValue1 ) ;
-        }
+        sut.RawControl2
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
+    }
 
-        [ TestMethod ]
-        public void RawControl3_ForNotRefreshedAndInvoked_EmptyBytes ( )
-        {
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public void RawControl3_ForNotRefreshedAndInvoked_EmptyBytes ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            sut.Initialize < Control > ( ) ;
+        sut.Initialize < Control > ( ) ;
 
-            sut.RawControl3
-               .Should ( )
-               .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
-        }
+        sut.RawControl3
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
+    }
 
-        [ TestMethod ]
-        public async Task RawControl3_ForRefreshedAndInvoked_Bytes ( )
-        {
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task RawControl3_ForRefreshedAndInvoked_Bytes ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.Initialize < Control > ( )
-                     .Refresh ( ) ;
+        await sut.Initialize < Control > ( )
+                 .Refresh ( ) ;
 
-            sut.RawControl3
-               .Should ( )
-               .BeEquivalentTo ( RawValue1 ) ;
-        }
+        sut.RawControl3
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
+    }
 
-        [ TestMethod ]
-        public async Task TryWriteRawValue_ForKnownCharacteristics_WritesRawValuesAsync ( )
-        {
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task TryWriteRawValue_ForKnownCharacteristics_WritesRawValuesAsync ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.Initialize < Control > ( )
-                     .Refresh ( ) ;
+        await sut.Initialize < Control > ( )
+                 .Refresh ( ) ;
 
-            await sut.TryWriteRawControl2 ( RawValue1 ) ;
+        await sut.TryWriteRawControl2 ( RawValue1 ) ;
 
-            await RawValueWriter.Received ( )
-                                .TryWriteValueAsync ( CharacteristicWrapper1 ,
-                                                      Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
-        }
+        await RawValueWriter.Received ( )
+                            .TryWriteValueAsync ( CharacteristicWrapper1 ,
+                                                  Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
+    }
 
 
-        protected override Control CreateSut ( )
-        {
-            return new Control ( Logger ,
-                                 Scheduler ,
-                                 Device ,
-                                 ProviderFactory ,
-                                 RawValueReader ,
-                                 RawValueWriter ,
-                                 ToStringConverter ,
-                                 DescriptionToUuid ) ;
-        }
+    protected override Control CreateSut ( )
+    {
+        return new Control ( Logger ,
+                             Scheduler ,
+                             Device ,
+                             ProviderFactory ,
+                             RawValueReader ,
+                             RawValueWriter ,
+                             ToStringConverter ,
+                             DescriptionToUuid ) ;
+    }
 
-        protected override void PopulateWrappers ( )
-        {
-            Wrappers.Add ( Control.Control2Key ,
-                           CharacteristicWrapper1 ) ;
+    protected override void PopulateWrappers ( )
+    {
+        Wrappers.Add ( Control.Control2Key ,
+                       CharacteristicWrapper1 ) ;
 
-            Wrappers.Add ( Control.Control3Key ,
-                           CharacteristicWrapper1 ) ;
-        }
+        Wrappers.Add ( Control.Control3Key ,
+                       CharacteristicWrapper1 ) ;
     }
 }

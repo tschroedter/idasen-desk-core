@@ -1,12 +1,11 @@
 ﻿using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Common.Tests ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.ConstructorNullTester
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.ConstructorNullTester ;
+
+[ TestClass ]
+public class GenericAttributeConstructorNullTests
+    : BaseConstructorNullTester < GenericAttribute >
 {
-    [ TestClass ]
-    public class GenericAttributeConstructorNullTests
-        : BaseConstructorNullTester < GenericAttribute >
-    {
-        public override int NumberOfConstructorsPassed { get ; } = 1 ;
-    }
+    public override int NumberOfConstructorsPassed { get ; } = 1 ;
 }

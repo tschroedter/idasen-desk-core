@@ -1,11 +1,10 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
-{
-    public interface ICharacteristicBase
-        : IDisposable
-    {
-        T ? Initialize < T > ( )
-            where T : class ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
-        public Task Refresh ( ) ;
-    }
+public interface ICharacteristicBase
+    : IDisposable
+{
+    T? Initialize<T> ( )
+        where T : class ;
+
+    public Task Refresh ( ) ;
 }

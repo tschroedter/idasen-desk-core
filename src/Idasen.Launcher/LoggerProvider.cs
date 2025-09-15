@@ -11,6 +11,7 @@ public static class LoggerProvider
                                        "{Level:u3}] {Message} " +
                                        "(at {Caller}){NewLine}{Exception}" ;
 
+    private static readonly object Sync = new ( ) ;
     private static Lazy < Logger >? _logger ;
 
     public static ILogger CreateLogger ( string appName ,
@@ -21,28 +22,38 @@ public static class LoggerProvider
         Guard.ArgumentNotNull ( appLogFileName ,
                                 nameof ( appLogFileName ) ) ;
 
-        if ( _logger != null )
+        lock (Sync)
         {
-            _logger.Value.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" , appName , appLogFileName ) ;
+            if ( _logger != null )
+            {
+                _logger.Value.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" ,
+                                      appName ,
+                                      appLogFileName ) ;
+
+                return _logger.Value ;
+            }
+
+            _logger = DoCreateLogger ( appLogFileName ) ;
+
+            _logger.Value.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" ,
+                                  appName ,
+                                  appLogFileName ) ;
 
             return _logger.Value ;
         }
-
-        _logger = DoCreateLogger ( appLogFileName ) ;
-
-        _logger.Value.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" , appName , appLogFileName ) ;
-
-        return _logger.Value ;
     }
 
     private static Lazy < Logger > DoCreateLogger ( string appLogFileName )
     {
-        var logFolder = AppDomain.CurrentDomain.BaseDirectory + "\\logs\\" ;
+        var logFolder = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory ,
+                                       "logs" ) ;
         var logFile = CreateFullPathLogFileName ( logFolder ,
                                                   appLogFileName ) ;
 
         if ( ! Directory.Exists ( logFolder ) )
+        {
             Directory.CreateDirectory ( logFolder ) ;
+        }
 
 #pragma warning disable CA1305
         var loggerConfiguration = new LoggerConfiguration ( )
@@ -58,11 +69,23 @@ public static class LoggerProvider
                                                  hooks : new LoggingFileHooks ( ) ) ;
 #pragma warning restore CA1305
 
-        var logger = loggerConfiguration.CreateLogger ( ) ;
+        // Important: Create logger inside the Lazy factory, not eagerly.
+        return new Lazy < Logger > ( ( ) => loggerConfiguration.CreateLogger ( ) ) ;
+    }
 
-        Console.WriteLine ( "Log file name: {0} {1}" , LoggingFile.FullPath , LoggingFile.Path ) ;
+    public static void Shutdown ( )
+    {
+        lock (Sync)
+        {
+            if ( _logger == null )
+            {
+                return ;
+            }
 
-        return new Lazy < Logger > ( logger ) ;
+            // Flush and close sinks
+            Log.CloseAndFlush ( ) ;
+            _logger = null ;
+        }
     }
 
     public static string CreateFullPathLogFileName ( string folder ,

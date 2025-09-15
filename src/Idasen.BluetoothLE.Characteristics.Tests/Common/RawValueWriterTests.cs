@@ -8,393 +8,392 @@ using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common
+namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+
+[ AutoDataTestClass ]
+public class RawValueWriterTests
 {
-    [ AutoDataTestClass ]
-    public class RawValueWriterTests
+    [ AutoDataTestMethod ]
+    public async Task TryWriteValueAsync_ForCharacteristicIsNull_Throws (
+        RawValueWriter sut ,
+        IBuffer buffer )
     {
-        [ AutoDataTestMethod ]
-        public async Task TryWriteValueAsync_ForCharacteristicIsNull_Throws (
-            RawValueWriter sut ,
-            IBuffer        buffer )
-        {
-            var action = async ( ) =>
-                         {
-                             await sut.TryWriteValueAsync ( null! ,
-                                                            buffer ) ;
-                         } ;
-
-            await action.Should ( )
-                        .ThrowAsync < ArgumentNullException > ( )
-                        .WithParameter ( "characteristic" ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public void TryWriteValueAsync_ForBufferIsNull_Throws (
-            RawValueWriter             sut ,
-            IGattCharacteristicWrapper characteristic )
-        {
-            var action = async ( ) =>
-                         {
-                             await sut.TryWriteValueAsync ( characteristic ,
-                                                            null! ) ;
-                         } ;
-
-            action.Should ( )
-                  .ThrowAsync < ArgumentNullException > ( )
-                  .WithParameter ( "buffer" ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task TryWriteValueAsync_ForGattCommunicationStatusIsSuccess_True (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.Success ) ;
-
-            var actual = await sut.TryWriteValueAsync ( characteristic ,
+        var action = async ( ) =>
+                     {
+                         await sut.TryWriteValueAsync ( null! ,
                                                         buffer ) ;
+                     } ;
 
-            actual.Should ( )
-                  .BeTrue ( ) ;
-        }
+        await action.Should ( )
+                    .ThrowAsync < ArgumentNullException > ( )
+                    .WithParameter ( "characteristic" ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task TryWriteValueAsync_ForGattCommunicationStatusIsUnreachable_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.Unreachable ) ;
+    [ AutoDataTestMethod ]
+    public void TryWriteValueAsync_ForBufferIsNull_Throws (
+        RawValueWriter sut ,
+        IGattCharacteristicWrapper characteristic )
+    {
+        var action = async ( ) =>
+                     {
+                         await sut.TryWriteValueAsync ( characteristic ,
+                                                        null! ) ;
+                     } ;
 
-            var actual = await sut.TryWriteValueAsync ( characteristic ,
-                                                        buffer ) ;
+        action.Should ( )
+              .ThrowAsync < ArgumentNullException > ( )
+              .WithParameter ( "buffer" ) ;
+    }
 
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
+    [ AutoDataTestMethod ]
+    public async Task TryWriteValueAsync_ForGattCommunicationStatusIsSuccess_True (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.Success ) ;
 
-        [ AutoDataTestMethod ]
-        public async Task TryWriteValueAsync_ForGattCommunicationStatusIsProtocolError_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.ProtocolError ) ;
+        var actual = await sut.TryWriteValueAsync ( characteristic ,
+                                                    buffer ) ;
 
-            var actual = await sut.TryWriteValueAsync ( characteristic ,
-                                                        buffer ) ;
+        actual.Should ( )
+              .BeTrue ( ) ;
+    }
 
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
+    [ AutoDataTestMethod ]
+    public async Task TryWriteValueAsync_ForGattCommunicationStatusIsUnreachable_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.Unreachable ) ;
 
-        [ AutoDataTestMethod ]
-        public async Task TryWriteValueAsync_ForGattCommunicationStatusIsAccessDenied_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.AccessDenied ) ;
+        var actual = await sut.TryWriteValueAsync ( characteristic ,
+                                                    buffer ) ;
 
-            var actual = await sut.TryWriteValueAsync ( characteristic ,
-                                                        buffer ) ;
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task TryWriteValueAsync_ForCharacteristicDoesNotSupportWrite_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.AccessDenied ) ;
+    [ AutoDataTestMethod ]
+    public async Task TryWriteValueAsync_ForGattCommunicationStatusIsProtocolError_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.ProtocolError ) ;
 
-            var actual = await sut.TryWriteValueAsync ( characteristic ,
-                                                        buffer ) ;
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
+        var actual = await sut.TryWriteValueAsync ( characteristic ,
+                                                    buffer ) ;
 
-        [ AutoDataTestMethod ]
-        public async Task TryWriteValueAsync_ForCharacteristicDoesNotSupportWrite_DoesNotCallTryWriteValueAsync (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None ) ;
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
 
-            await sut.TryWriteValueAsync ( characteristic ,
-                                           buffer ) ;
+    [ AutoDataTestMethod ]
+    public async Task TryWriteValueAsync_ForGattCommunicationStatusIsAccessDenied_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.AccessDenied ) ;
 
-            await characteristic.DidNotReceive ( )
-                                .WriteValueAsync ( buffer ) ;
-        }
+        var actual = await sut.TryWriteValueAsync ( characteristic ,
+                                                    buffer ) ;
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void TryWritableAuxiliariesValueAsync_ForCharacteristicIsNull_Throws (
-            RawValueWriter sut ,
-            IBuffer        buffer )
-        {
-            var action = async ( ) =>
-                         {
-                             await sut.TryWritableAuxiliariesValueAsync ( null! ,
-                                                                          buffer ) ;
-                         } ;
+    [ AutoDataTestMethod ]
+    public async Task TryWriteValueAsync_ForCharacteristicDoesNotSupportWrite_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.Write )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.AccessDenied ) ;
 
-            action.Should ( )
-                  .ThrowAsync < ArgumentNullException > ( )
-                  .WithParameter ( "characteristic" ) ;
-        }
+        var actual = await sut.TryWriteValueAsync ( characteristic ,
+                                                    buffer ) ;
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public void TryWritableAuxiliariesValueAsync_ForBufferIsNull_Throws (
-            RawValueWriter             sut ,
-            IGattCharacteristicWrapper characteristic )
-        {
-            var action = async ( ) =>
-                         {
-                             await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
-                                                                          null! ) ;
-                         } ;
+    [ AutoDataTestMethod ]
+    public async Task TryWriteValueAsync_ForCharacteristicDoesNotSupportWrite_DoesNotCallTryWriteValueAsync (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None ) ;
 
-            action.Should ( )
-                  .ThrowAsync < ArgumentNullException > ( )
-                  .WithParameter ( "buffer" ) ;
-        }
+        await sut.TryWriteValueAsync ( characteristic ,
+                                       buffer ) ;
 
-        [ AutoDataTestMethod ]
-        public async Task TryWritableAuxiliariesValueAsync_ForGattCommunicationStatusIsSuccess_True (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WritableAuxiliaries )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.Success ) ;
+        await characteristic.DidNotReceive ( )
+                            .WriteValueAsync ( buffer ) ;
+    }
 
-            var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
+    [ AutoDataTestMethod ]
+    public void TryWritableAuxiliariesValueAsync_ForCharacteristicIsNull_Throws (
+        RawValueWriter sut ,
+        IBuffer buffer )
+    {
+        var action = async ( ) =>
+                     {
+                         await sut.TryWritableAuxiliariesValueAsync ( null! ,
                                                                       buffer ) ;
+                     } ;
 
-            actual.Should ( )
-                  .BeTrue ( ) ;
-        }
+        action.Should ( )
+              .ThrowAsync < ArgumentNullException > ( )
+              .WithParameter ( "characteristic" ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task TryWritableAuxiliariesValueAsync_ForGattCommunicationStatusIsUnreachable_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WritableAuxiliaries )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.Unreachable ) ;
-
-            var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
-                                                                      buffer ) ;
-
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task TryWritableAuxiliariesValueAsync_ForGattCommunicationStatusIsProtocolError_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WritableAuxiliaries )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.ProtocolError ) ;
-
-            var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
-                                                                      buffer ) ;
-
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task TryWritableAuxiliariesValueAsync_ForGattCommunicationStatusIsAccessDenied_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WritableAuxiliaries )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.AccessDenied ) ;
-
-            var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
-                                                                      buffer ) ;
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task TryWritableAuxiliariesValueAsync_ForCharacteristicDoesNotSupportWrite_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None )
-                          .WithWriteValueAsyncResult ( GattCommunicationStatus.AccessDenied ) ;
-
-            var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
-                                                                      buffer ) ;
-            actual.Should ( )
-                  .BeFalse ( ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task
-            TryWritableAuxiliariesValueAsync_ForCharacteristicDoesNotSupportWritableAuxiliaries_DoesNotCallTryWriteValueAsync (
-                RawValueWriter                        sut ,
-                [ Freeze ] IGattCharacteristicWrapper characteristic ,
-                IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None ) ;
-
-            await sut.TryWriteValueAsync ( characteristic ,
-                                           buffer ) ;
-
-            await characteristic.DidNotReceive ( )
-                                .WriteValueAsync ( buffer ) ;
-        }
-
-        // --
-        [ AutoDataTestMethod ]
-        public void TryWriteWithoutResponseAsync_ForCharacteristicIsNull_Throws (
-            RawValueWriter sut ,
-            IBuffer        buffer )
-        {
-            var action = async ( ) =>
-                         {
-                             await sut.TryWriteWithoutResponseAsync ( null! ,
-                                                                      buffer ) ;
-                         } ;
-
-            action.Should ( )
-                  .ThrowAsync < ArgumentNullException > ( )
-                  .WithParameter ( "characteristic" ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task TryWriteWithoutResponseAsync_ForBufferIsNull_Throws (
-            RawValueWriter             sut ,
-            IGattCharacteristicWrapper characteristic )
-        {
-            var action = async ( ) =>
-                         {
-                             await sut.TryWriteWithoutResponseAsync ( characteristic ,
+    [ AutoDataTestMethod ]
+    public void TryWritableAuxiliariesValueAsync_ForBufferIsNull_Throws (
+        RawValueWriter sut ,
+        IGattCharacteristicWrapper characteristic )
+    {
+        var action = async ( ) =>
+                     {
+                         await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
                                                                       null! ) ;
-                         } ;
+                     } ;
 
-            await action.Should ( )
-                        .ThrowAsync < ArgumentNullException > ( )
-                        .WithParameter ( "buffer" ) ;
-        }
+        action.Should ( )
+              .ThrowAsync < ArgumentNullException > ( )
+              .WithParameter ( "buffer" ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task TryWriteWithoutResponseAsync_ForGattCommunicationStatusIsSuccess_True (
-            RawValueWriter                        sut ,
+    [ AutoDataTestMethod ]
+    public async Task TryWritableAuxiliariesValueAsync_ForGattCommunicationStatusIsSuccess_True (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WritableAuxiliaries )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.Success ) ;
+
+        var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
+                                                                  buffer ) ;
+
+        actual.Should ( )
+              .BeTrue ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task TryWritableAuxiliariesValueAsync_ForGattCommunicationStatusIsUnreachable_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WritableAuxiliaries )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.Unreachable ) ;
+
+        var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
+                                                                  buffer ) ;
+
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task TryWritableAuxiliariesValueAsync_ForGattCommunicationStatusIsProtocolError_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WritableAuxiliaries )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.ProtocolError ) ;
+
+        var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
+                                                                  buffer ) ;
+
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task TryWritableAuxiliariesValueAsync_ForGattCommunicationStatusIsAccessDenied_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WritableAuxiliaries )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.AccessDenied ) ;
+
+        var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
+                                                                  buffer ) ;
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task TryWritableAuxiliariesValueAsync_ForCharacteristicDoesNotSupportWrite_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None )
+                      .WithWriteValueAsyncResult ( GattCommunicationStatus.AccessDenied ) ;
+
+        var actual = await sut.TryWritableAuxiliariesValueAsync ( characteristic ,
+                                                                  buffer ) ;
+        actual.Should ( )
+              .BeFalse ( ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task
+        TryWritableAuxiliariesValueAsync_ForCharacteristicDoesNotSupportWritableAuxiliaries_DoesNotCallTryWriteValueAsync (
+            RawValueWriter sut ,
             [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer ,
-            IGattWriteResultWrapper               result )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WriteWithoutResponse )
-                          .WithWriteValueWithResultAsync ( result ) ;
+            IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None ) ;
 
-            var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
+        await sut.TryWriteValueAsync ( characteristic ,
+                                       buffer ) ;
+
+        await characteristic.DidNotReceive ( )
+                            .WriteValueAsync ( buffer ) ;
+    }
+
+    // --
+    [ AutoDataTestMethod ]
+    public void TryWriteWithoutResponseAsync_ForCharacteristicIsNull_Throws (
+        RawValueWriter sut ,
+        IBuffer buffer )
+    {
+        var action = async ( ) =>
+                     {
+                         await sut.TryWriteWithoutResponseAsync ( null! ,
                                                                   buffer ) ;
+                     } ;
 
-            actual.Should ( )
-                  .Be ( result ) ;
-        }
+        action.Should ( )
+              .ThrowAsync < ArgumentNullException > ( )
+              .WithParameter ( "characteristic" ) ;
+    }
 
-        [ AutoDataTestMethod ]
-        public async Task TryWriteWithoutResponseAsync_ForGattCommunicationStatusIsUnreachable_False (
-            RawValueWriter                        sut ,
+    [ AutoDataTestMethod ]
+    public async Task TryWriteWithoutResponseAsync_ForBufferIsNull_Throws (
+        RawValueWriter sut ,
+        IGattCharacteristicWrapper characteristic )
+    {
+        var action = async ( ) =>
+                     {
+                         await sut.TryWriteWithoutResponseAsync ( characteristic ,
+                                                                  null! ) ;
+                     } ;
+
+        await action.Should ( )
+                    .ThrowAsync < ArgumentNullException > ( )
+                    .WithParameter ( "buffer" ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task TryWriteWithoutResponseAsync_ForGattCommunicationStatusIsSuccess_True (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer ,
+        IGattWriteResultWrapper result )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WriteWithoutResponse )
+                      .WithWriteValueWithResultAsync ( result ) ;
+
+        var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
+                                                              buffer ) ;
+
+        actual.Should ( )
+              .Be ( result ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task TryWriteWithoutResponseAsync_ForGattCommunicationStatusIsUnreachable_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer ,
+        IGattWriteResultWrapper result )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WriteWithoutResponse )
+                      .WithWriteValueWithResultAsync ( result ) ;
+
+        var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
+                                                              buffer ) ;
+
+        actual.Should ( )
+              .Be ( result ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task TryWriteWithoutResponseAsync_ForGattCommunicationStatusIsProtocolError_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer ,
+        IGattWriteResultWrapper result )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WriteWithoutResponse )
+                      .WithWriteValueWithResultAsync ( result ) ;
+
+        var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
+                                                              buffer ) ;
+
+        actual.Should ( )
+              .Be ( result ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task TryWriteWithoutResponseAsync_ForGattCommunicationStatusIsAccessDenied_False (
+        RawValueWriter sut ,
+        [ Freeze ] IGattCharacteristicWrapper characteristic ,
+        IBuffer buffer ,
+        IGattWriteResultWrapper result )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WriteWithoutResponse )
+                      .WithWriteValueWithResultAsync ( result ) ;
+
+        var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
+                                                              buffer ) ;
+        actual.Should ( )
+              .Be ( result ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public async Task
+        TryWriteWithoutResponseAsync_ForCharacteristicDoesNotWriteWithoutResponse_GattWriteResultNotSupported (
+            RawValueWriter sut ,
             [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer ,
-            IGattWriteResultWrapper               result )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WriteWithoutResponse )
-                          .WithWriteValueWithResultAsync ( result ) ;
+            IBuffer buffer ,
+            IGattWriteResultWrapper result )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None )
+                      .WithWriteValueWithResultAsync ( result ) ;
 
-            var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
-                                                                  buffer ) ;
+        var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
+                                                              buffer ) ;
+        actual.Should ( )
+              .Be ( GattWriteResultWrapper.NotSupported ) ;
+    }
 
-            actual.Should ( )
-                  .Be ( result ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task TryWriteWithoutResponseAsync_ForGattCommunicationStatusIsProtocolError_False (
-            RawValueWriter                        sut ,
+    [ AutoDataTestMethod ]
+    public async Task
+        TryWriteWithoutResponseAsync_ForCharacteristicDoesNotSupportWrite_DoesNotCallTryWriteValueAsync (
+            RawValueWriter sut ,
             [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer ,
-            IGattWriteResultWrapper               result )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WriteWithoutResponse )
-                          .WithWriteValueWithResultAsync ( result ) ;
+            IBuffer buffer )
+    {
+        characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None ) ;
 
-            var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
-                                                                  buffer ) ;
+        await sut.TryWriteValueAsync ( characteristic ,
+                                       buffer ) ;
 
-            actual.Should ( )
-                  .Be ( result ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task TryWriteWithoutResponseAsync_ForGattCommunicationStatusIsAccessDenied_False (
-            RawValueWriter                        sut ,
-            [ Freeze ] IGattCharacteristicWrapper characteristic ,
-            IBuffer                               buffer ,
-            IGattWriteResultWrapper               result )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.WriteWithoutResponse )
-                          .WithWriteValueWithResultAsync ( result ) ;
-
-            var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
-                                                                  buffer ) ;
-            actual.Should ( )
-                  .Be ( result ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task
-            TryWriteWithoutResponseAsync_ForCharacteristicDoesNotWriteWithoutResponse_GattWriteResultNotSupported (
-                RawValueWriter                        sut ,
-                [ Freeze ] IGattCharacteristicWrapper characteristic ,
-                IBuffer                               buffer ,
-                IGattWriteResultWrapper               result )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None )
-                          .WithWriteValueWithResultAsync ( result ) ;
-
-            var actual = await sut.TryWriteWithoutResponseAsync ( characteristic ,
-                                                                  buffer ) ;
-            actual.Should ( )
-                  .Be ( GattWriteResultWrapper.NotSupported ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public async Task
-            TryWriteWithoutResponseAsync_ForCharacteristicDoesNotSupportWrite_DoesNotCallTryWriteValueAsync (
-                RawValueWriter                        sut ,
-                [ Freeze ] IGattCharacteristicWrapper characteristic ,
-                IBuffer                               buffer )
-        {
-            characteristic.WithCharacteristicProperties ( GattCharacteristicProperties.None ) ;
-
-            await sut.TryWriteValueAsync ( characteristic ,
-                                           buffer ) ;
-
-            await characteristic.DidNotReceive ( )
-                                .WriteValueAsync ( buffer ) ;
-        }
+        await characteristic.DidNotReceive ( )
+                            .WriteValueAsync ( buffer ) ;
     }
 }
