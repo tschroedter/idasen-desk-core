@@ -4,6 +4,7 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Autofac.Extras.DynamicProxy;
 using Idasen.Aop.Aspects;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
+using Serilog;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 {
@@ -14,14 +15,18 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         : IGattCharacteristicsResultWrapper, IDisposable
     {
         public GattCharacteristicsResultWrapper(
+            ILogger logger,
             IGattCharacteristicWrapperFactory factory,
             GattCharacteristicsResult         result)
         {
+            Guard.ArgumentNotNull(logger,
+                                  nameof(logger));
             Guard.ArgumentNotNull(factory,
                                   nameof(factory));
             Guard.ArgumentNotNull(result,
                                   nameof(result));
 
+            _logger = logger;
             _factory = factory;
             _result  = result;
         }
@@ -51,10 +56,33 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                                   .Select(characteristic => _factory.Create(characteristic))
                                   .ToList();
 
-            // Initialize all wrappers in parallel for efficiency
-            await Task.WhenAll(wrappers.Select(w => w.Initialize()));
+            // Initialize all wrappers in parallel; continue on failure of any item
+            var initTasks = wrappers.Select(async w =>
+            {
+                try
+                {
+                    await w.Initialize();
+                    return w;
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        _logger.Warning(ex, "Failed to initialize GATT characteristic wrapper {Uuid}", w.Uuid);
+                    }
+                    catch
+                    {
+                        _logger.Warning(ex, "Failed to initialize a GATT characteristic wrapper");
+                    }
 
-            Characteristics = wrappers;
+                    // swallow to continue; problematic wrapper is excluded
+                    w.Dispose();
+                    return null;
+                }
+            });
+
+            var initialized = await Task.WhenAll(initTasks);
+            Characteristics = initialized.Where(w => w is not null)!.ToList()!;
 
             return this;
         }
@@ -125,6 +153,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             Characteristics = Array.Empty<IGattCharacteristicWrapper>();
         }
 
+        private readonly ILogger _logger;
         private readonly IGattCharacteristicWrapperFactory _factory;
         private readonly GattCharacteristicsResult         _result;
     }

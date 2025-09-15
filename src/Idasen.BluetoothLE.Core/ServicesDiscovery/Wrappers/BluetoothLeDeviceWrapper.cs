@@ -89,6 +89,11 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     /// <inheritdoc />
     public async void Connect ( )
     {
+        await ConnectAsync ( ) ;
+    }
+
+    public async Task ConnectAsync ( )
+    {
         try
         {
             if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
@@ -123,13 +128,13 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     }
 
     /// <inheritdoc />
-    public string Name => _device.Name ;
+    public string Name => _device.Name ?? string.Empty ;
 
     /// <inheritdoc />
-    public string DeviceId => _device.DeviceId ;
+    public string DeviceId => _device.DeviceId ?? string.Empty ;
 
     /// <inheritdoc />
-    public bool IsPaired => _device.DeviceInformation.Pairing.IsPaired ;
+    public bool IsPaired => _device.DeviceInformation?.Pairing?.IsPaired ?? false ;
 
     /// <inheritdoc />
     public BluetoothConnectionStatus ConnectionStatus => _device.ConnectionStatus ;
@@ -153,7 +158,14 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         _session?.Dispose ( ) ;
 
         _session = await GattSession.FromDeviceIdAsync ( _device.BluetoothDeviceId ) ;
-        _session.MaintainConnection = true ;
+        if ( _session != null )
+        {
+            _session.MaintainConnection = true ;
+        }
+        else
+        {
+            _logger.Warning ( "[{DeviceId}] Failed to create GATT session" , DeviceId ) ;
+        }
     }
 
     // ReSharper disable once AsyncVoidMethod

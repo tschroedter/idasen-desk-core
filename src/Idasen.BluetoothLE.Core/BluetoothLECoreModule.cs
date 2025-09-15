@@ -124,6 +124,10 @@ namespace Idasen.BluetoothLE.Core
                    .As < IBluetoothLeDeviceWrapperFactory > ( )
                    .EnableInterfaceInterceptors ( ) ;
 
+            builder.RegisterType < GattDeviceServiceWrapper > ( )
+                   .As < IGattDeviceServiceWrapper > ( )
+                   .EnableInterfaceInterceptors ( ) ;
+
             builder.RegisterType < GattDeviceServicesResultWrapper > ( )
                    .As < IGattDeviceServicesResultWrapper > ( ) ;
 
@@ -143,7 +147,7 @@ namespace Idasen.BluetoothLE.Core
                    .As < IGattReadResultWrapper > ( ) ;
 
             builder.RegisterType < GattReadResultWrapperFactory > ( )
-                   .As < IGatReadResultWrapperFactory > ( )
+                   .As < IGattReadResultWrapperFactory > ( )
                    .EnableInterfaceInterceptors ( ) ;
 
             builder.RegisterType < GattWriteResultWrapper > ( )

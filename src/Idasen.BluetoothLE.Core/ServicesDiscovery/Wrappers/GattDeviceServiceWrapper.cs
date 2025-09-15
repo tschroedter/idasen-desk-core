@@ -27,9 +27,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         /// <inheritdoc />
         public void Dispose ( )
         {
-            _gattDeviceService.Dispose ( ) ;
             _lastCharacteristics?.Dispose ( ) ;
             _lastCharacteristics = null ;
+            _gattDeviceService.Dispose ( ) ;
         }
 
         /// <inheritdoc />

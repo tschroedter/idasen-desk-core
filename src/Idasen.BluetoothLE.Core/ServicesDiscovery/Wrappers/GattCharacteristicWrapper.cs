@@ -19,7 +19,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             GattCharacteristic characteristic,
             IGattCharacteristicValueChangedObservables observables,
             IGattWriteResultWrapperFactory writeResultFactory,
-            IGatReadResultWrapperFactory readResultFactory)
+            IGattReadResultWrapperFactory readResultFactory)
         {
             Guard.ArgumentNotNull(logger,
                                     nameof(logger));
@@ -60,7 +60,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         public GattCharacteristicProperties CharacteristicProperties => _characteristic.CharacteristicProperties;
 
         public IReadOnlyList<GattPresentationFormat> PresentationFormats => _characteristic.PresentationFormats;
-        public Guid ServiceUuid => _characteristic.Service.Uuid; // maybe inject IGattDeviceServiceWrapper
+        public Guid ServiceUuid => _characteristic.Service?.Uuid ?? Guid.Empty; // maybe inject IGattDeviceServiceWrapper
         public string UserDescription => _characteristic.UserDescription;
         public GattProtectionLevel ProtectionLevel => _characteristic.ProtectionLevel;
         public ushort AttributeHandle => _characteristic.AttributeHandle;
@@ -99,7 +99,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         private readonly GattCharacteristic _characteristic;
         private readonly ILogger _logger;
         private readonly IGattCharacteristicValueChangedObservables _observables;
-        private readonly IGatReadResultWrapperFactory _readResultFactory;
+        private readonly IGattReadResultWrapperFactory _readResultFactory;
         private readonly IGattWriteResultWrapperFactory _writeResultFactory;
     }
 }

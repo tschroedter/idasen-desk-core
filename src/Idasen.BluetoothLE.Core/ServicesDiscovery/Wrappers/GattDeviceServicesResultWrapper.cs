@@ -19,7 +19,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             _service               = service ;
             _serviceWrapperFactory = serviceWrapperFactory ;
 
-            _services = _service.Services
+            var services = _service.Services ?? Array.Empty<GattDeviceService>();
+
+            _services = services
                                 .Select ( s => _serviceWrapperFactory ( s ) )
                                 .ToArray ( ) ;
         }

@@ -22,7 +22,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         public GattCommunicationStatus Status => _result.Status ;
 
         public byte ?  ProtocolError => _result.ProtocolError ;
-        public IBuffer Value         => _result.Value ;
+        public IBuffer? Value         => _result.Value ;
 
         public delegate IGattReadResultWrapper Factory ( GattReadResult result ) ;
 

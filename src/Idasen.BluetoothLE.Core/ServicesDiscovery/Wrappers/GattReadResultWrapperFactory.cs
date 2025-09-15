@@ -8,7 +8,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     /// <inheritdoc />
     [ Intercept ( typeof ( LogAspect ) ) ]
     public class GattReadResultWrapperFactory
-        : IGatReadResultWrapperFactory
+        : IGattReadResultWrapperFactory
     {
         public GattReadResultWrapperFactory ( GattReadResultWrapper.Factory factory )
         {
