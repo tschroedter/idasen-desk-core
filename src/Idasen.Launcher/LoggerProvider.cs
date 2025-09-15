@@ -23,14 +23,14 @@ public static class LoggerProvider
 
         if ( _logger != null )
         {
-            _logger.Value.Debug ( $"Using existing logger for '{appName}' in folder {appLogFileName}" ) ;
+            _logger.Value.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" , appName , appLogFileName ) ;
 
             return _logger.Value ;
         }
 
         _logger = DoCreateLogger ( appLogFileName ) ;
 
-        _logger.Value.Debug ( $"Created logger for '{appName}' in folder '{appLogFileName}'" ) ;
+        _logger.Value.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" , appName , appLogFileName ) ;
 
         return _logger.Value ;
     }
@@ -60,7 +60,7 @@ public static class LoggerProvider
 
         var logger = loggerConfiguration.CreateLogger ( ) ;
 
-        Console.WriteLine ( $"Log file name: {LoggingFile.FullPath} {LoggingFile.Path}" ) ;
+        Console.WriteLine ( "Log file name: {FullPath} {Path}" , LoggingFile.FullPath , LoggingFile.Path ) ;
 
         return new Lazy < Logger > ( logger ) ;
     }

@@ -59,7 +59,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             {
                 _discoveredDevices.Remove ( device.Address ) ;
 
-                _logger.Information ( $"[{device.MacAddress}] Device removed" ) ;
+                _logger.Information ( "[{Mac}] Device removed" , device.MacAddress ) ;
             }
         }
 
@@ -101,14 +101,11 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
 
         private void AddDevice ( IDevice device )
         {
-            var newDevice = new Device ( device.BroadcastTime ,
-                                         device.Address ,
-                                         device.Name ,
-                                         device.RawSignalStrengthInDBm ) ;
+            var newDevice = new Device ( device ) ;
 
             _discoveredDevices [ device.Address ] = newDevice ;
 
-            _logger.Information ( $"[{device.MacAddress}] Device added" ) ;
+            _logger.Information ( "[{Mac}] Device added" , device.MacAddress ) ;
         }
 
         private void UpdateDevice ( IDevice device ,
@@ -121,7 +118,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
             storedDevice.RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
             storedDevice.BroadcastTime          = device.BroadcastTime ;
 
-            _logger.Information ( $"[{device.MacAddress}] Device updated" ) ;
+            _logger.Information ( "[{Mac}] Device updated" , device.MacAddress ) ;
         }
 
         private readonly Dictionary < ulong , Device > _discoveredDevices = new( ) ;

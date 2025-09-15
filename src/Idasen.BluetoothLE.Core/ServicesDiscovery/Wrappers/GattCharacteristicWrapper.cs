@@ -42,8 +42,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         /// <inheritdoc />
         public async Task<IGattCharacteristicWrapper> Initialize()
         {
-            _logger.Information("Initializing GattCharacteristic with UUID " +
-                                  $"{_characteristic.Uuid}");
+            _logger.Information("Initializing GattCharacteristic with UUID {Uuid}", _characteristic.Uuid);
 
             await _observables.Initialise(_characteristic);
 

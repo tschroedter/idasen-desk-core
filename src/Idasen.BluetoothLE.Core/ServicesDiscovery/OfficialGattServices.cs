@@ -50,14 +50,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
             var number = n.Substring ( 4 , 4 ) ;
 
-            ushort assignedNumber ;
-
-            try
-            {
-                assignedNumber = ( ushort )Convert.ToInt32 ( number ,
-                                                             16 ) ;
-            }
-            catch ( Exception )
+            // Avoid exception-based control flow; validate parse
+            if ( ! ushort.TryParse ( number , NumberStyles.HexNumber , CultureInfo.InvariantCulture , out var assignedNumber ) )
             {
                 return false ;
             }

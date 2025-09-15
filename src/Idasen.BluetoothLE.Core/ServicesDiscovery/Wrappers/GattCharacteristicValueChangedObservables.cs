@@ -41,11 +41,13 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             var properties  = characteristic.CharacteristicProperties ;
             var serviceUuid = characteristic.Service?.Uuid ?? Guid.Empty ;
 
-            _logger.Information ( $"Service UUID = {serviceUuid} Characteristic UUID = {characteristic.Uuid} " +
-                                  $"Notify = {properties.HasFlag ( GattCharacteristicProperties.Notify )} " +
-                                  $"Indicate = {properties.HasFlag ( GattCharacteristicProperties.Indicate )} " +
-                                  $"Write = {properties.HasFlag ( GattCharacteristicProperties.Write )} " +
-                                  $"WriteWithoutResponse = {properties.HasFlag ( GattCharacteristicProperties.WriteWithoutResponse )}" ) ;
+            _logger.Information ( "Service UUID = {ServiceUuid} Characteristic UUID = {CharacteristicUuid} Notify = {Notify} Indicate = {Indicate} Write = {Write} WriteWithoutResponse = {WriteWithoutResponse}" ,
+                                  serviceUuid ,
+                                  characteristic.Uuid ,
+                                  properties.HasFlag ( GattCharacteristicProperties.Notify ) ,
+                                  properties.HasFlag ( GattCharacteristicProperties.Indicate ) ,
+                                  properties.HasFlag ( GattCharacteristicProperties.Write ) ,
+                                  properties.HasFlag ( GattCharacteristicProperties.WriteWithoutResponse ) ) ;
 
             if ( properties.HasFlag ( GattCharacteristicProperties.Notify ) ||
                  properties.HasFlag ( GattCharacteristicProperties.Indicate ) ) /*&&
@@ -63,10 +65,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 
                     if ( status == GattCommunicationStatus.Success )
                     {
-                        _logger.Information ( "Notify/Indicate "                                +
-                                              $"Service UUID = {serviceUuid} "  +
-                                              $"Characteristic UUID = {characteristic.Uuid} - " +
-                                              "Subscribing to ValueChanged" ) ;
+                        _logger.Information ( "Notify/Indicate Service UUID = {ServiceUuid} Characteristic UUID = {CharacteristicUuid} - Subscribing to ValueChanged" ,
+                                              serviceUuid ,
+                                              characteristic.Uuid ) ;
 
                         _observable = Observable
                                      .FromEventPattern
@@ -89,7 +90,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                     var result = await characteristic.ReadClientCharacteristicConfigurationDescriptorAsync ( ) ;
 
                     if ( result.Status == GattCommunicationStatus.Success )
-                        _logger.Information ( $"{result.Status} {result.ClientCharacteristicConfigurationDescriptor}" ) ;
+                        _logger.Information ( "{Status} {Descriptor}" , result.Status , result.ClientCharacteristicConfigurationDescriptor ) ;
                 }
                 catch ( Exception e )
                 {

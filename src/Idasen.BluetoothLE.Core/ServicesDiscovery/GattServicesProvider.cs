@@ -45,7 +45,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
 
             if ( _device.ConnectionStatus == BluetoothConnectionStatus.Disconnected )
             {
-                _logger.Error ( $"[{_device.DeviceId}] {_device.ConnectionStatus}" ) ;
+                _logger.Error ( "[{DeviceId}] {Status}" , _device.DeviceId , _device.ConnectionStatus ) ;
 
                 _refreshed.OnNext ( GattCommunicationStatus.Unreachable ) ;
 
@@ -58,7 +58,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
             }
             catch ( Exception ex )
             {
-                _logger.Error ( ex , $"[{_device.DeviceId}] Failed to get GATT services" ) ;
+                _logger.Error ( ex , "[{DeviceId}] Failed to get GATT services" , _device.DeviceId ) ;
                 _refreshed.OnNext ( GattCommunicationStatus.Unreachable ) ;
                 return ;
             }
@@ -69,8 +69,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
             }
             else
             {
-                _logger.Error ( $"[{_device.DeviceId}] Gatt communication status " +
-                                $"'{_gattResult.Status}'" ) ;
+                _logger.Error ( "[{DeviceId}] Gatt communication status '{Status}'" ,
+                                _device.DeviceId ,
+                                _gattResult.Status ) ;
             }
 
             _refreshed.OnNext ( _gattResult.Status ) ;
@@ -102,15 +103,15 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
                 }
                 catch ( Exception ex )
                 {
-                    _logger.Error ( ex , $"[{_device.DeviceId}] Exception getting Characteristics for device " +
-                                         $"'{service.DeviceId}' and service '{service.Uuid}'" ) ;
+                    _logger.Error ( ex , "[{DeviceId}] Exception getting Characteristics for device '{ServiceDeviceId}' and service '{ServiceUuid}'" ,
+                                     _device.DeviceId , service.DeviceId , service.Uuid ) ;
                     continue ;
                 }
 
                 if ( characteristics.Status != GattCommunicationStatus.Success )
                 {
-                    _logger.Error ( $"[{_device.DeviceId}] Could not get Characteristics for device " +
-                                    $"'{service.DeviceId}' and service '{service.Uuid}'" ) ;
+                    _logger.Error ( "[{DeviceId}] Could not get Characteristics for device '{ServiceDeviceId}' and service '{ServiceUuid}'" ,
+                                    _device.DeviceId , service.DeviceId , service.Uuid ) ;
 
                     continue ;
                 }

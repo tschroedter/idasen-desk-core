@@ -30,7 +30,7 @@ namespace Idasen.BluetoothLE.Linak
             Guard.ArgumentNotNull ( details ,
                                     nameof ( details ) ) ;
 
-            _logger.Debug ( $"Received {details}" ) ;
+            _logger.Debug ( "Received {Details}" , details ) ;
 
             _subject.OnNext ( details ) ;
         }
@@ -42,7 +42,7 @@ namespace Idasen.BluetoothLE.Linak
             Guard.ArgumentNotNull ( message ,
                                     nameof ( message ) ) ;
 
-            _logger.Debug ( $"Received {message}" ) ;
+            _logger.Debug ( "Received {Message}" , message ) ;
 
             _subject.OnNext ( new ErrorDetails ( message ,
                                                  caller ) ) ;

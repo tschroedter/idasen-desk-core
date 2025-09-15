@@ -23,7 +23,11 @@ namespace Idasen.BluetoothLE.Characteristics.Common
                        $" (0x{exception.HResult:X}) "    +
                        message ;
 
-            log.Information ( text ) ;
+            // Prefer structured logging to preserve HResult as number and message pieces separately
+            log.Information ( "{Base} (0x{HResult:X}) {Message}" ,
+                              Constants.CheckAndEnableBluetooth ,
+                              exception.HResult ,
+                              message ) ;
         }
     }
 }
