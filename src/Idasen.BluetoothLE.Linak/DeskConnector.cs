@@ -113,6 +113,7 @@ namespace Idasen.BluetoothLE.Linak
             _device.Dispose ( ) ;
 
             _finishedSubject.OnCompleted ( ) ;
+            _deviceNameChanged.OnCompleted ( ) ;
         }
 
         /// <inheritdoc />
