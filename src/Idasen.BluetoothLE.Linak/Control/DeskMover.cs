@@ -122,7 +122,7 @@ namespace Idasen.BluetoothLE.Linak.Control
             _disposableTimer?.Dispose ( ) ;
 
             _disposalHeightAndSpeed = null ;
-            _disposableTimer = null ;
+            _disposableTimer        = null ;
 
             var stop = await _executor.Stop ( ) ;
 
@@ -181,7 +181,7 @@ namespace Idasen.BluetoothLE.Linak.Control
             _disposableTimer?.Dispose ( ) ;
             _disposableTimer = Observable.Interval ( TimerInterval )
                                          .ObserveOn ( _scheduler )
-                                         .Subscribe ( OnTimerElapsed ) ;
+                                         .SubscribeAsync ( _ => Move ( ) ) ;
 
             IsAllowedToMove = true ;
 
@@ -190,7 +190,7 @@ namespace Idasen.BluetoothLE.Linak.Control
 
         internal void OnTimerElapsed ( long time )
         {
-            if (_disposableTimer == null || ! IsAllowedToMove)
+            if ( _disposableTimer == null || ! IsAllowedToMove )
                 return ;
 
             if ( ! Move ( ).Wait ( TimerInterval * 10 ) )

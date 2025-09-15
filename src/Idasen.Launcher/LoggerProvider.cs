@@ -11,6 +11,7 @@ public static class LoggerProvider
                                        "{Level:u3}] {Message} " +
                                        "(at {Caller}){NewLine}{Exception}" ;
 
+    private static readonly object _sync = new ( ) ;
     private static Lazy < Logger >? _logger ;
 
     public static ILogger CreateLogger ( string appName ,
@@ -21,18 +22,21 @@ public static class LoggerProvider
         Guard.ArgumentNotNull ( appLogFileName ,
                                 nameof ( appLogFileName ) ) ;
 
-        if ( _logger != null )
+        lock ( _sync )
         {
-            _logger.Value.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" , appName , appLogFileName ) ;
+            if ( _logger != null )
+            {
+                _logger.Value.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" , appName , appLogFileName ) ;
+
+                return _logger.Value ;
+            }
+
+            _logger = DoCreateLogger ( appLogFileName ) ;
+
+            _logger.Value.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" , appName , appLogFileName ) ;
 
             return _logger.Value ;
         }
-
-        _logger = DoCreateLogger ( appLogFileName ) ;
-
-        _logger.Value.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" , appName , appLogFileName ) ;
-
-        return _logger.Value ;
     }
 
     private static Lazy < Logger > DoCreateLogger ( string appLogFileName )
@@ -63,6 +67,19 @@ public static class LoggerProvider
         Console.WriteLine ( "Log file name: {0} {1}" , LoggingFile.FullPath , LoggingFile.Path ) ;
 
         return new Lazy < Logger > ( logger ) ;
+    }
+
+    public static void Shutdown ( )
+    {
+        lock ( _sync )
+        {
+            if ( _logger == null )
+                return ;
+
+            // Flush and close sinks
+            Log.CloseAndFlush ( ) ;
+            _logger = null ;
+        }
     }
 
     public static string CreateFullPathLogFileName ( string folder ,

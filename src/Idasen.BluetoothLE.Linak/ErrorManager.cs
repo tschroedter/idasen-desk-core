@@ -10,7 +10,7 @@ namespace Idasen.BluetoothLE.Linak
 {
     [ Intercept ( typeof ( LogAspect ) ) ]
     public class ErrorManager // todo testing, move to more general project
-        : IErrorManager
+        : IErrorManager, IDisposable
     {
         public ErrorManager (
             ILogger                    logger ,
@@ -48,8 +48,15 @@ namespace Idasen.BluetoothLE.Linak
                                                  caller ) ) ;
         }
 
-        public           IObservable < IErrorDetails > ErrorChanged => _subject ;
-        private readonly ILogger                       _logger ;
-        private readonly ISubject < IErrorDetails >    _subject ;
+        public IObservable < IErrorDetails > ErrorChanged => _subject ;
+
+        public void Dispose()
+        {
+            // Complete the stream to release subscribers in long-running apps
+            _subject.OnCompleted ( ) ;
+        }
+
+        private readonly ILogger                    _logger ;
+        private readonly ISubject < IErrorDetails > _subject ;
     }
 }
