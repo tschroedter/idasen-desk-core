@@ -15,40 +15,12 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     public class BluetoothLeDeviceWrapperFactory
         : IBluetoothLeDeviceWrapperFactory
     {
-        [ SuppressMessage ( "NDepend" ,
-                            "ND1004:AvoidMethodsWithTooManyParameters" ,
-                            Justification = "The factory hides a real BluetoothLe device behind an interface." ) ]
-        public BluetoothLeDeviceWrapperFactory (
-            ILogger                                         logger ,
-            IGattServicesProviderFactory                    providerFactory ,
-            IGattDeviceServicesResultWrapperFactory         servicesFactory ,
-            Func < IGattServicesDictionary >                gattServicesDictionaryFactory ,
-            IGattCharacteristicsResultWrapperFactory        characteristicsFactory ,
-            Func < ISubject < BluetoothConnectionStatus > > connectionStatusChangedFactory ,
-            BluetoothLeDeviceWrapper.Factory                factory )
+        public BluetoothLeDeviceWrapperFactory ( BluetoothLeDeviceWrapper.Factory factory )
         {
-            Guard.ArgumentNotNull ( logger ,
-                                    nameof ( logger ) ) ;
-            Guard.ArgumentNotNull ( providerFactory ,
-                                    nameof ( providerFactory ) ) ;
-            Guard.ArgumentNotNull ( servicesFactory ,
-                                    nameof ( servicesFactory ) ) ;
-            Guard.ArgumentNotNull ( gattServicesDictionaryFactory ,
-                                    nameof ( gattServicesDictionaryFactory ) ) ;
-            Guard.ArgumentNotNull ( characteristicsFactory ,
-                                    nameof ( characteristicsFactory ) ) ;
-            Guard.ArgumentNotNull ( connectionStatusChangedFactory ,
-                                    nameof ( connectionStatusChangedFactory ) ) ;
             Guard.ArgumentNotNull ( factory ,
                                     nameof ( factory ) ) ;
 
-            _logger                         = logger ;
-            _providerFactory                = providerFactory ;
-            _servicesFactory                = servicesFactory ;
-            _gattServicesDictionaryFactory  = gattServicesDictionaryFactory ;
-            _characteristicsFactory         = characteristicsFactory ;
-            _connectionStatusChangedFactory = connectionStatusChangedFactory ;
-            _factory                        = factory ;
+            _factory = factory ;
         }
 
         /// <inheritdoc />
@@ -59,12 +31,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
             return _factory ( device ) ;
         }
 
-        private readonly IGattCharacteristicsResultWrapperFactory        _characteristicsFactory ;
-        private readonly Func < ISubject < BluetoothConnectionStatus > > _connectionStatusChangedFactory ;
-        private readonly BluetoothLeDeviceWrapper.Factory                _factory ;
-        private readonly Func < IGattServicesDictionary >                _gattServicesDictionaryFactory ;
-        private readonly ILogger                                         _logger ;
-        private readonly IGattServicesProviderFactory                    _providerFactory ;
-        private readonly IGattDeviceServicesResultWrapperFactory         _servicesFactory ;
+        private readonly BluetoothLeDeviceWrapper.Factory _factory ;
     }
 }

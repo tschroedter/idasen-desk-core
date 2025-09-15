@@ -72,6 +72,10 @@ namespace Idasen.BluetoothLE.Core
                    .As < IDeviceFactory > ( )
                    .EnableInterfaceInterceptors ( ) ;
 
+            builder.RegisterType<BluetoothLEDeviceProvider>()
+                   .As<IBluetoothLEDeviceProvider>()
+                   .EnableInterfaceInterceptors();
+
             builder.RegisterType < StatusMapper > ( )
                    .As < IStatusMapper > ( )
                    .EnableInterfaceInterceptors ( ) ;

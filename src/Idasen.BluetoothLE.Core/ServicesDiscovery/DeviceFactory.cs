@@ -14,22 +14,26 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
     {
         public DeviceFactory (
             Device.Factory                   deviceFactory ,
-            IBluetoothLeDeviceWrapperFactory deviceWrapperFactory )
+            IBluetoothLeDeviceWrapperFactory deviceWrapperFactory ,
+            IBluetoothLEDeviceProvider       deviceProvider )
         {
             Guard.ArgumentNotNull ( deviceFactory ,
                                     nameof ( deviceFactory ) ) ;
             Guard.ArgumentNotNull ( deviceWrapperFactory ,
                                     nameof ( deviceWrapperFactory ) ) ;
+            Guard.ArgumentNotNull ( deviceProvider ,
+                                    nameof ( deviceProvider ) ) ;
 
             _deviceFactory        = deviceFactory ;
             _deviceWrapperFactory = deviceWrapperFactory ;
+            _deviceProvider       = deviceProvider ;
         }
 
         /// <inheritdoc />
         [ ExcludeFromCodeCoverage ]
         public async Task < IDevice > FromBluetoothAddressAsync ( ulong address )
         {
-            var device = await BluetoothLEDevice.FromBluetoothAddressAsync ( address ) ;
+            var device = await _deviceProvider.FromBluetoothAddressAsync ( address ) ;
 
             if ( device is null )
                 throw new InvalidOperationException ( $"Failed to get BluetoothLEDevice for address {address}" ) ;
@@ -38,6 +42,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery
         }
 
         private readonly Device.Factory                   _deviceFactory ;
+        private readonly IBluetoothLEDeviceProvider       _deviceProvider ;
         private readonly IBluetoothLeDeviceWrapperFactory _deviceWrapperFactory ;
     }
 }
