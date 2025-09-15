@@ -23,12 +23,9 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             Guard.ArgumentNotNull ( buffer ,
                                     nameof ( buffer ) ) ;
 
-            if ( SupportsWrite ( characteristic ) )
+            if ( ! IsSupported ( characteristic , GattCharacteristicProperties.Write ) )
             {
-                Log.Information ( $"GattCharacteristic '{characteristic.Uuid}' " +
-                                  "doesn't support 'Write/WritableAuxiliaries/"  +
-                                  "WriteWithoutResponse'" ) ;
-
+                LogUnsupported ( characteristic , "Write" ) ;
                 return false ;
             }
 
@@ -46,12 +43,9 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             Guard.ArgumentNotNull ( buffer ,
                                     nameof ( buffer ) ) ;
 
-            if ( SupportsWritableAuxiliaries ( characteristic ) )
+            if ( ! IsSupported ( characteristic , GattCharacteristicProperties.WritableAuxiliaries ) )
             {
-                Log.Information ( $"GattCharacteristic '{characteristic.Uuid}' " +
-                                  "doesn't support 'Write/WritableAuxiliaries/"  +
-                                  "WriteWithoutResponse'" ) ;
-
+                LogUnsupported ( characteristic , "WritableAuxiliaries" ) ;
                 return false ;
             }
 
@@ -69,14 +63,9 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             Guard.ArgumentNotNull ( buffer ,
                                     nameof ( buffer ) ) ;
 
-            if ( SupportsWriteWithoutResponse ( characteristic ) )
+            if ( ! IsSupported ( characteristic , GattCharacteristicProperties.WriteWithoutResponse ) )
             {
-                var message = $"GattCharacteristic '{characteristic.Uuid}' " +
-                              "doesn't support 'Write/WritableAuxiliaries/"  +
-                              "WriteWithoutResponse'" ;
-
-                Log.Information ( message ) ;
-
+                LogUnsupported ( characteristic , "WriteWithoutResponse" ) ;
                 return GattWriteResultWrapper.NotSupported ;
             }
 
@@ -85,22 +74,18 @@ namespace Idasen.BluetoothLE.Characteristics.Common
             return status ;
         }
 
-        private static bool SupportsWrite ( IGattCharacteristicWrapper characteristic )
+        private static bool IsSupported ( IGattCharacteristicWrapper characteristic ,
+                                          GattCharacteristicProperties needed )
         {
-            return ( characteristic.CharacteristicProperties & GattCharacteristicProperties.Write ) !=
-                   GattCharacteristicProperties.Write ;
+            return ( characteristic.CharacteristicProperties & needed ) == needed ;
         }
 
-        private static bool SupportsWritableAuxiliaries ( IGattCharacteristicWrapper characteristic )
+        private static void LogUnsupported ( IGattCharacteristicWrapper characteristic ,
+                                             string                       capability )
         {
-            return ( characteristic.CharacteristicProperties & GattCharacteristicProperties.WritableAuxiliaries ) !=
-                   GattCharacteristicProperties.WritableAuxiliaries ;
-        }
-
-        private static bool SupportsWriteWithoutResponse ( IGattCharacteristicWrapper characteristic )
-        {
-            return ( characteristic.CharacteristicProperties & GattCharacteristicProperties.WriteWithoutResponse ) !=
-                   GattCharacteristicProperties.WriteWithoutResponse ;
+            Log.Information ( "GattCharacteristic '{Uuid}' doesn't support '{Capability}'" ,
+                              characteristic.Uuid ,
+                              capability ) ;
         }
     }
 }

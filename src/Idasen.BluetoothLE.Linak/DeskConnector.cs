@@ -97,19 +97,8 @@ namespace Idasen.BluetoothLE.Linak
         {
             get
             {
-                if ( _deskMover == null )
-                {
-                    // to do don't know the real reason why _deskMover is null
-                    _logger.Error ( "_deskMover is null, trying to force refresh" ) ;
-
-                    DoRefresh ( GattCommunicationStatus.Success ).Wait ( TimeSpan.FromSeconds ( 30 ) ) ;
-                }
-                else
-                {
-                    _logger.Debug ( $"[{GetHashCode ( )}] *** Finished = {_deskMover?.Finished.GetHashCode ( )}" ) ;
-                }
-
-                return _deskMover?.Finished ?? new Subject < uint > ( ) ; // todo new Subject here might be bad
+                EnsureDeskMoverInitialized ( ) ;
+                return _deskMover?.Finished ?? Observable.Empty < uint > ( ) ;
             }
         }
 
@@ -150,7 +139,7 @@ namespace Idasen.BluetoothLE.Linak
             if ( ! TryGetDeskMover ( out var deskMover ) )
                 return false ;
 
-            return await deskMover!.Up ( ) ;
+            return await deskMover!.Up ( ).ConfigureAwait ( false ) ;
         }
 
         /// <inheritdoc />
@@ -159,7 +148,7 @@ namespace Idasen.BluetoothLE.Linak
             if ( ! TryGetDeskMover ( out var deskMover ) )
                 return false ;
 
-            return await deskMover!.Down ( ) ;
+            return await deskMover!.Down ( ).ConfigureAwait ( false ) ;
         }
 
         /// <inheritdoc />
@@ -186,7 +175,7 @@ namespace Idasen.BluetoothLE.Linak
             if ( ! TryGetDeskMover ( out var deskMover ) )
                 return false ;
 
-            return await deskMover!.Stop ( ) ;
+            return await deskMover!.Stop ( ).ConfigureAwait ( false ) ;
         }
 
         /// <inheritdoc />
@@ -209,6 +198,27 @@ namespace Idasen.BluetoothLE.Linak
             deskLocker!.Unlock ( ) ;
 
             return Task.FromResult ( true ) ;
+        }
+
+        private void EnsureDeskMoverInitialized ( )
+        {
+            if ( _deskMover != null )
+                return ;
+
+            _logger.Error ( "_deskMover is null, attempting async refresh" ) ;
+            _ = TriggerRefreshAsync ( ) ;
+        }
+
+        private async Task TriggerRefreshAsync ( )
+        {
+            try
+            {
+                await DoRefresh ( GattCommunicationStatus.Success ).ConfigureAwait ( false ) ;
+            }
+            catch ( Exception e )
+            {
+                _logger.Error ( e , "Failed to refresh GATT services asynchronously" ) ;
+            }
         }
 
         private bool TryGetDeskMover ( out IDeskMover ? deskMover )
@@ -250,7 +260,7 @@ namespace Idasen.BluetoothLE.Linak
                 if ( status != GattCommunicationStatus.Success )
                     _subjectRefreshed.OnNext ( false ) ;
                 else
-                    await DoRefresh ( status ) ;
+                    await DoRefresh ( status ).ConfigureAwait ( false ) ;
             }
             catch ( Exception e )
             {
@@ -281,7 +291,7 @@ namespace Idasen.BluetoothLE.Linak
                                               .SubscribeOn ( _scheduler )
                                               .Subscribe ( OnDeviceNameChanged ) ;
 
-            await _deskCharacteristics.Refresh ( ) ;
+            await _deskCharacteristics.Refresh ( ).ConfigureAwait ( false ) ;
 
             _heightAndSpeed?.Dispose ( ) ;
             _heightAndSpeed = _heightAndSpeedFactory.Create ( _deskCharacteristics.ReferenceOutput ) ;

@@ -11,8 +11,6 @@ namespace Idasen.Launcher
 {
     public static class ContainerProvider
     {
-        public static ContainerBuilder Builder { get ; } = new( ) ;
-
         public static IContainer Create ( string                    appName ,
                                           string                    appLogFileName ,
                                           IEnumerable < IModule > ? otherModules = null )
@@ -28,7 +26,7 @@ namespace Idasen.Launcher
         {
             Log.Logger = new LoggerConfiguration ( ).ReadFrom
                                                     .Settings ( settings )
-                                                    .Enrich.WithCaller()
+                                                    .Enrich.WithCaller ( )
                                                     .CreateLogger ( ) ;
 
             return Register ( otherModules ) ;
@@ -41,26 +39,28 @@ namespace Idasen.Launcher
                                                                  .Configuration ( configuration )
                                                                  .Enrich.WithCaller ( ) ;
 
-            Log.Logger = Log.Logger = loggerConfiguration.CreateLogger ( ) ;
+            Log.Logger = loggerConfiguration.CreateLogger ( ) ;
 
             return Register ( otherModules ) ;
         }
 
         private static IContainer Register ( IEnumerable < IModule > ? otherModules )
         {
-            Builder.RegisterLogger ( ) ;
-            Builder.RegisterModule < BluetoothLECoreModule > ( ) ;
-            Builder.RegisterModule < BluetoothLELinakModule > ( ) ;
+            var builder = new ContainerBuilder ( ) ;
 
-            if ( otherModules == null )
-                return Builder.Build ( ) ;
+            builder.RegisterLogger ( ) ;
+            builder.RegisterModule < BluetoothLECoreModule > ( ) ;
+            builder.RegisterModule < BluetoothLELinakModule > ( ) ;
 
-            foreach ( var otherModule in otherModules )
+            if ( otherModules != null )
             {
-                Builder.RegisterModule ( otherModule ) ;
+                foreach ( var otherModule in otherModules )
+                {
+                    builder.RegisterModule ( otherModule ) ;
+                }
             }
 
-            return Builder.Build ( ) ;
+            return builder.Build ( ) ;
         }
     }
 }

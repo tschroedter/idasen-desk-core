@@ -40,7 +40,7 @@ namespace Idasen.BluetoothLE.Linak.Control
         {
             _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
                                                      .ObserveOn ( _scheduler )
-                                                     .Subscribe ( OnHeightAndSpeedChanged ) ;
+                                                     .SubscribeAsync ( OnHeightAndSpeedChanged ) ;
 
             return this ;
         }
@@ -76,7 +76,7 @@ namespace Idasen.BluetoothLE.Linak.Control
                                               IDeskCommandExecutor executor ,
                                               IDeskHeightAndSpeed  heightAndSpeed ) ;
 
-        private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
+        private async Task OnHeightAndSpeedChanged ( HeightSpeedDetails details )
         {
             if ( ! IsLocked )
                 return ;
@@ -88,7 +88,7 @@ namespace Idasen.BluetoothLE.Linak.Control
 
             _logger.Debug ( $"{details}" ) ;
 
-            _executor.Stop ( ) ;
+            await _executor.Stop ( ) ;
         }
 
         private readonly IDeskMover           _deskMover ;

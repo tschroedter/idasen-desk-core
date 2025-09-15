@@ -17,12 +17,9 @@ namespace Idasen.BluetoothLE.Linak
         protected override void Load ( ContainerBuilder builder )
         {
             builder.RegisterModule < BluetoothLEAop > ( ) ;
-
             builder.RegisterModule < BluetoothLEDeskCharacteristics > ( ) ;
 
-            var scheduler = TaskPoolScheduler.Default ;
-
-            builder.RegisterInstance ( scheduler )
+            builder.RegisterInstance ( TaskPoolScheduler.Default )
                    .As < IScheduler > ( ) ;
 
             builder.RegisterType < DeskCharacteristics > ( )
@@ -119,7 +116,8 @@ namespace Idasen.BluetoothLE.Linak
                    .As < IDeskLocker > ( ) ;
 
             builder.RegisterType < DeskLockerFactory > ( )
-                   .As < IDeskLockerFactory > ( ) ;
+                   .As < IDeskLockerFactory > ( )
+                   .EnableInterfaceInterceptors ( ) ;
 
             builder.RegisterType < ErrorManager > ( )
                    .As < IErrorManager > ( )
