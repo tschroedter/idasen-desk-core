@@ -26,7 +26,6 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     private readonly ILogger _logger ;
     private readonly IGattServicesProviderFactory _providerFactory ;
     private readonly IGattDeviceServicesResultWrapperFactory _servicesFactory ;
-    private readonly IScheduler _scheduler ;
     private readonly IDisposable _subscriberConnectionStatus ;
     private IGattServicesProvider? _provider ;
     private GattSession? _session ;
@@ -56,7 +55,6 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
                                 nameof ( device ) ) ;
 
         _logger = logger ;
-        _scheduler = scheduler ;
         _providerFactory = providerFactory ;
         _servicesFactory = servicesFactory ;
         _gattServicesDictionary = gattServicesDictionary ;
@@ -69,7 +67,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
                                                     nameof ( BluetoothLEDevice.ConnectionStatusChanged ) ) ;
 
         _subscriberConnectionStatus = statusChanged
-                                     .ObserveOn ( _scheduler )
+                                     .ObserveOn ( scheduler )
                                      .Subscribe ( OnConnectionStatusChanged ) ;
     }
 

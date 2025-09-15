@@ -9,6 +9,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     public class GattDeviceServiceWrapper
         : IGattDeviceServiceWrapper
     {
+        public delegate IGattDeviceServiceWrapper Factory ( GattDeviceService gattDeviceService ) ;
+
         public GattDeviceServiceWrapper (
             IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
             GattDeviceService                        gattDeviceService )

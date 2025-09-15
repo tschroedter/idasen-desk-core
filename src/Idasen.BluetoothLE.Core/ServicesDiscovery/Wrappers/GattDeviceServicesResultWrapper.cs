@@ -7,22 +7,20 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
     /// <inheritdoc />
     [ ExcludeFromCodeCoverage ]
     public class GattDeviceServicesResultWrapper
-        : IGattDeviceServicesResultWrapper
+        : IGattDeviceServicesResultWrapper, IDisposable
     {
         public GattDeviceServicesResultWrapper (
-            IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
-            GattDeviceServicesResult                 service )
+            GattDeviceServiceWrapper.Factory serviceWrapperFactory ,
+            GattDeviceServicesResult         service )
         {
-            Guard.ArgumentNotNull ( characteristicsFactory ,
-                                    nameof ( characteristicsFactory ) ) ;
-            Guard.ArgumentNotNull ( service ,
-                                    nameof ( service ) ) ;
+            Guard.ArgumentNotNull ( serviceWrapperFactory , nameof ( serviceWrapperFactory ) ) ;
+            Guard.ArgumentNotNull ( service , nameof ( service ) ) ;
 
-            _service = service ;
+            _service               = service ;
+            _serviceWrapperFactory = serviceWrapperFactory ;
 
             _services = _service.Services
-                                .Select ( s => new GattDeviceServiceWrapper ( characteristicsFactory ,
-                                                                              s ) )
+                                .Select ( s => _serviceWrapperFactory ( s ) )
                                 .ToArray ( ) ;
         }
 
@@ -37,7 +35,16 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 
         public delegate IGattDeviceServicesResultWrapper Factory ( GattDeviceServicesResult service ) ;
 
-        private readonly GattDeviceServicesResult                 _service ;
-        private readonly IEnumerable < GattDeviceServiceWrapper > _services ;
+        public void Dispose ( )
+        {
+            foreach ( var s in _services )
+            {
+                s.Dispose ( ) ;
+            }
+        }
+
+        private readonly GattDeviceServicesResult                  _service ;
+        private readonly GattDeviceServiceWrapper.Factory          _serviceWrapperFactory ;
+        private readonly IEnumerable < IGattDeviceServiceWrapper > _services ;
     }
 }
