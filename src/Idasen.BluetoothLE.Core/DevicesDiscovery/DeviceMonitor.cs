@@ -85,6 +85,11 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         {
             Unsubscribe ( ) ;
 
+            // complete subjects to avoid observers waiting forever
+            _deviceDiscovered.OnCompleted ( ) ;
+            _deviceUpdated.OnCompleted ( ) ;
+            _deviceNameUpdated.OnCompleted ( ) ;
+
             _watcher.Dispose ( ) ;
             _devices.Clear ( ) ;
         }
