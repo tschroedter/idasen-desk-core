@@ -67,7 +67,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
                                                     nameof ( BluetoothLEDevice.ConnectionStatusChanged ) ) ;
 
         _subscriberConnectionStatus = statusChanged
-                                     .ObserveOn ( scheduler ) // use ObserveOn to run the handler on the scheduler
+                                     .ObserveOn ( scheduler )
                                      .Subscribe ( OnConnectionStatusChanged ) ;
     }
 
@@ -159,17 +159,24 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     // ReSharper disable once AsyncVoidMethod
     private async void OnConnectionStatusChanged ( EventPattern < object > _ )
     {
-        if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
+        try
         {
-            _logger.Information (
-                                 "[{DeviceId}] BluetoothConnectionStatus = {BluetoothConnectionStatus}" ,
-                                 DeviceId ,
-                                 BluetoothConnectionStatus.Connected ) ;
+            if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
+            {
+                _logger.Information (
+                                     "[{DeviceId}] BluetoothConnectionStatus = {BluetoothConnectionStatus}" ,
+                                     DeviceId ,
+                                     BluetoothConnectionStatus.Connected ) ;
 
-            await GetOrCreateProvider ( ).Refresh ( ) ;
+                await GetOrCreateProvider ( ).Refresh ( ) ;
+            }
+
+            _connectionStatusChanged.OnNext ( _device.ConnectionStatus ) ;
         }
-
-        _connectionStatusChanged.OnNext ( _device.ConnectionStatus ) ;
+        catch ( Exception ex )
+        {
+            _logger.Error ( ex , "[{DeviceId}] Error in ConnectionStatusChanged handler" , DeviceId ) ;
+        }
     }
 
     private IGattServicesProvider GetOrCreateProvider ( )
