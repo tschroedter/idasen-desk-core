@@ -27,9 +27,9 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     private readonly IGattServicesProviderFactory _providerFactory ;
     private readonly IGattDeviceServicesResultWrapperFactory _servicesFactory ;
     private readonly IDisposable _subscriberConnectionStatus ;
+    private bool _disposed ;
     private IGattServicesProvider? _provider ;
     private GattSession? _session ;
-    private bool _disposed ;
 
     public BluetoothLeDeviceWrapper (
         ILogger logger ,
@@ -98,34 +98,6 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         {
             _logger.Error ( e ,
                             "Failed to connect to device {BluetoothAddress}" ,
-                            _device.BluetoothAddress ); 
-        }
-    }
-
-    public async Task ConnectAsync ( )
-    {
-        try
-        {
-            if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
-            {
-                _logger.Information ( "[{DeviceId}] Already connected" ,
-                                      DeviceId ) ;
-                return ;
-            }
-
-            if ( ! IsPaired )
-            {
-                _logger.Information ( "[{DeviceId}] Not paired" ,
-                                      DeviceId ) ;
-                return ;
-            }
-
-            await CreateSession ( ) ;
-        }
-        catch ( Exception e )
-        {
-            _logger.Error ( e ,
-                            "Failed to connect to device {BluetoothAddress}" ,
                             _device.BluetoothAddress ) ;
         }
     }
@@ -160,6 +132,34 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         GC.SuppressFinalize ( this ) ;
     }
 
+    public async Task ConnectAsync ( )
+    {
+        try
+        {
+            if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
+            {
+                _logger.Information ( "[{DeviceId}] Already connected" ,
+                                      DeviceId ) ;
+                return ;
+            }
+
+            if ( ! IsPaired )
+            {
+                _logger.Information ( "[{DeviceId}] Not paired" ,
+                                      DeviceId ) ;
+                return ;
+            }
+
+            await CreateSession ( ) ;
+        }
+        catch ( Exception e )
+        {
+            _logger.Error ( e ,
+                            "Failed to connect to device {BluetoothAddress}" ,
+                            _device.BluetoothAddress ) ;
+        }
+    }
+
     protected virtual void Dispose ( bool disposing )
     {
         if ( _disposed )
@@ -191,7 +191,8 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         }
         else
         {
-            _logger.Warning ( "[{DeviceId}] Failed to create GATT session" , DeviceId ) ;
+            _logger.Warning ( "[{DeviceId}] Failed to create GATT session" ,
+                              DeviceId ) ;
         }
     }
 
@@ -214,7 +215,9 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         }
         catch ( Exception ex )
         {
-            _logger.Error ( ex , "[{DeviceId}] Error in ConnectionStatusChanged handler" , DeviceId ) ;
+            _logger.Error ( ex ,
+                            "[{DeviceId}] Error in ConnectionStatusChanged handler" ,
+                            DeviceId ) ;
         }
     }
 

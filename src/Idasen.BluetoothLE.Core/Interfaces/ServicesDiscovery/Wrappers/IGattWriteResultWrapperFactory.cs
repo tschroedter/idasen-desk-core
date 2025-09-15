@@ -1,13 +1,12 @@
 ﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+public interface IGattWriteResultWrapperFactory
 {
-    public interface IGattWriteResultWrapperFactory
-    {
-        /// <summary>
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        IGattWriteResultWrapper Create ( GattWriteResult result ) ;
-    }
+    /// <summary>
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    IGattWriteResultWrapper Create ( GattWriteResult result ) ;
 }

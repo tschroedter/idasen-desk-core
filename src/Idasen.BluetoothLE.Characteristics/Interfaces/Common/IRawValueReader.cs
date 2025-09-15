@@ -1,14 +1,13 @@
 ﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+
+public interface IRawValueReader
 {
-    public interface IRawValueReader
-    {
-        /// <summary>
-        /// </summary>
-        /// <param name="characteristic"></param>
-        /// <returns></returns>
-        Task < (bool , byte [ ]) > TryReadValueAsync (
-            IGattCharacteristicWrapper characteristic ) ;
-    }
+    /// <summary>
+    /// </summary>
+    /// <param name="characteristic"></param>
+    /// <returns></returns>
+    Task < (bool , byte [ ]) > TryReadValueAsync (
+        IGattCharacteristicWrapper characteristic ) ;
 }

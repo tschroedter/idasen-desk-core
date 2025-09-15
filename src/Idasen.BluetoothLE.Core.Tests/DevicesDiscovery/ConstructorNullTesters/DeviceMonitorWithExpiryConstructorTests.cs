@@ -1,9 +1,8 @@
 ﻿using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters
-{
-    [ TestClass ]
-    public class DeviceMonitorWithExpiryConstructorTests
-        : BaseConstructorNullTester < DeviceMonitorWithExpiry > ;
-}
+namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters ;
+
+[ TestClass ]
+public class DeviceMonitorWithExpiryConstructorTests
+    : BaseConstructorNullTester < DeviceMonitorWithExpiry > ;

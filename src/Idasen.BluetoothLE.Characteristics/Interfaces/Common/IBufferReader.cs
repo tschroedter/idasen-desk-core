@@ -1,11 +1,10 @@
 ﻿using Windows.Storage.Streams ;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+
+public interface IBufferReader
 {
-    public interface IBufferReader
-    {
-        bool TryReadValue (
-            IBuffer      buffer ,
-            out byte [ ] bytes ) ;
-    }
+    bool TryReadValue (
+        IBuffer buffer ,
+        out byte [ ] bytes ) ;
 }

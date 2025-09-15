@@ -2,11 +2,10 @@
 
 // ReSharper disable UnusedMember.Global
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+public interface IGattWriteResultWrapper
 {
-    public interface IGattWriteResultWrapper
-    {
-        GattCommunicationStatus Status        { get ; }
-        byte ?                  ProtocolError { get ; }
-    }
+    GattCommunicationStatus Status { get ; }
+    byte? ProtocolError { get ; }
 }

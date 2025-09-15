@@ -10,122 +10,127 @@ using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak
+namespace Idasen.BluetoothLE.Linak ;
+
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class DeskHeightAndSpeed
+    : IDeskHeightAndSpeed
 {
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class DeskHeightAndSpeed
-        : IDeskHeightAndSpeed
+    public delegate IDeskHeightAndSpeed Factory ( IReferenceOutput referenceOutput ) ;
+
+    private readonly IRawValueToHeightAndSpeedConverter _converter ;
+
+    private readonly ILogger _logger ;
+    private readonly IReferenceOutput _referenceOutput ;
+    private readonly IScheduler _scheduler ;
+    private readonly ISubject < uint > _subjectHeight ;
+    private readonly ISubject < HeightSpeedDetails > _subjectHeightAndSpeed ;
+    private readonly ISubject < int > _subjectSpeed ;
+
+    private IDisposable? _subscriber ;
+
+    public DeskHeightAndSpeed ( ILogger logger ,
+                                IScheduler scheduler ,
+                                IReferenceOutput referenceOutput ,
+                                IRawValueToHeightAndSpeedConverter converter ,
+                                ISubject < uint > subjectHeight ,
+                                ISubject < int > subjectSpeed ,
+                                ISubject < HeightSpeedDetails > subjectHeightAndSpeed )
     {
-        public DeskHeightAndSpeed ( ILogger                            logger ,
-                                    IScheduler                         scheduler ,
-                                    IReferenceOutput                   referenceOutput ,
-                                    IRawValueToHeightAndSpeedConverter converter ,
-                                    ISubject < uint >                  subjectHeight ,
-                                    ISubject < int >                   subjectSpeed ,
-                                    ISubject < HeightSpeedDetails >    subjectHeightAndSpeed )
-        {
-            Guard.ArgumentNotNull ( logger ,
-                                    nameof ( logger ) ) ;
-            Guard.ArgumentNotNull ( scheduler ,
-                                    nameof ( scheduler ) ) ;
-            Guard.ArgumentNotNull ( referenceOutput ,
-                                    nameof ( referenceOutput ) ) ;
-            Guard.ArgumentNotNull ( converter ,
-                                    nameof ( converter ) ) ;
-            Guard.ArgumentNotNull ( subjectHeight ,
-                                    nameof ( subjectHeight ) ) ;
-            Guard.ArgumentNotNull ( subjectSpeed ,
-                                    nameof ( subjectSpeed ) ) ;
-            Guard.ArgumentNotNull ( subjectHeightAndSpeed ,
-                                    nameof ( subjectHeightAndSpeed ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( referenceOutput ,
+                                nameof ( referenceOutput ) ) ;
+        Guard.ArgumentNotNull ( converter ,
+                                nameof ( converter ) ) ;
+        Guard.ArgumentNotNull ( subjectHeight ,
+                                nameof ( subjectHeight ) ) ;
+        Guard.ArgumentNotNull ( subjectSpeed ,
+                                nameof ( subjectSpeed ) ) ;
+        Guard.ArgumentNotNull ( subjectHeightAndSpeed ,
+                                nameof ( subjectHeightAndSpeed ) ) ;
 
-            _logger                = logger ;
-            _scheduler             = scheduler ;
-            _referenceOutput       = referenceOutput ;
-            _converter             = converter ;
-            _subjectHeight         = subjectHeight ;
-            _subjectSpeed          = subjectSpeed ;
-            _subjectHeightAndSpeed = subjectHeightAndSpeed ;
+        _logger = logger ;
+        _scheduler = scheduler ;
+        _referenceOutput = referenceOutput ;
+        _converter = converter ;
+        _subjectHeight = subjectHeight ;
+        _subjectSpeed = subjectSpeed ;
+        _subjectHeightAndSpeed = subjectHeightAndSpeed ;
+    }
+
+    public IObservable < uint > HeightChanged => _subjectHeight ;
+
+    public IObservable < int > SpeedChanged => _subjectSpeed ;
+
+    public IObservable < HeightSpeedDetails > HeightAndSpeedChanged => _subjectHeightAndSpeed ;
+
+    public uint Height { get ; private set ; }
+
+    public int Speed { get ; private set ; }
+
+    public async Task Refresh ( )
+    {
+        await _referenceOutput.Refresh ( ) ;
+
+        Initialize ( ) ;
+    }
+
+    public IDeskHeightAndSpeed Initialize ( )
+    {
+        _subscriber?.Dispose ( ) ;
+
+        _subscriber = _referenceOutput.HeightSpeedChanged
+                                      .ObserveOn ( _scheduler )
+                                      .Subscribe ( OnHeightSpeedChanged ) ;
+
+        if ( _subscriber is UnknownBase )
+        {
+            _logger.Warning ( $"{nameof ( _referenceOutput )} is set to Unknown" ) ;
         }
 
-        public IObservable < uint > HeightChanged => _subjectHeight ;
-
-        public IObservable < int > SpeedChanged => _subjectSpeed ;
-
-        public IObservable < HeightSpeedDetails > HeightAndSpeedChanged => _subjectHeightAndSpeed ;
-
-        public uint Height { get ; private set ; }
-
-        public int Speed { get ; private set ; }
-
-        public async Task Refresh ( )
+        if ( ! _converter.TryConvert ( _referenceOutput.RawHeightSpeed ,
+                                       out var height ,
+                                       out var speed ) )
         {
-            await _referenceOutput.Refresh ( ) ;
-
-            Initialize ( ) ;
-        }
-
-        public IDeskHeightAndSpeed Initialize ( )
-        {
-            _subscriber?.Dispose ( ) ;
-
-            _subscriber = _referenceOutput.HeightSpeedChanged
-                                          .ObserveOn ( _scheduler )
-                                          .Subscribe ( OnHeightSpeedChanged ) ;
-
-            if ( _subscriber is UnknownBase )
-                _logger.Warning ( $"{nameof ( _referenceOutput )} is set to Unknown" ) ;
-
-            if ( ! _converter.TryConvert ( _referenceOutput.RawHeightSpeed ,
-                                           out var height ,
-                                           out var speed ) )
-                return this ;
-
-            Height = height ;
-            Speed  = speed ;
-
             return this ;
         }
 
-        public void Dispose ( )
+        Height = height ;
+        Speed = speed ;
+
+        return this ;
+    }
+
+    public void Dispose ( )
+    {
+        _referenceOutput.Dispose ( ) ;
+        _subscriber?.Dispose ( ) ;
+    }
+
+    private void OnHeightSpeedChanged ( RawValueChangedDetails details )
+    {
+        if ( ! _converter.TryConvert ( details.Value ,
+                                       out var height ,
+                                       out var speed ) )
         {
-            _referenceOutput.Dispose ( ) ;
-            _subscriber?.Dispose ( ) ;
+            return ;
         }
 
-        public delegate IDeskHeightAndSpeed Factory ( IReferenceOutput referenceOutput ) ;
+        Height = height ;
+        Speed = speed ;
 
-        private void OnHeightSpeedChanged ( RawValueChangedDetails details )
-        {
-            if ( ! _converter.TryConvert ( details.Value ,
-                                           out var height ,
-                                           out var speed ) )
-                return ;
+        _subjectHeight.OnNext ( Height ) ;
+        _subjectSpeed.OnNext ( Speed ) ;
 
-            Height = height ;
-            Speed  = speed ;
+        var value = new HeightSpeedDetails ( details.Timestamp ,
+                                             Height ,
+                                             Speed ) ;
 
-            _subjectHeight.OnNext ( Height ) ;
-            _subjectSpeed.OnNext ( Speed ) ;
+        _subjectHeightAndSpeed.OnNext ( value ) ;
 
-            var value = new HeightSpeedDetails ( details.Timestamp ,
-                                                 Height ,
-                                                 Speed ) ;
-
-            _subjectHeightAndSpeed.OnNext ( value ) ;
-
-            _logger.Debug ( $"Height = {Height} (10ths of a millimeter), Speed = {Speed} (100/RPM)" ) ;
-        }
-
-        private readonly IRawValueToHeightAndSpeedConverter _converter ;
-
-        private readonly ILogger                         _logger ;
-        private readonly IReferenceOutput                _referenceOutput ;
-        private readonly IScheduler                      _scheduler ;
-        private readonly ISubject < uint >               _subjectHeight ;
-        private readonly ISubject < HeightSpeedDetails > _subjectHeightAndSpeed ;
-        private readonly ISubject < int >                _subjectSpeed ;
-
-        private IDisposable ? _subscriber ;
+        _logger.Debug ( $"Height = {Height} (10ths of a millimeter), Speed = {Speed} (100/RPM)" ) ;
     }
 }

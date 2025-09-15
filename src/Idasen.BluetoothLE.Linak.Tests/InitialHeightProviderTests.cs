@@ -9,378 +9,377 @@ using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak.Tests
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
+[ TestClass ]
+public class InitialHeightProviderTests
 {
-    [ TestClass ]
-    public class InitialHeightProviderTests
+    private const uint SomeHeight = 123u ;
+
+    private HeightSpeedDetails _details1 = null! ;
+    private HeightSpeedDetails _details2 = null! ;
+    private HeightSpeedDetails _detailsZeroHeight = null! ;
+
+    private IDeskCommandExecutor _executor = null! ;
+    private IDeskHeightAndSpeed _heightAndSpeed = null! ;
+    private ILogger _logger = null! ;
+    private TestScheduler _scheduler = null! ;
+    private Subject < uint > _subjectFinished = null! ;
+    private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
+
+    [ TestInitialize ]
+    public void Initialize ( )
     {
-        [ TestInitialize ]
-        public void Initialize ( )
-        {
-            _scheduler       = new TestScheduler ( ) ;
-            _logger          = Substitute.For < ILogger > ( ) ;
-            _heightAndSpeed  = Substitute.For < IDeskHeightAndSpeed > ( ) ;
-            _executor        = Substitute.For < IDeskCommandExecutor > ( ) ;
-            _subjectFinished = new Subject < uint > ( ) ;
-
-            _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
-
-            _heightAndSpeed.HeightAndSpeedChanged
-                           .Returns ( _subjectHeightAndSpeed ) ;
-            _heightAndSpeed.Height
-                           .Returns ( SomeHeight ) ;
+        _scheduler = new TestScheduler ( ) ;
+        _logger = Substitute.For < ILogger > ( ) ;
+        _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
+        _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
+        _subjectFinished = new Subject < uint > ( ) ;
+
+        _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
 
-            _details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                                 1u ,
-                                                 2 ) ;
+        _heightAndSpeed.HeightAndSpeedChanged
+                       .Returns ( _subjectHeightAndSpeed ) ;
+        _heightAndSpeed.Height
+                       .Returns ( SomeHeight ) ;
 
-            _details2 = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                                 11u ,
-                                                 22 ) ;
+        _details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                             1u ,
+                                             2 ) ;
 
-            _detailsZeroHeight = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                                          0u ,
-                                                          22 ) ;
+        _details2 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                             11u ,
+                                             22 ) ;
 
-            _executor.Up ( )
-                     .Returns ( true ) ;
-            _executor.Down ( )
-                     .Returns ( true ) ;
-            _executor.Stop ( )
-                     .Returns ( true ) ;
-        }
+        _detailsZeroHeight = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                      0u ,
+                                                      22 ) ;
 
-        [ TestMethod ]
-        public void Initialize_ForInvokedTwice_DisposesOldSubscription ( )
-        {
-            var disposable1 = Substitute.For < IDisposable > ( ) ;
-            var disposable2 = Substitute.For < IDisposable > ( ) ;
+        _executor.Up ( )
+                 .Returns ( true ) ;
+        _executor.Down ( )
+                 .Returns ( true ) ;
+        _executor.Stop ( )
+                 .Returns ( true ) ;
+    }
 
-            var heightAndSpeed = Substitute.For < IObservable < HeightSpeedDetails > > ( ) ;
-            heightAndSpeed.Subscribe ( Arg.Any < IObserver < HeightSpeedDetails > > ( ) )
-                          .Returns ( disposable1 ,
-                                     disposable2 ) ;
+    [ TestMethod ]
+    public void Initialize_ForInvokedTwice_DisposesOldSubscription ( )
+    {
+        var disposable1 = Substitute.For < IDisposable > ( ) ;
+        var disposable2 = Substitute.For < IDisposable > ( ) ;
 
-            _heightAndSpeed.HeightAndSpeedChanged
-                           .Returns ( heightAndSpeed ) ;
+        var heightAndSpeed = Substitute.For < IObservable < HeightSpeedDetails > > ( ) ;
+        heightAndSpeed.Subscribe ( Arg.Any < IObserver < HeightSpeedDetails > > ( ) )
+                      .Returns ( disposable1 ,
+                                 disposable2 ) ;
 
-            using var sut = CreateSut ( ) ;
+        _heightAndSpeed.HeightAndSpeedChanged
+                       .Returns ( heightAndSpeed ) ;
 
-            sut.Initialize ( ) ;
-            sut.Initialize ( ) ;
+        using var sut = CreateSut ( ) ;
 
-            disposable1.Received ( )
-                       .Dispose ( ) ;
-            disposable2.DidNotReceive ( )
-                       .Dispose ( ) ;
-        }
+        sut.Initialize ( ) ;
+        sut.Initialize ( ) ;
 
-        [ TestMethod ]
-        public void Initialize_ForInvoked_SetsHeight ( )
-        {
-            using var sut = CreateSut ( ) ;
+        disposable1.Received ( )
+                   .Dispose ( ) ;
+        disposable2.DidNotReceive ( )
+                   .Dispose ( ) ;
+    }
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void Initialize_ForInvoked_SetsHeight ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            sut.Height
-               .Should ( )
-               .Be ( SomeHeight ) ;
-        }
+        sut.Initialize ( ) ;
 
-        [ TestMethod ]
-        public void OnHeightAndSpeedChanged_ForInvokedFirstTime_UpdatesHeight ( )
-        {
-            using var sut = CreateSut ( ) ;
+        sut.Height
+           .Should ( )
+           .Be ( SomeHeight ) ;
+    }
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_ForInvokedFirstTime_UpdatesHeight ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        sut.Initialize ( ) ;
 
-            _scheduler.Start ( ) ;
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
 
-            sut.Height
-               .Should ( )
-               .Be ( _details2.Height ) ;
-        }
+        _scheduler.Start ( ) ;
 
-        [ TestMethod ]
-        public void OnHeightAndSpeedChanged_ForInvokedFirstTime_HasReceivedHeightAndSpeedIsTrue ( )
-        {
-            using var sut = CreateSut ( ) ;
+        sut.Height
+           .Should ( )
+           .Be ( _details2.Height ) ;
+    }
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_ForInvokedFirstTime_HasReceivedHeightAndSpeedIsTrue ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        sut.Initialize ( ) ;
 
-            _scheduler.Start ( ) ;
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
 
-            sut.HasReceivedHeightAndSpeed
-               .Should ( )
-               .BeTrue ( ) ;
-        }
+        _scheduler.Start ( ) ;
 
-        [ TestMethod ]
-        public void OnHeightAndSpeedChanged_ForInvokedFirstTime_NotifiesFinished ( )
-        {
-            using var sut = CreateSut ( ) ;
+        sut.HasReceivedHeightAndSpeed
+           .Should ( )
+           .BeTrue ( ) ;
+    }
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_ForInvokedFirstTime_NotifiesFinished ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            var finished = false ;
+        sut.Initialize ( ) ;
 
-            sut.Finished
-               .ObserveOn ( _scheduler )
-               .Subscribe ( _ => finished = true ) ;
+        var finished = false ;
 
-            _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        sut.Finished
+           .ObserveOn ( _scheduler )
+           .Subscribe ( _ => finished = true ) ;
 
-            _scheduler.Start ( ) ;
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
 
-            finished
-               .Should ( )
-               .BeTrue ( ) ;
-        }
+        _scheduler.Start ( ) ;
 
-        [ TestMethod ]
-        public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_UpdatesHeight ( )
-        {
-            using var sut = CreateSut ( ) ;
+        finished
+           .Should ( )
+           .BeTrue ( ) ;
+    }
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_UpdatesHeight ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            _subjectHeightAndSpeed.OnNext ( _detailsZeroHeight ) ;
+        sut.Initialize ( ) ;
 
-            _scheduler.Start ( ) ;
+        _subjectHeightAndSpeed.OnNext ( _detailsZeroHeight ) ;
 
-            sut.Height
-               .Should ( )
-               .Be ( _detailsZeroHeight.Height ) ;
-        }
+        _scheduler.Start ( ) ;
 
-        [ TestMethod ]
-        public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_HasReceivedHeightAndSpeedIsFalse ( )
-        {
-            using var sut = CreateSut ( ) ;
+        sut.Height
+           .Should ( )
+           .Be ( _detailsZeroHeight.Height ) ;
+    }
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_HasReceivedHeightAndSpeedIsFalse ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            _subjectHeightAndSpeed.OnNext ( _detailsZeroHeight ) ;
+        sut.Initialize ( ) ;
 
-            _scheduler.Start ( ) ;
+        _subjectHeightAndSpeed.OnNext ( _detailsZeroHeight ) ;
 
-            sut.HasReceivedHeightAndSpeed
-               .Should ( )
-               .BeFalse ( ) ;
-        }
+        _scheduler.Start ( ) ;
 
-        [ TestMethod ]
-        public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_DoesNotNotifiesFinished ( )
-        {
-            using var sut = CreateSut ( ) ;
+        sut.HasReceivedHeightAndSpeed
+           .Should ( )
+           .BeFalse ( ) ;
+    }
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_DoesNotNotifiesFinished ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            var finished = false ;
+        sut.Initialize ( ) ;
 
-            sut.Finished
-               .ObserveOn ( _scheduler )
-               .Subscribe ( _ => finished = true ) ;
+        var finished = false ;
 
-            _subjectHeightAndSpeed.OnNext ( _detailsZeroHeight ) ;
-            _scheduler.Start ( ) ;
+        sut.Finished
+           .ObserveOn ( _scheduler )
+           .Subscribe ( _ => finished = true ) ;
 
-            finished
-               .Should ( )
-               .BeFalse ( ) ;
-        }
+        _subjectHeightAndSpeed.OnNext ( _detailsZeroHeight ) ;
+        _scheduler.Start ( ) ;
 
+        finished
+           .Should ( )
+           .BeFalse ( ) ;
+    }
 
-        [ TestMethod ]
-        public void OnHeightAndSpeedChanged_ForInvokedSecondTime_UpdatesHeight ( )
-        {
-            using var sut = CreateSut ( ) ;
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_ForInvokedSecondTime_UpdatesHeight ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            _subjectHeightAndSpeed.OnNext ( _details1 ) ;
-            _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        sut.Initialize ( ) ;
 
-            _scheduler.Start ( ) ;
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
 
-            sut.Height
-               .Should ( )
-               .Be ( _details2.Height ) ;
-        }
+        _scheduler.Start ( ) ;
 
-        [ TestMethod ]
-        public void OnHeightAndSpeedChanged_ForInvokedSecondTime_DoesNotNotifiesFinished ( )
-        {
-            using var sut = CreateSut ( ) ;
+        sut.Height
+           .Should ( )
+           .Be ( _details2.Height ) ;
+    }
 
-            sut.Initialize ( ) ;
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_ForInvokedSecondTime_DoesNotNotifiesFinished ( )
+    {
+        using var sut = CreateSut ( ) ;
 
-            _subjectHeightAndSpeed.OnNext ( _details1 ) ;
-            _scheduler.Start ( ) ;
+        sut.Initialize ( ) ;
 
-            var finished = false ;
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.Start ( ) ;
 
-            sut.Finished
-               .ObserveOn ( _scheduler )
-               .Subscribe ( _ => finished = true ) ;
+        var finished = false ;
 
-            _subjectHeightAndSpeed.OnNext ( _details2 ) ;
-            _scheduler.Start ( ) ;
+        sut.Finished
+           .ObserveOn ( _scheduler )
+           .Subscribe ( _ => finished = true ) ;
 
-            finished
-               .Should ( )
-               .BeFalse ( ) ;
-        }
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        _scheduler.Start ( ) ;
 
-        [ TestMethod ]
-        public async Task Start_ForNotInitialized_Throws ( )
-        {
-            var sut = CreateSut ( ) ;
+        finished
+           .Should ( )
+           .BeFalse ( ) ;
+    }
 
-            var action = async ( ) => await sut.Start ( ) ;
+    [ TestMethod ]
+    public async Task Start_ForNotInitialized_Throws ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            await action.Should ( )
-                        .ThrowAsync < NotInitializeException > ( ) ;
-        }
+        var action = async ( ) => await sut.Start ( ) ;
 
-        [ TestMethod ]
-        public async Task Start_ForInitializedAndHeightGreaterZero_SetsHasReceivedHeightAndSpeedToTrue ( )
-        {
-            _heightAndSpeed.Height
-                           .Returns ( 1u ) ;
+        await action.Should ( )
+                    .ThrowAsync < NotInitializeException > ( ) ;
+    }
 
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task Start_ForInitializedAndHeightGreaterZero_SetsHasReceivedHeightAndSpeedToTrue ( )
+    {
+        _heightAndSpeed.Height
+                       .Returns ( 1u ) ;
 
-            sut.Initialize ( ) ;
+        var sut = CreateSut ( ) ;
 
-            await sut.Start ( ) ;
+        sut.Initialize ( ) ;
 
-            sut.HasReceivedHeightAndSpeed
-               .Should ( )
-               .BeTrue ( ) ;
-        }
+        await sut.Start ( ) ;
 
-        [ TestMethod ]
-        public async Task Start_ForInitializedAndHeightGreaterZero_NotifiesFinished ( )
-        {
-            _heightAndSpeed.Height
-                           .Returns ( 1u ) ;
+        sut.HasReceivedHeightAndSpeed
+           .Should ( )
+           .BeTrue ( ) ;
+    }
 
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task Start_ForInitializedAndHeightGreaterZero_NotifiesFinished ( )
+    {
+        _heightAndSpeed.Height
+                       .Returns ( 1u ) ;
 
-            sut.Initialize ( ) ;
+        var sut = CreateSut ( ) ;
 
-            var finished = false ;
+        sut.Initialize ( ) ;
 
-            sut.Finished
-               .ObserveOn ( _scheduler )
-               .Subscribe ( _ => finished = true ) ;
+        var finished = false ;
 
-            await sut.Start ( ) ;
+        sut.Finished
+           .ObserveOn ( _scheduler )
+           .Subscribe ( _ => finished = true ) ;
 
-            _scheduler.Start ( ) ;
+        await sut.Start ( ) ;
 
-            finished
-               .Should ( )
-               .BeTrue ( ) ;
-        }
+        _scheduler.Start ( ) ;
 
-        [ TestMethod ]
-        public async Task Start_ForInitializedAndHeightIsZero_SetsHasReceivedHeightAndSpeedToFalse ( )
-        {
-            _heightAndSpeed.Height
-                           .Returns ( 0u ) ;
+        finished
+           .Should ( )
+           .BeTrue ( ) ;
+    }
 
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task Start_ForInitializedAndHeightIsZero_SetsHasReceivedHeightAndSpeedToFalse ( )
+    {
+        _heightAndSpeed.Height
+                       .Returns ( 0u ) ;
 
-            sut.Initialize ( ) ;
+        var sut = CreateSut ( ) ;
 
-            await sut.Start ( ) ;
+        sut.Initialize ( ) ;
 
-            sut.HasReceivedHeightAndSpeed
-               .Should ( )
-               .BeFalse ( ) ;
-        }
+        await sut.Start ( ) ;
 
-        [ TestMethod ]
-        public async Task Start_ForInitializedAndHeightIsZero_MoveDeskABit ( )
-        {
-            _heightAndSpeed.Height
-                           .Returns ( 0u ) ;
+        sut.HasReceivedHeightAndSpeed
+           .Should ( )
+           .BeFalse ( ) ;
+    }
 
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task Start_ForInitializedAndHeightIsZero_MoveDeskABit ( )
+    {
+        _heightAndSpeed.Height
+                       .Returns ( 0u ) ;
 
-            sut.Initialize ( ) ;
+        var sut = CreateSut ( ) ;
 
-            await sut.Start ( ) ;
+        sut.Initialize ( ) ;
 
-            using var scope = new AssertionScope ( ) ;
+        await sut.Start ( ) ;
 
-            await _executor.Received ( )
-                           .Up ( ) ;
+        using var scope = new AssertionScope ( ) ;
 
-            await _executor.Received ( )
-                           .Stop ( ) ;
-        }
+        await _executor.Received ( )
+                       .Up ( ) ;
 
-        [ TestMethod ]
-        public void HasReceivedHeightAndSpeed_ForInvoked_False ( )
-        {
-            var sut = CreateSut ( ) ;
+        await _executor.Received ( )
+                       .Stop ( ) ;
+    }
 
-            sut.HasReceivedHeightAndSpeed
-               .Should ( )
-               .BeFalse ( ) ;
-        }
+    [ TestMethod ]
+    public void HasReceivedHeightAndSpeed_ForInvoked_False ( )
+    {
+        var sut = CreateSut ( ) ;
 
-        [ TestMethod ]
-        public void Dispose_ForInvoked_DisposesHeightAndSpeed ( )
-        {
-            var disposable = Substitute.For < IDisposable > ( ) ;
-            var subject    = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
+        sut.HasReceivedHeightAndSpeed
+           .Should ( )
+           .BeFalse ( ) ;
+    }
 
-            subject.Subscribe ( null! )
-                   .ReturnsForAnyArgs ( disposable ) ;
+    [ TestMethod ]
+    public void Dispose_ForInvoked_DisposesHeightAndSpeed ( )
+    {
+        var disposable = Substitute.For < IDisposable > ( ) ;
+        var subject = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
 
-            _heightAndSpeed.HeightAndSpeedChanged
-                           .Returns ( subject ) ;
+        subject.Subscribe ( null! )
+               .ReturnsForAnyArgs ( disposable ) ;
 
-            var sut = CreateSut ( ) ;
+        _heightAndSpeed.HeightAndSpeedChanged
+                       .Returns ( subject ) ;
 
-            sut.Initialize ( ) ;
+        var sut = CreateSut ( ) ;
 
-            sut.Dispose ( ) ;
+        sut.Initialize ( ) ;
 
-            disposable.Received ( )
-                      .Dispose ( ) ;
-        }
+        sut.Dispose ( ) ;
 
-        private InitialHeightProvider CreateSut ( )
-        {
-            var deviceMonitor = new InitialHeightProvider ( _logger ,
-                                                            _scheduler ,
-                                                            _heightAndSpeed ,
-                                                            _executor ,
-                                                            _subjectFinished ) ;
+        disposable.Received ( )
+                  .Dispose ( ) ;
+    }
 
-            return deviceMonitor ;
-        }
+    private InitialHeightProvider CreateSut ( )
+    {
+        var deviceMonitor = new InitialHeightProvider ( _logger ,
+                                                        _scheduler ,
+                                                        _heightAndSpeed ,
+                                                        _executor ,
+                                                        _subjectFinished ) ;
 
-        private const uint SomeHeight = 123u ;
-
-        private HeightSpeedDetails _details1          = null! ;
-        private HeightSpeedDetails _details2          = null! ;
-        private HeightSpeedDetails _detailsZeroHeight = null! ;
-
-        private IDeskCommandExecutor           _executor              = null! ;
-        private IDeskHeightAndSpeed            _heightAndSpeed        = null! ;
-        private ILogger                        _logger                = null! ;
-        private TestScheduler                  _scheduler             = null! ;
-        private Subject < uint >               _subjectFinished       = null! ;
-        private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
+        return deviceMonitor ;
     }
 }

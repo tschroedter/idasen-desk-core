@@ -3,64 +3,67 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+
+/// <inheritdoc cref="IWatcher" />
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class Watcher
+    : IWatcher
 {
-    /// <inheritdoc cref="IWatcher" />
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class Watcher
-        : IWatcher
+    private readonly ISubject < DateTime > _startedWatching ;
+    private readonly IWrapper _wrapper ;
+
+    public Watcher ( IWrapper wrapper ,
+                     ISubject < DateTime > started )
     {
-        public Watcher ( IWrapper              wrapper ,
-                         ISubject < DateTime > started )
-        {
-            Guard.ArgumentNotNull ( wrapper ,
-                                    nameof ( wrapper ) ) ;
-            Guard.ArgumentNotNull ( started ,
-                                    nameof ( started ) ) ;
+        Guard.ArgumentNotNull ( wrapper ,
+                                nameof ( wrapper ) ) ;
+        Guard.ArgumentNotNull ( started ,
+                                nameof ( started ) ) ;
 
-            _wrapper         = wrapper ;
-            _startedWatching = started ;
+        _wrapper = wrapper ;
+        _startedWatching = started ;
+    }
+
+    /// <inheritdoc />
+    public bool IsListening => _wrapper.Status == Status.Started ;
+
+    /// <inheritdoc />
+    public IObservable < DateTime > Started => _startedWatching ;
+
+    /// <inheritdoc />
+    public IObservable < DateTime > Stopped => _wrapper.Stopped ;
+
+    /// <inheritdoc />
+    public IObservable < IDevice > Received => _wrapper.Received ;
+
+    /// <inheritdoc />
+    public void Start ( )
+    {
+        if ( IsListening )
+        {
+            return ;
         }
 
-        /// <inheritdoc />
-        public bool IsListening => _wrapper.Status == Status.Started ;
+        _wrapper.Start ( ) ;
 
-        /// <inheritdoc />
-        public IObservable < DateTime > Started => _startedWatching ;
+        _startedWatching.OnNext ( DateTime.Now ) ;
+    }
 
-        /// <inheritdoc />
-        public IObservable < DateTime > Stopped => _wrapper.Stopped ;
-
-        /// <inheritdoc />
-        public IObservable < IDevice > Received => _wrapper.Received ;
-
-        /// <inheritdoc />
-        public void Start ( )
+    /// <inheritdoc />
+    public void Stop ( )
+    {
+        if ( ! IsListening )
         {
-            if ( IsListening )
-                return ;
-
-            _wrapper.Start ( ) ;
-
-            _startedWatching.OnNext ( DateTime.Now ) ;
+            return ;
         }
 
-        /// <inheritdoc />
-        public void Stop ( )
-        {
-            if ( ! IsListening )
-                return ;
+        _wrapper.Stop ( ) ;
+    }
 
-            _wrapper.Stop ( ) ;
-        }
-
-        /// <inheritdoc />
-        public void Dispose ( )
-        {
-            _wrapper.Dispose ( ) ;
-        }
-
-        private readonly ISubject < DateTime > _startedWatching ;
-        private readonly IWrapper              _wrapper ;
+    /// <inheritdoc />
+    public void Dispose ( )
+    {
+        _wrapper.Dispose ( ) ;
     }
 }

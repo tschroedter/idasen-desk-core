@@ -4,20 +4,19 @@ using Idasen.Aop.Aspects ;
 using Idasen.Aop.Interfaces ;
 using Serilog ;
 
-namespace Idasen.Aop
-{
-    // ReSharper disable once InconsistentNaming
-    [ ExcludeFromCodeCoverage ]
-    public class BluetoothLEAop
-        : Module
-    {
-        protected override void Load ( ContainerBuilder builder )
-        {
-            builder.RegisterType < InvocationToTextConverter > ( )
-                   .As < IInvocationToTextConverter > ( ) ;
+namespace Idasen.Aop ;
 
-            builder.Register ( c => new LogAspect ( c.Resolve < ILogger > ( ) ,
-                                                    c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
-        }
+// ReSharper disable once InconsistentNaming
+[ ExcludeFromCodeCoverage ]
+public class BluetoothLEAop
+    : Module
+{
+    protected override void Load ( ContainerBuilder builder )
+    {
+        builder.RegisterType < InvocationToTextConverter > ( )
+               .As < IInvocationToTextConverter > ( ) ;
+
+        builder.Register ( c => new LogAspect ( c.Resolve < ILogger > ( ) ,
+                                                c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
     }
 }

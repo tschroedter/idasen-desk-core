@@ -7,303 +7,302 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+
+[ TestClass ]
+public class CharacteristicBaseTest
+    : CharacteristicBaseTests < TestCharacteristicBase >
 {
-    [ TestClass ]
-    public class CharacteristicBaseTest
-        : CharacteristicBaseTests < TestCharacteristicBase >
+    protected readonly Guid GattCharacteristicUuid = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
+    protected readonly Guid GattServiceUuid = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
+
+    [ TestMethod ]
+    public void GattServiceUuid_ForInvoked_Uuid ( )
     {
-        [ TestMethod ]
-        public void GattServiceUuid_ForInvoked_Uuid ( )
-        {
-            CreateSut ( ).GattServiceUuid
-                         .Should ( )
-                         .Be ( GattServiceUuid ) ;
-        }
-
-        [ AutoDataTestMethod ]
-        public void Initialize_ForUnknownGattServiceUuid_Throws (
-            TestCharacteristicBase sut ,
-            [ Freeze ] IDevice     device )
-        {
-            IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > gattServices =
-                new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( ) ;
-
-            device.GattServices
-                  .Returns ( gattServices ) ;
-
-            Action action = ( ) => sut.Initialize < TestCharacteristicBase > ( ) ;
-
-            action.Should ( )
-                  .Throw < ArgumentException > ( )
-                  .WithParameter ( "GattServiceUuid" ) ;
-        }
-
-        [ TestMethod ]
-        public void Initialize_ForKnownGattServiceUuid_AddsKeyToDescriptionToUuid ( )
-        {
-            var sut = CreateSut ( ) ;
-
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
-
-            sut.Initialize < TestCharacteristicBase > ( )
-               .DescriptionToUuid [ TestCharacteristicBase.RawValueKey ]
-               .Should ( )
-               .Be ( GattCharacteristicUuid ) ;
-        }
-
-        [ TestMethod ]
-        public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
-        {
-            var sut = CreateSut ( ) ;
-
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
-
-            sut.Initialize < TestCharacteristicBase > ( ) ;
-
-            sut.RawValue
-               .Should ( )
-               .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
-        }
-
-        [ TestMethod ]
-        public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
-        {
-            var sut = CreateSut ( ) ;
-
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
-
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
-
-            sut.RawValue
-               .Should ( )
-               .BeEquivalentTo ( RawValue1 ) ;
-        }
-
-        [ TestMethod ]
-        public async Task Refresh_ForSuccessfulRead_UpdatesRawValuesAsync ( )
-        {
-            var sut = CreateSut ( ) ;
-
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
-
-            RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
-                          .Returns ( ( true , RawValue1 ) ) ;
-
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
-
-            sut.RawValue
-               .Should ( )
-               .BeEquivalentTo ( RawValue1 ) ;
-        }
-
-        [ TestMethod ]
-        public async Task Refresh_ForFailedRead_UpdatesRawValuesAsync ( )
-        {
-            var sut = CreateSut ( ) ;
-
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
-
-            RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
-                          .Returns ( ( false , RawValue1 ) ) ;
-
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        CreateSut ( ).GattServiceUuid
+                     .Should ( )
+                     .Be ( GattServiceUuid ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void Initialize_ForUnknownGattServiceUuid_Throws (
+        TestCharacteristicBase sut ,
+        [ Freeze ] IDevice device )
+    {
+        IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > gattServices =
+            new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( ) ;
+
+        device.GattServices
+              .Returns ( gattServices ) ;
+
+        Action action = ( ) => sut.Initialize < TestCharacteristicBase > ( ) ;
+
+        action.Should ( )
+              .Throw < ArgumentException > ( )
+              .WithParameter ( "GattServiceUuid" ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_ForKnownGattServiceUuid_AddsKeyToDescriptionToUuid ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
+
+        sut.Initialize < TestCharacteristicBase > ( )
+           .DescriptionToUuid[TestCharacteristicBase.RawValueKey]
+           .Should ( )
+           .Be ( GattCharacteristicUuid ) ;
+    }
 
-            sut.RawValue
-               .Should ( )
-               .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
-        }
+    [ TestMethod ]
+    public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
+
+        sut.Initialize < TestCharacteristicBase > ( ) ;
+
+        sut.RawValue
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
+    }
+
+    [ TestMethod ]
+    public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
+
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
+
+        sut.RawValue
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
+    }
+
+    [ TestMethod ]
+    public async Task Refresh_ForSuccessfulRead_UpdatesRawValuesAsync ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
+
+        RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
+                      .Returns ( ( true , RawValue1 ) ) ;
+
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
+
+        sut.RawValue
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
+    }
+
+    [ TestMethod ]
+    public async Task Refresh_ForFailedRead_UpdatesRawValuesAsync ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
+
+        RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
+                      .Returns ( ( false , RawValue1 ) ) ;
+
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-        [ TestMethod ]
-        public async Task TryWriteRawValue_ForKnownCharacteristics_WritesRawValuesAsync ( )
-        {
-            var sut = CreateSut ( ) ;
+        sut.RawValue
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
+    }
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+    [ TestMethod ]
+    public async Task TryWriteRawValue_ForKnownCharacteristics_WritesRawValuesAsync ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.TryWriteRawValue ( RawValue1 ) ;
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-            await RawValueWriter.Received ( )
-                                .TryWriteValueAsync ( CharacteristicWrapper1 ,
-                                                      Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
-        }
+        await sut.TryWriteRawValue ( RawValue1 ) ;
 
-        [ TestMethod ]
-        public async Task TryWriteRawValue_ForKnownCharacteristics_ReturnsTrue ( )
-        {
-            var sut = CreateSut ( ) ;
+        await RawValueWriter.Received ( )
+                            .TryWriteValueAsync ( CharacteristicWrapper1 ,
+                                                  Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
+    }
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+    [ TestMethod ]
+    public async Task TryWriteRawValue_ForKnownCharacteristics_ReturnsTrue ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            RawValueWriter.TryWriteValueAsync ( Arg.Any < IGattCharacteristicWrapper > ( ) ,
-                                                Arg.Any < IBuffer > ( ) )
-                          .Returns ( Task.FromResult ( true ) ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        RawValueWriter.TryWriteValueAsync ( Arg.Any < IGattCharacteristicWrapper > ( ) ,
+                                            Arg.Any < IBuffer > ( ) )
+                      .Returns ( Task.FromResult ( true ) ) ;
 
-            sut.TryWriteRawValue ( RawValue1 )
-               .Result
-               .Should ( )
-               .Be ( true ) ;
-        }
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-        [ TestMethod ]
-        public async Task TryWriteRawValue_ForKnownCharacteristicsAndFailedToWrite_ReturnsFalse ( )
-        {
-            var sut = CreateSut ( ) ;
+        sut.TryWriteRawValue ( RawValue1 )
+           .Result
+           .Should ( )
+           .Be ( true ) ;
+    }
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+    [ TestMethod ]
+    public async Task TryWriteRawValue_ForKnownCharacteristicsAndFailedToWrite_ReturnsFalse ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            RawValueWriter.TryWriteValueAsync ( Arg.Any < IGattCharacteristicWrapper > ( ) ,
-                                                Arg.Any < IBuffer > ( ) )
-                          .Returns ( Task.FromResult ( false ) ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        RawValueWriter.TryWriteValueAsync ( Arg.Any < IGattCharacteristicWrapper > ( ) ,
+                                            Arg.Any < IBuffer > ( ) )
+                      .Returns ( Task.FromResult ( false ) ) ;
 
-            sut.TryWriteRawValue ( RawValue1 )
-               .Result
-               .Should ( )
-               .Be ( false ) ;
-        }
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-        [ TestMethod ]
-        public async Task TryWriteRawValue_ForUnknownCharacteristics_ReturnsFalse ( )
-        {
-            Wrappers.Clear ( ) ;
+        sut.TryWriteRawValue ( RawValue1 )
+           .Result
+           .Should ( )
+           .Be ( false ) ;
+    }
 
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task TryWriteRawValue_ForUnknownCharacteristics_ReturnsFalse ( )
+    {
+        Wrappers.Clear ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        var sut = CreateSut ( ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            sut.TryWriteRawValue ( RawValue1 )
-               .Result
-               .Should ( )
-               .Be ( false ) ;
-        }
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-        [ TestMethod ]
-        public async Task TryWriteRawValue_ForUnknownCharacteristics_LogsError ( )
-        {
-            Wrappers.Clear ( ) ;
+        sut.TryWriteRawValue ( RawValue1 )
+           .Result
+           .Should ( )
+           .Be ( false ) ;
+    }
 
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task TryWriteRawValue_ForUnknownCharacteristics_LogsError ( )
+    {
+        Wrappers.Clear ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        var sut = CreateSut ( ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.TryWriteRawValue ( RawValue1 ) ;
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-            Logger.ReceivedWithAnyArgs ( )
-                  .Error ( Arg.Any < string > ( ) ) ;
-        }
+        await sut.TryWriteRawValue ( RawValue1 ) ;
 
-        [ TestMethod ]
-        [ Ignore ( "Existing Characteristic will always return a value" ) ]
-        public async Task TryWriteRawValue_ForKnownCharacteristicsIsNull_ReturnsFalse ( )
-        {
-            Wrappers.Clear ( ) ;
+        Logger.ReceivedWithAnyArgs ( )
+              .Error ( Arg.Any < string > ( ) ) ;
+    }
 
-            Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                           null! ) ;
+    [ TestMethod ]
+    [ Ignore ( "Existing Characteristic will always return a value" ) ]
+    public async Task TryWriteRawValue_ForKnownCharacteristicsIsNull_ReturnsFalse ( )
+    {
+        Wrappers.Clear ( ) ;
 
-            var sut = CreateSut ( ) ;
+        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
+                       null! ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        var sut = CreateSut ( ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            sut.TryWriteRawValue ( RawValue1 )
-               .Result
-               .Should ( )
-               .Be ( false ) ;
-        }
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-        [ TestMethod ]
-        [ Ignore ( "Existing Characteristic will always return a value" ) ]
-        public async Task TryWriteRawValue_ForKnownCharacteristicsIsNull_LogsError ( )
-        {
-            Wrappers.Clear ( ) ;
+        sut.TryWriteRawValue ( RawValue1 )
+           .Result
+           .Should ( )
+           .Be ( false ) ;
+    }
 
-            Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                           null! ) ;
+    [ TestMethod ]
+    [ Ignore ( "Existing Characteristic will always return a value" ) ]
+    public async Task TryWriteRawValue_ForKnownCharacteristicsIsNull_LogsError ( )
+    {
+        Wrappers.Clear ( ) ;
 
-            var sut = CreateSut ( ) ;
+        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
+                       null! ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        var sut = CreateSut ( ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.TryWriteRawValue ( RawValue1 ) ;
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-            Logger.ReceivedWithAnyArgs ( )
-                  .Error ( Arg.Any < string > ( ) ) ;
-        }
+        await sut.TryWriteRawValue ( RawValue1 ) ;
 
-        [ TestMethod ]
-        public async Task ToString_ForInvoke_Instance ( )
-        {
-            var sut = CreateSut ( ) ;
+        Logger.ReceivedWithAnyArgs ( )
+              .Error ( Arg.Any < string > ( ) ) ;
+    }
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+    [ TestMethod ]
+    public async Task ToString_ForInvoke_Instance ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
-                          .Returns ( ( true , RawValue1 ) ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
+                      .Returns ( ( true , RawValue1 ) ) ;
 
-            sut.ToString ( )
-               .Should ( )
-               .Be ( ToStringResult ) ;
-        }
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-        protected override TestCharacteristicBase CreateSut ( )
-        {
-            return new TestCharacteristicBase ( Logger ,
-                                                Scheduler ,
-                                                Device ,
-                                                ProviderFactory ,
-                                                RawValueReader ,
-                                                RawValueWriter ,
-                                                ToStringConverter ,
-                                                DescriptionToUuid ) ;
-        }
+        sut.ToString ( )
+           .Should ( )
+           .Be ( ToStringResult ) ;
+    }
 
-        protected override void PopulateWrappers ( )
-        {
-            Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                           CharacteristicWrapper1 ) ;
-        }
+    protected override TestCharacteristicBase CreateSut ( )
+    {
+        return new TestCharacteristicBase ( Logger ,
+                                            Scheduler ,
+                                            Device ,
+                                            ProviderFactory ,
+                                            RawValueReader ,
+                                            RawValueWriter ,
+                                            ToStringConverter ,
+                                            DescriptionToUuid ) ;
+    }
 
-        protected readonly Guid GattCharacteristicUuid = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
-        protected readonly Guid GattServiceUuid        = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
+    protected override void PopulateWrappers ( )
+    {
+        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
+                       CharacteristicWrapper1 ) ;
     }
 }

@@ -3,83 +3,82 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+
+[ TestClass ]
+public class CharacteristicBaseToStringConverterTests
+    : CharacteristicBaseTests < TestCharacteristicBase >
 {
-    [ TestClass ]
-    public class CharacteristicBaseToStringConverterTests
-        : CharacteristicBaseTests < TestCharacteristicBase >
+    [ TestMethod ]
+    public async Task ToString_ForInvokedWithKeyAndNoProperty_Instance ( )
     {
-        [ TestMethod ]
-        public async Task ToString_ForInvokedWithKeyAndNoProperty_Instance ( )
-        {
-            const string expected = "TestCharacteristicBase\r\n" +
-                                    "RawValueKey = [01-02-03]\r\n" ;
+        const string expected = "TestCharacteristicBase\r\n" +
+                                "RawValueKey = [01-02-03]\r\n" ;
 
-            var sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
-                          .Returns ( ( true , RawValue1 ) ) ;
+        RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
+                      .Returns ( ( true , RawValue1 ) ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-            sut.ToString ( )
-               .Should ( )
-               .Be ( expected ) ;
-        }
+        sut.ToString ( )
+           .Should ( )
+           .Be ( expected ) ;
+    }
 
-        [ TestMethod ]
-        public async Task ToString_ForInvokedWithKeyAndProperty_Instance ( )
-        {
-            Properties.Add ( TestCharacteristicBase.RawValueKey ,
-                             GattCharacteristicProperties.None ) ;
+    [ TestMethod ]
+    public async Task ToString_ForInvokedWithKeyAndProperty_Instance ( )
+    {
+        Properties.Add ( TestCharacteristicBase.RawValueKey ,
+                         GattCharacteristicProperties.None ) ;
 
-            const string expected = "TestCharacteristicBase\r\n" +
-                                    "RawValueKey = [01-02-03] (None)\r\n" ;
+        const string expected = "TestCharacteristicBase\r\n" +
+                                "RawValueKey = [01-02-03] (None)\r\n" ;
 
-            var sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
-                          .Returns ( ( true , RawValue1 ) ) ;
+        RawValueReader.TryReadValueAsync ( CharacteristicWrapper1 )
+                      .Returns ( ( true , RawValue1 ) ) ;
 
-            await sut.Initialize < TestCharacteristicBase > ( )
-                     .Refresh ( ) ;
+        await sut.Initialize < TestCharacteristicBase > ( )
+                 .Refresh ( ) ;
 
-            sut.ToString ( )
-               .Should ( )
-               .Be ( expected ) ;
-        }
+        sut.ToString ( )
+           .Should ( )
+           .Be ( expected ) ;
+    }
 
-        [ TestMethod ]
-        public void RawArrayEmpty_ForInvoked_Empty ( )
-        {
-            CharacteristicBaseToStringConverter.RawArrayEmpty
-                                               .Should ( )
-                                               .BeEmpty ( ) ;
-        }
+    [ TestMethod ]
+    public void RawArrayEmpty_ForInvoked_Empty ( )
+    {
+        CharacteristicBaseToStringConverter.RawArrayEmpty
+                                           .Should ( )
+                                           .BeEmpty ( ) ;
+    }
 
-        protected override TestCharacteristicBase CreateSut ( )
-        {
-            return new TestCharacteristicBase ( Logger ,
-                                                Scheduler ,
-                                                Device ,
-                                                ProviderFactory ,
-                                                RawValueReader ,
-                                                RawValueWriter ,
-                                                new CharacteristicBaseToStringConverter ( ) ,
-                                                DescriptionToUuid ) ;
-        }
+    protected override TestCharacteristicBase CreateSut ( )
+    {
+        return new TestCharacteristicBase ( Logger ,
+                                            Scheduler ,
+                                            Device ,
+                                            ProviderFactory ,
+                                            RawValueReader ,
+                                            RawValueWriter ,
+                                            new CharacteristicBaseToStringConverter ( ) ,
+                                            DescriptionToUuid ) ;
+    }
 
-        protected override void PopulateWrappers ( )
-        {
-            Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                           CharacteristicWrapper1 ) ;
-        }
+    protected override void PopulateWrappers ( )
+    {
+        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
+                       CharacteristicWrapper1 ) ;
     }
 }

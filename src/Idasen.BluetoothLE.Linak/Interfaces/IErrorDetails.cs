@@ -1,14 +1,11 @@
-﻿
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
-// ReSharper disable UnusedMemberInSuper.Global
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces
+public interface IErrorDetails
 {
-    public interface IErrorDetails
-    {
-        string Message { get ; }
+    string Message { get ; }
 
-        Exception ? Exception { get ; }
-        string      Caller    { get ; }
-    }
+    Exception? Exception { get ; }
+    string Caller { get ; }
 }

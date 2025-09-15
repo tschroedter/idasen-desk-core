@@ -2,20 +2,19 @@
 using FluentAssertions ;
 using Selkie.AutoMocking ;
 
-namespace Idasen.BluetoothLE.Core.Tests
+namespace Idasen.BluetoothLE.Core.Tests ;
+
+[ AutoDataTestClass ]
+public class ObservableTimerFactoryTests
 {
-    [ AutoDataTestClass ]
-    public class ObservableTimerFactoryTests
+    [ AutoDataTestMethod ]
+    public void Create_ForInvoked_ReturnsInstance (
+        ObservableTimerFactory sut ,
+        IScheduler scheduler )
     {
-        [ AutoDataTestMethod ]
-        public void Create_ForInvoked_ReturnsInstance (
-            ObservableTimerFactory sut ,
-            IScheduler             scheduler )
-        {
-            sut.Create ( TimeSpan.FromSeconds ( 10 ) ,
-                         scheduler )
-               .Should ( )
-               .NotBeNull ( ) ;
-        }
+        sut.Create ( TimeSpan.FromSeconds ( 10 ) ,
+                     scheduler )
+           .Should ( )
+           .NotBeNull ( ) ;
     }
 }

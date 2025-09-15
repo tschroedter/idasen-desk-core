@@ -4,19 +4,18 @@ using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core
+namespace Idasen.BluetoothLE.Core ;
+
+/// <inheritdoc />
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class ObservableTimerFactory
+    : IObservableTimerFactory
 {
     /// <inheritdoc />
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class ObservableTimerFactory
-        : IObservableTimerFactory
+    public IObservable < long > Create ( TimeSpan period ,
+                                         IScheduler scheduler )
     {
-        /// <inheritdoc />
-        public IObservable < long > Create ( TimeSpan   period ,
-                                             IScheduler scheduler )
-        {
-            return Observable.Interval ( period ,
-                                         scheduler ) ;
-        }
+        return Observable.Interval ( period ,
+                                     scheduler ) ;
     }
 }

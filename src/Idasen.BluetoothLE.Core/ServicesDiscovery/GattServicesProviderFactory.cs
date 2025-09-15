@@ -3,30 +3,29 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+
+/// <inheritdoc />
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class GattServicesProviderFactory
+    : IGattServicesProviderFactory
 {
-    /// <inheritdoc />
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class GattServicesProviderFactory
-        : IGattServicesProviderFactory
+    private readonly GattServicesProvider.Factory _factory ;
+
+    public GattServicesProviderFactory ( GattServicesProvider.Factory factory )
     {
-        public GattServicesProviderFactory ( GattServicesProvider.Factory factory )
-        {
-            Guard.ArgumentNotNull ( factory ,
-                                    nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
-            _factory = factory ;
-        }
+        _factory = factory ;
+    }
 
-        /// <inheritdoc />
-        public IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper )
-        {
-            Guard.ArgumentNotNull ( wrapper ,
-                                    nameof ( wrapper ) ) ;
+    /// <inheritdoc />
+    public IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper )
+    {
+        Guard.ArgumentNotNull ( wrapper ,
+                                nameof ( wrapper ) ) ;
 
-            return _factory.Invoke ( wrapper ) ;
-        }
-
-        private readonly GattServicesProvider.Factory _factory ;
+        return _factory.Invoke ( wrapper ) ;
     }
 }

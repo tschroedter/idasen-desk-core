@@ -11,10 +11,12 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
 {
     private readonly ILogger _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
 
-    public string Convert ( IInvocation?  invocation )
+    public string Convert ( IInvocation? invocation )
     {
-        if (invocation == null)
-            throw new ArgumentNullException(nameof(invocation));
+        if ( invocation == null )
+        {
+            throw new ArgumentNullException ( nameof ( invocation ) ) ;
+        }
 
         var arguments = ConvertArgumentsToString ( invocation.Arguments ) ;
 
@@ -32,26 +34,36 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
         }
 
         if ( builder.Length > 0 )
+        {
             builder.Length-- ; // Remove the trailing comma
+        }
 
         return builder.ToString ( ) ;
     }
 
     private string DumpObject ( object? argument )
     {
-        if (argument == null)
-            return "null";
+        if ( argument == null )
+        {
+            return "null" ;
+        }
 
         try
         {
-            if (argument is CancellationToken)
-                return nameof(CancellationToken);
+            if ( argument is CancellationToken )
+            {
+                return nameof ( CancellationToken ) ;
+            }
 
-            if (argument is IntPtr)
-                return nameof(IntPtr);
+            if ( argument is IntPtr )
+            {
+                return nameof ( IntPtr ) ;
+            }
 
             if ( IsWindowsBluetoothInstance ( argument ) )
+            {
                 return argument.ToString ( ) ?? "null" ;
+            }
 
             return JsonSerializer.Serialize ( argument ) ;
         }
@@ -69,6 +81,7 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
     {
         return argument.GetType ( )
                        .Namespace?
-                       .StartsWith ( "Windows.Devices.Bluetooth" ) == true ;
+                       .StartsWith ( "Windows.Devices.Bluetooth" ) ==
+               true ;
     }
 }

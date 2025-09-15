@@ -1,9 +1,8 @@
 ﻿using Castle.DynamicProxy ;
 
-namespace Idasen.Aop.Interfaces
+namespace Idasen.Aop.Interfaces ;
+
+public interface IInvocationToTextConverter
 {
-    public interface IInvocationToTextConverter
-    {
-        string Convert ( IInvocation invocation ) ;
-    }
+    string Convert ( IInvocation invocation ) ;
 }

@@ -3,59 +3,58 @@ using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+
+[ TestClass ]
+public class GenericAttributeTest
+    : CharacteristicBaseTests < GenericAttribute >
 {
-    [ TestClass ]
-    public class GenericAttributeTest
-        : CharacteristicBaseTests < GenericAttribute >
+    [ TestMethod ]
+    public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        [ TestMethod ]
-        public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
-        {
-            var sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            Action action = ( ) => sut.Initialize < Dpg > ( ) ;
+        Action action = ( ) => sut.Initialize < Dpg > ( ) ;
 
-            action.Should ( )
-                  .Throw < Exception > ( ) ;
-        }
+        action.Should ( )
+              .Throw < Exception > ( ) ;
+    }
 
-        [ TestMethod ]
-        public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
-        {
-            var sut = CreateSut ( ) ;
+    [ TestMethod ]
+    public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
+    {
+        var sut = CreateSut ( ) ;
 
-            ServiceWrapper.Uuid
-                          .Returns ( sut.GattServiceUuid ) ;
+        ServiceWrapper.Uuid
+                      .Returns ( sut.GattServiceUuid ) ;
 
-            await sut.Initialize < GenericAttribute > ( )
-                     .Refresh ( ) ;
+        await sut.Initialize < GenericAttribute > ( )
+                 .Refresh ( ) ;
 
-            sut.RawServiceChanged
-               .Should ( )
-               .BeEquivalentTo ( RawValue1 ) ;
-        }
+        sut.RawServiceChanged
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
+    }
 
-        protected override GenericAttribute CreateSut ( )
-        {
-            return new GenericAttribute ( Logger ,
-                                          Scheduler ,
-                                          Device ,
-                                          ProviderFactory ,
-                                          RawValueReader ,
-                                          RawValueWriter ,
-                                          ToStringConverter ,
-                                          DescriptionToUuid ,
-                                          new AllGattCharacteristicsProvider ( ) ) ;
-        }
+    protected override GenericAttribute CreateSut ( )
+    {
+        return new GenericAttribute ( Logger ,
+                                      Scheduler ,
+                                      Device ,
+                                      ProviderFactory ,
+                                      RawValueReader ,
+                                      RawValueWriter ,
+                                      ToStringConverter ,
+                                      DescriptionToUuid ,
+                                      new AllGattCharacteristicsProvider ( ) ) ;
+    }
 
-        protected override void PopulateWrappers ( )
-        {
-            Wrappers.Add ( GenericAttribute.CharacteristicServiceChanged ,
-                           CharacteristicWrapper1 ) ;
-        }
+    protected override void PopulateWrappers ( )
+    {
+        Wrappers.Add ( GenericAttribute.CharacteristicServiceChanged ,
+                       CharacteristicWrapper1 ) ;
     }
 }

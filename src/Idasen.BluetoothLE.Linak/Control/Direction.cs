@@ -1,9 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Linak.Control
+﻿namespace Idasen.BluetoothLE.Linak.Control ;
+
+public enum Direction
 {
-    public enum Direction
-    {
-        None ,
-        Up ,
-        Down
-    }
+    None ,
+    Up ,
+    Down
 }

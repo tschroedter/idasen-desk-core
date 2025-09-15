@@ -2,13 +2,12 @@
 
 // ReSharper disable UnusedMemberInSuper.Global
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics
-{
-    public interface IDpg
-        : ICharacteristicBase
-    {
-        IEnumerable < byte > RawDpg { get ; }
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
-        delegate IDpg Factory ( IDevice device ) ;
-    }
+public interface IDpg
+    : ICharacteristicBase
+{
+    delegate IDpg Factory ( IDevice device ) ;
+
+    IEnumerable < byte > RawDpg { get ; }
 }

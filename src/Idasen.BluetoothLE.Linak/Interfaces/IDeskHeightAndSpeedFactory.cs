@@ -1,9 +1,8 @@
 ﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface IDeskHeightAndSpeedFactory
 {
-    public interface IDeskHeightAndSpeedFactory
-    {
-        IDeskHeightAndSpeed Create ( IReferenceOutput referenceOutput ) ;
-    }
+    IDeskHeightAndSpeed Create ( IReferenceOutput referenceOutput ) ;
 }

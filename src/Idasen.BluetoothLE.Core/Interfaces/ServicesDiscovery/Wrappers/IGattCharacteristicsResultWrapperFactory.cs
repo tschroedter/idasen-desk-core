@@ -1,22 +1,21 @@
 ﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+/// <summary>
+///     Factory to create <see cref="IGattCharacteristicsResultWrapper" /> instances.
+/// </summary>
+public interface IGattCharacteristicsResultWrapperFactory
 {
     /// <summary>
-    ///     Factory to create <see cref="IGattCharacteristicsResultWrapper" /> instances.
+    ///     Create a <see cref="IGattCharacteristicsResultWrapper" /> instance using
+    ///     the given <see cref="GattCharacteristicsResult" /> instance.
     /// </summary>
-    public interface IGattCharacteristicsResultWrapperFactory
-    {
-        /// <summary>
-        ///     Create a <see cref="IGattCharacteristicsResultWrapper" /> instance using
-        ///     the given <see cref="GattCharacteristicsResult" /> instance.
-        /// </summary>
-        /// <param name="result">
-        ///     The instance to wrap.
-        /// </param>
-        /// <returns>
-        ///     The wrapper.
-        /// </returns>
-        IGattCharacteristicsResultWrapper Create ( GattCharacteristicsResult result ) ;
-    }
+    /// <param name="result">
+    ///     The instance to wrap.
+    /// </param>
+    /// <returns>
+    ///     The wrapper.
+    /// </returns>
+    IGattCharacteristicsResultWrapper Create ( GattCharacteristicsResult result ) ;
 }

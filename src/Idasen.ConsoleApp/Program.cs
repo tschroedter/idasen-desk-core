@@ -6,59 +6,58 @@ using Microsoft.Extensions.Configuration ;
 using Serilog ;
 using static System.Console ;
 
-namespace Idasen.ConsoleApp
+namespace Idasen.ConsoleApp ;
+
+internal sealed class Program
 {
-    internal sealed class Program
+    private const string DefaultDeviceName = "Desk" ;
+    private const ulong DefaultDeviceAddress = 250635178951455u ;
+    private const uint DefaultDeviceMonitoringTimeout = 600u ;
+
+    /// <summary>
+    ///     Test Application
+    /// </summary>
+    [ UsedImplicitly ]
+    private async static Task Main ( )
     {
-        /// <summary>
-        ///     Test Application
-        /// </summary>
-        [ UsedImplicitly ]
-        private async static Task Main ( )
+        using var tokenSource = new CancellationTokenSource ( TimeSpan.FromSeconds ( 60 ) ) ;
+        var token = tokenSource.Token ;
+
+        var builder = new ConfigurationBuilder ( ).SetBasePath ( Directory.GetCurrentDirectory ( ) )
+                                                  .AddJsonFile ( "Appsettings.json" ) ;
+
+        IContainer? container = null ;
+
+        try
         {
-            using var tokenSource = new CancellationTokenSource ( TimeSpan.FromSeconds ( 60 ) ) ;
-            var        token       = tokenSource.Token ;
+            container = ContainerProvider.Create ( builder.Build ( ) ) ;
 
-            var builder = new ConfigurationBuilder ( ).SetBasePath ( Directory.GetCurrentDirectory ( ) )
-                                                      .AddJsonFile ( "Appsettings.json" ) ;
+            var logger = container.Resolve < ILogger > ( ) ;
+            var provider = container.Resolve < IDeskProvider > ( ) ;
 
-            IContainer? container = null ;
+            provider.Initialize ( DefaultDeviceName ,
+                                  DefaultDeviceAddress ,
+                                  DefaultDeviceMonitoringTimeout ) ;
 
-            try
+            var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
+
+            if ( isSuccess )
             {
-                container = ContainerProvider.Create ( builder.Build ( ) ) ;
-
-                var logger   = container.Resolve < ILogger > ( ) ;
-                var provider = container.Resolve < IDeskProvider > ( ) ;
-
-                provider.Initialize ( DefaultDeviceName ,
-                                      DefaultDeviceAddress ,
-                                      DefaultDeviceMonitoringTimeout ) ;
-
-                var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
-
-                if ( isSuccess )
-                {
-                    desk!.MoveTo ( 7200u ) ;
-                }
-                else
-                {
-                    logger.Error ( "Failed to detect desk" ) ;
-                }
-
-                ReadLine ( ) ;
-
-                desk?.Dispose ( ) ;
+                desk!.MoveTo ( 7200u ) ;
             }
-            finally
+            else
             {
-                container?.Dispose ( ) ;
-                LoggerProvider.Shutdown ( ) ;
+                logger.Error ( "Failed to detect desk" ) ;
             }
+
+            ReadLine ( ) ;
+
+            desk?.Dispose ( ) ;
         }
-
-        private const string DefaultDeviceName              = "Desk" ;
-        private const ulong  DefaultDeviceAddress           = 250635178951455u ;
-        private const uint   DefaultDeviceMonitoringTimeout = 600u ;
+        finally
+        {
+            container?.Dispose ( ) ;
+            LoggerProvider.Shutdown ( ) ;
+        }
     }
 }

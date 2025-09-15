@@ -22,18 +22,22 @@ public static class LoggerProvider
         Guard.ArgumentNotNull ( appLogFileName ,
                                 nameof ( appLogFileName ) ) ;
 
-        lock ( Sync )
+        lock (Sync)
         {
             if ( _logger != null )
             {
-                _logger.Value.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" , appName , appLogFileName ) ;
+                _logger.Value.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" ,
+                                      appName ,
+                                      appLogFileName ) ;
 
                 return _logger.Value ;
             }
 
             _logger = DoCreateLogger ( appLogFileName ) ;
 
-            _logger.Value.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" , appName , appLogFileName ) ;
+            _logger.Value.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" ,
+                                  appName ,
+                                  appLogFileName ) ;
 
             return _logger.Value ;
         }
@@ -41,12 +45,15 @@ public static class LoggerProvider
 
     private static Lazy < Logger > DoCreateLogger ( string appLogFileName )
     {
-        var logFolder = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory , "logs" ) ;
+        var logFolder = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory ,
+                                       "logs" ) ;
         var logFile = CreateFullPathLogFileName ( logFolder ,
                                                   appLogFileName ) ;
 
         if ( ! Directory.Exists ( logFolder ) )
+        {
             Directory.CreateDirectory ( logFolder ) ;
+        }
 
 #pragma warning disable CA1305
         var loggerConfiguration = new LoggerConfiguration ( )
@@ -64,17 +71,21 @@ public static class LoggerProvider
 
         var logger = loggerConfiguration.CreateLogger ( ) ;
 
-        Console.WriteLine ( "Log file name: {0} {1}" , LoggingFile.FullPath , LoggingFile.Path ) ;
+        Console.WriteLine ( "Log file name: {0} {1}" ,
+                            LoggingFile.FullPath ,
+                            LoggingFile.Path ) ;
 
         return new Lazy < Logger > ( logger ) ;
     }
 
     public static void Shutdown ( )
     {
-        lock ( Sync )
+        lock (Sync)
         {
             if ( _logger == null )
+            {
                 return ;
+            }
 
             // Flush and close sinks
             Log.CloseAndFlush ( ) ;

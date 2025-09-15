@@ -1,7 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface IDeskMovementMonitorFactory
 {
-    public interface IDeskMovementMonitorFactory
-    {
-        IDeskMovementMonitor Create ( IDeskHeightAndSpeed heightAndSpeed ) ;
-    }
+    IDeskMovementMonitor Create ( IDeskHeightAndSpeed heightAndSpeed ) ;
 }

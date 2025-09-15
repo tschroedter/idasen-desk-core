@@ -5,29 +5,28 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 // ReSharper disable UnusedMember.Global
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+[ ExcludeFromCodeCoverage ]
+public class GattReadResultWrapper
+    : IGattReadResultWrapper
 {
-    [ ExcludeFromCodeCoverage ]
-    public class GattReadResultWrapper
-        : IGattReadResultWrapper
+    public delegate IGattReadResultWrapper Factory ( GattReadResult result ) ;
+
+    public static readonly IGattReadResultWrapper NotSupported = new GattReadResultWrapperNotSupported ( ) ;
+
+    private readonly GattReadResult _result ;
+
+    public GattReadResultWrapper ( GattReadResult result )
     {
-        public GattReadResultWrapper ( GattReadResult result )
-        {
-            Guard.ArgumentNotNull ( result ,
-                                    nameof ( result ) ) ;
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
-            _result = result ;
-        }
-
-        public GattCommunicationStatus Status => _result.Status ;
-
-        public byte ?  ProtocolError => _result.ProtocolError ;
-        public IBuffer? Value         => _result.Value ;
-
-        public delegate IGattReadResultWrapper Factory ( GattReadResult result ) ;
-
-        public static readonly IGattReadResultWrapper NotSupported = new GattReadResultWrapperNotSupported ( ) ;
-
-        private readonly GattReadResult _result ;
+        _result = result ;
     }
+
+    public GattCommunicationStatus Status => _result.Status ;
+
+    public byte? ProtocolError => _result.ProtocolError ;
+    public IBuffer? Value => _result.Value ;
 }

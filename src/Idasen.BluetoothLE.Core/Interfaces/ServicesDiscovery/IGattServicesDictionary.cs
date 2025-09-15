@@ -1,17 +1,13 @@
 ﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+
+public interface IGattServicesDictionary
+    : IDisposable
 {
-    public interface IGattServicesDictionary
-        : IDisposable
-    {
-        IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ReadOnlyDictionary
-        {
-            get ;
-        }
+    IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ReadOnlyDictionary { get ; }
 
-        IGattCharacteristicsResultWrapper this [ IGattDeviceServiceWrapper service ] { get ; set ; }
+    IGattCharacteristicsResultWrapper this [ IGattDeviceServiceWrapper service ] { get ; set ; }
 
-        void Clear ( ) ;
-    }
+    void Clear ( ) ;
 }

@@ -1,12 +1,11 @@
-﻿namespace Idasen.BluetoothLE.Linak
+﻿namespace Idasen.BluetoothLE.Linak ;
+
+public enum DeskCharacteristicKey
 {
-    public enum DeskCharacteristicKey
-    {
-        GenericAccess ,
-        GenericAttribute ,
-        ReferenceInput ,
-        ReferenceOutput ,
-        Dpg ,
-        Control
-    }
+    GenericAccess ,
+    GenericAttribute ,
+    ReferenceInput ,
+    ReferenceOutput ,
+    Dpg ,
+    Control
 }

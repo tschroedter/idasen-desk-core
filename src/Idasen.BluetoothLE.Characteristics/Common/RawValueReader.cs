@@ -48,7 +48,9 @@ public class RawValueReader
         }
 
         if ( SupportsRead ( characteristic ) )
+        {
             return await ReadValue ( characteristic ) ;
+        }
 
         _logger.Information ( $"GattCharacteristic '{characteristic.Uuid}' " +
                               "doesn't support 'Read'" ) ;
@@ -80,10 +82,14 @@ public class RawValueReader
         Status = readValue.Status ;
 
         if ( GattCommunicationStatus.Success != Status )
+        {
             return ( false , ArrayEmpty ) ;
+        }
 
         if ( readValue.Value == null ) // todo testing for this if
+        {
             return ( false , ArrayEmpty ) ;
+        }
 
         return _reader.TryReadValue ( readValue.Value ,
                                       out var bytes )

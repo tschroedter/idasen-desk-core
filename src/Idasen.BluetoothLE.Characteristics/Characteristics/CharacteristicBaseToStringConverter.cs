@@ -5,65 +5,68 @@ using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics
+namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
+
+/// <inheritdoc cref="ICharacteristicBaseToStringConverter" />
+[ Intercept ( typeof ( LogAspect ) ) ]
+public class CharacteristicBaseToStringConverter
+    : ICharacteristicBaseToStringConverter
 {
-    /// <inheritdoc cref="ICharacteristicBaseToStringConverter" />
-    [ Intercept ( typeof ( LogAspect ) ) ]
-    public class CharacteristicBaseToStringConverter
-        : ICharacteristicBaseToStringConverter
+    internal static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+                                                                            .ToArray ( ) ;
+
+    /// <inheritdoc />
+    public string ToString ( CharacteristicBase characteristic )
     {
-        /// <inheritdoc />
-        public string ToString ( CharacteristicBase characteristic )
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
+
+        var builder = new StringBuilder ( ) ;
+
+        builder.AppendLine ( $"{characteristic.GetType ( ).Name}" ) ;
+
+        foreach (var key in characteristic.DescriptionToUuid.Keys)
         {
-            Guard.ArgumentNotNull ( characteristic ,
-                                    nameof ( characteristic ) ) ;
+            var value = TryGetValueOrEmpty ( characteristic ,
+                                             key ) ;
 
-            var builder = new StringBuilder ( ) ;
+            var rawValueOrUnavailable = RawValueOrUnavailable ( characteristic ,
+                                                                key ,
+                                                                value ) ;
 
-            builder.AppendLine ( $"{characteristic.GetType ( ).Name}" ) ;
+            builder.Append ( rawValueOrUnavailable ) ;
 
-            foreach ( var key in characteristic.DescriptionToUuid.Keys )
+            if ( characteristic.Characteristics != null &&
+                 characteristic.Characteristics.Properties.TryGetValue ( key ,
+                                                                         out var properties )
+               )
             {
-                var value = TryGetValueOrEmpty ( characteristic ,
-                                                 key ) ;
-
-                var rawValueOrUnavailable = RawValueOrUnavailable ( characteristic ,
-                                                                    key ,
-                                                                    value ) ;
-
-                builder.Append ( rawValueOrUnavailable ) ;
-
-                if ( characteristic.Characteristics != null &&
-                     characteristic.Characteristics.Properties.TryGetValue ( key ,
-                                                                             out var properties )
-                   )
-                    builder.AppendLine ( $" ({properties.ToCsv ( )})" ) ;
-                else
-                    builder.AppendLine ( ) ;
+                builder.AppendLine ( $" ({properties.ToCsv ( )})" ) ;
             }
-
-            return builder.ToString ( ) ;
+            else
+            {
+                builder.AppendLine ( ) ;
+            }
         }
 
-        protected IEnumerable < byte > TryGetValueOrEmpty ( CharacteristicBase characteristic ,
-                                                            string             key )
-        {
-            return characteristic.RawValues.GetValueOrDefault ( key , RawArrayEmpty ) ;
-        }
+        return builder.ToString ( ) ;
+    }
 
-        protected string RawValueOrUnavailable ( CharacteristicBase   characteristic ,
-                                                 string               key ,
-                                                 IEnumerable < byte > value )
-        {
-            return characteristic.Characteristics != null &&
-                   characteristic.Characteristics.Characteristics
-                                 .ContainsKey ( key )
-                       ? $"{key} = [{value.ToHex ( )}]"
-                       : $"{key} = Unavailable" ;
-        }
+    protected IEnumerable < byte > TryGetValueOrEmpty ( CharacteristicBase characteristic ,
+                                                        string key )
+    {
+        return characteristic.RawValues.GetValueOrDefault ( key ,
+                                                            RawArrayEmpty ) ;
+    }
 
-
-        internal static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
-                                                                                .ToArray ( ) ;
+    protected string RawValueOrUnavailable ( CharacteristicBase characteristic ,
+                                             string key ,
+                                             IEnumerable < byte > value )
+    {
+        return characteristic.Characteristics != null &&
+               characteristic.Characteristics.Characteristics
+                             .ContainsKey ( key )
+                   ? $"{key} = [{value.ToHex ( )}]"
+                   : $"{key} = Unavailable" ;
     }
 }

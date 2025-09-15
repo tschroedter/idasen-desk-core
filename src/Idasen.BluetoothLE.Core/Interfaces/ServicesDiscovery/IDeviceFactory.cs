@@ -1,19 +1,18 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+
+/// <summary>
+///     Factory to create <see cref="IDevice" /> instances.
+/// </summary>
+public interface IDeviceFactory
 {
     /// <summary>
-    ///     Factory to create <see cref="IDevice" /> instances.
+    ///     Create a <see cref="IDevice" /> instance using the given address.
     /// </summary>
-    public interface IDeviceFactory
-    {
-        /// <summary>
-        ///     Create a <see cref="IDevice" /> instance using the given address.
-        /// </summary>
-        /// <param name="address">
-        ///     The address of the device.
-        /// </param>
-        /// <returns>
-        ///     The device belonging to the address.
-        /// </returns>
-        Task < IDevice > FromBluetoothAddressAsync ( ulong address ) ;
-    }
+    /// <param name="address">
+    ///     The address of the device.
+    /// </param>
+    /// <returns>
+    ///     The device belonging to the address.
+    /// </returns>
+    Task < IDevice > FromBluetoothAddressAsync ( ulong address ) ;
 }

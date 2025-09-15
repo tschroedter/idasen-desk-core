@@ -1,12 +1,11 @@
 ﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+public interface IGattCharacteristicValueChangedObservables
+    : IDisposable
 {
-    public interface IGattCharacteristicValueChangedObservables
-        : IDisposable
-    {
-        IObservable < GattCharacteristicValueChangedDetails > ValueChanged { get ; }
-        Task                                                  Initialise ( GattCharacteristic characteristic ) ;
-    }
+    IObservable < GattCharacteristicValueChangedDetails > ValueChanged { get ; }
+    Task Initialise ( GattCharacteristic characteristic ) ;
 }

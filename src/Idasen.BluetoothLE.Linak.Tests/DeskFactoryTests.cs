@@ -3,37 +3,36 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Linak.Tests
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
+[ TestClass ]
+public class DeskFactoryTests
 {
-    [ TestClass ]
-    public class DeskFactoryTests
+    private Func < IDevice , IDeskConnector > _deskConnectorFactory = null! ;
+    private Func < IDeskConnector , IDesk > _deskFactory = null! ;
+    private IDeviceFactory _deviceFactory = null! ;
+
+    [ TestInitialize ]
+    public void Initialize ( )
     {
-        [ TestInitialize ]
-        public void Initialize ( )
-        {
-            _deviceFactory        = Substitute.For < IDeviceFactory > ( ) ;
-            _deskConnectorFactory = Substitute.For < Func < IDevice , IDeskConnector > > ( ) ;
-            _deskFactory          = Substitute.For < Func < IDeskConnector , IDesk > > ( ) ;
-        }
+        _deviceFactory = Substitute.For < IDeviceFactory > ( ) ;
+        _deskConnectorFactory = Substitute.For < Func < IDevice , IDeskConnector > > ( ) ;
+        _deskFactory = Substitute.For < Func < IDeskConnector , IDesk > > ( ) ;
+    }
 
-        [ TestMethod ]
-        public async Task CreateAsync_ForInvoked_ReturnsInstance ( )
-        {
-            var actual = await CreateSut ( ).CreateAsync ( 1u ) ;
+    [ TestMethod ]
+    public async Task CreateAsync_ForInvoked_ReturnsInstance ( )
+    {
+        var actual = await CreateSut ( ).CreateAsync ( 1u ) ;
 
-            actual.Should ( )
-                  .NotBeNull ( ) ;
-        }
+        actual.Should ( )
+              .NotBeNull ( ) ;
+    }
 
-        private DeskFactory CreateSut ( )
-        {
-            return new DeskFactory ( _deviceFactory ,
-                                     _deskConnectorFactory ,
-                                     _deskFactory ) ;
-        }
-
-        private Func < IDevice , IDeskConnector > _deskConnectorFactory = null! ;
-        private Func < IDeskConnector , IDesk >   _deskFactory          = null! ;
-        private IDeviceFactory                    _deviceFactory        = null! ;
+    private DeskFactory CreateSut ( )
+    {
+        return new DeskFactory ( _deviceFactory ,
+                                 _deskConnectorFactory ,
+                                 _deskFactory ) ;
     }
 }
