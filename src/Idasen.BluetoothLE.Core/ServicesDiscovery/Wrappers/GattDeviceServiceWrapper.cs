@@ -35,14 +35,14 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         public string DeviceId => _gattDeviceService.DeviceId ;
 
         /// <inheritdoc />
-        public Task < IGattCharacteristicsResultWrapper > GetCharacteristicsAsync ( )
+        public async Task < IGattCharacteristicsResultWrapper > GetCharacteristicsAsync ( )
         {
-            var characteristics = _gattDeviceService.GetCharacteristicsAsync ( ).AsTask ( ) ;
+            var characteristics = await _gattDeviceService.GetCharacteristicsAsync ( ).AsTask ( ) ;
 
-            var result = _characteristicsFactory.Create ( characteristics.Result )
+            var result = _characteristicsFactory.Create ( characteristics )
                                                 .Initialize ( ) ;
 
-            return result ;
+            return await result ;
         }
 
         private readonly IGattCharacteristicsResultWrapperFactory _characteristicsFactory ;
