@@ -16,29 +16,44 @@ namespace Idasen.ConsoleApp
         [ UsedImplicitly ]
         private async static Task Main ( )
         {
-            var tokenSource = new CancellationTokenSource ( TimeSpan.FromSeconds ( 60 ) ) ;
-            var token       = tokenSource.Token ;
+            using var tokenSource = new CancellationTokenSource ( TimeSpan.FromSeconds ( 60 ) ) ;
+            var        token       = tokenSource.Token ;
 
             var builder = new ConfigurationBuilder ( ).SetBasePath ( Directory.GetCurrentDirectory ( ) )
                                                       .AddJsonFile ( "Appsettings.json" ) ;
 
-            var container = ContainerProvider.Create ( builder.Build ( ) ) ;
+            IContainer? container = null ;
+            try
+            {
+                container = ContainerProvider.Create ( builder.Build ( ) ) ;
 
-            var logger   = container.Resolve < ILogger > ( ) ;
-            var provider = container.Resolve < IDeskProvider > ( ) ;
+                var logger   = container.Resolve < ILogger > ( ) ;
+                var provider = container.Resolve < IDeskProvider > ( ) ;
 
-            provider.Initialize ( DefaultDeviceName ,
-                                  DefaultDeviceAddress ,
-                                  DefaultDeviceMonitoringTimeout ) ;
+                provider.Initialize ( DefaultDeviceName ,
+                                      DefaultDeviceAddress ,
+                                      DefaultDeviceMonitoringTimeout ) ;
 
-            var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
+                var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
 
-            if ( isSuccess )
-                desk!.MoveTo ( 7200u ) ;
-            else
-                logger.Error ( "Failed to detect desk" ) ;
+                if ( isSuccess )
+                {
+                    desk!.MoveTo ( 7200u ) ;
+                }
+                else
+                {
+                    logger.Error ( "Failed to detect desk" ) ;
+                }
 
-            ReadLine ( ) ;
+                ReadLine ( ) ;
+
+                desk?.Dispose ( ) ;
+            }
+            finally
+            {
+                container?.Dispose ( ) ;
+                LoggerProvider.Shutdown ( ) ;
+            }
         }
 
         private const string DefaultDeviceName              = "Desk" ;
