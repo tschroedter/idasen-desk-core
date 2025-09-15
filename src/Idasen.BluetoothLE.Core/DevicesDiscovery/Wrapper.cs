@@ -77,6 +77,7 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery
         public void Dispose ( )
         {
             Unsubscribe ( ) ;
+            _watcher.Stop ( ) ;
         }
 
         private void Subscribe ( )

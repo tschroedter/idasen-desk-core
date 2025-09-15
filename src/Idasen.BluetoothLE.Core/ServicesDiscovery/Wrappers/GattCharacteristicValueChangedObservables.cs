@@ -69,6 +69,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
                                               serviceUuid ,
                                               characteristic.Uuid ) ;
 
+                        // dispose any prior subscription to avoid duplicate handlers/leaks
+                        DisposeSubscription ( ) ;
+
                         _observable = Observable
                                      .FromEventPattern
                                       < TypedEventHandler < GattCharacteristic , GattValueChangedEventArgs > ,
@@ -132,6 +135,7 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         private void DisposeSubscription ( )
         {
             _observable?.Dispose ( ) ;
+            _observable = null ;
         }
 
         private readonly ILogger                                            _logger ;
