@@ -26,6 +26,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         public void Dispose ( )
         {
             _gattDeviceService.Dispose ( ) ;
+            _lastCharacteristics?.Dispose ( ) ;
+            _lastCharacteristics = null ;
         }
 
         /// <inheritdoc />
@@ -39,13 +41,16 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         {
             var characteristics = await _gattDeviceService.GetCharacteristicsAsync ( ).AsTask ( ) ;
 
-            var result = _characteristicsFactory.Create ( characteristics )
-                                                .Initialize ( ) ;
+            var result = _characteristicsFactory.Create ( characteristics ) ;
 
-            return await result ;
+            _lastCharacteristics?.Dispose ( ) ;
+            _lastCharacteristics = await result.Initialize ( ) ;
+
+            return _lastCharacteristics ;
         }
 
         private readonly IGattCharacteristicsResultWrapperFactory _characteristicsFactory ;
         private readonly GattDeviceService                        _gattDeviceService ;
+        private IGattCharacteristicsResultWrapper?                _lastCharacteristics ;
     }
 }

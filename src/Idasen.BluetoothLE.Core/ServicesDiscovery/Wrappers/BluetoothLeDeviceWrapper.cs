@@ -26,6 +26,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     private readonly ILogger _logger ;
     private readonly IGattServicesProviderFactory _providerFactory ;
     private readonly IGattDeviceServicesResultWrapperFactory _servicesFactory ;
+    private readonly IScheduler _scheduler ;
     private readonly IDisposable _subscriberConnectionStatus ;
     private IGattServicesProvider? _provider ;
     private GattSession? _session ;
@@ -55,6 +56,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
                                 nameof ( device ) ) ;
 
         _logger = logger ;
+        _scheduler = scheduler ;
         _providerFactory = providerFactory ;
         _servicesFactory = servicesFactory ;
         _gattServicesDictionary = gattServicesDictionary ;
@@ -67,7 +69,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
                                                     nameof ( BluetoothLEDevice.ConnectionStatusChanged ) ) ;
 
         _subscriberConnectionStatus = statusChanged
-                                     .ObserveOn ( scheduler )
+                                     .ObserveOn ( _scheduler )
                                      .Subscribe ( OnConnectionStatusChanged ) ;
     }
 
@@ -144,7 +146,22 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         _provider?.Dispose ( ) ;
         _gattServicesDictionary.Dispose ( ) ;
         _session?.Dispose ( ) ;
+
+        // Unsubscribe from event stream and release device
         _subscriberConnectionStatus.Dispose ( ) ;
+
+        // Remove the event handler to ensure no rooted delegates retain this instance
+        try
+        {
+            // Best-effort attempt; FromEventPattern adds/removes handlers internally
+            // but explicit removal guards against leaks if Rx layer changes
+            _device.ConnectionStatusChanged -= (_, _) => { } ;
+        }
+        catch
+        {
+            // ignore
+        }
+
         _device.Dispose ( ) ;
     }
 

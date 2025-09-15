@@ -7,7 +7,7 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers
     /// <summary>
     ///     Wrapper for <see cref="GattCharacteristicsResult" />.
     /// </summary>
-    public interface IGattCharacteristicsResultWrapper
+    public interface IGattCharacteristicsResultWrapper : IDisposable
     {
         /// <summary>
         ///     Gets the status.

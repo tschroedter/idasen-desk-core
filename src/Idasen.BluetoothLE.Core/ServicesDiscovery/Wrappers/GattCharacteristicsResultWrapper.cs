@@ -8,110 +8,124 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 {
     /// <inheritdoc />
-    [ ExcludeFromCodeCoverage ]
-    [ Intercept ( typeof ( LogAspect ) ) ]
+    [ExcludeFromCodeCoverage]
+    [Intercept(typeof(LogAspect))]
     public class GattCharacteristicsResultWrapper
-        : IGattCharacteristicsResultWrapper
+        : IGattCharacteristicsResultWrapper, IDisposable
     {
-        public GattCharacteristicsResultWrapper (
-            IGattCharacteristicWrapperFactory factory ,
-            GattCharacteristicsResult         result )
+        public GattCharacteristicsResultWrapper(
+            IGattCharacteristicWrapperFactory factory,
+            GattCharacteristicsResult         result)
         {
-            Guard.ArgumentNotNull ( factory ,
-                                    nameof ( factory ) ) ;
-            Guard.ArgumentNotNull ( result ,
-                                    nameof ( result ) ) ;
+            Guard.ArgumentNotNull(factory,
+                                  nameof(factory));
+            Guard.ArgumentNotNull(result,
+                                  nameof(result));
 
-            _factory = factory ;
-            _result  = result ;
+            _factory = factory;
+            _result  = result;
         }
 
         /// <inheritdoc />
-        public GattCommunicationStatus Status => _result.Status ;
+        public GattCommunicationStatus Status => _result.Status;
 
         /// <inheritdoc />
-        public byte ? ProtocolError => _result.ProtocolError ;
+        public byte? ProtocolError => _result.ProtocolError;
 
         /// <inheritdoc />
-        public IReadOnlyList < IGattCharacteristicWrapper > Characteristics { get ; private set ; } =
-            new List < IGattCharacteristicWrapper > ( ) ;
+        public IReadOnlyList<IGattCharacteristicWrapper> Characteristics { get; private set; } =
+            new List<IGattCharacteristicWrapper>();
 
-        public async Task < IGattCharacteristicsResultWrapper > Initialize ( )
+        public async Task<IGattCharacteristicsResultWrapper> Initialize()
         {
             // Safeguard against unsuccessful status or missing characteristics
-            if ( _result.Status != GattCommunicationStatus.Success ||
-                 _result.Characteristics is null ||
-                 _result.Characteristics.Count == 0 )
+            if (_result.Status != GattCommunicationStatus.Success ||
+                _result.Characteristics is null ||
+                _result.Characteristics.Count == 0)
             {
-                Characteristics = [] ;
-                return this ;
+                Characteristics = Array.Empty<IGattCharacteristicWrapper>();
+                return this;
             }
 
             var wrappers = _result.Characteristics
-                                  .Select ( characteristic => _factory.Create ( characteristic ) )
-                                  .ToList ( ) ;
+                                  .Select(characteristic => _factory.Create(characteristic))
+                                  .ToList();
 
             // Initialize all wrappers in parallel for efficiency
-            await Task.WhenAll ( wrappers.Select ( w => w.Initialize ( ) ) ) ;
+            await Task.WhenAll(wrappers.Select(w => w.Initialize()));
 
-            Characteristics = wrappers ;
+            Characteristics = wrappers;
 
-            return this ;
+            return this;
         }
 
-        public delegate IGattCharacteristicsResultWrapper Factory ( GattCharacteristicsResult result ) ;
+        public delegate IGattCharacteristicsResultWrapper Factory(GattCharacteristicsResult result);
 
-        public override string ToString ( )
+        public override string ToString()
         {
-            var builder = new StringBuilder ( ) ;
+            var builder = new StringBuilder();
 
-            builder.Append ( CharacteristicsToString ( ) ) ;
+            builder.Append(CharacteristicsToString());
 
-            return builder.ToString ( ) ;
+            return builder.ToString();
         }
 
-        private string CharacteristicsToString ( )
+        private string CharacteristicsToString()
         {
-            var list = new List < string > ( ) ;
+            var list = new List<string>();
 
-            foreach ( var characteristic in Characteristics )
+            foreach (var characteristic in Characteristics)
             {
-                var properties = characteristic.CharacteristicProperties.ToCsv ( ) ;
-                var formats    = PresentationFormatsToString ( characteristic.PresentationFormats ) ;
+                var properties = characteristic.CharacteristicProperties.ToCsv();
+                var formats    = PresentationFormatsToString(characteristic.PresentationFormats);
 
-                list.Add ( $"Service UUID = {characteristic.ServiceUuid} "         +
-                           $"Characteristic UUID = {characteristic.Uuid}, "        +
-                           $"UserDescription = {characteristic.UserDescription}, " +
-                           $"ProtectionLevel = {characteristic.ProtectionLevel}, " +
-                           $"AttributeHandle = {characteristic.AttributeHandle}, " +
-                           $"CharacteristicProperties = [{properties}] "           +
-                           $"PresentationFormats = [{formats}]" ) ;
+                list.Add($"Service UUID = {characteristic.ServiceUuid} "         +
+                         $"Characteristic UUID = {characteristic.Uuid}, "        +
+                         $"UserDescription = {characteristic.UserDescription}, " +
+                         $"ProtectionLevel = {characteristic.ProtectionLevel}, " +
+                         $"AttributeHandle = {characteristic.AttributeHandle}, " +
+                         $"CharacteristicProperties = [{properties}] "           +
+                         $"PresentationFormats = [{formats}]");
             }
 
-            return string.Join ( Environment.NewLine ,
-                                 list ) ;
+            return string.Join(Environment.NewLine,
+                                 list);
         }
 
-        private static string PresentationFormatsToString (
-            IReadOnlyList < GattPresentationFormat > characteristicPresentationFormats )
+        private static string PresentationFormatsToString(
+            IReadOnlyList<GattPresentationFormat> characteristicPresentationFormats)
         {
-            var list = new List < string > ( ) ;
+            var list = new List<string>();
 
-            foreach ( var format in characteristicPresentationFormats )
+            foreach (var format in characteristicPresentationFormats)
             {
-                list.Add ( "GattPresentationFormat - "             +
-                           $"Description = {format.Description}, " +
-                           $"FormatType = {format.FormatType}, "   +
-                           $"Namespace = {format.Namespace}, "     +
-                           $"Exponent = {format.Exponent}, "       +
-                           $"Unit = {format.Unit}" ) ;
+                list.Add("GattPresentationFormat - "             +
+                         $"Description = {format.Description}, " +
+                         $"FormatType = {format.FormatType}, "   +
+                         $"Namespace = {format.Namespace}, "     +
+                         $"Exponent = {format.Exponent}, "       +
+                         $"Unit = {format.Unit}");
             }
 
-            return string.Join ( ", " ,
-                                 list ) ;
+            return string.Join(", ",
+                                 list);
         }
 
-        private readonly IGattCharacteristicWrapperFactory _factory ;
-        private readonly GattCharacteristicsResult         _result ;
+        public void Dispose()
+        {
+            // Dispose individual characteristic wrappers to release event subscriptions
+            if (Characteristics is { Count: > 0 })
+            {
+                foreach (var c in Characteristics)
+                {
+                    c.Dispose();
+                }
+            }
+
+            Characteristics = Array.Empty<IGattCharacteristicWrapper>();
+        }
+
+        private readonly IGattCharacteristicWrapperFactory _factory;
+        private readonly GattCharacteristicsResult         _result;
     }
 }
