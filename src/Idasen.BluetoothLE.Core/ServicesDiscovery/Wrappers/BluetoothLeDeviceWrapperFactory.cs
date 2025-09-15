@@ -54,13 +54,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
         /// <inheritdoc />
         public IBluetoothLeDeviceWrapper Create ( BluetoothLEDevice device )
         {
-            return _factory ( _logger ,
-                              _providerFactory ,
-                              _servicesFactory ,
-                              _gattServicesDictionaryFactory ( ) ,
-                              _characteristicsFactory ,
-                              _connectionStatusChangedFactory ( ) ,
-                              device ) ;
+            // With delegate factories, Autofac will resolve all other dependencies
+            // and we only need to pass the varying parameter
+            return _factory ( device ) ;
         }
 
         private readonly IGattCharacteristicsResultWrapperFactory        _characteristicsFactory ;

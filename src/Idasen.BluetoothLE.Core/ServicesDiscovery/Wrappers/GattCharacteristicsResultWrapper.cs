@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using System.Text ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using Autofac.Extras.DynamicProxy;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 {
@@ -38,14 +38,21 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers
 
         public async Task < IGattCharacteristicsResultWrapper > Initialize ( )
         {
+            // Safeguard against unsuccessful status or missing characteristics
+            if ( _result.Status != GattCommunicationStatus.Success ||
+                 _result.Characteristics is null ||
+                 _result.Characteristics.Count == 0 )
+            {
+                Characteristics = [] ;
+                return this ;
+            }
+
             var wrappers = _result.Characteristics
                                   .Select ( characteristic => _factory.Create ( characteristic ) )
                                   .ToList ( ) ;
 
-            foreach ( var wrapper in wrappers )
-            {
-                await wrapper.Initialize ( ) ;
-            }
+            // Initialize all wrappers in parallel for efficiency
+            await Task.WhenAll ( wrappers.Select ( w => w.Initialize ( ) ) ) ;
 
             Characteristics = wrappers ;
 
