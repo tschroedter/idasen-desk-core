@@ -49,6 +49,28 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
         }
 
         [ AutoDataTestMethod ]
+        public void Indexer_ForExistingService_DisposesOldValueOnly (
+            GattServicesDictionary            sut ,
+            IGattDeviceServiceWrapper         service ,
+            IGattCharacteristicsResultWrapper first ,
+            IGattCharacteristicsResultWrapper second )
+        {
+            sut [ service ] = first ;
+            sut [ service ] = second ;
+
+            sut [ service ]
+               .Should ( )
+               .Be ( second ) ;
+
+            first.Received ( 1 )
+                 .Dispose ( ) ;
+            second.DidNotReceive ( )
+                  .Dispose ( ) ;
+            service.DidNotReceive ( )
+                   .Dispose ( ) ;
+        }
+
+        [ AutoDataTestMethod ]
         public void Clear_ForInvoked_DisposesService1 (
             GattServicesDictionary            sut ,
             IGattDeviceServiceWrapper         service1 ,
@@ -78,8 +100,27 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
 
             sut.Clear ( ) ;
 
+            service2.Received ( )
+                    .Dispose ( ) ;
+        }
+
+        [ AutoDataTestMethod ]
+        public void Clear_ForInvoked_DisposesValues (
+            GattServicesDictionary            sut ,
+            IGattDeviceServiceWrapper         service1 ,
+            IGattCharacteristicsResultWrapper result1 ,
+            IGattDeviceServiceWrapper         service2 ,
+            IGattCharacteristicsResultWrapper result2 )
+        {
             sut [ service1 ] = result1 ;
             sut [ service2 ] = result2 ;
+
+            sut.Clear ( ) ;
+
+            result1.Received ( )
+                   .Dispose ( ) ;
+            result2.Received ( )
+                   .Dispose ( ) ;
         }
 
         [ AutoDataTestMethod ]
@@ -131,6 +172,24 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery
                     .Dispose ( ) ;
         }
 
+        [ AutoDataTestMethod ]
+        public void Dispose_ForInvoked_DisposesValues (
+            GattServicesDictionary            sut ,
+            IGattDeviceServiceWrapper         service1 ,
+            IGattCharacteristicsResultWrapper result1 ,
+            IGattDeviceServiceWrapper         service2 ,
+            IGattCharacteristicsResultWrapper result2 )
+        {
+            sut [ service1 ] = result1 ;
+            sut [ service2 ] = result2 ;
+
+            sut.Dispose ( ) ;
+
+            result1.Received ( )
+                   .Dispose ( ) ;
+            result2.Received ( )
+                   .Dispose ( ) ;
+        }
 
         [ AutoDataTestMethod ]
         public void ReadOnlyDictionary_ForInvoked_ContainsService1 (

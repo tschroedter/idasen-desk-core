@@ -19,31 +19,47 @@ namespace Idasen.BluetoothLE.Common.Tests
         [ TestCleanup ]
         public virtual void Cleanup ( )
         {
-            _container.Dispose ( ) ;
+            _container?.Dispose ( ) ;
+            _container = null ;
         }
 
 
         [ TestInitialize ]
         public virtual void Initialize ( )
         {
-            const string template = "[{Timestamp:HH:mm:ss.ffff} " +
-                                    "{Level:u3}] "                +
-                                    "{Message}\r\n" ;
+            ConfigureLogger ( ) ;
+            _container = BuildContainer ( ) ;
+        }
+
+        protected virtual void ConfigureLogger ( )
+        {
+            const string template = "[{Timestamp:HH:mm:ss.ffff} {Level:u3}] {Message:lj}{NewLine}{Exception}" ;
 
             Log.Logger = new LoggerConfiguration ( )
                         .Enrich.WithCaller ( )
                         .MinimumLevel.Information ( )
-                        .WriteTo.Console ( LogEventLevel.Debug ,
+                        .WriteTo.Console ( LogEventLevel.Information ,
                                            template ,
                                            theme : AnsiConsoleTheme.Code )
                         .CreateLogger ( ) ;
+        }
 
-            var builder = new ContainerBuilder ( ) ;
+        protected virtual ContainerBuilder CreateContainerBuilder ( )
+        {
+            return new ContainerBuilder ( ) ;
+        }
 
+        protected virtual void RegisterModules ( ContainerBuilder builder )
+        {
             builder.RegisterLogger ( ) ;
             builder.RegisterModule < DefConOneModule > ( ) ;
+        }
 
-            _container = builder.Build ( ) ;
+        protected virtual IContainer BuildContainer ( )
+        {
+            var builder = CreateContainerBuilder ( ) ;
+            RegisterModules ( builder ) ;
+            return builder.Build ( ) ;
         }
 
         [ TestMethod ]
@@ -73,9 +89,20 @@ namespace Idasen.BluetoothLE.Common.Tests
 
         protected virtual INotNullTester CreateTester ( )
         {
-            return _container.Resolve < INotNullTester > ( ) ;
+            return Container.Resolve < INotNullTester > ( ) ;
         }
 
-        private IContainer _container = null! ;
+        protected IContainer Container
+        {
+            get
+            {
+                if ( _container == null )
+                    throw new InvalidOperationException ( "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
+
+                return _container ;
+            }
+        }
+
+        private IContainer ? _container ;
     }
 }

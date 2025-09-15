@@ -27,6 +27,18 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery
                          .Be ( status ) ;
         }
 
+        [ TestMethod ]
+        public void Map_ForUnknownStatus_ThrowsArgumentException ( )
+        {
+            var unknown = ( BluetoothLEAdvertisementWatcherStatus )999 ;
+
+            var action = ( ) => CreateSut ( ).Map ( unknown ) ;
+
+            action.Should ( )
+                  .Throw < ArgumentException > ( )
+                  .WithMessage ( "Unknown status: '*" ) ;
+        }
+
         private StatusMapper CreateSut ( )
         {
             var sut = new StatusMapper ( ) ;
