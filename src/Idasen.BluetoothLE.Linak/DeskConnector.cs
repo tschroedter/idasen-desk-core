@@ -75,10 +75,10 @@ namespace Idasen.BluetoothLE.Linak
             _deskLockerFactory      = deskLockerFactory ;
             _errorManager           = errorManager ;
 
-            _device.GattServicesRefreshed
-                   .Throttle ( TimeSpan.FromSeconds ( 1 ) )
-                   .SubscribeOn ( scheduler )
-                   .SubscribeAsync ( OnGattServicesRefreshed ) ;
+            _refreshedSubscription = _device.GattServicesRefreshed
+                                            .Throttle ( TimeSpan.FromSeconds ( 1 ) )
+                                            .SubscribeOn ( scheduler )
+                                            .SubscribeAsync ( OnGattServicesRefreshed ) ;
 
             _deviceNameChanged = subjectFactory ( ) ;
         }
@@ -93,14 +93,7 @@ namespace Idasen.BluetoothLE.Linak
         public IObservable < HeightSpeedDetails > HeightAndSpeedChanged => _subjectHeightAndSpeed ;
 
         /// <inheritdoc />
-        public IObservable < uint > FinishedChanged
-        {
-            get
-            {
-                EnsureDeskMoverInitialized ( ) ;
-                return _deskMover?.Finished ?? Observable.Empty < uint > ( ) ;
-            }
-        }
+        public IObservable < uint > FinishedChanged => _finishedSubject ;
 
         /// <inheritdoc />
         public IObservable < bool > RefreshedChanged => _subjectRefreshed ;
@@ -108,6 +101,8 @@ namespace Idasen.BluetoothLE.Linak
         /// <inheritdoc />
         public void Dispose ( )
         {
+            _finishedSubscription?.Dispose ( ) ;
+            _refreshedSubscription?.Dispose ( ) ;
             _deskLocker?.Dispose ( ) ;
             _deskMover?.Dispose ( ) ;
             _disposableHeightAndSpeed?.Dispose ( ) ;
@@ -116,6 +111,8 @@ namespace Idasen.BluetoothLE.Linak
             _heightAndSpeed?.Dispose ( ) ;
             _subscriber?.Dispose ( ) ;
             _device.Dispose ( ) ;
+
+            _finishedSubject.OnCompleted ( ) ;
         }
 
         /// <inheritdoc />
@@ -198,27 +195,6 @@ namespace Idasen.BluetoothLE.Linak
             deskLocker!.Unlock ( ) ;
 
             return Task.FromResult ( true ) ;
-        }
-
-        private void EnsureDeskMoverInitialized ( )
-        {
-            if ( _deskMover != null )
-                return ;
-
-            _logger.Error ( "_deskMover is null, attempting async refresh" ) ;
-            _ = TriggerRefreshAsync ( ) ;
-        }
-
-        private async Task TriggerRefreshAsync ( )
-        {
-            try
-            {
-                await DoRefresh ( GattCommunicationStatus.Success ).ConfigureAwait ( false ) ;
-            }
-            catch ( Exception e )
-            {
-                _logger.Error ( e , "Failed to refresh GATT services asynchronously" ) ;
-            }
         }
 
         private bool TryGetDeskMover ( out IDeskMover ? deskMover )
@@ -315,6 +291,11 @@ namespace Idasen.BluetoothLE.Linak
 
             _deskMover.Initialize ( ) ;
 
+            _finishedSubscription?.Dispose ( ) ;
+            _finishedSubscription = _deskMover.Finished
+                                              .SubscribeOn ( _scheduler )
+                                              .Subscribe ( value => _finishedSubject.OnNext ( value ) ) ;
+
             _deskLocker = _deskLockerFactory.Create ( _deskMover ,
                                                       _executor ,
                                                       _heightAndSpeed ) ;
@@ -343,6 +324,7 @@ namespace Idasen.BluetoothLE.Linak
         private readonly ISubject < HeightSpeedDetails >   _subjectHeightAndSpeed ;
         private readonly ISubject < bool >                 _subjectRefreshed ;
         private readonly ISubject < int >                  _subjectSpeed ;
+        private readonly Subject < uint >                  _finishedSubject = new ( ) ;
         private          IDeskLocker ?                     _deskLocker ;
 
         // todo use list of IDisposables
@@ -352,6 +334,8 @@ namespace Idasen.BluetoothLE.Linak
         private IDisposable ?          _disposableSpeed ;
         private IDeskCommandExecutor ? _executor ;
 
+        private IDisposable ? _finishedSubscription ;
+        private IDisposable ? _refreshedSubscription ;
         private IDeskHeightAndSpeed ? _heightAndSpeed ;
         private IDisposable ?         _subscriber ;
     }
