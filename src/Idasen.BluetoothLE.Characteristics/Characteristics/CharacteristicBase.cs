@@ -95,11 +95,16 @@ public abstract class CharacteristicBase
         {
             foreach (var service1 in Device.GattServices)
             {
-                Logger.Information ( $"Service: DeviceId = {service1.Key.DeviceId}, Uuid = {service1.Key.Uuid}" ) ;
+                Logger.Information ( "Service: DeviceId = {DeviceId}, Uuid = {Uuid}" ,
+                                     service1.Key.DeviceId ,
+                                     service1.Key.Uuid ) ;
 
                 foreach (var characteristic in service1.Value.Characteristics)
                 {
-                    Logger.Information ( $"Characteristic: {characteristic.ServiceUuid} {characteristic.Uuid} {characteristic.UserDescription}" ) ;
+                    Logger.Information ( "Characteristic: {ServiceUuid} {Uuid} {UserDescription}" ,
+                                         characteristic.ServiceUuid ,
+                                         characteristic.Uuid ,
+                                         characteristic.UserDescription ) ;
                 }
             }
 
@@ -108,7 +113,8 @@ public abstract class CharacteristicBase
                                           nameof ( GattServiceUuid ) ) ;
         }
 
-        Logger.Information ( $"Found GattDeviceService with UUID {GattServiceUuid}" ) ;
+        Logger.Information ( "Found GattDeviceService with UUID {Uuid}" ,
+                             GattServiceUuid ) ;
 
         Characteristics = ProviderFactory.Create ( characteristicsResultWrapper ) ;
 
@@ -121,7 +127,7 @@ public abstract class CharacteristicBase
     {
         if ( Characteristics == null )
         {
-            Logger.Error ( $"{nameof ( Characteristics )} is null" ) ;
+            Logger.Error ( "{Property} is null" , nameof ( Characteristics ) ) ;
 
             return ;
         }
@@ -135,13 +141,14 @@ public abstract class CharacteristicBase
             if ( ! Characteristics.Characteristics.TryGetValue ( key ,
                                                                  out var characteristic ) )
             {
-                Logger.Warning ( $"Failed to get value for key '{key}'" ) ;
+                Logger.Warning ( "Failed to get value for key {Key}" , key ) ;
 
                 continue ;
             }
 
-            Logger.Debug ( $"Reading raw value for {key} " +
-                           $"and and characteristic {characteristic.Uuid}" ) ;
+            Logger.Debug ( "Reading raw value for {Key} and characteristic {Uuid}" ,
+                           key ,
+                           characteristic.Uuid ) ;
 
             (bool success , byte [ ] value) result =
                 await RawValueReader.TryReadValueAsync ( characteristic ) ;
@@ -192,7 +199,7 @@ public abstract class CharacteristicBase
     {
         if ( Characteristics == null )
         {
-            Logger.Error ( $"{nameof ( Characteristics )} is null" ) ;
+            Logger.Error ( "{Property} is null" , nameof ( Characteristics ) ) ;
 
             return false ;
         }
@@ -200,6 +207,7 @@ public abstract class CharacteristicBase
         if ( ! Characteristics.Characteristics.TryGetValue ( key ,
                                                              out var characteristic ) )
         {
+            // Keep single-argument overload for unit test expectations
             Logger.Error ( $"Unknown characteristic with key '{key}'" ) ;
 
             return false ;

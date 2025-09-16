@@ -99,7 +99,7 @@ public class DeskLocker
 
         _logger.Information ( "Manual move detected. Calling 'Stop'!" ) ;
 
-        _logger.Debug ( $"{details}" ) ;
+        _logger.Debug ( "{Details}" , details ) ;
 
         await _executor.Stop ( ) ;
     }
