@@ -9,7 +9,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 
 [ TestClass ]
-public class DeskMovementMonitorTests
+public class DeskMovementMonitorTests : IDisposable
 {
     private const int DefaultCapacity = 3 ;
 
@@ -123,5 +123,12 @@ public class DeskMovementMonitorTests
         action.Should ( )
               .Throw < ApplicationException > ( )
               .WithMessage ( DeskMovementMonitor.SpeedWasZero ) ;
+    }
+
+    public void Dispose ( )
+    {
+        _subjectHeightAndSpeed?.OnCompleted ( ) ;
+        _subjectHeightAndSpeed?.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 }

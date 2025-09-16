@@ -11,7 +11,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class DeskHeightAndSpeedTests
+public class DeskHeightAndSpeedTests : IDisposable
 {
     private const uint DefaultHeight = 1u ;
     private const int DefaultSpeed = 2 ;
@@ -21,10 +21,10 @@ public class DeskHeightAndSpeedTests
     private RawValueChangedDetails _rawDetailsDummy = null! ;
     private IReferenceOutput _referenceOutput = null! ;
     private TestScheduler _scheduler = null! ;
-    private ISubject < uint > _subjectHeight = null! ;
+    private Subject < uint > _subjectHeight = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
     private Subject < RawValueChangedDetails > _subjectRawHeightAndSpeed = null! ;
-    private ISubject < int > _subjectSpeed = null! ;
+    private Subject < int > _subjectSpeed = null! ;
 
     [ TestMethod ]
     public void Initialize_ForInvokedTwice_DisposesSubscriber ( )
@@ -192,7 +192,7 @@ public class DeskHeightAndSpeedTests
                                                         Guid.Empty ) ;
     }
 
-    private void SetTryConvert (
+    private static void SetTryConvert (
         IRawValueToHeightAndSpeedConverter converter ,
         bool result ,
         uint height ,
@@ -368,5 +368,19 @@ public class DeskHeightAndSpeedTests
         wasNotified
            .Should ( )
            .BeFalse ( ) ;
+    }
+
+    public void Dispose ( )
+    {
+        _subjectHeight?.OnCompleted ( ) ;
+        _subjectSpeed?.OnCompleted ( ) ;
+        _subjectHeightAndSpeed?.OnCompleted ( ) ;
+        _subjectRawHeightAndSpeed?.OnCompleted ( ) ;
+
+        _subjectHeight?.Dispose ( ) ;
+        _subjectSpeed?.Dispose ( ) ;
+        _subjectHeightAndSpeed?.Dispose ( ) ;
+        _subjectRawHeightAndSpeed?.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 }

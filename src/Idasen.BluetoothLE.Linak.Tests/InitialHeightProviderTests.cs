@@ -12,7 +12,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class InitialHeightProviderTests
+public class InitialHeightProviderTests : IDisposable
 {
     private const uint SomeHeight = 123u ;
 
@@ -370,6 +370,15 @@ public class InitialHeightProviderTests
 
         disposable.Received ( )
                   .Dispose ( ) ;
+    }
+
+    public void Dispose ( )
+    {
+        _subjectFinished?.OnCompleted ( ) ;
+        _subjectHeightAndSpeed?.OnCompleted ( ) ;
+        _subjectFinished?.Dispose ( ) ;
+        _subjectHeightAndSpeed?.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 
     private InitialHeightProvider CreateSut ( )

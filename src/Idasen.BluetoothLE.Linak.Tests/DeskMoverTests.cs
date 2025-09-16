@@ -11,7 +11,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class DeskMoverTests
+public class DeskMoverTests : IDisposable
 {
     private const uint InitialHeight = 100u ;
     private const uint DefaultTargetHeight = 1500 ;
@@ -449,5 +449,14 @@ public class DeskMoverTests
 
         disposable.Received ( )
                   .Dispose ( ) ;
+    }
+
+    public void Dispose ( )
+    {
+        _subjectFinished?.OnCompleted ( ) ;
+        _subjectHeightAndSpeed?.OnCompleted ( ) ;
+
+        _subjectFinished?.Dispose ( ) ;
+        _subjectHeightAndSpeed?.Dispose ( ) ;
     }
 }

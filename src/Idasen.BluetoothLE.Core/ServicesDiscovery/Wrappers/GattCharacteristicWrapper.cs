@@ -100,5 +100,6 @@ public class GattCharacteristicWrapper
     public void Dispose ( )
     {
         _observables.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 }

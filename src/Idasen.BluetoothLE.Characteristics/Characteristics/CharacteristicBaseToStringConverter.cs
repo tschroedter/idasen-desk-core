@@ -52,16 +52,16 @@ public class CharacteristicBaseToStringConverter
         return builder.ToString ( ) ;
     }
 
-    protected IEnumerable < byte > TryGetValueOrEmpty ( CharacteristicBase characteristic ,
-                                                        string key )
+    protected static IEnumerable < byte > TryGetValueOrEmpty ( CharacteristicBase characteristic ,
+                                                               string key )
     {
         return characteristic.RawValues.GetValueOrDefault ( key ,
                                                             RawArrayEmpty ) ;
     }
 
-    protected string RawValueOrUnavailable ( CharacteristicBase characteristic ,
-                                             string key ,
-                                             IEnumerable < byte > value )
+    protected static string RawValueOrUnavailable ( CharacteristicBase characteristic ,
+                                                    string key ,
+                                                    IEnumerable < byte > value )
     {
         return characteristic.Characteristics != null &&
                characteristic.Characteristics.Characteristics

@@ -116,6 +116,7 @@ public class GattCharacteristicValueChangedObservables
     public void Dispose ( )
     {
         DisposeSubscription ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 
     [ ExcludeFromCodeCoverage ]
