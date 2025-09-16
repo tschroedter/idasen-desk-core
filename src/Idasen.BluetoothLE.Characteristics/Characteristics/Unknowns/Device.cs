@@ -15,7 +15,7 @@ public class Device
     internal const string UnknownBluetoothAddressType = "Unknown Address Type" ;
     internal const string UnknownName = "Unknown Device" ;
     internal const string UnknownId = "Unknown Device Id" ;
-    internal const string Message = "Can't use a anknown Instance" ;
+    internal const string Message = "Can't use an unknown instance" ;
 
     public void Dispose ( )
     {

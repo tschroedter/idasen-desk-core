@@ -69,13 +69,17 @@ public static class LoggerProvider
                                                  hooks : new LoggingFileHooks ( ) ) ;
 #pragma warning restore CA1305
 
-        var logger = loggerConfiguration.CreateLogger ( ) ;
+        // Important: Create logger inside the Lazy factory, not eagerly.
+        return new Lazy < Logger > ( ( ) =>
+        {
+            var logger = loggerConfiguration.CreateLogger ( ) ;
 
-        Console.WriteLine ( "Log file name: {0} {1}" ,
-                            LoggingFile.FullPath ,
-                            LoggingFile.Path ) ;
+            Console.WriteLine ( "Log file name: {0} {1}" ,
+                                LoggingFile.FullPath ,
+                                LoggingFile.Path ) ;
 
-        return new Lazy < Logger > ( logger ) ;
+            return logger ;
+        } ) ;
     }
 
     public static void Shutdown ( )

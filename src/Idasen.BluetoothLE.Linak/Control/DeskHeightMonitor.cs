@@ -33,7 +33,7 @@ public class DeskHeightMonitor
         var differentValues = lastNValues.Distinct ( )
                                          .Count ( ) ;
 
-        _logger.Debug ( $"History: {string.Join ( "," , differentValues )}" ) ;
+        _logger.Debug ( $"History: {string.Join ( "," , lastNValues )}; DifferentValues = {differentValues}" ) ;
 
         return differentValues > 1 ;
     }

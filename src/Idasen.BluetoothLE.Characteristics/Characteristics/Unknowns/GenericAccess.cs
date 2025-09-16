@@ -7,7 +7,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 public class GenericAccess
     : UnknownBase , IGenericAccess
 {
-    internal const string Message = "Can't use a anknown Instance" ;
+    internal const string Message = "Can't use an unknown instance" ;
     public IEnumerable < byte > RawResolution { get ; } = RawArrayEmpty ;
     public IEnumerable < byte > RawParameters { get ; } = RawArrayEmpty ;
     public IEnumerable < byte > RawAppearance { get ; } = RawArrayEmpty ;
