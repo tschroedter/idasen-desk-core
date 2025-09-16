@@ -79,7 +79,7 @@ public class ReferenceOutput
     {
         base.Initialize < T > ( ) ;
 
-        return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
+        return this as T ?? throw new InvalidCastException ( $"Can't cast {GetType ( )} to {typeof ( T )}" ) ;
     }
 
     public async override Task Refresh ( )
@@ -141,7 +141,7 @@ public class ReferenceOutput
         DescriptionToUuid[Mask] = Guid.Parse ( "99FA0029-338A-1024-8A49-009C0215F78A" ) ;
         DescriptionToUuid[DetectMask] = Guid.Parse ( "99FA002A-338A-1024-8A49-009C0215F78A" ) ;
 
-        return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
+        return this as T ?? throw new InvalidCastException ( $"Can't cast {GetType ( )} to {typeof ( T )}" ) ;
     }
 
     private void OnValueChanged ( GattCharacteristicValueChangedDetails details )

@@ -90,9 +90,9 @@ public class GattCharacteristicValueChangedObservables
                 }
                 else
                 {
-                    throw new Exception ( $"Service UUID = {serviceUuid} " +
-                                          $"Characteristic UUID = {characteristic.Uuid} - " +
-                                          "Failed to subscribe to ValueChanged" ) ;
+                    throw new InvalidOperationException ( $"Service UUID = {serviceUuid} " +
+                                                          $"Characteristic UUID = {characteristic.Uuid} - " +
+                                                          "Failed to subscribe to ValueChanged" ) ;
                 }
 
                 var result = await characteristic.ReadClientCharacteristicConfigurationDescriptorAsync ( ) ;

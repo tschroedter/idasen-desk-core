@@ -46,6 +46,6 @@ public class Control ( ILogger logger ,
         DescriptionToUuid[Control2Key] = Guid.Parse ( "99fa0002-338a-1024-8a49-009c0215f78a" ) ;
         DescriptionToUuid[Control3Key] = Guid.Parse ( "99fa0003-338a-1024-8a49-009c0215f78a" ) ;
 
-        return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
+        return this as T ?? throw new InvalidCastException ( $"Can't cast {GetType ( )} to {typeof ( T )}" ) ;
     }
 }

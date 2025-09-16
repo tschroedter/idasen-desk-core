@@ -117,6 +117,6 @@ public class GenericAccess
             DescriptionToUuid[CharacteristicResolution] = uuid ;
         }
 
-        return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
+        return this as T ?? throw new InvalidCastException ( $"Can't cast {GetType ( )} to {typeof ( T )}" ) ;
     }
 }
