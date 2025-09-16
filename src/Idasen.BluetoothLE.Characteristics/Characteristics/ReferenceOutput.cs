@@ -152,6 +152,7 @@ public class ReferenceOutput
                        details.Uuid ) ;
 
         var count = details.Value.Count ( ) ;
+
         if ( count != 4 )
         {
             Logger.Error ( "Failed, expected 4 bytes but received {Count}" , count ) ;

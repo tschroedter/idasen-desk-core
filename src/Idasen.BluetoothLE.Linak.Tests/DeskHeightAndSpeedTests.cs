@@ -372,15 +372,15 @@ public class DeskHeightAndSpeedTests : IDisposable
 
     public void Dispose ( )
     {
-        _subjectHeight?.OnCompleted ( ) ;
-        _subjectSpeed?.OnCompleted ( ) ;
-        _subjectHeightAndSpeed?.OnCompleted ( ) ;
-        _subjectRawHeightAndSpeed?.OnCompleted ( ) ;
+        _subjectHeight.OnCompleted ( ) ;
+        _subjectSpeed.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
+        _subjectRawHeightAndSpeed.OnCompleted ( ) ;
 
-        _subjectHeight?.Dispose ( ) ;
-        _subjectSpeed?.Dispose ( ) ;
-        _subjectHeightAndSpeed?.Dispose ( ) ;
-        _subjectRawHeightAndSpeed?.Dispose ( ) ;
+        _subjectHeight.Dispose ( ) ;
+        _subjectSpeed.Dispose ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
+        _subjectRawHeightAndSpeed.Dispose ( ) ;
         GC.SuppressFinalize ( this ) ;
     }
 }

@@ -81,7 +81,7 @@ public class DeskMoverTests : IDisposable
 
         // initialise the subscription disposable used in assertions
         _disposable = Substitute.For < IDisposable > ( ) ;
-        _finished.Subscribe ( default! )
+        _finished.Subscribe ( null! )
                  .ReturnsForAnyArgs ( _disposable ) ;
 
         _disposableProvider = Substitute.For < IInitialHeightProvider > ( ) ;
@@ -453,11 +453,11 @@ public class DeskMoverTests : IDisposable
 
     public void Dispose ( )
     {
-        _subjectFinished?.OnCompleted ( ) ;
-        _subjectHeightAndSpeed?.OnCompleted ( ) ;
+        _subjectFinished.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
 
-        _subjectFinished?.Dispose ( ) ;
-        _subjectHeightAndSpeed?.Dispose ( ) ;
+        _subjectFinished.Dispose ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
         GC.SuppressFinalize ( this ) ;
     }
 }

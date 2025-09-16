@@ -135,16 +135,16 @@ public class DeskDetectorTests : IDisposable
 
     public void Dispose ( )
     {
-        (_deskDetected as IDisposable)?.Dispose ( ) ;
-        _updated?.OnCompleted ( ) ;
-        _discovered?.OnCompleted ( ) ;
-        _nameChanged?.OnCompleted ( ) ;
-        _deskFound?.OnCompleted ( ) ;
+        ( _deskDetected as IDisposable )?.Dispose ( ) ;
+        _updated.OnCompleted ( ) ;
+        _discovered.OnCompleted ( ) ;
+        _nameChanged.OnCompleted ( ) ;
+        _deskFound.OnCompleted ( ) ;
 
-        _updated?.Dispose ( ) ;
-        _discovered?.Dispose ( ) ;
-        _nameChanged?.Dispose ( ) ;
-        _deskFound?.Dispose ( ) ;
+        _updated.Dispose ( ) ;
+        _discovered.Dispose ( ) ;
+        _nameChanged.Dispose ( ) ;
+        _deskFound.Dispose ( ) ;
         GC.SuppressFinalize ( this ) ;
     }
 }

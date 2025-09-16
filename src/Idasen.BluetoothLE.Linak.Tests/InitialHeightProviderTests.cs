@@ -374,10 +374,10 @@ public class InitialHeightProviderTests : IDisposable
 
     public void Dispose ( )
     {
-        _subjectFinished?.OnCompleted ( ) ;
-        _subjectHeightAndSpeed?.OnCompleted ( ) ;
-        _subjectFinished?.Dispose ( ) ;
-        _subjectHeightAndSpeed?.Dispose ( ) ;
+        _subjectFinished.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
+        _subjectFinished.Dispose ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
         GC.SuppressFinalize ( this ) ;
     }
 

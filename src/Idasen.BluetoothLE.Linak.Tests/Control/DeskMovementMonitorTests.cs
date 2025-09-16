@@ -127,8 +127,8 @@ public class DeskMovementMonitorTests : IDisposable
 
     public void Dispose ( )
     {
-        _subjectHeightAndSpeed?.OnCompleted ( ) ;
-        _subjectHeightAndSpeed?.Dispose ( ) ;
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
         GC.SuppressFinalize ( this ) ;
     }
 }
