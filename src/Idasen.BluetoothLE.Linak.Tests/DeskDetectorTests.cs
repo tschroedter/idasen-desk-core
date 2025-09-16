@@ -33,6 +33,21 @@ public class DeskDetectorTests : IDisposable
     private TestScheduler _scheduler = null! ;
     private Subject < IDevice > _updated = null! ;
 
+    public void Dispose ( )
+    {
+        ( _deskDetected as IDisposable )?.Dispose ( ) ;
+        _updated.OnCompleted ( ) ;
+        _discovered.OnCompleted ( ) ;
+        _nameChanged.OnCompleted ( ) ;
+        _deskFound.OnCompleted ( ) ;
+
+        _updated.Dispose ( ) ;
+        _discovered.Dispose ( ) ;
+        _nameChanged.Dispose ( ) ;
+        _deskFound.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
+    }
+
     [ TestInitialize ]
     public void Initialize ( )
     {
@@ -131,20 +146,5 @@ public class DeskDetectorTests : IDisposable
                                   _monitor ,
                                   _factory ,
                                   _deskDetected ) ;
-    }
-
-    public void Dispose ( )
-    {
-        ( _deskDetected as IDisposable )?.Dispose ( ) ;
-        _updated.OnCompleted ( ) ;
-        _discovered.OnCompleted ( ) ;
-        _nameChanged.OnCompleted ( ) ;
-        _deskFound.OnCompleted ( ) ;
-
-        _updated.Dispose ( ) ;
-        _discovered.Dispose ( ) ;
-        _nameChanged.Dispose ( ) ;
-        _deskFound.Dispose ( ) ;
-        GC.SuppressFinalize ( this ) ;
     }
 }

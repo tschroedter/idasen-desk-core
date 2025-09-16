@@ -26,6 +26,20 @@ public class DeskHeightAndSpeedTests : IDisposable
     private Subject < RawValueChangedDetails > _subjectRawHeightAndSpeed = null! ;
     private Subject < int > _subjectSpeed = null! ;
 
+    public void Dispose ( )
+    {
+        _subjectHeight.OnCompleted ( ) ;
+        _subjectSpeed.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
+        _subjectRawHeightAndSpeed.OnCompleted ( ) ;
+
+        _subjectHeight.Dispose ( ) ;
+        _subjectSpeed.Dispose ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
+        _subjectRawHeightAndSpeed.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
+    }
+
     [ TestMethod ]
     public void Initialize_ForInvokedTwice_DisposesSubscriber ( )
     {
@@ -368,19 +382,5 @@ public class DeskHeightAndSpeedTests : IDisposable
         wasNotified
            .Should ( )
            .BeFalse ( ) ;
-    }
-
-    public void Dispose ( )
-    {
-        _subjectHeight.OnCompleted ( ) ;
-        _subjectSpeed.OnCompleted ( ) ;
-        _subjectHeightAndSpeed.OnCompleted ( ) ;
-        _subjectRawHeightAndSpeed.OnCompleted ( ) ;
-
-        _subjectHeight.Dispose ( ) ;
-        _subjectSpeed.Dispose ( ) ;
-        _subjectHeightAndSpeed.Dispose ( ) ;
-        _subjectRawHeightAndSpeed.Dispose ( ) ;
-        GC.SuppressFinalize ( this ) ;
     }
 }
