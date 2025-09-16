@@ -25,6 +25,8 @@ public class DeskLocker
 
     private IDisposable? _disposalHeightAndSpeed ;
 
+    private bool _disposed ;
+
     public DeskLocker ( ILogger logger ,
                         IScheduler scheduler ,
                         IDeskMover deskMover ,
@@ -80,9 +82,25 @@ public class DeskLocker
 
     public void Dispose ( )
     {
-        _deskMover.Dispose ( ) ;
-        _heightAndSpeed.Dispose ( ) ;
-        _disposalHeightAndSpeed?.Dispose ( ) ;
+        Dispose ( true ) ;
+        GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+        {
+            return ;
+        }
+
+        if ( disposing )
+        {
+            _deskMover.Dispose ( ) ;
+            _heightAndSpeed.Dispose ( ) ;
+            _disposalHeightAndSpeed?.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 
     private async Task OnHeightAndSpeedChanged ( HeightSpeedDetails details )

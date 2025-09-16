@@ -88,7 +88,7 @@ public class ReferenceOutput
 
         if ( Characteristics == null )
         {
-            Logger.Error ( $"{nameof ( Characteristics )} is null" ) ;
+            Logger.Error ( "{Property} is null" , nameof ( Characteristics ) ) ;
 
             return ;
         }
@@ -96,8 +96,8 @@ public class ReferenceOutput
         if ( ! Characteristics.Characteristics.TryGetValue ( HeightSpeed ,
                                                              out var heightAndSpeed ) )
         {
-            Logger.Error ( "Failed to find characteristic for Height and Speed " +
-                           $"with UUID '{HeightSpeed}'" ) ;
+            Logger.Error ( "Failed to find characteristic for Height and Speed with key {Key}" ,
+                           HeightSpeed ) ;
 
             return ;
         }
@@ -146,13 +146,15 @@ public class ReferenceOutput
 
     private void OnValueChanged ( GattCharacteristicValueChangedDetails details )
     {
-        Logger.Debug ( $"Value = {details.Value.ToHex ( )}, " +
-                       $"Timestamp = {details.Timestamp}, " +
-                       $"Uuid = {details.Uuid}" ) ;
+        Logger.Debug ( "Value={ValueHex}, Timestamp={Timestamp}, Uuid={Uuid}" ,
+                       details.Value.ToHex ( ) ,
+                       details.Timestamp ,
+                       details.Uuid ) ;
 
-        if ( details.Value.Count ( ) != 4 )
+        var count = details.Value.Count ( ) ;
+        if ( count != 4 )
         {
-            Logger.Error ( $"Failed, expected 4 bytes but received {details.Value.Count ( )}" ) ;
+            Logger.Error ( "Failed, expected 4 bytes but received {Count}" , count ) ;
 
             return ;
         }

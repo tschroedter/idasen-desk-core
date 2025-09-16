@@ -16,34 +16,32 @@ public class ULongExtensionsTests
     }
 
     [ TestMethod ]
-    public void ToMacAddress_ForValueIsZero_ReturnsValue ( )
+    public void ToMacAddress_ForValueIsZero_ReturnsZeroPaddedMac ( )
     {
         const ulong value = 0 ;
 
         value.ToMacAddress ( )
              .Should ( )
-             .Be ( "0" ) ;
+             .Be ( "00:00:00:00:00:00" ) ;
     }
 
     [ TestMethod ]
-    public void ToMacAddress_ForValueNotLargeEnough_ReturnsValue ( )
+    public void ToMacAddress_ForValueNotLargeEnough_PadsOnTheLeft ( )
     {
         const ulong value = 2546828283860 ;
 
-        // ReSharper disable StringLiteralTypo
         value.ToMacAddress ( )
              .Should ( )
-             .Be ( "250FACB8FD4" ) ;
-        // ReSharper restore StringLiteralTypo
+             .Be ( "02:50:FA:CB:8F:D4" ) ;
     }
 
     [ TestMethod ]
-    public void ToMacAddress_ForValueToLarge_ReturnsInvalidMacAddress ( )
+    public void ToMacAddress_ForValueTooLarge_UsesLower48Bits ( )
     {
         const ulong value = 25468282838607111 ;
 
         value.ToMacAddress ( )
              .Should ( )
-             .Be ( "5A:7B:44:AF:A2:6507" ) ;
+             .Be ( "7B:44:AF:A2:65:07" ) ;
     }
 }
