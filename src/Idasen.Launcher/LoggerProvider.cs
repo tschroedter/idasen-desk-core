@@ -70,16 +70,7 @@ public static class LoggerProvider
 #pragma warning restore CA1305
 
         // Important: Create logger inside the Lazy factory, not eagerly.
-        return new Lazy < Logger > ( ( ) =>
-        {
-            var logger = loggerConfiguration.CreateLogger ( ) ;
-
-            Console.WriteLine ( "Log file name: {0} {1}" ,
-                                LoggingFile.FullPath ,
-                                LoggingFile.Path ) ;
-
-            return logger ;
-        } ) ;
+        return new Lazy < Logger > ( ( ) => loggerConfiguration.CreateLogger ( ) ) ;
     }
 
     public static void Shutdown ( )
