@@ -69,7 +69,7 @@ public class DeskLocker
         return this ;
     }
 
-    public bool IsLocked { get ; set ; }
+    public bool IsLocked { get ; private set ; }
 
     public IDeskLocker Unlock ( )
     {
@@ -95,8 +95,6 @@ public class DeskLocker
 
         if ( disposing )
         {
-            _deskMover.Dispose ( ) ;
-            _heightAndSpeed.Dispose ( ) ;
             _disposalHeightAndSpeed?.Dispose ( ) ;
         }
 
