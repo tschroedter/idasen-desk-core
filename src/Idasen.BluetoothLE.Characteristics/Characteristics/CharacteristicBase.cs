@@ -127,7 +127,8 @@ public abstract class CharacteristicBase
     {
         if ( Characteristics == null )
         {
-            Logger.Error ( "{Property} is null" , nameof ( Characteristics ) ) ;
+            Logger.Error ( "{Property} is null" ,
+                           nameof ( Characteristics ) ) ;
 
             return ;
         }
@@ -141,7 +142,8 @@ public abstract class CharacteristicBase
             if ( ! Characteristics.Characteristics.TryGetValue ( key ,
                                                                  out var characteristic ) )
             {
-                Logger.Warning ( "Failed to get value for key {Key}" , key ) ;
+                Logger.Warning ( "Failed to get value for key {Key}" ,
+                                 key ) ;
 
                 continue ;
             }
@@ -199,7 +201,8 @@ public abstract class CharacteristicBase
     {
         if ( Characteristics == null )
         {
-            Logger.Error ( "{Property} is null" , nameof ( Characteristics ) ) ;
+            Logger.Error ( "{Property} is null" ,
+                           nameof ( Characteristics ) ) ;
 
             return false ;
         }

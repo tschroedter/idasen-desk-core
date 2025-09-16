@@ -19,12 +19,12 @@ public class DeviceMonitorWithExpiry
 
     private readonly ISubject < IDevice > _deviceExpired ;
     private readonly IDeviceMonitor _deviceMonitor ;
-    private readonly ILogger _logger ;
     private readonly IObservableTimerFactory _factory ;
+    private readonly ILogger _logger ;
     private readonly IScheduler _scheduler ;
+    private TimeSpan _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
 
     private IDisposable? _timer ;
-    private TimeSpan _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
 
     public DeviceMonitorWithExpiry (
         ILogger logger ,
@@ -71,7 +71,8 @@ public class DeviceMonitorWithExpiry
 
             _timeOut = value ;
 
-            _logger.Information ( "TimeOut = {Timeout}" , value ) ;
+            _logger.Information ( "TimeOut = {Timeout}" ,
+                                  value ) ;
 
             // restart timer if running to apply new timeout
             if ( _timer != null )
@@ -163,11 +164,11 @@ public class DeviceMonitorWithExpiry
         }
 
         _timer = _factory.Create ( TimeOut ,
-                                    _scheduler )
-                          .SubscribeOn ( _scheduler )
-                          .Subscribe ( CleanUp ,
-                                       OnError ,
-                                       OnCompleted ) ;
+                                   _scheduler )
+                         .SubscribeOn ( _scheduler )
+                         .Subscribe ( CleanUp ,
+                                      OnError ,
+                                      OnCompleted ) ;
     }
 
     private void StopTimer ( )

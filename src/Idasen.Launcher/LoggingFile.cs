@@ -8,6 +8,6 @@ public static class LoggingFile
 {
     public static string FullPath { get ; internal set ; } = string.Empty ;
 
-    [UsedImplicitly]
+    [ UsedImplicitly ]
     public static string Path => System.IO.Path.GetDirectoryName ( FullPath ) ?? string.Empty ;
 }

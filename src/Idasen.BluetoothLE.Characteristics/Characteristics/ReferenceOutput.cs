@@ -88,7 +88,8 @@ public class ReferenceOutput
 
         if ( Characteristics == null )
         {
-            Logger.Error ( "{Property} is null" , nameof ( Characteristics ) ) ;
+            Logger.Error ( "{Property} is null" ,
+                           nameof ( Characteristics ) ) ;
 
             return ;
         }
@@ -155,7 +156,8 @@ public class ReferenceOutput
 
         if ( count != 4 )
         {
-            Logger.Error ( "Failed, expected 4 bytes but received {Count}" , count ) ;
+            Logger.Error ( "Failed, expected 4 bytes but received {Count}" ,
+                           count ) ;
 
             return ;
         }

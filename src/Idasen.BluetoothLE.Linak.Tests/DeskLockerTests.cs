@@ -18,6 +18,13 @@ public class DeskLockerTests : IDisposable
     private TestScheduler _scheduler = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
 
+    public void Dispose ( )
+    {
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
+    }
+
     [ TestInitialize ]
     public void Initialize ( )
     {
@@ -115,12 +122,5 @@ public class DeskLockerTests : IDisposable
     private IDeskLocker CreateSutInitialized ( )
     {
         return CreateSut ( ).Initialize ( ) ;
-    }
-
-    public void Dispose ( )
-    {
-        _subjectHeightAndSpeed.OnCompleted ( ) ;
-        _subjectHeightAndSpeed.Dispose ( ) ;
-        GC.SuppressFinalize ( this ) ;
     }
 }

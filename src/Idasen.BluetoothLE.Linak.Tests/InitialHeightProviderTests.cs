@@ -27,6 +27,15 @@ public class InitialHeightProviderTests : IDisposable
     private Subject < uint > _subjectFinished = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
 
+    public void Dispose ( )
+    {
+        _subjectFinished.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
+        _subjectFinished.Dispose ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
+    }
+
     [ TestInitialize ]
     public void Initialize ( )
     {
@@ -370,15 +379,6 @@ public class InitialHeightProviderTests : IDisposable
 
         disposable.Received ( )
                   .Dispose ( ) ;
-    }
-
-    public void Dispose ( )
-    {
-        _subjectFinished.OnCompleted ( ) ;
-        _subjectHeightAndSpeed.OnCompleted ( ) ;
-        _subjectFinished.Dispose ( ) ;
-        _subjectHeightAndSpeed.Dispose ( ) ;
-        GC.SuppressFinalize ( this ) ;
     }
 
     private InitialHeightProvider CreateSut ( )

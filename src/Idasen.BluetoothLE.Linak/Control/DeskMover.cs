@@ -234,7 +234,8 @@ public class DeskMover
         }
         catch ( Exception e )
         {
-            _logger.Error ( e , "Calling Move() failed" ) ;
+            _logger.Error ( e ,
+                            "Calling Move() failed" ) ;
         }
     }
 

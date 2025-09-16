@@ -36,6 +36,16 @@ public class DeskMoverTests : IDisposable
     private Subject < uint > _subjectFinished = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
 
+    public void Dispose ( )
+    {
+        _subjectFinished.OnCompleted ( ) ;
+        _subjectHeightAndSpeed.OnCompleted ( ) ;
+
+        _subjectFinished.Dispose ( ) ;
+        _subjectHeightAndSpeed.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
+    }
+
     [ TestInitialize ]
     public void Initialize ( )
     {
@@ -449,15 +459,5 @@ public class DeskMoverTests : IDisposable
 
         disposable.Received ( )
                   .Dispose ( ) ;
-    }
-
-    public void Dispose ( )
-    {
-        _subjectFinished.OnCompleted ( ) ;
-        _subjectHeightAndSpeed.OnCompleted ( ) ;
-
-        _subjectFinished.Dispose ( ) ;
-        _subjectHeightAndSpeed.Dispose ( ) ;
-        GC.SuppressFinalize ( this ) ;
     }
 }
