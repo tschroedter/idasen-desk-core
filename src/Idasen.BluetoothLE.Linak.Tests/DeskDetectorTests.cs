@@ -11,7 +11,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class DeskDetectorTests
+public class DeskDetectorTests : IDisposable
 {
     private const string DeviceName = nameof ( DeviceName ) ;
     private const uint DeviceAddress = 123 ;
@@ -31,7 +31,7 @@ public class DeskDetectorTests
     private Subject < IDevice > _nameChanged = null! ;
 
     private TestScheduler _scheduler = null! ;
-    private ISubject < IDevice > _updated = null! ;
+    private Subject < IDevice > _updated = null! ;
 
     [ TestInitialize ]
     public void Initialize ( )
@@ -131,5 +131,20 @@ public class DeskDetectorTests
                                   _monitor ,
                                   _factory ,
                                   _deskDetected ) ;
+    }
+
+    public void Dispose ( )
+    {
+        (_deskDetected as IDisposable)?.Dispose ( ) ;
+        _updated?.OnCompleted ( ) ;
+        _discovered?.OnCompleted ( ) ;
+        _nameChanged?.OnCompleted ( ) ;
+        _deskFound?.OnCompleted ( ) ;
+
+        _updated?.Dispose ( ) ;
+        _discovered?.Dispose ( ) ;
+        _nameChanged?.Dispose ( ) ;
+        _deskFound?.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 }

@@ -61,7 +61,7 @@ public class DeviceMonitorTests
         _subjects.Enqueue ( _subjectUpdated ) ;
     }
 
-    private Recorded < Notification < IDevice > > [ ] OnMultipleNext ( IEnumerable < IDevice > devices )
+    private static Recorded < Notification < IDevice > > [ ] OnMultipleNext ( IEnumerable < IDevice > devices )
     {
         var list = new List < Recorded < Notification < IDevice > > > ( ) ;
 
@@ -77,7 +77,7 @@ public class DeviceMonitorTests
     }
 
 
-    private Recorded < Notification < IDevice > > OnNext (
+    private static Recorded < Notification < IDevice > > OnNext (
         long time ,
         IDevice device )
     {

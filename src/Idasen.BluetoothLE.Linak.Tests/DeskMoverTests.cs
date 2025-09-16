@@ -81,8 +81,8 @@ public class DeskMoverTests : IDisposable
 
         // initialise the subscription disposable used in assertions
         _disposable = Substitute.For < IDisposable > ( ) ;
-        _finished.Subscribe ( Arg.Any < IObserver < uint > > ( ) )
-                 .Returns ( _disposable ) ;
+        _finished.Subscribe ( default! )
+                 .ReturnsForAnyArgs ( _disposable ) ;
 
         _disposableProvider = Substitute.For < IInitialHeightProvider > ( ) ;
         _disposableProvider.Finished
@@ -290,8 +290,8 @@ public class DeskMoverTests : IDisposable
 
         await sut.OnTimerElapsed ( 1 ) ;
 
-        _executor.Received ( )
-                 .Down ( ) ;
+        await _executor.Received ( )
+                       .Down ( ) ;
     }
 
     [ TestMethod ]
@@ -306,8 +306,8 @@ public class DeskMoverTests : IDisposable
 
         using var scope = new AssertionScope ( ) ;
 
-        _executor.Received ( )
-                 .Stop ( ) ;
+        await _executor.Received ( )
+                       .Stop ( ) ;
     }
 
     [ TestMethod ]
@@ -322,12 +322,12 @@ public class DeskMoverTests : IDisposable
 
         using var scope = new AssertionScope ( ) ;
 
-        _executor.DidNotReceive ( )
-                 .Up ( ) ;
-        _executor.DidNotReceive ( )
-                 .Down ( ) ;
-        _executor.DidNotReceive ( )
-                 .Stop ( ) ;
+        await _executor.DidNotReceive ( )
+                       .Up ( ) ;
+        await _executor.DidNotReceive ( )
+                       .Down ( ) ;
+        await _executor.DidNotReceive ( )
+                       .Stop ( ) ;
     }
 
 
@@ -458,5 +458,6 @@ public class DeskMoverTests : IDisposable
 
         _subjectFinished?.Dispose ( ) ;
         _subjectHeightAndSpeed?.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 }

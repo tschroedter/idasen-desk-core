@@ -102,7 +102,7 @@ public class DeskHeightMonitorTests
            .BeTrue ( ) ;
     }
 
-    private static void PopulateWithSameHeight ( IDeskHeightMonitor sut )
+    private static void PopulateWithSameHeight ( DeskHeightMonitor sut )
     {
         for (var i = 0; i < 10; i++)
         {

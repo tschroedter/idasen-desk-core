@@ -8,7 +8,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class DeskLockerTests
+public class DeskLockerTests : IDisposable
 {
     private IDeskMover _deskMover = null! ;
     private HeightSpeedDetails _details = null! ;
@@ -115,5 +115,12 @@ public class DeskLockerTests
     private IDeskLocker CreateSutInitialized ( )
     {
         return CreateSut ( ).Initialize ( ) ;
+    }
+
+    public void Dispose ( )
+    {
+        _subjectHeightAndSpeed?.OnCompleted ( ) ;
+        _subjectHeightAndSpeed?.Dispose ( ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 }

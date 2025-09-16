@@ -72,7 +72,7 @@ public class DeskCommandsProviderTests
              .BeEquivalentTo ( expected ) ;
     }
 
-    private DeskCommandsProvider CreateSut ( )
+    private static DeskCommandsProvider CreateSut ( )
     {
         return new DeskCommandsProvider ( ) ;
     }
