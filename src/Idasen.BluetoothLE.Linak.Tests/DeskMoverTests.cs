@@ -79,8 +79,8 @@ public class DeskMoverTests
 
         _finished = Substitute.For < ISubject < uint > > ( ) ;
 
+        // initialise the subscription disposable used in assertions
         _disposable = Substitute.For < IDisposable > ( ) ;
-
         _finished.Subscribe ( Arg.Any < IObserver < uint > > ( ) )
                  .Returns ( _disposable ) ;
 
@@ -125,6 +125,17 @@ public class DeskMoverTests
         var sut = CreateSutWithTargetHeight ( ) ;
 
         _subjectFinished.OnNext ( InitialHeight ) ;
+
+        _scheduler.Start ( ) ;
+
+        return sut ;
+    }
+
+    private DeskMover CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( )
+    {
+        var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
 
         _scheduler.Start ( ) ;
 
@@ -236,11 +247,7 @@ public class DeskMoverTests
     [ TestMethod ]
     public void Height_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesHeight ( )
     {
-        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
-
-        _scheduler.Start ( ) ;
+        using var sut = CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( ) ;
 
         sut.Height
            .Should ( )
@@ -250,11 +257,7 @@ public class DeskMoverTests
     [ TestMethod ]
     public void Speed_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesSpeed ( )
     {
-        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
-
-        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
-
-        _scheduler.Start ( ) ;
+        using var sut = CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( ) ;
 
         sut.Speed
            .Should ( )
@@ -271,35 +274,35 @@ public class DeskMoverTests
 
         await sut.Stop ( ) ; // make sure timer is null
 
-        sut.OnTimerElapsed ( 1 ) ;
+        await sut.OnTimerElapsed ( 1 ) ;
 
         await _executor.DidNotReceive ( )
                        .Up ( ) ;
     }
 
     [ TestMethod ]
-    public void OnTimerElapsed_ForMoveIntoDirectionDown_MovesDown ( )
+    public async Task OnTimerElapsed_ForMoveIntoDirectionDown_MovesDown ( )
     {
         _calculator.MoveIntoDirection
                    .Returns ( Direction.Down ) ;
 
         using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
-        sut.OnTimerElapsed ( 1 ) ;
+        await sut.OnTimerElapsed ( 1 ) ;
 
         _executor.Received ( )
                  .Down ( ) ;
     }
 
     [ TestMethod ]
-    public void OnTimerElapsed_ForMoveIntoDirectionNone_MoveStop ( )
+    public async Task OnTimerElapsed_ForMoveIntoDirectionNone_MoveStop ( )
     {
         _calculator.MoveIntoDirection
                    .Returns ( Direction.None ) ;
 
         using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
-        sut.OnTimerElapsed ( 1 ) ;
+        await sut.OnTimerElapsed ( 1 ) ;
 
         using var scope = new AssertionScope ( ) ;
 
@@ -308,14 +311,14 @@ public class DeskMoverTests
     }
 
     [ TestMethod ]
-    public void OnTimerElapsed_ForIsAllowedToMoveIsFalse_DoesNotMove ( )
+    public async Task OnTimerElapsed_ForIsAllowedToMoveIsFalse_DoesNotMove ( )
     {
         _calculator.MoveIntoDirection
                    .Returns ( Direction.None ) ;
 
         using var sut = CreateSutInitialized ( ) ;
 
-        sut.OnTimerElapsed ( 1 ) ;
+        await sut.OnTimerElapsed ( 1 ) ;
 
         using var scope = new AssertionScope ( ) ;
 

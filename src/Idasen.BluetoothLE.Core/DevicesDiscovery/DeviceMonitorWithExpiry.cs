@@ -20,7 +20,10 @@ public class DeviceMonitorWithExpiry
     private readonly ISubject < IDevice > _deviceExpired ;
     private readonly IDeviceMonitor _deviceMonitor ;
     private readonly ILogger _logger ;
-    private readonly IDisposable _timer ;
+    private readonly IObservableTimerFactory _factory ;
+    private readonly IScheduler _scheduler ;
+
+    private IDisposable? _timer ;
     private TimeSpan _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
 
     public DeviceMonitorWithExpiry (
@@ -48,13 +51,11 @@ public class DeviceMonitorWithExpiry
         _dateTimeOffset = dateTimeOffset ;
         _deviceMonitor = deviceMonitor ;
         _deviceExpired = deviceExpired ;
+        _factory = factory ;
+        _scheduler = scheduler ;
 
-        _timer = factory.Create ( TimeOut ,
-                                  scheduler )
-                        .SubscribeOn ( scheduler )
-                        .Subscribe ( CleanUp ,
-                                     OnError ,
-                                     OnCompleted ) ;
+        // Keep backward compatibility with existing tests: start timer immediately
+        StartTimerIfNeeded ( ) ;
     }
 
     /// <inheritdoc />
@@ -71,6 +72,12 @@ public class DeviceMonitorWithExpiry
             _timeOut = value ;
 
             _logger.Information ( $"TimeOut = {value}" ) ;
+
+            // restart timer if running to apply new timeout
+            if ( _timer != null )
+            {
+                RestartTimer ( ) ;
+            }
         }
     }
 
@@ -80,7 +87,7 @@ public class DeviceMonitorWithExpiry
     /// <inheritdoc />
     public void Dispose ( )
     {
-        _timer.Dispose ( ) ;
+        StopTimer ( ) ;
         _deviceMonitor.Dispose ( ) ;
     }
 
@@ -103,12 +110,14 @@ public class DeviceMonitorWithExpiry
     public void Start ( )
     {
         _deviceMonitor.Start ( ) ;
+        StartTimerIfNeeded ( ) ;
     }
 
     /// <inheritdoc />
     public void Stop ( )
     {
         _deviceMonitor.Stop ( ) ;
+        StopTimer ( ) ;
     }
 
     /// <inheritdoc />
@@ -144,5 +153,32 @@ public class DeviceMonitorWithExpiry
 
             _deviceExpired.OnNext ( device ) ;
         }
+    }
+
+    private void StartTimerIfNeeded ( )
+    {
+        if ( _timer != null )
+        {
+            return ;
+        }
+
+        _timer = _factory.Create ( TimeOut ,
+                                    _scheduler )
+                          .SubscribeOn ( _scheduler )
+                          .Subscribe ( CleanUp ,
+                                       OnError ,
+                                       OnCompleted ) ;
+    }
+
+    private void StopTimer ( )
+    {
+        _timer?.Dispose ( ) ;
+        _timer = null ;
+    }
+
+    private void RestartTimer ( )
+    {
+        StopTimer ( ) ;
+        StartTimerIfNeeded ( ) ;
     }
 }

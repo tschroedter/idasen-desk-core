@@ -216,16 +216,25 @@ public class DeskMover
         _heightMonitor.Reset ( ) ;
     }
 
-    internal void OnTimerElapsed ( long time )
+    internal async Task OnTimerElapsed ( long time )
     {
         if ( _disposableTimer == null || ! IsAllowedToMove )
         {
             return ;
         }
 
-        if ( ! Move ( ).Wait ( TimerInterval * 10 ) )
+        try
+        {
+            // Ensure we don't block the calling thread and respect a timeout
+            await Move ( ).WaitAsync ( TimerInterval * 10 ) ;
+        }
+        catch ( TimeoutException )
         {
             _logger.Warning ( "Calling Move() timed-out" ) ;
+        }
+        catch ( Exception e )
+        {
+            _logger.Error ( e , "Calling Move() failed" ) ;
         }
     }
 
