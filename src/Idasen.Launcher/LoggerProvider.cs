@@ -68,8 +68,7 @@ public static class LoggerProvider
                                                     LogTemplate )
                                  .WriteTo.File ( logFile ,
                                                  LogEventLevel.Debug ,
-                                                 LogTemplate ,
-                                                 hooks : new LoggingFileHooks ( ) ) ;
+                                                 LogTemplate ) ;
 #pragma warning restore CA1305
 
         return loggerConfiguration.CreateLogger ( ) ;

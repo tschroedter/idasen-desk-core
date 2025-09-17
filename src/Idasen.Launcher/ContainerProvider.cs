@@ -26,8 +26,6 @@ public static class ContainerProvider
     public static IContainer Create ( ILoggerSettings settings ,
                                       IEnumerable < IModule >? otherModules = null )
     {
-        LoggingFilePathInitializer.TrySetFromSettings ( settings ) ;
-
         Log.Logger = new LoggerConfiguration ( ).ReadFrom
                                                 .Settings ( settings )
                                                 .Enrich.WithCaller ( )
@@ -39,8 +37,6 @@ public static class ContainerProvider
     public static IContainer Create ( IConfiguration configuration ,
                                       IEnumerable < IModule >? otherModules = null )
     {
-        LoggingFilePathInitializer.TrySetFromConfiguration ( configuration ) ;
-
         var loggerConfiguration = new LoggerConfiguration ( ).ReadFrom
                                                              .Configuration ( configuration )
                                                              .Enrich.WithCaller ( ) ;
