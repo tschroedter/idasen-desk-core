@@ -55,6 +55,9 @@ public static class LoggerProvider
             Directory.CreateDirectory ( logFolder ) ;
         }
 
+        // Make the path available immediately; the hook will set it again once the file is opened
+        LoggingFile.FullPath = logFile ;
+
 #pragma warning disable CA1305
         var loggerConfiguration = new LoggerConfiguration ( )
                                  .MinimumLevel
