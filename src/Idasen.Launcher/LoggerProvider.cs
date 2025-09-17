@@ -12,7 +12,7 @@ public static class LoggerProvider
                                        "(at {Caller}){NewLine}{Exception}" ;
 
     private static readonly object Sync = new ( ) ;
-    private static Lazy < Logger >? _logger ;
+    private static Logger? _logger ;
 
     public static ILogger CreateLogger ( string appName ,
                                          string appLogFileName )
@@ -26,24 +26,24 @@ public static class LoggerProvider
         {
             if ( _logger != null )
             {
-                _logger.Value.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" ,
-                                      appName ,
-                                      appLogFileName ) ;
+                _logger.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" ,
+                                appName ,
+                                appLogFileName ) ;
 
-                return _logger.Value ;
+                return _logger ;
             }
 
             _logger = DoCreateLogger ( appLogFileName ) ;
 
-            _logger.Value.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" ,
-                                  appName ,
-                                  appLogFileName ) ;
+            _logger.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" ,
+                            appName ,
+                            appLogFileName ) ;
 
-            return _logger.Value ;
+            return _logger ;
         }
     }
 
-    private static Lazy < Logger > DoCreateLogger ( string appLogFileName )
+    private static Logger DoCreateLogger ( string appLogFileName )
     {
         var logFolder = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory ,
                                        "logs" ) ;
@@ -72,8 +72,7 @@ public static class LoggerProvider
                                                  hooks : new LoggingFileHooks ( ) ) ;
 #pragma warning restore CA1305
 
-        // Important: Create logger inside the Lazy factory, not eagerly.
-        return new Lazy < Logger > ( ( ) => loggerConfiguration.CreateLogger ( ) ) ;
+        return loggerConfiguration.CreateLogger ( ) ;
     }
 
     public static void Shutdown ( )
@@ -85,9 +84,12 @@ public static class LoggerProvider
                 return ;
             }
 
-            // Flush and close sinks
-            Log.CloseAndFlush ( ) ;
+            // Dispose the instance logger to flush/close sinks
+            _logger.Dispose ( ) ;
             _logger = null ;
+
+            // Optional: if you also used the static Log.Logger elsewhere
+            Log.CloseAndFlush ( ) ;
         }
     }
 
