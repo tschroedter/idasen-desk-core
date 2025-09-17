@@ -6,6 +6,9 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Thread-safe dictionary mapping GATT device services to their characteristics results.
+/// </summary>
 public class GattServicesDictionary
     : IGattServicesDictionary
 {
@@ -14,6 +17,9 @@ public class GattServicesDictionary
 
     private readonly object _padlock = new ( ) ;
 
+    /// <summary>
+    ///     Gets the number of items in the dictionary.
+    /// </summary>
     public int Count
     {
         get
@@ -25,6 +31,10 @@ public class GattServicesDictionary
         }
     }
 
+    /// <summary>
+    ///     Gets or sets the characteristics result for the specified service.
+    ///     Setting a new value disposes the old one to avoid leaks.
+    /// </summary>
     public IGattCharacteristicsResultWrapper this [ IGattDeviceServiceWrapper service ]
     {
         get
@@ -53,6 +63,9 @@ public class GattServicesDictionary
         }
     }
 
+    /// <summary>
+    ///     Clears the dictionary and disposes entries.
+    /// </summary>
     public void Clear ( )
     {
         DisposeEntries ( ) ;
@@ -63,11 +76,17 @@ public class GattServicesDictionary
         }
     }
 
+    /// <summary>
+    ///     Disposes stored entries (service and characteristics).
+    /// </summary>
     public void Dispose ( )
     {
         DisposeEntries ( ) ;
     }
 
+    /// <summary>
+    ///     Gets a read-only view of the dictionary.
+    /// </summary>
     public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper >
         ReadOnlyDictionary
     {

@@ -45,7 +45,6 @@ public static class LoggerProvider
                 baseDir = Path.GetDirectoryName ( Assembly.GetEntryAssembly ( )?.Location ?? AppContext.BaseDirectory ) ?? AppContext.BaseDirectory ;
             }
 
-
             var configuration = new ConfigurationBuilder ( )
                                .SetBasePath ( baseDir )
                                .AddJsonFile ( "appsettings.json" ,

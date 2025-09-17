@@ -20,9 +20,16 @@ namespace Idasen.BluetoothLE.Core ;
 
 // ReSharper disable once InconsistentNaming
 [ ExcludeFromCodeCoverage ]
+/// <summary>
+///     Autofac module wiring up core Bluetooth LE services, discovery wrappers, and AOP.
+/// </summary>
 public class BluetoothLECoreModule
     : Module
 {
+    /// <summary>
+    ///     Registers all services and factories into the Autofac container.
+    /// </summary>
+    /// <param name="builder">The container builder.</param>
     protected override void Load ( ContainerBuilder builder )
     {
         builder.RegisterModule < BluetoothLEAop > ( ) ;

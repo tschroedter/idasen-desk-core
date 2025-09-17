@@ -7,6 +7,9 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 /// <inheritdoc cref="IDevices" />
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     In-memory thread-safe store of discovered devices with update semantics.
+/// </summary>
 public class Devices
     : IDevices
 {

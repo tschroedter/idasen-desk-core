@@ -6,6 +6,9 @@ using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Core ;
 
+/// <summary>
+///     Factory that creates observable timers using Rx.
+/// </summary>
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class ObservableTimerFactory

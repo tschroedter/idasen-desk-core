@@ -2,6 +2,9 @@
 
 namespace Idasen.BluetoothLE.Core ;
 
+/// <summary>
+///     Extensions for <see cref="ulong"/> values.
+/// </summary>
 public static class ULongExtensions
 {
     private const string Grouping = "(.{2})(.{2})(.{2})(.{2})(.{2})(.{2})" ;

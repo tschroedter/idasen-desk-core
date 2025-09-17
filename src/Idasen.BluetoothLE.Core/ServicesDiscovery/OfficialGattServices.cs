@@ -12,6 +12,9 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Loads official GATT services from an embedded CSV resource and provides lookup by assigned number.
+/// </summary>
 public class OfficialGattServices
     : IOfficialGattServices
 {
@@ -26,6 +29,9 @@ public class OfficialGattServices
         Populate ( ReadCsvFile ( ResourceName ) ) ;
     }
 
+    /// <summary>
+    ///     Gets the manifest resource name of the embedded CSV file.
+    /// </summary>
     public string ResourceName { get ; }
 
     /// <inheritdoc />

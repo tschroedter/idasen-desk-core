@@ -4,11 +4,17 @@ using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core ;
 
+/// <summary>
+///     Common guard helpers for argument validation.
+/// </summary>
 public static class Guard
 {
     private const string ValueCannotBeNullOrEmpty = "Value cannot be null or empty" ;
     private const string ValueCannotBeWhitespace = "Value cannot be null, empty or whitespace" ;
 
+    /// <summary>
+    ///     Ensures the parameter is a non-null, non-empty, non-whitespace string.
+    /// </summary>
     [ UsedImplicitly ]
     [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
     public static void ArgumentNotEmptyOrWhitespace ( object parameter ,
@@ -30,6 +36,9 @@ public static class Guard
                                       parameterName ) ;
     }
 
+    /// <summary>
+    ///     Ensures the parameter is not null.
+    /// </summary>
     [ UsedImplicitly ]
     [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
     public static void ArgumentNotNull ( object parameter ,
@@ -41,6 +50,9 @@ public static class Guard
         }
     }
 
+    /// <summary>
+    ///     Ensures the parameter is a non-null, non-empty string.
+    /// </summary>
     [ UsedImplicitly ]
     [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
     public static void ArgumentNotNullOrEmpty ( object parameter ,

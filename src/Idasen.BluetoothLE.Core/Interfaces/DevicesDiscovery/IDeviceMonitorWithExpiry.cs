@@ -2,6 +2,9 @@
 
 namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
+/// <summary>
+///     Extends device monitoring with expiry notifications and a timeout window.
+/// </summary>
 public interface IDeviceMonitorWithExpiry
     : IDeviceMonitor
 {

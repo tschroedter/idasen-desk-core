@@ -7,11 +7,17 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Default implementation of <see cref="IGattServicesProviderFactory"/> using a delegate factory.
+/// </summary>
 public class GattServicesProviderFactory
     : IGattServicesProviderFactory
 {
     private readonly GattServicesProvider.Factory _factory ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GattServicesProviderFactory"/> class.
+    /// </summary>
     public GattServicesProviderFactory ( GattServicesProvider.Factory factory )
     {
         Guard.ArgumentNotNull ( factory ,
@@ -21,6 +27,9 @@ public class GattServicesProviderFactory
     }
 
     /// <inheritdoc />
+    /// <summary>
+    ///     Creates an instance of <see cref="IGattServicesProvider"/> for the specified Bluetooth Low Energy device.
+    /// </summary>
     public IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper )
     {
         Guard.ArgumentNotNull ( wrapper ,
