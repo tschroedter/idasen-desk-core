@@ -7,10 +7,21 @@ using Serilog ;
 
 namespace Idasen.Aop ;
 
+/// <summary>
+///     Default implementation of <see cref="IInvocationToTextConverter"/> that renders
+///     target type, method name and a JSON-like list of arguments.
+/// </summary>
+/// <param name="logger">Logger used to report serialization failures at debug level.</param>
 public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextConverter
 {
     private readonly ILogger _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
 
+    /// <summary>
+    ///     Converts the specified invocation to a formatted string.
+    /// </summary>
+    /// <param name="invocation">The intercepted method invocation.</param>
+    /// <returns>A string describing the invocation.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="invocation"/> is null.</exception>
     public string Convert ( IInvocation? invocation )
     {
         if ( invocation == null )
@@ -23,6 +34,11 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
         return $"{invocation.TargetType.FullName}.{invocation.Method.Name}({arguments})" ;
     }
 
+    /// <summary>
+    ///     Converts an array of arguments to a comma-separated string.
+    /// </summary>
+    /// <param name="arguments">The method arguments.</param>
+    /// <returns>Formatted argument list.</returns>
     [ UsedImplicitly ]
     internal string ConvertArgumentsToString ( object [ ] arguments )
     {

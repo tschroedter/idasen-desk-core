@@ -7,10 +7,18 @@ using Serilog ;
 namespace Idasen.Aop ;
 
 // ReSharper disable once InconsistentNaming
+/// <summary>
+///     Autofac module that registers AOP-related components for BluetoothLE, including
+///     invocation-to-text conversion and logging aspects.
+/// </summary>
 [ ExcludeFromCodeCoverage ]
 public class BluetoothLEAop
     : Module
 {
+    /// <summary>
+    ///     Adds the AOP services to the provided container builder.
+    /// </summary>
+    /// <param name="builder">The Autofac container builder.</param>
     protected override void Load ( ContainerBuilder builder )
     {
         builder.RegisterType < InvocationToTextConverter > ( )
