@@ -35,6 +35,10 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="SerilogAnalyzer" Version="0.15.0" />
+    </ItemGroup>
+
     <!-- Include any other necessary project configurations -->
 
 </Project>

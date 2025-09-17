@@ -26,6 +26,10 @@
         <ProjectReference Include="..\Idasen.BluetoothLE.Linak\Idasen.BluetoothLE.Linak.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="SerilogAnalyzer" Version="0.15.0" />
+    </ItemGroup>
+
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>

@@ -19,6 +19,10 @@
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="SerilogAnalyzer" Version="0.15.0" />
+    </ItemGroup>
+
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>

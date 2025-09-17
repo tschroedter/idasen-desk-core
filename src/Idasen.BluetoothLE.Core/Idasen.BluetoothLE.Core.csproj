@@ -41,6 +41,10 @@
         <ProjectReference Include="..\Idasen.Aop\Idasen.Aop.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="SerilogAnalyzer" Version="0.15.0" />
+    </ItemGroup>
+
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
