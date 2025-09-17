@@ -287,6 +287,8 @@
           "CsvHelper": "[33.1.0, )",
           "JetBrains.Annotations": "[2025.2.2, )",
           "Microsoft.Extensions.Configuration": "[9.0.9, )",
+          "Microsoft.Extensions.Configuration.FileExtensions": "[9.0.9, )",
+          "Microsoft.Extensions.Configuration.Json": "[9.0.9, )",
           "Selkie.DefCon.One.Common": "[0.0.23, )",
           "Serilog": "[4.3.0, )",
           "Serilog.Settings.Configuration": "[9.0.0, )",
