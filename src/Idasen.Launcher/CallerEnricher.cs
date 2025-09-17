@@ -5,8 +5,18 @@ using Serilog.Events ;
 
 namespace Idasen.Launcher ;
 
+/// <summary>
+///     Serilog enricher that populates the <c>Caller</c> property with the fully-qualified method
+///     name of the user-code frame that initiated the log call (skipping Serilog infrastructure frames).
+/// </summary>
 public class CallerEnricher : ILogEventEnricher
 {
+    /// <summary>
+    ///     Adds the <c>Caller</c> property to the <paramref name="logEvent" />, identifying the
+    ///     originating method in the call stack, or <c>&lt;unknown method&gt;</c> if it cannot be resolved.
+    /// </summary>
+    /// <param name="logEvent">The log event to enrich.</param>
+    /// <param name="propertyFactory">Factory for creating log event properties.</param>
     public void Enrich ( LogEvent logEvent ,
                          ILogEventPropertyFactory propertyFactory )
     {
