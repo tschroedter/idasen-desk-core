@@ -12,6 +12,9 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Determines the initial height by optionally nudging the desk to produce height/speed updates.
+/// </summary>
 public class InitialHeightProvider
     : IInitialHeightProvider
 {
@@ -28,6 +31,9 @@ public class InitialHeightProvider
     // ReSharper disable once InconsistentNaming - only used for testing
     internal IDisposable? _disposalHeightAndSpeed ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="InitialHeightProvider"/> class.
+    /// </summary>
     public InitialHeightProvider ( ILogger logger ,
                                    IScheduler scheduler ,
                                    IDeskHeightAndSpeed heightAndSpeed ,

@@ -10,6 +10,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     High-level service that initializes detection and exposes the detected desk instance.
+/// </summary>
 public class DeskProvider
     : IDeskProvider
 {
@@ -162,7 +165,9 @@ public class DeskProvider
         _detector.Dispose ( ) ;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Gets the last detected desk instance.
+    /// </summary>
     public IDesk? Desk { get ; private set ; }
 
     internal void DoTryGetDesk ( CancellationToken token )

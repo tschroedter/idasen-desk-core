@@ -6,11 +6,18 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Factory for creating <see cref="IDeskMovementMonitor"/> instances.
+/// </summary>
 public class DeskMovementMonitorFactory
     : IDeskMovementMonitorFactory
 {
     private readonly DeskMovementMonitor.Factory _factory ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskMovementMonitorFactory"/> class.
+    /// </summary>
+    /// <param name="factory">The IoC factory delegate for <see cref="DeskMovementMonitor"/>.</param>
     public DeskMovementMonitorFactory ( DeskMovementMonitor.Factory factory )
     {
         Guard.ArgumentNotNull ( factory ,
@@ -19,6 +26,7 @@ public class DeskMovementMonitorFactory
         _factory = factory ;
     }
 
+    /// <inheritdoc />
     public IDeskMovementMonitor Create ( IDeskHeightAndSpeed heightAndSpeed )
     {
         Guard.ArgumentNotNull ( heightAndSpeed ,

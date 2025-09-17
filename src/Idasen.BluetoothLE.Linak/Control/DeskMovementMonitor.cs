@@ -9,6 +9,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Monitors combined height/speed samples to ensure the desk is actually moving when commanded.
+/// </summary>
 public class DeskMovementMonitor
     : IDeskMovementMonitor
 {
@@ -51,6 +54,10 @@ public class DeskMovementMonitor
         _disposalHeightAndSpeed?.Dispose ( ) ;
     }
 
+    /// <summary>
+    ///     Initializes monitoring with the specified history capacity.
+    /// </summary>
+    /// <param name="capacity">The number of samples to retain in history.</param>
     public void Initialize ( int capacity = DefaultCapacity )
     {
         History = new CircularBuffer < HeightSpeedDetails > ( capacity ) ;

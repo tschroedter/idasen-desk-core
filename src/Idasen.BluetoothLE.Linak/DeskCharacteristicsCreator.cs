@@ -10,12 +10,18 @@ namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Creates and attaches all known LINAK desk characteristics to a given container.
+/// </summary>
 public class DeskCharacteristicsCreator
     : IDeskCharacteristicsCreator
 {
     private readonly ICharacteristicBaseFactory _baseFactory ;
     private readonly ILogger _logger ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskCharacteristicsCreator"/> class.
+    /// </summary>
     public DeskCharacteristicsCreator (
         ILogger logger ,
         ICharacteristicBaseFactory baseFactory )

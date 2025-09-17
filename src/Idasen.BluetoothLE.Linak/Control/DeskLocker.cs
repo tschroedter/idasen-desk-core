@@ -9,6 +9,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Implements a movement lock that stops manual operations when the desk is locked and height/speed indicates manual motion.
+/// </summary>
 public class DeskLocker
     : IDeskLocker
 {
@@ -27,6 +30,9 @@ public class DeskLocker
 
     private bool _disposed ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskLocker"/> class.
+    /// </summary>
     public DeskLocker ( ILogger logger ,
                         IScheduler scheduler ,
                         IDeskMover deskMover ,

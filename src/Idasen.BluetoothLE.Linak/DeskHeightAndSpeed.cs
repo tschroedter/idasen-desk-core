@@ -13,6 +13,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Adapts the LINAK Reference Output characteristic into strongly-typed height and speed observables and values.
+/// </summary>
 public class DeskHeightAndSpeed
     : IDeskHeightAndSpeed
 {
@@ -29,6 +32,9 @@ public class DeskHeightAndSpeed
 
     private IDisposable? _subscriber ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskHeightAndSpeed"/> class.
+    /// </summary>
     public DeskHeightAndSpeed ( ILogger logger ,
                                 IScheduler scheduler ,
                                 IReferenceOutput referenceOutput ,
@@ -61,16 +67,22 @@ public class DeskHeightAndSpeed
         _subjectHeightAndSpeed = subjectHeightAndSpeed ;
     }
 
+    /// <inheritdoc />
     public IObservable < uint > HeightChanged => _subjectHeight ;
 
+    /// <inheritdoc />
     public IObservable < int > SpeedChanged => _subjectSpeed ;
 
+    /// <inheritdoc />
     public IObservable < HeightSpeedDetails > HeightAndSpeedChanged => _subjectHeightAndSpeed ;
 
+    /// <inheritdoc />
     public uint Height { get ; private set ; }
 
+    /// <inheritdoc />
     public int Speed { get ; private set ; }
 
+    /// <inheritdoc />
     public async Task Refresh ( )
     {
         await _referenceOutput.Refresh ( ) ;
@@ -78,6 +90,7 @@ public class DeskHeightAndSpeed
         Initialize ( ) ;
     }
 
+    /// <inheritdoc />
     public IDeskHeightAndSpeed Initialize ( )
     {
         _subscriber?.Dispose ( ) ;
@@ -104,6 +117,7 @@ public class DeskHeightAndSpeed
         return this ;
     }
 
+    /// <inheritdoc />
     public void Dispose ( )
     {
         _referenceOutput.Dispose ( ) ;

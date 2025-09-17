@@ -8,6 +8,9 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Calculates the estimated stopping height, movement until stop, and whether a target height has been reached.
+/// </summary>
 public class StoppingHeightCalculator
     : IStoppingHeightCalculator
 {
@@ -18,6 +21,9 @@ public class StoppingHeightCalculator
 
     private readonly ILogger _logger ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="StoppingHeightCalculator"/> class.
+    /// </summary>
     public StoppingHeightCalculator ( ILogger logger ,
                                       IHasReachedTargetHeightCalculator calculator )
     {

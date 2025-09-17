@@ -10,11 +10,10 @@ public interface IStoppingHeightCalculator
     ///     The expected movement in mm of the desk from maximum speed to zero
     ///     speed.
     /// </summary>
-    // ReSharper disable once UnusedMemberInSuper.Global
     uint MaxSpeedToStopMovement { get ; set ; }
 
     /// <summary>
-    ///     The maximum movement in mm speed of the desk.
+    ///     The maximum movement speed of the desk.
     /// </summary>
     int MaxSpeed { get ; set ; }
 
@@ -69,7 +68,7 @@ public interface IStoppingHeightCalculator
     Direction StartMovingIntoDirection { get ; set ; }
 
     /// <summary>
-    ///     Calculate the get only properties: Delta, StoppingHeight...
+    ///     Calculate the get only properties: Delta, StoppingHeight, ...
     /// </summary>
     /// <returns>
     ///     Itself.

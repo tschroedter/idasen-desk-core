@@ -13,6 +13,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Orchestrates movement toward a target height using speed/height feedback and calculators; exposes completion and state.
+/// </summary>
 public class DeskMover
     : IDeskMover
 {
@@ -31,6 +34,9 @@ public class DeskMover
     private readonly IScheduler _scheduler ;
     private readonly ISubject < uint > _subjectFinished ;
 
+    /// <summary>
+    ///     Timer tick interval used to drive movement evaluation.
+    /// </summary>
     public readonly TimeSpan TimerInterval = TimeSpan.FromMilliseconds ( 100 ) ;
 
     private IDisposable? _disposableProvider ;
@@ -39,6 +45,9 @@ public class DeskMover
     private IInitialHeightProvider? _initialProvider ;
     private IDeskMovementMonitor? _monitor ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskMover"/> class.
+    /// </summary>
     public DeskMover ( ILogger logger ,
                        IScheduler scheduler ,
                        IInitialHeightAndSpeedProviderFactory providerFactory ,
@@ -79,14 +88,22 @@ public class DeskMover
         _heightMonitor = heightMonitor ;
     }
 
+    /// <summary>
+    ///     Direction used for the first movement step once height is known.
+    /// </summary>
     public Direction StartMovingIntoDirection { get ; set ; }
 
+    /// <inheritdoc />
     public uint Height { get ; private set ; }
+    /// <inheritdoc />
     public int Speed { get ; private set ; }
+    /// <inheritdoc />
     public uint TargetHeight { get ; set ; }
 
+    /// <inheritdoc />
     public IObservable < uint > Finished => _subjectFinished ;
 
+    /// <inheritdoc />
     public void Initialize ( )
     {
         lock (_padlock)
@@ -107,6 +124,7 @@ public class DeskMover
         }
     }
 
+    /// <inheritdoc />
     public void Start ( )
     {
         _logger.Debug ( "Starting..." ) ;
@@ -122,6 +140,7 @@ public class DeskMover
         _initialProvider?.Start ( ) ;
     }
 
+    /// <inheritdoc />
     public async Task < bool > Up ( )
     {
         if ( IsAllowedToMove )
@@ -132,6 +151,7 @@ public class DeskMover
         return false ;
     }
 
+    /// <inheritdoc />
     public async Task < bool > Down ( )
     {
         if ( IsAllowedToMove )
@@ -142,6 +162,7 @@ public class DeskMover
         return false ;
     }
 
+    /// <inheritdoc />
     public async Task < bool > Stop ( )
     {
         _logger.Debug ( "Stopping..." ) ;
@@ -169,6 +190,7 @@ public class DeskMover
         return stop ;
     }
 
+    /// <inheritdoc />
     public void Dispose ( )
     {
         _monitor?.Dispose ( ) ;
@@ -177,6 +199,7 @@ public class DeskMover
         _disposableTimer?.Dispose ( ) ; // todo testing
     }
 
+    /// <inheritdoc />
     public bool IsAllowedToMove { get ; private set ; }
 
     private void StartAfterReceivingCurrentHeight ( )

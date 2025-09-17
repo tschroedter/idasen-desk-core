@@ -2,6 +2,9 @@
 
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
+/// <summary>
+///     Coordinates desk detection and exposes the currently detected desk instance and related notifications.
+/// </summary>
 public interface IDeskProvider
     : IDisposable
 {

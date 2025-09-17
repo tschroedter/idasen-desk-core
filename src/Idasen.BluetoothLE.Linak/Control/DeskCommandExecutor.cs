@@ -9,6 +9,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Executes raw control commands against the desk's control characteristic.
+/// </summary>
 public class DeskCommandExecutor
     : IDeskCommandExecutor
 {
@@ -20,6 +23,9 @@ public class DeskCommandExecutor
     private readonly ILogger _logger ;
     private readonly IDeskCommandsProvider _provider ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskCommandExecutor"/> class.
+    /// </summary>
     public DeskCommandExecutor ( ILogger logger ,
                                  IErrorManager errorManager ,
                                  IDeskCommandsProvider provider ,
@@ -40,16 +46,19 @@ public class DeskCommandExecutor
         _control = control ;
     }
 
+    /// <inheritdoc />
     public async Task < bool > Up ( )
     {
         return await Execute ( DeskCommands.MoveUp ) ;
     }
 
+    /// <inheritdoc />
     public async Task < bool > Down ( )
     {
         return await Execute ( DeskCommands.MoveDown ) ;
     }
 
+    /// <inheritdoc />
     public async Task < bool > Stop ( )
     {
         return await Execute ( DeskCommands.MoveStop ) ;

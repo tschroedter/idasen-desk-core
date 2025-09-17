@@ -8,6 +8,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Converts raw GATT bytes into height and speed values.
+/// </summary>
 public class RawValueToHeightAndSpeedConverter
     : IRawValueToHeightAndSpeedConverter
 {
@@ -16,6 +19,9 @@ public class RawValueToHeightAndSpeedConverter
 
     private readonly ILogger _logger ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RawValueToHeightAndSpeedConverter"/> class.
+    /// </summary>
     public RawValueToHeightAndSpeedConverter ( ILogger logger )
     {
         Guard.ArgumentNotNull ( logger ,
@@ -24,6 +30,7 @@ public class RawValueToHeightAndSpeedConverter
         _logger = logger ;
     }
 
+    /// <inheritdoc />
     public bool TryConvert ( IEnumerable < byte > bytes ,
                              out uint height ,
                              out int speed )

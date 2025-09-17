@@ -25,6 +25,9 @@ public interface IInitialHeightProvider
     /// </summary>
     bool HasReceivedHeightAndSpeed { get ; }
 
+    /// <summary>
+    ///     Initializes the provider and subscribes to the necessary sources.
+    /// </summary>
     void Initialize ( ) ;
 
     /// <summary>

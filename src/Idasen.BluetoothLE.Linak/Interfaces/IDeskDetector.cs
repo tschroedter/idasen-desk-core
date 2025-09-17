@@ -1,5 +1,8 @@
 ﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
+/// <summary>
+///     Detects LINAK desks by name or address and publishes discovered instances.
+/// </summary>
 public interface IDeskDetector
     : IDisposable
 {

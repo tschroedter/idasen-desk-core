@@ -6,11 +6,18 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Factory that creates <see cref="IInitialHeightProvider"/> instances used to retrieve the initial desk height.
+/// </summary>
 public class InitialHeightAndSpeedProviderFactory
     : IInitialHeightAndSpeedProviderFactory
 {
     private readonly InitialHeightProvider.Factory _factory ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="InitialHeightAndSpeedProviderFactory"/> class.
+    /// </summary>
+    /// <param name="factory">The IoC factory delegate for <see cref="InitialHeightProvider"/>.</param>
     public InitialHeightAndSpeedProviderFactory ( InitialHeightProvider.Factory factory )
     {
         Guard.ArgumentNotNull ( factory ,
@@ -19,6 +26,7 @@ public class InitialHeightAndSpeedProviderFactory
         _factory = factory ;
     }
 
+    /// <inheritdoc />
     public IInitialHeightProvider Create (
         IDeskCommandExecutor executor ,
         IDeskHeightAndSpeed heightAndSpeed )

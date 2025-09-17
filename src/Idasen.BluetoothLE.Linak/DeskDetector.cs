@@ -11,6 +11,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Observes device discovery updates and connects to the first matching LINAK desk, then publishes it.
+/// </summary>
 public class DeskDetector
     : IDeskDetector
 {
@@ -55,6 +58,9 @@ public class DeskDetector
         _deskDetected = deskDetected ;
     }
 
+    /// <summary>
+    ///     Indicates whether the detector is currently attempting to connect to a desk.
+    /// </summary>
     public bool IsConnecting { get ; private set ; }
 
     /// <inheritdoc />

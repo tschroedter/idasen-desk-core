@@ -1,5 +1,8 @@
 ﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
+/// <summary>
+///     Internal desk orchestrator that binds to GATT characteristics, exposes observables, and executes movement commands.
+/// </summary>
 public interface IDeskConnector
     : IDisposable
 {

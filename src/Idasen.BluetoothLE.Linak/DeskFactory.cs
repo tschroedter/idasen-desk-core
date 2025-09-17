@@ -7,6 +7,9 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 namespace Idasen.BluetoothLE.Linak ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Factory that composes a desk from a device, connector, and facade.
+/// </summary>
 public class DeskFactory
     : IDeskFactory
 {
@@ -14,6 +17,12 @@ public class DeskFactory
     private readonly Func < IDeskConnector , IDesk > _deskFactory ;
     private readonly IDeviceFactory _deviceFactory ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskFactory"/> class.
+    /// </summary>
+    /// <param name="deviceFactory">The device factory.</param>
+    /// <param name="deskConnectorFactory">The desk connector factory.</param>
+    /// <param name="deskFactory">The desk factory.</param>
     public DeskFactory (
         IDeviceFactory deviceFactory ,
         Func < IDevice , IDeskConnector > deskConnectorFactory ,
@@ -31,6 +40,7 @@ public class DeskFactory
         _deskFactory = deskFactory ;
     }
 
+    /// <inheritdoc />
     public async Task < IDesk > CreateAsync ( ulong address )
     {
         var device = await _deviceFactory.FromBluetoothAddressAsync ( address ) ;

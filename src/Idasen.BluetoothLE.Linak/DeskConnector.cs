@@ -13,6 +13,9 @@ namespace Idasen.BluetoothLE.Linak ;
 
 // todo tests
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Connects to a LINAK desk device, wires up characteristics, exposes observables, and delegates movement commands.
+/// </summary>
 public class DeskConnector
     : IDeskConnector
 {
@@ -45,6 +48,9 @@ public class DeskConnector
     private IDeskHeightAndSpeed? _heightAndSpeed ;
     private IDisposable? _subscriber ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskConnector"/> class.
+    /// </summary>
     public DeskConnector (
         ILogger logger ,
         IScheduler scheduler ,

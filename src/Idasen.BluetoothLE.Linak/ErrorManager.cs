@@ -9,12 +9,18 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Default implementation of <see cref="IErrorManager"/> that publishes error notifications via an observable stream.
+/// </summary>
 public class ErrorManager // todo testing, move to more general project
     : IErrorManager , IDisposable
 {
     private readonly ILogger _logger ;
     private readonly ISubject < IErrorDetails > _subject ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ErrorManager"/> class.
+    /// </summary>
     public ErrorManager (
         ILogger logger ,
         ISubject < IErrorDetails > subject )

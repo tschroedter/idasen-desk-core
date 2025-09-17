@@ -6,11 +6,17 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Factory that creates <see cref="IDeskLocker"/> instances.
+/// </summary>
 public class DeskLockerFactory
     : IDeskLockerFactory
 {
     private readonly DeskLocker.Factory _factory ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskLockerFactory"/> class.
+    /// </summary>
     public DeskLockerFactory ( DeskLocker.Factory factory )
     {
         Guard.ArgumentNotNull ( factory ,
@@ -19,6 +25,7 @@ public class DeskLockerFactory
         _factory = factory ;
     }
 
+    /// <inheritdoc />
     public IDeskLocker Create ( IDeskMover deskMover ,
                                 IDeskCommandExecutor executor ,
                                 IDeskHeightAndSpeed heightAndSpeed )

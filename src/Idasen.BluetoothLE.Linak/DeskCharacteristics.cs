@@ -9,6 +9,9 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
+/// <summary>
+///     Aggregates discovered characteristics for a LINAK desk and provides typed accessors.
+/// </summary>
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCharacteristics
     : IDeskCharacteristics
@@ -31,8 +34,12 @@ public class DeskCharacteristics
         _creator = creator ;
     }
 
+    /// <summary>
+    ///     Gets the available characteristics map.
+    /// </summary>
     public IReadOnlyDictionary < DeskCharacteristicKey , ICharacteristicBase > Characteristics => _available ;
 
+    /// <inheritdoc />
     public async Task Refresh ( )
     {
         foreach (var characteristicBase in _available.Values)
@@ -41,6 +48,7 @@ public class DeskCharacteristics
         }
     }
 
+    /// <inheritdoc />
     public IDeskCharacteristics Initialize ( IDevice device )
     {
         Guard.ArgumentNotNull ( device ,
@@ -52,22 +60,29 @@ public class DeskCharacteristics
         return this ;
     }
 
+    /// <inheritdoc />
     public IGenericAccess GenericAccess =>
         _available.As < IGenericAccess > ( DeskCharacteristicKey.GenericAccess ) ;
 
+    /// <inheritdoc />
     public IGenericAttribute GenericAttribute =>
         _available.As < IGenericAttribute > ( DeskCharacteristicKey.GenericAttribute ) ;
 
+    /// <inheritdoc />
     public IReferenceInput ReferenceInput =>
         _available.As < IReferenceInput > ( DeskCharacteristicKey.ReferenceInput ) ;
 
+    /// <inheritdoc />
     public IReferenceOutput ReferenceOutput =>
         _available.As < IReferenceOutput > ( DeskCharacteristicKey.ReferenceOutput ) ;
 
+    /// <inheritdoc />
     public IDpg Dpg => _available.As < IDpg > ( DeskCharacteristicKey.Dpg ) ;
 
+    /// <inheritdoc />
     public IControl Control => _available.As < IControl > ( DeskCharacteristicKey.Control ) ;
 
+    /// <inheritdoc />
     public IDeskCharacteristics WithCharacteristics (
         DeskCharacteristicKey key ,
         ICharacteristicBase characteristic )
@@ -90,6 +105,9 @@ public class DeskCharacteristics
         return this ;
     }
 
+    /// <summary>
+    ///     Returns a multi-line representation of the current characteristics and their values.
+    /// </summary>
     public override string ToString ( )
     {
         var builder = new StringBuilder ( ) ;

@@ -3,6 +3,9 @@
 
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
+/// <summary>
+///     High-level desk API combining connection, movement commands, and state observables.
+/// </summary>
 public interface IDesk
     : IDisposable
 {

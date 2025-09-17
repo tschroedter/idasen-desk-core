@@ -8,11 +8,17 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Calculates whether the target height has been reached based on current height, speed, and stopping distance.
+/// </summary>
 public class HasReachedTargetHeightCalculator
     : IHasReachedTargetHeightCalculator
 {
     private readonly ILogger _logger ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="HasReachedTargetHeightCalculator"/> class.
+    /// </summary>
     public HasReachedTargetHeightCalculator ( ILogger logger )
     {
         Guard.ArgumentNotNull ( logger ,
@@ -107,6 +113,9 @@ public class HasReachedTargetHeightCalculator
         return false ;
     }
 
+    /// <summary>
+    ///     Returns a JSON representation of the calculation state.
+    /// </summary>
     public override string ToString ( )
     {
         return $"{JsonSerializer.Serialize ( this )}" ;

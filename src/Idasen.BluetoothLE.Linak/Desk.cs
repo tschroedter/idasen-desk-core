@@ -5,12 +5,19 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
+/// <summary>
+///     High-level desk facade that delegates operations and events to an underlying <see cref="IDeskConnector"/>.
+/// </summary>
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class Desk
     : IDesk
 {
     private readonly IDeskConnector _connector ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Desk"/> class.
+    /// </summary>
+    /// <param name="connector">Connector handling the actual BLE communication and state.</param>
     public Desk (
         IDeskConnector connector )
     {
