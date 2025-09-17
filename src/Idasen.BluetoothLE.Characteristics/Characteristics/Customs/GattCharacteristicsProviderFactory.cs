@@ -7,11 +7,18 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Default factory for creating <see cref="IGattCharacteristicProvider"/> instances.
+/// </summary>
 public class GattCharacteristicsProviderFactory
     : IGattCharacteristicsProviderFactory
 {
     private readonly GattCharacteristicProvider.Factory _factory ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GattCharacteristicsProviderFactory"/> class.
+    /// </summary>
+    /// <param name="factory">The delegate factory to create providers.</param>
     public GattCharacteristicsProviderFactory (
         GattCharacteristicProvider.Factory factory )
     {
@@ -21,6 +28,7 @@ public class GattCharacteristicsProviderFactory
         _factory = factory ;
     }
 
+    /// <inheritdoc />
     public IGattCharacteristicProvider Create (
         IGattCharacteristicsResultWrapper wrapper )
     {

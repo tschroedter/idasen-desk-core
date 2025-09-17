@@ -7,6 +7,9 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
+/// <summary>
+///     Implements the Control service for sending raw control commands.
+/// </summary>
 public class Control ( ILogger logger ,
                        IScheduler scheduler ,
                        IDevice device ,
@@ -25,22 +28,39 @@ public class Control ( ILogger logger ,
                            descriptionToUuid ) ,
       IControl
 {
+    /// <summary>
+    ///     Factory delegate used by DI to create instances per device.
+    /// </summary>
     public delegate IControl Factory ( IDevice device ) ;
 
     internal const string Control2Key = "Ctrl2" ;
     internal const string Control3Key = "Ctrl3" ;
 
+    /// <summary>
+    ///     Gets the UUID of the Control GATT service.
+    /// </summary>
     public override Guid GattServiceUuid { get ; } = Guid.Parse ( "99FA0001-338A-1024-8A49-009C0215F78A" ) ;
+
+    /// <summary>
+    ///     Raw bytes of the Ctrl2 characteristic.
+    /// </summary>
     public IEnumerable < byte > RawControl2 => GetValueOrEmpty ( Control2Key ) ;
 
+    /// <summary>
+    ///     Raw bytes of the Ctrl3 characteristic.
+    /// </summary>
     public IEnumerable < byte > RawControl3 => GetValueOrEmpty ( Control3Key ) ;
 
+    /// <summary>
+    ///     Attempts to write raw bytes to Ctrl2.
+    /// </summary>
     public async Task < bool > TryWriteRawControl2 ( IEnumerable < byte > bytes )
     {
         return await TryWriteValueAsync ( Control2Key ,
                                           bytes ) ;
     }
 
+    /// <inheritdoc />
     protected override T WithMapping<T> ( ) where T : class
     {
         DescriptionToUuid[Control2Key] = Guid.Parse ( "99fa0002-338a-1024-8a49-009c0215f78a" ) ;

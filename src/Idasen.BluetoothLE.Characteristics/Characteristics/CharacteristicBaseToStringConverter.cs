@@ -7,6 +7,10 @@ using Idasen.BluetoothLE.Core ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
+/// <summary>
+///     Default implementation of <see cref="ICharacteristicBaseToStringConverter"/> that renders
+///     a characteristic's known keys, their raw values (in hex), and available properties.
+/// </summary>
 /// <inheritdoc cref="ICharacteristicBaseToStringConverter" />
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class CharacteristicBaseToStringConverter
@@ -52,6 +56,9 @@ public class CharacteristicBaseToStringConverter
         return builder.ToString ( ) ;
     }
 
+    /// <summary>
+    ///     Returns the cached raw value for the given key, or an empty array if not available.
+    /// </summary>
     protected static IEnumerable < byte > TryGetValueOrEmpty ( CharacteristicBase characteristic ,
                                                                string key )
     {
@@ -59,6 +66,10 @@ public class CharacteristicBaseToStringConverter
                                                             RawArrayEmpty ) ;
     }
 
+    /// <summary>
+    ///     Formats a line for the given key, showing either the hex-encoded value or "Unavailable" if the
+    ///     characteristic is not present.
+    /// </summary>
     protected static string RawValueOrUnavailable ( CharacteristicBase characteristic ,
                                                     string key ,
                                                     IEnumerable < byte > value )

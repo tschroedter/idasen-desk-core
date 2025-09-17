@@ -7,6 +7,9 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
+/// <summary>
+///     Implements the DPG (desk panel) service and exposes raw value(s).
+/// </summary>
 public class Dpg ( ILogger logger ,
                    IScheduler scheduler ,
                    IDevice device ,
@@ -25,13 +28,27 @@ public class Dpg ( ILogger logger ,
                            descriptionToUuid ) ,
       IDpg
 {
+    /// <summary>
+    ///     Factory delegate used by DI to create instances per device.
+    /// </summary>
     public delegate IDpg Factory ( IDevice device ) ;
 
     public const string DpgKey = "Dpg" ;
 
+    /// <summary>
+    ///     Gets the UUID of the DPG GATT service.
+    /// </summary>
     public override Guid GattServiceUuid { get ; } = Guid.Parse ( "99FA0010-338A-1024-8A49-009C0215F78A" ) ;
+
+    /// <summary>
+    ///     Gets the raw DPG value.
+    /// </summary>
     public IEnumerable < byte > RawDpg => GetValueOrEmpty ( DpgKey ) ;
 
+    /// <inheritdoc />
+    /// <summary>
+    ///     Provides the mapping of the characteristic.
+    /// </summary>
     protected override T WithMapping<T> ( ) where T : class
     {
         DescriptionToUuid[DpgKey] = Guid.Parse ( "99FA0011-338A-1024-8A49-009C0215F78A" ) ;

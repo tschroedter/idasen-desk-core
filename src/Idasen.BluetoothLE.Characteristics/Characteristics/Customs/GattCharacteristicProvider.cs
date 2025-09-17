@@ -9,9 +9,15 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Provides discovered GATT characteristics mapped by friendly keys.
+/// </summary>
 public class GattCharacteristicProvider
     : IGattCharacteristicProvider
 {
+    /// <summary>
+    ///     Factory delegate for creating <see cref="GattCharacteristicProvider"/> instances.
+    /// </summary>
     public delegate IGattCharacteristicProvider
         Factory ( IGattCharacteristicsResultWrapper gattCharacteristics ) ;
 
@@ -24,6 +30,11 @@ public class GattCharacteristicProvider
 
     private readonly List < string > _unavailable = [] ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GattCharacteristicProvider"/> class.
+    /// </summary>
+    /// <param name="logger">Logger used for discovery diagnostics.</param>
+    /// <param name="gattCharacteristics">Discovered characteristics wrapper.</param>
     public GattCharacteristicProvider (
         ILogger logger ,
         IGattCharacteristicsResultWrapper gattCharacteristics )
@@ -37,11 +48,15 @@ public class GattCharacteristicProvider
         _gattCharacteristics = gattCharacteristics ;
     }
 
+    /// <inheritdoc />
     public IReadOnlyDictionary < string , IGattCharacteristicWrapper > Characteristics => _characteristics ;
 
+    /// <inheritdoc />
     public IReadOnlyCollection < string > UnavailableCharacteristics => _unavailable ;
+    /// <inheritdoc />
     public IReadOnlyDictionary < string , GattCharacteristicProperties > Properties => _properties ;
 
+    /// <inheritdoc />
     public virtual void Refresh (
         IReadOnlyDictionary < string , Guid > customCharacteristic )
     {

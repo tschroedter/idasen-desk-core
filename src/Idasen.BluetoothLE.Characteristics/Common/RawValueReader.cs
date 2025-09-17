@@ -9,6 +9,9 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Reads raw values from GATT characteristics and exposes the last status and protocol error.
+/// </summary>
 public class RawValueReader
     : IRawValueReader
 {
@@ -18,6 +21,11 @@ public class RawValueReader
     private readonly ILogger _logger ;
     private readonly IBufferReader _reader ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RawValueReader"/> class.
+    /// </summary>
+    /// <param name="logger">Logger used for warnings and diagnostics.</param>
+    /// <param name="reader">Helper used to extract bytes from the platform buffer.</param>
     public RawValueReader ( ILogger logger ,
                             IBufferReader reader )
     {
@@ -30,9 +38,17 @@ public class RawValueReader
         _reader = reader ;
     }
 
+    /// <summary>
+    ///     Gets the last protocol error from a read operation, if any.
+    /// </summary>
     public byte? ProtocolError { get ; private set ; }
+
+    /// <summary>
+    ///     Gets the last GATT communication status from a read operation.
+    /// </summary>
     public GattCommunicationStatus Status { get ; private set ; } = GattCommunicationStatus.Unreachable ;
 
+    /// <inheritdoc />
     public async Task < (bool , byte [ ]) > TryReadValueAsync (
         IGattCharacteristicWrapper characteristic )
     {

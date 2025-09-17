@@ -29,7 +29,7 @@ public static class LoggerProvider
     /// </summary>
     /// <returns>An <see cref="ILogger" /> configured from application settings.</returns>
     [ UsedImplicitly ]
-    public static ILogger CreateLogger ( )
+    public static ILogger CreateLogger (string baseDir = "")
     {
         EnsureSelfLogEnabled ( ) ;
 
@@ -40,7 +40,11 @@ public static class LoggerProvider
                 return _logger ;
             }
 
-            var baseDir = Path.GetDirectoryName ( Assembly.GetEntryAssembly ( )?.Location ?? AppContext.BaseDirectory ) ?? AppContext.BaseDirectory ;
+            if ( string.IsNullOrEmpty ( baseDir ) )
+            {
+                baseDir = Path.GetDirectoryName ( Assembly.GetEntryAssembly ( )?.Location ?? AppContext.BaseDirectory ) ?? AppContext.BaseDirectory ;
+            }
+
 
             var configuration = new ConfigurationBuilder ( )
                                .SetBasePath ( baseDir )

@@ -11,9 +11,13 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Writes raw byte arrays to GATT characteristics, checking capability support before writing.
+/// </summary>
 public class RawValueWriter
     : IRawValueWriter
 {
+    /// <inheritdoc />
     public async Task < bool > TryWriteValueAsync (
         IGattCharacteristicWrapper characteristic ,
         IBuffer buffer )
@@ -36,6 +40,7 @@ public class RawValueWriter
         return status == GattCommunicationStatus.Success ;
     }
 
+    /// <inheritdoc />
     public async Task < bool > TryWritableAuxiliariesValueAsync (
         IGattCharacteristicWrapper characteristic ,
         IBuffer buffer )
@@ -58,6 +63,7 @@ public class RawValueWriter
         return status == GattCommunicationStatus.Success ;
     }
 
+    /// <inheritdoc />
     public async Task < IGattWriteResultWrapper > TryWriteWithoutResponseAsync (
         IGattCharacteristicWrapper characteristic ,
         IBuffer buffer )

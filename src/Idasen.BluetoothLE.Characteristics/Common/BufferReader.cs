@@ -10,11 +10,18 @@ namespace Idasen.BluetoothLE.Characteristics.Common ;
 
 [ ExcludeFromCodeCoverage ]
 [ Intercept ( typeof ( LogAspect ) ) ]
+/// <summary>
+///     Default <see cref="IBufferReader"/> that reads bytes from Windows runtime buffers.
+/// </summary>
 public class BufferReader
     : IBufferReader
 {
     private readonly ILogger _logger ;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="BufferReader"/> class.
+    /// </summary>
+    /// <param name="logger">Logger used for error reporting.</param>
     public BufferReader ( ILogger logger )
     {
         Guard.ArgumentNotNull ( logger ,
@@ -23,6 +30,7 @@ public class BufferReader
         _logger = logger ;
     }
 
+    /// <inheritdoc />
     public bool TryReadValue (
         IBuffer buffer ,
         out byte [ ] bytes )

@@ -15,6 +15,10 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
+/// <summary>
+///     Abstract base for Bluetooth LE characteristic classes. Centralizes service discovery, characteristic mapping, raw
+///     value read/write, caching, and logging. Designed for DI and AOP with LogAspect.
+/// </summary>
 [ Intercept ( typeof ( LogAspect ) ) ]
 public abstract class CharacteristicBase
     : ICharacteristicBase
@@ -81,6 +85,15 @@ public abstract class CharacteristicBase
 
     internal IDescriptionToUuid DescriptionToUuid { get ; }
 
+    /// <summary>
+    ///     Initializes this characteristic by locating the GATT service, creating the characteristic provider,
+    ///     and applying the mapping for type <typeparamref name="T" />. Returns this instance cast to
+    ///     <typeparamref name="T" />.
+    /// </summary>
+    /// <typeparam name="T">The characteristic-specific type to cast and return.</typeparam>
+    /// <returns>This instance cast to <typeparamref name="T" />.</returns>
+    /// <exception cref="ArgumentException">Thrown if the GATT service with <see cref="GattServiceUuid" /> cannot be found.</exception>
+    /// <exception cref="InvalidCastException">Thrown if this instance cannot be cast to <typeparamref name="T" />.</exception>
     public virtual T Initialize<T> ( )
         where T : class
     {
@@ -123,6 +136,9 @@ public abstract class CharacteristicBase
         return this as T ?? throw new InvalidCastException ( $"Can't cast {GetType ( )} to {typeof ( T )}" ) ;
     }
 
+    /// <summary>
+    ///     Refreshes all known characteristics by reading their raw values and updating the local cache.
+    /// </summary>
     public async virtual Task Refresh ( )
     {
         if ( Characteristics == null )
@@ -161,6 +177,9 @@ public abstract class CharacteristicBase
         }
     }
 
+    /// <summary>
+    ///     Disposes this instance. Multiple calls are safe.
+    /// </summary>
     public void Dispose ( )
     {
         Dispose ( true ) ;
@@ -227,6 +246,10 @@ public abstract class CharacteristicBase
                                              RawArrayEmpty ) ;
     }
 
+    /// <summary>
+    ///     Returns a logging-friendly string for this characteristic.
+    /// </summary>
+    /// <returns>A string representation for diagnostics/logging.</returns>
     public override string ToString ( )
     {
         return _toStringConverter.ToString ( this ) ;
