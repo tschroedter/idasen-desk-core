@@ -42,7 +42,7 @@ public static class LoggerProvider
 
             if ( string.IsNullOrEmpty ( baseDir ) )
             {
-                baseDir = Path.GetDirectoryName ( Assembly.GetEntryAssembly ( )?.Location ?? AppContext.BaseDirectory ) ?? AppContext.BaseDirectory ;
+                baseDir = GetBaseDirectoryName ( ) ;
             }
 
             var configuration = new ConfigurationBuilder ( )
@@ -198,5 +198,10 @@ public static class LoggerProvider
                              }
                          } ) ;
         _selfLogEnabled = true ;
+    }
+
+    private static string GetBaseDirectoryName()
+    {
+        return Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location ?? AppContext.BaseDirectory) ?? AppContext.BaseDirectory;
     }
 }
