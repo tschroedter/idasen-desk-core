@@ -1,4 +1,5 @@
-﻿using Castle.DynamicProxy ;
+﻿using System.Diagnostics.CodeAnalysis ;
+using Castle.DynamicProxy ;
 using Idasen.Aop.Interfaces ;
 using Serilog ;
 using Serilog.Events ;
@@ -11,6 +12,7 @@ namespace Idasen.Aop.Aspects ;
 /// </summary>
 /// <param name="logger">Logger used to write debug messages.</param>
 /// <param name="converter">Converter that formats the intercepted invocation.</param>
+[ExcludeFromCodeCoverage]
 public class LogAspect ( ILogger logger ,
                          IInvocationToTextConverter converter )
     : IInterceptor

@@ -1,6 +1,7 @@
 ﻿using Castle.DynamicProxy ;
 using Idasen.Aop.Interfaces ;
 using Serilog ;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,6 +13,7 @@ namespace Idasen.Aop.Aspects ;
 /// </summary>
 /// <param name="logger">Logger used to write error messages.</param>
 /// <param name="converter">Converter that formats the intercepted invocation.</param>
+[ExcludeFromCodeCoverage]
 public class LogExceptionAspect ( ILogger logger ,
                                   IInvocationToTextConverter converter )
     : IInterceptor
