@@ -22,13 +22,16 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
     {
         ArgumentNullException.ThrowIfNull ( invocation ) ;
 
-        var targetTypeName = invocation.TargetType?.FullName ??
-                             invocation.Method.DeclaringType?.FullName ??
-                             "UnknownType" ;
+        // Prefer the declaring type to avoid Castle proxy type names (e.g., SampleProxy)
+        var type = invocation.Method.DeclaringType ??
+                   invocation.TargetType ??
+                   invocation.Proxy?.GetType ( ).BaseType ;
+
+        var typeName = type?.FullName ?? "UnknownType" ;
 
         var arguments = ConvertArgumentsToString ( invocation ) ;
 
-        return $"{targetTypeName}.{invocation.Method.Name}({arguments})" ;
+        return $"{typeName}.{invocation.Method.Name}({arguments})" ;
     }
 
     /// <summary>
