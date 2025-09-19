@@ -82,6 +82,11 @@ public sealed class InvocationToTextConverter ( ILogger logger ) : IInvocationTo
         {
             switch ( argument )
             {
+                case string s:                        return JsonSerializer.Serialize ( s , SafeLogJsonOptions ) ;
+                case bool b:                          return b ? "true" : "false" ;
+                case int i:                           return i.ToString ( System.Globalization.CultureInfo.InvariantCulture ) ;
+                case uint ui:                         return ui.ToString ( System.Globalization.CultureInfo.InvariantCulture ) ;
+                case float f:                         return f.ToString ( "R" , System.Globalization.CultureInfo.InvariantCulture ) ;
                 case CancellationToken:               return "CancellationToken" ;
                 case nint:                            return "IntPtr" ;
                 case Task:                            return "Task" ;
