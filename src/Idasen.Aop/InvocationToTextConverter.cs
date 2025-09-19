@@ -1,5 +1,6 @@
 ﻿using System.Text ;
 using System.Text.Json ;
+using System.Text.Json.Serialization ;
 using Castle.DynamicProxy ;
 using Idasen.Aop.Interfaces ;
 using JetBrains.Annotations ;
@@ -8,12 +9,20 @@ using Serilog ;
 namespace Idasen.Aop ;
 
 /// <summary>
-///     Default implementation of <see cref="IInvocationToTextConverter"/> that renders
+///     Default implementation of <see cref="IInvocationToTextConverter" /> that renders
 ///     target type, method name and a JSON-like list of arguments.
 /// </summary>
 /// <param name="logger">Logger used to report serialization failures at debug level.</param>
-public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextConverter
+public sealed class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextConverter
 {
+    private static readonly JsonSerializerOptions SafeLogJsonOptions = new ( )
+    {
+        ReferenceHandler       = ReferenceHandler.IgnoreCycles ,
+        MaxDepth               = 16 ,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull ,
+        WriteIndented          = false
+    } ;
+
     private readonly ILogger _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
 
     /// <summary>
@@ -21,17 +30,17 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
     /// </summary>
     /// <param name="invocation">The intercepted method invocation.</param>
     /// <returns>A string describing the invocation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="invocation"/> is null.</exception>
-    public string Convert ( IInvocation? invocation )
+    public string Convert ( IInvocation invocation )
     {
-        if ( invocation == null )
-        {
-            throw new ArgumentNullException ( nameof ( invocation ) ) ;
-        }
+        ArgumentNullException.ThrowIfNull ( invocation ) ;
+
+        var targetTypeName = invocation.TargetType?.FullName ??
+                             invocation.Method.DeclaringType?.FullName ??
+                             "UnknownType" ;
 
         var arguments = ConvertArgumentsToString ( invocation.Arguments ) ;
 
-        return $"{invocation.TargetType.FullName}.{invocation.Method.Name}({arguments})" ;
+        return $"{targetTypeName}.{invocation.Method.Name}({arguments})" ;
     }
 
     /// <summary>
@@ -42,16 +51,21 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
     [ UsedImplicitly ]
     internal string ConvertArgumentsToString ( object [ ] arguments )
     {
-        var builder = new StringBuilder ( ) ;
-
-        foreach (var argument in arguments)
+        if ( arguments.Length == 0 )
         {
-            builder.Append ( DumpObject ( argument ) ).Append ( "," ) ;
+            return string.Empty ;
         }
 
-        if ( builder.Length > 0 )
+        var builder = new StringBuilder ( ) ;
+
+        for ( var i = 0 ; i < arguments.Length ; i++ )
         {
-            builder.Length-- ; // Remove the trailing comma
+            builder.Append ( DumpObject ( arguments [ i ] ) ) ;
+
+            if ( i < arguments.Length - 1 )
+            {
+                builder.Append ( "," ) ;
+            }
         }
 
         return builder.ToString ( ) ;
@@ -59,21 +73,21 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
 
     private string DumpObject ( object? argument )
     {
-        if ( argument == null )
+        if ( argument is null )
         {
             return "null" ;
         }
 
         try
         {
-            if ( argument is CancellationToken )
+            switch ( argument )
             {
-                return nameof ( CancellationToken ) ;
-            }
-
-            if ( argument is IntPtr )
-            {
-                return nameof ( IntPtr ) ;
+                case CancellationToken:               return "CancellationToken" ;
+                case nint:                            return "IntPtr" ;
+                case Task:                            return "Task" ;
+                case Stream:                          return "Stream" ;
+                case Exception ex:                    return $"{ex.GetType ( ).FullName}: {ex.Message}" ;
+                case Type t:                          return $"typeof({t.FullName ?? t.Name})" ;
             }
 
             if ( IsWindowsBluetoothInstance ( argument ) )
@@ -81,15 +95,29 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
                 return argument.ToString ( ) ?? "null" ;
             }
 
-            return JsonSerializer.Serialize ( argument ) ;
+            if ( argument is IProxyTargetAccessor )
+            {
+                return $"{argument.GetType ( ).Name}[proxy]" ;
+            }
+
+            return IsIdasenType ( argument )
+                       ? JsonSerializer.Serialize ( argument , SafeLogJsonOptions )
+                       : argument.GetType ( ).FullName ?? argument.GetType ( ).Name ;
         }
-        catch ( Exception e )
+        catch ( Exception ex )
         {
             _logger.Debug ( "Failed to convert object '{Type}' to JSON - Message: '{Message}'" ,
                             argument.GetType ( ).FullName ,
-                            e.Message ) ;
+                            ex.Message ) ;
 
-            return argument.ToString ( ) ?? "null" ;
+            try
+            {
+                return argument.ToString ( ) ?? argument.GetType ( ).Name ;
+            }
+            catch
+            {
+                return argument.GetType ( ).Name ;
+            }
         }
     }
 
@@ -99,5 +127,12 @@ public class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextCon
                        .Namespace?
                        .StartsWith ( "Windows.Devices.Bluetooth" ) ==
                true ;
+    }
+
+    private static bool IsIdasenType ( object argument )
+    {
+        var ns = argument.GetType ( ).Namespace ;
+
+        return ns is "Idasen" || ns?.StartsWith ( "Idasen." , System.StringComparison.Ordinal ) == true ;
     }
 }
