@@ -1,4 +1,7 @@
-﻿using System.Text ;
+﻿using System.Collections ;
+using System.Globalization ;
+using System.Reflection ;
+using System.Text ;
 using System.Text.Json ;
 using System.Text.Json.Serialization ;
 using Castle.DynamicProxy ;
@@ -15,12 +18,14 @@ namespace Idasen.Aop ;
 /// <param name="logger">Logger used to report serialization failures at debug level.</param>
 public sealed class InvocationToTextConverter ( ILogger logger ) : IInvocationToTextConverter
 {
+    private const int MaxStringLengthPerArg = 256 ;
+
     private static readonly JsonSerializerOptions SafeLogJsonOptions = new ( )
     {
-        ReferenceHandler       = ReferenceHandler.IgnoreCycles ,
-        MaxDepth               = 16 ,
+        ReferenceHandler = ReferenceHandler.IgnoreCycles ,
+        MaxDepth = 4 ,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull ,
-        WriteIndented          = false
+        WriteIndented = false
     } ;
 
     private readonly ILogger _logger = logger ?? throw new ArgumentNullException ( nameof ( logger ) ) ;
@@ -38,13 +43,14 @@ public sealed class InvocationToTextConverter ( ILogger logger ) : IInvocationTo
                              invocation.Method.DeclaringType?.FullName ??
                              "UnknownType" ;
 
-        var arguments = ConvertArgumentsToString ( invocation.Arguments ) ;
+        var arguments = ConvertArgumentsToString ( invocation ) ;
 
         return $"{targetTypeName}.{invocation.Method.Name}({arguments})" ;
     }
 
     /// <summary>
     ///     Converts an array of arguments to a comma-separated string.
+    ///     Kept for backward compatibility and test usage. Does not include parameter names.
     /// </summary>
     /// <param name="arguments">The method arguments.</param>
     /// <returns>Formatted argument list.</returns>
@@ -58,9 +64,9 @@ public sealed class InvocationToTextConverter ( ILogger logger ) : IInvocationTo
 
         var builder = new StringBuilder ( ) ;
 
-        for ( var i = 0 ; i < arguments.Length ; i++ )
+        for (var i = 0; i < arguments.Length; i++)
         {
-            builder.Append ( DumpObject ( arguments [ i ] ) ) ;
+            builder.Append ( DumpObject ( arguments[i] ) ) ;
 
             if ( i < arguments.Length - 1 )
             {
@@ -69,6 +75,72 @@ public sealed class InvocationToTextConverter ( ILogger logger ) : IInvocationTo
         }
 
         return builder.ToString ( ) ;
+    }
+
+    /// <summary>
+    ///     Converts an invocation's arguments to a comma-separated string including parameter names.
+    /// </summary>
+    private string ConvertArgumentsToString ( IInvocation invocation )
+    {
+        var args = invocation.Arguments ;
+
+        if ( args.Length == 0 )
+        {
+            return string.Empty ;
+        }
+
+        var parameters = invocation.Method.GetParameters ( ) ;
+        var builder = new StringBuilder ( ) ;
+
+        for (var i = 0; i < args.Length; i++)
+        {
+            var name = i < parameters.Length
+                           ? parameters[i].Name
+                           : $"arg{i}" ;
+            var p = i < parameters.Length
+                        ? parameters[i]
+                        : null ;
+            var modifier = GetParamModifier ( p ) ;
+
+            builder.Append ( modifier ) ;
+            builder.Append ( name ) ;
+            builder.Append ( "=" ) ;
+            builder.Append ( DumpObject ( args[i] ) ) ;
+
+            if ( i < args.Length - 1 )
+            {
+                builder.Append ( "," ) ;
+            }
+        }
+
+        return builder.ToString ( ) ;
+    }
+
+    private static string GetParamModifier ( ParameterInfo? p )
+    {
+        if ( p == null )
+        {
+            return string.Empty ;
+        }
+
+        if ( p.IsOut )
+        {
+            return "out " ;
+        }
+
+        // IsByRef is true for ref/out
+        if ( p.ParameterType.IsByRef )
+        {
+            return "ref " ;
+        }
+
+        if ( p.IsDefined ( typeof ( ParamArrayAttribute ) ,
+                           false ) )
+        {
+            return "params " ;
+        }
+
+        return string.Empty ;
     }
 
     private string DumpObject ( object? argument )
@@ -80,50 +152,138 @@ public sealed class InvocationToTextConverter ( ILogger logger ) : IInvocationTo
 
         try
         {
-            switch ( argument )
+            switch (argument)
             {
-                case string s:                        return JsonSerializer.Serialize ( s , SafeLogJsonOptions ) ;
-                case bool b:                          return b ? "true" : "false" ;
-                case int i:                           return i.ToString ( System.Globalization.CultureInfo.InvariantCulture ) ;
-                case uint ui:                         return ui.ToString ( System.Globalization.CultureInfo.InvariantCulture ) ;
-                case float f:                         return f.ToString ( "R" , System.Globalization.CultureInfo.InvariantCulture ) ;
-                case CancellationToken:               return "CancellationToken" ;
-                case nint:                            return "IntPtr" ;
-                case Task:                            return "Task" ;
-                case Stream:                          return "Stream" ;
-                case Exception ex:                    return $"{ex.GetType ( ).FullName}: {ex.Message}" ;
-                case Type t:                          return $"typeof({t.FullName ?? t.Name})" ;
+                case string s:
+                    return Truncate ( JsonSerializer.Serialize ( s ,
+                                                                 SafeLogJsonOptions ) ,
+                                      MaxStringLengthPerArg ) ;
+
+                case char c:
+                    return JsonSerializer.Serialize ( c ,
+                                                      SafeLogJsonOptions ) ;
+
+                case bool b:
+                    return b
+                               ? "true"
+                               : "false" ;
+
+                case byte [ ] bytes:
+                    return DumpByteArray ( bytes ) ;
+
+                case CancellationToken ct:
+                    return $"CancellationToken(IsCancellationRequested={ct.IsCancellationRequested.ToString ( CultureInfo.InvariantCulture )})" ;
+
+                case Task t:
+                    return $"Task(Status={t.Status})" ;
+
+                case IDictionary dictionary:
+                    return DumpDictionary ( dictionary ) ;
+
+                case IEnumerable enumerable:
+                    // Avoid treating string as IEnumerable here (already handled above)
+                    return DumpEnumerable ( enumerable ) ;
             }
 
             if ( IsWindowsBluetoothInstance ( argument ) )
             {
-                return argument.ToString ( ) ?? "null" ;
+                // Windows.Devices.Bluetooth WinRT types are complex; avoid deep serialization
+                return $"[{argument.GetType ( ).FullName}]" ;
             }
 
-            if ( argument is IProxyTargetAccessor )
+            // For simple primitives and structs, ToString with invariant is fine
+            if ( IsSimpleScalar ( argument ) )
             {
-                return $"{argument.GetType ( ).Name}[proxy]" ;
+                return Truncate ( System.Convert.ToString ( argument ,
+                                                            CultureInfo.InvariantCulture ) ??
+                                  argument.GetType ( ).Name ,
+                                  MaxStringLengthPerArg ) ;
             }
 
-            return IsIdasenType ( argument )
-                       ? JsonSerializer.Serialize ( argument , SafeLogJsonOptions )
-                       : argument.GetType ( ).FullName ?? argument.GetType ( ).Name ;
+            // Try safe JSON for other objects
+            try
+            {
+                var json = JsonSerializer.Serialize ( argument ,
+                                                      SafeLogJsonOptions ) ;
+                return Truncate ( json ,
+                                  MaxStringLengthPerArg ) ;
+            }
+            catch ( Exception ex )
+            {
+                _logger.Debug ( ex ,
+                                "Failed to serialize argument of type {Type}" ,
+                                argument.GetType ( ).FullName ) ;
+                // Do NOT call ToString() on unknown objects to avoid potential recursion/StackOverflow
+                return $"[{argument.GetType ( ).FullName}]" ;
+            }
         }
         catch ( Exception ex )
         {
-            _logger.Debug ( "Failed to convert object '{Type}' to JSON - Message: '{Message}'" ,
-                            argument.GetType ( ).FullName ,
-                            ex.Message ) ;
-
-            try
-            {
-                return argument.ToString ( ) ?? argument.GetType ( ).Name ;
-            }
-            catch
-            {
-                return argument.GetType ( ).Name ;
-            }
+            _logger.Debug ( ex ,
+                            "Failed to dump argument of type {Type}" ,
+                            argument.GetType ( ).FullName ) ;
+            return $"[{argument.GetType ( ).FullName}]" ;
         }
+    }
+
+    private static bool IsSimpleScalar ( object value )
+    {
+        var t = value.GetType ( ) ;
+
+        if ( t.IsEnum )
+        {
+            return true ;
+        }
+
+        // Handle common primitives and BCL value types
+        return t.IsPrimitive ||
+               t == typeof ( decimal ) ||
+               t == typeof ( DateTime ) ||
+               t == typeof ( DateTimeOffset ) ||
+               t == typeof ( TimeSpan ) ||
+               t == typeof ( Guid ) ;
+    }
+
+    private static string DumpByteArray ( byte [ ] bytes )
+    {
+        // Only dump length to avoid large logs
+        return $"byte[{bytes.Length}]" ;
+    }
+
+    private string DumpEnumerable ( IEnumerable enumerable )
+    {
+        // Only dump the length for safety; avoid invoking arbitrary Count members
+        if ( enumerable is Array arr )
+        {
+            return $"IEnumerable[{arr.Length}]" ;
+        }
+
+        if ( enumerable is ICollection nonGenericCollection )
+        {
+            return $"IEnumerable[{nonGenericCollection.Count}]" ;
+        }
+
+        return "IEnumerable[?]" ;
+    }
+
+    private string DumpDictionary ( IDictionary dictionary )
+    {
+        // Only dump the length (Count is available on IDictionary)
+        return $"IDictionary[{dictionary.Count}]" ;
+    }
+
+    private static string Truncate ( string text , int maxLength )
+    {
+        if ( text.Length <= maxLength )
+        {
+            return text ;
+        }
+
+        // Keep closing bracket/quote visibility by using an ellipsis suffix
+        return text.Substring ( 0 ,
+                                Math.Max ( 0 ,
+                                           maxLength - 1 ) ) +
+               "…" ;
     }
 
     private static bool IsWindowsBluetoothInstance ( object argument )
@@ -138,6 +298,9 @@ public sealed class InvocationToTextConverter ( ILogger logger ) : IInvocationTo
     {
         var ns = argument.GetType ( ).Namespace ;
 
-        return ns is "Idasen" || ns?.StartsWith ( "Idasen." , System.StringComparison.Ordinal ) == true ;
+        return ns is "Idasen" ||
+               ns?.StartsWith ( "Idasen." ,
+                                StringComparison.Ordinal ) ==
+               true ;
     }
 }
