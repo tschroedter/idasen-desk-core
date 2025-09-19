@@ -3,7 +3,7 @@
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
-///     Factory for creating <see cref="IGattServicesProvider"/> instances.
+///     Factory for creating <see cref="IGattServicesProvider" /> instances.
 /// </summary>
 public interface IGattServicesProviderFactory
 {

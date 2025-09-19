@@ -12,7 +12,7 @@ public interface IMatchMaker
     ///     Attempts to pair to BLE device by address.
     /// </summary>
     /// <param name="address">The BLE device address.</param>
-    /// <returns>A task that completes with the paired <see cref="IDevice"/>.</returns>
+    /// <returns>A task that completes with the paired <see cref="IDevice" />.</returns>
     [ UsedImplicitly ]
     Task < IDevice > PairToDeviceAsync ( ulong address ) ;
 }

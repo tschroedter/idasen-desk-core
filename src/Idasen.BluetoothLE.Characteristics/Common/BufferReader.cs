@@ -19,7 +19,7 @@ public class BufferReader
     private readonly ILogger _logger ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="BufferReader"/> class.
+    ///     Initializes a new instance of the <see cref="BufferReader" /> class.
     /// </summary>
     /// <param name="logger">Logger used for error reporting.</param>
     public BufferReader ( ILogger logger )

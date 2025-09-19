@@ -10,7 +10,7 @@ public interface ICharacteristicBase
     ///     Initializes the characteristic and returns this instance cast to the requested type.
     /// </summary>
     /// <typeparam name="T">The characteristic-specific type to return.</typeparam>
-    /// <returns>The current instance cast to <typeparamref name="T"/>.</returns>
+    /// <returns>The current instance cast to <typeparamref name="T" />.</returns>
     T? Initialize<T> ( )
         where T : class ;
 

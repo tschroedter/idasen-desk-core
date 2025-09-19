@@ -3,7 +3,7 @@
 namespace Idasen.Aop.Interfaces ;
 
 /// <summary>
-///     Converts a Castle DynamicProxy <see cref="IInvocation"/> into a human-readable string representation.
+///     Converts a Castle DynamicProxy <see cref="IInvocation" /> into a human-readable string representation.
 /// </summary>
 public interface IInvocationToTextConverter
 {

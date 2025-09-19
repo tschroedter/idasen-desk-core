@@ -44,7 +44,7 @@ public interface IDeskCharacteristics
     ///     Initializes the characteristics by discovering them on the specified device.
     /// </summary>
     /// <param name="device">The device to initialize characteristics for.</param>
-    /// <returns>The current instance of <see cref="IDeskCharacteristics"/>.</returns>
+    /// <returns>The current instance of <see cref="IDeskCharacteristics" />.</returns>
     IDeskCharacteristics Initialize ( IDevice device ) ;
 
     /// <summary>
@@ -59,7 +59,7 @@ public interface IDeskCharacteristics
     /// <param name="key">The key of the characteristic to add.</param>
     /// <param name="characteristic">The characteristic instance to add.</param>
     /// <returns>
-    ///     The current instance of <see cref="IDeskCharacteristics"/>.
+    ///     The current instance of <see cref="IDeskCharacteristics" />.
     /// </returns>
     IDeskCharacteristics WithCharacteristics (
         DeskCharacteristicKey key ,

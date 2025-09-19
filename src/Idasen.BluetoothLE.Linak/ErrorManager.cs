@@ -19,7 +19,7 @@ public class ErrorManager // todo testing, move to more general project
     private readonly ISubject < IErrorDetails > _subject ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ErrorManager"/> class.
+    ///     Initializes a new instance of the <see cref="ErrorManager" /> class.
     /// </summary>
     public ErrorManager (
         ILogger logger ,

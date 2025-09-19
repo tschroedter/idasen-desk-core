@@ -9,10 +9,10 @@ namespace Idasen.Launcher ;
 public static class LoggerCallerEnrichmentConfiguration
 {
     /// <summary>
-    ///     Registers the <see cref="CallerEnricher"/> to populate the <c>Caller</c> log property.
+    ///     Registers the <see cref="CallerEnricher" /> to populate the <c>Caller</c> log property.
     /// </summary>
     /// <param name="enrichmentConfiguration">The enrichment configuration builder.</param>
-    /// <returns>The updated <see cref="LoggerConfiguration"/>.</returns>
+    /// <returns>The updated <see cref="LoggerConfiguration" />.</returns>
     public static LoggerConfiguration WithCaller ( this LoggerEnrichmentConfiguration enrichmentConfiguration )
     {
         return enrichmentConfiguration.With < CallerEnricher > ( ) ;

@@ -3,7 +3,7 @@
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
-///     Factory for creating <see cref="IDeskCommandExecutor"/> instances bound to a control characteristic.
+///     Factory for creating <see cref="IDeskCommandExecutor" /> instances bound to a control characteristic.
 /// </summary>
 public interface IDeskCommandExecutorFactory
 {

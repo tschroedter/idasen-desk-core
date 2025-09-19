@@ -1,7 +1,7 @@
 ﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
-///     Factory for creating <see cref="IDesk"/> instances from a device address.
+///     Factory for creating <see cref="IDesk" /> instances from a device address.
 /// </summary>
 public interface IDeskFactory
 {

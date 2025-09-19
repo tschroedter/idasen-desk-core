@@ -3,7 +3,7 @@
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
-///     Creates <see cref="IDeskHeightAndSpeed"/> instances bound to a reference output characteristic.
+///     Creates <see cref="IDeskHeightAndSpeed" /> instances bound to a reference output characteristic.
 /// </summary>
 public interface IDeskHeightAndSpeedFactory
 {

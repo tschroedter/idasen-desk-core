@@ -20,10 +20,12 @@ public interface IReferenceOutput
     ///     UUID of the service.
     /// </summary>
     Guid GattServiceUuid { get ; }
+
     /// <summary>
     ///     Raw HeightSpeed value.
     /// </summary>
     IEnumerable < byte > RawHeightSpeed { get ; }
+
     IEnumerable < byte > RawTwo { get ; }
     IEnumerable < byte > RawThree { get ; }
     IEnumerable < byte > RawFour { get ; }

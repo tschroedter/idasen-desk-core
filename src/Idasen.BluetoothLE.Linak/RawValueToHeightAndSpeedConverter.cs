@@ -20,7 +20,7 @@ public class RawValueToHeightAndSpeedConverter
     private readonly ILogger _logger ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="RawValueToHeightAndSpeedConverter"/> class.
+    ///     Initializes a new instance of the <see cref="RawValueToHeightAndSpeedConverter" /> class.
     /// </summary>
     public RawValueToHeightAndSpeedConverter ( ILogger logger )
     {

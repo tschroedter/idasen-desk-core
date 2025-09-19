@@ -3,7 +3,7 @@
 namespace Idasen.BluetoothLE.Core ;
 
 /// <summary>
-///     Extensions for <see cref="ulong"/> values.
+///     Extensions for <see cref="ulong" /> values.
 /// </summary>
 public static class ULongExtensions
 {

@@ -7,12 +7,12 @@ using Serilog.Events ;
 namespace Idasen.Aop.Aspects ;
 
 /// <summary>
-///     Interceptor that logs method invocations at <see cref="LogEventLevel.Debug"/> using the provided
-///     <see cref="ILogger"/> and <see cref="IInvocationToTextConverter"/>.
+///     Interceptor that logs method invocations at <see cref="LogEventLevel.Debug" /> using the provided
+///     <see cref="ILogger" /> and <see cref="IInvocationToTextConverter" />.
 /// </summary>
 /// <param name="logger">Logger used to write debug messages.</param>
 /// <param name="converter">Converter that formats the intercepted invocation.</param>
-[ExcludeFromCodeCoverage]
+[ ExcludeFromCodeCoverage ]
 public class LogAspect ( ILogger logger ,
                          IInvocationToTextConverter converter )
     : IInterceptor

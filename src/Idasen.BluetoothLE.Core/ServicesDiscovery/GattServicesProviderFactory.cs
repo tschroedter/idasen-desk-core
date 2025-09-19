@@ -16,7 +16,7 @@ public class GattServicesProviderFactory
     private readonly GattServicesProvider.Factory _factory ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="GattServicesProviderFactory"/> class.
+    ///     Initializes a new instance of the <see cref="GattServicesProviderFactory" /> class.
     /// </summary>
     public GattServicesProviderFactory ( GattServicesProvider.Factory factory )
     {
@@ -28,7 +28,7 @@ public class GattServicesProviderFactory
 
     /// <inheritdoc />
     /// <summary>
-    ///     Creates an instance of <see cref="IGattServicesProvider"/> for the specified Bluetooth Low Energy device.
+    ///     Creates an instance of <see cref="IGattServicesProvider" /> for the specified Bluetooth Low Energy device.
     /// </summary>
     public IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper )
     {

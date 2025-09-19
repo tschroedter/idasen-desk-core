@@ -18,7 +18,7 @@ public class DeskFactory
     private readonly IDeviceFactory _deviceFactory ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskFactory"/> class.
+    ///     Initializes a new instance of the <see cref="DeskFactory" /> class.
     /// </summary>
     /// <param name="deviceFactory">The device factory.</param>
     /// <param name="deskConnectorFactory">The desk connector factory.</param>

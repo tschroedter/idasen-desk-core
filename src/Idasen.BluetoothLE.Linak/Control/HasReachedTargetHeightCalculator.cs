@@ -17,7 +17,7 @@ public class HasReachedTargetHeightCalculator
     private readonly ILogger _logger ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="HasReachedTargetHeightCalculator"/> class.
+    ///     Initializes a new instance of the <see cref="HasReachedTargetHeightCalculator" /> class.
     /// </summary>
     public HasReachedTargetHeightCalculator ( ILogger logger )
     {

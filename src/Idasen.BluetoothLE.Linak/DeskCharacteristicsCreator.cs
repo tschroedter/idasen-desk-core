@@ -20,7 +20,7 @@ public class DeskCharacteristicsCreator
     private readonly ILogger _logger ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskCharacteristicsCreator"/> class.
+    ///     Initializes a new instance of the <see cref="DeskCharacteristicsCreator" /> class.
     /// </summary>
     public DeskCharacteristicsCreator (
         ILogger logger ,

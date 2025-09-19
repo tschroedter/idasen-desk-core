@@ -15,9 +15,9 @@ public class InitialHeightAndSpeedProviderFactory
     private readonly InitialHeightProvider.Factory _factory ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="InitialHeightAndSpeedProviderFactory"/> class.
+    ///     Initializes a new instance of the <see cref="InitialHeightAndSpeedProviderFactory" /> class.
     /// </summary>
-    /// <param name="factory">The IoC factory delegate for <see cref="InitialHeightProvider"/>.</param>
+    /// <param name="factory">The IoC factory delegate for <see cref="InitialHeightProvider" />.</param>
     public InitialHeightAndSpeedProviderFactory ( InitialHeightProvider.Factory factory )
     {
         Guard.ArgumentNotNull ( factory ,

@@ -16,7 +16,7 @@ public class GattCharacteristicProvider
     : IGattCharacteristicProvider
 {
     /// <summary>
-    ///     Factory delegate for creating <see cref="GattCharacteristicProvider"/> instances.
+    ///     Factory delegate for creating <see cref="GattCharacteristicProvider" /> instances.
     /// </summary>
     public delegate IGattCharacteristicProvider
         Factory ( IGattCharacteristicsResultWrapper gattCharacteristics ) ;
@@ -31,7 +31,7 @@ public class GattCharacteristicProvider
     private readonly List < string > _unavailable = [] ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="GattCharacteristicProvider"/> class.
+    ///     Initializes a new instance of the <see cref="GattCharacteristicProvider" /> class.
     /// </summary>
     /// <param name="logger">Logger used for discovery diagnostics.</param>
     /// <param name="gattCharacteristics">Discovered characteristics wrapper.</param>
@@ -53,6 +53,7 @@ public class GattCharacteristicProvider
 
     /// <inheritdoc />
     public IReadOnlyCollection < string > UnavailableCharacteristics => _unavailable ;
+
     /// <inheritdoc />
     public IReadOnlyDictionary < string , GattCharacteristicProperties > Properties => _properties ;
 

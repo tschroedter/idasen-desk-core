@@ -9,22 +9,27 @@ public enum DeskCharacteristicKey
     ///     Generic Access service characteristics.
     /// </summary>
     GenericAccess ,
+
     /// <summary>
     ///     Generic Attribute service characteristics.
     /// </summary>
     GenericAttribute ,
+
     /// <summary>
     ///     Reference Input service characteristics.
     /// </summary>
     ReferenceInput ,
+
     /// <summary>
     ///     Reference Output service characteristics.
     /// </summary>
     ReferenceOutput ,
+
     /// <summary>
     ///     DPG service characteristics.
     /// </summary>
     Dpg ,
+
     /// <summary>
     ///     Control service characteristics.
     /// </summary>

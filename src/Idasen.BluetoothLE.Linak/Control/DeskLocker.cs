@@ -31,7 +31,7 @@ public class DeskLocker
     private bool _disposed ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskLocker"/> class.
+    ///     Initializes a new instance of the <see cref="DeskLocker" /> class.
     /// </summary>
     public DeskLocker ( ILogger logger ,
                         IScheduler scheduler ,

@@ -16,7 +16,7 @@ public class DeskCommandExecutorFactory
     private readonly DeskCommandExecutor.Factory _factory ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskCommandExecutorFactory"/> class.
+    ///     Initializes a new instance of the <see cref="DeskCommandExecutorFactory" /> class.
     /// </summary>
     /// <param name="factory">The factory delegate.</param>
     public DeskCommandExecutorFactory ( DeskCommandExecutor.Factory factory )
@@ -29,10 +29,10 @@ public class DeskCommandExecutorFactory
 
     /// <inheritdoc />
     /// <summary>
-    ///     Creates a new instance of <see cref="IDeskCommandExecutor"/>.
+    ///     Creates a new instance of <see cref="IDeskCommandExecutor" />.
     /// </summary>
     /// <param name="control">The control.</param>
-    /// <returns>A new instance of <see cref="IDeskCommandExecutor"/>.</returns>
+    /// <returns>A new instance of <see cref="IDeskCommandExecutor" />.</returns>
     public IDeskCommandExecutor Create ( IControl control )
     {
         Guard.ArgumentNotNull ( control ,

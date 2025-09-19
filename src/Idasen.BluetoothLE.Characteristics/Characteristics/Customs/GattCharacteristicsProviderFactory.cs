@@ -16,7 +16,7 @@ public class GattCharacteristicsProviderFactory
     private readonly GattCharacteristicProvider.Factory _factory ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="GattCharacteristicsProviderFactory"/> class.
+    ///     Initializes a new instance of the <see cref="GattCharacteristicsProviderFactory" /> class.
     /// </summary>
     /// <param name="factory">The delegate factory to create providers.</param>
     public GattCharacteristicsProviderFactory (

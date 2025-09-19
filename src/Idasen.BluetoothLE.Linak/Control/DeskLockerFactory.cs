@@ -15,7 +15,7 @@ public class DeskLockerFactory
     private readonly DeskLocker.Factory _factory ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskLockerFactory"/> class.
+    ///     Initializes a new instance of the <see cref="DeskLockerFactory" /> class.
     /// </summary>
     public DeskLockerFactory ( DeskLocker.Factory factory )
     {

@@ -9,10 +9,12 @@ public enum Direction
     ///     No movement.
     /// </summary>
     None ,
+
     /// <summary>
     ///     Moving up.
     /// </summary>
     Up ,
+
     /// <summary>
     ///     Moving down.
     /// </summary>

@@ -27,7 +27,7 @@ public class GattReadResultWrapper
     private readonly GattReadResult _result ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="GattReadResultWrapper"/> class.
+    ///     Initializes a new instance of the <see cref="GattReadResultWrapper" /> class.
     /// </summary>
     public GattReadResultWrapper ( GattReadResult result )
     {

@@ -11,18 +11,21 @@ using Serilog.Configuration ;
 namespace Idasen.Launcher ;
 
 /// <summary>
-///     Provides factory methods to create and configure an Autofac <see cref="IContainer"/>, wiring up Serilog and the BluetoothLE modules. Overloads allow configuring Serilog from app name/log file, <see cref="ILoggerSettings"/>, or <see cref="IConfiguration"/>.
+///     Provides factory methods to create and configure an Autofac <see cref="IContainer" />, wiring up Serilog and the
+///     BluetoothLE modules. Overloads allow configuring Serilog from app name/log file, <see cref="ILoggerSettings" />, or
+///     <see cref="IConfiguration" />.
 /// </summary>
 [ ExcludeFromCodeCoverage ]
 public static class ContainerProvider
 {
     /// <summary>
-    ///     Creates an Autofac container after configuring Serilog using the provided application name and log file name via <see cref="LoggerProvider"/>.
+    ///     Creates an Autofac container after configuring Serilog using the provided application name and log file name via
+    ///     <see cref="LoggerProvider" />.
     /// </summary>
     /// <param name="appName">Logical application name used for logger diagnostics.</param>
     /// <param name="appLogFileName">Log file name (e.g., <c>app.log</c>).</param>
     /// <param name="otherModules">Optional additional Autofac modules to register.</param>
-    /// <returns>A built <see cref="IContainer"/> ready for use.</returns>
+    /// <returns>A built <see cref="IContainer" /> ready for use.</returns>
     public static IContainer Create ( string appName ,
                                       string appLogFileName ,
                                       IEnumerable < IModule >? otherModules = null )
@@ -34,11 +37,11 @@ public static class ContainerProvider
     }
 
     /// <summary>
-    ///     Creates an Autofac container after configuring Serilog using the provided <see cref="ILoggerSettings"/>.
+    ///     Creates an Autofac container after configuring Serilog using the provided <see cref="ILoggerSettings" />.
     /// </summary>
     /// <param name="settings">Serilog settings source.</param>
     /// <param name="otherModules">Optional additional Autofac modules to register.</param>
-    /// <returns>A built <see cref="IContainer"/> ready for use.</returns>
+    /// <returns>A built <see cref="IContainer" /> ready for use.</returns>
     public static IContainer Create ( ILoggerSettings settings ,
                                       IEnumerable < IModule >? otherModules = null )
     {
@@ -51,11 +54,11 @@ public static class ContainerProvider
     }
 
     /// <summary>
-    ///     Creates an Autofac container after configuring Serilog using the provided Microsoft <see cref="IConfiguration"/>.
+    ///     Creates an Autofac container after configuring Serilog using the provided Microsoft <see cref="IConfiguration" />.
     /// </summary>
     /// <param name="configuration">Configuration root containing Serilog settings.</param>
     /// <param name="otherModules">Optional additional Autofac modules to register.</param>
-    /// <returns>A built <see cref="IContainer"/> ready for use.</returns>
+    /// <returns>A built <see cref="IContainer" /> ready for use.</returns>
     public static IContainer Create ( IConfiguration configuration ,
                                       IEnumerable < IModule >? otherModules = null )
     {

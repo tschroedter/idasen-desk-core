@@ -15,9 +15,9 @@ public class DeskMoverFactory
     private readonly DeskMover.Factory _factory ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskMoverFactory"/> class.
+    ///     Initializes a new instance of the <see cref="DeskMoverFactory" /> class.
     /// </summary>
-    /// <param name="factory">The IoC factory delegate for <see cref="DeskMover"/>.</param>
+    /// <param name="factory">The IoC factory delegate for <see cref="DeskMover" />.</param>
     public DeskMoverFactory ( DeskMover.Factory factory )
     {
         Guard.ArgumentNotNull ( factory ,

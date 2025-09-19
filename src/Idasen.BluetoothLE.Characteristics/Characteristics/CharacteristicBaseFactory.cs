@@ -9,7 +9,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
 /// <summary>
 ///     Factory for creating characteristic instances using Autofac, injecting the required
-///     <see cref="IDevice"/> into the constructor via a named parameter.
+///     <see cref="IDevice" /> into the constructor via a named parameter.
 /// </summary>
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class CharacteristicBaseFactory
@@ -18,7 +18,7 @@ public class CharacteristicBaseFactory
     private readonly ILifetimeScope _scope ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CharacteristicBaseFactory"/> class.
+    ///     Initializes a new instance of the <see cref="CharacteristicBaseFactory" /> class.
     /// </summary>
     /// <param name="scope">The Autofac lifetime scope used to resolve instances.</param>
     public CharacteristicBaseFactory ( ILifetimeScope scope )
@@ -30,11 +30,11 @@ public class CharacteristicBaseFactory
     }
 
     /// <summary>
-    ///     Creates an instance of <typeparamref name="T"/> providing the specified <see cref="IDevice"/>.
+    ///     Creates an instance of <typeparamref name="T" /> providing the specified <see cref="IDevice" />.
     /// </summary>
     /// <typeparam name="T">The service type to resolve.</typeparam>
     /// <param name="device">The device to pass to the resolved constructor.</param>
-    /// <returns>An instance of <typeparamref name="T"/>.</returns>
+    /// <returns>An instance of <typeparamref name="T" />.</returns>
     public T Create<T> ( IDevice device ) where T : notnull
     {
         var instance = _scope.Resolve < T > ( new NamedParameter ( "device" ,

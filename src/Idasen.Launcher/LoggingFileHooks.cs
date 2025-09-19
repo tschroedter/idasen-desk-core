@@ -18,8 +18,8 @@ public class LoggingFileHooks : FileLifecycleHooks
     public string FullPath { get ; private set ; } = string.Empty ;
 
     /// <summary>
-    ///     Called by Serilog when the file sink opens the log file. Updates <see cref="FullPath"/> and
-    ///     the global <see cref="LoggingFile.FullPath"/> value.
+    ///     Called by Serilog when the file sink opens the log file. Updates <see cref="FullPath" /> and
+    ///     the global <see cref="LoggingFile.FullPath" /> value.
     /// </summary>
     /// <param name="path">Full path of the file being opened.</param>
     /// <param name="underlyingStream">The underlying stream used by the sink.</param>

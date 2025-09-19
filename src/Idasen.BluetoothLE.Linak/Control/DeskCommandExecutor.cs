@@ -24,7 +24,7 @@ public class DeskCommandExecutor
     private readonly IDeskCommandsProvider _provider ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskCommandExecutor"/> class.
+    ///     Initializes a new instance of the <see cref="DeskCommandExecutor" /> class.
     /// </summary>
     public DeskCommandExecutor ( ILogger logger ,
                                  IErrorManager errorManager ,

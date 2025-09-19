@@ -8,7 +8,7 @@ using Idasen.BluetoothLE.Core ;
 namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
 /// <summary>
-///     Default implementation of <see cref="ICharacteristicBaseToStringConverter"/> that renders
+///     Default implementation of <see cref="ICharacteristicBaseToStringConverter" /> that renders
 ///     a characteristic's known keys, their raw values (in hex), and available properties.
 /// </summary>
 /// <inheritdoc cref="ICharacteristicBaseToStringConverter" />

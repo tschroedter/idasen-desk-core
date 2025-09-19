@@ -33,7 +33,7 @@ public class DeskHeightAndSpeed
     private IDisposable? _subscriber ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskHeightAndSpeed"/> class.
+    ///     Initializes a new instance of the <see cref="DeskHeightAndSpeed" /> class.
     /// </summary>
     public DeskHeightAndSpeed ( ILogger logger ,
                                 IScheduler scheduler ,

@@ -3,7 +3,7 @@
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 
 /// <summary>
-///     Reads raw byte arrays from Windows runtime <see cref="IBuffer"/> instances.
+///     Reads raw byte arrays from Windows runtime <see cref="IBuffer" /> instances.
 /// </summary>
 public interface IBufferReader
 {

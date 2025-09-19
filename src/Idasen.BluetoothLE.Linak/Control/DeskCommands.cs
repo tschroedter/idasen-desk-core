@@ -9,10 +9,12 @@ public enum DeskCommands
     ///     Move up command.
     /// </summary>
     MoveUp ,
+
     /// <summary>
     ///     Move down command.
     /// </summary>
     MoveDown ,
+
     /// <summary>
     ///     Stop movement command.
     /// </summary>

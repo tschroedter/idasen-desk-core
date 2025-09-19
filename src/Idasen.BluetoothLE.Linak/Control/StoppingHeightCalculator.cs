@@ -22,7 +22,7 @@ public class StoppingHeightCalculator
     private readonly ILogger _logger ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="StoppingHeightCalculator"/> class.
+    ///     Initializes a new instance of the <see cref="StoppingHeightCalculator" /> class.
     /// </summary>
     public StoppingHeightCalculator ( ILogger logger ,
                                       IHasReachedTargetHeightCalculator calculator )

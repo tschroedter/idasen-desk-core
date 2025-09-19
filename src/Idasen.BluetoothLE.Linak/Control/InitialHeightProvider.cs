@@ -32,7 +32,7 @@ public class InitialHeightProvider
     internal IDisposable? _disposalHeightAndSpeed ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="InitialHeightProvider"/> class.
+    ///     Initializes a new instance of the <see cref="InitialHeightProvider" /> class.
     /// </summary>
     public InitialHeightProvider ( ILogger logger ,
                                    IScheduler scheduler ,

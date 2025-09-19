@@ -16,7 +16,7 @@ public class DeviceFactory
     private readonly Device.Factory _factory ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeviceFactory"/> class.
+    ///     Initializes a new instance of the <see cref="DeviceFactory" /> class.
     /// </summary>
     /// <param name="factory">
     ///     The factory delegate used to create devices.

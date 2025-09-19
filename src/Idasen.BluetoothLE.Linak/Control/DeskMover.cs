@@ -46,7 +46,7 @@ public class DeskMover
     private IDeskMovementMonitor? _monitor ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskMover"/> class.
+    ///     Initializes a new instance of the <see cref="DeskMover" /> class.
     /// </summary>
     public DeskMover ( ILogger logger ,
                        IScheduler scheduler ,
@@ -95,8 +95,10 @@ public class DeskMover
 
     /// <inheritdoc />
     public uint Height { get ; private set ; }
+
     /// <inheritdoc />
     public int Speed { get ; private set ; }
+
     /// <inheritdoc />
     public uint TargetHeight { get ; set ; }
 

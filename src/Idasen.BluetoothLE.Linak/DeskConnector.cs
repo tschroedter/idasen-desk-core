@@ -49,7 +49,7 @@ public class DeskConnector
     private IDisposable? _subscriber ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskConnector"/> class.
+    ///     Initializes a new instance of the <see cref="DeskConnector" /> class.
     /// </summary>
     public DeskConnector (
         ILogger logger ,

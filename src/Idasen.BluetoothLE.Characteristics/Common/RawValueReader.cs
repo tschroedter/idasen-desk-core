@@ -22,7 +22,7 @@ public class RawValueReader
     private readonly IBufferReader _reader ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="RawValueReader"/> class.
+    ///     Initializes a new instance of the <see cref="RawValueReader" /> class.
     /// </summary>
     /// <param name="logger">Logger used for warnings and diagnostics.</param>
     /// <param name="reader">Helper used to extract bytes from the platform buffer.</param>

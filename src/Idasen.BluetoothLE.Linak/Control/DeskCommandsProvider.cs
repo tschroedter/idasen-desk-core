@@ -14,16 +14,16 @@ public class DeskCommandsProvider
     private readonly Dictionary < DeskCommands , IEnumerable < byte > > _dictionary = new ( ) ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskCommandsProvider"/> class with default command mappings.
+    ///     Initializes a new instance of the <see cref="DeskCommandsProvider" /> class with default command mappings.
     /// </summary>
     public DeskCommandsProvider ( )
     {
         _dictionary.Add ( DeskCommands.MoveUp ,
-                          new byte[] { 0x47 , 0x00 } ) ;
+                          new byte [ ] { 0x47 , 0x00 } ) ;
         _dictionary.Add ( DeskCommands.MoveDown ,
-                          new byte[] { 0x46 , 0x00 } ) ;
+                          new byte [ ] { 0x46 , 0x00 } ) ;
         _dictionary.Add ( DeskCommands.MoveStop ,
-                          new byte[] { 0x48 , 0x00 } ) ;
+                          new byte [ ] { 0x48 , 0x00 } ) ;
     }
 
     /// <inheritdoc />
@@ -33,7 +33,7 @@ public class DeskCommandsProvider
         var tryGetValue = _dictionary.TryGetValue ( command ,
                                                     out var tempBytes ) ;
 
-        bytes = tempBytes ?? Array.Empty<byte> ( ) ;
+        bytes = tempBytes ?? Array.Empty < byte > ( ) ;
 
         return tryGetValue ;
     }

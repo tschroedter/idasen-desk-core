@@ -1,7 +1,7 @@
 ﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
-///     Creates <see cref="IDeskLocker"/> instances for lock/unlock operations.
+///     Creates <see cref="IDeskLocker" /> instances for lock/unlock operations.
 /// </summary>
 public interface IDeskLockerFactory
 {
