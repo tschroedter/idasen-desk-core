@@ -7,15 +7,13 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+using System.Threading ;
 
 [ assembly : InternalsVisibleTo ( "Idasen.BluetoothLE.Linak.Tests" ) ]
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Orchestrates movement toward a target height using speed/height feedback and calculators; exposes completion and state.
-/// </summary>
 public class DeskMover
     : IDeskMover
 {
@@ -44,6 +42,23 @@ public class DeskMover
     private IDisposable? _disposalHeightAndSpeed ;
     private IInitialHeightProvider? _initialProvider ;
     private IDeskMovementMonitor? _monitor ;
+
+    // Prevent overlapping Move() executions across timer ticks
+    private readonly SemaphoreSlim _moveSemaphore = new ( 1 , 1 ) ;
+    private volatile bool _finishedEmitted ;
+
+    // Backing field with volatile memory semantics for IsAllowedToMove
+    private bool _isAllowedToMove ;
+
+    // Tracks when we are executing inside Move() to avoid re-entrant deadlocks in Stop()
+    private static readonly AsyncLocal < bool > _inMove = new ( ) ;
+
+    // Tracks the last command sent to the executor to avoid re-sending the same command
+    private Direction _currentCommandedDirection = Direction.None ;
+
+    // Near-target tolerance band (device units)
+    private const uint NearTargetBaseTolerance = 2u ;
+    private const uint NearTargetMaxDynamicTolerance = 10u ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskMover" /> class.
@@ -169,27 +184,68 @@ public class DeskMover
     {
         _logger.Debug ( "Stopping..." ) ;
 
+        // If we are already stopped, avoid duplicate work and events
+        if ( ! IsAllowedToMove && _disposableTimer == null )
+        {
+            _logger.Debug ( "Already stopped" ) ;
+            return true ;
+        }
+
         IsAllowedToMove = false ;
         _calculator.MoveIntoDirection = Direction.None ;
 
-        _disposalHeightAndSpeed?.Dispose ( ) ;
         _disposableTimer?.Dispose ( ) ;
-
-        _disposalHeightAndSpeed = null ;
         _disposableTimer = null ;
+        _currentCommandedDirection = Direction.None ;
 
-        var stop = await _executor.Stop ( ) ;
+        var calledFromMove = _inMove.Value ;
 
-        if ( ! stop )
+        if ( calledFromMove )
         {
-            _logger.Error ( "Failed to stop" ) ;
+            // Avoid deadlock: OnTimerElapsed already holds the semaphore
+            var stop = await _executor.Stop ( ).ConfigureAwait ( false ) ;
+
+            if ( ! stop )
+            {
+                _logger.Error ( "Failed to stop" ) ;
+            }
+
+            _logger.Debug ( $"Sending finished with height {Height}" ) ;
+
+            if ( ! _finishedEmitted )
+            {
+                _finishedEmitted = true ;
+                _subjectFinished.OnNext ( Height ) ;
+            }
+
+            return stop ;
         }
 
-        _logger.Debug ( $"Sending finished with height {Height}" ) ;
+        // Ensure no concurrent Move() is running while issuing Stop
+        await _moveSemaphore.WaitAsync ( ).ConfigureAwait ( false ) ;
+        try
+        {
+            var stop = await _executor.Stop ( ).ConfigureAwait ( false ) ;
 
-        _subjectFinished.OnNext ( Height ) ;
+            if ( ! stop )
+            {
+                _logger.Error ( "Failed to stop" ) ;
+            }
 
-        return stop ;
+            _logger.Debug ( $"Sending finished with height {Height}" ) ;
+
+            if ( ! _finishedEmitted )
+            {
+                _finishedEmitted = true ;
+                _subjectFinished.OnNext ( Height ) ;
+            }
+
+            return stop ;
+        }
+        finally
+        {
+            _moveSemaphore.Release ( ) ;
+        }
     }
 
     /// <inheritdoc />
@@ -202,7 +258,11 @@ public class DeskMover
     }
 
     /// <inheritdoc />
-    public bool IsAllowedToMove { get ; private set ; }
+    public bool IsAllowedToMove
+    {
+        get => Volatile.Read ( ref _isAllowedToMove ) ;
+        private set => Volatile.Write ( ref _isAllowedToMove , value ) ;
+    }
 
     private void StartAfterReceivingCurrentHeight ( )
     {
@@ -228,39 +288,59 @@ public class DeskMover
         StartMovingIntoDirection = _calculator.MoveIntoDirection ;
 
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
-                                                 .ObserveOn ( _scheduler )
                                                  .Subscribe ( OnHeightAndSpeedChanged ) ;
 
         _disposableTimer?.Dispose ( ) ;
+        // Use OnTimerElapsed to centralize execution and avoid overlapping calls
         _disposableTimer = Observable.Interval ( TimerInterval )
                                      .ObserveOn ( _scheduler )
-                                     .SubscribeAsync ( _ => Move ( ) ) ;
+                                     .SubscribeAsync ( OnTimerElapsed ) ;
 
         IsAllowedToMove = true ;
+        _finishedEmitted = false ;
+        _currentCommandedDirection = Direction.None ;
 
         _heightMonitor.Reset ( ) ;
     }
 
+    private void OnFinished ( uint height )
+    {
+        Height = height ;
+        StartAfterReceivingCurrentHeight ( ) ;
+    }
+
     internal async Task OnTimerElapsed ( long time )
+    {
+        await TryEvaluateMoveAsync ( true ).ConfigureAwait ( false ) ;
+    }
+
+    private async Task TryEvaluateMoveAsync ( bool fromTimer = false )
     {
         if ( _disposableTimer == null || ! IsAllowedToMove )
         {
             return ;
         }
 
+        if ( ! await _moveSemaphore.WaitAsync ( 0 ).ConfigureAwait ( false ) )
+        {
+            _logger.Debug ( "Move() still running, skipping evaluation" ) ;
+            return ;
+        }
+
         try
         {
-            // Ensure we don't block the calling thread and respect a timeout
-            await Move ( ).WaitAsync ( TimerInterval * 10 ) ;
-        }
-        catch ( TimeoutException )
-        {
-            _logger.Warning ( "Calling Move() timed-out" ) ;
+            _inMove.Value = true ;
+            await Move ( fromTimer ).ConfigureAwait ( false ) ;
         }
         catch ( Exception e )
         {
             _logger.Error ( e ,
                             "Calling Move() failed" ) ;
+        }
+        finally
+        {
+            _inMove.Value = false ;
+            _moveSemaphore.Release ( ) ;
         }
     }
 
@@ -268,23 +348,16 @@ public class DeskMover
     {
         Height = details.Height ;
         Speed = details.Speed ;
+        _ = TryEvaluateMoveAsync ( false ) ;
     }
 
-    private void OnFinished ( uint height )
-    {
-        Height = height ;
-
-        StartAfterReceivingCurrentHeight ( ) ;
-    }
-
-    private async Task Move ( )
+    private async Task Move ( bool fromTimer )
     {
         _logger.Debug ( "Move..." ) ;
 
         if ( ! IsAllowedToMove )
         {
             _logger.Debug ( "Not allowed to move..." ) ;
-
             return ;
         }
 
@@ -296,13 +369,11 @@ public class DeskMover
 
         _heightMonitor.AddHeight ( Height ) ;
 
-        if ( ! _heightMonitor.IsHeightChanging ( ) ) //\ todo testing
+        if ( ! _heightMonitor.IsHeightChanging ( ) )
         {
             _logger.Warning ( "Failed, desk not moving during last " +
                               $"{DeskHeightMonitor.MinimumNumberOfItems} polls." ) ;
-
             await Stop ( ) ;
-
             return ;
         }
 
@@ -312,31 +383,84 @@ public class DeskMover
         _calculator.StartMovingIntoDirection = StartMovingIntoDirection ;
         _calculator.Calculate ( ) ;
 
-        if ( _calculator.MoveIntoDirection == Direction.None ||
-             _calculator.HasReachedTargetHeight )
+        var desired = _calculator.MoveIntoDirection ;
+
+        // Compute tolerance band and predicted crossing using MovementUntilStop
+        var movementAbs = (uint)Math.Abs ( _calculator.MovementUntilStop ) ;
+        var toleranceDynamic = Math.Min ( NearTargetMaxDynamicTolerance , movementAbs ) ;
+        var tolerance = Math.Max ( NearTargetBaseTolerance , toleranceDynamic ) ;
+
+        // If within near-target band, stop immediately to avoid hunting
+        var diff = Height > TargetHeight ? Height - TargetHeight : TargetHeight - Height ;
+        if ( diff <= tolerance )
         {
             await Stop ( ) ;
+            return ;
+        }
+
+        // Predictive crossing-stop to avoid overshoot
+        if ( desired == Direction.Up )
+        {
+            if ( movementAbs > 0 && Height < TargetHeight )
+            {
+                var predictedStop = Height + movementAbs ;
+                if ( predictedStop >= TargetHeight )
+                {
+                    await Stop ( ) ;
+                    return ;
+                }
+            }
+        }
+        else if ( desired == Direction.Down )
+        {
+            if ( movementAbs > 0 && Height > TargetHeight )
+            {
+                var predictedStop = Height <= movementAbs ? 0u : Height - movementAbs ;
+                if ( predictedStop <= TargetHeight )
+                {
+                    await Stop ( ) ;
+                    return ;
+                }
+            }
+        }
+
+        if ( desired == Direction.None || _calculator.HasReachedTargetHeight )
+        {
+            // Only stop on timer ticks or if we were moving already.
+            if ( fromTimer || _currentCommandedDirection != Direction.None )
+            {
+                await Stop ( ) ;
+            }
+            return ;
+        }
+
+        if ( desired != _currentCommandedDirection )
+        {
+            if ( _currentCommandedDirection != Direction.None )
+            {
+                await Stop ( ) ;
+                return ;
+            }
+
+            switch ( desired )
+            {
+                case Direction.Up:
+                    if ( await Up ( ) )
+                    {
+                        _currentCommandedDirection = Direction.Up ;
+                    }
+                    break ;
+                case Direction.Down:
+                    if ( await Down ( ) )
+                    {
+                        _currentCommandedDirection = Direction.Down ;
+                    }
+                    break ;
+            }
 
             return ;
         }
 
-        switch (_calculator.MoveIntoDirection)
-        {
-            case Direction.Up:
-                await Up ( ) ;
-
-                break ;
-            case Direction.Down:
-                await Down ( ) ;
-
-                break ;
-            case Direction.None:
-                break ;
-
-            default:
-                await Stop ( ) ;
-
-                break ;
-        }
+        // desired == _currentCommandedDirection: do nothing
     }
 }
