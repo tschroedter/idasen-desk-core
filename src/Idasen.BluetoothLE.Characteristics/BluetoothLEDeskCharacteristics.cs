@@ -12,12 +12,12 @@ using Idasen.BluetoothLE.Core ;
 namespace Idasen.BluetoothLE.Characteristics ;
 
 // ReSharper disable once InconsistentNaming
-[ ExcludeFromCodeCoverage ]
 /// <summary>
 ///     Autofac module registering Bluetooth LE characteristics, providers, and helpers
 ///     with interface interceptors for AOP logging.
 /// </summary>
-public class BluetoothLEDeskCharacteristics : Module
+[ ExcludeFromCodeCoverage ]
+public sealed class BluetoothLEDeskCharacteristics : Module
 {
     /// <summary>
     ///     Registers all services for the characteristics package into the Autofac container.
@@ -25,6 +25,8 @@ public class BluetoothLEDeskCharacteristics : Module
     /// <param name="builder">The container builder.</param>
     protected override void Load ( ContainerBuilder builder )
     {
+        Guard.ArgumentNotNull ( builder , nameof ( builder ) ) ;
+
         builder.RegisterModule < BluetoothLECoreModule > ( ) ;
 
         RegisterWithInterceptors < IAllGattCharacteristicsProvider , AllGattCharacteristicsProvider > ( builder ) ;
@@ -47,7 +49,7 @@ public class BluetoothLEDeskCharacteristics : Module
     /// <summary>
     ///     Registers the implementation with its interface and enables interface interceptors.
     /// </summary>
-    private void RegisterWithInterceptors<TInterface , TImplementation> ( ContainerBuilder builder )
+    private static void RegisterWithInterceptors<TInterface , TImplementation> ( ContainerBuilder builder )
         where TImplementation : TInterface where TInterface : notnull
     {
         builder.RegisterType < TImplementation > ( )

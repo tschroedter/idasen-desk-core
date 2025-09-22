@@ -8,15 +8,14 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
 /// <summary>
 ///     Reads raw values from GATT characteristics and exposes the last status and protocol error.
 /// </summary>
-public class RawValueReader
+[ Intercept ( typeof ( LogAspect ) ) ]
+public sealed class RawValueReader
     : IRawValueReader
 {
-    private static readonly byte [ ] ArrayEmpty = Enumerable.Empty < byte > ( )
-                                                            .ToArray ( ) ;
+    private static readonly byte [ ] ArrayEmpty = Array.Empty<byte> ( ) ;
 
     private readonly ILogger _logger ;
     private readonly IBufferReader _reader ;
@@ -102,7 +101,7 @@ public class RawValueReader
             return ( false , ArrayEmpty ) ;
         }
 
-        if ( readValue.Value == null ) // todo testing for this if
+        if ( readValue.Value == null )
         {
             return ( false , ArrayEmpty ) ;
         }

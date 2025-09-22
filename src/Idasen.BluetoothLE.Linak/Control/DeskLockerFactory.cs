@@ -1,14 +1,11 @@
 ﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Factory that creates <see cref="IDeskLocker"/> instances.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskLockerFactory
     : IDeskLockerFactory
 {
@@ -19,8 +16,7 @@ public class DeskLockerFactory
     /// </summary>
     public DeskLockerFactory ( DeskLocker.Factory factory )
     {
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        ArgumentNullException.ThrowIfNull ( factory ) ;
 
         _factory = factory ;
     }
@@ -30,12 +26,9 @@ public class DeskLockerFactory
                                 IDeskCommandExecutor executor ,
                                 IDeskHeightAndSpeed heightAndSpeed )
     {
-        Guard.ArgumentNotNull ( deskMover ,
-                                nameof ( deskMover ) ) ;
-        Guard.ArgumentNotNull ( executor ,
-                                nameof ( executor ) ) ;
-        Guard.ArgumentNotNull ( heightAndSpeed ,
-                                nameof ( heightAndSpeed ) ) ;
+        ArgumentNullException.ThrowIfNull ( deskMover ) ;
+        ArgumentNullException.ThrowIfNull ( executor ) ;
+        ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
 
         return _factory ( deskMover ,
                           executor ,

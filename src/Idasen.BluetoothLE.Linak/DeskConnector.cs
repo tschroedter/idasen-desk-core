@@ -67,34 +67,20 @@ public class DeskConnector
         IDeskLockerFactory deskLockerFactory ,
         IErrorManager errorManager )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( subjectFactory ,
-                                nameof ( subjectFactory ) ) ;
-        Guard.ArgumentNotNull ( subjectHeight ,
-                                nameof ( subjectHeight ) ) ;
-        Guard.ArgumentNotNull ( subjectRefreshed ,
-                                nameof ( subjectRefreshed ) ) ;
-        Guard.ArgumentNotNull ( subjectSpeed ,
-                                nameof ( subjectSpeed ) ) ;
-        Guard.ArgumentNotNull ( subjectHeightAndSpeed ,
-                                nameof ( subjectHeightAndSpeed ) ) ;
-        Guard.ArgumentNotNull ( device ,
-                                nameof ( device ) ) ;
-        Guard.ArgumentNotNull ( deskCharacteristics ,
-                                nameof ( deskCharacteristics ) ) ;
-        Guard.ArgumentNotNull ( heightAndSpeedFactory ,
-                                nameof ( heightAndSpeedFactory ) ) ;
-        Guard.ArgumentNotNull ( commandExecutorFactory ,
-                                nameof ( commandExecutorFactory ) ) ;
-        Guard.ArgumentNotNull ( moverFactory ,
-                                nameof ( moverFactory ) ) ;
-        Guard.ArgumentNotNull ( deskLockerFactory ,
-                                nameof ( deskLockerFactory ) ) ;
-        Guard.ArgumentNotNull ( errorManager ,
-                                nameof ( errorManager ) ) ; // todo testing
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( subjectFactory ) ;
+        ArgumentNullException.ThrowIfNull ( subjectHeight ) ;
+        ArgumentNullException.ThrowIfNull ( subjectRefreshed ) ;
+        ArgumentNullException.ThrowIfNull ( subjectSpeed ) ;
+        ArgumentNullException.ThrowIfNull ( subjectHeightAndSpeed ) ;
+        ArgumentNullException.ThrowIfNull ( device ) ;
+        ArgumentNullException.ThrowIfNull ( deskCharacteristics ) ;
+        ArgumentNullException.ThrowIfNull ( heightAndSpeedFactory ) ;
+        ArgumentNullException.ThrowIfNull ( commandExecutorFactory ) ;
+        ArgumentNullException.ThrowIfNull ( moverFactory ) ;
+        ArgumentNullException.ThrowIfNull ( deskLockerFactory ) ;
+        ArgumentNullException.ThrowIfNull ( errorManager ) ;
 
         _logger = logger ;
         _scheduler = scheduler ;
@@ -113,7 +99,8 @@ public class DeskConnector
         _refreshedSubscription = _device.GattServicesRefreshed
                                         .Throttle ( TimeSpan.FromSeconds ( 1 ) )
                                         .SubscribeOn ( scheduler )
-                                        .SubscribeAsync ( OnGattServicesRefreshed ) ;
+                                        .SubscribeAsync ( OnGattServicesRefreshed ,
+                                                          ex => _logger.Error ( ex , "Error handling GattServicesRefreshed" ) ) ;
 
         _deviceNameChanged = subjectFactory ( ) ;
     }
@@ -145,6 +132,7 @@ public class DeskConnector
         _disposableHeight?.Dispose ( ) ;
         _heightAndSpeed?.Dispose ( ) ;
         _subscriber?.Dispose ( ) ;
+        _subscriber = null ;
         _device.Dispose ( ) ;
 
         _finishedSubject.OnCompleted ( ) ;
@@ -251,7 +239,7 @@ public class DeskConnector
     {
         if ( _deskMover == null )
         {
-            _logger.Error ( "Desk needs to be refreshed first!" ) ;
+            _logger.Error ( "Desk needs to be refreshed first" ) ;
 
             deskMover = null ;
 
@@ -267,7 +255,7 @@ public class DeskConnector
     {
         if ( _deskLocker == null )
         {
-            _logger.Error ( "Desk needs to be refreshed first!" ) ;
+            _logger.Error ( "Desk needs to be refreshed first" ) ;
 
             deskLocker = null ;
 
@@ -307,10 +295,11 @@ public class DeskConnector
 
     private async Task DoRefresh ( GattCommunicationStatus status )
     {
-        _logger.Information ( $"[{_device.Id}] " +
-                              $"ConnectionStatus: {_device.ConnectionStatus} " +
-                              $"GattCommunicationStatus: {status} " +
-                              $"GattCommunicationStatus: {_device.GattCommunicationStatus}" ) ;
+        _logger.Information ( "[{Id}] ConnectionStatus={ConnectionStatus} GattCommunicationStatus={Status} DeviceGattStatus={DeviceGattStatus}" ,
+                              _device.Id ,
+                              _device.ConnectionStatus ,
+                              status ,
+                              _device.GattCommunicationStatus ) ;
 
         _deskCharacteristics.Initialize ( _device ) ;
 
@@ -319,7 +308,8 @@ public class DeskConnector
         _subscriber = _deskCharacteristics.GenericAccess
                                           .DeviceNameChanged
                                           .SubscribeOn ( _scheduler )
-                                          .Subscribe ( OnDeviceNameChanged ) ;
+                                          .Subscribe ( OnDeviceNameChanged ,
+                                                      ex => _logger.Error ( ex , "Error handling DeviceNameChanged" ) ) ;
 
         await _deskCharacteristics.Refresh ( ).ConfigureAwait ( false ) ;
 

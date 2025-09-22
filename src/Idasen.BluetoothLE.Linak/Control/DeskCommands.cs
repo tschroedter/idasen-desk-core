@@ -6,17 +6,22 @@
 public enum DeskCommands
 {
     /// <summary>
+    ///     No command.
+    /// </summary>
+    None = 0 ,
+
+    /// <summary>
     ///     Move up command.
     /// </summary>
-    MoveUp ,
+    MoveUp = 1 ,
 
     /// <summary>
     ///     Move down command.
     /// </summary>
-    MoveDown ,
+    MoveDown = 2 ,
 
     /// <summary>
     ///     Stop movement command.
     /// </summary>
-    MoveStop
+    MoveStop = 3
 }

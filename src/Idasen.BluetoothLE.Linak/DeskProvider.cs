@@ -9,10 +9,8 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     High-level service that initializes detection and exposes the detected desk instance.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskProvider
     : IDeskProvider
 {
@@ -25,6 +23,7 @@ public class DeskProvider
     internal readonly AutoResetEvent DeskDetectedEvent = new ( false ) ;
 
     private IDisposable? _deskDetected ;
+    private bool _disposed ;
 
     public DeskProvider (
         ILogger logger ,
@@ -33,16 +32,11 @@ public class DeskProvider
         IDeskDetector detector ,
         IErrorManager errorManager )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( taskRunner ,
-                                nameof ( taskRunner ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( detector ,
-                                nameof ( detector ) ) ;
-        Guard.ArgumentNotNull ( errorManager ,
-                                nameof ( errorManager ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( taskRunner ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( detector ) ;
+        ArgumentNullException.ThrowIfNull ( errorManager ) ;
 
         _logger = logger ;
         _taskRunner = taskRunner ;
@@ -62,7 +56,8 @@ public class DeskProvider
             _detector.Start ( ) ;
 
             await _taskRunner.Run ( ( ) => DoTryGetDesk ( token ) ,
-                                    token ) ;
+                                    token )
+                             .ConfigureAwait ( false ) ;
 
             if ( token.IsCancellationRequested )
             {
@@ -103,16 +98,17 @@ public class DeskProvider
                                       ulong deviceAddress ,
                                       uint deviceTimeout )
     {
-        Guard.ArgumentNotNull ( deviceName ,
-                                nameof ( deviceName ) ) ;
+        ArgumentException.ThrowIfNullOrWhiteSpace ( deviceName ) ;
 
         _detector.Initialize ( deviceName ,
                                deviceAddress ,
                                deviceTimeout ) ;
 
+        _deskDetected?.Dispose ( ) ;
         _deskDetected = _detector.DeskDetected
                                  .ObserveOn ( _scheduler )
-                                 .Subscribe ( OnDeskDetected ) ;
+                                 .Subscribe ( OnDeskDetected ,
+                                             ex => _logger.Error ( ex , "Error while handling detected desk" ) ) ;
 
         return this ;
     }
@@ -120,7 +116,7 @@ public class DeskProvider
     /// <inheritdoc />
     public IDeskProvider StartDetecting ( )
     {
-        _logger.Information ( "Start trying to detect desk..." ) ;
+        _logger.Information ( "Start trying to detect desk" ) ;
 
         try
         {
@@ -140,7 +136,7 @@ public class DeskProvider
     /// <inheritdoc />
     public IDeskProvider StopDetecting ( )
     {
-        _logger.Information ( "Stop trying to detect desk..." ) ;
+        _logger.Information ( "Stop trying to detect desk" ) ;
 
         try
         {
@@ -160,9 +156,17 @@ public class DeskProvider
     /// <inheritdoc />
     public void Dispose ( )
     {
+        if ( _disposed )
+        {
+            return ;
+        }
+
         Desk?.Dispose ( ) ; // todo test
         _deskDetected?.Dispose ( ) ;
+        _deskDetected = null ;
         _detector.Dispose ( ) ;
+
+        _disposed = true ;
     }
 
     /// <summary>
@@ -172,10 +176,10 @@ public class DeskProvider
 
     internal void DoTryGetDesk ( CancellationToken token )
     {
-        while (Desk == null &&
-               ! token.IsCancellationRequested)
+        while ( Desk == null &&
+                ! token.IsCancellationRequested )
         {
-            _logger.Information ( "Trying to find desk..." ) ;
+            _logger.Information ( "Trying to find desk" ) ;
 
             DeskDetectedEvent.WaitOne ( TimeSpan.FromSeconds ( 1 ) ) ;
         }
@@ -183,8 +187,9 @@ public class DeskProvider
 
     internal void OnDeskDetected ( IDesk desk )
     {
-        _logger.Information ( $"Detected desk {desk.Name} with " +
-                              $"Bluetooth address {desk.BluetoothAddress}" ) ;
+        _logger.Information ( "Detected desk {Name} with Bluetooth address {Address}" ,
+                              desk.Name ,
+                              desk.BluetoothAddress ) ;
 
         _detector.Stop ( ) ;
 

@@ -7,10 +7,8 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Calculates whether the target height has been reached based on current height, speed, and stopping distance.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class HasReachedTargetHeightCalculator
     : IHasReachedTargetHeightCalculator
 {
@@ -21,8 +19,7 @@ public class HasReachedTargetHeightCalculator
     /// </summary>
     public HasReachedTargetHeightCalculator ( ILogger logger )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
 
         _logger = logger ;
     }
@@ -51,21 +48,20 @@ public class HasReachedTargetHeightCalculator
     /// <inheritdoc />
     public IHasReachedTargetHeightCalculator Calculate ( )
     {
-        // ReSharper disable MathAbsMethodIsRedundant
+        // Compute absolute difference without casts/Math.Abs (unsigned arithmetic)
         Delta = TargetHeight >= StoppingHeight
-                    ? ( uint ) Math.Abs ( TargetHeight - StoppingHeight )
-                    : ( uint ) Math.Abs ( StoppingHeight - TargetHeight ) ;
-        // ReSharper restore MathAbsMethodIsRedundant
+                    ? TargetHeight - StoppingHeight
+                    : StoppingHeight - TargetHeight ;
 
         if ( StartMovingIntoDirection != MoveIntoDirection )
         {
-            // must be StoppingHeight must be 'behind' TargetHeight
+            // StoppingHeight must be 'behind' TargetHeight when direction changed
             HasReachedTargetHeight = true ;
 
             return this ;
         }
 
-        if ( CalculatePastTargetHeight ( ) )
+        if ( IsPastTargetHeight ( ) )
         {
             HasReachedTargetHeight = true ;
 
@@ -76,41 +72,39 @@ public class HasReachedTargetHeightCalculator
 
         HasReachedTargetHeight = MoveIntoDirection switch
                                  {
-                                     Direction.Up => isCloseToTargetHeight || StoppingHeight >= TargetHeight ,
+                                     Direction.Up   => isCloseToTargetHeight || StoppingHeight >= TargetHeight ,
                                      Direction.Down => isCloseToTargetHeight || StoppingHeight <= TargetHeight ,
-                                     _ => true
+                                     _               => true
                                  } ;
 
-        _logger.Debug ( ToString ( ) ) ;
+        _logger.Debug (
+            "ReachedCalc Target={TargetHeight} Stop={StoppingHeight} Move={MoveIntoDirection} Start={StartMovingIntoDirection} Delta={Delta} UntilStop={MovementUntilStop} Reached={HasReachedTargetHeight}" ,
+            TargetHeight ,
+            StoppingHeight ,
+            MoveIntoDirection ,
+            StartMovingIntoDirection ,
+            Delta ,
+            MovementUntilStop ,
+            HasReachedTargetHeight ) ;
 
         return this ;
     }
 
-    private bool CalculatePastTargetHeight ( )
+    private bool IsPastTargetHeight ( )
     {
-        switch (MoveIntoDirection)
+        switch ( MoveIntoDirection )
         {
             case Direction.Up:
-                if ( StoppingHeight >= TargetHeight )
-                {
-                    return true ;
-                }
-
-                break ;
+                return StoppingHeight >= TargetHeight ;
             case Direction.Down:
-                if ( StoppingHeight <= TargetHeight )
-                {
-                    return true ;
-                }
-
-                break ;
+                return StoppingHeight <= TargetHeight ;
             case Direction.None:
                 return true ;
             default:
-                throw new ArgumentOutOfRangeException ( ) ;
+                throw new ArgumentOutOfRangeException ( nameof ( MoveIntoDirection ) ,
+                                                        MoveIntoDirection ,
+                                                        "Unknown direction" ) ;
         }
-
-        return false ;
     }
 
     /// <summary>

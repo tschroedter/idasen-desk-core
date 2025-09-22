@@ -2,16 +2,13 @@
 using System.Reactive.Linq ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Monitors combined height/speed samples to ensure the desk is actually moving when commanded.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskMovementMonitor
     : IDeskMovementMonitor
 {
@@ -36,12 +33,9 @@ public class DeskMovementMonitor
                                  IScheduler scheduler ,
                                  IDeskHeightAndSpeed heightAndSpeed )
     {
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( heightAndSpeed ,
-                                nameof ( heightAndSpeed ) ) ;
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
 
         _logger = logger ;
         _scheduler = scheduler ;
@@ -52,6 +46,7 @@ public class DeskMovementMonitor
     public void Dispose ( )
     {
         _disposalHeightAndSpeed?.Dispose ( ) ;
+        _disposalHeightAndSpeed = null ;
     }
 
     /// <summary>
@@ -60,18 +55,26 @@ public class DeskMovementMonitor
     /// <param name="capacity">The number of samples to retain in history.</param>
     public void Initialize ( int capacity = DefaultCapacity )
     {
+        if ( capacity <= 0 )
+        {
+            throw new ArgumentOutOfRangeException ( nameof ( capacity ) , capacity , "Capacity must be positive." ) ;
+        }
+
         History = new CircularBuffer < HeightSpeedDetails > ( capacity ) ;
 
+        _disposalHeightAndSpeed?.Dispose ( ) ;
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
                                                  .ObserveOn ( _scheduler )
-                                                 .Subscribe ( OnHeightAndSpeedChanged ) ;
+                                                 .Subscribe ( OnHeightAndSpeedChanged ,
+                                                             ex => _logger.Error ( ex ,
+                                                                                   "Error observing height/speed changes" ) ) ;
     }
 
     private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
     {
         History.PushBack ( details ) ;
 
-        _logger.Debug ( $"History: {string.Join ( ',' , History )}" ) ;
+        _logger.Debug ( "History: {History}" , string.Join ( ',' , History ) ) ;
 
         if ( History.Size < History.Capacity )
         {

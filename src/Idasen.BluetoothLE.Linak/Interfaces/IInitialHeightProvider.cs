@@ -1,6 +1,6 @@
 ﻿// ReSharper disable UnusedMemberInSuper.Global
 
-namespace Idasen.BluetoothLE.Linak.Control ;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     The desk doesn't always provide the current height, so we have to

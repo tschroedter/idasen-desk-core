@@ -76,10 +76,10 @@ public static class LoggerProvider
     /// </exception>
     public static ILogger CreateLogger ( string appName , string appLogFileName )
     {
-        Guard.ArgumentNotNull ( appName ,
-                                nameof ( appName ) ) ;
-        Guard.ArgumentNotNull ( appLogFileName ,
-                                nameof ( appLogFileName ) ) ;
+        Guard.ArgumentNotEmptyOrWhitespace ( appName ,
+                                             nameof ( appName ) ) ;
+        Guard.ArgumentNotEmptyOrWhitespace ( appLogFileName ,
+                                             nameof ( appLogFileName ) ) ;
 
         EnsureSelfLogEnabled ( ) ;
 
@@ -173,6 +173,9 @@ public static class LoggerProvider
     /// <returns>The combined full path.</returns>
     public static string CreateFullPathLogFileName ( string folder , string fileName )
     {
+        ArgumentNullException.ThrowIfNull ( folder ) ;
+        ArgumentNullException.ThrowIfNull ( fileName ) ;
+
         return Path.Combine ( folder ,
                               fileName ) ;
     }

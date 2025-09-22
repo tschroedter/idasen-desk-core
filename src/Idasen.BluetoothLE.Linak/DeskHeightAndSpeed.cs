@@ -6,16 +6,13 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Adapts the LINAK Reference Output characteristic into strongly-typed height and speed observables and values.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskHeightAndSpeed
     : IDeskHeightAndSpeed
 {
@@ -43,20 +40,13 @@ public class DeskHeightAndSpeed
                                 ISubject < int > subjectSpeed ,
                                 ISubject < HeightSpeedDetails > subjectHeightAndSpeed )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( referenceOutput ,
-                                nameof ( referenceOutput ) ) ;
-        Guard.ArgumentNotNull ( converter ,
-                                nameof ( converter ) ) ;
-        Guard.ArgumentNotNull ( subjectHeight ,
-                                nameof ( subjectHeight ) ) ;
-        Guard.ArgumentNotNull ( subjectSpeed ,
-                                nameof ( subjectSpeed ) ) ;
-        Guard.ArgumentNotNull ( subjectHeightAndSpeed ,
-                                nameof ( subjectHeightAndSpeed ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( referenceOutput ) ;
+        ArgumentNullException.ThrowIfNull ( converter ) ;
+        ArgumentNullException.ThrowIfNull ( subjectHeight ) ;
+        ArgumentNullException.ThrowIfNull ( subjectSpeed ) ;
+        ArgumentNullException.ThrowIfNull ( subjectHeightAndSpeed ) ;
 
         _logger = logger ;
         _scheduler = scheduler ;
@@ -85,7 +75,7 @@ public class DeskHeightAndSpeed
     /// <inheritdoc />
     public async Task Refresh ( )
     {
-        await _referenceOutput.Refresh ( ) ;
+        await _referenceOutput.Refresh ( ).ConfigureAwait ( false ) ;
 
         Initialize ( ) ;
     }
@@ -97,11 +87,13 @@ public class DeskHeightAndSpeed
 
         _subscriber = _referenceOutput.HeightSpeedChanged
                                       .ObserveOn ( _scheduler )
-                                      .Subscribe ( OnHeightSpeedChanged ) ;
+                                      .Subscribe ( OnHeightSpeedChanged ,
+                                                  ex => _logger.Error ( ex ,
+                                                                        "Error while handling HeightSpeedChanged" ) ) ;
 
-        if ( _subscriber is UnknownBase )
+        if ( _referenceOutput is UnknownBase )
         {
-            _logger.Warning ( $"{nameof ( _referenceOutput )} is set to Unknown" ) ;
+            _logger.Warning ( "{ReferenceOutput} is set to Unknown" , nameof ( _referenceOutput ) ) ;
         }
 
         if ( ! _converter.TryConvert ( _referenceOutput.RawHeightSpeed ,
@@ -122,6 +114,7 @@ public class DeskHeightAndSpeed
     {
         _referenceOutput.Dispose ( ) ;
         _subscriber?.Dispose ( ) ;
+        _subscriber = null ;
     }
 
     private void OnHeightSpeedChanged ( RawValueChangedDetails details )
@@ -145,6 +138,8 @@ public class DeskHeightAndSpeed
 
         _subjectHeightAndSpeed.OnNext ( value ) ;
 
-        _logger.Debug ( $"Height = {Height} (10ths of a millimeter), Speed = {Speed} (100/RPM)" ) ;
+        _logger.Debug ( "Height={Height} (10ths of a millimeter), Speed={Speed} (100/RPM)" ,
+                        Height ,
+                        Speed ) ;
     }
 }

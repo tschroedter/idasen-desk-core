@@ -2,16 +2,13 @@
 using System.Reactive.Linq ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Implements a movement lock that stops manual operations when the desk is locked and height/speed indicates manual motion.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskLocker
     : IDeskLocker
 {
@@ -39,16 +36,11 @@ public class DeskLocker
                         IDeskCommandExecutor executor ,
                         IDeskHeightAndSpeed heightAndSpeed )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( deskMover ,
-                                nameof ( deskMover ) ) ;
-        Guard.ArgumentNotNull ( executor ,
-                                nameof ( executor ) ) ;
-        Guard.ArgumentNotNull ( heightAndSpeed ,
-                                nameof ( heightAndSpeed ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( deskMover ) ;
+        ArgumentNullException.ThrowIfNull ( executor ) ;
+        ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
 
         _logger = logger ;
         _scheduler = scheduler ;
@@ -57,8 +49,11 @@ public class DeskLocker
         _heightAndSpeed = heightAndSpeed ;
     }
 
+    /// <inheritdoc />
     public IDeskLocker Initialize ( )
     {
+        _disposalHeightAndSpeed?.Dispose ( ) ;
+
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
                                                  .ObserveOn ( _scheduler )
                                                  .SubscribeAsync ( OnHeightAndSpeedChanged ) ;
@@ -66,26 +61,30 @@ public class DeskLocker
         return this ;
     }
 
+    /// <inheritdoc />
     public IDeskLocker Lock ( )
     {
-        _logger.Information ( "Desk locked!" ) ;
+        _logger.Information ( "Desk locked" ) ;
 
         IsLocked = true ;
 
         return this ;
     }
 
+    /// <inheritdoc />
     public bool IsLocked { get ; private set ; }
 
+    /// <inheritdoc />
     public IDeskLocker Unlock ( )
     {
-        _logger.Information ( "Desk unlocked!" ) ;
+        _logger.Information ( "Desk unlocked" ) ;
 
         IsLocked = false ;
 
         return this ;
     }
 
+    /// <inheritdoc />
     public void Dispose ( )
     {
         Dispose ( true ) ;
@@ -102,6 +101,7 @@ public class DeskLocker
         if ( disposing )
         {
             _disposalHeightAndSpeed?.Dispose ( ) ;
+            _disposalHeightAndSpeed = null ;
         }
 
         _disposed = true ;
@@ -119,11 +119,15 @@ public class DeskLocker
             return ;
         }
 
-        _logger.Information ( "Manual move detected. Calling 'Stop'!" ) ;
+        _logger.Information ( "Manual move detected. Calling Stop. Details={Details}" , details ) ;
 
-        _logger.Debug ( "{Details}" ,
-                        details ) ;
-
-        await _executor.Stop ( ) ;
+        try
+        {
+            await _executor.Stop ( ).ConfigureAwait ( false ) ;
+        }
+        catch ( Exception ex )
+        {
+            _logger.Error ( ex , "Error while stopping after manual move detection" ) ;
+        }
     }
 }

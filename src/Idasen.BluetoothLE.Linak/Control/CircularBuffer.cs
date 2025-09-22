@@ -1,10 +1,9 @@
-﻿#nullable disable
+#nullable disable
 
 using System.Collections ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-/// <inheritdoc />
 /// <summary>
 ///     Circular buffer.
 ///     The original source code from https://github.com/joaoportela/CircularBuffer-CSharp.
@@ -63,15 +62,11 @@ public class CircularBuffer<T> : IEnumerable < T >
     {
         if ( capacity < 1 )
         {
-            throw new ArgumentException (
-                                         "Circular buffer cannot have negative or zero capacity." ,
-                                         nameof ( capacity ) ) ;
+            throw new ArgumentOutOfRangeException ( nameof ( capacity ) , capacity ,
+                                                    "Capacity must be positive." ) ;
         }
 
-        if ( items == null )
-        {
-            throw new ArgumentNullException ( nameof ( items ) ) ;
-        }
+        ArgumentNullException.ThrowIfNull ( items ) ;
 
         if ( items.Length > capacity )
         {
@@ -118,6 +113,11 @@ public class CircularBuffer<T> : IEnumerable < T >
     public int Size => _size ;
 
     /// <summary>
+    ///     Alias for <see cref="Size"/> to align with common .NET collection naming.
+    /// </summary>
+    public int Count => _size ;
+
+    /// <summary>
     ///     Index access to elements in buffer.
     ///     Index does not loop around like when adding elements,
     ///     valid interval is [0;Size[
@@ -137,7 +137,7 @@ public class CircularBuffer<T> : IEnumerable < T >
                 throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer is empty" ) ;
             }
 
-            if ( index >= _size )
+            if ( index < 0 || index >= _size )
             {
                 throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer size is {_size}" ) ;
             }
@@ -153,7 +153,7 @@ public class CircularBuffer<T> : IEnumerable < T >
                 throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer is empty" ) ;
             }
 
-            if ( index >= _size )
+            if ( index < 0 || index >= _size )
             {
                 throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer size is {_size}" ) ;
             }
@@ -171,20 +171,16 @@ public class CircularBuffer<T> : IEnumerable < T >
     /// <returns>An enumerator that can be used to iterate this collection.</returns>
     public IEnumerator < T > GetEnumerator ( )
     {
-        var segments = new [ ] { ArrayOne ( ) , ArrayTwo ( ) } ;
-
-        foreach (var segment in segments)
+        var segment1 = ArrayOne ( ) ;
+        for ( var i = 0 ; i < segment1.Count ; i++ )
         {
-            for (var i = 0; i < segment.Count; i++)
-            {
-                if ( segment.Array == null )
-                    // todo this should log an error
-                {
-                    continue ;
-                }
+            yield return segment1.Array[segment1.Offset + i] ;
+        }
 
-                yield return segment.Array[segment.Offset + i] ;
-            }
+        var segment2 = ArrayTwo ( ) ;
+        for ( var i = 0 ; i < segment2.Count ; i++ )
+        {
+            yield return segment2.Array[segment2.Offset + i] ;
         }
     }
 
@@ -304,23 +300,21 @@ public class CircularBuffer<T> : IEnumerable < T >
     {
         var newArray = new T[Size] ;
         var newArrayOffset = 0 ;
-        var segments = new [ ] { ArrayOne ( ) , ArrayTwo ( ) } ;
 
-        foreach (var segment in segments)
-        {
-            if ( segment.Array == null )
-                // todo this should log an error
-            {
-                continue ;
-            }
+        var segment1 = ArrayOne ( ) ;
+        Array.Copy ( segment1.Array ,
+                     segment1.Offset ,
+                     newArray ,
+                     newArrayOffset ,
+                     segment1.Count ) ;
+        newArrayOffset += segment1.Count ;
 
-            Array.Copy ( segment.Array ,
-                         segment.Offset ,
-                         newArray ,
-                         newArrayOffset ,
-                         segment.Count ) ;
-            newArrayOffset += segment.Count ;
-        }
+        var segment2 = ArrayTwo ( ) ;
+        Array.Copy ( segment2.Array ,
+                     segment2.Offset ,
+                     newArray ,
+                     newArrayOffset ,
+                     segment2.Count ) ;
 
         return newArray ;
     }

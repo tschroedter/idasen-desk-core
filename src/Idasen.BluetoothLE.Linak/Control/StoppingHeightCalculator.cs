@@ -8,9 +8,6 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Calculates the estimated stopping height, movement until stop, and whether a target height has been reached.
-/// </summary>
 public class StoppingHeightCalculator
     : IStoppingHeightCalculator
 {
@@ -27,10 +24,8 @@ public class StoppingHeightCalculator
     public StoppingHeightCalculator ( ILogger logger ,
                                       IHasReachedTargetHeightCalculator calculator )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( calculator ,
-                                nameof ( calculator ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( calculator ) ;
 
         _logger = logger ;
         _calculator = calculator ;
@@ -77,10 +72,11 @@ public class StoppingHeightCalculator
     {
         MoveIntoDirection = CalculateMoveIntoDirection ( ) ;
 
-        _logger.Information ( $"Height = {Height}," +
-                              $"Speed = {Speed}," +
-                              $"StartMovingIntoDirection = {StartMovingIntoDirection} " +
-                              $"MoveIntoDirection = {MoveIntoDirection}" ) ;
+        _logger.Information ( "Height={Height}, Speed={Speed}, StartMove={StartMovingIntoDirection}, Move={MoveIntoDirection}" ,
+                              Height ,
+                              Speed ,
+                              StartMovingIntoDirection ,
+                              MoveIntoDirection ) ;
 
         if ( Speed == 0 )
         {
@@ -96,7 +92,10 @@ public class StoppingHeightCalculator
 
     private Direction CalculateMoveIntoDirection ( )
     {
-        if ( Math.Abs ( ( int ) Height - ( int ) TargetHeight ) <= MaxSpeedToStopMovement * FudgeFactor )
+        var diff = ( long ) Height - ( long ) TargetHeight ;
+        var threshold = ( double ) MaxSpeedToStopMovement * FudgeFactor ;
+
+        if ( Math.Abs ( diff ) <= threshold )
         {
             return Direction.None ;
         }
@@ -108,16 +107,20 @@ public class StoppingHeightCalculator
 
     private void CalculateForSpeed ( )
     {
-        MovementUntilStop = DefaultMaxSpeedToStopMovement ;
-
-        StoppingHeight = Height ;
-
+        // Preserve sign semantics from original implementation
         MovementUntilStop = ( int ) ( ( float ) Speed /
                                       MaxSpeed *
                                       MaxSpeedToStopMovement *
                                       FudgeFactor ) ;
 
-        StoppingHeight = ( uint ) ( StoppingHeight + MovementUntilStop ) ;
+        // Original behavior: add MovementUntilStop (signed) to current height
+        var stopping = ( long ) Height + MovementUntilStop ;
+        if ( stopping < 0 )
+            stopping = 0 ;
+        if ( stopping > uint.MaxValue )
+            stopping = uint.MaxValue ;
+
+        StoppingHeight = ( uint ) stopping ;
 
         var (hasReachedTargetHeight , delta) = CalculateHasReachedTargetHeight ( ) ;
 
@@ -129,12 +132,13 @@ public class StoppingHeightCalculator
 
     private void LogStatus ( )
     {
-        _logger.Information ( $"Height = {Height}, " +
-                              $"Speed = {Speed} " +
-                              $"TargetHeight = {TargetHeight}, " +
-                              $"StoppingHeight = {StoppingHeight} " +
-                              $"MovementUntilStop = {MovementUntilStop} " +
-                              $"Delta = {Delta:F2}" ) ;
+        _logger.Information ( "Height={Height}, Speed={Speed}, TargetHeight={TargetHeight}, StoppingHeight={StoppingHeight}, MovementUntilStop={MovementUntilStop}, Delta={Delta}" ,
+                              Height ,
+                              Speed ,
+                              TargetHeight ,
+                              StoppingHeight ,
+                              MovementUntilStop ,
+                              Delta ) ;
     }
 
     private void CalculateForSpeedZero ( )

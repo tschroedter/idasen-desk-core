@@ -8,10 +8,8 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Executes raw control commands against the desk's control characteristic.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCommandExecutor
     : IDeskCommandExecutor
 {
@@ -31,14 +29,10 @@ public class DeskCommandExecutor
                                  IDeskCommandsProvider provider ,
                                  IControl control )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( provider ,
-                                nameof ( provider ) ) ;
-        Guard.ArgumentNotNull ( control ,
-                                nameof ( control ) ) ;
-        Guard.ArgumentNotNull ( errorManager ,
-                                nameof ( errorManager ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( provider ) ;
+        ArgumentNullException.ThrowIfNull ( control ) ;
+        ArgumentNullException.ThrowIfNull ( errorManager ) ;
 
         _logger = logger ;
         _errorManager = errorManager ;
@@ -47,38 +41,30 @@ public class DeskCommandExecutor
     }
 
     /// <inheritdoc />
-    public async Task < bool > Up ( )
-    {
-        return await Execute ( DeskCommands.MoveUp ) ;
-    }
+    public Task < bool > Up ( ) => Execute ( DeskCommands.MoveUp ) ;
 
     /// <inheritdoc />
-    public async Task < bool > Down ( )
-    {
-        return await Execute ( DeskCommands.MoveDown ) ;
-    }
+    public Task < bool > Down ( ) => Execute ( DeskCommands.MoveDown ) ;
 
     /// <inheritdoc />
-    public async Task < bool > Stop ( )
-    {
-        return await Execute ( DeskCommands.MoveStop ) ;
-    }
+    public Task < bool > Stop ( ) => Execute ( DeskCommands.MoveStop ) ;
 
     private async Task < bool > Execute ( DeskCommands deskCommand )
     {
         if ( ! _provider.TryGetValue ( deskCommand ,
                                        out var bytes ) )
         {
-            _logger.Error ( $"Failed for unknown command '{deskCommand}'" ) ;
+            _logger.Error ( "Failed for unknown command {Command}" , deskCommand ) ;
 
             return false ;
         }
 
-        var result = await _control.TryWriteRawControl2 ( bytes ) ;
+        var result = await _control.TryWriteRawControl2 ( bytes )
+                                   .ConfigureAwait ( false ) ;
 
         if ( ! result )
         {
-            ExecutionFailed ( deskCommand ) ; // to do testing
+            ExecutionFailed ( deskCommand ) ;
         }
 
         return result ;
@@ -86,10 +72,9 @@ public class DeskCommandExecutor
 
     private void ExecutionFailed ( DeskCommands deskCommand )
     {
-        var message = $"Failed for '{deskCommand}' command. " +
-                      Constants.CheckAndEnableBluetooth ;
-
-        _logger.Error ( message ) ;
+        _logger.Error ( "Failed for '{Command}' command. {Hint}" ,
+                        deskCommand ,
+                        Constants.CheckAndEnableBluetooth ) ;
 
         _errorManager.PublishForMessage ( Constants.CheckAndEnableBluetooth ) ;
     }

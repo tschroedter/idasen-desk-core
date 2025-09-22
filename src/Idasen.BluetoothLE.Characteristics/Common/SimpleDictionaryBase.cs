@@ -60,9 +60,9 @@ public class SimpleDictionaryBase<TKey , TValue>
         {
             lock (_padlock)
             {
+                // Avoid invalid casts; only include keys that are truly strings
                 return _dictionary.Keys
-                                  .Cast < string > ( )
-                                  .Where ( x => x != null )
+                                  .OfType < string > ( )
                                   .ToArray ( ) ;
             }
         }
@@ -75,8 +75,8 @@ public class SimpleDictionaryBase<TKey , TValue>
         {
             lock (_padlock)
             {
-                return _dictionary.ToDictionary ( item => item.Key ,
-                                                  item => item.Value ) ;
+                // Create a shallow copy snapshot to avoid exposing internal state
+                return new Dictionary < TKey , TValue > ( _dictionary ) ;
             }
         }
     }

@@ -1,6 +1,4 @@
-﻿using Idasen.BluetoothLE.Linak.Control ;
-
-namespace Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Creates providers that fetch the initial height and speed values.

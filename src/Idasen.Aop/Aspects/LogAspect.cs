@@ -13,7 +13,7 @@ namespace Idasen.Aop.Aspects ;
 /// <param name="logger">Logger used to write debug messages.</param>
 /// <param name="converter">Converter that formats the intercepted invocation.</param>
 [ ExcludeFromCodeCoverage ]
-public class LogAspect ( ILogger logger ,
+public sealed class LogAspect ( ILogger logger ,
                          IInvocationToTextConverter converter )
     : IInterceptor
 {

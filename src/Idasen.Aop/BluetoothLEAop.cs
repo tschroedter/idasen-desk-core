@@ -12,7 +12,7 @@ namespace Idasen.Aop ;
 ///     invocation-to-text conversion and logging aspects.
 /// </summary>
 [ ExcludeFromCodeCoverage ]
-public class BluetoothLEAop
+public sealed class BluetoothLEAop
     : Module
 {
     /// <summary>
@@ -21,6 +21,8 @@ public class BluetoothLEAop
     /// <param name="builder">The Autofac container builder.</param>
     protected override void Load ( ContainerBuilder builder )
     {
+        ArgumentNullException.ThrowIfNull ( builder ) ;
+
         builder.RegisterType < InvocationToTextConverter > ( )
                .As < IInvocationToTextConverter > ( ) ;
 

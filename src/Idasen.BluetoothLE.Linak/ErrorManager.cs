@@ -1,22 +1,21 @@
-﻿using System.Reactive.Subjects ;
+﻿using System.Reactive.Linq ;
+using System.Reactive.Subjects ;
 using System.Runtime.CompilerServices ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Default implementation of <see cref="IErrorManager"/> that publishes error notifications via an observable stream.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class ErrorManager // todo testing, move to more general project
     : IErrorManager , IDisposable
 {
     private readonly ILogger _logger ;
     private readonly ISubject < IErrorDetails > _subject ;
+    private bool _disposed ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ErrorManager" /> class.
@@ -25,25 +24,47 @@ public class ErrorManager // todo testing, move to more general project
         ILogger logger ,
         ISubject < IErrorDetails > subject )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( subject ,
-                                nameof ( subject ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( subject ) ;
+
         _logger = logger ;
         _subject = subject ;
     }
 
+    /// <inheritdoc />
     public void Dispose ( )
     {
-        // Complete the stream to release subscribers in long-running apps
-        _subject.OnCompleted ( ) ;
+        Dispose ( true ) ;
+        GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+        {
+            return ;
+        }
+
+        if ( disposing )
+        {
+            // Complete the stream to release subscribers in long-running apps
+            try
+            {
+                _subject.OnCompleted ( ) ;
+            }
+            catch ( Exception ex )
+            {
+                _logger.Warning ( ex , "Error completing ErrorChanged stream" ) ;
+            }
+        }
+
+        _disposed = true ;
     }
 
     /// <inheritdoc />
     public void Publish ( IErrorDetails details )
     {
-        Guard.ArgumentNotNull ( details ,
-                                nameof ( details ) ) ;
+        ArgumentNullException.ThrowIfNull ( details ) ;
 
         _logger.Debug ( "Received {Details}" ,
                         details ) ;
@@ -55,8 +76,7 @@ public class ErrorManager // todo testing, move to more general project
     public void PublishForMessage ( string message ,
                                     [ CallerMemberName ] string caller = "" )
     {
-        Guard.ArgumentNotNull ( message ,
-                                nameof ( message ) ) ;
+        ArgumentNullException.ThrowIfNull ( message ) ;
 
         _logger.Debug ( "Received {Message}" ,
                         message ) ;
@@ -65,5 +85,6 @@ public class ErrorManager // todo testing, move to more general project
                                              caller ) ) ;
     }
 
+    // Return the underlying subject to satisfy existing unit tests
     public IObservable < IErrorDetails > ErrorChanged => _subject ;
 }

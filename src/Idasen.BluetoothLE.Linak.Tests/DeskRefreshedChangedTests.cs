@@ -8,12 +8,15 @@ using Selkie.AutoMocking ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
-public class DeskRefreshedChangedTests
+public sealed class DeskRefreshedChangedTests
     : DeskRaiseEventForDeskBase < bool >
 {
     protected override void SetSubscription ( IDesk desk ,
                                               TestScheduler scheduler )
     {
+        ArgumentNullException.ThrowIfNull ( desk ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+
         desk.RefreshedChanged
             .ObserveOn ( scheduler )
             .Subscribe ( OnRaised ) ;
@@ -22,6 +25,9 @@ public class DeskRefreshedChangedTests
     protected override void SetSubject ( IDeskConnector connector ,
                                          Subject < bool > subject )
     {
+        ArgumentNullException.ThrowIfNull ( connector ) ;
+        ArgumentNullException.ThrowIfNull ( subject ) ;
+
         connector.RefreshedChanged
                  .Returns ( subject ) ;
     }

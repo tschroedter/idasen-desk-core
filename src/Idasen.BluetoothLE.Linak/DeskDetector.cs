@@ -3,17 +3,14 @@ using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Observes device discovery updates and connects to the first matching LINAK desk, then publishes it.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskDetector
     : IDeskDetector
 {
@@ -24,6 +21,8 @@ public class DeskDetector
     private readonly ILogger _logger ;
     private readonly IDeviceMonitorWithExpiry _monitor ;
     private readonly IScheduler _scheduler ;
+
+    private readonly object _sync = new ( ) ;
 
     // todo use list of disposables
     private IDesk? _desk ;
@@ -40,16 +39,11 @@ public class DeskDetector
                           IDeskFactory factory ,
                           ISubject < IDesk > deskDetected )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( monitor ,
-                                nameof ( monitor ) ) ;
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
-        Guard.ArgumentNotNull ( deskDetected ,
-                                nameof ( deskDetected ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( monitor ) ;
+        ArgumentNullException.ThrowIfNull ( factory ) ;
+        ArgumentNullException.ThrowIfNull ( deskDetected ) ;
 
         _logger = logger ;
         _scheduler = scheduler ;
@@ -82,33 +76,36 @@ public class DeskDetector
                                       ulong deviceAddress ,
                                       uint deviceTimeout )
     {
-        Guard.ArgumentNotNull ( deviceName ,
-                                nameof ( deviceName ) ) ;
+        ArgumentException.ThrowIfNullOrWhiteSpace ( deviceName ) ;
 
         _monitor.TimeOut = TimeSpan.FromSeconds ( deviceTimeout ) ;
 
         _updated = _monitor.DeviceUpdated
                            .ObserveOn ( _scheduler )
-                           .Subscribe ( OnDeviceUpdated ) ;
+                           .Subscribe ( OnDeviceUpdated ,
+                                       ex => _logger.Error ( ex , "Error handling DeviceUpdated" ) ) ;
 
         _discovered = _monitor.DeviceDiscovered
                               .ObserveOn ( _scheduler )
-                              .Subscribe ( OnDeviceDiscovered ) ;
+                              .Subscribe ( OnDeviceDiscovered ,
+                                          ex => _logger.Error ( ex , "Error handling DeviceDiscovered" ) ) ;
 
         _nameChanged = _monitor.DeviceNameUpdated
                                .ObserveOn ( _scheduler )
-                               .Subscribe ( OnDeviceNameChanged ) ;
+                               .Subscribe ( OnDeviceNameChanged ,
+                                           ex => _logger.Error ( ex , "Error handling DeviceNameUpdated" ) ) ;
 
         // todo find by address if possible
 
         _deskFound = _monitor.DeviceNameUpdated
                              .ObserveOn ( _scheduler )
-                             .Where ( device => device.Name != null &&
-                                                device.Name.StartsWith ( deviceName ,
-                                                                         StringComparison
-                                                                            .InvariantCultureIgnoreCase ) ||
-                                                device.Address == deviceAddress )
-                             .SubscribeAsync ( OnDeskDiscovered ) ;
+                             .Where ( device =>
+                                         ( device.Name != null &&
+                                           device.Name.StartsWith ( deviceName ,
+                                                                    StringComparison.InvariantCultureIgnoreCase ) ) ||
+                                         device.Address == deviceAddress )
+                             .SubscribeAsync ( OnDeskDiscovered ,
+                                               ex => _logger.Error ( ex , "Error handling OnDeskDiscovered" ) ) ;
 
         return this ;
     }
@@ -130,7 +127,7 @@ public class DeskDetector
 
     private async Task OnDeskDiscovered ( IDevice device )
     {
-        lock (this)
+        lock ( _sync )
         {
             if ( _desk != null || IsConnecting )
             {
@@ -142,18 +139,20 @@ public class DeskDetector
 
         try
         {
-            _logger.Information ( $"[{device.MacAddress}] Desk '{device.Name}' discovered" ) ;
+            _logger.Information ( "[{Mac}] Desk '{Name}' discovered" , device.MacAddress , device.Name ) ;
 
-            _desk = await _factory.CreateAsync ( device.Address ) ;
+            _desk = await _factory.CreateAsync ( device.Address )
+                                  .ConfigureAwait ( false ) ;
 
             _refreshedChanged = _desk.RefreshedChanged
-                                     .Subscribe ( OnRefreshedChanged ) ;
+                                     .Subscribe ( OnRefreshedChanged ,
+                                                 ex => _logger.Error ( ex , "Error handling RefreshedChanged" ) ) ;
 
             _desk.Connect ( ) ;
         }
         catch ( Exception e )
         {
-            _logger.Error ( $"[{device.MacAddress}] Failed to connect to desk '{device.Name}' ({e.Message})" ) ;
+            _logger.Error ( e , "[{Mac}] Failed to connect to desk '{Name}'" , device.MacAddress , device.Name ) ;
 
             IsConnecting = false ;
         }
@@ -161,17 +160,17 @@ public class DeskDetector
 
     private void OnDeviceUpdated ( IDevice device )
     {
-        _logger.Information ( $"[{device.MacAddress}] Device Updated: {device.Details}" ) ;
+        _logger.Information ( "[{Mac}] Device Updated: {Details}" , device.MacAddress , device.Details ) ;
     }
 
     private void OnDeviceDiscovered ( IDevice device )
     {
-        _logger.Information ( $"[{device.MacAddress}] Device Discovered: {device.Details}" ) ;
+        _logger.Information ( "[{Mac}] Device Discovered: {Details}" , device.MacAddress , device.Details ) ;
     }
 
     private void OnDeviceNameChanged ( IDevice device )
     {
-        _logger.Information ( $"[{device.MacAddress}] Device Name Changed: {device.Details}" ) ;
+        _logger.Information ( "[{Mac}] Device Name Changed: {Details}" , device.MacAddress , device.Details ) ;
     }
 
     private void OnRefreshedChanged ( bool status )

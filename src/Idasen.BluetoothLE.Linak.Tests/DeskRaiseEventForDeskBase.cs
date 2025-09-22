@@ -1,4 +1,5 @@
-﻿using System.Reactive.Subjects ;
+﻿using System ;
+using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
@@ -18,10 +19,14 @@ public abstract class DeskRaiseEventForDeskBase<TSubject>
         Subject < TSubject > subject ,
         TestScheduler scheduler )
     {
+        ArgumentNullException.ThrowIfNull ( connector ) ;
+        ArgumentNullException.ThrowIfNull ( subject ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+
         SetSubject ( connector ,
                      subject ) ;
 
-        var sut = new Desk ( connector ) ;
+        using var sut = new Desk ( connector ) ;
 
         SetSubscription ( sut ,
                           scheduler ) ;

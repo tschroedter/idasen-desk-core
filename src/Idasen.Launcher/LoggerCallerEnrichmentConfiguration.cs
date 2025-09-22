@@ -15,6 +15,8 @@ public static class LoggerCallerEnrichmentConfiguration
     /// <returns>The updated <see cref="LoggerConfiguration" />.</returns>
     public static LoggerConfiguration WithCaller ( this LoggerEnrichmentConfiguration enrichmentConfiguration )
     {
+        ArgumentNullException.ThrowIfNull ( enrichmentConfiguration ) ;
+
         return enrichmentConfiguration.With < CallerEnricher > ( ) ;
     }
 }

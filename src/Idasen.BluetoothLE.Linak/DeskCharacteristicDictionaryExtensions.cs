@@ -10,6 +10,7 @@ public static class DeskCharacteristicDictionaryExtensions
 {
     /// <summary>
     ///     A map of default unknown characteristic instances used when a specific characteristic is missing.
+    ///     Kept for backward compatibility; prefer the internal factories in this class.
     /// </summary>
     public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
         new ( )
@@ -22,6 +23,17 @@ public static class DeskCharacteristicDictionaryExtensions
             { DeskCharacteristicKey.Control , new Characteristics.Characteristics.Unknowns.Control ( ) }
         } ;
 
+    private static readonly IReadOnlyDictionary < DeskCharacteristicKey , Func < ICharacteristicBase > > UnknownFactories =
+        new Dictionary < DeskCharacteristicKey , Func < ICharacteristicBase > >
+        {
+            { DeskCharacteristicKey.GenericAccess , static ( ) => new GenericAccess ( ) } ,
+            { DeskCharacteristicKey.GenericAttribute , static ( ) => new GenericAttribute ( ) } ,
+            { DeskCharacteristicKey.ReferenceInput , static ( ) => new ReferenceInput ( ) } ,
+            { DeskCharacteristicKey.ReferenceOutput , static ( ) => new ReferenceOutput ( ) } ,
+            { DeskCharacteristicKey.Dpg , static ( ) => new Dpg ( ) } ,
+            { DeskCharacteristicKey.Control , static ( ) => new Characteristics.Characteristics.Unknowns.Control ( ) }
+        } ;
+
     /// <summary>
     ///     Attempts to retrieve a typed characteristic from the dictionary. Falls back to an unknown instance if not present.
     /// </summary>
@@ -29,24 +41,41 @@ public static class DeskCharacteristicDictionaryExtensions
     /// <param name="dictionary">The dictionary of available characteristics.</param>
     /// <param name="key">The characteristic key to look up.</param>
     /// <returns>The characteristic instance.</returns>
-    /// <exception cref="ArgumentException">Thrown when the key is not recognized.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when the dictionary is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the key is invalid or not recognized.</exception>
+    /// <exception cref="InvalidCastException">Thrown when the characteristic does not implement the requested type.</exception>
     public static T As<T> (
-        this Dictionary < DeskCharacteristicKey , ICharacteristicBase > dictionary ,
+        this IReadOnlyDictionary < DeskCharacteristicKey , ICharacteristicBase > dictionary ,
         DeskCharacteristicKey key )
     {
-        if ( dictionary.TryGetValue ( key ,
-                                      out var characteristicBase ) )
+        ArgumentNullException.ThrowIfNull ( dictionary ) ;
+
+        if ( key == DeskCharacteristicKey.None )
         {
-            return ( T ) characteristicBase ;
+            throw new ArgumentOutOfRangeException ( nameof ( key ) , key , "Key must not be None." ) ;
         }
 
-        if ( UnknownBases.TryGetValue ( key ,
-                                        out characteristicBase ) )
+        if ( dictionary.TryGetValue ( key , out var characteristicBase ) )
         {
-            return ( T ) characteristicBase ;
+            if ( characteristicBase is T typed )
+            {
+                return typed ;
+            }
+
+            throw new InvalidCastException ( $"Characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {characteristicBase.GetType ( ).Name})." ) ;
         }
 
-        throw new ArgumentException ( "" ,
-                                      nameof ( key ) ) ;
+        if ( UnknownFactories.TryGetValue ( key , out var factory ) )
+        {
+            var unknown = factory ( ) ;
+            if ( unknown is T typedUnknown )
+            {
+                return typedUnknown ;
+            }
+
+            throw new InvalidCastException ( $"Unknown characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {unknown.GetType ( ).Name})." ) ;
+        }
+
+        throw new ArgumentOutOfRangeException ( nameof ( key ) , key , "Unknown characteristic key." ) ;
     }
 }

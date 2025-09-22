@@ -14,7 +14,7 @@ namespace Idasen.Aop.Aspects ;
 /// <param name="logger">Logger used to write error messages.</param>
 /// <param name="converter">Converter that formats the intercepted invocation.</param>
 [ ExcludeFromCodeCoverage ]
-public class LogExceptionAspect ( ILogger logger ,
+public sealed class LogExceptionAspect ( ILogger logger ,
                                   IInvocationToTextConverter converter )
     : IInterceptor
 {

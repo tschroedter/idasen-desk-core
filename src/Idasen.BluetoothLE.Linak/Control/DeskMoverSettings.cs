@@ -20,5 +20,8 @@ public class DeskMoverSettings
     /// </summary>
     public uint NearTargetMaxDynamicTolerance { get ; init ; } = 10u ;
 
+    /// <summary>
+    ///     Provides a shared default <see cref="DeskMoverSettings"/> instance with standard values.
+    /// </summary>
     public static DeskMoverSettings Default { get ; } = new ( ) ;
 }

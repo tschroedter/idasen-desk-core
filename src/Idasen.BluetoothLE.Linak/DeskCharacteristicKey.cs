@@ -6,32 +6,37 @@
 public enum DeskCharacteristicKey
 {
     /// <summary>
+    ///     No characteristic.
+    /// </summary>
+    None = 0 ,
+
+    /// <summary>
     ///     Generic Access service characteristics.
     /// </summary>
-    GenericAccess ,
+    GenericAccess = 1 ,
 
     /// <summary>
     ///     Generic Attribute service characteristics.
     /// </summary>
-    GenericAttribute ,
+    GenericAttribute = 2 ,
 
     /// <summary>
     ///     Reference Input service characteristics.
     /// </summary>
-    ReferenceInput ,
+    ReferenceInput = 3 ,
 
     /// <summary>
     ///     Reference Output service characteristics.
     /// </summary>
-    ReferenceOutput ,
+    ReferenceOutput = 4 ,
 
     /// <summary>
     ///     DPG service characteristics.
     /// </summary>
-    Dpg ,
+    Dpg = 5 ,
 
     /// <summary>
     ///     Control service characteristics.
     /// </summary>
-    Control
+    Control = 6
 }

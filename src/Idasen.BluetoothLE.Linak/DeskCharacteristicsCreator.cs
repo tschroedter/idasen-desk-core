@@ -1,7 +1,6 @@
 ﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
@@ -10,9 +9,6 @@ namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Creates and attaches all known LINAK desk characteristics to a given container.
-/// </summary>
 public class DeskCharacteristicsCreator
     : IDeskCharacteristicsCreator
 {
@@ -26,10 +22,8 @@ public class DeskCharacteristicsCreator
         ILogger logger ,
         ICharacteristicBaseFactory baseFactory )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( baseFactory ,
-                                nameof ( baseFactory ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( baseFactory ) ;
 
         _logger = logger ;
         _baseFactory = baseFactory ;
@@ -40,12 +34,12 @@ public class DeskCharacteristicsCreator
         IDeskCharacteristics characteristics ,
         IDevice device )
     {
-        Guard.ArgumentNotNull ( device ,
-                                nameof ( device ) ) ;
-        Guard.ArgumentNotNull ( characteristics ,
-                                nameof ( characteristics ) ) ;
+        ArgumentNullException.ThrowIfNull ( device ) ;
+        ArgumentNullException.ThrowIfNull ( characteristics ) ;
 
-        _logger.Debug ( $"[{device.Id}] Creating desk characteristics {characteristics}" ) ;
+        _logger.Debug ( "[{DeviceId}] Creating desk characteristics {Characteristics}" ,
+                        device.Id ,
+                        characteristics ) ;
 
         characteristics.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
                                               _baseFactory.Create < IGenericAccess > ( device ) )

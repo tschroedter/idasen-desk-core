@@ -1,19 +1,19 @@
 ﻿using System.Diagnostics.CodeAnalysis ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
+/// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
-public class TaskRunner
+public sealed class TaskRunner
     : ITaskRunner
 {
+    /// <inheritdoc />
     public Task Run (
         Action action ,
         CancellationToken token )
     {
-        Guard.ArgumentNotNull ( action ,
-                                nameof ( action ) ) ;
+        ArgumentNullException.ThrowIfNull ( action ) ;
 
         return Task.Run ( action ,
                           token ) ;

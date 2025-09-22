@@ -1,15 +1,12 @@
 ﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Factory that composes a desk from a device, connector, and facade.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskFactory
     : IDeskFactory
 {
@@ -28,12 +25,9 @@ public class DeskFactory
         Func < IDevice , IDeskConnector > deskConnectorFactory ,
         Func < IDeskConnector , IDesk > deskFactory )
     {
-        Guard.ArgumentNotNull ( deskConnectorFactory ,
-                                nameof ( deskConnectorFactory ) ) ;
-        Guard.ArgumentNotNull ( deviceFactory ,
-                                nameof ( deviceFactory ) ) ;
-        Guard.ArgumentNotNull ( deskFactory ,
-                                nameof ( deskFactory ) ) ;
+        ArgumentNullException.ThrowIfNull ( deskConnectorFactory ) ;
+        ArgumentNullException.ThrowIfNull ( deviceFactory ) ;
+        ArgumentNullException.ThrowIfNull ( deskFactory ) ;
 
         _deviceFactory = deviceFactory ;
         _deskConnectorFactory = deskConnectorFactory ;
@@ -43,7 +37,8 @@ public class DeskFactory
     /// <inheritdoc />
     public async Task < IDesk > CreateAsync ( ulong address )
     {
-        var device = await _deviceFactory.FromBluetoothAddressAsync ( address ) ;
+        var device = await _deviceFactory.FromBluetoothAddressAsync ( address )
+                                         .ConfigureAwait ( false ) ;
         var connector = _deskConnectorFactory.Invoke ( device ) ;
 
         return _deskFactory.Invoke ( connector ) ;

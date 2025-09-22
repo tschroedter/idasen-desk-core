@@ -12,7 +12,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 ///     <see cref="IDevice" /> into the constructor via a named parameter.
 /// </summary>
 [ Intercept ( typeof ( LogAspect ) ) ]
-public class CharacteristicBaseFactory
+public sealed class CharacteristicBaseFactory
     : ICharacteristicBaseFactory
 {
     private readonly ILifetimeScope _scope ;
@@ -37,6 +37,8 @@ public class CharacteristicBaseFactory
     /// <returns>An instance of <typeparamref name="T" />.</returns>
     public T Create<T> ( IDevice device ) where T : notnull
     {
+        Guard.ArgumentNotNull ( device , nameof ( device ) ) ;
+
         var instance = _scope.Resolve < T > ( new NamedParameter ( "device" ,
                                                                    device ) ) ;
 

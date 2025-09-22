@@ -1,15 +1,12 @@
 ﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-/// <summary>
-///     High-level desk facade that delegates operations and events to an underlying <see cref="IDeskConnector" />.
-/// </summary>
-[ Intercept ( typeof ( LogAspect ) ) ]
-public class Desk
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
+public sealed class Desk
     : IDesk
 {
     private readonly IDeskConnector _connector ;
@@ -21,8 +18,7 @@ public class Desk
     public Desk (
         IDeskConnector connector )
     {
-        Guard.ArgumentNotNull ( connector ,
-                                nameof ( connector ) ) ;
+        ArgumentNullException.ThrowIfNull ( connector ) ;
 
         _connector = connector ;
     }
@@ -34,10 +30,7 @@ public class Desk
     public string BluetoothAddressType => _connector.BluetoothAddressType ;
 
     /// <inheritdoc />
-    public void Connect ( )
-    {
-        _connector.Connect ( ) ;
-    }
+    public void Connect ( ) => _connector.Connect ( ) ;
 
     /// <inheritdoc />
     public IObservable < IEnumerable < byte > > DeviceNameChanged => _connector.DeviceNameChanged ;
@@ -50,7 +43,7 @@ public class Desk
 
     /// <inheritdoc />
     public IObservable < HeightSpeedDetails > HeightAndSpeedChanged =>
-        _connector.HeightAndSpeedChanged ; // todo use only this
+        _connector.HeightAndSpeedChanged ;
 
     /// <inheritdoc />
     public IObservable < uint > FinishedChanged => _connector.FinishedChanged ;
@@ -64,45 +57,51 @@ public class Desk
     /// <inheritdoc />
     public void MoveTo ( uint targetHeight )
     {
+        if ( targetHeight == 0u )
+        {
+            throw new ArgumentOutOfRangeException ( nameof ( targetHeight ) , "Target height must be greater than 0." ) ;
+        }
+
         _connector.MoveTo ( targetHeight ) ;
-        // todo these methods should be async too
     }
 
     /// <inheritdoc />
-    public void MoveUp ( )
-    {
-        _connector.MoveUp ( ) ;
-    }
+    [Obsolete("Use MoveUpAsync() instead.")]
+    public void MoveUp ( ) => _ = _connector.MoveUp ( ) ;
 
     /// <inheritdoc />
-    public void MoveDown ( )
-    {
-        _connector.MoveDown ( ) ;
-    }
+    [Obsolete("Use MoveDownAsync() instead.")]
+    public void MoveDown ( ) => _ = _connector.MoveDown ( ) ;
 
     /// <inheritdoc />
-    public void MoveStop ( )
-    {
-        _connector.MoveStop ( ) ;
-    }
+    [Obsolete("Use MoveStopAsync() instead.")]
+    public void MoveStop ( ) => _ = _connector.MoveStop ( ) ;
 
     /// <inheritdoc />
-    public void MoveLock ( )
-    {
-        _connector.MoveLock ( ) ;
-    }
+    [Obsolete("Use MoveLockAsync() instead.")]
+    public void MoveLock ( ) => _ = _connector.MoveLock ( ) ;
 
     /// <inheritdoc />
-    public void MoveUnlock ( )
-    {
-        _connector.MoveUnlock ( ) ;
-    }
+    [Obsolete("Use MoveUnlockAsync() instead.")]
+    public void MoveUnlock ( ) => _ = _connector.MoveUnlock ( ) ;
 
     /// <inheritdoc />
-    public void Dispose ( )
-    {
-        _connector.Dispose ( ) ;
-    }
+    public Task<bool> MoveUpAsync() => _connector.MoveUp();
+
+    /// <inheritdoc />
+    public Task<bool> MoveDownAsync() => _connector.MoveDown();
+
+    /// <inheritdoc />
+    public Task<bool> MoveStopAsync() => _connector.MoveStop();
+
+    /// <inheritdoc />
+    public Task<bool> MoveLockAsync() => _connector.MoveLock();
+
+    /// <inheritdoc />
+    public Task<bool> MoveUnlockAsync() => _connector.MoveUnlock();
+
+    /// <inheritdoc />
+    public void Dispose ( ) => _connector.Dispose ( ) ;
 
     /// <inheritdoc />
     public string DeviceName => _connector.DeviceName ;

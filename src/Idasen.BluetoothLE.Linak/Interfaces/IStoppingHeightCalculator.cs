@@ -4,6 +4,9 @@
 
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
+/// <summary>
+///     Calculates the estimated stopping height, movement until stop, and whether a target height has been reached.
+/// </summary>
 public interface IStoppingHeightCalculator
 {
     /// <summary>

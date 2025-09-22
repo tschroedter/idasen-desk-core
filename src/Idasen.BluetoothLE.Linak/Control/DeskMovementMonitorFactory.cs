@@ -1,14 +1,11 @@
 ﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Factory for creating <see cref="IDeskMovementMonitor"/> instances.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskMovementMonitorFactory
     : IDeskMovementMonitorFactory
 {
@@ -20,8 +17,7 @@ public class DeskMovementMonitorFactory
     /// <param name="factory">The IoC factory delegate for <see cref="DeskMovementMonitor" />.</param>
     public DeskMovementMonitorFactory ( DeskMovementMonitor.Factory factory )
     {
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        ArgumentNullException.ThrowIfNull ( factory ) ;
 
         _factory = factory ;
     }
@@ -29,8 +25,7 @@ public class DeskMovementMonitorFactory
     /// <inheritdoc />
     public IDeskMovementMonitor Create ( IDeskHeightAndSpeed heightAndSpeed )
     {
-        Guard.ArgumentNotNull ( heightAndSpeed ,
-                                nameof ( heightAndSpeed ) ) ;
+        ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
 
         return _factory ( heightAndSpeed ) ;
     }

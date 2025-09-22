@@ -3,7 +3,7 @@
 /// <summary>
 ///     Immutable value object containing a timestamped height and speed sample.
 /// </summary>
-public class HeightSpeedDetails ( DateTimeOffset timestamp ,
+public sealed class HeightSpeedDetails ( DateTimeOffset timestamp ,
                                   uint height ,
                                   int speed )
 {

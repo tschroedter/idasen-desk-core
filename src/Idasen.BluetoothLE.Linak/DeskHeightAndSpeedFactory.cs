@@ -1,12 +1,12 @@
 ﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskHeightAndSpeedFactory
     : IDeskHeightAndSpeedFactory
 {
@@ -14,16 +14,14 @@ public class DeskHeightAndSpeedFactory
 
     public DeskHeightAndSpeedFactory ( DeskHeightAndSpeed.Factory factory )
     {
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        ArgumentNullException.ThrowIfNull ( factory ) ;
 
         _factory = factory ;
     }
 
     public IDeskHeightAndSpeed Create ( IReferenceOutput referenceOutput )
     {
-        Guard.ArgumentNotNull ( referenceOutput ,
-                                nameof ( referenceOutput ) ) ;
+        ArgumentNullException.ThrowIfNull ( referenceOutput ) ;
 
         return _factory ( referenceOutput ) ;
     }

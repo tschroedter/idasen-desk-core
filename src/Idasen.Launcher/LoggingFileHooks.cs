@@ -10,7 +10,7 @@ namespace Idasen.Launcher ;
 /// </summary>
 [ UsedImplicitly ]
 [ ExcludeFromCodeCoverage ]
-public class LoggingFileHooks : FileLifecycleHooks
+public sealed class LoggingFileHooks : FileLifecycleHooks
 {
     /// <summary>
     ///     Gets the full path of the currently opened log file as reported by the sink.
@@ -27,6 +27,10 @@ public class LoggingFileHooks : FileLifecycleHooks
     /// <returns>The stream to be used by the sink (typically the base implementation's result).</returns>
     public override Stream OnFileOpened ( string path , Stream underlyingStream , Encoding encoding )
     {
+        ArgumentNullException.ThrowIfNull ( path ) ;
+        ArgumentNullException.ThrowIfNull ( underlyingStream ) ;
+        ArgumentNullException.ThrowIfNull ( encoding ) ;
+
         FullPath = path ;
         LoggingFile.FullPath = path ;
 

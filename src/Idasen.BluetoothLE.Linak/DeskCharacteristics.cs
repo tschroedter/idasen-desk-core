@@ -2,17 +2,14 @@
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-/// <summary>
-///     Aggregates discovered characteristics for a LINAK desk and provides typed accessors.
-/// </summary>
-[ Intercept ( typeof ( LogAspect ) ) ]
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCharacteristics
     : IDeskCharacteristics
 {
@@ -25,34 +22,29 @@ public class DeskCharacteristics
         ILogger logger ,
         IDeskCharacteristicsCreator creator )
     {
-        Guard.ArgumentNotNull ( creator ,
-                                nameof ( creator ) ) ;
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
+        ArgumentNullException.ThrowIfNull ( creator ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
 
         _logger = logger ;
         _creator = creator ;
     }
 
-    /// <summary>
-    ///     Gets the available characteristics map.
-    /// </summary>
+    /// <inheritdoc />
     public IReadOnlyDictionary < DeskCharacteristicKey , ICharacteristicBase > Characteristics => _available ;
 
     /// <inheritdoc />
     public async Task Refresh ( )
     {
-        foreach (var characteristicBase in _available.Values)
+        foreach ( var characteristicBase in _available.Values )
         {
-            await characteristicBase.Refresh ( ) ;
+            await characteristicBase.Refresh ( ).ConfigureAwait ( false ) ;
         }
     }
 
     /// <inheritdoc />
     public IDeskCharacteristics Initialize ( IDevice device )
     {
-        Guard.ArgumentNotNull ( device ,
-                                nameof ( device ) ) ;
+        ArgumentNullException.ThrowIfNull ( device ) ;
 
         _creator.Create ( this ,
                           device ) ;
@@ -87,8 +79,7 @@ public class DeskCharacteristics
         DeskCharacteristicKey key ,
         ICharacteristicBase characteristic )
     {
-        Guard.ArgumentNotNull ( characteristic ,
-                                nameof ( characteristic ) ) ;
+        ArgumentNullException.ThrowIfNull ( characteristic ) ;
 
         characteristic.Initialize < ICharacteristicBase > ( ) ;
 
@@ -100,7 +91,9 @@ public class DeskCharacteristics
 
         _available[key] = characteristic ;
 
-        _logger.Debug ( $"Added characteristic {characteristic} for key {key}" ) ;
+        _logger.Debug ( "Added characteristic {Characteristic} for key {Key}" ,
+                        characteristic ,
+                        key ) ;
 
         return this ;
     }

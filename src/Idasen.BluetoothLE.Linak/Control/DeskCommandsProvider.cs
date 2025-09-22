@@ -4,37 +4,30 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Provides raw byte payloads for desk control commands.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCommandsProvider
     : IDeskCommandsProvider
 {
-    private readonly Dictionary < DeskCommands , IEnumerable < byte > > _dictionary = new ( ) ;
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskCommandsProvider" /> class with default command mappings.
-    /// </summary>
-    public DeskCommandsProvider ( )
-    {
-        _dictionary.Add ( DeskCommands.MoveUp ,
-                          new byte [ ] { 0x47 , 0x00 } ) ;
-        _dictionary.Add ( DeskCommands.MoveDown ,
-                          new byte [ ] { 0x46 , 0x00 } ) ;
-        _dictionary.Add ( DeskCommands.MoveStop ,
-                          new byte [ ] { 0x48 , 0x00 } ) ;
-    }
+    private static readonly IReadOnlyDictionary < DeskCommands , byte [ ] > Commands =
+        new Dictionary < DeskCommands , byte [ ] >
+        {
+            { DeskCommands.MoveUp , new byte [ ] { 0x47 , 0x00 } } ,
+            { DeskCommands.MoveDown , new byte [ ] { 0x46 , 0x00 } } ,
+            { DeskCommands.MoveStop , new byte [ ] { 0x48 , 0x00 } }
+        } ;
 
     /// <inheritdoc />
     public bool TryGetValue ( DeskCommands command ,
                               out IEnumerable < byte > bytes )
     {
-        var tryGetValue = _dictionary.TryGetValue ( command ,
-                                                    out var tempBytes ) ;
+        if ( Commands.TryGetValue ( command , out var tempBytes ) )
+        {
+            bytes = tempBytes ;
+            return true ;
+        }
 
-        bytes = tempBytes ?? Array.Empty < byte > ( ) ;
-
-        return tryGetValue ;
+        bytes = Array.Empty < byte > ( ) ;
+        return false ;
     }
 }

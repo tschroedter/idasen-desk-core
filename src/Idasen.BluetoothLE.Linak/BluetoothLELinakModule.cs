@@ -9,11 +9,11 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-// ReSharper disable once InconsistentNaming
-[ ExcludeFromCodeCoverage ]
 /// <summary>
 ///     Autofac module that wires up LINAK desk services, control components, and characteristics.
 /// </summary>
+// ReSharper disable once InconsistentNaming
+[ExcludeFromCodeCoverage]
 public class BluetoothLELinakModule
     : Module
 {
@@ -90,7 +90,8 @@ public class BluetoothLELinakModule
                .EnableInterfaceInterceptors ( ) ;
 
         builder.RegisterType < InitialHeightProvider > ( )
-               .As < IInitialHeightProvider > ( ) ;
+               .As < IInitialHeightProvider > ( )
+               .EnableInterfaceInterceptors ( ) ;
 
         builder.RegisterType < InitialHeightAndSpeedProviderFactory > ( )
                .As < IInitialHeightAndSpeedProviderFactory > ( )
@@ -120,7 +121,8 @@ public class BluetoothLELinakModule
                .As < ITaskRunner > ( ) ;
 
         builder.RegisterType < DeskLocker > ( )
-               .As < IDeskLocker > ( ) ;
+               .As < IDeskLocker > ( )
+               .EnableInterfaceInterceptors ( ) ;
 
         builder.RegisterType < DeskLockerFactory > ( )
                .As < IDeskLockerFactory > ( )

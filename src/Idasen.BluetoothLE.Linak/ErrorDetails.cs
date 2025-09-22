@@ -1,13 +1,11 @@
-﻿using Idasen.BluetoothLE.Core ;
+﻿using System.Diagnostics ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-/// <summary>
-///     Default implementation of <see cref="IErrorDetails" /> that carries an error message, optional exception, and
-///     caller.
-/// </summary>
-public class ErrorDetails // todo testing
+/// <inheritdoc />
+[DebuggerDisplay ( "{ToString(),nq}" )]
+public sealed class ErrorDetails // todo testing
     : IErrorDetails
 {
     /// <summary>
@@ -21,10 +19,8 @@ public class ErrorDetails // todo testing
         string caller ,
         Exception? exception = null )
     {
-        Guard.ArgumentNotNull ( message ,
-                                nameof ( message ) ) ;
-        Guard.ArgumentNotNull ( caller ,
-                                nameof ( caller ) ) ;
+        ArgumentNullException.ThrowIfNull ( message ) ;
+        ArgumentNullException.ThrowIfNull ( caller ) ;
 
         Message = message ;
         Exception = exception ;

@@ -20,14 +20,10 @@ public class DateTimeOffsetWrapper ( DateTimeOffset dateTimeOffset )
     public long Ticks => dateTimeOffset.Ticks ;
 
     /// <inheritdoc />
-    public string ToString ( string format ,
-                             IFormatProvider formatProvider )
+    public string ToString ( string? format ,
+                             IFormatProvider? formatProvider )
     {
-        Guard.ArgumentNotNull ( format ,
-                                nameof ( format ) ) ;
-        Guard.ArgumentNotNull ( formatProvider ,
-                                nameof ( formatProvider ) ) ;
-
+        // Allow nulls per .NET guidelines. Underlying API handles nulls.
         return dateTimeOffset.ToString ( format ,
                                          formatProvider ) ;
     }

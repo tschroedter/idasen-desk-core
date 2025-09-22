@@ -1,12 +1,10 @@
-﻿using Idasen.BluetoothLE.Core ;
+﻿using System.Linq ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak.Control ;
+namespace Idasen.BluetoothLE.Linak.Control;
 
-/// <summary>
-///     Maintains a rolling history of heights to determine whether the desk is changing height as expected.
-/// </summary>
+/// <inheritdoc />
 public class DeskHeightMonitor
     : IDeskHeightMonitor
 {
@@ -17,8 +15,7 @@ public class DeskHeightMonitor
 
     public DeskHeightMonitor ( ILogger logger )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
 
         _logger = logger ;
     }
@@ -26,18 +23,22 @@ public class DeskHeightMonitor
     /// <inheritdoc />
     public bool IsHeightChanging ( )
     {
-        if ( _history.Count ( ) < MinimumNumberOfItems )
+        if ( _history.Size < MinimumNumberOfItems )
         {
             return true ;
         }
 
-        var lastNValues = _history.Skip ( _history.Count ( ) - MinimumNumberOfItems )
+        var needed = MinimumNumberOfItems ;
+        var skip = Math.Max ( 0 , _history.Size - needed ) ;
+        var lastNValues = _history.Skip ( skip )
                                   .ToArray ( ) ;
 
         var differentValues = lastNValues.Distinct ( )
                                          .Count ( ) ;
 
-        _logger.Debug ( $"History: {string.Join ( "," , lastNValues )}; DifferentValues = {differentValues}" ) ;
+        _logger.Debug ( "History: {History}; DifferentValues={DifferentValues}" ,
+                        string.Join ( "," , lastNValues ) ,
+                        differentValues ) ;
 
         return differentValues > 1 ;
     }

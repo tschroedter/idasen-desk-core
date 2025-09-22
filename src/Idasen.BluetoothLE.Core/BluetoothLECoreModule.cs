@@ -19,11 +19,11 @@ using IDeviceFactory = Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery.IDevi
 namespace Idasen.BluetoothLE.Core ;
 
 // ReSharper disable once InconsistentNaming
-[ ExcludeFromCodeCoverage ]
 /// <summary>
 ///     Autofac module wiring up core Bluetooth LE services, discovery wrappers, and AOP.
 /// </summary>
-public class BluetoothLECoreModule
+[ ExcludeFromCodeCoverage ]
+public sealed class BluetoothLECoreModule
     : Module
 {
     /// <summary>
@@ -32,6 +32,8 @@ public class BluetoothLECoreModule
     /// <param name="builder">The container builder.</param>
     protected override void Load ( ContainerBuilder builder )
     {
+        Guard.ArgumentNotNull ( builder , nameof ( builder ) ) ;
+
         builder.RegisterModule < BluetoothLEAop > ( ) ;
 
         builder.RegisterGeneric ( typeof ( Subject <> ) )

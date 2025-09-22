@@ -9,7 +9,7 @@ namespace Idasen.Launcher ;
 ///     Serilog enricher that populates the <c>Caller</c> property with the fully-qualified method
 ///     name of the user-code frame that initiated the log call (skipping Serilog infrastructure frames).
 /// </summary>
-public class CallerEnricher : ILogEventEnricher
+public sealed class CallerEnricher : ILogEventEnricher
 {
     /// <summary>
     ///     Adds the <c>Caller</c> property to the <paramref name="logEvent" />, identifying the
@@ -20,6 +20,9 @@ public class CallerEnricher : ILogEventEnricher
     public void Enrich ( LogEvent logEvent ,
                          ILogEventPropertyFactory propertyFactory )
     {
+        ArgumentNullException.ThrowIfNull ( logEvent ) ;
+        ArgumentNullException.ThrowIfNull ( propertyFactory ) ;
+
         var skip = 3 ;
 
         while (true)
