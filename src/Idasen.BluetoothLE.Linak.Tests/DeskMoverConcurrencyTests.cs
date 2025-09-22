@@ -7,6 +7,7 @@ using NSubstitute;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace Idasen.BluetoothLE.Linak.Tests;
 
@@ -101,7 +102,7 @@ public class DeskMoverConcurrencyTests
         await Task.Yield();
         _executor.Received(1).Up();
 
-        // Simulate second overlapping timer tick -> should be skipped by semaphore
+        // Simulate second overlapping timer tick -> should be skipped by semaphore/pending task
         var t2 = sut.OnTimerElapsed(1);
         await t2; // should complete quickly without invoking Up again
 
@@ -170,6 +171,88 @@ public class DeskMoverConcurrencyTests
         _executor.Received(1).Stop();
         finishedEvents.Count.Should().Be(1);
 
+        sut.Dispose();
+    }
+
+    [TestMethod]
+    public void Sampling_TakesLastItemPerInterval()
+    {
+        var sut = CreateSut();
+        sut.TargetHeight = 1500u;
+        _calculator.MoveIntoDirection.Returns(Direction.None);
+
+        sut.Initialize();
+        sut.Start();
+        _finishedSubject.OnNext(1000u);
+        _scheduler.AdvanceBy(1);
+
+        var d1 = new HeightSpeedDetails(DateTimeOffset.Now, 1100u, 50);
+        var d2 = new HeightSpeedDetails(DateTimeOffset.Now.AddMilliseconds(10), 1200u, 60);
+
+        // Emit two samples within one interval
+        _heightSpeedSubject.OnNext(d1);
+        _heightSpeedSubject.OnNext(d2);
+
+        // Advance past one sampling window
+        _scheduler.AdvanceBy(TimeSpan.FromMilliseconds(200).Ticks);
+
+        sut.Height.Should().Be(d2.Height);
+        sut.Speed.Should().Be(d2.Speed);
+
+        sut.Dispose();
+    }
+
+    [TestMethod]
+    public async Task MoveCommand_Failure_AllowsRetry()
+    {
+        var sut = CreateSut();
+        sut.TargetHeight = 2000u;
+        _calculator.MoveIntoDirection.Returns(Direction.Up);
+
+        // First Up fails, second succeeds
+        _executor.Up().Returns(Task.FromResult(false), Task.FromResult(true));
+
+        sut.Initialize();
+        sut.Start();
+        _finishedSubject.OnNext(1000u);
+        _scheduler.AdvanceBy(1);
+
+        await sut.OnTimerElapsed(0);
+        _executor.Received(1).Up();
+
+        // Allow continuation to reset direction after failure
+        await Task.Yield();
+
+        await sut.OnTimerElapsed(1);
+        _executor.Received(2).Up();
+
+        sut.Dispose();
+    }
+
+    [TestMethod]
+    public async Task Stop_Coalesces_MultipleRequests_WhilePending()
+    {
+        var sut = CreateSut();
+        sut.TargetHeight = 1500u;
+        _calculator.MoveIntoDirection.Returns(Direction.None);
+
+        var tcs = new TaskCompletionSource<bool>();
+        _executor.Stop().Returns(_ => tcs.Task);
+
+        sut.Initialize();
+        sut.Start();
+        _finishedSubject.OnNext(1000u);
+        _scheduler.AdvanceBy(1);
+
+        // First evaluation triggers Stop (pending)
+        await sut.OnTimerElapsed(0);
+        _executor.Received(1).Stop();
+
+        // While Stop is still pending, further evaluations should not send another Stop
+        await sut.OnTimerElapsed(1);
+        _executor.Received(1).Stop();
+
+        tcs.TrySetResult(true);
         sut.Dispose();
     }
 }

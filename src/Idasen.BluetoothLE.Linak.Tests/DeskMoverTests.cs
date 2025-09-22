@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq ;
+﻿using System ;
+using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
@@ -136,7 +137,8 @@ public class DeskMoverTests : IDisposable
 
         _subjectFinished.OnNext ( InitialHeight ) ;
 
-        _scheduler.Start ( ) ;
+        // Process ObserveOn scheduled work without running indefinitely
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 1 ).Ticks ) ;
 
         return sut ;
     }
@@ -147,7 +149,8 @@ public class DeskMoverTests : IDisposable
 
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
 
-        _scheduler.Start ( ) ;
+        // Advance virtual time to allow the sampling window to emit
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 200 ).Ticks ) ;
 
         return sut ;
     }
@@ -353,7 +356,8 @@ public class DeskMoverTests : IDisposable
 
         await sut.Stop ( ) ;
 
-        _scheduler.Start ( ) ;
+        // Process the ObserveOn scheduled Finished notification
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 1 ).Ticks ) ;
 
         wasNotified.Should ( )
                    .BeTrue ( ) ;

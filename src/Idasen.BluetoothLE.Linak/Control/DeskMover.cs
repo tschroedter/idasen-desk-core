@@ -8,6 +8,7 @@ using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 using System.Threading ;
+using System.Threading.Tasks ;
 
 [ assembly : InternalsVisibleTo ( "Idasen.BluetoothLE.Linak.Tests" ) ]
 
@@ -31,11 +32,10 @@ public class DeskMover
     private readonly IInitialHeightAndSpeedProviderFactory _providerFactory ;
     private readonly IScheduler _scheduler ;
     private readonly ISubject < uint > _subjectFinished ;
+    private readonly DeskMoverSettings _settings ;
 
-    /// <summary>
-    ///     Timer tick interval used to drive movement evaluation.
-    /// </summary>
-    public readonly TimeSpan TimerInterval = TimeSpan.FromMilliseconds ( 100 ) ;
+    // Expose configured interval for internal use and diagnostics
+    public TimeSpan TimerInterval => _settings.TimerInterval ;
 
     private IDisposable? _disposableProvider ;
     private IDisposable? _disposableTimer ;
@@ -56,9 +56,35 @@ public class DeskMover
     // Tracks the last command sent to the executor to avoid re-sending the same command
     private Direction _currentCommandedDirection = Direction.None ;
 
-    // Near-target tolerance band (device units)
-    private const uint NearTargetBaseTolerance = 2u ;
-    private const uint NearTargetMaxDynamicTolerance = 10u ;
+    // Pending async command tasks to avoid overlapping awaits and reduce latency while holding the semaphore
+    private Task < bool > ? _pendingMoveCommandTask ;
+    private Task < bool > ? _pendingStopTask ;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DeskMover" /> class.
+    ///     This overload uses default settings.
+    /// </summary>
+    public DeskMover ( ILogger logger ,
+                       IScheduler scheduler ,
+                       IInitialHeightAndSpeedProviderFactory providerFactory ,
+                       IDeskMovementMonitorFactory monitorFactory ,
+                       IDeskCommandExecutor executor ,
+                       IDeskHeightAndSpeed heightAndSpeed ,
+                       IStoppingHeightCalculator calculator ,
+                       ISubject < uint > subjectFinished ,
+                       IDeskHeightMonitor heightMonitor )
+        : this ( logger ,
+                 scheduler ,
+                 providerFactory ,
+                 monitorFactory ,
+                 executor ,
+                 heightAndSpeed ,
+                 calculator ,
+                 subjectFinished ,
+                 heightMonitor ,
+                 DeskMoverSettings.Default )
+    {
+    }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskMover" /> class.
@@ -71,7 +97,8 @@ public class DeskMover
                        IDeskHeightAndSpeed heightAndSpeed ,
                        IStoppingHeightCalculator calculator ,
                        ISubject < uint > subjectFinished ,
-                       IDeskHeightMonitor heightMonitor )
+                       IDeskHeightMonitor heightMonitor ,
+                       DeskMoverSettings settings )
     {
         Guard.ArgumentNotNull ( logger ,
                                 nameof ( logger ) ) ;
@@ -91,6 +118,8 @@ public class DeskMover
                                 nameof ( subjectFinished ) ) ;
         Guard.ArgumentNotNull ( heightMonitor ,
                                 nameof ( heightMonitor ) ) ;
+        Guard.ArgumentNotNull ( settings ,
+                                nameof ( settings ) ) ;
 
         _logger = logger ;
         _scheduler = scheduler ;
@@ -101,6 +130,7 @@ public class DeskMover
         _calculator = calculator ;
         _subjectFinished = subjectFinished ;
         _heightMonitor = heightMonitor ;
+        _settings = settings ;
     }
 
     /// <summary>
@@ -119,6 +149,19 @@ public class DeskMover
 
     /// <inheritdoc />
     public IObservable < uint > Finished => _subjectFinished ;
+
+    // Exposes a reduced-rate stream of the latest height/speed using TimerInterval.
+    private IObservable<HeightSpeedDetails>? _heightAndSpeedSampled ;
+    public IObservable<HeightSpeedDetails> HeightAndSpeedSampled =>
+        _heightAndSpeedSampled ??= _heightAndSpeed.HeightAndSpeedChanged
+                                      .Buffer ( TimerInterval , _scheduler )
+                                      .Where ( batch => batch.Count > 0 )
+                                      .Select ( batch => batch[^1] )
+                                      .StartWith ( new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                                            Height ,
+                                                                            Speed ) )
+                                      .Replay ( 1 )
+                                      .RefCount ( ) ;
 
     /// <inheritdoc />
     public void Initialize ( )
@@ -162,7 +205,7 @@ public class DeskMover
     {
         if ( IsAllowedToMove )
         {
-            return await _executor.Up ( ) ;
+            return await _executor.Up ( ).ConfigureAwait ( false ) ;
         }
 
         return false ;
@@ -173,7 +216,7 @@ public class DeskMover
     {
         if ( IsAllowedToMove )
         {
-            return await _executor.Down ( ) ;
+            return await _executor.Down ( ).ConfigureAwait ( false ) ;
         }
 
         return false ;
@@ -287,13 +330,13 @@ public class DeskMover
 
         StartMovingIntoDirection = _calculator.MoveIntoDirection ;
 
-        _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
+        // Subscribe to reduced-rate height/speed stream
+        _disposalHeightAndSpeed = HeightAndSpeedSampled
                                                  .Subscribe ( OnHeightAndSpeedChanged ) ;
 
         _disposableTimer?.Dispose ( ) ;
         // Use OnTimerElapsed to centralize execution and avoid overlapping calls
-        _disposableTimer = Observable.Interval ( TimerInterval )
-                                     .ObserveOn ( _scheduler )
+        _disposableTimer = Observable.Interval ( TimerInterval , _scheduler )
                                      .SubscribeAsync ( OnTimerElapsed ) ;
 
         IsAllowedToMove = true ;
@@ -351,6 +394,69 @@ public class DeskMover
         _ = TryEvaluateMoveAsync ( false ) ;
     }
 
+    private void IssueStopIfNotPending ( )
+    {
+        if ( _pendingStopTask != null && ! _pendingStopTask.IsCompleted )
+        {
+            return ;
+        }
+
+        _pendingStopTask = Stop ( ) ;
+
+        _ = _pendingStopTask.ContinueWith ( t =>
+                                            {
+                                                if ( t.IsFaulted )
+                                                {
+                                                    _logger.Error ( t.Exception , "Stop command faulted" ) ;
+                                                }
+
+                                                Interlocked.Exchange ( ref _pendingStopTask , null ) ;
+                                            } ,
+                                            CancellationToken.None ,
+                                            TaskContinuationOptions.ExecuteSynchronously ,
+                                            TaskScheduler.Default ) ;
+    }
+
+    private void IssueMoveCommand ( Direction desired )
+    {
+        if ( _pendingMoveCommandTask != null && ! _pendingMoveCommandTask.IsCompleted )
+        {
+            return ;
+        }
+
+        _currentCommandedDirection = desired ; // optimistic set to avoid duplicate sends
+
+        Task < bool > task = desired == Direction.Up
+                                ? _executor.Up ( )
+                                : _executor.Down ( ) ;
+
+        _pendingMoveCommandTask = task ;
+
+        _ = task.ContinueWith ( t =>
+                                 {
+                                     if ( t.IsFaulted )
+                                     {
+                                         _logger.Error ( t.Exception , "Move command faulted" ) ;
+                                     }
+
+                                     var ok = t.Status == TaskStatus.RanToCompletion && t.Result ;
+                                     if ( ! ok )
+                                     {
+                                         // Only reset if we still think we are commanding this direction
+                                         if ( _currentCommandedDirection == desired )
+                                         {
+                                             _currentCommandedDirection = Direction.None ;
+                                         }
+                                     }
+
+                                     // clear pending task reference
+                                     Interlocked.Exchange ( ref _pendingMoveCommandTask , null ) ;
+                                 } ,
+                                 CancellationToken.None ,
+                                 TaskContinuationOptions.ExecuteSynchronously ,
+                                 TaskScheduler.Default ) ;
+    }
+
     private async Task Move ( bool fromTimer )
     {
         _logger.Debug ( "Move..." ) ;
@@ -363,8 +469,7 @@ public class DeskMover
 
         if ( TargetHeight == 0u )
         {
-            _logger.Debug ( "*** TargetHeight = 0\r\n" +
-                            $"{Environment.StackTrace}" ) ;
+            _logger.Debug ( "*** TargetHeight = 0" ) ;
         }
 
         _heightMonitor.AddHeight ( Height ) ;
@@ -373,7 +478,7 @@ public class DeskMover
         {
             _logger.Warning ( "Failed, desk not moving during last " +
                               $"{DeskHeightMonitor.MinimumNumberOfItems} polls." ) ;
-            await Stop ( ) ;
+            IssueStopIfNotPending ( ) ;
             return ;
         }
 
@@ -387,14 +492,14 @@ public class DeskMover
 
         // Compute tolerance band and predicted crossing using MovementUntilStop
         var movementAbs = (uint)Math.Abs ( _calculator.MovementUntilStop ) ;
-        var toleranceDynamic = Math.Min ( NearTargetMaxDynamicTolerance , movementAbs ) ;
-        var tolerance = Math.Max ( NearTargetBaseTolerance , toleranceDynamic ) ;
+        var toleranceDynamic = Math.Min ( _settings.NearTargetMaxDynamicTolerance , movementAbs ) ;
+        var tolerance = Math.Max ( _settings.NearTargetBaseTolerance , toleranceDynamic ) ;
 
         // If within near-target band, stop immediately to avoid hunting
         var diff = Height > TargetHeight ? Height - TargetHeight : TargetHeight - Height ;
         if ( diff <= tolerance )
         {
-            await Stop ( ) ;
+            IssueStopIfNotPending ( ) ;
             return ;
         }
 
@@ -406,7 +511,7 @@ public class DeskMover
                 var predictedStop = Height + movementAbs ;
                 if ( predictedStop >= TargetHeight )
                 {
-                    await Stop ( ) ;
+                    IssueStopIfNotPending ( ) ;
                     return ;
                 }
             }
@@ -418,7 +523,7 @@ public class DeskMover
                 var predictedStop = Height <= movementAbs ? 0u : Height - movementAbs ;
                 if ( predictedStop <= TargetHeight )
                 {
-                    await Stop ( ) ;
+                    IssueStopIfNotPending ( ) ;
                     return ;
                 }
             }
@@ -429,7 +534,7 @@ public class DeskMover
             // Only stop on timer ticks or if we were moving already.
             if ( fromTimer || _currentCommandedDirection != Direction.None )
             {
-                await Stop ( ) ;
+                IssueStopIfNotPending ( ) ;
             }
             return ;
         }
@@ -438,26 +543,11 @@ public class DeskMover
         {
             if ( _currentCommandedDirection != Direction.None )
             {
-                await Stop ( ) ;
+                IssueStopIfNotPending ( ) ;
                 return ;
             }
 
-            switch ( desired )
-            {
-                case Direction.Up:
-                    if ( await Up ( ) )
-                    {
-                        _currentCommandedDirection = Direction.Up ;
-                    }
-                    break ;
-                case Direction.Down:
-                    if ( await Down ( ) )
-                    {
-                        _currentCommandedDirection = Direction.Down ;
-                    }
-                    break ;
-            }
-
+            IssueMoveCommand ( desired ) ;
             return ;
         }
 
