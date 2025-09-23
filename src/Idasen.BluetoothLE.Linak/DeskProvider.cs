@@ -5,6 +5,7 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+using System.Threading ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
@@ -23,6 +24,9 @@ public class DeskProvider
 
     private IDisposable? _deskDetected ;
     private bool _disposed ;
+
+    // Backing field for Desk with volatile memory semantics
+    private IDesk? _desk ;
 
     public DeskProvider (
         ILogger logger ,
@@ -172,7 +176,11 @@ public class DeskProvider
     /// <summary>
     ///     Gets the last detected desk instance.
     /// </summary>
-    public IDesk? Desk { get ; private set ; }
+    public IDesk? Desk
+    {
+        get => Volatile.Read ( ref _desk ) ;
+        private set => Volatile.Write ( ref _desk , value ) ;
+    }
 
     internal void DoTryGetDesk ( CancellationToken token )
     {
