@@ -60,6 +60,9 @@ public class DeskMover
     private Task < bool >? _pendingMoveCommandTask ;
     private Task < bool >? _pendingStopTask ;
 
+    // Tracks consecutive polls where height did not change to avoid premature stop near target
+    private int _noMovementPolls ;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskMover" /> class.
     ///     This overload uses default settings.
@@ -242,6 +245,7 @@ public class DeskMover
         _disposableTimer?.Dispose ( ) ;
         _disposableTimer = null ;
         _currentCommandedDirection = Direction.None ;
+        _noMovementPolls = 0 ;
 
         var calledFromMove = InMove.Value ;
 
@@ -351,6 +355,7 @@ public class DeskMover
         IsAllowedToMove = true ;
         _finishedEmitted = false ;
         _currentCommandedDirection = Direction.None ;
+        _noMovementPolls = 0 ;
 
         _heightMonitor.Reset ( ) ;
     }
@@ -488,13 +493,29 @@ public class DeskMover
 
         _heightMonitor.AddHeight ( Height ) ;
 
+        // Only consider a stall if we are already commanding movement, and it has persisted.
+        var activelyCommanding = _currentCommandedDirection != Direction.None ;
+
         if ( ! _heightMonitor.IsHeightChanging ( ) )
         {
-            _logger.Warning ( "Failed, desk not moving during last " +
-                              "{MinimumNumberOfItems} polls." ,
-                              DeskHeightMonitor.MinimumNumberOfItems ) ;
-            IssueStopIfNotPending ( ) ;
-            return Task.CompletedTask ;
+            _noMovementPolls++ ;
+
+            // Treat as stall only when we have been commanding and the stall persisted long enough.
+            var longStall = _noMovementPolls >= 20 ;
+
+            if ( activelyCommanding && longStall )
+            {
+                _logger.Warning ( "Failed, desk not moving during last " +
+                                  "{MinimumNumberOfItems} polls." ,
+                                  DeskHeightMonitor.MinimumNumberOfItems ) ;
+                IssueStopIfNotPending ( ) ;
+                return Task.CompletedTask ;
+            }
+        }
+        else
+        {
+            // Reset stall counter as soon as we detect movement again
+            _noMovementPolls = 0 ;
         }
 
         _calculator.Height = Height ;
@@ -568,14 +589,19 @@ public class DeskMover
         {
             if ( _currentCommandedDirection != Direction.None )
             {
+                // Direction change while already moving -> stop first
                 IssueStopIfNotPending ( ) ;
                 return Task.CompletedTask ;
             }
 
+            // Start moving in the desired direction
             IssueMoveCommand ( desired ) ;
+            return Task.CompletedTask ;
         }
 
-        // desired == _currentCommandedDirection: do nothing
+        // desired == _currentCommandedDirection:
+        // Re-issue the same command to keep the desk moving (LINAK requires periodic keep-alive).
+        IssueMoveCommand ( desired ) ;
 
         return Task.CompletedTask ;
     }

@@ -18,7 +18,7 @@ public class DeskMoverSettings
     /// <summary>
     ///     Maximum dynamic tolerance based on predicted movement until stop.
     /// </summary>
-    public uint NearTargetMaxDynamicTolerance { get ; init ; } = 10u ;
+    public uint NearTargetMaxDynamicTolerance { get ; init ; } = 4u ;
 
     /// <summary>
     ///     Provides a shared default <see cref="DeskMoverSettings" /> instance with standard values.
