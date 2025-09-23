@@ -152,7 +152,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public async Task < bool > MoveUp ( ) // todo this should be async
+    public async Task < bool > MoveUpAsync ( ) // todo this should be async
     {
         if ( ! TryGetDeskMover ( out var deskMover ) )
         {
@@ -163,7 +163,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public async Task < bool > MoveDown ( ) // todo check test for async
+    public async Task < bool > MoveDownAsync ( ) // todo check test for async
     {
         if ( ! TryGetDeskMover ( out var deskMover ) )
         {
@@ -196,7 +196,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public async Task < bool > MoveStop ( ) // todo check test for async
+    public async Task < bool > MoveStopAsync ( ) // todo check test for async
     {
         if ( ! TryGetDeskMover ( out var deskMover ) )
         {
@@ -207,7 +207,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public Task < bool > MoveLock ( ) // todo check test for async
+    public Task < bool > MoveLockAsync ( ) // todo check test for async
     {
         if ( ! TryGetDeskLocker ( out var deskLocker ) )
         {
@@ -220,7 +220,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public Task < bool > MoveUnlock ( ) // todo check test for async
+    public Task < bool > MoveUnlockAsync ( ) // todo check test for async
     {
         if ( ! TryGetDeskLocker ( out var deskLocker ) )
         {

@@ -136,7 +136,7 @@ public class DeskConnectorTests
     {
         var sut = CreateSut ( ) ;
 
-        var result = await sut.MoveUp ( ) ;
+        var result = await sut.MoveUpAsync ( ) ;
 
         result.Should ( ).BeFalse ( ) ;
         _logger.Received ( ).Error ( Arg.Is < string > ( s => s.Contains ( "refreshed" ,
@@ -152,7 +152,7 @@ public class DeskConnectorTests
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
-        var result = await sut.MoveUp ( ) ;
+        var result = await sut.MoveUpAsync ( ) ;
 
         result.Should ( ).BeTrue ( ) ;
         await _mover.Received ( ).Up ( ) ;
@@ -168,10 +168,10 @@ public class DeskConnectorTests
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
-        ( await sut.MoveDown ( ) ).Should ( ).BeTrue ( ) ;
+        ( await sut.MoveDownAsync ( ) ).Should ( ).BeTrue ( ) ;
         await _mover.Received ( ).Down ( ) ;
 
-        ( await sut.MoveStop ( ) ).Should ( ).BeTrue ( ) ;
+        ( await sut.MoveStopAsync ( ) ).Should ( ).BeTrue ( ) ;
         await _mover.Received ( ).Stop ( ) ;
     }
 
@@ -180,16 +180,16 @@ public class DeskConnectorTests
     {
         var sut = CreateSut ( ) ;
 
-        ( await sut.MoveLock ( ) ).Should ( ).BeFalse ( ) ;
-        ( await sut.MoveUnlock ( ) ).Should ( ).BeFalse ( ) ;
+        ( await sut.MoveLockAsync ( ) ).Should ( ).BeFalse ( ) ;
+        ( await sut.MoveUnlockAsync ( ) ).Should ( ).BeFalse ( ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
-        ( await sut.MoveLock ( ) ).Should ( ).BeTrue ( ) ;
+        ( await sut.MoveLockAsync ( ) ).Should ( ).BeTrue ( ) ;
         _deskLocker.Received ( ).Lock ( ) ;
 
-        ( await sut.MoveUnlock ( ) ).Should ( ).BeTrue ( ) ;
+        ( await sut.MoveUnlockAsync ( ) ).Should ( ).BeTrue ( ) ;
         _deskLocker.Received ( ).Unlock ( ) ;
     }
 

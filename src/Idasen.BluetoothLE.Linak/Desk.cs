@@ -73,65 +73,65 @@ public sealed class Desk
     [ Obsolete ( "Use MoveUpAsync() instead." ) ]
     public void MoveUp ( )
     {
-        _ = _connector.MoveUp ( ) ;
+        _ = _connector.MoveUpAsync ( ) ;
     }
 
     /// <inheritdoc />
     [ Obsolete ( "Use MoveDownAsync() instead." ) ]
     public void MoveDown ( )
     {
-        _ = _connector.MoveDown ( ) ;
+        _ = _connector.MoveDownAsync ( ) ;
     }
 
     /// <inheritdoc />
     [ Obsolete ( "Use MoveStopAsync() instead." ) ]
     public void MoveStop ( )
     {
-        _ = _connector.MoveStop ( ) ;
+        _ = _connector.MoveStopAsync ( ) ;
     }
 
     /// <inheritdoc />
     [ Obsolete ( "Use MoveLockAsync() instead." ) ]
     public void MoveLock ( )
     {
-        _ = _connector.MoveLock ( ) ;
+        _ = _connector.MoveLockAsync ( ) ;
     }
 
     /// <inheritdoc />
     [ Obsolete ( "Use MoveUnlockAsync() instead." ) ]
     public void MoveUnlock ( )
     {
-        _ = _connector.MoveUnlock ( ) ;
+        _ = _connector.MoveUnlockAsync ( ) ;
     }
 
     /// <inheritdoc />
     public Task < bool > MoveUpAsync ( )
     {
-        return _connector.MoveUp ( ) ;
+        return _connector.MoveUpAsync ( ) ;
     }
 
     /// <inheritdoc />
     public Task < bool > MoveDownAsync ( )
     {
-        return _connector.MoveDown ( ) ;
+        return _connector.MoveDownAsync ( ) ;
     }
 
     /// <inheritdoc />
     public Task < bool > MoveStopAsync ( )
     {
-        return _connector.MoveStop ( ) ;
+        return _connector.MoveStopAsync ( ) ;
     }
 
     /// <inheritdoc />
     public Task < bool > MoveLockAsync ( )
     {
-        return _connector.MoveLock ( ) ;
+        return _connector.MoveLockAsync ( ) ;
     }
 
     /// <inheritdoc />
     public Task < bool > MoveUnlockAsync ( )
     {
-        return _connector.MoveUnlock ( ) ;
+        return _connector.MoveUnlockAsync ( ) ;
     }
 
     /// <inheritdoc />

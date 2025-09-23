@@ -69,29 +69,29 @@ public interface IDeskConnector
     ///     Move the desk up.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task < bool > MoveUp ( ) ;
+    Task < bool > MoveUpAsync ( ) ;
 
     /// <summary>
     ///     Move the desk down.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task < bool > MoveDown ( ) ;
+    Task < bool > MoveDownAsync ( ) ;
 
     /// <summary>
     ///     Stop moving the desk.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task < bool > MoveStop ( ) ;
+    Task < bool > MoveStopAsync ( ) ;
 
     /// <summary>
     ///     Lock the desk which means manual movement is blocked.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task < bool > MoveLock ( ) ;
+    Task < bool > MoveLockAsync ( ) ;
 
     /// <summary>
     ///     Unlock the desk which means manual movement is allowed.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task < bool > MoveUnlock ( ) ;
+    Task < bool > MoveUnlockAsync ( ) ;
 }
