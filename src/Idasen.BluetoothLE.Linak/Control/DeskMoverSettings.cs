@@ -3,7 +3,7 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 /// <summary>
 ///     Configuration settings for DeskMover behavior.
 /// </summary>
-public class DeskMoverSettings
+public class DeskMoverSettings // todo make all the properties settable via ISettings
 {
     /// <summary>
     ///     Interval for movement evaluation and sampling.
@@ -18,7 +18,7 @@ public class DeskMoverSettings
     /// <summary>
     ///     Maximum dynamic tolerance based on predicted movement until stop.
     /// </summary>
-    public uint NearTargetMaxDynamicTolerance { get ; init ; } = 4u ;
+    public uint NearTargetMaxDynamicTolerance { get ; init ; } = 10u ;
 
     /// <summary>
     ///     Provides a shared default <see cref="DeskMoverSettings" /> instance with standard values.
