@@ -182,12 +182,33 @@ public class DeskProvider
 
     internal void DoTryGetDesk ( CancellationToken token )
     {
-        while (Desk == null &&
-               ! token.IsCancellationRequested)
+        // Fast-path exit if already detected or canceled
+        if ( Desk != null || token.IsCancellationRequested )
+        {
+            return ;
+        }
+
+        var handles = new WaitHandle [ ]
+        {
+            DeskDetectedEvent ,
+            token.WaitHandle
+        } ;
+
+        while ( Desk == null && ! token.IsCancellationRequested )
         {
             _logger.Information ( "Trying to find desk" ) ;
 
-            DeskDetectedEvent.WaitOne ( TimeSpan.FromSeconds ( 1 ) ) ;
+            // Wait up to 1s for either the desk-detected event or cancellation
+            var index = WaitHandle.WaitAny ( handles , 1000 ) ;
+
+            // If cancellation was signaled, leave immediately
+            if ( index == 1 )
+            {
+                break ;
+            }
+
+            // If timed out (index == WaitHandle.WaitTimeout) just loop again and re-check conditions
+            // If desk-detected event (index == 0), loop will re-check Desk and exit if set
         }
     }
 
