@@ -228,22 +228,21 @@ public class DeskProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public void OnDeskDetected_ForInvoked_CallsDeskDetectedEventSet (
+    public async Task OnDeskDetected_ForInvoked_CallsDeskDetectedEventSet (
         DeskProvider sut ,
         IDesk desk ,
         CancellationTokenSource source )
     {
-        Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) ) ;
+        // Safety timeout so the test doesn't hang in case of failure
+        source.CancelAfter ( TimeSpan.FromSeconds ( 5 ) ) ;
 
-        Task.Run ( ( ) => sut.OnDeskDetected ( desk ) ,
-                   source.Token ) ;
+        var waitForDetection = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) , source.Token ) ;
+        var triggerDetection = Task.Run ( ( ) => sut.OnDeskDetected ( desk ) , source.Token ) ;
 
-        Thread.Sleep ( 5000 ) ; // not a good way but the only way at the moment
+        await Task.WhenAll ( waitForDetection , triggerDetection ) ;
 
         sut.Desk
            .Should ( )
            .Be ( desk ) ;
-
-        source.Cancel ( false ) ;
     }
 }

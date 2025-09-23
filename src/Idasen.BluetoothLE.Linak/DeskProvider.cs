@@ -195,14 +195,29 @@ public class DeskProvider
 
     internal void OnDeskDetected ( IDesk desk )
     {
-        _logger.Information ( "Detected desk {Name} with Bluetooth address {Address}" ,
-                              desk.Name ,
-                              desk.BluetoothAddress ) ;
-
-        _detector.Stop ( ) ;
-
+        // Ensure Desk is visible immediately to other threads waiting on it
         Desk = desk ;
-
         DeskDetectedEvent.Set ( ) ;
+
+        try
+        {
+            _detector.Stop ( ) ;
+        }
+        catch ( Exception e )
+        {
+            _logger.Error ( e , "Failed stopping detector after detection" ) ;
+            _errorManager.PublishForMessage ( "Failed Stop Detecting" ) ;
+        }
+
+        try
+        {
+            _logger.Information ( "Detected desk {Name} with Bluetooth address {Address}" ,
+                                  desk.Name ,
+                                  desk.BluetoothAddress ) ;
+        }
+        catch
+        {
+            // Swallow logging issues to not impact state used in tests
+        }
     }
 }
