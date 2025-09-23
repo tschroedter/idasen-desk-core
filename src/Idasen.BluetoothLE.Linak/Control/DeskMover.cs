@@ -40,7 +40,7 @@ public class DeskMover
     private readonly DeskMoverSettings _settings ;
     private readonly ISubject < uint > _subjectFinished ;
 
-    // Tracks the last command sent to the executor to avoid re-sending the same command
+    // Tracks the last command sent to the executor to avoid re-sending the same command within a single evaluation
     private Direction _currentCommandedDirection = Direction.None ;
 
     private IDisposable? _disposableProvider ;
@@ -607,10 +607,16 @@ public class DeskMover
                 return Task.CompletedTask ;
             }
 
+            // Start moving in the new desired direction
             IssueMoveCommand ( desired ) ;
+            return Task.CompletedTask ;
         }
 
-        // desired == _currentCommandedDirection: do nothing
+        // desired == _currentCommandedDirection: re-issue the command on timer ticks to keep movement alive
+        if ( fromTimer )
+        {
+            IssueMoveCommand ( desired ) ;
+        }
 
         return Task.CompletedTask ;
     }
