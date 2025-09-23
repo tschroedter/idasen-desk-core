@@ -1,17 +1,12 @@
-using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Reflection;
-using System.Threading.Tasks;
-using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using FluentAssertions;
 using Idasen.BluetoothLE.Common.Tests;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
-using Idasen.BluetoothLE.Linak;
 using Idasen.BluetoothLE.Linak.Interfaces;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Serilog;
 
@@ -32,7 +27,7 @@ public class DeskConnectorTests
 
     private IDeskCharacteristics _deskCharacteristics = null!;
     private IGenericAccess _genericAccess = null!;
-    private Subject<System.Collections.Generic.IEnumerable<byte>> _genericAccessDeviceNameChanged = null!;
+    private Subject<IEnumerable<byte>> _genericAccessDeviceNameChanged = null!;
     private IReferenceOutput _referenceOutput = null!;
     private IControl _control = null!;
 
@@ -71,7 +66,7 @@ public class DeskConnectorTests
 
         _deskCharacteristics = Substitute.For<IDeskCharacteristics>();
         _genericAccess = Substitute.For<IGenericAccess>();
-        _genericAccessDeviceNameChanged = new Subject<System.Collections.Generic.IEnumerable<byte>>();
+        _genericAccessDeviceNameChanged = new Subject<IEnumerable<byte>>();
         _genericAccess.DeviceNameChanged.Returns(_genericAccessDeviceNameChanged);
         _referenceOutput = Substitute.For<IReferenceOutput>();
         _control = Substitute.For<IControl>();
@@ -110,7 +105,7 @@ public class DeskConnectorTests
         return new DeskConnector(
             _logger,
             _scheduler,
-            () => new Subject<System.Collections.Generic.IEnumerable<byte>>(),
+            () => new Subject<IEnumerable<byte>>(),
             _heightSubject,
             _speedSubject,
             _refreshedSubject,
@@ -124,11 +119,12 @@ public class DeskConnectorTests
             _errorManager);
     }
 
-    private static async Task InvokeOnGattServicesRefreshedAsync(DeskConnector sut, GattCommunicationStatus status)
+    private async static Task InvokeOnGattServicesRefreshedAsync(DeskConnector sut, GattCommunicationStatus status)
     {
         var method = typeof(DeskConnector).GetMethod("OnGattServicesRefreshed", BindingFlags.NonPublic | BindingFlags.Instance);
         method.Should().NotBeNull();
-        var task = (Task)method!.Invoke(sut, new object[] { status })!;
+        var task = (Task)method.Invoke(sut,
+                                       [status] )!;
         await task.ConfigureAwait(false);
     }
 
@@ -237,16 +233,18 @@ public class DeskConnectorTests
     {
         var sut = CreateSut();
 
-        System.Collections.Generic.IEnumerable<byte>? received = null;
+        IEnumerable<byte>? received = null;
         using var sub = sut.DeviceNameChanged.Subscribe(v => received = v);
 
         await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
 
-        var name = new byte[] { 65, 66, 67 };
+        var name = "ABC"u8.ToArray ( );
         _genericAccessDeviceNameChanged.OnNext(name);
 
+        // ReSharper disable PossibleMultipleEnumeration
         received.Should().NotBeNull();
         received.Should().BeEquivalentTo(name);
+        // ReSharper restore PossibleMultipleEnumeration
     }
 
     [TestMethod]
