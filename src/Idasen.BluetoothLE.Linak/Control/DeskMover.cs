@@ -446,6 +446,20 @@ public class DeskMover
                        ? _executor.Up ( )
                        : _executor.Down ( ) ;
 
+        // If the task completed synchronously, handle outcome immediately for deterministic retries
+        if ( task.IsCompleted )
+        {
+            var ok = task.Status == TaskStatus.RanToCompletion && task.Result ;
+
+            if ( ! ok && _currentCommandedDirection == desired )
+            {
+                _currentCommandedDirection = Direction.None ;
+            }
+
+            // no need to keep a pending reference
+            return ;
+        }
+
         _pendingMoveCommandTask = task ;
 
         _ = task.ContinueWith ( t =>
