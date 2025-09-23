@@ -12,7 +12,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskHeightAndSpeed
     : IDeskHeightAndSpeed
 {
@@ -88,12 +88,13 @@ public class DeskHeightAndSpeed
         _subscriber = _referenceOutput.HeightSpeedChanged
                                       .ObserveOn ( _scheduler )
                                       .Subscribe ( OnHeightSpeedChanged ,
-                                                  ex => _logger.Error ( ex ,
-                                                                        "Error while handling HeightSpeedChanged" ) ) ;
+                                                   ex => _logger.Error ( ex ,
+                                                                         "Error while handling HeightSpeedChanged" ) ) ;
 
         if ( _referenceOutput is UnknownBase )
         {
-            _logger.Warning ( "{ReferenceOutput} is set to Unknown" , nameof ( _referenceOutput ) ) ;
+            _logger.Warning ( "{ReferenceOutput} is set to Unknown" ,
+                              nameof ( _referenceOutput ) ) ;
         }
 
         if ( ! _converter.TryConvert ( _referenceOutput.RawHeightSpeed ,

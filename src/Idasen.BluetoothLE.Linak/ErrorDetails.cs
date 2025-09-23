@@ -4,7 +4,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[DebuggerDisplay ( "{ToString(),nq}" )]
+[ DebuggerDisplay ( "{ToString(),nq}" ) ]
 public sealed class ErrorDetails // todo testing
     : IErrorDetails
 {

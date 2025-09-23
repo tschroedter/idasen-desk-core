@@ -63,7 +63,8 @@ public class CircularBuffer<T> : IEnumerable < T >
     {
         if ( capacity < 1 )
         {
-            throw new ArgumentOutOfRangeException ( nameof ( capacity ) , capacity ,
+            throw new ArgumentOutOfRangeException ( nameof ( capacity ) ,
+                                                    capacity ,
                                                     "Capacity must be positive." ) ;
         }
 
@@ -114,9 +115,9 @@ public class CircularBuffer<T> : IEnumerable < T >
     public int Size => _size ;
 
     /// <summary>
-    ///     Alias for <see cref="Size"/> to align with common .NET collection naming.
+    ///     Alias for <see cref="Size" /> to align with common .NET collection naming.
     /// </summary>
-    [UsedImplicitly]
+    [ UsedImplicitly ]
     public int Count => _size ;
 
     /// <summary>
@@ -175,7 +176,7 @@ public class CircularBuffer<T> : IEnumerable < T >
     {
         var segment1 = ArrayOne ( ) ;
 
-        for ( var i = 0 ; i < segment1.Count ; i++ )
+        for (var i = 0; i < segment1.Count; i++)
         {
             if ( segment1.Array != null )
             {
@@ -185,7 +186,7 @@ public class CircularBuffer<T> : IEnumerable < T >
 
         var segment2 = ArrayTwo ( ) ;
 
-        for ( var i = 0 ; i < segment2.Count ; i++ )
+        for (var i = 0; i < segment2.Count; i++)
         {
             if ( segment2.Array != null )
             {

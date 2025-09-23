@@ -8,7 +8,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class ErrorManager // todo testing, move to more general project
     : IErrorManager
 {
@@ -37,29 +37,6 @@ public class ErrorManager // todo testing, move to more general project
         GC.SuppressFinalize ( this ) ;
     }
 
-    protected virtual void Dispose ( bool disposing )
-    {
-        if ( _disposed )
-        {
-            return ;
-        }
-
-        if ( disposing )
-        {
-            // Complete the stream to release subscribers in long-running apps
-            try
-            {
-                _subject.OnCompleted ( ) ;
-            }
-            catch ( Exception ex )
-            {
-                _logger.Warning ( ex , "Error completing ErrorChanged stream" ) ;
-            }
-        }
-
-        _disposed = true ;
-    }
-
     /// <inheritdoc />
     public void Publish ( IErrorDetails details )
     {
@@ -86,4 +63,28 @@ public class ErrorManager // todo testing, move to more general project
 
     // Return the underlying subject to satisfy existing unit tests
     public IObservable < IErrorDetails > ErrorChanged => _subject ;
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+        {
+            return ;
+        }
+
+        if ( disposing )
+        {
+            // Complete the stream to release subscribers in long-running apps
+            try
+            {
+                _subject.OnCompleted ( ) ;
+            }
+            catch ( Exception ex )
+            {
+                _logger.Warning ( ex ,
+                                  "Error completing ErrorChanged stream" ) ;
+            }
+        }
+
+        _disposed = true ;
+    }
 }

@@ -37,7 +37,8 @@ public sealed class CharacteristicBaseFactory
     /// <returns>An instance of <typeparamref name="T" />.</returns>
     public T Create<T> ( IDevice device ) where T : notnull
     {
-        Guard.ArgumentNotNull ( device , nameof ( device ) ) ;
+        Guard.ArgumentNotNull ( device ,
+                                nameof ( device ) ) ;
 
         var instance = _scope.Resolve < T > ( new NamedParameter ( "device" ,
                                                                    device ) ) ;

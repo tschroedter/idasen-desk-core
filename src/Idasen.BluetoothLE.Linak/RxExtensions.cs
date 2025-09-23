@@ -24,14 +24,16 @@ public static class RxExtensions
         ArgumentNullException.ThrowIfNull ( asyncAction ) ;
 
         var query = source.SelectMany ( _ => Observable.FromAsync ( async ( ) =>
-        {
-            await asyncAction ( ).ConfigureAwait ( false ) ;
-            return Unit.Default ;
-        } ) ) ;
+                                                                    {
+                                                                        await asyncAction ( ).ConfigureAwait ( false ) ;
+                                                                        return Unit.Default ;
+                                                                    } ) ) ;
 
         return handler == null
-                   ? query.Subscribe ( _ => { } , _ => { } )
-                   : query.Subscribe ( _ => { } , handler ) ;
+                   ? query.Subscribe ( _ => { } ,
+                                       _ => { } )
+                   : query.Subscribe ( _ => { } ,
+                                       handler ) ;
     }
 
     /// <summary>
@@ -50,13 +52,15 @@ public static class RxExtensions
         ArgumentNullException.ThrowIfNull ( asyncAction ) ;
 
         var query = source.SelectMany ( t => Observable.FromAsync ( async ( ) =>
-        {
-            await asyncAction ( t ).ConfigureAwait ( false ) ;
-            return Unit.Default ;
-        } ) ) ;
+                                                                    {
+                                                                        await asyncAction ( t ).ConfigureAwait ( false ) ;
+                                                                        return Unit.Default ;
+                                                                    } ) ) ;
 
         return handler == null
-                   ? query.Subscribe ( _ => { } , _ => { } )
-                   : query.Subscribe ( _ => { } , handler ) ;
+                   ? query.Subscribe ( _ => { } ,
+                                       _ => { } )
+                   : query.Subscribe ( _ => { } ,
+                                       handler ) ;
     }
 }

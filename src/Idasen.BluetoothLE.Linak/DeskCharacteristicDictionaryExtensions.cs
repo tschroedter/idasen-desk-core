@@ -13,7 +13,7 @@ public static class DeskCharacteristicDictionaryExtensions
     ///     A map of default unknown characteristic instances used when a specific characteristic is missing.
     ///     Kept for backward compatibility; prefer the internal factories in this class.
     /// </summary>
-    [UsedImplicitly]
+    [ UsedImplicitly ]
     public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
         new ( )
         {
@@ -54,20 +54,25 @@ public static class DeskCharacteristicDictionaryExtensions
 
         if ( key == DeskCharacteristicKey.None )
         {
-            throw new ArgumentOutOfRangeException ( nameof ( key ) , key , "Key must not be None." ) ;
+            throw new ArgumentOutOfRangeException ( nameof ( key ) ,
+                                                    key ,
+                                                    "Key must not be None." ) ;
         }
 
-        if ( dictionary.TryGetValue ( key , out var characteristicBase ) )
+        if ( dictionary.TryGetValue ( key ,
+                                      out var characteristicBase ) )
         {
             if ( characteristicBase is T typed )
             {
                 return typed ;
             }
 
-            throw new InvalidCastException ( $"Characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {characteristicBase.GetType ( ).Name})." ) ;
+            throw new
+                InvalidCastException ( $"Characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {characteristicBase.GetType ( ).Name})." ) ;
         }
 
-        if ( UnknownFactories.TryGetValue ( key , out var factory ) )
+        if ( UnknownFactories.TryGetValue ( key ,
+                                            out var factory ) )
         {
             var unknown = factory ( ) ;
 
@@ -76,9 +81,12 @@ public static class DeskCharacteristicDictionaryExtensions
                 return typedUnknown ;
             }
 
-            throw new InvalidCastException ( $"Unknown characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {unknown.GetType ( ).Name})." ) ;
+            throw new
+                InvalidCastException ( $"Unknown characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {unknown.GetType ( ).Name})." ) ;
         }
 
-        throw new ArgumentOutOfRangeException ( nameof ( key ) , key , "Unknown characteristic key." ) ;
+        throw new ArgumentOutOfRangeException ( nameof ( key ) ,
+                                                key ,
+                                                "Unknown characteristic key." ) ;
     }
 }

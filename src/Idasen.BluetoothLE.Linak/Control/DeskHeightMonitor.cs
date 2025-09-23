@@ -1,7 +1,7 @@
 ﻿using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak.Control;
+namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 public class DeskHeightMonitor
@@ -28,7 +28,8 @@ public class DeskHeightMonitor
         }
 
         var needed = MinimumNumberOfItems ;
-        var skip = Math.Max ( 0 , _history.Size - needed ) ;
+        var skip = Math.Max ( 0 ,
+                              _history.Size - needed ) ;
         var lastNValues = _history.Skip ( skip )
                                   .ToArray ( ) ;
 
@@ -36,7 +37,8 @@ public class DeskHeightMonitor
                                          .Count ( ) ;
 
         _logger.Debug ( "History: {History}; DifferentValues={DifferentValues}" ,
-                        string.Join ( "," , lastNValues ) ,
+                        string.Join ( "," ,
+                                      lastNValues ) ,
                         differentValues ) ;
 
         return differentValues > 1 ;

@@ -166,7 +166,7 @@ public class DeskMoverConcurrencyTests
         // Second stop should be a noop
         await sut.Stop ( ) ;
 
-        await _executor.Received(1).Stop() ;
+        await _executor.Received ( 1 ).Stop ( ) ;
         finishedEvents.Count.Should ( ).Be ( 1 ) ;
 
         sut.Dispose ( ) ;
@@ -221,13 +221,13 @@ public class DeskMoverConcurrencyTests
         _scheduler.AdvanceBy ( 1 ) ;
 
         await sut.OnTimerElapsed ( 0 ) ;
-        await _executor.Received(1).Up() ;
+        await _executor.Received ( 1 ).Up ( ) ;
 
         // Allow continuation to reset direction after failure
         await Task.Yield ( ) ;
 
         await sut.OnTimerElapsed ( 1 ) ;
-        await _executor.Received(2).Up() ;
+        await _executor.Received ( 2 ).Up ( ) ;
 
         sut.Dispose ( ) ;
     }
@@ -249,11 +249,11 @@ public class DeskMoverConcurrencyTests
 
         // First evaluation triggers Stop (pending)
         await sut.OnTimerElapsed ( 0 ) ;
-        await _executor.Received(1).Stop() ;
+        await _executor.Received ( 1 ).Stop ( ) ;
 
         // While Stop is still pending, further evaluations should not send another Stop
         await sut.OnTimerElapsed ( 1 ) ;
-        await _executor.Received(1).Stop() ;
+        await _executor.Received ( 1 ).Stop ( ) ;
 
         tcs.TrySetResult ( true ) ;
         sut.Dispose ( ) ;

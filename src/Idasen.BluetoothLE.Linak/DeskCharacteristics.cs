@@ -9,7 +9,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCharacteristics
     : IDeskCharacteristics
 {
@@ -35,7 +35,7 @@ public class DeskCharacteristics
     /// <inheritdoc />
     public async Task Refresh ( )
     {
-        foreach ( var characteristicBase in _available.Values )
+        foreach (var characteristicBase in _available.Values)
         {
             await characteristicBase.Refresh ( ).ConfigureAwait ( false ) ;
         }

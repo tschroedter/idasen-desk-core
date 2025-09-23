@@ -23,7 +23,7 @@ public static class ExceptionExtensions
 
         return hresult == 0x8007048F || // ERROR_DEVICE_NOT_CONNECTED
                hresult == 0x800710DF || // ERROR_REMOTE_SESSION_LIMIT_EXCEEDED (used by stack)
-               hresult == 0x8000FFFF ;   // E_UNEXPECTED
+               hresult == 0x8000FFFF ; // E_UNEXPECTED
     }
 
     /// <summary>

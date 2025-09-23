@@ -148,10 +148,10 @@ public class InvocationToTextConverterTests
 
     private sealed class Node ( string name )
     {
-        [UsedImplicitly]
+        [ UsedImplicitly ]
         public string Name { get ; } = name ;
 
-        [UsedImplicitly]
+        [ UsedImplicitly ]
         public Node? Next { get ; set ; }
     }
 }

@@ -23,8 +23,8 @@ public interface IDateTimeOffset
     ///     Converts the value of the current DateTimeOffset object to its
     ///     equivalent string representation using the specified format and
     ///     culture-specific format information.
-    ///     Follows the .NET pattern: both <paramref name="format"/> and
-    ///     <paramref name="formatProvider"/> may be <c>null</c>.
+    ///     Follows the .NET pattern: both <paramref name="format" /> and
+    ///     <paramref name="formatProvider" /> may be <c>null</c>.
     /// </summary>
     /// <param name="format">
     ///     A format string, or <c>null</c> to use the default format.

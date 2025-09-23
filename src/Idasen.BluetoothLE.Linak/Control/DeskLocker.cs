@@ -8,7 +8,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskLocker
     : IDeskLocker
 {
@@ -119,7 +119,8 @@ public class DeskLocker
             return ;
         }
 
-        _logger.Information ( "Manual move detected. Calling Stop. Details={Details}" , details ) ;
+        _logger.Information ( "Manual move detected. Calling Stop. Details={Details}" ,
+                              details ) ;
 
         try
         {
@@ -127,7 +128,8 @@ public class DeskLocker
         }
         catch ( Exception ex )
         {
-            _logger.Error ( ex , "Error while stopping after manual move detection" ) ;
+            _logger.Error ( ex ,
+                            "Error while stopping after manual move detection" ) ;
         }
     }
 }

@@ -23,10 +23,10 @@ public class InitialHeightProvider
     private readonly ILogger _logger ;
     private readonly IScheduler _scheduler ;
     private readonly ISubject < uint > _subjectFinished ;
+    private CancellationTokenSource? _cts ;
 
     // ReSharper disable once InconsistentNaming - only used for testing
     internal IDisposable? _disposalHeightAndSpeed ;
-    private CancellationTokenSource? _cts ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="InitialHeightProvider" /> class.
@@ -58,11 +58,46 @@ public class InitialHeightProvider
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
                                                  .ObserveOn ( _scheduler )
                                                  .Subscribe ( OnHeightAndSpeedChanged ,
-                                                             ex => _logger.Error ( ex ,
-                                                                                   "Error while observing height/speed changes" ) ) ;
+                                                              ex => _logger.Error ( ex ,
+                                                                                    "Error while observing height/speed changes" ) ) ;
 
         Height = _heightAndSpeed.Height ;
     }
+
+    /// <inheritdoc />
+    public Task Start ( )
+    {
+        return Start ( CancellationToken.None ) ;
+    }
+
+    /// <inheritdoc />
+    public IObservable < uint > Finished => _subjectFinished ;
+
+    /// <inheritdoc />
+    public void Dispose ( )
+    {
+        try
+        {
+            _cts?.Cancel ( ) ;
+        }
+        catch
+        {
+            // ignore
+        }
+        finally
+        {
+            _cts?.Dispose ( ) ;
+            _cts = null ;
+        }
+
+        _disposalHeightAndSpeed?.Dispose ( ) ;
+    }
+
+    /// <inheritdoc />
+    public uint Height { get ; private set ; }
+
+    /// <inheritdoc />
+    public bool HasReceivedHeightAndSpeed { get ; private set ; }
 
     /// <summary>
     ///     Starts the process with cancellation support.
@@ -76,9 +111,6 @@ public class InitialHeightProvider
         return StartInternalAsync ( _cts.Token ) ;
     }
 
-    /// <inheritdoc />
-    public Task Start ( ) => Start ( CancellationToken.None ) ;
-
     private async Task StartInternalAsync ( CancellationToken cancellationToken )
     {
         if ( _disposalHeightAndSpeed == null )
@@ -90,7 +122,8 @@ public class InitialHeightProvider
 
         if ( _heightAndSpeed.Height > 0 )
         {
-            _logger.Information ( "Current height is {Height}" , _heightAndSpeed.Height ) ;
+            _logger.Information ( "Current height is {Height}" ,
+                                  _heightAndSpeed.Height ) ;
 
             HasReceivedHeightAndSpeed = true ;
 
@@ -135,38 +168,10 @@ public class InitialHeightProvider
         }
         catch ( Exception ex )
         {
-            _logger.Warning ( ex , "Attempt to stop after cancellation failed" ) ;
+            _logger.Warning ( ex ,
+                              "Attempt to stop after cancellation failed" ) ;
         }
     }
-
-    /// <inheritdoc />
-    public IObservable < uint > Finished => _subjectFinished ;
-
-    /// <inheritdoc />
-    public void Dispose ( )
-    {
-        try
-        {
-            _cts?.Cancel ( ) ;
-        }
-        catch
-        {
-            // ignore
-        }
-        finally
-        {
-            _cts?.Dispose ( ) ;
-            _cts = null ;
-        }
-
-        _disposalHeightAndSpeed?.Dispose ( ) ;
-    }
-
-    /// <inheritdoc />
-    public uint Height { get ; private set ; }
-
-    /// <inheritdoc />
-    public bool HasReceivedHeightAndSpeed { get ; private set ; }
 
     private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
     {
@@ -189,6 +194,7 @@ public class InitialHeightProvider
         _subjectFinished.OnNext ( Height ) ;
         HasReceivedHeightAndSpeed = true ;
 
-        _logger.Information ( "Received valid height {Height}" , details.Height ) ;
+        _logger.Information ( "Received valid height {Height}" ,
+                              details.Height ) ;
     }
 }

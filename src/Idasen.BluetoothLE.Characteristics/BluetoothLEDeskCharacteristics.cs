@@ -25,7 +25,8 @@ public sealed class BluetoothLEDeskCharacteristics : Module
     /// <param name="builder">The container builder.</param>
     protected override void Load ( ContainerBuilder builder )
     {
-        Guard.ArgumentNotNull ( builder , nameof ( builder ) ) ;
+        Guard.ArgumentNotNull ( builder ,
+                                nameof ( builder ) ) ;
 
         builder.RegisterModule < BluetoothLECoreModule > ( ) ;
 

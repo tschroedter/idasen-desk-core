@@ -11,7 +11,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class RawValueWriter
     : IRawValueWriter
 {

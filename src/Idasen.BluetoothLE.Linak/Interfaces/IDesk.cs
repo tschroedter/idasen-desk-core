@@ -75,60 +75,60 @@ public interface IDesk
     /// <summary>
     ///     Move the desk up.
     /// </summary>
-    [Obsolete("Use MoveUpAsync() instead.")]
+    [ Obsolete ( "Use MoveUpAsync() instead." ) ]
     void MoveUp ( ) ;
 
     /// <summary>
     ///     Move the desk down.
     /// </summary>
-    [Obsolete("Use MoveDownAsync() instead.")]
+    [ Obsolete ( "Use MoveDownAsync() instead." ) ]
     void MoveDown ( ) ;
 
     /// <summary>
     ///     Stop moving the desk.
     /// </summary>
-    [Obsolete("Use MoveStopAsync() instead.")]
+    [ Obsolete ( "Use MoveStopAsync() instead." ) ]
     void MoveStop ( ) ;
 
     /// <summary>
     ///     Lock the desk, stop manual movement.
     /// </summary>
-    [Obsolete("Use MoveLockAsync() instead.")]
+    [ Obsolete ( "Use MoveLockAsync() instead." ) ]
     void MoveLock ( ) ;
 
     /// <summary>
     ///     Unlock the desk, allow manual movement.
     /// </summary>
-    [Obsolete("Use MoveUnlockAsync() instead.")]
+    [ Obsolete ( "Use MoveUnlockAsync() instead." ) ]
     void MoveUnlock ( ) ;
 
     /// <summary>
     ///     Move the desk up.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task<bool> MoveUpAsync();
+    Task < bool > MoveUpAsync ( ) ;
 
     /// <summary>
     ///     Move the desk down.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task<bool> MoveDownAsync();
+    Task < bool > MoveDownAsync ( ) ;
 
     /// <summary>
     ///     Stop moving the desk.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task<bool> MoveStopAsync();
+    Task < bool > MoveStopAsync ( ) ;
 
     /// <summary>
     ///     Lock the desk which means manual movement is blocked.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task<bool> MoveLockAsync();
+    Task < bool > MoveLockAsync ( ) ;
 
     /// <summary>
     ///     Unlock the desk which means manual movement is allowed.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
-    Task<bool> MoveUnlockAsync();
+    Task < bool > MoveUnlockAsync ( ) ;
 }

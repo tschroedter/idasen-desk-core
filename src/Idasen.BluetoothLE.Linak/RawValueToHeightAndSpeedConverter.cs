@@ -8,7 +8,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class RawValueToHeightAndSpeedConverter
     : IRawValueToHeightAndSpeedConverter
 {
@@ -53,8 +53,10 @@ public class RawValueToHeightAndSpeedConverter
                 }
 
                 var span = arr.AsSpan ( ) ;
-                var rawHeight = BinaryPrimitives.ReadUInt16LittleEndian ( span.Slice ( 0 , 2 ) ) ;
-                var rawSpeed = BinaryPrimitives.ReadInt16LittleEndian ( span.Slice ( 2 , 2 ) ) ;
+                var rawHeight = BinaryPrimitives.ReadUInt16LittleEndian ( span.Slice ( 0 ,
+                                                                                       2 ) ) ;
+                var rawSpeed = BinaryPrimitives.ReadInt16LittleEndian ( span.Slice ( 2 ,
+                                                                                     2 ) ) ;
 
                 height = HeightBaseInMicroMeter + rawHeight ;
                 speed = rawSpeed ;
@@ -62,10 +64,10 @@ public class RawValueToHeightAndSpeedConverter
             }
 
             // Fallback: copy first 4 bytes without allocating a full array
-            Span < byte > buffer = stackalloc byte[4] ;
+            Span < byte > buffer = stackalloc byte [4] ;
             var i = 0 ;
 
-            foreach ( var b in enumerable )
+            foreach (var b in enumerable)
             {
                 if ( i < 4 )
                 {
@@ -92,8 +94,10 @@ public class RawValueToHeightAndSpeedConverter
                 return false ;
             }
 
-            var h = BinaryPrimitives.ReadUInt16LittleEndian ( buffer.Slice ( 0 , 2 ) ) ;
-            var s = BinaryPrimitives.ReadInt16LittleEndian ( buffer.Slice ( 2 , 2 ) ) ;
+            var h = BinaryPrimitives.ReadUInt16LittleEndian ( buffer.Slice ( 0 ,
+                                                                             2 ) ) ;
+            var s = BinaryPrimitives.ReadInt16LittleEndian ( buffer.Slice ( 2 ,
+                                                                            2 ) ) ;
 
             height = HeightBaseInMicroMeter + h ;
             speed = s ;
@@ -102,8 +106,12 @@ public class RawValueToHeightAndSpeedConverter
         catch ( Exception e )
         {
             // Allocate only for logging
-            var hex = bytes is byte [ ] a ? a.ToHex ( ) : enumerable.ToArray ( ).ToHex ( ) ;
-            _logger.Warning ( e , "Failed to convert raw value {Hex} to height and speed" , hex ) ;
+            var hex = bytes is byte [ ] a
+                          ? a.ToHex ( )
+                          : enumerable.ToArray ( ).ToHex ( ) ;
+            _logger.Warning ( e ,
+                              "Failed to convert raw value {Hex} to height and speed" ,
+                              hex ) ;
             height = 0 ;
             speed = 0 ;
             return false ;

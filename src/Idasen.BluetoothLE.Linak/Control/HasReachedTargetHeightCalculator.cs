@@ -7,7 +7,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class HasReachedTargetHeightCalculator
     : IHasReachedTargetHeightCalculator
 {
@@ -71,27 +71,27 @@ public class HasReachedTargetHeightCalculator
 
         HasReachedTargetHeight = MoveIntoDirection switch
                                  {
-                                     Direction.Up   => isCloseToTargetHeight || StoppingHeight >= TargetHeight ,
+                                     Direction.Up => isCloseToTargetHeight || StoppingHeight >= TargetHeight ,
                                      Direction.Down => isCloseToTargetHeight || StoppingHeight <= TargetHeight ,
-                                     _               => true
+                                     _ => true
                                  } ;
 
         _logger.Debug (
-            "ReachedCalc Target={TargetHeight} Stop={StoppingHeight} Move={MoveIntoDirection} Start={StartMovingIntoDirection} Delta={Delta} UntilStop={MovementUntilStop} Reached={HasReachedTargetHeight}" ,
-            TargetHeight ,
-            StoppingHeight ,
-            MoveIntoDirection ,
-            StartMovingIntoDirection ,
-            Delta ,
-            MovementUntilStop ,
-            HasReachedTargetHeight ) ;
+                       "ReachedCalc Target={TargetHeight} Stop={StoppingHeight} Move={MoveIntoDirection} Start={StartMovingIntoDirection} Delta={Delta} UntilStop={MovementUntilStop} Reached={HasReachedTargetHeight}" ,
+                       TargetHeight ,
+                       StoppingHeight ,
+                       MoveIntoDirection ,
+                       StartMovingIntoDirection ,
+                       Delta ,
+                       MovementUntilStop ,
+                       HasReachedTargetHeight ) ;
 
         return this ;
     }
 
     private bool IsPastTargetHeight ( )
     {
-        switch ( MoveIntoDirection )
+        switch (MoveIntoDirection)
         {
             case Direction.Up:
                 return StoppingHeight >= TargetHeight ;

@@ -12,7 +12,7 @@ namespace Idasen.BluetoothLE.Linak ;
 /// <summary>
 ///     Autofac module that wires up LINAK desk services, control components, and characteristics.
 /// </summary>
-[ExcludeFromCodeCoverage]
+[ ExcludeFromCodeCoverage ]
 // ReSharper disable once InconsistentNaming
 public class BluetoothLELinakModule
     : Module

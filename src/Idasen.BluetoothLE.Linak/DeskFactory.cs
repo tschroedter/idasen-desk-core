@@ -6,7 +6,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskFactory
     : IDeskFactory
 {

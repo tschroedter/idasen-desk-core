@@ -73,7 +73,8 @@ public static class ExceptionAssertionsExtensions
     /// <param name="parameter">The expected parameter name.</param>
     /// <returns></returns>
     [ UsedImplicitly ]
-    [ Obsolete ( "Prefer awaiting the Task-returning WithParameter overload." , false ) ]
+    [ Obsolete ( "Prefer awaiting the Task-returning WithParameter overload." ,
+                 false ) ]
     public static AndConstraint < StringAssertions > WithParameterAsync (
         this Task < ExceptionAssertions < ArgumentNullException > > assertions ,
         string parameter )
@@ -97,7 +98,8 @@ public static class ExceptionAssertionsExtensions
     /// <param name="parameter">The expected parameter name.</param>
     /// <returns></returns>
     [ UsedImplicitly ]
-    [ Obsolete ( "Prefer awaiting the Task-returning WithParameter overload." , false ) ]
+    [ Obsolete ( "Prefer awaiting the Task-returning WithParameter overload." ,
+                 false ) ]
     public static AndConstraint < StringAssertions > WithParameterAsync (
         this Task < ExceptionAssertions < ArgumentException > > assertions ,
         string parameter )

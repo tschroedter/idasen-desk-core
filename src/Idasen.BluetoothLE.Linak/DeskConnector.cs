@@ -11,7 +11,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskConnector
     : IDeskConnector
 {
@@ -96,7 +96,8 @@ public class DeskConnector
                                         .Throttle ( TimeSpan.FromSeconds ( 1 ) )
                                         .SubscribeOn ( scheduler )
                                         .SubscribeAsync ( OnGattServicesRefreshed ,
-                                                          ex => _logger.Error ( ex , "Error handling GattServicesRefreshed" ) ) ;
+                                                          ex => _logger.Error ( ex ,
+                                                                                "Error handling GattServicesRefreshed" ) ) ;
 
         _deviceNameChanged = subjectFactory ( ) ;
     }
@@ -305,7 +306,8 @@ public class DeskConnector
                                           .DeviceNameChanged
                                           .SubscribeOn ( _scheduler )
                                           .Subscribe ( OnDeviceNameChanged ,
-                                                      ex => _logger.Error ( ex , "Error handling DeviceNameChanged" ) ) ;
+                                                       ex => _logger.Error ( ex ,
+                                                                             "Error handling DeviceNameChanged" ) ) ;
 
         await _deskCharacteristics.Refresh ( ).ConfigureAwait ( false ) ;
 

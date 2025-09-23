@@ -30,8 +30,10 @@ public static class ContainerProvider
                                       string appLogFileName ,
                                       IEnumerable < IModule >? otherModules = null )
     {
-        Guard.ArgumentNotEmptyOrWhitespace ( appName , nameof ( appName ) ) ;
-        Guard.ArgumentNotEmptyOrWhitespace ( appLogFileName , nameof ( appLogFileName ) ) ;
+        Guard.ArgumentNotEmptyOrWhitespace ( appName ,
+                                             nameof ( appName ) ) ;
+        Guard.ArgumentNotEmptyOrWhitespace ( appLogFileName ,
+                                             nameof ( appLogFileName ) ) ;
 
         Log.Logger = LoggerProvider.CreateLogger ( appName ,
                                                    appLogFileName ) ;

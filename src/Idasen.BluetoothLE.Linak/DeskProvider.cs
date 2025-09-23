@@ -9,7 +9,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskProvider
     : IDeskProvider
 {
@@ -107,7 +107,8 @@ public class DeskProvider
         _deskDetected = _detector.DeskDetected
                                  .ObserveOn ( _scheduler )
                                  .Subscribe ( OnDeskDetected ,
-                                             ex => _logger.Error ( ex , "Error while handling detected desk" ) ) ;
+                                              ex => _logger.Error ( ex ,
+                                                                    "Error while handling detected desk" ) ) ;
 
         return this ;
     }
@@ -175,8 +176,8 @@ public class DeskProvider
 
     internal void DoTryGetDesk ( CancellationToken token )
     {
-        while ( Desk == null &&
-                ! token.IsCancellationRequested )
+        while (Desk == null &&
+               ! token.IsCancellationRequested)
         {
             _logger.Information ( "Trying to find desk" ) ;
 

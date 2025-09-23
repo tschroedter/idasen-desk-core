@@ -478,7 +478,7 @@ public class DeskMover
         if ( ! IsAllowedToMove )
         {
             _logger.Debug ( "Not allowed to move..." ) ;
-            return Task.CompletedTask;
+            return Task.CompletedTask ;
         }
 
         if ( TargetHeight == 0u )
@@ -491,10 +491,10 @@ public class DeskMover
         if ( ! _heightMonitor.IsHeightChanging ( ) )
         {
             _logger.Warning ( "Failed, desk not moving during last " +
-                              "{MinimumNumberOfItems} polls.",
-                              DeskHeightMonitor.MinimumNumberOfItems) ;
+                              "{MinimumNumberOfItems} polls." ,
+                              DeskHeightMonitor.MinimumNumberOfItems ) ;
             IssueStopIfNotPending ( ) ;
-            return Task.CompletedTask;
+            return Task.CompletedTask ;
         }
 
         _calculator.Height = Height ;
@@ -520,7 +520,7 @@ public class DeskMover
         if ( diff <= tolerance )
         {
             IssueStopIfNotPending ( ) ;
-            return Task.CompletedTask;
+            return Task.CompletedTask ;
         }
 
         // Predictive crossing-stop to avoid overshoot
@@ -533,7 +533,7 @@ public class DeskMover
                 if ( predictedStop >= TargetHeight )
                 {
                     IssueStopIfNotPending ( ) ;
-                    return Task.CompletedTask;
+                    return Task.CompletedTask ;
                 }
             }
         }
@@ -548,7 +548,7 @@ public class DeskMover
                 if ( predictedStop <= TargetHeight )
                 {
                     IssueStopIfNotPending ( ) ;
-                    return Task.CompletedTask;
+                    return Task.CompletedTask ;
                 }
             }
         }
@@ -561,7 +561,7 @@ public class DeskMover
                 IssueStopIfNotPending ( ) ;
             }
 
-            return Task.CompletedTask;
+            return Task.CompletedTask ;
         }
 
         if ( desired != _currentCommandedDirection )
@@ -569,7 +569,7 @@ public class DeskMover
             if ( _currentCommandedDirection != Direction.None )
             {
                 IssueStopIfNotPending ( ) ;
-                return Task.CompletedTask;
+                return Task.CompletedTask ;
             }
 
             IssueMoveCommand ( desired ) ;

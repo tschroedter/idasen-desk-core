@@ -5,7 +5,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCommandsProvider
     : IDeskCommandsProvider
 {
@@ -21,7 +21,8 @@ public class DeskCommandsProvider
     public bool TryGetValue ( DeskCommands command ,
                               out IEnumerable < byte > bytes )
     {
-        if ( Commands.TryGetValue ( command , out var tempBytes ) )
+        if ( Commands.TryGetValue ( command ,
+                                    out var tempBytes ) )
         {
             bytes = tempBytes ;
             return true ;

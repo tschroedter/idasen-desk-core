@@ -8,7 +8,7 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
-[ExcludeFromCodeCoverage ]
+[ ExcludeFromCodeCoverage ]
 public class GattReadResultWrapper
     : IGattReadResultWrapper
 {

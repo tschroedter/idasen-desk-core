@@ -5,7 +5,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskMoverFactory
     : IDeskMoverFactory
 {

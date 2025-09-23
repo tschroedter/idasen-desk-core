@@ -8,7 +8,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCommandExecutor
     : IDeskCommandExecutor
 {
@@ -40,20 +40,30 @@ public class DeskCommandExecutor
     }
 
     /// <inheritdoc />
-    public Task < bool > Up ( ) => Execute ( DeskCommands.MoveUp ) ;
+    public Task < bool > Up ( )
+    {
+        return Execute ( DeskCommands.MoveUp ) ;
+    }
 
     /// <inheritdoc />
-    public Task < bool > Down ( ) => Execute ( DeskCommands.MoveDown ) ;
+    public Task < bool > Down ( )
+    {
+        return Execute ( DeskCommands.MoveDown ) ;
+    }
 
     /// <inheritdoc />
-    public Task < bool > Stop ( ) => Execute ( DeskCommands.MoveStop ) ;
+    public Task < bool > Stop ( )
+    {
+        return Execute ( DeskCommands.MoveStop ) ;
+    }
 
     private async Task < bool > Execute ( DeskCommands deskCommand )
     {
         if ( ! _provider.TryGetValue ( deskCommand ,
                                        out var bytes ) )
         {
-            _logger.Error ( "Failed for unknown command {Command}" , deskCommand ) ;
+            _logger.Error ( "Failed for unknown command {Command}" ,
+                            deskCommand ) ;
 
             return false ;
         }

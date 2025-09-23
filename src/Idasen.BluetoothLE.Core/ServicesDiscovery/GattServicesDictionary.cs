@@ -6,7 +6,7 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class GattServicesDictionary
     : IGattServicesDictionary
 {

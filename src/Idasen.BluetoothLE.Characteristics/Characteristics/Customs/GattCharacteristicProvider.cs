@@ -11,7 +11,7 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 /// <summary>
 ///     Provides discovered GATT characteristics mapped by friendly keys.
 /// </summary>
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class GattCharacteristicProvider
     : IGattCharacteristicProvider
 {

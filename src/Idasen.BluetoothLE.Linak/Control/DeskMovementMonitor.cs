@@ -8,7 +8,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskMovementMonitor
     : IDeskMovementMonitor
 {
@@ -57,7 +57,9 @@ public class DeskMovementMonitor
     {
         if ( capacity <= 0 )
         {
-            throw new ArgumentOutOfRangeException ( nameof ( capacity ) , capacity , "Capacity must be positive." ) ;
+            throw new ArgumentOutOfRangeException ( nameof ( capacity ) ,
+                                                    capacity ,
+                                                    "Capacity must be positive." ) ;
         }
 
         History = new CircularBuffer < HeightSpeedDetails > ( capacity ) ;
@@ -66,15 +68,17 @@ public class DeskMovementMonitor
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
                                                  .ObserveOn ( _scheduler )
                                                  .Subscribe ( OnHeightAndSpeedChanged ,
-                                                             ex => _logger.Error ( ex ,
-                                                                                   "Error observing height/speed changes" ) ) ;
+                                                              ex => _logger.Error ( ex ,
+                                                                                    "Error observing height/speed changes" ) ) ;
     }
 
     private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
     {
         History.PushBack ( details ) ;
 
-        _logger.Debug ( "History: {History}" , string.Join ( ',' , History ) ) ;
+        _logger.Debug ( "History: {History}" ,
+                        string.Join ( ',' ,
+                                      History ) ) ;
 
         if ( History.Size < History.Capacity )
         {

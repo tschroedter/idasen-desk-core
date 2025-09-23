@@ -10,7 +10,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[Intercept ( typeof ( LogAspect ) ) ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskDetector
     : IDeskDetector
 {
@@ -83,29 +83,33 @@ public class DeskDetector
         _updated = _monitor.DeviceUpdated
                            .ObserveOn ( _scheduler )
                            .Subscribe ( OnDeviceUpdated ,
-                                       ex => _logger.Error ( ex , "Error handling DeviceUpdated" ) ) ;
+                                        ex => _logger.Error ( ex ,
+                                                              "Error handling DeviceUpdated" ) ) ;
 
         _discovered = _monitor.DeviceDiscovered
                               .ObserveOn ( _scheduler )
                               .Subscribe ( OnDeviceDiscovered ,
-                                          ex => _logger.Error ( ex , "Error handling DeviceDiscovered" ) ) ;
+                                           ex => _logger.Error ( ex ,
+                                                                 "Error handling DeviceDiscovered" ) ) ;
 
         _nameChanged = _monitor.DeviceNameUpdated
                                .ObserveOn ( _scheduler )
                                .Subscribe ( OnDeviceNameChanged ,
-                                           ex => _logger.Error ( ex , "Error handling DeviceNameUpdated" ) ) ;
+                                            ex => _logger.Error ( ex ,
+                                                                  "Error handling DeviceNameUpdated" ) ) ;
 
         // todo find by address if possible
 
         _deskFound = _monitor.DeviceNameUpdated
                              .ObserveOn ( _scheduler )
                              .Where ( device =>
-                                         ( device.Name != null &&
-                                           device.Name.StartsWith ( deviceName ,
-                                                                    StringComparison.InvariantCultureIgnoreCase ) ) ||
-                                         device.Address == deviceAddress )
+                                          device.Name != null &&
+                                          device.Name.StartsWith ( deviceName ,
+                                                                   StringComparison.InvariantCultureIgnoreCase ) ||
+                                          device.Address == deviceAddress )
                              .SubscribeAsync ( OnDeskDiscovered ,
-                                               ex => _logger.Error ( ex , "Error handling OnDeskDiscovered" ) ) ;
+                                               ex => _logger.Error ( ex ,
+                                                                     "Error handling OnDeskDiscovered" ) ) ;
 
         return this ;
     }
@@ -127,7 +131,7 @@ public class DeskDetector
 
     private async Task OnDeskDiscovered ( IDevice device )
     {
-        lock ( _sync )
+        lock (_sync)
         {
             if ( _desk != null || IsConnecting )
             {
@@ -139,20 +143,26 @@ public class DeskDetector
 
         try
         {
-            _logger.Information ( "[{Mac}] Desk '{Name}' discovered" , device.MacAddress , device.Name ) ;
+            _logger.Information ( "[{Mac}] Desk '{Name}' discovered" ,
+                                  device.MacAddress ,
+                                  device.Name ) ;
 
             _desk = await _factory.CreateAsync ( device.Address )
                                   .ConfigureAwait ( false ) ;
 
             _refreshedChanged = _desk.RefreshedChanged
                                      .Subscribe ( OnRefreshedChanged ,
-                                                 ex => _logger.Error ( ex , "Error handling RefreshedChanged" ) ) ;
+                                                  ex => _logger.Error ( ex ,
+                                                                        "Error handling RefreshedChanged" ) ) ;
 
             _desk.Connect ( ) ;
         }
         catch ( Exception e )
         {
-            _logger.Error ( e , "[{Mac}] Failed to connect to desk '{Name}'" , device.MacAddress , device.Name ) ;
+            _logger.Error ( e ,
+                            "[{Mac}] Failed to connect to desk '{Name}'" ,
+                            device.MacAddress ,
+                            device.Name ) ;
 
             IsConnecting = false ;
         }
@@ -160,17 +170,23 @@ public class DeskDetector
 
     private void OnDeviceUpdated ( IDevice device )
     {
-        _logger.Information ( "[{Mac}] Device Updated: {Details}" , device.MacAddress , device.Details ) ;
+        _logger.Information ( "[{Mac}] Device Updated: {Details}" ,
+                              device.MacAddress ,
+                              device.Details ) ;
     }
 
     private void OnDeviceDiscovered ( IDevice device )
     {
-        _logger.Information ( "[{Mac}] Device Discovered: {Details}" , device.MacAddress , device.Details ) ;
+        _logger.Information ( "[{Mac}] Device Discovered: {Details}" ,
+                              device.MacAddress ,
+                              device.Details ) ;
     }
 
     private void OnDeviceNameChanged ( IDevice device )
     {
-        _logger.Information ( "[{Mac}] Device Name Changed: {Details}" , device.MacAddress , device.Details ) ;
+        _logger.Information ( "[{Mac}] Device Name Changed: {Details}" ,
+                              device.MacAddress ,
+                              device.Details ) ;
     }
 
     private void OnRefreshedChanged ( bool status )
