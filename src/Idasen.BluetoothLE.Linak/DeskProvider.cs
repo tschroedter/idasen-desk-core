@@ -5,7 +5,6 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
-using System.Threading ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
@@ -62,14 +61,11 @@ public class DeskProvider
                                     token )
                              .ConfigureAwait ( false ) ;
 
-            if ( token.IsCancellationRequested )
-            {
-                return ( false , null ) ;
-            }
-
-            return Desk == null
+            return token.IsCancellationRequested
                        ? ( false , null )
-                       : ( true , Desk ) ;
+                       : Desk == null
+                           ? ( false , null )
+                           : ( true , Desk ) ;
         }
         catch ( Exception e )
         {
@@ -171,6 +167,8 @@ public class DeskProvider
         _detector.Dispose ( ) ;
 
         _disposed = true ;
+
+        GC.SuppressFinalize ( this );
     }
 
     /// <summary>
