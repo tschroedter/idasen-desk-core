@@ -33,36 +33,36 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public void MoveUp_ForInvoked_CallsConnector (
+    public async Task MoveUpAsync_ForInvoked_CallsConnector (
         Desk sut ,
         [ Freeze ] IDeskConnector connector )
     {
-        sut.MoveUp ( ) ;
+        await sut.MoveUpAsync ( ) ;
 
-        connector.Received ( )
-                 .MoveUpAsync ( ) ;
+        await connector.Received ( )
+                        .MoveUpAsync ( ) ;
     }
 
     [ AutoDataTestMethod ]
-    public void MoveDown_ForInvoked_CallsConnector (
+    public async Task MoveDownAsync_ForInvoked_CallsConnector (
         Desk sut ,
         [ Freeze ] IDeskConnector connector )
     {
-        sut.MoveDown ( ) ;
+        await sut.MoveDownAsync ( ) ;
 
-        connector.Received ( )
-                 .MoveDownAsync ( ) ;
+        await connector.Received ( )
+                        .MoveDownAsync ( ) ;
     }
 
     [ AutoDataTestMethod ]
-    public void MoveStop_ForInvoked_CallsConnector (
+    public async Task MoveStopAsync_ForInvoked_CallsConnector (
         Desk sut ,
         [ Freeze ] IDeskConnector connector )
     {
-        sut.MoveStop ( ) ;
+        await sut.MoveStopAsync ( ) ;
 
-        connector.Received ( )
-                 .MoveStopAsync ( ) ;
+        await connector.Received ( )
+                        .MoveStopAsync ( ) ;
     }
 
     [ AutoDataTestMethod ]

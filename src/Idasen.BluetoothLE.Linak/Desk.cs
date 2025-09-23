@@ -70,41 +70,6 @@ public sealed class Desk
     }
 
     /// <inheritdoc />
-    [ Obsolete ( "Use MoveUpAsync() instead." ) ]
-    public void MoveUp ( )
-    {
-        _ = _connector.MoveUpAsync ( ) ;
-    }
-
-    /// <inheritdoc />
-    [ Obsolete ( "Use MoveDownAsync() instead." ) ]
-    public void MoveDown ( )
-    {
-        _ = _connector.MoveDownAsync ( ) ;
-    }
-
-    /// <inheritdoc />
-    [ Obsolete ( "Use MoveStopAsync() instead." ) ]
-    public void MoveStop ( )
-    {
-        _ = _connector.MoveStopAsync ( ) ;
-    }
-
-    /// <inheritdoc />
-    [ Obsolete ( "Use MoveLockAsync() instead." ) ]
-    public void MoveLock ( )
-    {
-        _ = _connector.MoveLockAsync ( ) ;
-    }
-
-    /// <inheritdoc />
-    [ Obsolete ( "Use MoveUnlockAsync() instead." ) ]
-    public void MoveUnlock ( )
-    {
-        _ = _connector.MoveUnlockAsync ( ) ;
-    }
-
-    /// <inheritdoc />
     public Task < bool > MoveUpAsync ( )
     {
         return _connector.MoveUpAsync ( ) ;
