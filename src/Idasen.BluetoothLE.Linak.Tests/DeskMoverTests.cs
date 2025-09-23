@@ -54,6 +54,8 @@ public class DeskMoverTests : IDisposable
         _providerFactory = Substitute.For < IInitialHeightAndSpeedProviderFactory > ( ) ;
         _monitorFactory = Substitute.For < IDeskMovementMonitorFactory > ( ) ;
         _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
+        // Ensure Stop() has a valid default return to avoid awaiting null
+        _executor.Stop ( ).Returns ( true ) ;
         _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _calculator = Substitute.For < IStoppingHeightCalculator > ( ) ;
         _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
@@ -462,5 +464,65 @@ public class DeskMoverTests : IDisposable
 
         disposable.Received ( )
                   .Dispose ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task OnTimerElapsed_PredictiveStop_PreventsOvershoot_WhenMovingUp ( )
+    {
+        // Arrange a scenario where adding MovementUntilStop to current height would cross the target
+        _heightAndSpeed.Height.Returns ( 1000u ) ;
+        _heightAndSpeed.Speed.Returns ( 100 ) ;
+
+        _calculator.Calculate ( ).Returns ( _calculator ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
+        _calculator.MovementUntilStop.Returns ( 120 ) ; // enough to cross from 1000 to >= 1120
+        _calculator.HasReachedTargetHeight.Returns ( false ) ;
+
+        var sut = CreateSut ( ) ;
+        sut.TargetHeight = 1080u ; // below predicted stopping height
+
+        sut.Initialize ( ) ;
+        sut.Start ( ) ;
+
+        _subjectFinished.OnNext ( 1000u ) ;
+        _scheduler.AdvanceBy ( 1 ) ;
+
+        // Act
+        await sut.OnTimerElapsed ( 1 ) ;
+
+        // Assert: Stop was issued due to predictive crossing, and no Up/Down command after that
+        await _executor.Received ( 1 ).Stop ( ) ;
+        await _executor.DidNotReceive ( ).Up ( ) ;
+        await _executor.DidNotReceive ( ).Down ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task OnTimerElapsed_PredictiveStop_PreventsOvershoot_WhenMovingDown ( )
+    {
+        // Arrange a scenario where subtracting MovementUntilStop from current height would cross the target downward
+        _heightAndSpeed.Height.Returns ( 1200u ) ;
+        _heightAndSpeed.Speed.Returns ( -100 ) ;
+
+        _calculator.Calculate ( ).Returns ( _calculator ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.Down ) ;
+        _calculator.MovementUntilStop.Returns ( -150 ) ; // magnitude 150
+        _calculator.HasReachedTargetHeight.Returns ( false ) ;
+
+        var sut = CreateSut ( ) ;
+        sut.TargetHeight = 1100u ; // predicted stop 1050 <= target
+
+        sut.Initialize ( ) ;
+        sut.Start ( ) ;
+
+        _subjectFinished.OnNext ( 1200u ) ;
+        _scheduler.AdvanceBy ( 1 ) ;
+
+        // Act
+        await sut.OnTimerElapsed ( 1 ) ;
+
+        // Assert: Stop was issued due to predictive crossing, and no Up/Down command after that
+        await _executor.Received ( 1 ).Stop ( ) ;
+        await _executor.DidNotReceive ( ).Up ( ) ;
+        await _executor.DidNotReceive ( ).Down ( ) ;
     }
 }
