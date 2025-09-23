@@ -20,7 +20,7 @@ public class DeskMover
                                          IDeskHeightAndSpeed heightAndSpeed ) ;
 
     // Tracks when we are executing inside Move() to avoid re-entrant deadlocks in Stop()
-    private static readonly AsyncLocal < bool > _inMove = new ( ) ;
+    private static readonly AsyncLocal < bool > InMove = new ( ) ;
 
     private readonly IStoppingHeightCalculator _calculator ;
     private readonly IDeskCommandExecutor _executor ;
@@ -243,7 +243,7 @@ public class DeskMover
         _disposableTimer = null ;
         _currentCommandedDirection = Direction.None ;
 
-        var calledFromMove = _inMove.Value ;
+        var calledFromMove = InMove.Value ;
 
         if ( calledFromMove )
         {
@@ -255,7 +255,8 @@ public class DeskMover
                 _logger.Error ( "Failed to stop" ) ;
             }
 
-            _logger.Debug ( $"Sending finished with height {Height}" ) ;
+            _logger.Debug ( "Sending finished with height {Height}" ,
+                            Height ) ;
 
             if ( ! _finishedEmitted )
             {
@@ -278,7 +279,8 @@ public class DeskMover
                 _logger.Error ( "Failed to stop" ) ;
             }
 
-            _logger.Debug ( $"Sending finished with height {Height}" ) ;
+            _logger.Debug ( "Sending finished with height {Height}" ,
+                            Height ) ;
 
             if ( ! _finishedEmitted )
             {
@@ -301,6 +303,8 @@ public class DeskMover
         _disposableProvider?.Dispose ( ) ;
         _disposalHeightAndSpeed?.Dispose ( ) ;
         _disposableTimer?.Dispose ( ) ; // todo testing
+
+        GC.SuppressFinalize ( this ) ;
     }
 
     /// <inheritdoc />
@@ -377,7 +381,7 @@ public class DeskMover
 
         try
         {
-            _inMove.Value = true ;
+            InMove.Value = true ;
             await Move ( fromTimer ).ConfigureAwait ( false ) ;
         }
         catch ( Exception e )
@@ -387,7 +391,7 @@ public class DeskMover
         }
         finally
         {
-            _inMove.Value = false ;
+            InMove.Value = false ;
             _moveSemaphore.Release ( ) ;
         }
     }
@@ -401,7 +405,7 @@ public class DeskMover
 
     private void IssueStopIfNotPending ( )
     {
-        if ( _pendingStopTask != null && ! _pendingStopTask.IsCompleted )
+        if ( _pendingStopTask is { IsCompleted: false } )
         {
             return ;
         }
@@ -426,7 +430,7 @@ public class DeskMover
 
     private void IssueMoveCommand ( Direction desired )
     {
-        if ( _pendingMoveCommandTask != null && ! _pendingMoveCommandTask.IsCompleted )
+        if ( _pendingMoveCommandTask is { IsCompleted: false } )
         {
             return ;
         }
@@ -447,7 +451,7 @@ public class DeskMover
                                                         "Move command faulted" ) ;
                                     }
 
-                                    var ok = t.Status == TaskStatus.RanToCompletion && t.Result ;
+                                    var ok = t is { Status: TaskStatus.RanToCompletion , Result: true } ;
 
                                     if ( ! ok )
                                     {
@@ -467,14 +471,14 @@ public class DeskMover
                                 TaskScheduler.Default ) ;
     }
 
-    private async Task Move ( bool fromTimer )
+    private Task Move ( bool fromTimer )
     {
         _logger.Debug ( "Move..." ) ;
 
         if ( ! IsAllowedToMove )
         {
             _logger.Debug ( "Not allowed to move..." ) ;
-            return ;
+            return Task.CompletedTask;
         }
 
         if ( TargetHeight == 0u )
@@ -487,9 +491,10 @@ public class DeskMover
         if ( ! _heightMonitor.IsHeightChanging ( ) )
         {
             _logger.Warning ( "Failed, desk not moving during last " +
-                              $"{DeskHeightMonitor.MinimumNumberOfItems} polls." ) ;
+                              "{MinimumNumberOfItems} polls.",
+                              DeskHeightMonitor.MinimumNumberOfItems) ;
             IssueStopIfNotPending ( ) ;
-            return ;
+            return Task.CompletedTask;
         }
 
         _calculator.Height = Height ;
@@ -515,7 +520,7 @@ public class DeskMover
         if ( diff <= tolerance )
         {
             IssueStopIfNotPending ( ) ;
-            return ;
+            return Task.CompletedTask;
         }
 
         // Predictive crossing-stop to avoid overshoot
@@ -528,7 +533,7 @@ public class DeskMover
                 if ( predictedStop >= TargetHeight )
                 {
                     IssueStopIfNotPending ( ) ;
-                    return ;
+                    return Task.CompletedTask;
                 }
             }
         }
@@ -543,7 +548,7 @@ public class DeskMover
                 if ( predictedStop <= TargetHeight )
                 {
                     IssueStopIfNotPending ( ) ;
-                    return ;
+                    return Task.CompletedTask;
                 }
             }
         }
@@ -556,7 +561,7 @@ public class DeskMover
                 IssueStopIfNotPending ( ) ;
             }
 
-            return ;
+            return Task.CompletedTask;
         }
 
         if ( desired != _currentCommandedDirection )
@@ -564,12 +569,14 @@ public class DeskMover
             if ( _currentCommandedDirection != Direction.None )
             {
                 IssueStopIfNotPending ( ) ;
-                return ;
+                return Task.CompletedTask;
             }
 
             IssueMoveCommand ( desired ) ;
         }
 
         // desired == _currentCommandedDirection: do nothing
+
+        return Task.CompletedTask ;
     }
 }

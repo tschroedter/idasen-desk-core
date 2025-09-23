@@ -5,10 +5,8 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Thread-safe dictionary mapping GATT device services to their characteristics results.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class GattServicesDictionary
     : IGattServicesDictionary
 {

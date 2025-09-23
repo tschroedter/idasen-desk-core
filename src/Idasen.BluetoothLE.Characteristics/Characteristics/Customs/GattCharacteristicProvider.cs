@@ -8,10 +8,10 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
 /// <summary>
 ///     Provides discovered GATT characteristics mapped by friendly keys.
 /// </summary>
+[Intercept ( typeof ( LogAspect ) ) ]
 public class GattCharacteristicProvider
     : IGattCharacteristicProvider
 {
@@ -64,7 +64,8 @@ public class GattCharacteristicProvider
         Guard.ArgumentNotNull ( customCharacteristic ,
                                 nameof ( customCharacteristic ) ) ;
 
-        _logger.Information ( $"{_gattCharacteristics}" ) ;
+        _logger.Information ( "{GattCharacteristicsResultWrapper}" ,
+                              _gattCharacteristics ) ;
 
         _characteristics.Clear ( ) ;
         _unavailable.Clear ( ) ;

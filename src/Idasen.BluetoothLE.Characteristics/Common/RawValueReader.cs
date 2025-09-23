@@ -15,7 +15,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common ;
 public sealed class RawValueReader
     : IRawValueReader
 {
-    private static readonly byte [ ] ArrayEmpty = Array.Empty<byte> ( ) ;
+    private static readonly byte [ ] ArrayEmpty = [] ;
 
     private readonly ILogger _logger ;
     private readonly IBufferReader _reader ;

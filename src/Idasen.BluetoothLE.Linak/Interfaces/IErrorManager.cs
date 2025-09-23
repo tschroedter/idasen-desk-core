@@ -8,7 +8,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces ;
 /// <summary>
 ///     Publishes error notifications to interested subscribers and helpers to create standard error messages.
 /// </summary>
-public interface IErrorManager
+public interface IErrorManager : IDisposable
 {
     /// <summary>
     ///     Notify when an error happened.

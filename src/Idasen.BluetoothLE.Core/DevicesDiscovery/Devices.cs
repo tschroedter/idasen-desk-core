@@ -5,11 +5,8 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-/// <inheritdoc cref="IDevices" />
+/// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     In-memory thread-safe store of discovered devices with update semantics.
-/// </summary>
 public class Devices
     : IDevices
 {

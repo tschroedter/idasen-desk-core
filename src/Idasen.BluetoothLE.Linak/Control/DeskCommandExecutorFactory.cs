@@ -5,7 +5,6 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCommandExecutorFactory
     : IDeskCommandExecutorFactory

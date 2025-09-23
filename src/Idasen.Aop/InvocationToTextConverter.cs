@@ -158,8 +158,8 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
             return $"[{genericDictCount.Value}]" ;
         }
 
-        // Other IEnumerables -> just say enumerable
-        if ( value is IEnumerable && value is not string )
+        // Other IEnumerable -> just say enumerable
+        if ( value is IEnumerable and not string )
         {
             return "enumerable" ;
         }

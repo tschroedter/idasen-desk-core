@@ -30,7 +30,7 @@ public class RawValueWriterTests
     }
 
     [ AutoDataTestMethod ]
-    public void TryWriteValueAsync_ForBufferIsNull_Throws (
+    public async Task TryWriteValueAsync_ForBufferIsNull_Throws (
         RawValueWriter sut ,
         IGattCharacteristicWrapper characteristic )
     {
@@ -40,9 +40,9 @@ public class RawValueWriterTests
                                                         null! ) ;
                      } ;
 
-        action.Should ( )
-              .ThrowAsync < ArgumentNullException > ( )
-              .WithParameter ( "buffer" ) ;
+        await action.Should ( )
+                    .ThrowAsync < ArgumentNullException > ( )
+                    .WithParameter ( "buffer" ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -139,7 +139,7 @@ public class RawValueWriterTests
     }
 
     [ AutoDataTestMethod ]
-    public void TryWritableAuxiliariesValueAsync_ForCharacteristicIsNull_Throws (
+    public async Task TryWritableAuxiliariesValueAsync_ForCharacteristicIsNull_Throws (
         RawValueWriter sut ,
         IBuffer buffer )
     {
@@ -149,13 +149,13 @@ public class RawValueWriterTests
                                                                       buffer ) ;
                      } ;
 
-        action.Should ( )
-              .ThrowAsync < ArgumentNullException > ( )
-              .WithParameter ( "characteristic" ) ;
+        await action.Should ( )
+                    .ThrowAsync < ArgumentNullException > ( )
+                    .WithParameter ( "characteristic" ) ;
     }
 
     [ AutoDataTestMethod ]
-    public void TryWritableAuxiliariesValueAsync_ForBufferIsNull_Throws (
+    public async Task TryWritableAuxiliariesValueAsync_ForBufferIsNull_Throws (
         RawValueWriter sut ,
         IGattCharacteristicWrapper characteristic )
     {
@@ -165,9 +165,9 @@ public class RawValueWriterTests
                                                                       null! ) ;
                      } ;
 
-        action.Should ( )
-              .ThrowAsync < ArgumentNullException > ( )
-              .WithParameter ( "buffer" ) ;
+        await action.Should ( )
+                    .ThrowAsync < ArgumentNullException > ( )
+                    .WithParameter ( "buffer" ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -264,9 +264,8 @@ public class RawValueWriterTests
                             .WriteValueAsync ( buffer ) ;
     }
 
-    // --
     [ AutoDataTestMethod ]
-    public void TryWriteWithoutResponseAsync_ForCharacteristicIsNull_Throws (
+    public async Task TryWriteWithoutResponseAsync_ForCharacteristicIsNull_Throws (
         RawValueWriter sut ,
         IBuffer buffer )
     {
@@ -276,9 +275,9 @@ public class RawValueWriterTests
                                                                   buffer ) ;
                      } ;
 
-        action.Should ( )
-              .ThrowAsync < ArgumentNullException > ( )
-              .WithParameter ( "characteristic" ) ;
+        await action.Should ( )
+                    .ThrowAsync < ArgumentNullException > ( )
+                    .WithParameter ( "characteristic" ) ;
     }
 
     [ AutoDataTestMethod ]

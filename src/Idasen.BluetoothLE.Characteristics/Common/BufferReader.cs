@@ -8,11 +8,9 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-[ ExcludeFromCodeCoverage ]
+/// <inheritdoc />
+[ExcludeFromCodeCoverage ]
 [ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Default <see cref="IBufferReader"/> that reads bytes from Windows runtime buffers.
-/// </summary>
 public class BufferReader
     : IBufferReader
 {

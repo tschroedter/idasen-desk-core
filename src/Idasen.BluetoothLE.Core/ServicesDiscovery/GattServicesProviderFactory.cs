@@ -7,9 +7,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Default implementation of <see cref="IGattServicesProviderFactory"/> using a delegate factory.
-/// </summary>
 public class GattServicesProviderFactory
     : IGattServicesProviderFactory
 {

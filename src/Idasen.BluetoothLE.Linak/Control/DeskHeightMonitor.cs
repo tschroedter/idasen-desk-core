@@ -1,5 +1,4 @@
-﻿using System.Linq ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Control;

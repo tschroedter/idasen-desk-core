@@ -14,7 +14,7 @@ public static class ExceptionAssertionsExtensions
     /// <param name="parameter">The expected parameter name.</param>
     /// <returns></returns>
     [ UsedImplicitly ]
-    public static async Task < AndConstraint < StringAssertions > > WithParameter (
+    public async static Task < AndConstraint < StringAssertions > > WithParameter (
         this Task < ExceptionAssertions < ArgumentNullException > > assertions ,
         string parameter )
     {

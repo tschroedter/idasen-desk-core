@@ -1,5 +1,4 @@
-﻿using System.Reactive.Linq ;
-using System.Reactive.Subjects ;
+﻿using System.Reactive.Subjects ;
 using System.Runtime.CompilerServices ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
@@ -11,7 +10,7 @@ namespace Idasen.BluetoothLE.Linak ;
 /// <inheritdoc />
 [Intercept ( typeof ( LogAspect ) ) ]
 public class ErrorManager // todo testing, move to more general project
-    : IErrorManager , IDisposable
+    : IErrorManager
 {
     private readonly ILogger _logger ;
     private readonly ISubject < IErrorDetails > _subject ;

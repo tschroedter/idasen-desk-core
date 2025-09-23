@@ -14,7 +14,7 @@ namespace Idasen.Aop.Aspects ;
 /// <param name="converter">Converter that formats the intercepted invocation.</param>
 [ ExcludeFromCodeCoverage ]
 public sealed class LogAspect ( ILogger logger ,
-                         IInvocationToTextConverter converter )
+                                IInvocationToTextConverter converter )
     : IInterceptor
 {
     private readonly IInvocationToTextConverter _converter = converter ?? throw new ArgumentNullException ( nameof ( converter ) ) ;

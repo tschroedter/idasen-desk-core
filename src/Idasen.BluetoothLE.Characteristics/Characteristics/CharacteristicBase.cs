@@ -230,7 +230,8 @@ public abstract class CharacteristicBase
                                                              out var characteristic ) )
         {
             // Keep single-argument overload for unit test expectations
-            Logger.Error ( $"Unknown characteristic with key '{key}'" ) ;
+            Logger.Error ( "Unknown characteristic with key '{Key}'" ,
+                           key ) ;
 
             return false ;
         }

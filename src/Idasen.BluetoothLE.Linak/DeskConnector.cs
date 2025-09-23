@@ -4,18 +4,14 @@ using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
-// todo tests
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Connects to a LINAK desk device, wires up characteristics, exposes observables, and delegates movement commands.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class DeskConnector
     : IDeskConnector
 {

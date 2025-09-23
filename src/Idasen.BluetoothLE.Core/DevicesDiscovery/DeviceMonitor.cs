@@ -133,7 +133,8 @@ public class DeviceMonitor
         if ( ! _devices.TryGetDevice ( device.Address ,
                                        out var storedDevice ) )
         {
-            _logger.Information ( $"[{device.MacAddress}] Discovered Device" ) ;
+            _logger.Information ( "[{DeviceMacAddress}] Discovered Device" ,
+                                  device.MacAddress ) ;
 
             _devices.AddOrUpdateDevice ( device ) ;
 
@@ -158,7 +159,8 @@ public class DeviceMonitor
                 return ;
             }
 
-            _logger.Information ( $"[{device.MacAddress}] Device Name Changed" ) ;
+            _logger.Information ( "[{DeviceMacAddress}] Device Name Changed" ,
+                                  device.MacAddress ) ;
 
             _deviceNameUpdated.OnNext ( device ) ;
         }

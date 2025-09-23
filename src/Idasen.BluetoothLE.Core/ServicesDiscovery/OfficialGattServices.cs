@@ -12,9 +12,6 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Loads official GATT services from an embedded CSV resource and provides lookup by assigned number.
-/// </summary>
 public class OfficialGattServices
     : IOfficialGattServices
 {

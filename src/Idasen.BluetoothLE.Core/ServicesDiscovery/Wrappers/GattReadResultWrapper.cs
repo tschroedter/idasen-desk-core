@@ -7,10 +7,8 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
-[ ExcludeFromCodeCoverage ]
-/// <summary>
-///     Wrapper around <see cref="GattReadResult"/> exposing status, protocol error, and value.
-/// </summary>
+/// <inheritdoc />
+[ExcludeFromCodeCoverage ]
 public class GattReadResultWrapper
     : IGattReadResultWrapper
 {

@@ -10,10 +10,8 @@ using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Writes raw byte arrays to GATT characteristics, checking capability support before writing.
-/// </summary>
+/// <inheritdoc />
+[Intercept ( typeof ( LogAspect ) ) ]
 public class RawValueWriter
     : IRawValueWriter
 {

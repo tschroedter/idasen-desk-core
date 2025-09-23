@@ -1,5 +1,6 @@
 ﻿using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
@@ -12,6 +13,7 @@ public static class DeskCharacteristicDictionaryExtensions
     ///     A map of default unknown characteristic instances used when a specific characteristic is missing.
     ///     Kept for backward compatibility; prefer the internal factories in this class.
     /// </summary>
+    [UsedImplicitly]
     public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
         new ( )
         {
@@ -68,6 +70,7 @@ public static class DeskCharacteristicDictionaryExtensions
         if ( UnknownFactories.TryGetValue ( key , out var factory ) )
         {
             var unknown = factory ( ) ;
+
             if ( unknown is T typedUnknown )
             {
                 return typedUnknown ;

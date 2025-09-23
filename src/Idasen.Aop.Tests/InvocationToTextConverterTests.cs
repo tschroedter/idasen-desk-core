@@ -1,6 +1,7 @@
 using Castle.DynamicProxy ;
 using FluentAssertions ;
 using Idasen.Aop.Interfaces ;
+using JetBrains.Annotations ;
 
 namespace Idasen.Aop.Tests ;
 
@@ -114,7 +115,7 @@ public class InvocationToTextConverterTests
         return captured ?? throw new AssertFailedException ( "Invocation was not captured" ) ;
     }
 
-    // Make proxyable by Castle: public, non-sealed, virtual members
+    // Make proxy-able by Castle: public, non-sealed, virtual members
     public class Sample
     {
         public virtual int Property { get ; set ; }
@@ -141,18 +142,16 @@ public class InvocationToTextConverterTests
         public void Intercept ( IInvocation invocation )
         {
             onInvoke ( invocation ) ;
-            // do not proceed to avoid side-effects
+            // do not proceed to avoid side effects
         }
     }
 
-    private sealed class Node
+    private sealed class Node ( string name )
     {
-        public Node ( string name )
-        {
-            Name = name ;
-        }
+        [UsedImplicitly]
+        public string Name { get ; } = name ;
 
-        public string Name { get ; }
+        [UsedImplicitly]
         public Node? Next { get ; set ; }
     }
 }

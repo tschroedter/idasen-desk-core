@@ -1,7 +1,6 @@
 ﻿using System.Text.Json ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 

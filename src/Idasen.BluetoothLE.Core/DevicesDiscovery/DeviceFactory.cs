@@ -7,9 +7,6 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-/// <summary>
-///     Default implementation of <see cref="IDeviceFactory"/> using a delegate factory.
-/// </summary>
 public class DeviceFactory
     : IDeviceFactory
 {

@@ -37,6 +37,8 @@ public class RawValueToHeightAndSpeedConverter
         height = 0 ;
         speed = 0 ;
 
+        var enumerable = bytes as byte [ ] ?? bytes.ToArray ( ) ;
+
         try
         {
             // Fast path if we already have a byte[]
@@ -62,11 +64,13 @@ public class RawValueToHeightAndSpeedConverter
             // Fallback: copy first 4 bytes without allocating a full array
             Span < byte > buffer = stackalloc byte[4] ;
             var i = 0 ;
-            foreach ( var b in bytes )
+
+            foreach ( var b in enumerable )
             {
                 if ( i < 4 )
                 {
                     buffer[i++] = b ;
+
                     if ( i == 4 )
                     {
                         break ;
@@ -81,7 +85,7 @@ public class RawValueToHeightAndSpeedConverter
             if ( i < 4 )
             {
                 // Only allocate for logging on failure
-                var hex = bytes.ToArray ( ).ToHex ( ) ;
+                var hex = enumerable.ToArray ( ).ToHex ( ) ;
                 _logger.Warning ( "Failed to convert raw value {Hex} to height and speed. Payload too short ({Length})" ,
                                   hex ,
                                   i ) ;
@@ -98,7 +102,7 @@ public class RawValueToHeightAndSpeedConverter
         catch ( Exception e )
         {
             // Allocate only for logging
-            var hex = bytes is byte [ ] a ? a.ToHex ( ) : bytes.ToArray ( ).ToHex ( ) ;
+            var hex = bytes is byte [ ] a ? a.ToHex ( ) : enumerable.ToArray ( ).ToHex ( ) ;
             _logger.Warning ( e , "Failed to convert raw value {Hex} to height and speed" , hex ) ;
             height = 0 ;
             speed = 0 ;

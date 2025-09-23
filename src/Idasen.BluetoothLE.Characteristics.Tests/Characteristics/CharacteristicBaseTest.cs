@@ -219,8 +219,11 @@ public class CharacteristicBaseTest
 
         await sut.TryWriteRawValue ( RawValue1 ) ;
 
-        Logger.ReceivedWithAnyArgs ( )
-              .Error ( Arg.Any < string > ( ) ) ;
+        // Accept Serilog's generic Error<T>(string, T) overload
+        Logger.Received ( )
+              .Error ( Arg.Is < string > ( s => s.Contains ( "Unknown characteristic" ,
+                                                             StringComparison.OrdinalIgnoreCase ) ) ,
+                       Arg.Any < string > ( ) ) ;
     }
 
     [ TestMethod ]

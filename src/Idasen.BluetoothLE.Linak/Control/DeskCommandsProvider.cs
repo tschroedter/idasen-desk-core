@@ -12,9 +12,9 @@ public class DeskCommandsProvider
     private static readonly IReadOnlyDictionary < DeskCommands , byte [ ] > Commands =
         new Dictionary < DeskCommands , byte [ ] >
         {
-            { DeskCommands.MoveUp , new byte [ ] { 0x47 , 0x00 } } ,
-            { DeskCommands.MoveDown , new byte [ ] { 0x46 , 0x00 } } ,
-            { DeskCommands.MoveStop , new byte [ ] { 0x48 , 0x00 } }
+            { DeskCommands.MoveUp , "G\0"u8.ToArray ( ) } ,
+            { DeskCommands.MoveDown , "F\0"u8.ToArray ( ) } ,
+            { DeskCommands.MoveStop , "H\0"u8.ToArray ( ) }
         } ;
 
     /// <inheritdoc />
@@ -27,7 +27,8 @@ public class DeskCommandsProvider
             return true ;
         }
 
-        bytes = Array.Empty < byte > ( ) ;
+        bytes = [] ;
+
         return false ;
     }
 }

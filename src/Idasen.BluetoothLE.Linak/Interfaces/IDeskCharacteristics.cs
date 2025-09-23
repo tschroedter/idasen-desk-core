@@ -41,6 +41,20 @@ public interface IDeskCharacteristics
     IControl Control { get ; }
 
     /// <summary>
+    ///     Gets the read-only collection of all discovered LINAK desk characteristics,
+    ///     indexed by <see cref="DeskCharacteristicKey" />.
+    /// </summary>
+    /// <remarks>
+    ///     The dictionary is populated during <see cref="Initialize" /> and via
+    ///     <see cref="WithCharacteristics(DeskCharacteristicKey, ICharacteristicBase)" />.
+    ///     For strongly-typed access, prefer the dedicated properties:
+    ///     <see cref="GenericAccess" />, <see cref="GenericAttribute" />,
+    ///     <see cref="ReferenceInput" />, <see cref="ReferenceOutput" />,
+    ///     <see cref="Dpg" />, and <see cref="Control" />.
+    /// </remarks>
+    IReadOnlyDictionary < DeskCharacteristicKey , ICharacteristicBase > Characteristics { get ; }
+
+    /// <summary>
     ///     Initializes the characteristics by discovering them on the specified device.
     /// </summary>
     /// <param name="device">The device to initialize characteristics for.</param>

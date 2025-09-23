@@ -1,6 +1,7 @@
 #nullable disable
 
 using System.Collections ;
+using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
@@ -115,6 +116,7 @@ public class CircularBuffer<T> : IEnumerable < T >
     /// <summary>
     ///     Alias for <see cref="Size"/> to align with common .NET collection naming.
     /// </summary>
+    [UsedImplicitly]
     public int Count => _size ;
 
     /// <summary>
@@ -172,15 +174,23 @@ public class CircularBuffer<T> : IEnumerable < T >
     public IEnumerator < T > GetEnumerator ( )
     {
         var segment1 = ArrayOne ( ) ;
+
         for ( var i = 0 ; i < segment1.Count ; i++ )
         {
-            yield return segment1.Array[segment1.Offset + i] ;
+            if ( segment1.Array != null )
+            {
+                yield return segment1.Array[segment1.Offset + i] ;
+            }
         }
 
         var segment2 = ArrayTwo ( ) ;
+
         for ( var i = 0 ; i < segment2.Count ; i++ )
         {
-            yield return segment2.Array[segment2.Offset + i] ;
+            if ( segment2.Array != null )
+            {
+                yield return segment2.Array[segment2.Offset + i] ;
+            }
         }
     }
 
@@ -302,6 +312,12 @@ public class CircularBuffer<T> : IEnumerable < T >
         var newArrayOffset = 0 ;
 
         var segment1 = ArrayOne ( ) ;
+
+        if ( segment1.Array == null )
+        {
+            return newArray ;
+        }
+
         Array.Copy ( segment1.Array ,
                      segment1.Offset ,
                      newArray ,
@@ -310,11 +326,15 @@ public class CircularBuffer<T> : IEnumerable < T >
         newArrayOffset += segment1.Count ;
 
         var segment2 = ArrayTwo ( ) ;
-        Array.Copy ( segment2.Array ,
-                     segment2.Offset ,
-                     newArray ,
-                     newArrayOffset ,
-                     segment2.Count ) ;
+
+        if ( segment2.Array != null )
+        {
+            Array.Copy ( segment2.Array ,
+                         segment2.Offset ,
+                         newArray ,
+                         newArrayOffset ,
+                         segment2.Count ) ;
+        }
 
         return newArray ;
     }

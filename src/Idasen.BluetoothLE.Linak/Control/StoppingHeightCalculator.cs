@@ -1,6 +1,5 @@
 ﻿using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 
@@ -92,7 +91,7 @@ public class StoppingHeightCalculator
 
     private Direction CalculateMoveIntoDirection ( )
     {
-        var diff = ( long ) Height - ( long ) TargetHeight ;
+        var diff = Height - ( long ) TargetHeight ;
         var threshold = ( double ) MaxSpeedToStopMovement * FudgeFactor ;
 
         if ( Math.Abs ( diff ) <= threshold )
@@ -114,11 +113,17 @@ public class StoppingHeightCalculator
                                       FudgeFactor ) ;
 
         // Original behavior: add MovementUntilStop (signed) to current height
-        var stopping = ( long ) Height + MovementUntilStop ;
+        var stopping = Height + MovementUntilStop ;
+
         if ( stopping < 0 )
+        {
             stopping = 0 ;
+        }
+
         if ( stopping > uint.MaxValue )
+        {
             stopping = uint.MaxValue ;
+        }
 
         StoppingHeight = ( uint ) stopping ;
 

@@ -3,6 +3,4 @@
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
 public sealed class TestSimpleDictionaryBase
-    : SimpleDictionaryBase < string , Guid >
-{
-}
+    : SimpleDictionaryBase < string , Guid > ;
