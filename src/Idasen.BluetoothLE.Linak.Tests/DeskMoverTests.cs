@@ -148,6 +148,8 @@ public class DeskMoverTests : IDisposable
     {
         var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
+        _heightAndSpeed.Height.Returns ( _details1.Height ) ;
+        _heightAndSpeed.Speed.Returns ( _details1.Speed ) ;
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
 
         // Advance virtual time to allow the sampling window to emit

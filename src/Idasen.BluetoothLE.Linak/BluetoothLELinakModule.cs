@@ -65,12 +65,29 @@ public class BluetoothLELinakModule
                .As < IDeskCommandsProvider > ( )
                .EnableInterfaceInterceptors ( ) ;
 
+        // Manager
         builder.RegisterType < DeskMover > ( )
                .As < IDeskMover > ( )
                .EnableInterfaceInterceptors ( ) ;
 
         builder.RegisterType < DeskMoverFactory > ( )
                .As < IDeskMoverFactory > ( )
+               .EnableInterfaceInterceptors ( ) ;
+
+        // New collaborators
+        builder.RegisterType < DeskMoveEngine > ( )
+               .As < IDeskMoveEngine > ( )
+               .EnableInterfaceInterceptors ( ) ;
+
+        builder.Register ( ctx =>
+                           {
+                               var logger = ctx.Resolve < Serilog.ILogger > ( ) ;
+                               var settings = ctx.Resolve < DeskMoverSettings > ( ) ;
+                               var heightMonitor = ctx.Resolve < IDeskHeightMonitor > ( ) ;
+                               var calculator = ctx.Resolve < IStoppingHeightCalculator > ( ) ;
+                               return new DeskStopper ( logger , settings , heightMonitor , calculator ) ;
+                           } )
+               .As < IDeskStopper > ( )
                .EnableInterfaceInterceptors ( ) ;
 
         builder.RegisterType < DeskMovementMonitor > ( )
@@ -132,5 +149,8 @@ public class BluetoothLELinakModule
                .As < IErrorManager > ( )
                .SingleInstance ( )
                .EnableInterfaceInterceptors ( ) ;
+
+        builder.RegisterInstance ( DeskMoverSettings.Default )
+               .AsSelf ( ) ;
     }
 }
