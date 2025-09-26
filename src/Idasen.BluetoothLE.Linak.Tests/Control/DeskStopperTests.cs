@@ -79,7 +79,7 @@ public class DeskStopperTests
         _calculator.Received ( 1 ).StartMovingIntoDirection = start ;
         _calculator.Received ( 1 ).Calculate ( ) ;
 
-        // height monitor fed
+        // height monitor fed (first distinct sample)
         _heightMonitor.Received ( 1 ).AddHeight ( height ) ;
     }
 
@@ -191,13 +191,22 @@ public class DeskStopperTests
     {
         var sut = CreateSut ( ) ;
 
+        // Simulate no movement and not actively commanding with near-zero speed
         _heightMonitor.IsHeightChanging ( ).Returns ( false ) ;
         _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
         _calculator.MovementUntilStop.Returns ( 0 ) ;
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
+        // First call seeds last height; second call with same height and speed 0 triggers stall
+        var d1 = sut.ShouldStop ( 1000 ,
+                                   0 ,
+                                   5000 ,
+                                   Direction.Up ,
+                                   Direction.None ) ;
+        d1.ShouldStop.Should ( ).BeFalse ( ) ;
+
         var details = sut.ShouldStop ( 1000 ,
-                                       10 ,
+                                       0 ,
                                        5000 ,
                                        Direction.Up ,
                                        Direction.None ) ;
@@ -215,20 +224,28 @@ public class DeskStopperTests
         _calculator.MovementUntilStop.Returns ( 0 ) ;
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        // 19 polls -> below threshold, should not stop (actively commanding)
-        for (var i = 0; i < 19; i++)
+        // Seed first distinct sample so that subsequent calls count as stall ticks
+        var seed = sut.ShouldStop ( 1000 ,
+                                    0 ,
+                                    5000 ,
+                                    Direction.Up ,
+                                    Direction.Up ) ;
+        seed.ShouldStop.Should ( ).BeFalse ( ) ;
+
+        // 19 polls -> below threshold, should not stop (actively commanding), using speed 0 to simulate stall
+        for ( var i = 0 ; i < 19 ; i++ )
         {
             var d = sut.ShouldStop ( 1000 ,
-                                     10 ,
+                                     0 ,
                                      5000 ,
                                      Direction.Up ,
                                      Direction.Up ) ;
             d.ShouldStop.Should ( ).BeFalse ( ) ;
         }
 
-        // 20th poll -> reaches threshold, should stop
+        // 20th stall tick -> reaches threshold, should stop
         var details = sut.ShouldStop ( 1000 ,
-                                       10 ,
+                                       0 ,
                                        5000 ,
                                        Direction.Up ,
                                        Direction.Up ) ;
@@ -244,13 +261,20 @@ public class DeskStopperTests
         _calculator.MovementUntilStop.Returns ( 0 ) ;
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        // 19 non-changing polls while actively commanding
+        // Seed first distinct sample
         _heightMonitor.IsHeightChanging ( ).Returns ( false ) ;
+        var seed = sut.ShouldStop ( 1000 ,
+                                    0 ,
+                                    5000 ,
+                                    Direction.Up ,
+                                    Direction.Up ) ;
+        seed.ShouldStop.Should ( ).BeFalse ( ) ;
 
-        for (var i = 0; i < 19; i++)
+        // 19 non-changing polls while actively commanding (speed 0 so they count as stall ticks)
+        for ( var i = 0 ; i < 19 ; i++ )
         {
             var d = sut.ShouldStop ( 1000 ,
-                                     10 ,
+                                     0 ,
                                      5000 ,
                                      Direction.Up ,
                                      Direction.Up ) ;
@@ -269,7 +293,7 @@ public class DeskStopperTests
         // back to non-changing: should not stop immediately (counter restarted)
         _heightMonitor.IsHeightChanging ( ).Returns ( false ) ;
         var afterReset = sut.ShouldStop ( 1002 ,
-                                          10 ,
+                                          0 ,
                                           5000 ,
                                           Direction.Up ,
                                           Direction.Up ) ;
