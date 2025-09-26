@@ -85,7 +85,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
         if ( task.IsCompleted )
         {
-            var ok = task.Status == TaskStatus.RanToCompletion && task.Result ;
+            var ok = task is { Status: TaskStatus.RanToCompletion , Result: true } ;
 
             if ( ok )
             {
@@ -138,7 +138,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
         if ( task.IsCompleted )
         {
-            var ok = task.Status == TaskStatus.RanToCompletion && task.Result ;
+            var ok = task is { Status: TaskStatus.RanToCompletion , Result: true } ;
 
             if ( ! ok && CurrentDirection == desired )
             {

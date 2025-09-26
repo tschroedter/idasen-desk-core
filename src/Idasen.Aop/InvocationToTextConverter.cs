@@ -122,13 +122,10 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
             return "ref " ;
         }
 
-        if ( p.IsDefined ( typeof ( ParamArrayAttribute ) ,
-                           false ) )
-        {
-            return "params " ;
-        }
-
-        return string.Empty ;
+        return p.IsDefined ( typeof ( ParamArrayAttribute ) ,
+                             false )
+                   ? "params "
+                   : string.Empty ;
     }
 
     private static string ToValueString ( object? value )

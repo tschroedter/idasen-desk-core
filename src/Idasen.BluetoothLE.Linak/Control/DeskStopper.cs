@@ -14,7 +14,6 @@ internal class DeskStopper : IDeskStopper
 {
     private readonly IStoppingHeightCalculator _calculator ;
     private readonly IDeskHeightMonitor _heightMonitor ;
-    private readonly ILogger _logger ;
     private readonly DeskMoverSettings _settings ;
 
     private int _noMovementPolls ;
@@ -26,7 +25,6 @@ internal class DeskStopper : IDeskStopper
         ArgumentNullException.ThrowIfNull ( heightMonitor ) ;
         ArgumentNullException.ThrowIfNull ( calculator ) ;
 
-        _logger = logger ;
         _settings = settings ;
         _heightMonitor = heightMonitor ;
         _calculator = calculator ;

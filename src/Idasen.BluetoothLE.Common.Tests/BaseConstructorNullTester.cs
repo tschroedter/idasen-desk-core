@@ -17,18 +17,7 @@ public abstract class BaseConstructorNullTester<T> where T : class
     public virtual int NumberOfConstructorsPassed { get ; } = 1 ;
     public virtual int NumberOfConstructorsFailed { get ; } = 0 ;
 
-    protected IContainer Container
-    {
-        get
-        {
-            if ( _container == null )
-            {
-                throw new InvalidOperationException ( "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
-            }
-
-            return _container ;
-        }
-    }
+    protected IContainer Container => _container ?? throw new InvalidOperationException ( "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
 
     [ TestCleanup ]
     public virtual void Cleanup ( )
