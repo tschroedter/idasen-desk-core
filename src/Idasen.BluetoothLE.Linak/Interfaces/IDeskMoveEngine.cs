@@ -1,6 +1,6 @@
-using Idasen.BluetoothLE.Linak.Control;
+using Idasen.BluetoothLE.Linak.Control ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Issues movement commands and tracks the currently commanded direction.
@@ -10,21 +10,21 @@ public interface IDeskMoveEngine
     /// <summary>
     ///     The last direction commanded. None means not moving.
     /// </summary>
-    Direction CurrentDirection { get; }
+    Direction CurrentDirection { get ; }
 
     /// <summary>
     ///     True if a direction is currently commanded.
     /// </summary>
-    bool IsMoving { get; }
+    bool IsMoving { get ; }
 
     /// <summary>
     ///     Request to move (or keep moving) in the desired direction. No-op when switching
     ///     from an already commanded opposite direction; the manager should stop first.
     /// </summary>
-    void Move(Direction desired, bool fromTimer);
+    void Move ( Direction desired , bool fromTimer ) ;
 
     /// <summary>
     ///     Issues a stop command (idempotent). Resets current direction on success.
     /// </summary>
-    Task<bool> StopAsync();
+    Task < bool > StopAsync ( ) ;
 }

@@ -233,13 +233,16 @@ public class DeskProviderTests
         IDesk desk ,
         CancellationTokenSource source )
     {
-            // Safety timeout so the test doesn't hang in case of failure
+        // Safety timeout so the test doesn't hang in case of failure
         source.CancelAfter ( TimeSpan.FromSeconds ( 5 ) ) ;
 
-        var waitForDetection = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) , source.Token ) ;
-        var triggerDetection = Task.Run ( ( ) => sut.OnDeskDetected ( desk ) , source.Token ) ;
+        var waitForDetection = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) ,
+                                          source.Token ) ;
+        var triggerDetection = Task.Run ( ( ) => sut.OnDeskDetected ( desk ) ,
+                                          source.Token ) ;
 
-        await Task.WhenAll ( waitForDetection , triggerDetection ) ;
+        await Task.WhenAll ( waitForDetection ,
+                             triggerDetection ) ;
 
         sut.Desk
            .Should ( )

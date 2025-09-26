@@ -21,11 +21,11 @@ public class DeskProvider
 
     internal readonly AutoResetEvent DeskDetectedEvent = new ( false ) ;
 
-    private IDisposable? _deskDetected ;
-    private bool _disposed ;
-
     // Backing field for Desk with volatile memory semantics
     private IDesk? _desk ;
+
+    private IDisposable? _deskDetected ;
+    private bool _disposed ;
 
     public DeskProvider (
         ILogger logger ,
@@ -168,7 +168,7 @@ public class DeskProvider
 
         _disposed = true ;
 
-        GC.SuppressFinalize ( this );
+        GC.SuppressFinalize ( this ) ;
     }
 
     /// <summary>
@@ -177,7 +177,8 @@ public class DeskProvider
     public IDesk? Desk
     {
         get => Volatile.Read ( ref _desk ) ;
-        private set => Volatile.Write ( ref _desk , value ) ;
+        private set => Volatile.Write ( ref _desk ,
+                                        value ) ;
     }
 
     internal void DoTryGetDesk ( CancellationToken token )
@@ -188,18 +189,19 @@ public class DeskProvider
             return ;
         }
 
-        var handles = new WaitHandle [ ]
+        var handles = new [ ]
         {
             DeskDetectedEvent ,
             token.WaitHandle
         } ;
 
-        while ( Desk == null && ! token.IsCancellationRequested )
+        while (Desk == null && ! token.IsCancellationRequested)
         {
             _logger.Information ( "Trying to find desk" ) ;
 
             // Wait up to 1s for either the desk-detected event or cancellation
-            var index = WaitHandle.WaitAny ( handles , 1000 ) ;
+            var index = WaitHandle.WaitAny ( handles ,
+                                             1000 ) ;
 
             // If cancellation was signaled, leave immediately
             if ( index == 1 )
@@ -224,7 +226,8 @@ public class DeskProvider
         }
         catch ( Exception e )
         {
-            _logger.Error ( e , "Failed stopping detector after detection" ) ;
+            _logger.Error ( e ,
+                            "Failed stopping detector after detection" ) ;
             _errorManager.PublishForMessage ( "Failed Stop Detecting" ) ;
         }
 

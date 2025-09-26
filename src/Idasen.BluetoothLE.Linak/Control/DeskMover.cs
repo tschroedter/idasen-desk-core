@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Concurrency ;
+using System.Reactive.Disposables ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using System.Reactive.Disposables ;
 using System.Runtime.CompilerServices ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
@@ -21,26 +21,26 @@ public class DeskMover
                                          IDeskHeightAndSpeed heightAndSpeed ) ;
 
     private readonly IStoppingHeightCalculator _calculator ;
+
+    private readonly IDeskMoveEngine _engine ;
     private readonly IDeskCommandExecutor _executor ;
     private readonly IDeskHeightAndSpeed _heightAndSpeed ;
 
     private readonly ILogger _logger ;
     private readonly IDeskMovementMonitorFactory _monitorFactory ;
 
-    private readonly SemaphoreSlim _moveSemaphore = new ( 1 , 1 ) ;
+    private readonly SemaphoreSlim _moveSemaphore = new ( 1 ,
+                                                          1 ) ;
 
     private readonly object _padlock = new ( ) ;
     private readonly IInitialHeightAndSpeedProviderFactory _providerFactory ;
     private readonly IScheduler _scheduler ;
     private readonly DeskMoverSettings _settings ;
-    private readonly ISubject < uint > _subjectFinished ;
-
-    private readonly IDeskMoveEngine _engine ;
     private readonly IDeskStopper _stopper ;
+    private readonly ISubject < uint > _subjectFinished ;
+    private CompositeDisposable? _cycleDisposables ;
 
     private IDisposable? _disposableProvider ;
-    private IDisposable? _rawHeightAndSpeedSubscription ;
-    private CompositeDisposable? _cycleDisposables ;
     private volatile bool _finishedEmitted ;
 
     private IObservable < HeightSpeedDetails >? _heightAndSpeedSampled ;
@@ -50,6 +50,7 @@ public class DeskMover
     private IDeskMovementMonitor? _monitor ;
 
     private Task < bool >? _pendingStopTask ;
+    private IDisposable? _rawHeightAndSpeedSubscription ;
 
     public DeskMover ( ILogger logger ,
                        IScheduler scheduler ,
@@ -70,8 +71,12 @@ public class DeskMover
                  subjectFinished ,
                  heightMonitor ,
                  DeskMoverSettings.Default ,
-                 engine : new DeskMoveEngine ( logger , executor ) ,
-                 stopper : new DeskStopper ( logger , DeskMoverSettings.Default , heightMonitor , calculator ) )
+                 new DeskMoveEngine ( logger ,
+                                      executor ) ,
+                 new DeskStopper ( logger ,
+                                   DeskMoverSettings.Default ,
+                                   heightMonitor ,
+                                   calculator ) )
     {
     }
 
@@ -88,18 +93,30 @@ public class DeskMover
                          IDeskMoveEngine engine ,
                          IDeskStopper stopper )
     {
-        Guard.ArgumentNotNull ( logger , nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( scheduler , nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( providerFactory , nameof ( providerFactory ) ) ;
-        Guard.ArgumentNotNull ( monitorFactory , nameof ( monitorFactory ) ) ;
-        Guard.ArgumentNotNull ( executor , nameof ( executor ) ) ;
-        Guard.ArgumentNotNull ( heightAndSpeed , nameof ( heightAndSpeed ) ) ;
-        Guard.ArgumentNotNull ( calculator , nameof ( calculator ) ) ;
-        Guard.ArgumentNotNull ( subjectFinished , nameof ( subjectFinished ) ) ;
-        Guard.ArgumentNotNull ( heightMonitor , nameof ( heightMonitor ) ) ;
-        Guard.ArgumentNotNull ( settings , nameof ( settings ) ) ;
-        Guard.ArgumentNotNull ( engine , nameof ( engine ) ) ;
-        Guard.ArgumentNotNull ( stopper , nameof ( stopper ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( providerFactory ,
+                                nameof ( providerFactory ) ) ;
+        Guard.ArgumentNotNull ( monitorFactory ,
+                                nameof ( monitorFactory ) ) ;
+        Guard.ArgumentNotNull ( executor ,
+                                nameof ( executor ) ) ;
+        Guard.ArgumentNotNull ( heightAndSpeed ,
+                                nameof ( heightAndSpeed ) ) ;
+        Guard.ArgumentNotNull ( calculator ,
+                                nameof ( calculator ) ) ;
+        Guard.ArgumentNotNull ( subjectFinished ,
+                                nameof ( subjectFinished ) ) ;
+        Guard.ArgumentNotNull ( heightMonitor ,
+                                nameof ( heightMonitor ) ) ;
+        Guard.ArgumentNotNull ( settings ,
+                                nameof ( settings ) ) ;
+        Guard.ArgumentNotNull ( engine ,
+                                nameof ( engine ) ) ;
+        Guard.ArgumentNotNull ( stopper ,
+                                nameof ( stopper ) ) ;
 
         _logger = logger ;
         _scheduler = scheduler ;
@@ -124,10 +141,13 @@ public class DeskMover
 
     public IObservable < HeightSpeedDetails > HeightAndSpeedSampled =>
         _heightAndSpeedSampled ??= _heightAndSpeed.HeightAndSpeedChanged
-                                                  .Buffer ( TimerInterval , _scheduler )
+                                                  .Buffer ( TimerInterval ,
+                                                            _scheduler )
                                                   .Where ( batch => batch.Count > 0 )
                                                   .Select ( batch => batch[^1] )
-                                                  .StartWith ( new HeightSpeedDetails ( DateTimeOffset.Now , Height , Speed ) )
+                                                  .StartWith ( new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                                                        Height ,
+                                                                                        Speed ) )
                                                   .Replay ( 1 )
                                                   .RefCount ( ) ;
 
@@ -146,14 +166,15 @@ public class DeskMover
     /// <inheritdoc />
     public void Initialize ( )
     {
-        lock ( _padlock )
+        lock (_padlock)
         {
             _monitor?.Dispose ( ) ;
             _monitor = _monitorFactory.Create ( _heightAndSpeed ) ;
             _monitor.Initialize ( ) ;
 
             _initialProvider?.Dispose ( ) ;
-            _initialProvider = _providerFactory.Create ( _executor , _heightAndSpeed ) ;
+            _initialProvider = _providerFactory.Create ( _executor ,
+                                                         _heightAndSpeed ) ;
             _initialProvider.Initialize ( ) ;
 
             _disposableProvider?.Dispose ( ) ;
@@ -164,12 +185,12 @@ public class DeskMover
             // Global raw subscription to reflect latest Height/Speed for observers/tests
             _rawHeightAndSpeedSubscription?.Dispose ( ) ;
             _rawHeightAndSpeedSubscription = _heightAndSpeed.HeightAndSpeedChanged
-                                                           .ObserveOn ( _scheduler )
-                                                           .Subscribe ( d =>
-                                                           {
-                                                               Height = d.Height ;
-                                                               Speed  = d.Speed ;
-                                                           } ) ;
+                                                            .ObserveOn ( _scheduler )
+                                                            .Subscribe ( d =>
+                                                                         {
+                                                                             Height = d.Height ;
+                                                                             Speed = d.Speed ;
+                                                                         } ) ;
         }
     }
 
@@ -236,7 +257,8 @@ public class DeskMover
             _logger.Error ( "Failed to stop" ) ;
         }
 
-        _logger.Debug ( "Sending finished with height {Height}" , Height ) ;
+        _logger.Debug ( "Sending finished with height {Height}" ,
+                        Height ) ;
 
         if ( ! _finishedEmitted )
         {
@@ -262,7 +284,8 @@ public class DeskMover
     public bool IsAllowedToMove
     {
         get => Volatile.Read ( ref _isAllowedToMove ) ;
-        private set => Volatile.Write ( ref _isAllowedToMove , value ) ;
+        private set => Volatile.Write ( ref _isAllowedToMove ,
+                                        value ) ;
     }
 
     private void StartAfterReceivingCurrentHeight ( )
@@ -293,7 +316,8 @@ public class DeskMover
         _cycleDisposables.Add ( HeightAndSpeedSampled.Subscribe ( __ => _ = TryEvaluateMoveAsync ( ) ) ) ;
 
         // Periodic evaluation timer
-        _cycleDisposables.Add ( Observable.Interval ( TimerInterval , _scheduler ).SubscribeAsync ( OnTimerElapsed ) ) ;
+        _cycleDisposables.Add ( Observable.Interval ( TimerInterval ,
+                                                      _scheduler ).SubscribeAsync ( OnTimerElapsed ) ) ;
 
         IsAllowedToMove = true ;
         _finishedEmitted = false ;
@@ -350,11 +374,13 @@ public class DeskMover
                 return ;
             }
 
-            _engine.Move ( result.Desired , fromTimer ) ;
+            _engine.Move ( result.Desired ,
+                           fromTimer ) ;
         }
         catch ( Exception e )
         {
-            _logger.Error ( e , "Calling Move() failed" ) ;
+            _logger.Error ( e ,
+                            "Calling Move() failed" ) ;
         }
         finally
         {
@@ -362,23 +388,28 @@ public class DeskMover
         }
     }
 
-    private void IssueStopIfNotPending()
+    private void IssueStopIfNotPending ( )
     {
-        if (_pendingStopTask is { IsCompleted: false })
+        if ( _pendingStopTask is { IsCompleted: false } )
         {
-            return;
+            return ;
         }
 
-        _pendingStopTask = Stop();
+        _pendingStopTask = Stop ( ) ;
 
-        _ = _pendingStopTask.ContinueWith(t =>
-        {
-            if (t.IsFaulted)
-            {
-                _logger.Error(t.Exception, "Stop command faulted");
-            }
+        _ = _pendingStopTask.ContinueWith ( t =>
+                                            {
+                                                if ( t.IsFaulted )
+                                                {
+                                                    _logger.Error ( t.Exception ,
+                                                                    "Stop command faulted" ) ;
+                                                }
 
-            Interlocked.Exchange(ref _pendingStopTask, null);
-        }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+                                                Interlocked.Exchange ( ref _pendingStopTask ,
+                                                                       null ) ;
+                                            } ,
+                                            CancellationToken.None ,
+                                            TaskContinuationOptions.ExecuteSynchronously ,
+                                            TaskScheduler.Default ) ;
     }
 }

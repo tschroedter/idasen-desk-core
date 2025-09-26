@@ -503,11 +503,11 @@ public class DeskMoverTests : IDisposable
     {
         // Arrange a scenario where subtracting MovementUntilStop from current height would cross the target downward
         _heightAndSpeed.Height.Returns ( 1200u ) ;
-        _heightAndSpeed.Speed.Returns ( -100 ) ;
+        _heightAndSpeed.Speed.Returns ( - 100 ) ;
 
         _calculator.Calculate ( ).Returns ( _calculator ) ;
         _calculator.MoveIntoDirection.Returns ( Direction.Down ) ;
-        _calculator.MovementUntilStop.Returns ( -150 ) ; // magnitude 150
+        _calculator.MovementUntilStop.Returns ( - 150 ) ; // magnitude 150
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
         var sut = CreateSut ( ) ;

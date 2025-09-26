@@ -6,6 +6,7 @@ using Idasen.Aop ;
 using Idasen.BluetoothLE.Characteristics ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
+using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
@@ -81,11 +82,14 @@ public class BluetoothLELinakModule
 
         builder.Register ( ctx =>
                            {
-                               var logger = ctx.Resolve < Serilog.ILogger > ( ) ;
+                               var logger = ctx.Resolve < ILogger > ( ) ;
                                var settings = ctx.Resolve < DeskMoverSettings > ( ) ;
                                var heightMonitor = ctx.Resolve < IDeskHeightMonitor > ( ) ;
                                var calculator = ctx.Resolve < IStoppingHeightCalculator > ( ) ;
-                               return new DeskStopper ( logger , settings , heightMonitor , calculator ) ;
+                               return new DeskStopper ( logger ,
+                                                        settings ,
+                                                        heightMonitor ,
+                                                        calculator ) ;
                            } )
                .As < IDeskStopper > ( )
                .EnableInterfaceInterceptors ( ) ;

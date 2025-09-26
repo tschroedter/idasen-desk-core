@@ -40,7 +40,7 @@ public class DeskTests
         await sut.MoveUpAsync ( ) ;
 
         await connector.Received ( )
-                        .MoveUpAsync ( ) ;
+                       .MoveUpAsync ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -51,7 +51,7 @@ public class DeskTests
         await sut.MoveDownAsync ( ) ;
 
         await connector.Received ( )
-                        .MoveDownAsync ( ) ;
+                       .MoveDownAsync ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -62,7 +62,7 @@ public class DeskTests
         await sut.MoveStopAsync ( ) ;
 
         await connector.Received ( )
-                        .MoveStopAsync ( ) ;
+                       .MoveStopAsync ( ) ;
     }
 
     [ AutoDataTestMethod ]
