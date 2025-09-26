@@ -236,10 +236,9 @@ public class DeskProviderTests
         // Safety timeout so the test doesn't hang in case of failure
         source.CancelAfter ( TimeSpan.FromSeconds ( 5 ) ) ;
 
-        var waitForDetection = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) ,
-                                          source.Token ) ;
-        var triggerDetection = Task.Run ( ( ) => sut.OnDeskDetected ( desk ) ,
-                                          source.Token ) ;
+        // Ensure scheduling is not skipped due to token pre-cancellation; pass token only to the work, not to Task.Run
+        var waitForDetection = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) ) ;
+        var triggerDetection = Task.Run ( ( ) => sut.OnDeskDetected ( desk ) ) ;
 
         await Task.WhenAll ( waitForDetection ,
                              triggerDetection ) ;
