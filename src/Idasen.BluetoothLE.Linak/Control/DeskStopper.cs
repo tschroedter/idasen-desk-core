@@ -12,9 +12,13 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 [ Intercept ( typeof ( LogAspect ) ) ]
 internal class DeskStopper : IDeskStopper
 {
+    // Treat as stalled only if speed is effectively zero while height hasn't changed
+    private const int StallSpeedThreshold = 1 ; // absolute speed <= 1 considered no movement
     private readonly IStoppingHeightCalculator _calculator ;
     private readonly IDeskHeightMonitor _heightMonitor ;
+    private readonly ILogger _logger ;
     private readonly DeskMoverSettings _settings ;
+    private uint? _lastHeight ;
 
     private int _noMovementPolls ;
 
@@ -25,6 +29,7 @@ internal class DeskStopper : IDeskStopper
         ArgumentNullException.ThrowIfNull ( heightMonitor ) ;
         ArgumentNullException.ThrowIfNull ( calculator ) ;
 
+        _logger = logger ;
         _settings = settings ;
         _heightMonitor = heightMonitor ;
         _calculator = calculator ;
@@ -33,6 +38,7 @@ internal class DeskStopper : IDeskStopper
     public void Reset ( )
     {
         _noMovementPolls = 0 ;
+        _lastHeight = null ;
         _heightMonitor.Reset ( ) ;
     }
 
@@ -52,14 +58,24 @@ internal class DeskStopper : IDeskStopper
         var desired = _calculator.MoveIntoDirection ;
         var movementAbs = ( uint ) Math.Abs ( _calculator.MovementUntilStop ) ;
 
-        _heightMonitor.AddHeight ( height ) ;
+        // Only push distinct heights to the monitor to avoid false "no change" from repeated evaluations
+        var isNewSample = _lastHeight is null || _lastHeight.Value != height ;
 
-        if ( ! _heightMonitor.IsHeightChanging ( ) )
+        if ( isNewSample )
+        {
+            _heightMonitor.AddHeight ( height ) ;
+            _lastHeight = height ;
+        }
+
+        // Stalling detection: only count when height hasn't changed AND speed is effectively zero
+        var activelyCommanding = currentCommandedDirection != Direction.None ;
+        var stalledTick = ! isNewSample && Math.Abs ( speed ) <= StallSpeedThreshold ;
+
+        if ( stalledTick )
         {
             _noMovementPolls++ ;
 
-            var longStall = _noMovementPolls >= 20 ; // ~2s if 100ms
-            var activelyCommanding = currentCommandedDirection != Direction.None ;
+            var longStall = _noMovementPolls >= 20 ; // ~2s if 100ms polls from manager
 
             if ( ! activelyCommanding || longStall )
             {
