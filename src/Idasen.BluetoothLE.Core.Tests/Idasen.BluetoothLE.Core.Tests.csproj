@@ -13,7 +13,7 @@
     <ItemGroup>
         <PackageReference Include="AutofacSerilogIntegration" Version="5.0.0" />
         <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
-        <PackageReference Include="FluentAssertions" Version="8.6.0" />
+        <PackageReference Include="FluentAssertions" Version="8.7.0" />
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.2" />

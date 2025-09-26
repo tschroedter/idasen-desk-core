@@ -24,9 +24,9 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[8.6.0, )",
-        "resolved": "8.6.0",
-        "contentHash": "h5tb0odkLRWuwjc5EhwHQZpZm7+5YmJBNn379tJPIK04FOv3tuOfhGZTPFSuj/MTgzfV6UlAjfbSEBcEGhGucQ=="
+        "requested": "[8.7.0, )",
+        "resolved": "8.7.0",
+        "contentHash": "h86TKCk6fS6Es6YPUtTUjekCeR1dSsdmD8dhdMy7RHLso/JH52QYU5W2Zw4wJJWGMzcEBMia8F70JctsbREvPA=="
       },
       "JetBrains.Annotations": {
         "type": "Direct",
@@ -1228,7 +1228,7 @@
         "dependencies": {
           "Autofac": "[8.4.0, )",
           "AutofacSerilogIntegration": "[5.0.0, )",
-          "FluentAssertions": "[8.6.0, )",
+          "FluentAssertions": "[8.7.0, )",
           "MSTest.TestFramework": "[3.10.4, )",
           "Selkie.DefCon.One": "[0.0.23, )",
           "Serilog.Sinks.Console": "[6.0.0, )"
