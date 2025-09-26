@@ -45,18 +45,25 @@ public static class LoggerProvider
                 baseDir = GetBaseDirectoryName ( ) ;
             }
 
+            var environmentName =
+                Environment.GetEnvironmentVariable ( "DOTNET_ENVIRONMENT" ) ??
+                Environment.GetEnvironmentVariable ( "ASPNETCORE_ENVIRONMENT" ) ??
+                "Production" ;
+
             var configuration = new ConfigurationBuilder ( )
                                .SetBasePath ( baseDir )
                                .AddJsonFile ( "appsettings.json" ,
-                                              true ,
-                                              true )
+                                              optional : true ,
+                                              reloadOnChange : false )
+                               .AddJsonFile ( $"appsettings.{environmentName}.json" ,
+                                              optional : true ,
+                                              reloadOnChange : false )
                                .Build ( ) ;
 
             _logger = new LoggerConfiguration ( )
                      .ReadFrom.Configuration ( configuration )
                      .CreateLogger ( ) ;
 
-            // Keep Serilog's global reference in sync for third-party components
             Log.Logger = _logger ;
 
             return _logger ;
