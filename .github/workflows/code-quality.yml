@@ -1,0 +1,126 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+
+jobs:
+  code-analysis:
+    name: Code Quality Analysis
+    runs-on: windows-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore Dependencies
+        working-directory: ./src
+        run: dotnet restore idasen-desk-core.sln --verbosity minimal
+
+      - name: Run Code Analysis
+        working-directory: ./src
+        shell: pwsh
+        run: |
+          Write-Host "=== Running .NET Code Analysis ===" -ForegroundColor Green
+          
+          # Build with code analysis enabled
+          dotnet build idasen-desk-core.sln `
+            --configuration Release `
+            --no-restore `
+            --verbosity normal `
+            /p:RunAnalyzersDuringBuild=true `
+            /p:TreatWarningsAsErrors=false `
+            /p:WarningsAsErrors= `
+            /p:WarningsNotAsErrors=
+
+      - name: Format Check
+        working-directory: ./src
+        shell: pwsh
+        run: |
+          Write-Host "=== Checking Code Formatting ===" -ForegroundColor Green
+          
+          # Check if code is properly formatted
+          $result = dotnet format idasen-desk-core.sln --verify-no-changes --verbosity diagnostic
+          if ($LASTEXITCODE -ne 0) {
+            Write-Warning "Code formatting issues detected. Run 'dotnet format' to fix them."
+            # Don't fail the build for formatting issues, just warn
+          } else {
+            Write-Host "Code formatting is correct!" -ForegroundColor Green
+          }
+
+      - name: Package License Check
+        working-directory: ./src
+        shell: pwsh
+        run: |
+          Write-Host "=== Checking Package Licenses ===" -ForegroundColor Green
+          
+          # List all packages and their licenses (if available)
+          dotnet list package --include-transitive > packages.txt
+          
+          # Display package information
+          Get-Content packages.txt
+          
+          Write-Host "Package license information listed above. Manual review recommended for production use."
+
+  security-scan:
+    name: Security Scanning
+    runs-on: windows-latest
+    timeout-minutes: 15
+    needs: code-analysis
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'csharp'
+          config-file: ./.github/codeql-config.yml
+
+      - name: Restore and Build
+        working-directory: ./src
+        run: |
+          dotnet restore idasen-desk-core.sln --verbosity minimal
+          dotnet build idasen-desk-core.sln --configuration Release --no-restore --verbosity minimal
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:csharp"

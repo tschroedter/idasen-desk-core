@@ -1,0 +1,25 @@
+# CodeQL configuration for C# analysis
+name: "CodeQL Config"
+
+# Disable default queries and use only security-focused ones for efficiency
+disable-default-queries: false
+
+# Include additional query packs
+packs:
+  - codeql/csharp-queries:Security
+
+# Custom queries (if any)
+queries:
+  - uses: security-and-quality
+
+# Paths to ignore during analysis
+paths-ignore:
+  - "**/*Test*.cs"
+  - "**/*Tests*.cs"  
+  - "**/bin/**"
+  - "**/obj/**"
+  - "**/.vs/**"
+
+# Paths to include (all source files by default)
+paths:
+  - "src/**/*.cs"

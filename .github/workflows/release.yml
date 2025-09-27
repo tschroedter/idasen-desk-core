@@ -1,0 +1,332 @@
+name: Release and Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-bump:
+        description: 'Version bump type (patch, minor, major, prerelease)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+        - prerelease
+      prerelease-tag:
+        description: 'Prerelease tag (e.g., beta, rc). Only used when bump type = prerelease.'
+        required: false
+        default: 'beta'
+      dry-run:
+        description: 'Perform a dry run without publishing'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write      # for creating tag & release
+  packages: write      # if publishing to GitHub Packages
+  id-token: write      # for NuGet.org publish (OIDC)
+
+env:
+  PROJECT_FILE: src/Idasen.Launcher/Idasen.Launcher.csproj
+  SLN_DIR: src
+  PACKAGE_OUTPUT: output
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+
+jobs:
+  release:
+    name: Version, Build, Test, and Publish
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Determine Current Version
+        id: get_version
+        shell: pwsh
+        run: |
+          if (-not (Test-Path $env:PROJECT_FILE)) {
+            Write-Error "Project file not found: $env:PROJECT_FILE"
+            exit 1
+          }
+          
+          [xml]$proj = Get-Content $env:PROJECT_FILE
+          $versionNode = $proj.Project.PropertyGroup | Where-Object { $_.VersionPrefix } | Select-Object -First 1
+          
+          if (-not $versionNode -or -not $versionNode.VersionPrefix) {
+            Write-Error 'VersionPrefix not found in project file.'
+            exit 1
+          }
+          
+          $current = $versionNode.VersionPrefix.Trim()
+          Write-Host "Current version: $current"
+          echo "current-version=$current" >> $env:GITHUB_OUTPUT
+
+      - name: Calculate Next Version
+        id: bump_version
+        shell: pwsh
+        run: |
+          $bump = '${{ github.event.inputs.version-bump }}'
+          $preTag = '${{ github.event.inputs.prerelease-tag }}'
+          $current = '${{ steps.get_version.outputs.current-version }}'
+          
+          if (-not $current) { 
+            Write-Error 'Current version missing'
+            exit 1 
+          }
+          
+          # Validate version format
+          if ($current -notmatch '^\d+\.\d+\.\d+') {
+            Write-Error "Invalid version format: $current. Expected format: major.minor.patch"
+            exit 1
+          }
+          
+          $parts = $current -split '\.' | ForEach-Object { [int]$_ }
+          $major, $minor, $patch = $parts[0], $parts[1], $parts[2]
+          
+          switch ($bump) {
+            'major' { $major++; $minor=0; $patch=0 }
+            'minor' { $minor++; $patch=0 }
+            'patch' { $patch++ }
+            'prerelease' { 
+              # For prerelease, keep current version but add/increment prerelease tag
+            }
+            default { 
+              Write-Error "Unsupported bump type: $bump"
+              exit 1 
+            }
+          }
+          
+          $newVersion = "$major.$minor.$patch"
+          
+          if ($bump -eq 'prerelease') {
+            if (-not $preTag) { $preTag = 'beta' }
+            # Handle prerelease versioning
+            if ($current -match "^(\d+\.\d+\.\d+)(?:-($preTag)\.?(\d+)?)?$") {
+              $baseVersion = $Matches[1]
+              $existingTag = $Matches[2]
+              $existingNum = $Matches[3]
+              
+              if ($existingTag -eq $preTag -and $existingNum) {
+                $num = [int]$existingNum + 1
+              } else {
+                $num = 1
+              }
+              
+              $newVersion = "$baseVersion-$preTag.$num"
+            } else {
+              $newVersion = "$newVersion-$preTag.1"
+            }
+          }
+          
+          echo "new-version=$newVersion" >> $env:GITHUB_OUTPUT
+          echo "is-prerelease=$($newVersion.Contains('-'))" >> $env:GITHUB_OUTPUT
+          Write-Host "New version: $newVersion"
+
+      - name: Update Version in Project File
+        if: ${{ !inputs.dry-run }}
+        shell: pwsh
+        run: |
+          $newVersion = '${{ steps.bump_version.outputs.new-version }}'
+          $projectFile = $env:PROJECT_FILE
+          
+          Write-Host "Updating VersionPrefix to $newVersion in $projectFile"
+          
+          $content = Get-Content $projectFile -Raw
+          $updatedContent = $content -replace '<VersionPrefix>.*?</VersionPrefix>', "<VersionPrefix>$newVersion</VersionPrefix>"
+          
+          if ($content -eq $updatedContent) {
+            Write-Warning "No changes made to project file. VersionPrefix might not exist or already be set to $newVersion"
+          }
+          
+          $updatedContent | Set-Content $projectFile -NoNewline
+          Write-Host "Version updated successfully"
+
+      - name: Restore Dependencies
+        working-directory: ./src
+        run: dotnet restore idasen-desk-core.sln --verbosity minimal
+
+      - name: Build Solution
+        working-directory: ./src
+        run: |
+          dotnet build idasen-desk-core.sln --configuration Release --no-restore /p:ContinuousIntegrationBuild=true --verbosity minimal
+
+      - name: Run Tests Before Release
+        shell: pwsh
+        working-directory: ./src
+        run: |
+          Write-Host "Running tests before release..."
+          $testProjects = Get-ChildItem -Recurse -Filter "*.Tests.csproj" | Where-Object { $_.Name -notmatch 'Integration\.Tests' }
+          
+          if (-not $testProjects) {
+            Write-Host "No unit test projects found."
+            exit 0
+          }
+          
+          $failed = $false
+          foreach ($proj in $testProjects) {
+            Write-Host "Testing: $($proj.Name)"
+            dotnet test $proj.FullName --configuration Release --no-build --verbosity minimal || { $failed = $true }
+          }
+          
+          if ($failed) {
+            Write-Error "Tests failed. Release aborted."
+            exit 1
+          }
+          
+          Write-Host "All tests passed successfully!"
+
+      - name: Create NuGet Package
+        working-directory: ./src
+        run: |
+          dotnet pack Idasen.Launcher/Idasen.Launcher.csproj --configuration Release --no-build --output ../${{ env.PACKAGE_OUTPUT }} /p:PackageVersion=${{ steps.bump_version.outputs.new-version }} --verbosity minimal
+
+      - name: Validate Package
+        shell: pwsh
+        run: |
+          $packages = Get-ChildItem "$env:PACKAGE_OUTPUT" -Filter "*.nupkg"
+          if ($packages.Count -eq 0) {
+            Write-Error "No packages were created"
+            exit 1
+          }
+          
+          foreach ($pkg in $packages) {
+            Write-Host "Created package: $($pkg.Name) (Size: $([math]::Round($pkg.Length / 1MB, 2)) MB)"
+          }
+
+      - name: Commit Version Bump
+        if: ${{ !inputs.dry-run }}
+        shell: pwsh
+        run: |
+          $newVersion = '${{ steps.bump_version.outputs.new-version }}'
+          
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          
+          git add $env:PROJECT_FILE
+          
+          if (git diff --cached --quiet) {
+            Write-Host 'No version changes to commit'
+          } else {
+            git commit -m "chore: bump version to $newVersion"
+            Write-Host "Committed version bump to $newVersion"
+          }
+
+      - name: Create Git Tag
+        if: ${{ !inputs.dry-run }}
+        shell: pwsh
+        run: |
+          $newVersion = '${{ steps.bump_version.outputs.new-version }}'
+          $tag = "v$newVersion"
+          
+          # Check if tag already exists
+          if (git tag -l $tag) {
+            Write-Warning "Tag $tag already exists. Skipping tag creation."
+          } else {
+            git tag $tag
+            Write-Host "Created tag: $tag"
+          }
+
+      - name: Push Changes and Tags
+        if: ${{ !inputs.dry-run }}
+        shell: pwsh
+        run: |
+          Write-Host "Pushing changes and tags to origin..."
+          git push origin HEAD:main
+          git push origin --tags
+          Write-Host "Changes and tags pushed successfully"
+
+      - name: Publish to NuGet.org
+        if: ${{ !inputs.dry-run && success() }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        shell: pwsh
+        run: |
+          if (-not $env:NUGET_API_KEY) {
+            Write-Warning 'NUGET_API_KEY secret not set. Skipping NuGet.org publish.'
+            exit 0
+          }
+          
+          $packages = Get-ChildItem "$env:PACKAGE_OUTPUT" -Filter "*.nupkg"
+          foreach ($package in $packages) {
+            Write-Host "Publishing $($package.Name) to NuGet.org..."
+            dotnet nuget push $package.FullName --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
+
+      - name: Publish to GitHub Packages
+        if: ${{ !inputs.dry-run && success() }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          $packages = Get-ChildItem "$env:PACKAGE_OUTPUT" -Filter "*.nupkg"
+          if ($packages.Count -eq 0) {
+            Write-Host 'No packages found for GitHub Packages publish.'
+            exit 0
+          }
+          
+          foreach ($package in $packages) {
+            Write-Host "Publishing $($package.Name) to GitHub Packages..."
+            dotnet nuget push $package.FullName --api-key $env:GITHUB_TOKEN --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --skip-duplicate
+          }
+
+      - name: Create GitHub Release
+        if: ${{ !inputs.dry-run && success() }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.bump_version.outputs.new-version }}
+          name: Release v${{ steps.bump_version.outputs.new-version }}
+          draft: false
+          prerelease: ${{ steps.bump_version.outputs.is-prerelease == 'true' }}
+          generate_release_notes: true
+          files: |
+            ${{ env.PACKAGE_OUTPUT }}/*.nupkg
+
+      - name: Upload Release Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts-${{ steps.bump_version.outputs.new-version }}
+          path: ${{ env.PACKAGE_OUTPUT }}/
+          retention-days: 90
+
+      - name: Summary
+        if: always()
+        shell: pwsh
+        run: |
+          $newVersion = '${{ steps.bump_version.outputs.new-version }}'
+          $isDryRun = '${{ inputs.dry-run }}'
+          $isPrerelease = '${{ steps.bump_version.outputs.is-prerelease }}'
+          
+          Write-Host ""
+          Write-Host "=== RELEASE SUMMARY ===" -ForegroundColor Green
+          Write-Host "Version: $newVersion" -ForegroundColor Cyan
+          Write-Host "Prerelease: $isPrerelease" -ForegroundColor Cyan
+          Write-Host "Dry Run: $isDryRun" -ForegroundColor Cyan
+          
+          if ($isDryRun -eq 'true') {
+            Write-Host ""
+            Write-Host "This was a DRY RUN - no actual release was performed." -ForegroundColor Yellow
+          } else {
+            Write-Host ""
+            Write-Host "Release completed successfully!" -ForegroundColor Green
+          }

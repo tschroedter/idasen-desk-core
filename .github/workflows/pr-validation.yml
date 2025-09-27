@@ -1,0 +1,156 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+
+jobs:
+  validate-pr:
+    name: Validate Pull Request
+    runs-on: windows-latest
+    timeout-minutes: 25
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore Dependencies
+        working-directory: ./src
+        run: dotnet restore idasen-desk-core.sln --verbosity minimal
+
+      - name: Build Solution
+        working-directory: ./src
+        run: dotnet build idasen-desk-core.sln --configuration Release --no-restore --verbosity minimal
+
+      - name: Run Unit Tests
+        working-directory: ./src
+        shell: pwsh
+        run: |
+          Write-Host "Running unit tests for PR validation..."
+          $testProjects = Get-ChildItem -Recurse -Filter "*.Tests.csproj" | Where-Object { $_.Name -notmatch 'Integration\.Tests' }
+          
+          if (-not $testProjects) {
+            Write-Host "No unit test projects found."
+            exit 0
+          }
+          
+          $failed = $false
+          foreach ($proj in $testProjects) {
+            Write-Host "Testing: $($proj.Name)"
+            dotnet test $proj.FullName `
+              --configuration Release `
+              --no-build `
+              --logger "trx;LogFileName=$($proj.BaseName)-results.trx" `
+              --collect:"XPlat Code Coverage" `
+              --results-directory ./TestResults `
+              --verbosity normal || { $failed = $true }
+          }
+          
+          if ($failed) {
+            Write-Error "One or more test projects failed."
+            exit 1
+          }
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr-test-results-${{ github.event.number }}
+          path: src/TestResults/
+          retention-days: 7
+
+      - name: Comment Test Results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: PR Test Results
+          path: 'src/TestResults/*.trx'
+          reporter: dotnet-trx
+          fail-on-error: false
+
+      - name: Check for Breaking Changes
+        shell: pwsh
+        run: |
+          Write-Host "=== Checking for Breaking Changes ===" -ForegroundColor Green
+          
+          # Get list of changed files
+          $changedFiles = git diff --name-only origin/main..HEAD
+          
+          # Check if any public API files have changed
+          $publicApiChanges = $changedFiles | Where-Object { 
+            $_ -like "src/Idasen.Launcher/*" -and 
+            $_ -like "*.cs" -and 
+            $_ -notlike "*Test*"
+          }
+          
+          if ($publicApiChanges) {
+            Write-Warning "Public API files have been modified:"
+            $publicApiChanges | ForEach-Object { Write-Warning "  - $_" }
+            Write-Warning "Please ensure this is not a breaking change or increment the major version."
+          } else {
+            Write-Host "No public API changes detected." -ForegroundColor Green
+          }
+
+      - name: PR Size Check
+        shell: pwsh
+        run: |
+          # Count lines changed
+          $stats = git diff --stat origin/main..HEAD
+          $statsOutput = $stats | Out-String
+          
+          Write-Host "=== Pull Request Size Analysis ===" -ForegroundColor Green
+          Write-Host $statsOutput
+          
+          # Extract changed lines count (rough estimation)
+          if ($statsOutput -match '(\d+)\s+insertions?\(\+\).*?(\d+)\s+deletions?\(\-\)') {
+            $insertions = [int]$Matches[1]
+            $deletions = [int]$Matches[2]
+            $totalChanges = $insertions + $deletions
+            
+            Write-Host "Total lines changed: $totalChanges" -ForegroundColor Cyan
+            
+            if ($totalChanges -gt 500) {
+              Write-Warning "This is a large PR ($totalChanges lines changed). Consider breaking it into smaller PRs."
+            } elseif ($totalChanges -gt 200) {
+              Write-Warning "This is a medium-sized PR ($totalChanges lines changed). Please ensure thorough testing."
+            } else {
+              Write-Host "PR size is reasonable ($totalChanges lines changed)." -ForegroundColor Green
+            }
+          }
+
+  draft-pr-check:
+    name: Draft PR Notice
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == true
+    
+    steps:
+      - name: Draft PR Message
+        run: |
+          echo "::notice title=Draft PR::This is a draft pull request. It will not trigger full validation until marked as ready for review."
