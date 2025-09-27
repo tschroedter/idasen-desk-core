@@ -27,10 +27,33 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore
-        run: dotnet restore
+        shell: pwsh
+        run: |
+          Write-Host "Restoring all projects..."
+          Get-ChildItem -Recurse -Filter *.csproj | ForEach-Object { 
+            Write-Host "Restoring $($_.FullName)"; 
+            dotnet restore $_.FullName 
+          }
 
       - name: Build (Release)
-        run: dotnet build --configuration Release --no-restore
+        shell: pwsh
+        run: |
+          Write-Host "Building all non-test projects in Release..."
+          Get-ChildItem -Recurse -Filter *.csproj | Where-Object { $_.FullName -notmatch '\\Tests\\' } | ForEach-Object {
+            Write-Host "Building $($_.FullName)";
+            dotnet build $_.FullName --configuration Release --no-restore
+          }
 
       - name: Run Tests
-        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" --verbosity minimal
+        shell: pwsh
+        run: |
+          $failed = $false
+          $testProjects = Get-ChildItem -Recurse -Filter *.Tests.csproj
+          if (-not $testProjects) {
+            Write-Host "No test projects found."; exit 0
+          }
+          foreach ($proj in $testProjects) {
+            Write-Host "Testing $($proj.FullName)";
+            dotnet test $proj.FullName --configuration Release --no-build --collect:"XPlat Code Coverage" --verbosity minimal || { $failed = $true }
+          }
+          if ($failed) { Write-Error "One or more tests failed."; exit 1 }
