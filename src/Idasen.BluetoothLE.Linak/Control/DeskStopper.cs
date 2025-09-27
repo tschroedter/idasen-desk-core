@@ -75,9 +75,11 @@ internal class DeskStopper : IDeskStopper
         {
             _noMovementPolls++ ;
 
-            var longStall = _noMovementPolls >= 20 ; // ~2s if 100ms polls from manager
-
-            if ( ! activelyCommanding || longStall )
+            // Previous logic stopped after a fixed number of stalled ticks even while actively commanding.
+            // This caused long movements (> ~10cm) to stutter periodically. We now only stop immediately
+            // when we are NOT actively commanding (lost command) – but we keep counting otherwise so that
+            // future adaptive logic could use it (without triggering spurious stops).
+            if ( ! activelyCommanding )
             {
                 return new StopDetails ( true ,
                                          desired ) ;
@@ -85,7 +87,11 @@ internal class DeskStopper : IDeskStopper
         }
         else
         {
-            _noMovementPolls = 0 ;
+            // Reset counter on any movement or speed change
+            if ( _noMovementPolls != 0 )
+            {
+                _noMovementPolls = 0 ;
+            }
         }
 
         // tolerance based stop

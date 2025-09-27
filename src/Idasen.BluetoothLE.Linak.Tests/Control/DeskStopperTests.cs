@@ -215,7 +215,7 @@ public class DeskStopperTests
     }
 
     [ TestMethod ]
-    public void ShouldStop_NoMovement_LongStall_WhileActivelyCommanding_StopsOnThreshold ( )
+    public void ShouldNotStop_LongStall_WhileActivelyCommanding ( )
     {
         var sut = CreateSut ( ) ;
 
@@ -232,8 +232,8 @@ public class DeskStopperTests
                                     Direction.Up ) ;
         seed.ShouldStop.Should ( ).BeFalse ( ) ;
 
-        // 19 polls -> below threshold, should not stop (actively commanding), using speed 0 to simulate stall
-        for ( var i = 0 ; i < 19 ; i++ )
+        // 50 polls with no movement while actively commanding should NOT trigger stop anymore
+        for ( var i = 0 ; i < 50 ; i++ )
         {
             var d = sut.ShouldStop ( 1000 ,
                                      0 ,
@@ -242,14 +242,6 @@ public class DeskStopperTests
                                      Direction.Up ) ;
             d.ShouldStop.Should ( ).BeFalse ( ) ;
         }
-
-        // 20th stall tick -> reaches threshold, should stop
-        var details = sut.ShouldStop ( 1000 ,
-                                       0 ,
-                                       5000 ,
-                                       Direction.Up ,
-                                       Direction.Up ) ;
-        details.ShouldStop.Should ( ).BeTrue ( ) ;
     }
 
     [ TestMethod ]
@@ -270,8 +262,8 @@ public class DeskStopperTests
                                     Direction.Up ) ;
         seed.ShouldStop.Should ( ).BeFalse ( ) ;
 
-        // 19 non-changing polls while actively commanding (speed 0 so they count as stall ticks)
-        for ( var i = 0 ; i < 19 ; i++ )
+        // 10 non-changing polls while actively commanding (speed 0 so they count as stall ticks)
+        for ( var i = 0 ; i < 10 ; i++ )
         {
             var d = sut.ShouldStop ( 1000 ,
                                      0 ,
