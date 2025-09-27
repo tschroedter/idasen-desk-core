@@ -44,6 +44,7 @@ internal class DeskStopper : IDeskStopper
         _noMovementPolls = 0 ;
         _lastHeight = null ;
         _heightMonitor.Reset ( ) ;
+        _logger.Debug ( "Stopper reset" ) ;
     }
 
     public StopDetails ShouldStop ( uint height ,
@@ -88,7 +89,8 @@ internal class DeskStopper : IDeskStopper
 
             if ( _settings.OvershootCompensation > 0 && movementAbs > 0 )
             {
-                _logger.Debug ( "Overshoot compensation applied for prediction: raw={Raw} comp={Comp} used={Used}" ,
+                _logger.Debug ( "Predictive active speed={Speed} rawMove={Raw} comp={Comp} used={Used}" ,
+                                speed ,
                                 movementAbs ,
                                 _settings.OvershootCompensation ,
                                 compensatedMovementForPrediction ) ;
@@ -96,7 +98,7 @@ internal class DeskStopper : IDeskStopper
         }
         else if ( movementAbs > 0 )
         {
-            _logger.Debug ( "Predictive crossing disabled (speed {Speed} < {MinSpeed}); raw movement={Raw}" ,
+            _logger.Debug ( "Predictive disabled speed={Speed} (<{Min}) rawMove={Raw}" ,
                             speed ,
                             MinPredictiveSpeed ,
                             movementAbs ) ;
@@ -118,19 +120,19 @@ internal class DeskStopper : IDeskStopper
         if ( stalledTick )
         {
             _noMovementPolls++ ;
+            _logger.Debug ( "Stall tick count={Cnt} activelyCommanding={Commanding}" , _noMovementPolls , activelyCommanding ) ;
 
             if ( ! activelyCommanding )
             {
+                _logger.Debug ( "Returning stop due to stall and not actively commanding" ) ;
                 return new StopDetails ( true ,
                                          desired ) ;
             }
         }
-        else
+        else if ( _noMovementPolls != 0 )
         {
-            if ( _noMovementPolls != 0 )
-            {
-                _noMovementPolls = 0 ;
-            }
+            _logger.Debug ( "Reset stall counter from {Cnt}" , _noMovementPolls ) ;
+            _noMovementPolls = 0 ;
         }
 
         // tolerance based stop (dynamic tolerance limited by predicted raw movement, NOT compensated one)
@@ -142,8 +144,15 @@ internal class DeskStopper : IDeskStopper
                        ? height - targetHeight
                        : targetHeight - height ;
 
+        _logger.Debug ( "Tolerance eval diff={Diff} tol={Tol} dynTol={DynTol} movementAbs={MoveAbs}" ,
+                        diff ,
+                        tolerance ,
+                        toleranceDynamic ,
+                        movementAbs ) ;
+
         if ( diff <= tolerance )
         {
+            _logger.Debug ( "Returning stop due to tolerance diff={Diff} tol={Tol}" , diff , tolerance ) ;
             return new StopDetails ( true ,
                                      desired ) ;
         }
@@ -156,9 +165,11 @@ internal class DeskStopper : IDeskStopper
                 if ( compensatedMovementForPrediction > 0 && height < targetHeight )
                 {
                     var predictedStop = height + compensatedMovementForPrediction ;
+                    _logger.Debug ( "Predictive Up predictedStop={Pred} target={Target}" , predictedStop , targetHeight ) ;
 
                     if ( predictedStop >= targetHeight )
                     {
+                        _logger.Debug ( "Returning stop due to predictive up crossing" ) ;
                         return new StopDetails ( true ,
                                                  desired ) ;
                     }
@@ -173,8 +184,11 @@ internal class DeskStopper : IDeskStopper
                                     : compensatedMovementForPrediction ;
                     var predictedStop = height - delta ;
 
+                    _logger.Debug ( "Predictive Down predictedStop={Pred} target={Target}" , predictedStop , targetHeight ) ;
+
                     if ( predictedStop <= targetHeight )
                     {
+                        _logger.Debug ( "Returning stop due to predictive down crossing" ) ;
                         return new StopDetails ( true ,
                                                  desired ) ;
                     }
@@ -184,10 +198,12 @@ internal class DeskStopper : IDeskStopper
 
         if ( desired == Direction.None || _calculator.HasReachedTargetHeight )
         {
+            _logger.Debug ( "Returning stop due to calculator state desired={Desired} reached={Reached}" , desired , _calculator.HasReachedTargetHeight ) ;
             return new StopDetails ( true ,
                                      desired ) ;
         }
 
+        _logger.Debug ( "Continue movement desired={Desired}" , desired ) ;
         return new StopDetails ( false ,
                                  desired ) ;
     }

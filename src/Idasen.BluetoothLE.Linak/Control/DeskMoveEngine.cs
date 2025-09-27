@@ -51,6 +51,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
         // If a different direction is currently commanded, manager must stop first.
         if ( CurrentDirection != Direction.None && desired != CurrentDirection )
         {
+            _logger.Debug ( "Ignoring move request: already moving {Current} cannot switch to {Desired} without stop" , CurrentDirection , desired ) ;
             return ;
         }
 
@@ -59,6 +60,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
         {
             if ( fromTimer )
             {
+                _logger.Debug ( "Re-issuing keep-alive move {Dir}" , desired ) ;
                 IssueMoveCommand ( desired ) ;
             }
 
@@ -66,6 +68,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
         }
 
         // Start moving in desired direction from idle
+        _logger.Debug ( "Issuing initial move {Dir}" , desired ) ;
         IssueMoveCommand ( desired ) ;
     }
 
@@ -76,10 +79,11 @@ internal class DeskMoveEngine : IDeskMoveEngine
     {
         if ( _pendingStopTask is { IsCompleted: false } )
         {
+            _logger.Debug ( "Stop already pending (coalesced)" ) ;
             return _pendingStopTask ;
         }
 
-        _logger.Debug ( "Engine stopping..." ) ;
+        _logger.Debug ( "Engine stopping (currentDir={Dir})" , CurrentDirection ) ;
 
         var task = _executor.Stop ( ) ;
 
@@ -89,7 +93,12 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
             if ( ok )
             {
+                _logger.Debug ( "Stop completed synchronously" ) ;
                 CurrentDirection = Direction.None ;
+            }
+            else
+            {
+                _logger.Debug ( "Stop failed synchronously" ) ;
             }
 
             return task ;
@@ -109,7 +118,12 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
                                     if ( ok )
                                     {
+                                        _logger.Debug ( "Stop completed (async)" ) ;
                                         CurrentDirection = Direction.None ;
+                                    }
+                                    else
+                                    {
+                                        _logger.Debug ( "Stop failed (async)" ) ;
                                     }
 
                                     Interlocked.Exchange ( ref _pendingStopTask ,
@@ -126,12 +140,14 @@ internal class DeskMoveEngine : IDeskMoveEngine
     {
         if ( _pendingMoveCommandTask is { IsCompleted: false } )
         {
+            _logger.Debug ( "Move command already pending (dir={Dir})" , desired ) ;
             return ;
         }
 
         // optimistic set to avoid duplicate sends
         CurrentDirection = desired ;
 
+        _logger.Debug ( "Sending move command {Dir}" , desired ) ;
         var task = desired == Direction.Up
                        ? _executor.Up ( )
                        : _executor.Down ( ) ;
@@ -142,6 +158,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
             if ( ! ok && CurrentDirection == desired )
             {
+                _logger.Debug ( "Move command failed synchronously -> reset direction" ) ;
                 CurrentDirection = Direction.None ;
             }
 
@@ -162,7 +179,12 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
                                     if ( ! ok && CurrentDirection == desired )
                                     {
+                                        _logger.Debug ( "Move command failed (async) -> reset direction" ) ;
                                         CurrentDirection = Direction.None ;
+                                    }
+                                    else if ( ok )
+                                    {
+                                        _logger.Debug ( "Move command completed (async) ok={Ok}" , ok ) ;
                                     }
 
                                     Interlocked.Exchange ( ref _pendingMoveCommandTask ,
