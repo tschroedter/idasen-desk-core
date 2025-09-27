@@ -27,6 +27,12 @@ public class DeskMoverSettings // todo make all the properties settable via ISet
     public uint OvershootCompensation { get ; init ; } = 10u ;
 
     /// <summary>
+    ///     Minimum elapsed time between re-issued keep-alive move commands while already moving.
+    ///     Throttling reduces BLE command spam that can cause perceived stutter on some controllers.
+    /// </summary>
+    public TimeSpan KeepAliveInterval { get ; init ; } = TimeSpan.FromMilliseconds ( 400 ) ;
+
+    /// <summary>
     ///     Provides a shared default <see cref="DeskMoverSettings" /> instance with standard values.
     /// </summary>
     public static DeskMoverSettings Default { get ; } = new ( ) ;

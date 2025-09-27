@@ -17,14 +17,17 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
     private Task < bool >? _pendingMoveCommandTask ;
     private Task < bool >? _pendingStopTask ;
+    private readonly TimeSpan _keepAliveInterval ;
+    private DateTime _lastKeepAlive = DateTime.MinValue ;
 
-    public DeskMoveEngine ( ILogger logger , IDeskCommandExecutor executor )
+    public DeskMoveEngine ( ILogger logger , IDeskCommandExecutor executor , DeskMoverSettings? settings = null )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( executor ) ;
 
         _logger = logger ;
         _executor = executor ;
+        _keepAliveInterval = ( settings ?? DeskMoverSettings.Default ).KeepAliveInterval ;
     }
 
     /// <summary>
@@ -55,13 +58,22 @@ internal class DeskMoveEngine : IDeskMoveEngine
             return ;
         }
 
-        // If same direction and from timer, re-issue as keep-alive; if idle, start.
+        // If same direction and from timer, re-issue as keep-alive but throttle.
         if ( CurrentDirection == desired )
         {
             if ( fromTimer )
             {
-                _logger.Debug ( "Re-issuing keep-alive move {Dir}" , desired ) ;
-                IssueMoveCommand ( desired ) ;
+                var now = DateTime.UtcNow ;
+                if ( now - _lastKeepAlive >= _keepAliveInterval )
+                {
+                    _lastKeepAlive = now ;
+                    _logger.Debug ( "Re-issuing keep-alive move {Dir}" , desired ) ;
+                    IssueMoveCommand ( desired ) ;
+                }
+                else
+                {
+                    _logger.Debug ( "Skipping keep-alive (throttled) dir={Dir} remainingMs={Remaining}" , desired , (_keepAliveInterval - ( now - _lastKeepAlive ) ).TotalMilliseconds ) ;
+                }
             }
 
             return ;
@@ -69,6 +81,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
         // Start moving in desired direction from idle
         _logger.Debug ( "Issuing initial move {Dir}" , desired ) ;
+        _lastKeepAlive = DateTime.UtcNow ;
         IssueMoveCommand ( desired ) ;
     }
 

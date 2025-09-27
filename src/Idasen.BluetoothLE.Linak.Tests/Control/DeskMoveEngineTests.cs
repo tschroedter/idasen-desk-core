@@ -1,3 +1,4 @@
+using System ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
@@ -24,11 +25,18 @@ public class DeskMoveEngineTests
         _executor.Stop ( ).Returns ( true ) ;
     }
 
-    private DeskMoveEngine CreateSut ( )
+    private DeskMoveEngine CreateSut ( DeskMoverSettings? settings = null )
     {
         return new DeskMoveEngine ( _logger ,
-                                    _executor ) ;
+                                    _executor ,
+                                    settings ) ;
     }
+
+    private DeskMoveEngine CreateSutWithKeepAlive ( TimeSpan keepAlive ) =>
+        CreateSut ( new DeskMoverSettings
+        {
+            KeepAliveInterval = keepAlive
+        } ) ;
 
     [ TestMethod ]
     public void Initial_State_IsIdle ( )
@@ -93,12 +101,13 @@ public class DeskMoveEngineTests
     [ TestMethod ]
     public void Move_SameDirection_WithTimer_Reissues_WhenPreviousCompleted ( )
     {
-        var sut = CreateSut ( ) ;
+        // disable throttling for this behavior test
+        var sut = CreateSutWithKeepAlive ( TimeSpan.Zero ) ;
 
         sut.Move ( Direction.Up ,
                    false ) ; // first start
         sut.Move ( Direction.Up ,
-                   true ) ; // keep-alive
+                   true ) ; // keep-alive should reissue immediately
 
         _ = _executor.Received ( 2 ).Up ( ) ;
     }
@@ -106,7 +115,7 @@ public class DeskMoveEngineTests
     [ TestMethod ]
     public void Move_SameDirection_WithTimer_DoesNotReissue_WhilePending ( )
     {
-        var sut = CreateSut ( ) ;
+        var sut = CreateSutWithKeepAlive ( TimeSpan.Zero ) ;
 
         var tcs = new TaskCompletionSource < bool > ( ) ;
         _executor.Up ( ).Returns ( _ => tcs.Task ) ;
