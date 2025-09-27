@@ -14,10 +14,20 @@ namespace Idasen.BluetoothLE.Common.Tests ;
 public abstract class BaseConstructorNullTester<T> where T : class
 {
     private IContainer? _container ;
-    public virtual int NumberOfConstructorsPassed { get ; } = 1 ;
-    public virtual int NumberOfConstructorsFailed { get ; } = 0 ;
 
-    protected IContainer Container => _container ?? throw new InvalidOperationException ( "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
+    protected BaseConstructorNullTester ( int numberOfConstructorsPassed = 1,
+                                          int numberOfConstructorsFailed = 0)
+    {
+        NumberOfConstructorsPassed = numberOfConstructorsPassed ;
+        NumberOfConstructorsFailed = numberOfConstructorsFailed ;
+    }
+
+    public virtual int NumberOfConstructorsPassed { get ; } = 1 ;
+    public virtual int NumberOfConstructorsFailed { get ; }
+
+    protected IContainer Container => _container ??
+                                      throw new
+                                          InvalidOperationException ( "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
 
     [ TestCleanup ]
     public virtual void Cleanup ( )

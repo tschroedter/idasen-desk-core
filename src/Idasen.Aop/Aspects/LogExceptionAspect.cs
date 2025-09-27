@@ -30,8 +30,9 @@ public sealed class LogExceptionAspect ( ILogger logger ,
         }
         catch ( Exception exception )
         {
-            logger.Error ( $"{converter.Convert ( invocation )} " +
-                           exception ) ;
+            logger.Error ( exception ,
+                           "{Invocation}" ,
+                           converter.Convert ( invocation ) ) ;
         }
     }
 }

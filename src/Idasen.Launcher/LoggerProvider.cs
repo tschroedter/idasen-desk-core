@@ -53,11 +53,11 @@ public static class LoggerProvider
             var configuration = new ConfigurationBuilder ( )
                                .SetBasePath ( baseDir )
                                .AddJsonFile ( "appsettings.json" ,
-                                              optional : true ,
-                                              reloadOnChange : false )
+                                              true ,
+                                              false )
                                .AddJsonFile ( $"appsettings.{environmentName}.json" ,
-                                              optional : true ,
-                                              reloadOnChange : false )
+                                              true ,
+                                              false )
                                .Build ( ) ;
 
             _logger = new LoggerConfiguration ( )

@@ -1,4 +1,3 @@
-using System ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
@@ -32,11 +31,13 @@ public class DeskMoveEngineTests
                                     settings ) ;
     }
 
-    private DeskMoveEngine CreateSutWithKeepAlive ( TimeSpan keepAlive ) =>
-        CreateSut ( new DeskMoverSettings
+    private DeskMoveEngine CreateSutWithKeepAlive ( TimeSpan keepAlive )
+    {
+        return CreateSut ( new DeskMoverSettings
         {
             KeepAliveInterval = keepAlive
         } ) ;
+    }
 
     [ TestMethod ]
     public void Initial_State_IsIdle ( )

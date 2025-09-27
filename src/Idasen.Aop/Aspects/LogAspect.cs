@@ -28,8 +28,9 @@ public sealed class LogAspect ( ILogger logger ,
     {
         if ( _logger.IsEnabled ( LogEventLevel.Debug ) )
         {
-            var message = $"[LogAspect] ({invocation.InvocationTarget.GetHashCode ( ):D10}) {_converter.Convert ( invocation )}" ;
-            _logger.Debug ( message ) ;
+            _logger.Debug ("[LogAspect] ({HashCode:D10}) {Invocation}",
+                           invocation.InvocationTarget.GetHashCode(),
+                           _converter.Convert(invocation) ) ;
         }
 
         invocation.Proceed ( ) ;

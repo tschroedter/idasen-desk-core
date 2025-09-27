@@ -172,16 +172,20 @@ public class BluetoothLELinakModule
 
                                var defaults = DeskMoverSettings.Default ;
 
-                               if ( ! TimeSpan.TryParse ( section[ nameof ( DeskMoverSettings.TimerInterval ) ] , out var timerInterval ) )
+                               if ( ! TimeSpan.TryParse ( section[nameof ( DeskMoverSettings.TimerInterval )] ,
+                                                          out var timerInterval ) )
                                {
-                                   timerInterval = long.TryParse ( section[ nameof ( DeskMoverSettings.TimerInterval ) ] , out var ms )
+                                   timerInterval = long.TryParse ( section[nameof ( DeskMoverSettings.TimerInterval )] ,
+                                                                   out var ms )
                                                        ? TimeSpan.FromMilliseconds ( ms )
                                                        : defaults.TimerInterval ;
                                }
 
-                               if ( ! TimeSpan.TryParse ( section[ nameof ( DeskMoverSettings.KeepAliveInterval ) ] , out var keepAliveInterval ) )
+                               if ( ! TimeSpan.TryParse ( section[nameof ( DeskMoverSettings.KeepAliveInterval )] ,
+                                                          out var keepAliveInterval ) )
                                {
-                                   keepAliveInterval = long.TryParse ( section[ nameof ( DeskMoverSettings.KeepAliveInterval ) ] , out var kam )
+                                   keepAliveInterval = long.TryParse ( section[nameof ( DeskMoverSettings.KeepAliveInterval )] ,
+                                                                       out var kam )
                                                            ? TimeSpan.FromMilliseconds ( kam )
                                                            : defaults.KeepAliveInterval ;
                                }
@@ -197,9 +201,12 @@ public class BluetoothLELinakModule
                                return new DeskMoverSettings
                                {
                                    TimerInterval = timerInterval ,
-                                   NearTargetBaseTolerance = ReadUInt ( nameof ( DeskMoverSettings.NearTargetBaseTolerance ) , defaults.NearTargetBaseTolerance ) ,
-                                   NearTargetMaxDynamicTolerance = ReadUInt ( nameof ( DeskMoverSettings.NearTargetMaxDynamicTolerance ) , defaults.NearTargetMaxDynamicTolerance ) ,
-                                   OvershootCompensation = ReadUInt ( nameof ( DeskMoverSettings.OvershootCompensation ) , defaults.OvershootCompensation ) ,
+                                   NearTargetBaseTolerance = ReadUInt ( nameof ( DeskMoverSettings.NearTargetBaseTolerance ) ,
+                                                                        defaults.NearTargetBaseTolerance ) ,
+                                   NearTargetMaxDynamicTolerance = ReadUInt ( nameof ( DeskMoverSettings.NearTargetMaxDynamicTolerance ) ,
+                                                                              defaults.NearTargetMaxDynamicTolerance ) ,
+                                   OvershootCompensation = ReadUInt ( nameof ( DeskMoverSettings.OvershootCompensation ) ,
+                                                                      defaults.OvershootCompensation ) ,
                                    KeepAliveInterval = keepAliveInterval
                                } ;
                            } )

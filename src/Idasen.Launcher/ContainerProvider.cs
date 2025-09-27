@@ -79,7 +79,7 @@ public static class ContainerProvider
         Log.Logger = loggerConfiguration.CreateLogger ( ) ;
 
         return Register ( otherModules ,
-                           configuration ) ;
+                          configuration ) ;
     }
 
     private static IContainer Register ( IEnumerable < IModule >? otherModules ,

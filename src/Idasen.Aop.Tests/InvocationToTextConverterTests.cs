@@ -1,6 +1,5 @@
 using Castle.DynamicProxy ;
 using FluentAssertions ;
-using Idasen.Aop.Interfaces ;
 using JetBrains.Annotations ;
 
 namespace Idasen.Aop.Tests ;
@@ -8,7 +7,7 @@ namespace Idasen.Aop.Tests ;
 [ TestClass ]
 public class InvocationToTextConverterTests
 {
-    private static IInvocationToTextConverter CreateConverter ( )
+    private static InvocationToTextConverter CreateConverter ( )
     {
         return new InvocationToTextConverter ( ) ;
     }
@@ -25,7 +24,7 @@ public class InvocationToTextConverterTests
         var text = converter.Convert ( invocation ) ;
 
         text.Should ( ).Contain ( "Sample.NoArgs(" ) ;
-        text.EndsWith ( ")" ).Should ( ).BeTrue ( ) ;
+        text.EndsWith ( ')' ).Should ( ).BeTrue ( ) ;
     }
 
     [ TestMethod ]
@@ -66,10 +65,10 @@ public class InvocationToTextConverterTests
         var converter = CreateConverter ( ) ;
 
         var invocation = Intercept ( proxy ,
-                                     p => p.Property = 123 ) ;
+                                     p => p.SampleProperty = 123 ) ;
         var text = converter.Convert ( invocation ) ;
 
-        text.Should ( ).Contain ( "set_Property(value=123)" ) ;
+        text.Should ( ).Contain ( "Idasen.Aop.Tests.InvocationToTextConverterTests+Sample.set_SampleProperty(value=123)" ) ;
     }
 
     [ TestMethod ]
@@ -118,7 +117,7 @@ public class InvocationToTextConverterTests
     // Make proxy-able by Castle: public, non-sealed, virtual members
     public class Sample
     {
-        public virtual int Property { get ; set ; }
+        public virtual int SampleProperty { get ; set ; }
 
         public virtual void NoArgs ( )
         {

@@ -41,7 +41,7 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
     /// <param name="arguments">The method arguments.</param>
     /// <returns>Formatted argument list.</returns>
     [ UsedImplicitly ]
-    internal string ConvertArgumentsToString ( object [ ] arguments )
+    internal static string ConvertArgumentsToString ( object [ ] arguments )
     {
         if ( arguments.Length == 0 )
         {
@@ -57,7 +57,7 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
             if ( i < arguments.Length - 1 )
             {
-                builder.Append ( "," ) ;
+                builder.Append ( ',' ) ;
             }
         }
 
@@ -68,7 +68,7 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
     ///     Converts an invocation's arguments to a comma-separated string including parameter names (and modifiers) with
     ///     values.
     /// </summary>
-    private string ConvertArgumentsToString ( IInvocation invocation )
+    private static string ConvertArgumentsToString ( IInvocation invocation )
     {
         var args = invocation.Arguments ;
 
@@ -92,12 +92,12 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
             builder.Append ( modifier ) ;
             builder.Append ( name ) ;
-            builder.Append ( "=" ) ;
+            builder.Append ( '=' ) ;
             builder.Append ( ToValueString ( args[i] ) ) ;
 
             if ( i < args.Length - 1 )
             {
-                builder.Append ( "," ) ;
+                builder.Append ( ',' ) ;
             }
         }
 

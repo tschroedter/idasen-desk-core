@@ -199,10 +199,10 @@ public class DeskStopperTests
 
         // First call seeds last height; second call with same height and speed 0 triggers stall
         var d1 = sut.ShouldStop ( 1000 ,
-                                   0 ,
-                                   5000 ,
-                                   Direction.Up ,
-                                   Direction.None ) ;
+                                  0 ,
+                                  5000 ,
+                                  Direction.Up ,
+                                  Direction.None ) ;
         d1.ShouldStop.Should ( ).BeFalse ( ) ;
 
         var details = sut.ShouldStop ( 1000 ,
@@ -233,7 +233,7 @@ public class DeskStopperTests
         seed.ShouldStop.Should ( ).BeFalse ( ) ;
 
         // 50 polls with no movement while actively commanding should NOT trigger stop anymore
-        for ( var i = 0 ; i < 50 ; i++ )
+        for (var i = 0; i < 50; i++)
         {
             var d = sut.ShouldStop ( 1000 ,
                                      0 ,
@@ -263,7 +263,7 @@ public class DeskStopperTests
         seed.ShouldStop.Should ( ).BeFalse ( ) ;
 
         // 10 non-changing polls while actively commanding (speed 0 so they count as stall ticks)
-        for ( var i = 0 ; i < 10 ; i++ )
+        for (var i = 0; i < 10; i++)
         {
             var d = sut.ShouldStop ( 1000 ,
                                      0 ,

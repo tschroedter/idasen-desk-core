@@ -198,7 +198,8 @@ public class DeskMover
     /// <inheritdoc />
     public void Start ( )
     {
-        _logger.Debug ( "Starting movement cycle (target={TargetHeight})" , TargetHeight ) ;
+        _logger.Debug ( "Starting movement cycle (target={TargetHeight})" ,
+                        TargetHeight ) ;
 
         _cycleDisposables?.Dispose ( ) ;
         _cycleDisposables = null ;
@@ -216,7 +217,9 @@ public class DeskMover
     {
         if ( IsAllowedToMove )
         {
-            _logger.Debug ( "Manual Up() requested (height={Height} target={Target})" , Height , TargetHeight ) ;
+            _logger.Debug ( "Manual Up() requested (height={Height} target={Target})" ,
+                            Height ,
+                            TargetHeight ) ;
             return await _executor.Up ( ).ConfigureAwait ( false ) ;
         }
 
@@ -228,7 +231,9 @@ public class DeskMover
     {
         if ( IsAllowedToMove )
         {
-            _logger.Debug ( "Manual Down() requested (height={Height} target={Target})" , Height , TargetHeight ) ;
+            _logger.Debug ( "Manual Down() requested (height={Height} target={Target})" ,
+                            Height ,
+                            TargetHeight ) ;
             return await _executor.Down ( ).ConfigureAwait ( false ) ;
         }
 
@@ -238,7 +243,10 @@ public class DeskMover
     /// <inheritdoc />
     public async Task < bool > Stop ( )
     {
-        _logger.Debug ( "Stopping... (height={Height} speed={Speed} target={Target})" , Height , Speed , TargetHeight ) ;
+        _logger.Debug ( "Stopping... (height={Height} speed={Speed} target={Target})" ,
+                        Height ,
+                        Speed ,
+                        TargetHeight ) ;
 
         // If we are already stopped, avoid duplicate work and events
         if ( ! IsAllowedToMove && _cycleDisposables == null )
@@ -293,7 +301,9 @@ public class DeskMover
 
     private void StartAfterReceivingCurrentHeight ( )
     {
-        _logger.Debug ( "Initial height received -> start control loop (height={Height} target={Target})" , _heightAndSpeed.Height , TargetHeight ) ;
+        _logger.Debug ( "Initial height received -> start control loop (height={Height} target={Target})" ,
+                        _heightAndSpeed.Height ,
+                        TargetHeight ) ;
 
         if ( TargetHeight == 0 )
         {
@@ -312,7 +322,8 @@ public class DeskMover
         _calculator.Calculate ( ) ;
         StartMovingIntoDirection = _calculator.MoveIntoDirection ;
 
-        _logger.Debug ( "Calculated initial direction={Dir}" , StartMovingIntoDirection ) ;
+        _logger.Debug ( "Calculated initial direction={Dir}" ,
+                        StartMovingIntoDirection ) ;
 
         _cycleDisposables?.Dispose ( ) ;
         _cycleDisposables = new CompositeDisposable ( ) ;
@@ -356,7 +367,11 @@ public class DeskMover
 
         try
         {
-            _logger.Debug ( "Evaluate move (height={Height} speed={Speed} target={Target} engineDir={EngineDir})" , Height , Speed , TargetHeight , _engine.CurrentDirection ) ;
+            _logger.Debug ( "Evaluate move (height={Height} speed={Speed} target={Target} engineDir={EngineDir})" ,
+                            Height ,
+                            Speed ,
+                            TargetHeight ,
+                            _engine.CurrentDirection ) ;
 
             if ( TargetHeight == 0u )
             {
@@ -369,20 +384,26 @@ public class DeskMover
                                                StartMovingIntoDirection ,
                                                _engine.CurrentDirection ) ;
 
-            _logger.Debug ( "StopEval result stop={Stop} desired={Desired} engineDir={EngineDir}" , result.ShouldStop , result.Desired , _engine.CurrentDirection ) ;
+            _logger.Debug ( "StopEval result stop={Stop} desired={Desired} engineDir={EngineDir}" ,
+                            result.ShouldStop ,
+                            result.Desired ,
+                            _engine.CurrentDirection ) ;
 
             if ( result.ShouldStop )
             {
                 if ( fromTimer || _engine.IsMoving )
                 {
-                    _logger.Debug ( "Issuing stop (fromTimer={FromTimer} engineMoving={Moving})" , fromTimer , _engine.IsMoving ) ;
+                    _logger.Debug ( "Issuing stop (fromTimer={FromTimer} engineMoving={Moving})" ,
+                                    fromTimer ,
+                                    _engine.IsMoving ) ;
                     IssueStopIfNotPending ( ) ;
                 }
 
                 return ;
             }
 
-            _logger.Debug ( "Continuing movement desired={Desired}" , result.Desired ) ;
+            _logger.Debug ( "Continuing movement desired={Desired}" ,
+                            result.Desired ) ;
             _engine.Move ( result.Desired ,
                            fromTimer ) ;
         }
