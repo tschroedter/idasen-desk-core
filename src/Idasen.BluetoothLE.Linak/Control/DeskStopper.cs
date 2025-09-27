@@ -14,6 +14,10 @@ internal class DeskStopper : IDeskStopper
 {
     // Treat as stalled only if speed is effectively zero while height hasn't changed
     private const int StallSpeedThreshold = 1 ; // absolute speed <= 1 considered no movement
+
+    // Minimum absolute speed required before enabling predictive crossing + overshoot compensation logic
+    private const int MinPredictiveSpeed = 5 ;
+
     private readonly IStoppingHeightCalculator _calculator ;
     private readonly IDeskHeightMonitor _heightMonitor ;
     private readonly ILogger _logger ;
@@ -58,32 +62,44 @@ internal class DeskStopper : IDeskStopper
         var desired = _calculator.MoveIntoDirection ;
         var movementAbs = ( uint ) Math.Abs ( _calculator.MovementUntilStop ) ;
 
+        // Enable predictive crossing only after we have reached a minimum speed to avoid
+        // an early tiny predicted movement triggering a premature S    top/Restart jitter.
+        var predictiveActive = Math.Abs ( speed ) >= MinPredictiveSpeed ;
+
         // OvershootCompensation semantics (see DeskMoverSettings):
-        // We ADD the compensation to the predicted movement when evaluating a potential crossing so that
-        // we stop a little earlier (counter systematic overshoot). We DO NOT shrink movementAbs here,
-        // because the dynamic tolerance relies on the raw predicted movement until stop.
-        // Keep the original movementAbs for tolerance. Use compensated value only for predictive crossing.
+        // Only apply when predictive logic is active. Early in the motion (speed below threshold) we
+        // keep raw prediction to avoid immediate stop pulses.
         var compensatedMovementForPrediction = movementAbs ;
 
-        try
+        if ( predictiveActive )
         {
-            checked
+            try
             {
-                compensatedMovementForPrediction = movementAbs + _settings.OvershootCompensation ;
+                checked
+                {
+                    compensatedMovementForPrediction = movementAbs + _settings.OvershootCompensation ;
+                }
+            }
+            catch ( OverflowException )
+            {
+                // fall back to raw value on overflow.
+                compensatedMovementForPrediction = movementAbs ;
+            }
+
+            if ( _settings.OvershootCompensation > 0 && movementAbs > 0 )
+            {
+                _logger.Debug ( "Overshoot compensation applied for prediction: raw={Raw} comp={Comp} used={Used}" ,
+                                movementAbs ,
+                                _settings.OvershootCompensation ,
+                                compensatedMovementForPrediction ) ;
             }
         }
-        catch ( OverflowException )
+        else if ( movementAbs > 0 )
         {
-            // In the very unlikely case of overflow just fall back to raw value.
-            compensatedMovementForPrediction = movementAbs ;
-        }
-
-        if ( _settings.OvershootCompensation > 0 && movementAbs > 0 )
-        {
-            _logger.Debug ( "Overshoot compensation applied for prediction: raw={Raw} comp={Comp} used={Used}" ,
-                            movementAbs ,
-                            _settings.OvershootCompensation ,
-                            compensatedMovementForPrediction ) ;
+            _logger.Debug ( "Predictive crossing disabled (speed {Speed} < {MinSpeed}); raw movement={Raw}" ,
+                            speed ,
+                            MinPredictiveSpeed ,
+                            movementAbs ) ;
         }
 
         // Only push distinct heights to the monitor to avoid false "no change" from repeated evaluations
@@ -132,33 +148,36 @@ internal class DeskStopper : IDeskStopper
                                      desired ) ;
         }
 
-        // predictive crossing (use compensated movement to trigger earlier stop)
-        if ( desired == Direction.Up )
+        // predictive crossing (use compensated movement to trigger earlier stop) - only if active
+        if ( predictiveActive )
         {
-            if ( compensatedMovementForPrediction > 0 && height < targetHeight )
+            if ( desired == Direction.Up )
             {
-                var predictedStop = height + compensatedMovementForPrediction ;
-
-                if ( predictedStop >= targetHeight )
+                if ( compensatedMovementForPrediction > 0 && height < targetHeight )
                 {
-                    return new StopDetails ( true ,
-                                             desired ) ;
+                    var predictedStop = height + compensatedMovementForPrediction ;
+
+                    if ( predictedStop >= targetHeight )
+                    {
+                        return new StopDetails ( true ,
+                                                 desired ) ;
+                    }
                 }
             }
-        }
-        else if ( desired == Direction.Down )
-        {
-            if ( compensatedMovementForPrediction > 0 && height > targetHeight )
+            else if ( desired == Direction.Down )
             {
-                var delta = compensatedMovementForPrediction > height
-                                ? height
-                                : compensatedMovementForPrediction ;
-                var predictedStop = height - delta ;
-
-                if ( predictedStop <= targetHeight )
+                if ( compensatedMovementForPrediction > 0 && height > targetHeight )
                 {
-                    return new StopDetails ( true ,
-                                             desired ) ;
+                    var delta = compensatedMovementForPrediction > height
+                                    ? height
+                                    : compensatedMovementForPrediction ;
+                    var predictedStop = height - delta ;
+
+                    if ( predictedStop <= targetHeight )
+                    {
+                        return new StopDetails ( true ,
+                                                 desired ) ;
+                    }
                 }
             }
         }
