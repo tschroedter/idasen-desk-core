@@ -58,20 +58,31 @@ internal class DeskStopper : IDeskStopper
         var desired = _calculator.MoveIntoDirection ;
         var movementAbs = ( uint ) Math.Abs ( _calculator.MovementUntilStop ) ;
 
-        // Apply overshoot compensation (systematic delay/latency). We only adjust if still moving towards target.
-        if ( desired != Direction.None && movementAbs > 0 )
+        // OvershootCompensation semantics (see DeskMoverSettings):
+        // We ADD the compensation to the predicted movement when evaluating a potential crossing so that
+        // we stop a little earlier (counter systematic overshoot). We DO NOT shrink movementAbs here,
+        // because the dynamic tolerance relies on the raw predicted movement until stop.
+        // Keep the original movementAbs for tolerance. Use compensated value only for predictive crossing.
+        var compensatedMovementForPrediction = movementAbs ;
+        try
         {
-            var compensated = movementAbs > _settings.OvershootCompensation
-                                   ? movementAbs - _settings.OvershootCompensation
-                                   : 0u ;
-            if ( compensated != movementAbs )
+            checked
             {
-                _logger.Debug ( "Applying overshoot compensation: raw={Raw} compensated={Compensated} (comp={Comp})" ,
-                                movementAbs ,
-                                compensated ,
-                                _settings.OvershootCompensation ) ;
+                compensatedMovementForPrediction = movementAbs + _settings.OvershootCompensation ;
             }
-            movementAbs = compensated ;
+        }
+        catch ( OverflowException )
+        {
+            // In the very unlikely case of overflow just fall back to raw value.
+            compensatedMovementForPrediction = movementAbs ;
+        }
+
+        if ( _settings.OvershootCompensation > 0 && movementAbs > 0 )
+        {
+            _logger.Debug ( "Overshoot compensation applied for prediction: raw={Raw} comp={Comp} used={Used}" ,
+                            movementAbs ,
+                            _settings.OvershootCompensation ,
+                            compensatedMovementForPrediction ) ;
         }
 
         // Only push distinct heights to the monitor to avoid false "no change" from repeated evaluations
@@ -91,10 +102,6 @@ internal class DeskStopper : IDeskStopper
         {
             _noMovementPolls++ ;
 
-            // Previous logic stopped after a fixed number of stalled ticks even while actively commanding.
-            // This caused long movements (> ~10cm) to stutter periodically. We now only stop immediately
-            // when we are NOT actively commanding (lost command) – but we keep counting otherwise so that
-            // future adaptive logic could use it (without triggering spurious stops).
             if ( ! activelyCommanding )
             {
                 return new StopDetails ( true ,
@@ -103,14 +110,13 @@ internal class DeskStopper : IDeskStopper
         }
         else
         {
-            // Reset counter on any movement or speed change
             if ( _noMovementPolls != 0 )
             {
                 _noMovementPolls = 0 ;
             }
         }
 
-        // tolerance based stop
+        // tolerance based stop (dynamic tolerance limited by predicted raw movement, NOT compensated one)
         var toleranceDynamic = Math.Min ( _settings.NearTargetMaxDynamicTolerance ,
                                           movementAbs ) ;
         var tolerance = Math.Max ( _settings.NearTargetBaseTolerance ,
@@ -125,12 +131,12 @@ internal class DeskStopper : IDeskStopper
                                      desired ) ;
         }
 
-        // predictive crossing (with compensated movementAbs)
+        // predictive crossing (use compensated movement to trigger earlier stop)
         if ( desired == Direction.Up )
         {
-            if ( movementAbs > 0 && height < targetHeight )
+            if ( compensatedMovementForPrediction > 0 && height < targetHeight )
             {
-                var predictedStop = height + movementAbs ;
+                var predictedStop = height + compensatedMovementForPrediction ;
 
                 if ( predictedStop >= targetHeight )
                 {
@@ -141,11 +147,12 @@ internal class DeskStopper : IDeskStopper
         }
         else if ( desired == Direction.Down )
         {
-            if ( movementAbs > 0 && height > targetHeight )
+            if ( compensatedMovementForPrediction > 0 && height > targetHeight )
             {
-                var predictedStop = height <= movementAbs
-                                        ? 0u
-                                        : height - movementAbs ;
+                var delta = compensatedMovementForPrediction > height
+                                ? height
+                                : compensatedMovementForPrediction ;
+                var predictedStop = height - delta ;
 
                 if ( predictedStop <= targetHeight )
                 {
