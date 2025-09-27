@@ -21,6 +21,12 @@ public class DeskMoverSettings // todo make all the properties settable via ISet
     public uint NearTargetMaxDynamicTolerance { get ; init ; } = 10u ;
 
     /// <summary>
+    ///     Compensation (in mm units) added to predicted movement to counter systematic overshoot.
+    ///     Increase if desk still stops beyond target, decrease if it now undershoots. Default targets ~1cm correction.
+    /// </summary>
+    public uint OvershootCompensation { get ; init ; } = 10u ;
+
+    /// <summary>
     ///     Provides a shared default <see cref="DeskMoverSettings" /> instance with standard values.
     /// </summary>
     public static DeskMoverSettings Default { get ; } = new ( ) ;

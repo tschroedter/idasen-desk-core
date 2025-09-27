@@ -58,6 +58,22 @@ internal class DeskStopper : IDeskStopper
         var desired = _calculator.MoveIntoDirection ;
         var movementAbs = ( uint ) Math.Abs ( _calculator.MovementUntilStop ) ;
 
+        // Apply overshoot compensation (systematic delay/latency). We only adjust if still moving towards target.
+        if ( desired != Direction.None && movementAbs > 0 )
+        {
+            var compensated = movementAbs > _settings.OvershootCompensation
+                                   ? movementAbs - _settings.OvershootCompensation
+                                   : 0u ;
+            if ( compensated != movementAbs )
+            {
+                _logger.Debug ( "Applying overshoot compensation: raw={Raw} compensated={Compensated} (comp={Comp})" ,
+                                movementAbs ,
+                                compensated ,
+                                _settings.OvershootCompensation ) ;
+            }
+            movementAbs = compensated ;
+        }
+
         // Only push distinct heights to the monitor to avoid false "no change" from repeated evaluations
         var isNewSample = _lastHeight is null || _lastHeight.Value != height ;
 
@@ -109,7 +125,7 @@ internal class DeskStopper : IDeskStopper
                                      desired ) ;
         }
 
-        // predictive crossing
+        // predictive crossing (with compensated movementAbs)
         if ( desired == Direction.Up )
         {
             if ( movementAbs > 0 && height < targetHeight )
