@@ -1,0 +1,43 @@
+# Configuration for the dependency review action
+# https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/configuring-dependency-review
+
+# Fail the action if any of these license types are detected
+fail_on_scopes:
+  - development
+  - runtime
+
+# Comment on PRs with dependency changes
+comment_summary_in_pr: on-failure
+
+# Allow only these licenses (SPDX license IDs)
+allow_licenses:
+  - "MIT"
+  - "Apache-2.0" 
+  - "BSD-2-Clause"
+  - "BSD-3-Clause"
+  - "ISC"
+  - "MS-PL"
+  - "0BSD"
+
+# Block these licenses
+deny_licenses:
+  - "GPL-2.0"
+  - "GPL-3.0"
+  - "AGPL-1.0"
+  - "AGPL-3.0"
+
+# Allow these security severities
+allow_vulnerabilities:
+  - low
+
+# Fail on these security severities
+fail_on_vulnerability_severities:
+  - critical
+  - high
+  - moderate
+
+# Allow certain packages (use with caution)
+allow_dependencies_with_vulnerabilities: []
+
+# Block certain packages/organizations  
+deny_packages: []
