@@ -4,29 +4,30 @@ using Idasen.Aop.Aspects ;
 using Idasen.Aop.Interfaces ;
 using Serilog ;
 
-namespace Idasen.Aop ;
-
-// ReSharper disable once InconsistentNaming
-/// <summary>
-///     Autofac module that registers AOP-related components for BluetoothLE, including
-///     invocation-to-text conversion and logging aspects.
-/// </summary>
-[ ExcludeFromCodeCoverage ]
-public sealed class BluetoothLEAop
-    : Module
+namespace Idasen.Aop
 {
+    // ReSharper disable once InconsistentNaming
     /// <summary>
-    ///     Adds the AOP services to the provided container builder.
+    ///     Autofac module that registers AOP-related components for BluetoothLE, including
+    ///     invocation-to-text conversion and logging aspects.
     /// </summary>
-    /// <param name="builder">The Autofac container builder.</param>
-    protected override void Load ( ContainerBuilder builder )
+    [ ExcludeFromCodeCoverage ]
+    public sealed class BluetoothLEAop
+        : Module
     {
-        ArgumentNullException.ThrowIfNull ( builder ) ;
+        /// <summary>
+        ///     Adds the AOP services to the provided container builder.
+        /// </summary>
+        /// <param name="builder">The Autofac container builder.</param>
+        protected override void Load ( ContainerBuilder builder )
+        {
+            ArgumentNullException.ThrowIfNull ( builder ) ;
 
-        builder.RegisterType < InvocationToTextConverter > ( )
-               .As < IInvocationToTextConverter > ( ) ;
+            builder.RegisterType < InvocationToTextConverter > ( )
+                   .As < IInvocationToTextConverter > ( ) ;
 
-        builder.Register ( c => new LogAspect ( c.Resolve < ILogger > ( ) ,
-                                                c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
+            builder.Register ( c => new LogAspect ( c.Resolve < ILogger > ( ) ,
+                                                    c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
+        }
     }
 }
