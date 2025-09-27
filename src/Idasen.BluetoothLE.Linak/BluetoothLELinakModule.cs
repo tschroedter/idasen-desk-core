@@ -6,6 +6,7 @@ using Idasen.Aop ;
 using Idasen.BluetoothLE.Characteristics ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
+using Microsoft.Extensions.Configuration ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak ;
@@ -154,7 +155,48 @@ public class BluetoothLELinakModule
                .SingleInstance ( )
                .EnableInterfaceInterceptors ( ) ;
 
-        builder.RegisterInstance ( DeskMoverSettings.Default )
-               .AsSelf ( ) ;
+        // Bind DeskMoverSettings from configuration (if available), fallback to defaults
+        builder.Register ( ctx =>
+                           {
+                               if ( ! ctx.TryResolve ( out IConfiguration config ) )
+                               {
+                                   return DeskMoverSettings.Default ;
+                               }
+
+                               var section = config.GetSection ( "DeskMoverSettings" ) ;
+
+                               if ( ! section.Exists ( ) )
+                               {
+                                   return DeskMoverSettings.Default ;
+                               }
+
+                               var defaults = DeskMoverSettings.Default ;
+
+                               TimeSpan timerInterval ;
+
+                               if ( ! TimeSpan.TryParse ( section[ nameof ( DeskMoverSettings.TimerInterval ) ] , out timerInterval ) )
+                               {
+                                   if ( long.TryParse ( section[ nameof ( DeskMoverSettings.TimerInterval ) ] , out var ms ) )
+                                   {
+                                       timerInterval = TimeSpan.FromMilliseconds ( ms ) ;
+                                   }
+                                   else
+                                   {
+                                       timerInterval = defaults.TimerInterval ;
+                                   }
+                               }
+
+                               uint ReadUInt ( string key , uint fallback ) => uint.TryParse ( section[ key ] , out var v ) ? v : fallback ;
+
+                               return new DeskMoverSettings
+                               {
+                                   TimerInterval = timerInterval ,
+                                   NearTargetBaseTolerance = ReadUInt ( nameof ( DeskMoverSettings.NearTargetBaseTolerance ) , defaults.NearTargetBaseTolerance ) ,
+                                   NearTargetMaxDynamicTolerance = ReadUInt ( nameof ( DeskMoverSettings.NearTargetMaxDynamicTolerance ) , defaults.NearTargetMaxDynamicTolerance ) ,
+                                   OvershootCompensation = ReadUInt ( nameof ( DeskMoverSettings.OvershootCompensation ) , defaults.OvershootCompensation )
+                               } ;
+                           } )
+               .AsSelf ( )
+               .SingleInstance ( ) ;
     }
 }

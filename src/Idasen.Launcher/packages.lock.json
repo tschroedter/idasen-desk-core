@@ -273,6 +273,7 @@
           "Idasen.Aop": "[1.0.0, )",
           "Idasen.BluetoothLE.Characteristics": "[1.0.0, )",
           "Idasen.BluetoothLE.Core": "[1.0.0, )",
+          "Microsoft.Extensions.Configuration": "[9.0.0, )",
           "Serilog": "[4.3.0, )",
           "System.Reactive": "[6.0.2, )"
         }

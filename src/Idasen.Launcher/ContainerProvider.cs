@@ -62,6 +62,7 @@ public static class ContainerProvider
 
     /// <summary>
     ///     Creates an Autofac container after configuring Serilog using the provided Microsoft <see cref="IConfiguration" />.
+    ///     The configuration root is also registered so modules can bind their own settings objects.
     /// </summary>
     /// <param name="configuration">Configuration root containing Serilog settings.</param>
     /// <param name="otherModules">Optional additional Autofac modules to register.</param>
@@ -77,14 +78,24 @@ public static class ContainerProvider
 
         Log.Logger = loggerConfiguration.CreateLogger ( ) ;
 
-        return Register ( otherModules ) ;
+        return Register ( otherModules ,
+                           configuration ) ;
     }
 
-    private static IContainer Register ( IEnumerable < IModule >? otherModules )
+    private static IContainer Register ( IEnumerable < IModule >? otherModules ,
+                                         IConfiguration? configuration = null )
     {
         var builder = new ContainerBuilder ( ) ;
 
         builder.RegisterLogger ( ) ;
+
+        if ( configuration != null )
+        {
+            builder.RegisterInstance ( configuration )
+                   .As < IConfiguration > ( )
+                   .SingleInstance ( ) ;
+        }
+
         builder.RegisterModule < BluetoothLECoreModule > ( ) ;
         builder.RegisterModule < BluetoothLELinakModule > ( ) ;
 
