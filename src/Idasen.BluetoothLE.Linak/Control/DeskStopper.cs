@@ -64,6 +64,7 @@ internal class DeskStopper : IDeskStopper
         // because the dynamic tolerance relies on the raw predicted movement until stop.
         // Keep the original movementAbs for tolerance. Use compensated value only for predictive crossing.
         var compensatedMovementForPrediction = movementAbs ;
+
         try
         {
             checked
