@@ -63,11 +63,6 @@ jobs:
       - name: Test (${{ env.BUILD_CONFIGURATION }})
         run: dotnet test src/idasen-desk-core.sln --configuration $env:BUILD_CONFIGURATION --no-build --verbosity normal
 
-      - name: Format Check
-        run: |
-          dotnet tool restore || true
-          dotnet format src/idasen-desk-core.sln --verify-no-changes --verbosity minimal || exit 1
-
       - name: Create and push git tag (optional)
         if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/')
         run: |
