@@ -67,14 +67,14 @@ jobs:
       - name: Pack NuGet packages (${{ env.BUILD_CONFIGURATION }})
         run: |
           New-Item -ItemType Directory -Path $env:PACKAGE_OUTPUT -Force | Out-Null
-          dotnet pack src/idasen-desk-core.sln --configuration $env:BUILD_CONFIGURATION --no-build --output $env:PACKAGE_OUTPUT
+          dotnet pack src/Idasen.BluetoothLE.Core/Idasen.BluetoothLE.Core.csproj --configuration $env:BUILD_CONFIGURATION --no-build --output $env:PACKAGE_OUTPUT
           Get-ChildItem $env:PACKAGE_OUTPUT
 
       - name: Upload NuGet packages artifact
         uses: actions/upload-artifact@v4
         with:
           name: nuget-packages
-          path: ${{ env.PACKAGE_OUTPUT }}\idasen.desk.core.*.nupkg
+          path: ${{ env.PACKAGE_OUTPUT }}\Idasen.BluetoothLE.Core.*.nupkg
           if-no-files-found: error
           retention-days: 14
 

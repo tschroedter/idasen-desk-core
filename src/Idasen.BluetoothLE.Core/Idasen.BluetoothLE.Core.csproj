@@ -50,6 +50,11 @@
         <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <ImplicitUsings>enable</ImplicitUsings>
+        <PackageId>Idasen.BluetoothLE.Core</PackageId>
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <Authors>tschroedter</Authors>
+        <Product>Idasen.BluetoothLE.Core</Product>
+        <Description>Core Bluetooth LE functionality for controlling Ikea's Idasen Desk using Windows 10 and BluetoothLE. This package contains the low-level device discovery and service wrappers.</Description>
     </PropertyGroup>
 
 </Project>
