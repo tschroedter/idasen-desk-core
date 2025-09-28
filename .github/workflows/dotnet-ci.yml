@@ -71,10 +71,23 @@ jobs:
           dotnet pack src/Idasen.Launcher/Idasen.Launcher.csproj --configuration $env:BUILD_CONFIGURATION --output $env:PACKAGE_OUTPUT
           Get-ChildItem $env:PACKAGE_OUTPUT
 
+      - name: Determine package version
+        id: determine_version
+        run: |
+          $pkg = Get-ChildItem "$env:PACKAGE_OUTPUT/idasen.desk.core.*.nupkg" | Select-Object -First 1
+          if (-not $pkg) { Write-Error "No package found"; exit 1 }
+          if ($pkg.BaseName -match '^idasen\.desk\.core\.(?<ver>.+)$') {
+            $version = $Matches['ver']
+          } else {
+            Write-Error "Could not parse version from $($pkg.Name)"; exit 1
+          }
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Write-Host "Detected package version: $version"
+
       - name: Upload NuGet packages artifact
         uses: actions/upload-artifact@v4
         with:
-            name: nuget-packages
+            name: nuget-packages-${{ steps.determine_version.outputs.version }}
             path: ${{ env.PACKAGE_OUTPUT }}\idasen.desk.core.*.nupkg
             if-no-files-found: error
             retention-days: 14
@@ -83,13 +96,13 @@ jobs:
         if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/')
         run: |
           $run  = $env:GITHUB_RUN_NUMBER
-          $tag  = "v0.1.$run"
-          git fetch --tags --quiet
-          if (git rev-parse -q --verify "refs/tags/$tag") {
-            Write-Host "Tag $tag already exists, skipping."
-          } else {
-            git config user.name "github-actions"
-            git config user.email "github-actions@github.com"
-            git tag -a $tag -m "Automated build $tag"
-            git push origin $tag
-          }
+            $tag  = "v0.1.$run"
+            git fetch --tags --quiet
+            if (git rev-parse -q --verify "refs/tags/$tag") {
+              Write-Host "Tag $tag already exists, skipping."
+            } else {
+              git config user.name "github-actions"
+              git config user.email "github-actions@github.com"
+              git tag -a $tag -m "Automated build $tag"
+              git push origin $tag
+            }
