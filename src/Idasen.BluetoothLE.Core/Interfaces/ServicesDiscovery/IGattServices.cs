@@ -5,7 +5,7 @@ using Wrappers ;
 /// <summary>
 ///     Thread-safe mapping between GATT device services and their characteristics.
 /// </summary>
-public interface IGattServicesDictionary
+public interface IGattServices
     : IDisposable
 {
     /// <summary>

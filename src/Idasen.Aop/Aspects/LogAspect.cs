@@ -29,7 +29,9 @@ public sealed class LogAspect ( ILogger logger ,
         if ( _logger.IsEnabled ( LogEventLevel.Debug ) )
         {
             _logger.Debug ( "[LogAspect] ({HashCode:D10}) {Invocation}" ,
+#pragma warning disable CA1062
                             invocation.InvocationTarget.GetHashCode ( ) ,
+#pragma warning restore CA1062
                             _converter.Convert ( invocation ) ) ;
         }
 

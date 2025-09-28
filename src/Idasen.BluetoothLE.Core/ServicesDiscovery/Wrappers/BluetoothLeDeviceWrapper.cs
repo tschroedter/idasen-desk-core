@@ -22,7 +22,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
 
     private readonly ISubject < BluetoothConnectionStatus > _connectionStatusChanged ;
     private readonly BluetoothLEDevice _device ;
-    private readonly IGattServicesDictionary _gattServicesDictionary ;
+    private readonly IGattServices _gattServices ;
     private readonly ILogger _logger ;
     private readonly IGattServicesProviderFactory _providerFactory ;
     private readonly IGattDeviceServicesResultWrapperFactory _servicesFactory ;
@@ -36,7 +36,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         IScheduler scheduler ,
         IGattServicesProviderFactory providerFactory ,
         IGattDeviceServicesResultWrapperFactory servicesFactory ,
-        IGattServicesDictionary gattServicesDictionary ,
+        IGattServices gattServices ,
         ISubject < BluetoothConnectionStatus > connectionStatusChanged ,
         BluetoothLEDevice device )
     {
@@ -48,8 +48,8 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
                                 nameof ( providerFactory ) ) ;
         Guard.ArgumentNotNull ( servicesFactory ,
                                 nameof ( servicesFactory ) ) ;
-        Guard.ArgumentNotNull ( gattServicesDictionary ,
-                                nameof ( gattServicesDictionary ) ) ;
+        Guard.ArgumentNotNull ( gattServices ,
+                                nameof ( gattServices ) ) ;
         Guard.ArgumentNotNull ( connectionStatusChanged ,
                                 nameof ( connectionStatusChanged ) ) ;
         Guard.ArgumentNotNull ( device ,
@@ -58,7 +58,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         _logger = logger ;
         _providerFactory = providerFactory ;
         _servicesFactory = servicesFactory ;
-        _gattServicesDictionary = gattServicesDictionary ;
+        _gattServices = gattServices ;
         _connectionStatusChanged = connectionStatusChanged ;
         _device = device ;
 
@@ -170,7 +170,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         if ( disposing )
         {
             _provider?.Dispose ( ) ;
-            _gattServicesDictionary.Dispose ( ) ;
+            _gattServices.Dispose ( ) ;
             _session?.Dispose ( ) ;
             _subscriberConnectionStatus.Dispose ( ) ;
             _device.Dispose ( ) ;

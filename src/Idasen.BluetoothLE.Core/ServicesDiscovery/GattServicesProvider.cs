@@ -19,11 +19,11 @@ public class GattServicesProvider
     private readonly IBluetoothLeDeviceWrapper _device ;
     private readonly ILogger _logger ;
     private readonly ISubject < GattCommunicationStatus > _refreshed ;
-    private readonly IGattServicesDictionary _services ;
+    private readonly IGattServices _services ;
     private IGattDeviceServicesResultWrapper? _gattResult ;
 
     public GattServicesProvider ( ILogger logger ,
-                                  IGattServicesDictionary services ,
+                                  IGattServices services ,
                                   ISubject < GattCommunicationStatus > refreshed ,
                                   IBluetoothLeDeviceWrapper device )
     {

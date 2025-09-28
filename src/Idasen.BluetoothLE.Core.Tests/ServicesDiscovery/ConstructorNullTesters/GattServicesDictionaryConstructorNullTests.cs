@@ -5,7 +5,7 @@ using Core.ServicesDiscovery ;
 
 [ TestClass ]
 public class GattServicesDictionaryConstructorNullTests
-    : BaseConstructorNullTester < GattServicesDictionary >
+    : BaseConstructorNullTester < GattServices >
 {
     public override int NumberOfConstructorsPassed { get ; } = 0 ;
 }

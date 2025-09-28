@@ -33,7 +33,7 @@ public class GattServicesProviderTests
     [ AutoDataTestMethod ]
     public void Constructor_ForServicesNull_Throws (
         Lazy < GattServicesProvider > sut ,
-        [ BeNull ] IGattServicesDictionary services )
+        [ BeNull ] IGattServices services )
     {
         // ReSharper disable once UnusedVariable
         Action action = ( ) =>
@@ -164,7 +164,7 @@ public class GattServicesProviderTests
     [ AutoDataTestMethod ]
     public async Task Refresh_ForInvoked_ClearsServices (
         GattServicesProvider sut ,
-        [ Freeze ] IGattServicesDictionary services )
+        [ Freeze ] IGattServices services )
     {
         await sut.Refresh ( ) ;
 
@@ -201,7 +201,7 @@ public class GattServicesProviderTests
         GattServicesProvider sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper device ,
         [ Freeze ] ISubject < GattCommunicationStatus > refreshed ,
-        [ Freeze ] IGattServicesDictionary services ,
+        [ Freeze ] IGattServices services ,
         IGattDeviceServicesResultWrapper result ,
         IGattDeviceServiceWrapper service ,
         IGattCharacteristicsResultWrapper characteristics )
@@ -236,7 +236,7 @@ public class GattServicesProviderTests
     public async Task Refresh_ForConnectedAndCharacteristicsUnreachable_DoesNotAddService (
         GattServicesProvider sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper device ,
-        [ Freeze ] IGattServicesDictionary services ,
+        [ Freeze ] IGattServices services ,
         IGattDeviceServicesResultWrapper result ,
         IGattDeviceServiceWrapper service ,
         IGattCharacteristicsResultWrapper characteristics )

@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
@@ -7,8 +7,8 @@ using Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-public class GattServicesDictionary
-    : IGattServicesDictionary
+public class GattServices
+    : IGattServices
 {
     private readonly Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > _dictionary =
         new ( ) ;

@@ -28,9 +28,13 @@ public sealed class LogExceptionAspect ( ILogger logger ,
     {
         try
         {
+#pragma warning disable CA1062
             invocation.Proceed ( ) ;
+#pragma warning restore CA1062
         }
+#pragma warning disable CA1031
         catch ( Exception exception )
+#pragma warning restore CA1031
         {
             logger.Error ( exception ,
                            "{Invocation}" ,

@@ -1,30 +1,17 @@
-﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
 
-using Common.Tests ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Core.ServicesDiscovery ;
 using FluentAssertions ;
-using Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 
 [ AutoDataTestClass ]
-public class GattServicesDictionaryTests
+public class GattServicesTests
 {
     [ AutoDataTestMethod ]
-    public void Indexer_ForServiceAndResultNull_Throws (
-        GattServicesDictionary sut ,
-        IGattDeviceServiceWrapper service )
-    {
-        Action action = ( ) => sut[service] = null! ;
-
-        action.Should ( )
-              .Throw < ArgumentException > ( )
-              .WithParameter ( "value" ) ;
-    }
-
-    [ AutoDataTestMethod ]
     public void Indexer_ForServiceAndResult_SetsKeyAndValue (
-        GattServicesDictionary sut ,
+        GattServices sut ,
         IGattDeviceServiceWrapper service ,
         IGattCharacteristicsResultWrapper result )
     {
@@ -37,7 +24,7 @@ public class GattServicesDictionaryTests
 
     [ AutoDataTestMethod ]
     public void Indexer_ForServiceAndResult_UpdatesCount (
-        GattServicesDictionary sut ,
+        GattServices sut ,
         IGattDeviceServiceWrapper service ,
         IGattCharacteristicsResultWrapper result )
     {
@@ -49,30 +36,8 @@ public class GattServicesDictionaryTests
     }
 
     [ AutoDataTestMethod ]
-    public void Indexer_ForExistingService_DisposesOldValueOnly (
-        GattServicesDictionary sut ,
-        IGattDeviceServiceWrapper service ,
-        IGattCharacteristicsResultWrapper first ,
-        IGattCharacteristicsResultWrapper second )
-    {
-        sut[service] = first ;
-        sut[service] = second ;
-
-        sut[service]
-           .Should ( )
-           .Be ( second ) ;
-
-        first.Received ( 1 )
-             .Dispose ( ) ;
-        second.DidNotReceive ( )
-              .Dispose ( ) ;
-        service.DidNotReceive ( )
-               .Dispose ( ) ;
-    }
-
-    [ AutoDataTestMethod ]
     public void Clear_ForInvoked_DisposesService1 (
-        GattServicesDictionary sut ,
+        GattServices sut ,
         IGattDeviceServiceWrapper service1 ,
         IGattCharacteristicsResultWrapper result1 ,
         IGattDeviceServiceWrapper service2 ,
@@ -89,7 +54,7 @@ public class GattServicesDictionaryTests
 
     [ AutoDataTestMethod ]
     public void Clear_ForInvoked_DisposesService2 (
-        GattServicesDictionary sut ,
+        GattServices sut ,
         IGattDeviceServiceWrapper service1 ,
         IGattCharacteristicsResultWrapper result1 ,
         IGattDeviceServiceWrapper service2 ,
@@ -100,32 +65,13 @@ public class GattServicesDictionaryTests
 
         sut.Clear ( ) ;
 
-        service2.Received ( )
-                .Dispose ( ) ;
-    }
-
-    [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_DisposesValues (
-        GattServicesDictionary sut ,
-        IGattDeviceServiceWrapper service1 ,
-        IGattCharacteristicsResultWrapper result1 ,
-        IGattDeviceServiceWrapper service2 ,
-        IGattCharacteristicsResultWrapper result2 )
-    {
         sut[service1] = result1 ;
         sut[service2] = result2 ;
-
-        sut.Clear ( ) ;
-
-        result1.Received ( )
-               .Dispose ( ) ;
-        result2.Received ( )
-               .Dispose ( ) ;
     }
 
     [ AutoDataTestMethod ]
     public void Clear_ForInvoked_SetsCountToZero (
-        GattServicesDictionary sut ,
+        GattServices sut ,
         IGattDeviceServiceWrapper service ,
         IGattCharacteristicsResultWrapper result )
     {
@@ -140,7 +86,7 @@ public class GattServicesDictionaryTests
 
     [ AutoDataTestMethod ]
     public void Dispose_ForInvoked_DisposesService1 (
-        GattServicesDictionary sut ,
+        GattServices sut ,
         IGattDeviceServiceWrapper service1 ,
         IGattCharacteristicsResultWrapper result1 ,
         IGattDeviceServiceWrapper service2 ,
@@ -157,7 +103,7 @@ public class GattServicesDictionaryTests
 
     [ AutoDataTestMethod ]
     public void Dispose_ForInvoked_DisposesService2 (
-        GattServicesDictionary sut ,
+        GattServices sut ,
         IGattDeviceServiceWrapper service1 ,
         IGattCharacteristicsResultWrapper result1 ,
         IGattDeviceServiceWrapper service2 ,
@@ -172,28 +118,10 @@ public class GattServicesDictionaryTests
                 .Dispose ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesValues (
-        GattServicesDictionary sut ,
-        IGattDeviceServiceWrapper service1 ,
-        IGattCharacteristicsResultWrapper result1 ,
-        IGattDeviceServiceWrapper service2 ,
-        IGattCharacteristicsResultWrapper result2 )
-    {
-        sut[service1] = result1 ;
-        sut[service2] = result2 ;
-
-        sut.Dispose ( ) ;
-
-        result1.Received ( )
-               .Dispose ( ) ;
-        result2.Received ( )
-               .Dispose ( ) ;
-    }
 
     [ AutoDataTestMethod ]
     public void ReadOnlyDictionary_ForInvoked_ContainsService1 (
-        GattServicesDictionary sut ,
+        GattServices sut ,
         IGattDeviceServiceWrapper service ,
         IGattCharacteristicsResultWrapper result )
     {
