@@ -37,7 +37,7 @@
 
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
         <PackageId>Idasen.Desk.Core</PackageId>
         <Authors>tschroedter</Authors>
         <Product>Idasen.Desk.Core</Product>
