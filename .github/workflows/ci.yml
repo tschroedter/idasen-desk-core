@@ -1,0 +1,72 @@
+name: 🏗️ Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: windows-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ⚡ Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 📦 Restore dependencies
+      working-directory: src
+      run: dotnet restore --verbosity minimal
+
+    - name: 🏗️ Build solution
+      working-directory: src
+      run: dotnet build --configuration Release --no-restore --verbosity minimal
+
+    - name: 🧪 Run tests
+      working-directory: src
+      run: |
+        # Find and run unit tests (excluding integration tests)
+        $testProjects = Get-ChildItem -Recurse -Filter "*.Tests.csproj" | Where-Object { $_.Name -notmatch 'Integration\.Tests' }
+        
+        if ($testProjects.Count -eq 0) {
+          Write-Host "No unit test projects found."
+          exit 0
+        }
+        
+        # Create test results directory
+        New-Item -ItemType Directory -Path "TestResults" -Force | Out-Null
+        
+        $failed = $false
+        foreach ($proj in $testProjects) {
+          Write-Host "Running tests for: $($proj.Name)"
+          
+          $testResultFile = "TestResults/test-results-$($proj.BaseName).xml"
+          
+          dotnet test $proj.FullName --configuration Release --no-build --no-restore --verbosity minimal --logger "trx;LogFileName=$testResultFile"
+          
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Tests failed for $($proj.Name)" -ForegroundColor Red
+            $failed = $true
+          }
+        }
+        
+        if ($failed) {
+          Write-Host "One or more test projects failed." -ForegroundColor Red
+          exit 1
+        }
+        
+        Write-Host "All tests passed!" -ForegroundColor Green
+
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: src/TestResults/
+        retention-days: 30

@@ -1,0 +1,156 @@
+name: 🚀 Release and Publish
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.1)'
+        required: true
+        type: string
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: windows-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: ⚡ Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 🔢 Determine version
+      id: version
+      run: |
+        if ("${{ github.event.inputs.version }}" -ne "") {
+          $version = "${{ github.event.inputs.version }}"
+        } else {
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+        }
+        
+        Write-Host "Release version: $version"
+        echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+        echo "TAG=v$version" >> $env:GITHUB_OUTPUT
+
+    - name: 🔄 Update version in project files
+      working-directory: src
+      run: |
+        $version = "${{ steps.version.outputs.VERSION }}"
+        Write-Host "Updating version to: $version" -ForegroundColor Blue
+        
+        # Find the main project file
+        $projectFile = "Idasen.Launcher/Idasen.Launcher.csproj"
+        
+        if (Test-Path $projectFile) {
+          [xml]$proj = Get-Content $projectFile
+          
+          # Find or create VersionPrefix property
+          $versionGroup = $proj.Project.PropertyGroup | Where-Object { $_.VersionPrefix } | Select-Object -First 1
+          
+          if ($versionGroup -and $versionGroup.VersionPrefix) {
+            $versionGroup.VersionPrefix = $version
+            Write-Host "Updated existing VersionPrefix to: $version"
+          } else {
+            # Find a PropertyGroup to add version to, or create one
+            $propertyGroup = $proj.Project.PropertyGroup | Select-Object -First 1
+            if ($propertyGroup) {
+              $versionElement = $proj.CreateElement("VersionPrefix")
+              $versionElement.InnerText = $version
+              $propertyGroup.AppendChild($versionElement) | Out-Null
+              Write-Host "Added VersionPrefix: $version"
+            }
+          }
+          
+          $proj.Save($projectFile)
+          Write-Host "Project file updated successfully."
+        }
+
+    - name: 📦 Restore dependencies
+      working-directory: src
+      run: dotnet restore --verbosity minimal
+
+    - name: 🏗️ Build solution
+      working-directory: src
+      run: dotnet build --configuration Release --no-restore --verbosity minimal
+
+    - name: 🧪 Run tests
+      working-directory: src
+      run: |
+        # Find and run unit tests (excluding integration tests)
+        $testProjects = Get-ChildItem -Recurse -Filter "*.Tests.csproj" | Where-Object { $_.Name -notmatch 'Integration\.Tests' }
+        
+        if ($testProjects.Count -eq 0) {
+          Write-Host "No unit test projects found."
+        } else {
+          foreach ($proj in $testProjects) {
+            Write-Host "Running tests for: $($proj.Name)"
+            dotnet test $proj.FullName --configuration Release --no-build --no-restore --verbosity minimal
+            
+            if ($LASTEXITCODE -ne 0) {
+              Write-Host "Tests failed for $($proj.Name)" -ForegroundColor Red
+              exit 1
+            }
+          }
+          Write-Host "All tests passed!" -ForegroundColor Green
+        }
+
+    - name: 📦 Create NuGet packages
+      working-directory: src
+      run: |
+        Write-Host "Creating NuGet packages..." -ForegroundColor Blue
+        
+        # Create output directory
+        New-Item -ItemType Directory -Path "../output" -Force | Out-Null
+        
+        # Pack the main project
+        dotnet pack Idasen.Launcher/Idasen.Launcher.csproj --configuration Release --no-build --no-restore --output ../output --verbosity minimal
+        
+        Write-Host "NuGet packages created successfully!" -ForegroundColor Green
+
+    - name: 📂 Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-packages
+        path: output/
+        retention-days: 90
+
+    - name: 🏷️ Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.TAG }}
+        release_name: Release ${{ steps.version.outputs.VERSION }}
+        body: |
+          ## Release ${{ steps.version.outputs.VERSION }}
+          
+          ### Changes
+          - Automated release created from version ${{ steps.version.outputs.VERSION }}
+          
+          ### NuGet Package
+          - **Idasen.Desk.Core** v${{ steps.version.outputs.VERSION }}
+        draft: false
+        prerelease: false
+
+    - name: 📦 Publish to NuGet (if configured)
+      working-directory: output
+      run: |
+        if ("${{ secrets.NUGET_API_KEY }}" -ne "") {
+          Write-Host "Publishing to NuGet..." -ForegroundColor Blue
+          
+          Get-ChildItem -Filter "*.nupkg" | ForEach-Object {
+            dotnet nuget push $_.Name --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
+          
+          Write-Host "Published to NuGet successfully!" -ForegroundColor Green
+        } else {
+          Write-Host "NUGET_API_KEY not configured, skipping NuGet publish." -ForegroundColor Yellow
+        }

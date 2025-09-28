@@ -1,0 +1,66 @@
+name: 🔍 Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: windows-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ⚡ Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 📦 Restore dependencies
+      working-directory: src
+      run: dotnet restore --verbosity minimal
+
+    - name: 🎨 Check code formatting
+      working-directory: src
+      run: |
+        Write-Host "Checking code formatting using .editorconfig..." -ForegroundColor Blue
+        
+        # Check formatting without making changes
+        dotnet format idasen-desk-core.sln --verify-no-changes --verbosity diagnostic
+        
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "Code formatting issues detected. Please run 'dotnet format' to fix them." -ForegroundColor Red
+          Write-Host "The project uses the .editorconfig file in the src folder for formatting rules." -ForegroundColor Yellow
+          exit 1
+        }
+        
+        Write-Host "Code formatting is correct!" -ForegroundColor Green
+
+    - name: 🔍 Run static code analysis
+      working-directory: src
+      run: |
+        Write-Host "Running static code analysis..." -ForegroundColor Blue
+        
+        # Build with analysis
+        dotnet build idasen-desk-core.sln --configuration Release --no-restore --verbosity minimal /p:RunAnalyzersDuringBuild=true /p:TreatWarningsAsErrors=false
+        
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "Static code analysis found issues." -ForegroundColor Red
+          exit 1
+        }
+        
+        Write-Host "Static code analysis passed!" -ForegroundColor Green
+
+    - name: 📋 Run code analysis report
+      working-directory: src
+      run: |
+        Write-Host "Generating code analysis report..." -ForegroundColor Blue
+        
+        # Run with detailed analysis output
+        dotnet build idasen-desk-core.sln --configuration Release --no-restore --verbosity normal /p:RunAnalyzersDuringBuild=true
+        
+        Write-Host "Code analysis report completed." -ForegroundColor Green

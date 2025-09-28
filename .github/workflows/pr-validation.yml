@@ -1,0 +1,106 @@
+name: 📊 PR Validation
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  pr-validation:
+    name: Pull Request Validation
+    runs-on: windows-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ⚡ Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 📦 Restore dependencies
+      working-directory: src
+      run: dotnet restore --verbosity minimal
+
+    - name: 🎨 Validate code formatting
+      working-directory: src
+      run: |
+        Write-Host "Validating code formatting..." -ForegroundColor Blue
+        
+        dotnet format idasen-desk-core.sln --verify-no-changes --verbosity diagnostic
+        
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "❌ Code formatting validation failed" -ForegroundColor Red
+          Write-Host "Please run 'dotnet format' in the src directory to fix formatting issues." -ForegroundColor Yellow
+          exit 1
+        }
+        
+        Write-Host "✅ Code formatting validation passed" -ForegroundColor Green
+
+    - name: 🏗️ Build validation
+      working-directory: src
+      run: |
+        Write-Host "Validating build..." -ForegroundColor Blue
+        
+        dotnet build idasen-desk-core.sln --configuration Release --no-restore --verbosity minimal
+        
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "❌ Build validation failed" -ForegroundColor Red
+          exit 1
+        }
+        
+        Write-Host "✅ Build validation passed" -ForegroundColor Green
+
+    - name: 🧪 Test validation
+      working-directory: src
+      run: |
+        Write-Host "Validating tests..." -ForegroundColor Blue
+        
+        # Find and run unit tests (excluding integration tests)
+        $testProjects = Get-ChildItem -Recurse -Filter "*.Tests.csproj" | Where-Object { $_.Name -notmatch 'Integration\.Tests' }
+        
+        if ($testProjects.Count -eq 0) {
+          Write-Host "No unit test projects found - skipping test validation." -ForegroundColor Yellow
+          exit 0
+        }
+        
+        $failed = $false
+        foreach ($proj in $testProjects) {
+          Write-Host "Running tests for: $($proj.Name)"
+          
+          dotnet test $proj.FullName --configuration Release --no-build --no-restore --verbosity minimal
+          
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "❌ Tests failed for $($proj.Name)" -ForegroundColor Red
+            $failed = $true
+          }
+        }
+        
+        if ($failed) {
+          Write-Host "❌ Test validation failed" -ForegroundColor Red
+          exit 1
+        }
+        
+        Write-Host "✅ Test validation passed" -ForegroundColor Green
+
+    - name: 📋 PR Summary
+      if: always()
+      run: |
+        Write-Host "=====================================
+        📊 Pull Request Validation Summary
+        ====================================="
+        
+        $validationSteps = @(
+          "🎨 Code Formatting",
+          "🏗️ Build",
+          "🧪 Tests"
+        )
+        
+        Write-Host "Validation completed for:" -ForegroundColor Blue
+        foreach ($step in $validationSteps) {
+          Write-Host "  $step" -ForegroundColor Green
+        }
+        
+        Write-Host ""
+        Write-Host "Please ensure all validation steps pass before merging." -ForegroundColor Yellow
