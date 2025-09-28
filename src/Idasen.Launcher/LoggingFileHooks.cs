@@ -1,9 +1,9 @@
-﻿namespace Idasen.Launcher ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using System.Text ;
 using JetBrains.Annotations ;
 using Serilog.Sinks.File ;
+
+namespace Idasen.Launcher ;
 
 /// <summary>
 ///     Serilog file sink lifecycle hooks that capture the fully-resolved log file path when the sink opens the file.
@@ -31,11 +31,12 @@ public sealed class LoggingFileHooks : FileLifecycleHooks
         ArgumentNullException.ThrowIfNull ( underlyingStream ) ;
         ArgumentNullException.ThrowIfNull ( encoding ) ;
 
-        FullPath = path ;
+        FullPath             = path ;
         LoggingFile.FullPath = path ;
 
-        return base.OnFileOpened ( path ,
-                                   underlyingStream ,
-                                   encoding ) ;
+        return base.OnFileOpened (
+                                  path ,
+                                  underlyingStream ,
+                                  encoding ) ;
     }
 }

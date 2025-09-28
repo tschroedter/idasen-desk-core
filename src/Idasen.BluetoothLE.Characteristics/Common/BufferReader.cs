@@ -1,12 +1,12 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Storage.Streams ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Core ;
-using Interfaces.Common ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Idasen.BluetoothLE.Core ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Characteristics.Common ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -22,34 +22,35 @@ public class BufferReader
     /// <param name="logger">Logger used for error reporting.</param>
     public BufferReader ( ILogger logger )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull (
+                               logger ,
+                               nameof ( logger ) ) ;
 
         _logger = logger ;
     }
 
     /// <inheritdoc />
     public bool TryReadValue (
-        IBuffer buffer ,
+        IBuffer      buffer ,
         out byte [ ] bytes )
     {
-        Guard.ArgumentNotNull ( buffer ,
-                                nameof ( buffer ) ) ;
+        Guard.ArgumentNotNull (
+                               buffer ,
+                               nameof ( buffer ) ) ;
 
-        try
-        {
+        try {
             var reader = DataReader.FromBuffer ( buffer ) ;
-            bytes = new byte[reader.UnconsumedBufferLength] ;
+            bytes = new byte[ reader.UnconsumedBufferLength ] ;
             reader.ReadBytes ( bytes ) ;
 
             return true ;
         }
-        catch ( Exception e )
-        {
+        catch ( Exception e ) {
             const string message = "Failed to read from buffer" ;
 
-            _logger.Error ( e ,
-                            message ) ;
+            _logger.Error (
+                           e ,
+                           message ) ;
         }
 
         bytes = [] ;

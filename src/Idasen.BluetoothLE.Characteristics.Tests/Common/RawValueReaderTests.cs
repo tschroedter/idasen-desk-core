@@ -1,15 +1,15 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
-
-using System.Collections ;
+﻿using System.Collections ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
-using BluetoothLE.Characteristics.Common ;
-using BluetoothLE.Common.Tests ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
 using FluentAssertions ;
-using Interfaces.Common ;
+using Idasen.BluetoothLE.Characteristics.Common ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
 [ AutoDataTestClass ]
 public class RawValueReaderTests
@@ -18,7 +18,7 @@ public class RawValueReaderTests
     public async Task TryReadValueAsync_ForCharacteristicIsNull_Throws (
         RawValueReader sut )
     {
-        Func < Task > action = async ( ) => { await sut.TryReadValueAsync ( null! ) ; } ;
+        var action = async ( ) => { await sut.TryReadValueAsync ( null! ) ; } ;
 
         await action.Should ( )
                     .ThrowAsync < ArgumentNullException > ( )
@@ -27,13 +27,14 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForSupportsNotifyTrue_False (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic )
     {
-        WithTryReadValueResult ( reader ,
-                                 Array.Empty < byte > ( ) ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                Array.Empty < byte > ( ) ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -49,13 +50,14 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForSupportsNotifyTrue_Empty (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic )
     {
-        WithTryReadValueResult ( reader ,
-                                 Array.Empty < byte > ( ) ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                Array.Empty < byte > ( ) ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -71,13 +73,14 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForNotSupportingRead_False (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic )
     {
-        WithTryReadValueResult ( reader ,
-                                 Array.Empty < byte > ( ) ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                Array.Empty < byte > ( ) ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -93,13 +96,14 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForNotSupportingRead_Empty (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic )
     {
-        WithTryReadValueResult ( reader ,
-                                 Array.Empty < byte > ( ) ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                Array.Empty < byte > ( ) ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -115,13 +119,14 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForGattCommunicationStatusIsSuccess_True (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic )
     {
-        WithTryReadValueResult ( reader ,
-                                 Array.Empty < byte > ( ) ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                Array.Empty < byte > ( ) ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -137,14 +142,15 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForGattCommunicationStatusIsSuccess_Bytes (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic ,
-        byte [ ] bytes )
+        byte [ ]                   bytes )
     {
-        WithTryReadValueResult ( reader ,
-                                 bytes ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                bytes ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -160,13 +166,14 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForGattCommunicationStatusIsNotSuccess_False (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic )
     {
-        WithTryReadValueResult ( reader ,
-                                 Array.Empty < byte > ( ) ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                Array.Empty < byte > ( ) ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Unreachable ) ;
@@ -182,13 +189,14 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForGattCommunicationStatusIsNotSuccess_Empty (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic )
     {
-        WithTryReadValueResult ( reader ,
-                                 Array.Empty < byte > ( ) ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                Array.Empty < byte > ( ) ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -204,14 +212,15 @@ public class RawValueReaderTests
 
     [ AutoDataTestMethod ]
     public async Task TryReadValueAsync_ForGattCommunicationStatus_SetsProtocolError (
-        RawValueReader sut ,
-        [ Freeze ] IBufferReader reader ,
-        IGattReadResultWrapper result ,
+        RawValueReader             sut ,
+        [ Freeze ] IBufferReader   reader ,
+        IGattReadResultWrapper     result ,
         IGattCharacteristicWrapper characteristic ,
-        byte protocolError )
+        byte                       protocolError )
     {
-        WithTryReadValueResult ( reader ,
-                                 Array.Empty < byte > ( ) ) ;
+        WithTryReadValueResult (
+                                reader ,
+                                Array.Empty < byte > ( ) ) ;
 
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -229,14 +238,15 @@ public class RawValueReaderTests
            .Be ( protocolError ) ;
     }
 
-    private void WithTryReadValueResult ( IBufferReader reader ,
-                                          IEnumerable bytes )
+    private void WithTryReadValueResult (
+        IBufferReader reader ,
+        IEnumerable   bytes )
     {
-        reader.TryReadValue ( Arg.Any < IBuffer > ( ) ,
-                              out _ )
-              .Returns ( x =>
-                         {
-                             x[1] = bytes ;
+        reader.TryReadValue (
+                             Arg.Any < IBuffer > ( ) ,
+                             out _ )
+              .Returns ( x => {
+                             x [ 1 ] = bytes ;
 
                              return true ;
                          } ) ;

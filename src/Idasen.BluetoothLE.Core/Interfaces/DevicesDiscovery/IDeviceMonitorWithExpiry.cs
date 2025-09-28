@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿using JetBrains.Annotations ;
 
-using JetBrains.Annotations ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 /// <summary>
 ///     Extends device monitoring with expiry notifications and a timeout window.

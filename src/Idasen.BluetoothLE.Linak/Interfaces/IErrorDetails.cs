@@ -15,7 +15,7 @@ public interface IErrorDetails
     /// <summary>
     ///     Gets the optional exception associated with this error.
     /// </summary>
-    Exception? Exception { get ; }
+    Exception ? Exception { get ; }
 
     /// <summary>
     ///     Gets the originating member name or component reporting the error.

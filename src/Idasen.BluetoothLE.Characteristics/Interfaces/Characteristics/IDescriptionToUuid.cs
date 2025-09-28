@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 
-using Common ;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 public interface IDescriptionToUuid
     : ISimpleDictionary < string , Guid > ;

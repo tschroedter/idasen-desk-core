@@ -1,9 +1,9 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
-
-using Windows.Storage.Streams ;
-using BluetoothLE.Characteristics.Characteristics ;
+﻿using Windows.Storage.Streams ;
 using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using NSubstitute ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
 public class ControlTest
@@ -12,7 +12,7 @@ public class ControlTest
     [ TestMethod ]
     public void RawControl2_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        Control sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -27,7 +27,7 @@ public class ControlTest
     [ TestMethod ]
     public async Task RawControl2_ForRefreshedAndInvoked_Bytes ( )
     {
-        Control sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -43,7 +43,7 @@ public class ControlTest
     [ TestMethod ]
     public void RawControl3_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        Control sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -58,7 +58,7 @@ public class ControlTest
     [ TestMethod ]
     public async Task RawControl3_ForRefreshedAndInvoked_Bytes ( )
     {
-        Control sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -74,7 +74,7 @@ public class ControlTest
     [ TestMethod ]
     public async Task TryWriteRawValue_ForKnownCharacteristics_WritesRawValuesAsync ( )
     {
-        Control sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -85,29 +85,32 @@ public class ControlTest
         await sut.TryWriteRawControl2 ( RawValue1 ) ;
 
         await RawValueWriter.Received ( )
-                            .TryWriteValueAsync ( CharacteristicWrapper1 ,
-                                                  Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
+                            .TryWriteValueAsync (
+                                                 CharacteristicWrapper1 ,
+                                                 Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
     }
-
 
     protected override Control CreateSut ( )
     {
-        return new Control ( Logger ,
-                             Scheduler ,
-                             Device ,
-                             ProviderFactory ,
-                             RawValueReader ,
-                             RawValueWriter ,
-                             ToStringConverter ,
-                             DescriptionToUuid ) ;
+        return new Control (
+                            Logger ,
+                            Scheduler ,
+                            Device ,
+                            ProviderFactory ,
+                            RawValueReader ,
+                            RawValueWriter ,
+                            ToStringConverter ,
+                            DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add ( Control.Control2Key ,
-                       CharacteristicWrapper1 ) ;
+        Wrappers.Add (
+                      Control.Control2Key ,
+                      CharacteristicWrapper1 ) ;
 
-        Wrappers.Add ( Control.Control3Key ,
-                       CharacteristicWrapper1 ) ;
+        Wrappers.Add (
+                      Control.Control3Key ,
+                      CharacteristicWrapper1 ) ;
     }
 }

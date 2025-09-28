@@ -1,16 +1,16 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using Characteristics.Interfaces.Characteristics ;
-using Common.Tests ;
-using FluentAssertions ;
-using Interfaces ;
-using Linak.Control ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Linak.Control ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class DeskCommandExecutorFactoryTests
 {
-    private IControl _control = null! ;
+    private IControl                    _control = null! ;
     private DeskCommandExecutor.Factory _factory = null! ;
 
     [ TestInitialize ]
@@ -26,7 +26,7 @@ public class DeskCommandExecutorFactoryTests
     [ TestMethod ]
     public void Create_ForControlNull_Throws ( )
     {
-        Action action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
+        var action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )

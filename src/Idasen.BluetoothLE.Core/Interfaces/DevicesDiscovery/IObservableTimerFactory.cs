@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿using System.Reactive.Concurrency ;
 
-using System.Reactive.Concurrency ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 public interface IObservableTimerFactory
 {
@@ -18,6 +18,7 @@ public interface IObservableTimerFactory
     /// <returns>
     ///     An observable sequence that produces a value after each period.
     /// </returns>
-    IObservable < long > Create ( TimeSpan period ,
-                                  IScheduler scheduler ) ;
+    IObservable < long > Create (
+        TimeSpan   period ,
+        IScheduler scheduler ) ;
 }

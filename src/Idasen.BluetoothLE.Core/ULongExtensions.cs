@@ -1,13 +1,14 @@
-namespace Idasen.BluetoothLE.Core ;
-
 using System.Text.RegularExpressions ;
+
+namespace Idasen.BluetoothLE.Core ;
 
 public static partial class ULongExtensions
 {
     private const string Replace = "$1:$2:$3:$4:$5:$6" ;
 
-    [ GeneratedRegex ( "(.{2})(.{2})(.{2})(.{2})(.{2})(.{2})" ,
-                       RegexOptions.CultureInvariant | RegexOptions.Compiled ) ]
+    [ GeneratedRegex (
+                         "(.{2})(.{2})(.{2})(.{2})(.{2})(.{2})" ,
+                         RegexOptions.CultureInvariant | RegexOptions.Compiled ) ]
     private static partial Regex MacGroupingRegex ( ) ;
 
     /// <summary>
@@ -18,8 +19,9 @@ public static partial class ULongExtensions
     public static string ToMacAddress ( this ulong value )
     {
         var lower48 = value & 0x0000FFFFFFFFFFFFUL ;
-        var hex = lower48.ToString ( "X12" ) ;
-        return MacGroupingRegex ( ).Replace ( hex ,
-                                              Replace ) ;
+        var hex     = lower48.ToString ( "X12" ) ;
+        return MacGroupingRegex ( ).Replace (
+                                             hex ,
+                                             Replace ) ;
     }
 }

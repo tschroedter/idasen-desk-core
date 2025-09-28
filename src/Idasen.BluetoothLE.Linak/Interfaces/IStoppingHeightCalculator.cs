@@ -1,10 +1,8 @@
-﻿
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
-// ReSharper disable UnusedMemberInSuper.Global
+using Idasen.BluetoothLE.Linak.Control ;
 
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
-
-using Control ;
 
 /// <summary>
 ///     Calculates the estimated stopping height, movement until stop, and whether a target height has been reached.

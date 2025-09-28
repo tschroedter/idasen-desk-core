@@ -1,11 +1,9 @@
-﻿
-
-// ReSharper disable UnusedMemberInSuper.Global
-
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
 using Windows.Storage.Streams ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 
 /// <summary>
 ///     Writes raw byte values to GATT characteristics.
@@ -20,7 +18,7 @@ public interface IRawValueWriter
     /// <returns><c>true</c> on success; otherwise, <c>false</c>.</returns>
     Task < bool > TryWriteValueAsync (
         IGattCharacteristicWrapper characteristic ,
-        IBuffer buffer ) ;
+        IBuffer                    buffer ) ;
 
     /// <summary>
     ///     Attempts to write the given value using the WritableAuxiliaries capability.
@@ -30,7 +28,7 @@ public interface IRawValueWriter
     /// <returns><c>true</c> on success; otherwise, <c>false</c>.</returns>
     Task < bool > TryWritableAuxiliariesValueAsync (
         IGattCharacteristicWrapper characteristic ,
-        IBuffer buffer ) ;
+        IBuffer                    buffer ) ;
 
     /// <summary>
     ///     Writes without requiring a response and returns the detailed write result.
@@ -40,5 +38,5 @@ public interface IRawValueWriter
     /// <returns>The platform write result wrapper.</returns>
     Task < IGattWriteResultWrapper > TryWriteWithoutResponseAsync (
         IGattCharacteristicWrapper characteristic ,
-        IBuffer buffer ) ;
+        IBuffer                    buffer ) ;
 }

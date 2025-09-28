@@ -1,32 +1,32 @@
-﻿namespace Idasen.BluetoothLE.Linak ;
-
-using System.Reactive.Subjects ;
+﻿using System.Reactive.Subjects ;
 using System.Runtime.CompilerServices ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class ErrorManager // todo testing, move to more general project
     : IErrorManager
 {
-    private readonly ILogger _logger ;
+    private readonly ILogger                    _logger ;
     private readonly ISubject < IErrorDetails > _subject ;
-    private bool _disposed ;
+    private          bool                       _disposed ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ErrorManager" /> class.
     /// </summary>
     public ErrorManager (
-        ILogger logger ,
+        ILogger                    logger ,
         ISubject < IErrorDetails > subject )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( subject ) ;
 
-        _logger = logger ;
+        _logger  = logger ;
         _subject = subject ;
     }
 
@@ -42,23 +42,28 @@ public class ErrorManager // todo testing, move to more general project
     {
         ArgumentNullException.ThrowIfNull ( details ) ;
 
-        _logger.Debug ( "Received {Details}" ,
-                        details ) ;
+        _logger.Debug (
+                       "Received {Details}" ,
+                       details ) ;
 
         _subject.OnNext ( details ) ;
     }
 
     /// <inheritdoc />
-    public void PublishForMessage ( string message ,
-                                    [ CallerMemberName ] string caller = "" )
+    public void PublishForMessage (
+        string                      message ,
+        [ CallerMemberName ] string caller = "" )
     {
         ArgumentNullException.ThrowIfNull ( message ) ;
 
-        _logger.Debug ( "Received {Message}" ,
-                        message ) ;
+        _logger.Debug (
+                       "Received {Message}" ,
+                       message ) ;
 
-        _subject.OnNext ( new ErrorDetails ( message ,
-                                             caller ) ) ;
+        _subject.OnNext (
+                         new ErrorDetails (
+                                           message ,
+                                           caller ) ) ;
     }
 
     // Return the underlying subject to satisfy existing unit tests
@@ -67,21 +72,17 @@ public class ErrorManager // todo testing, move to more general project
     protected virtual void Dispose ( bool disposing )
     {
         if ( _disposed )
-        {
             return ;
-        }
 
-        if ( disposing )
-        {
+        if ( disposing ) {
             // Complete the stream to release subscribers in long-running apps
-            try
-            {
+            try {
                 _subject.OnCompleted ( ) ;
             }
-            catch ( Exception ex )
-            {
-                _logger.Warning ( ex ,
-                                  "Error completing ErrorChanged stream" ) ;
+            catch ( Exception ex ) {
+                _logger.Warning (
+                                 ex ,
+                                 "Error completing ErrorChanged stream" ) ;
             }
         }
 

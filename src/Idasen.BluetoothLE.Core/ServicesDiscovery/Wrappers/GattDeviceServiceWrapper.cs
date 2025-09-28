@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -12,20 +12,22 @@ public class GattDeviceServiceWrapper
     public delegate IGattDeviceServiceWrapper Factory ( GattDeviceService gattDeviceService ) ;
 
     private readonly IGattCharacteristicsResultWrapperFactory _characteristicsFactory ;
-    private readonly GattDeviceService _gattDeviceService ;
-    private IGattCharacteristicsResultWrapper? _lastCharacteristics ;
+    private readonly GattDeviceService                        _gattDeviceService ;
+    private          IGattCharacteristicsResultWrapper ?      _lastCharacteristics ;
 
     public GattDeviceServiceWrapper (
         IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
-        GattDeviceService gattDeviceService )
+        GattDeviceService                        gattDeviceService )
     {
-        Guard.ArgumentNotNull ( characteristicsFactory ,
-                                nameof ( characteristicsFactory ) ) ;
-        Guard.ArgumentNotNull ( gattDeviceService ,
-                                nameof ( gattDeviceService ) ) ;
+        Guard.ArgumentNotNull (
+                               characteristicsFactory ,
+                               nameof ( characteristicsFactory ) ) ;
+        Guard.ArgumentNotNull (
+                               gattDeviceService ,
+                               nameof ( gattDeviceService ) ) ;
 
         _characteristicsFactory = characteristicsFactory ;
-        _gattDeviceService = gattDeviceService ;
+        _gattDeviceService      = gattDeviceService ;
     }
 
     /// <inheritdoc />
@@ -45,9 +47,9 @@ public class GattDeviceServiceWrapper
     /// <inheritdoc />
     public async Task < IGattCharacteristicsResultWrapper > GetCharacteristicsAsync ( )
     {
-        GattCharacteristicsResult? characteristics = await _gattDeviceService.GetCharacteristicsAsync ( ).AsTask ( ) ;
+        var characteristics = await _gattDeviceService.GetCharacteristicsAsync ( ).AsTask ( ) ;
 
-        IGattCharacteristicsResultWrapper result = _characteristicsFactory.Create ( characteristics ) ;
+        var result = _characteristicsFactory.Create ( characteristics ) ;
 
         _lastCharacteristics?.Dispose ( ) ;
         _lastCharacteristics = await result.Initialize ( ) ;

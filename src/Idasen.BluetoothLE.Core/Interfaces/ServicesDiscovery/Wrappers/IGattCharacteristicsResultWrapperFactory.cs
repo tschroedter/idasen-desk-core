@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Factory to create <see cref="IGattCharacteristicsResultWrapper" /> instances.

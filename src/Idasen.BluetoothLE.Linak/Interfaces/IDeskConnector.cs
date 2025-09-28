@@ -46,7 +46,6 @@ public interface IDeskConnector
     /// </summary>
     string BluetoothAddressType { get ; }
 
-
     /// <summary>
     ///     The device name.
     /// </summary>

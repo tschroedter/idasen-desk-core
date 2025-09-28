@@ -1,17 +1,17 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using System.Reactive ;
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces.ServicesDiscovery ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -20,49 +20,56 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
 {
     public delegate IBluetoothLeDeviceWrapper Factory ( BluetoothLEDevice device ) ;
 
-    private readonly ISubject < BluetoothConnectionStatus > _connectionStatusChanged ;
-    private readonly BluetoothLEDevice _device ;
-    private readonly IGattServices _gattServices ;
-    private readonly ILogger _logger ;
-    private readonly IGattServicesProviderFactory _providerFactory ;
+    private readonly ISubject < BluetoothConnectionStatus >  _connectionStatusChanged ;
+    private readonly BluetoothLEDevice                       _device ;
+    private readonly IGattServices                           _gattServices ;
+    private readonly ILogger                                 _logger ;
+    private readonly IGattServicesProviderFactory            _providerFactory ;
     private readonly IGattDeviceServicesResultWrapperFactory _servicesFactory ;
-    private readonly IDisposable _subscriberConnectionStatus ;
-    private bool _disposed ;
-    private IGattServicesProvider? _provider ;
-    private GattSession? _session ;
+    private readonly IDisposable                             _subscriberConnectionStatus ;
+    private          bool                                    _disposed ;
+    private          IGattServicesProvider ?                 _provider ;
+    private          GattSession ?                           _session ;
 
     public BluetoothLeDeviceWrapper (
-        ILogger logger ,
-        IScheduler scheduler ,
-        IGattServicesProviderFactory providerFactory ,
+        ILogger                                 logger ,
+        IScheduler                              scheduler ,
+        IGattServicesProviderFactory            providerFactory ,
         IGattDeviceServicesResultWrapperFactory servicesFactory ,
-        IGattServices gattServices ,
-        ISubject < BluetoothConnectionStatus > connectionStatusChanged ,
-        BluetoothLEDevice device )
+        IGattServices                           gattServices ,
+        ISubject < BluetoothConnectionStatus >  connectionStatusChanged ,
+        BluetoothLEDevice                       device )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( providerFactory ,
-                                nameof ( providerFactory ) ) ;
-        Guard.ArgumentNotNull ( servicesFactory ,
-                                nameof ( servicesFactory ) ) ;
-        Guard.ArgumentNotNull ( gattServices ,
-                                nameof ( gattServices ) ) ;
-        Guard.ArgumentNotNull ( connectionStatusChanged ,
-                                nameof ( connectionStatusChanged ) ) ;
-        Guard.ArgumentNotNull ( device ,
-                                nameof ( device ) ) ;
+        Guard.ArgumentNotNull (
+                               logger ,
+                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull (
+                               scheduler ,
+                               nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull (
+                               providerFactory ,
+                               nameof ( providerFactory ) ) ;
+        Guard.ArgumentNotNull (
+                               servicesFactory ,
+                               nameof ( servicesFactory ) ) ;
+        Guard.ArgumentNotNull (
+                               gattServices ,
+                               nameof ( gattServices ) ) ;
+        Guard.ArgumentNotNull (
+                               connectionStatusChanged ,
+                               nameof ( connectionStatusChanged ) ) ;
+        Guard.ArgumentNotNull (
+                               device ,
+                               nameof ( device ) ) ;
 
-        _logger = logger ;
-        _providerFactory = providerFactory ;
-        _servicesFactory = servicesFactory ;
-        _gattServices = gattServices ;
+        _logger                  = logger ;
+        _providerFactory         = providerFactory ;
+        _servicesFactory         = servicesFactory ;
+        _gattServices            = gattServices ;
         _connectionStatusChanged = connectionStatusChanged ;
-        _device = device ;
+        _device                  = device ;
 
-        IObservable < EventPattern < object > > statusChanged =
+        var statusChanged =
             Observable.FromEventPattern < object > (
                                                     _device ,
                                                     nameof ( BluetoothLEDevice.ConnectionStatusChanged ) ) ;
@@ -90,22 +97,21 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     /// <inheritdoc />
     public async void Connect ( )
     {
-        try
-        {
+        try {
             await ConnectAsync ( ) ;
         }
-        catch ( Exception e )
-        {
-            _logger.Error ( e ,
-                            "Failed to connect to device {BluetoothAddress}" ,
-                            _device.BluetoothAddress ) ;
+        catch ( Exception e ) {
+            _logger.Error (
+                           e ,
+                           "Failed to connect to device {BluetoothAddress}" ,
+                           _device.BluetoothAddress ) ;
         }
     }
 
     /// <inheritdoc />
     public async Task < IGattDeviceServicesResultWrapper > GetGattServicesAsync ( )
     {
-        GattDeviceServicesResult? gattServicesResult = await _device.GetGattServicesAsync ( ).AsTask ( ) ;
+        var gattServicesResult = await _device.GetGattServicesAsync ( ).AsTask ( ) ;
         return _servicesFactory.Create ( gattServicesResult ) ;
     }
 
@@ -134,41 +140,37 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
 
     public async Task ConnectAsync ( )
     {
-        try
-        {
-            if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
-            {
-                _logger.Information ( "[{DeviceId}] Already connected" ,
-                                      DeviceId ) ;
+        try {
+            if ( ConnectionStatus == BluetoothConnectionStatus.Connected ) {
+                _logger.Information (
+                                     "[{DeviceId}] Already connected" ,
+                                     DeviceId ) ;
                 return ;
             }
 
-            if ( ! IsPaired )
-            {
-                _logger.Information ( "[{DeviceId}] Not paired" ,
-                                      DeviceId ) ;
+            if ( ! IsPaired ) {
+                _logger.Information (
+                                     "[{DeviceId}] Not paired" ,
+                                     DeviceId ) ;
                 return ;
             }
 
             await CreateSession ( ) ;
         }
-        catch ( Exception e )
-        {
-            _logger.Error ( e ,
-                            "Failed to connect to device {BluetoothAddress}" ,
-                            _device.BluetoothAddress ) ;
+        catch ( Exception e ) {
+            _logger.Error (
+                           e ,
+                           "Failed to connect to device {BluetoothAddress}" ,
+                           _device.BluetoothAddress ) ;
         }
     }
 
     protected virtual void Dispose ( bool disposing )
     {
         if ( _disposed )
-        {
             return ;
-        }
 
-        if ( disposing )
-        {
+        if ( disposing ) {
             _provider?.Dispose ( ) ;
             _gattServices.Dispose ( ) ;
             _session?.Dispose ( ) ;
@@ -186,23 +188,19 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         _session = await GattSession.FromDeviceIdAsync ( _device.BluetoothDeviceId ) ;
 
         if ( _session != null )
-        {
             _session.MaintainConnection = true ;
-        }
-        else
-        {
-            _logger.Warning ( "[{DeviceId}] Failed to create GATT session" ,
-                              DeviceId ) ;
+        else {
+            _logger.Warning (
+                             "[{DeviceId}] Failed to create GATT session" ,
+                             DeviceId ) ;
         }
     }
 
     // ReSharper disable once AsyncVoidMethod
     private async void OnConnectionStatusChanged ( EventPattern < object > _ )
     {
-        try
-        {
-            if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
-            {
+        try {
+            if ( ConnectionStatus == BluetoothConnectionStatus.Connected ) {
                 _logger.Information (
                                      "[{DeviceId}] BluetoothConnectionStatus = {BluetoothConnectionStatus}" ,
                                      DeviceId ,
@@ -213,11 +211,11 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
 
             _connectionStatusChanged.OnNext ( _device.ConnectionStatus ) ;
         }
-        catch ( Exception ex )
-        {
-            _logger.Error ( ex ,
-                            "[{DeviceId}] Error in ConnectionStatusChanged handler" ,
-                            DeviceId ) ;
+        catch ( Exception ex ) {
+            _logger.Error (
+                           ex ,
+                           "[{DeviceId}] Error in ConnectionStatusChanged handler" ,
+                           DeviceId ) ;
         }
     }
 

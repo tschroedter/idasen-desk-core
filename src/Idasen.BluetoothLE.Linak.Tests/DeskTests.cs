@@ -1,16 +1,16 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using FluentAssertions ;
-using Interfaces ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public class DeskTests
 {
     [ AutoDataTestMethod ]
     public void Connect_ForInvoked_CallsDeskConnector (
-        Desk sut ,
+        Desk                      sut ,
         [ Freeze ] IDeskConnector connector )
     {
         sut.Connect ( ) ;
@@ -21,7 +21,7 @@ public class DeskTests
 
     [ AutoDataTestMethod ]
     public void MoveTo_ForTargetHeight_CallsConnector (
-        Desk sut ,
+        Desk                      sut ,
         [ Freeze ] IDeskConnector connector )
     {
         const uint targetHeight = 100u ;
@@ -34,7 +34,7 @@ public class DeskTests
 
     [ AutoDataTestMethod ]
     public async Task MoveUpAsync_ForInvoked_CallsConnector (
-        Desk sut ,
+        Desk                      sut ,
         [ Freeze ] IDeskConnector connector )
     {
         await sut.MoveUpAsync ( ) ;
@@ -45,7 +45,7 @@ public class DeskTests
 
     [ AutoDataTestMethod ]
     public async Task MoveDownAsync_ForInvoked_CallsConnector (
-        Desk sut ,
+        Desk                      sut ,
         [ Freeze ] IDeskConnector connector )
     {
         await sut.MoveDownAsync ( ) ;
@@ -56,7 +56,7 @@ public class DeskTests
 
     [ AutoDataTestMethod ]
     public async Task MoveStopAsync_ForInvoked_CallsConnector (
-        Desk sut ,
+        Desk                      sut ,
         [ Freeze ] IDeskConnector connector )
     {
         await sut.MoveStopAsync ( ) ;
@@ -67,7 +67,7 @@ public class DeskTests
 
     [ AutoDataTestMethod ]
     public void Dispose_ForInvoked_CallsDeskConnector (
-        Desk sut ,
+        Desk                      sut ,
         [ Freeze ] IDeskConnector connector )
     {
         sut.Dispose ( ) ;
@@ -78,7 +78,7 @@ public class DeskTests
 
     [ AutoDataTestMethod ]
     public void DeviceName_ForInvoked_DeviceName (
-        Desk sut ,
+        Desk              sut ,
         [ Freeze ] string deviceName )
     {
         sut.DeviceName
@@ -88,7 +88,7 @@ public class DeskTests
 
     [ AutoDataTestMethod ]
     public void BluetoothAddress_ForInvoked_BluetoothAddress (
-        Desk sut ,
+        Desk             sut ,
         [ Freeze ] ulong bluetoothAddress )
     {
         sut.BluetoothAddress
@@ -98,7 +98,7 @@ public class DeskTests
 
     [ AutoDataTestMethod ]
     public void BluetoothAddressType_ForInvoked_BluetoothAddressType (
-        Desk sut ,
+        Desk              sut ,
         [ Freeze ] string bluetoothAddressType )
     {
         sut.BluetoothAddressType

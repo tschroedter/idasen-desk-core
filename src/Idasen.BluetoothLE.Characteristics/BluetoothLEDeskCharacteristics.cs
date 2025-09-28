@@ -1,15 +1,15 @@
-﻿namespace Idasen.BluetoothLE.Characteristics ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Autofac ;
 using Autofac.Extras.DynamicProxy ;
-using Characteristics ;
-using Characteristics.Customs ;
-using Common ;
-using Core ;
-using Interfaces.Characteristics ;
-using Interfaces.Characteristics.Customs ;
-using Interfaces.Common ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
+using Idasen.BluetoothLE.Characteristics.Common ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Idasen.BluetoothLE.Core ;
+
+namespace Idasen.BluetoothLE.Characteristics ;
 
 // ReSharper disable once InconsistentNaming
 /// <summary>
@@ -25,8 +25,9 @@ public sealed class BluetoothLEDeskCharacteristics : Module
     /// <param name="builder">The container builder.</param>
     protected override void Load ( ContainerBuilder builder )
     {
-        Guard.ArgumentNotNull ( builder ,
-                                nameof ( builder ) ) ;
+        Guard.ArgumentNotNull (
+                               builder ,
+                               nameof ( builder ) ) ;
 
         builder.RegisterModule < BluetoothLECoreModule > ( ) ;
 
@@ -50,7 +51,7 @@ public sealed class BluetoothLEDeskCharacteristics : Module
     /// <summary>
     ///     Registers the implementation with its interface and enables interface interceptors.
     /// </summary>
-    private static void RegisterWithInterceptors<TInterface , TImplementation> ( ContainerBuilder builder )
+    private static void RegisterWithInterceptors < TInterface , TImplementation > ( ContainerBuilder builder )
         where TImplementation : TInterface where TInterface : notnull
     {
         builder.RegisterType < TImplementation > ( )

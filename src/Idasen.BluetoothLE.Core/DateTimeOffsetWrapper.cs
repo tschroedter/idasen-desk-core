@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Core ;
+﻿using System.Diagnostics.CodeAnalysis ;
+using Idasen.BluetoothLE.Core.Interfaces ;
 
-using System.Diagnostics.CodeAnalysis ;
-using Interfaces ;
+namespace Idasen.BluetoothLE.Core ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -20,12 +20,14 @@ public class DateTimeOffsetWrapper ( DateTimeOffset dateTimeOffset )
     public long Ticks => dateTimeOffset.Ticks ;
 
     /// <inheritdoc />
-    public string ToString ( string? format ,
-                             IFormatProvider? formatProvider )
+    public string ToString (
+        string ?          format ,
+        IFormatProvider ? formatProvider )
     {
         // Allow nulls per .NET guidelines. Underlying API handles nulls.
-        return dateTimeOffset.ToString ( format ,
-                                         formatProvider ) ;
+        return dateTimeOffset.ToString (
+                                        format ,
+                                        formatProvider ) ;
     }
 
     /// <inheritdoc />

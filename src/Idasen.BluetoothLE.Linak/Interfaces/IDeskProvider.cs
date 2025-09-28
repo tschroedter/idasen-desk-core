@@ -16,7 +16,7 @@ public interface IDeskProvider
     /// <summary>
     ///     The currently detected desk.
     /// </summary>
-    public IDesk? Desk { get ; }
+    IDesk ? Desk { get ; }
 
     /// <summary>
     ///     Initialize the instance and is required to be called first.
@@ -33,9 +33,10 @@ public interface IDeskProvider
     /// <returns>
     ///     Returns itself.
     /// </returns>
-    IDeskProvider Initialize ( string deviceName ,
-                               ulong deviceAddress ,
-                               uint deviceTimeout ) ;
+    IDeskProvider Initialize (
+        string deviceName ,
+        ulong  deviceAddress ,
+        uint   deviceTimeout ) ;
 
     /// <summary>
     ///     Start the desk detection process.
@@ -61,5 +62,5 @@ public interface IDeskProvider
     ///     A tuple with the first value indicating if a desk was found or not.
     ///     The second parameter is the detected desk or null.
     /// </returns>
-    Task < (bool , IDesk?) > TryGetDesk ( CancellationToken token ) ;
+    Task < (bool , IDesk ?) > TryGetDesk ( CancellationToken token ) ;
 }

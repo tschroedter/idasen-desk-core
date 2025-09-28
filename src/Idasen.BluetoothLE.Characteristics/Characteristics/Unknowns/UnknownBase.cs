@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
-using Interfaces.Characteristics ;
+namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
 public class UnknownBase
     : ICharacteristicBase
@@ -10,7 +10,7 @@ public class UnknownBase
 
     private bool _disposed ;
 
-    public T? Initialize<T> ( ) where T : class => this as T ;
+    public T ? Initialize < T > ( ) where T : class => this as T ;
 
     public Task Refresh ( ) => Task.FromResult ( false ) ;
 
@@ -19,9 +19,7 @@ public class UnknownBase
     protected virtual void Dispose ( bool disposing )
     {
         if ( _disposed )
-        {
             return ;
-        }
 
         _disposed = true ;
     }

@@ -1,10 +1,10 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using Common.Tests ;
-using FluentAssertions ;
-using Interfaces ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public class DeskProviderTests
@@ -12,12 +12,13 @@ public class DeskProviderTests
     [ AutoDataTestMethod ]
     public void Initialize_ForDeviceNameIsNull_Throws (
         DeskProvider sut ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        ulong        deviceAddress ,
+        uint         deviceTimeout )
     {
-        Action action = ( ) => sut.Initialize ( null! ,
-                                                deviceAddress ,
-                                                deviceTimeout ) ;
+        Action action = ( ) => sut.Initialize (
+                                               null! ,
+                                               deviceAddress ,
+                                               deviceTimeout ) ;
 
         action.Should ( )
               .Throw < ArgumentException > ( )
@@ -26,33 +27,36 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public void Initialize_ForInvoked_CallsDetectorInitialize (
-        DeskProvider sut ,
+        DeskProvider             sut ,
         [ Freeze ] IDeskDetector detector ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        string                   deviceName ,
+        ulong                    deviceAddress ,
+        uint                     deviceTimeout )
     {
-        sut.Initialize ( deviceName ,
-                         deviceAddress ,
-                         deviceTimeout ) ;
+        sut.Initialize (
+                        deviceName ,
+                        deviceAddress ,
+                        deviceTimeout ) ;
 
         detector.Received ( )
-                .Initialize ( deviceName ,
-                              deviceAddress ,
-                              deviceTimeout ) ;
+                .Initialize (
+                             deviceName ,
+                             deviceAddress ,
+                             deviceTimeout ) ;
     }
 
     [ AutoDataTestMethod ]
     public void Initialize_ForInvoked_SubscribesToDeskDetected (
-        DeskProvider sut ,
+        DeskProvider                     sut ,
         [ Freeze ] IObservable < IDesk > deskDetected ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        string                           deviceName ,
+        ulong                            deviceAddress ,
+        uint                             deviceTimeout )
     {
-        sut.Initialize ( deviceName ,
-                         deviceAddress ,
-                         deviceTimeout ) ;
+        sut.Initialize (
+                        deviceName ,
+                        deviceAddress ,
+                        deviceTimeout ) ;
 
         deskDetected.ReceivedWithAnyArgs ( )
                     .Subscribe ( ) ;
@@ -60,15 +64,16 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public void StartDetecting_ForInvoked_CallsDeskDetectorStart (
-        DeskProvider sut ,
+        DeskProvider             sut ,
         [ Freeze ] IDeskDetector detector ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        string                   deviceName ,
+        ulong                    deviceAddress ,
+        uint                     deviceTimeout )
     {
-        sut.Initialize ( deviceName ,
-                         deviceAddress ,
-                         deviceTimeout )
+        sut.Initialize (
+                        deviceName ,
+                        deviceAddress ,
+                        deviceTimeout )
            .StartDetecting ( ) ;
 
         detector.Received ( )
@@ -77,15 +82,16 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public void StopDetecting_ForInvoked_CallsDeskDetectorStart (
-        DeskProvider sut ,
+        DeskProvider             sut ,
         [ Freeze ] IDeskDetector detector ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        string                   deviceName ,
+        ulong                    deviceAddress ,
+        uint                     deviceTimeout )
     {
-        sut.Initialize ( deviceName ,
-                         deviceAddress ,
-                         deviceTimeout )
+        sut.Initialize (
+                        deviceName ,
+                        deviceAddress ,
+                        deviceTimeout )
            .StopDetecting ( ) ;
 
         detector.Received ( )
@@ -94,15 +100,16 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public void Dispose_ForInvoked_DisposesDeskDetected (
-        DeskProvider sut ,
+        DeskProvider           sut ,
         [ Freeze ] IDisposable deskDetected ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        string                 deviceName ,
+        ulong                  deviceAddress ,
+        uint                   deviceTimeout )
     {
-        sut.Initialize ( deviceName ,
-                         deviceAddress ,
-                         deviceTimeout )
+        sut.Initialize (
+                        deviceName ,
+                        deviceAddress ,
+                        deviceTimeout )
            .Dispose ( ) ;
 
         deskDetected.Received ( )
@@ -111,15 +118,16 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public void StopDetecting_ForInvoked_DisposesDeskDetector (
-        DeskProvider sut ,
+        DeskProvider             sut ,
         [ Freeze ] IDeskDetector detector ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        string                   deviceName ,
+        ulong                    deviceAddress ,
+        uint                     deviceTimeout )
     {
-        sut.Initialize ( deviceName ,
-                         deviceAddress ,
-                         deviceTimeout )
+        sut.Initialize (
+                        deviceName ,
+                        deviceAddress ,
+                        deviceTimeout )
            .Dispose ( ) ;
 
         detector.Received ( )
@@ -128,7 +136,7 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public void DeskDetected_ForInvoked_CallsDeskDetector (
-        DeskProvider sut ,
+        DeskProvider                     sut ,
         [ Freeze ] IObservable < IDesk > deskDetected )
     {
         sut.DeskDetected
@@ -138,19 +146,19 @@ public class DeskProviderTests
                     .Subscribe ( ) ;
     }
 
-
     [ AutoDataTestMethod ]
     public async Task TryGetDesk_ForInvoked_CallsDeskDetectorStart (
-        DeskProvider sut ,
+        DeskProvider             sut ,
         [ Freeze ] IDeskDetector detector ,
-        CancellationTokenSource source ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        CancellationTokenSource  source ,
+        string                   deviceName ,
+        ulong                    deviceAddress ,
+        uint                     deviceTimeout )
     {
-        await sut.Initialize ( deviceName ,
-                               deviceAddress ,
-                               deviceTimeout )
+        await sut.Initialize (
+                              deviceName ,
+                              deviceAddress ,
+                              deviceTimeout )
                  .TryGetDesk ( source.Token ) ;
 
         detector.Received ( )
@@ -159,21 +167,23 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public async Task TryGetDesk_ForCancelled_ReturnsFalse (
-        DeskProvider sut ,
+        DeskProvider             sut ,
         [ Freeze ] IDeskDetector detector ,
-        CancellationTokenSource source ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        CancellationTokenSource  source ,
+        string                   deviceName ,
+        ulong                    deviceAddress ,
+        uint                     deviceTimeout )
     {
-        detector.When ( x => x.Initialize ( deviceName ,
-                                            deviceAddress ,
-                                            deviceTimeout ) )
+        detector.When ( x => x.Initialize (
+                                           deviceName ,
+                                           deviceAddress ,
+                                           deviceTimeout ) )
                 .Do ( _ => { source.Cancel ( ) ; } ) ;
 
-        var (success , _) = await sut.Initialize ( deviceName ,
-                                                   deviceAddress ,
-                                                   deviceTimeout )
+        var (success , _) = await sut.Initialize (
+                                                  deviceName ,
+                                                  deviceAddress ,
+                                                  deviceTimeout )
                                      .TryGetDesk ( source.Token ) ;
 
         success.Should ( )
@@ -182,22 +192,24 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public async Task TryGetDesk_ForCancelled_ReturnsNullForDesk (
-        DeskProvider sut ,
+        DeskProvider             sut ,
         [ Freeze ] IDeskDetector detector ,
-        CancellationTokenSource source ,
-        string deviceName ,
-        ulong deviceAddress ,
-        uint deviceTimeout )
+        CancellationTokenSource  source ,
+        string                   deviceName ,
+        ulong                    deviceAddress ,
+        uint                     deviceTimeout )
     {
-        detector.When ( x => x.Initialize ( deviceName ,
-                                            deviceAddress ,
-                                            deviceTimeout ) )
+        detector.When ( x => x.Initialize (
+                                           deviceName ,
+                                           deviceAddress ,
+                                           deviceTimeout ) )
                 .Do ( _ => { source.Cancel ( ) ; } ) ;
 
-        ( _ , IDesk? desk ) = await sut.Initialize ( deviceName ,
-                                                     deviceAddress ,
-                                                     deviceTimeout )
-                                       .TryGetDesk ( source.Token ) ;
+        var (_ , desk) = await sut.Initialize (
+                                               deviceName ,
+                                               deviceAddress ,
+                                               deviceTimeout )
+                                  .TryGetDesk ( source.Token ) ;
 
         desk.Should ( )
             .BeNull ( ) ;
@@ -205,9 +217,9 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public void OnDeskDetected_ForInvoked_CallsDeskDetectorStop (
-        DeskProvider sut ,
+        DeskProvider             sut ,
         [ Freeze ] IDeskDetector detector ,
-        IDesk desk )
+        IDesk                    desk )
     {
         sut.OnDeskDetected ( desk ) ;
 
@@ -218,7 +230,7 @@ public class DeskProviderTests
     [ AutoDataTestMethod ]
     public void OnDeskDetected_ForInvoked_SetsDesk (
         DeskProvider sut ,
-        IDesk desk )
+        IDesk        desk )
     {
         sut.OnDeskDetected ( desk ) ;
 
@@ -229,8 +241,8 @@ public class DeskProviderTests
 
     [ AutoDataTestMethod ]
     public async Task OnDeskDetected_ForInvoked_CallsDeskDetectedEventSet (
-        DeskProvider sut ,
-        IDesk desk ,
+        DeskProvider            sut ,
+        IDesk                   desk ,
         CancellationTokenSource source )
     {
         // Safety timeout so the test doesn't hang in case of failure
@@ -240,8 +252,9 @@ public class DeskProviderTests
         var waitForDetection = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) ) ;
         var triggerDetection = Task.Run ( ( ) => sut.OnDeskDetected ( desk ) ) ;
 
-        await Task.WhenAll ( waitForDetection ,
-                             triggerDetection ) ;
+        await Task.WhenAll (
+                            waitForDetection ,
+                            triggerDetection ) ;
 
         sut.Desk
            .Should ( )

@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
-using Core.Interfaces.ServicesDiscovery ;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Creates and adds desk characteristics to a given characteristics.
@@ -17,6 +17,7 @@ public interface IDeskCharacteristicsCreator
     /// <param name="device">
     ///     The device providing the characteristics.
     /// </param>
-    void Create ( IDeskCharacteristics characteristics ,
-                  IDevice device ) ;
+    void Create (
+        IDeskCharacteristics characteristics ,
+        IDevice              device ) ;
 }

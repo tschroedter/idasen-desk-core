@@ -1,10 +1,10 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -16,8 +16,9 @@ public class BluetoothLeDeviceWrapperFactory
 
     public BluetoothLeDeviceWrapperFactory ( BluetoothLeDeviceWrapper.Factory factory )
     {
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        Guard.ArgumentNotNull (
+                               factory ,
+                               nameof ( factory ) ) ;
 
         _factory = factory ;
     }

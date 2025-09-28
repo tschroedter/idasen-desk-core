@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Linak ;
+﻿using System.Diagnostics.CodeAnalysis ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 
-using System.Diagnostics.CodeAnalysis ;
-using Interfaces ;
+namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -10,12 +10,13 @@ public sealed class TaskRunner
 {
     /// <inheritdoc />
     public Task Run (
-        Action action ,
+        Action            action ,
         CancellationToken token )
     {
         ArgumentNullException.ThrowIfNull ( action ) ;
 
-        return Task.Run ( action ,
-                          token ) ;
+        return Task.Run (
+                         action ,
+                         token ) ;
     }
 }

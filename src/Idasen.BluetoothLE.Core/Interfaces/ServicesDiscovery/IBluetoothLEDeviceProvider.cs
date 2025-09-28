@@ -1,6 +1,6 @@
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-
 using Windows.Devices.Bluetooth ;
+
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     Abstraction over platform BluetoothLEDevice retrieval for testability.
@@ -8,5 +8,5 @@ using Windows.Devices.Bluetooth ;
 // ReSharper disable once InconsistentNaming
 public interface IBluetoothLEDeviceProvider
 {
-    Task < BluetoothLEDevice? > FromBluetoothAddressAsync ( ulong address ) ;
+    Task < BluetoothLEDevice ? > FromBluetoothAddressAsync ( ulong address ) ;
 }

@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Core ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+
+namespace Idasen.BluetoothLE.Core ;
 
 [ ExcludeFromCodeCoverage ]
 public static class GattCharacteristicPropertiesExtensions
@@ -20,16 +20,14 @@ public static class GattCharacteristicPropertiesExtensions
     {
         var list = new List < GattCharacteristicProperties > ( ) ;
 
-        foreach (GattCharacteristicProperties property in
-                 Enum.GetValues ( typeof ( GattCharacteristicProperties ) ))
-        {
+        foreach ( GattCharacteristicProperties property in
+                 Enum.GetValues ( typeof ( GattCharacteristicProperties ) ) ) {
             if ( ( properties & property ) == property )
-            {
                 list.Add ( property ) ;
-            }
         }
 
-        return string.Join ( ", " ,
-                             list ) ;
+        return string.Join (
+                            ", " ,
+                            list ) ;
     }
 }

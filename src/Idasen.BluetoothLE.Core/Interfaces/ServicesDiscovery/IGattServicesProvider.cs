@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Wrappers ;
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 public interface IGattServicesProvider
     : IDisposable
@@ -16,7 +16,6 @@ public interface IGattServicesProvider
     ///     being refreshed.
     /// </summary>
     IObservable < GattCommunicationStatus > Refreshed { get ; }
-
 
     /// <summary>
     ///     Gets the Gatt communication connection status of the device.

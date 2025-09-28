@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces ;
-
+﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using JetBrains.Annotations ;
-using ServicesDiscovery ;
+
+namespace Idasen.BluetoothLE.Core.Interfaces ;
 
 /// <summary>
 ///     Pairs with a BLE device based on its address.

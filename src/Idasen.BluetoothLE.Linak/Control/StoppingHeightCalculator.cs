@@ -1,17 +1,17 @@
-﻿namespace Idasen.BluetoothLE.Linak.Control ;
-
-using Aop.Aspects ;
-using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
+﻿using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class StoppingHeightCalculator
     : IStoppingHeightCalculator
 {
-    private const int DefaultMaxSpeedToStopMovement = 14 ; // per notification, 16 notifications in 60 secs
-    private const int DefaultMaxSpeed = 6200 ; // rpm/10
+    private const int DefaultMaxSpeedToStopMovement = 14 ;   // per notification, 16 notifications in 60 secs
+    private const int DefaultMaxSpeed               = 6200 ; // rpm/10
 
     private readonly IHasReachedTargetHeightCalculator _calculator ;
 
@@ -20,13 +20,14 @@ public class StoppingHeightCalculator
     /// <summary>
     ///     Initializes a new instance of the <see cref="StoppingHeightCalculator" /> class.
     /// </summary>
-    public StoppingHeightCalculator ( ILogger logger ,
-                                      IHasReachedTargetHeightCalculator calculator )
+    public StoppingHeightCalculator (
+        ILogger                           logger ,
+        IHasReachedTargetHeightCalculator calculator )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( calculator ) ;
 
-        _logger = logger ;
+        _logger     = logger ;
         _calculator = calculator ;
     }
 
@@ -71,33 +72,28 @@ public class StoppingHeightCalculator
     {
         MoveIntoDirection = CalculateMoveIntoDirection ( ) ;
 
-        _logger.Information ( "Height={Height}, Speed={Speed}, StartMove={StartMovingIntoDirection}, Move={MoveIntoDirection}" ,
-                              Height ,
-                              Speed ,
-                              StartMovingIntoDirection ,
-                              MoveIntoDirection ) ;
+        _logger.Information (
+                             "Height={Height}, Speed={Speed}, StartMove={StartMovingIntoDirection}, Move={MoveIntoDirection}" ,
+                             Height ,
+                             Speed ,
+                             StartMovingIntoDirection ,
+                             MoveIntoDirection ) ;
 
         if ( Speed == 0 )
-        {
             CalculateForSpeedZero ( ) ;
-        }
         else
-        {
             CalculateForSpeed ( ) ;
-        }
 
         return this ;
     }
 
     private Direction CalculateMoveIntoDirection ( )
     {
-        var diff = Height - ( long ) TargetHeight ;
+        var diff      = Height - ( long ) TargetHeight ;
         var threshold = ( double ) MaxSpeedToStopMovement * FudgeFactor ;
 
         if ( Math.Abs ( diff ) <= threshold )
-        {
             return Direction.None ;
-        }
 
         return Height > TargetHeight
                    ? Direction.Down
@@ -108,7 +104,7 @@ public class StoppingHeightCalculator
     {
         // Preserve sign semantics from original implementation
         MovementUntilStop = ( int ) ( ( float ) Speed /
-                                      MaxSpeed *
+                                      MaxSpeed               *
                                       MaxSpeedToStopMovement *
                                       FudgeFactor ) ;
 
@@ -116,20 +112,16 @@ public class StoppingHeightCalculator
         var stopping = Height + MovementUntilStop ;
 
         if ( stopping < 0 )
-        {
             stopping = 0 ;
-        }
 
         if ( stopping > uint.MaxValue )
-        {
             stopping = uint.MaxValue ;
-        }
 
         StoppingHeight = ( uint ) stopping ;
 
         var (hasReachedTargetHeight , delta) = CalculateHasReachedTargetHeight ( ) ;
 
-        Delta = delta ;
+        Delta                  = delta ;
         HasReachedTargetHeight = hasReachedTargetHeight ;
 
         LogStatus ( ) ;
@@ -137,13 +129,14 @@ public class StoppingHeightCalculator
 
     private void LogStatus ( )
     {
-        _logger.Information ( "Height={Height}, Speed={Speed}, TargetHeight={TargetHeight}, StoppingHeight={StoppingHeight}, MovementUntilStop={MovementUntilStop}, Delta={Delta}" ,
-                              Height ,
-                              Speed ,
-                              TargetHeight ,
-                              StoppingHeight ,
-                              MovementUntilStop ,
-                              Delta ) ;
+        _logger.Information (
+                             "Height={Height}, Speed={Speed}, TargetHeight={TargetHeight}, StoppingHeight={StoppingHeight}, MovementUntilStop={MovementUntilStop}, Delta={Delta}" ,
+                             Height ,
+                             Speed ,
+                             TargetHeight ,
+                             StoppingHeight ,
+                             MovementUntilStop ,
+                             Delta ) ;
     }
 
     private void CalculateForSpeedZero ( )
@@ -154,7 +147,7 @@ public class StoppingHeightCalculator
 
         var (hasReachedTargetHeight , delta) = CalculateHasReachedTargetHeight ( ) ;
 
-        Delta = delta ;
+        Delta                  = delta ;
         HasReachedTargetHeight = hasReachedTargetHeight ;
 
         LogStatus ( ) ;
@@ -162,10 +155,10 @@ public class StoppingHeightCalculator
 
     private (bool hasReachedTargetHeight , uint delta) CalculateHasReachedTargetHeight ( )
     {
-        _calculator.TargetHeight = TargetHeight ;
-        _calculator.StoppingHeight = StoppingHeight ;
-        _calculator.MovementUntilStop = MovementUntilStop ;
-        _calculator.MoveIntoDirection = MoveIntoDirection ;
+        _calculator.TargetHeight             = TargetHeight ;
+        _calculator.StoppingHeight           = StoppingHeight ;
+        _calculator.MovementUntilStop        = MovementUntilStop ;
+        _calculator.MoveIntoDirection        = MoveIntoDirection ;
         _calculator.StartMovingIntoDirection = StartMovingIntoDirection ;
         _calculator.Calculate ( ) ;
 

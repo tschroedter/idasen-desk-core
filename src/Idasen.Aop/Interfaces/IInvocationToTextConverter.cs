@@ -1,6 +1,6 @@
-﻿namespace Idasen.Aop.Interfaces ;
+﻿using Castle.DynamicProxy ;
 
-using Castle.DynamicProxy ;
+namespace Idasen.Aop.Interfaces ;
 
 /// <summary>
 ///     Converts a Castle DynamicProxy <see cref="IInvocation" /> into a human-readable string representation.

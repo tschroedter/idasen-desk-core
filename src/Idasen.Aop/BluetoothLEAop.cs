@@ -1,10 +1,10 @@
-namespace Idasen.Aop ;
-
 using System.Diagnostics.CodeAnalysis ;
-using Aspects ;
 using Autofac ;
-using Interfaces ;
+using Idasen.Aop.Aspects ;
+using Idasen.Aop.Interfaces ;
 using Serilog ;
+
+namespace Idasen.Aop ;
 
 // ReSharper disable once InconsistentNaming
 /// <summary>
@@ -26,7 +26,8 @@ public sealed class BluetoothLEAop
         _ = builder.RegisterType < InvocationToTextConverter > ( )
                    .As < IInvocationToTextConverter > ( ) ;
 
-        _ = builder.Register ( c => new LogAspect ( c.Resolve < ILogger > ( ) ,
-                                                    c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
+        _ = builder.Register ( c => new LogAspect (
+                                                   c.Resolve < ILogger > ( ) ,
+                                                   c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
     }
 }

@@ -1,8 +1,8 @@
-namespace Idasen.Aop.Tests ;
-
 using Castle.DynamicProxy ;
 using FluentAssertions ;
 using JetBrains.Annotations ;
+
+namespace Idasen.Aop.Tests ;
 
 [ TestClass ]
 public class InvocationToTextConverterTests
@@ -12,12 +12,13 @@ public class InvocationToTextConverterTests
     [ TestMethod ]
     public void Convert_NoArgs_PrintsMethod ( )
     {
-        var target = new Sample ( ) ;
-        Sample proxy = CreateProxy ( target ) ;
-        InvocationToTextConverter converter = CreateConverter ( ) ;
+        var target    = new Sample ( ) ;
+        var proxy     = CreateProxy ( target ) ;
+        var converter = CreateConverter ( ) ;
 
-        IInvocation invocation = Intercept ( proxy ,
-                                             p => p.NoArgs ( ) ) ;
+        var invocation = Intercept (
+                                    proxy ,
+                                    p => p.NoArgs ( ) ) ;
         var text = converter.Convert ( invocation ) ;
 
         text.Should ( ).Contain ( "Sample.NoArgs(" ) ;
@@ -27,13 +28,15 @@ public class InvocationToTextConverterTests
     [ TestMethod ]
     public void Convert_Primitives_IncludesNamesAndValues ( )
     {
-        var target = new Sample ( ) ;
-        Sample proxy = CreateProxy ( target ) ;
-        InvocationToTextConverter converter = CreateConverter ( ) ;
+        var target    = new Sample ( ) ;
+        var proxy     = CreateProxy ( target ) ;
+        var converter = CreateConverter ( ) ;
 
-        IInvocation invocation = Intercept ( proxy ,
-                                             p => p.Primitives ( 42 ,
-                                                                 "abc" ) ) ;
+        var invocation = Intercept (
+                                    proxy ,
+                                    p => p.Primitives (
+                                                       42 ,
+                                                       "abc" ) ) ;
         var text = converter.Convert ( invocation ) ;
 
         text.Should ( ).Contain ( "x=42" ) ;
@@ -43,12 +46,13 @@ public class InvocationToTextConverterTests
     [ TestMethod ]
     public void Convert_Array_SummarizedAsLength ( )
     {
-        var target = new Sample ( ) ;
-        Sample proxy = CreateProxy ( target ) ;
-        InvocationToTextConverter converter = CreateConverter ( ) ;
+        var target    = new Sample ( ) ;
+        var proxy     = CreateProxy ( target ) ;
+        var converter = CreateConverter ( ) ;
 
-        IInvocation invocation = Intercept ( proxy ,
-                                             p => p.WithArray ( new byte[100] ) ) ;
+        var invocation = Intercept (
+                                    proxy ,
+                                    p => p.WithArray ( new byte[ 100 ] ) ) ;
         var text = converter.Convert ( invocation ) ;
 
         text.Should ( ).Contain ( "bytes=[100]" ) ;
@@ -57,12 +61,13 @@ public class InvocationToTextConverterTests
     [ TestMethod ]
     public void Convert_PropertySetter_UsesNameValue ( )
     {
-        var target = new Sample ( ) ;
-        Sample proxy = CreateProxy ( target ) ;
-        InvocationToTextConverter converter = CreateConverter ( ) ;
+        var target    = new Sample ( ) ;
+        var proxy     = CreateProxy ( target ) ;
+        var converter = CreateConverter ( ) ;
 
-        IInvocation invocation = Intercept ( proxy ,
-                                             p => p.SampleProperty = 123 ) ;
+        var invocation = Intercept (
+                                    proxy ,
+                                    p => p.SampleProperty = 123 ) ;
         var text = converter.Convert ( invocation ) ;
 
         text.Should ( ).Contain ( "Idasen.Aop.Tests.InvocationToTextConverterTests+Sample.set_SampleProperty(value=123)" ) ;
@@ -71,15 +76,16 @@ public class InvocationToTextConverterTests
     [ TestMethod ]
     public void Convert_SelfReferencingParameter_IsCycleSafe ( )
     {
-        var target = new Sample ( ) ;
-        Sample proxy = CreateProxy ( target ) ;
-        InvocationToTextConverter converter = CreateConverter ( ) ;
+        var target    = new Sample ( ) ;
+        var proxy     = CreateProxy ( target ) ;
+        var converter = CreateConverter ( ) ;
 
         var node = new Node ( "root" ) ;
         node.Next = node ; // direct cycle
 
-        IInvocation invocation = Intercept ( proxy ,
-                                             p => p.WithObject ( node ) ) ;
+        var invocation = Intercept (
+                                    proxy ,
+                                    p => p.WithObject ( node ) ) ;
 
         // Should not recurse infinitely or throw
         FluentActions.Invoking ( ( ) => converter.Convert ( invocation ) )
@@ -93,19 +99,20 @@ public class InvocationToTextConverterTests
         // text.Should().Contain("<cycle>");
     }
 
-    private static T CreateProxy<T> ( T target ) where T : class
+    private static T CreateProxy < T > ( T target ) where T : class
     {
         var generator = new ProxyGenerator ( ) ;
         return generator.CreateClassProxyWithTarget ( target ) ;
     }
 
-    private static IInvocation Intercept<T> ( T proxy , Action < T > call ) where T : class
+    private static IInvocation Intercept < T > ( T proxy , Action < T > call ) where T : class
     {
-        IInvocation? captured = null ;
+        IInvocation ? captured = null ;
 
-        var generator = new ProxyGenerator ( ) ;
+        var generator   = new ProxyGenerator ( ) ;
         var interceptor = new CaptureInterceptor ( i => captured = i ) ;
-        T? proxied = generator.CreateClassProxyWithTarget ( proxy ,
+        var proxied = generator.CreateClassProxyWithTarget (
+                                                            proxy ,
                                                             interceptor ) ;
         call ( proxied ) ;
         return captured ?? throw new AssertFailedException ( "Invocation was not captured" ) ;
@@ -148,6 +155,6 @@ public class InvocationToTextConverterTests
         public string Name { get ; } = name ;
 
         [ UsedImplicitly ]
-        public Node? Next { get ; set ; }
+        public Node ? Next { get ; set ; }
     }
 }

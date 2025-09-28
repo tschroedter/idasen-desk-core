@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
+﻿using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Linak.Control ;
 
-using Common.Tests ;
-using Linak.Control ;
+namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
 
 [ TestClass ]
 public class DeskCommandsProviderConstructorNullTests

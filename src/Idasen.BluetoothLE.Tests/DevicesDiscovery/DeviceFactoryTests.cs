@@ -1,53 +1,55 @@
-﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
-
-using Core ;
-using Core.DevicesDiscovery ;
-using Core.Interfaces ;
-using Core.Interfaces.DevicesDiscovery ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using FluentAssertions.Execution ;
+using Idasen.BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+
+namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
 [ TestClass ]
 public class DeviceFactoryTests
 {
-    private ulong _address ;
+    private ulong           _address ;
     private IDateTimeOffset _broadcastTime = null! ;
-    private Device.Factory _factory = null! ;
-    private string _name = null! ;
-    private short _rawSignalStrengthInDBm ;
+    private Device.Factory  _factory       = null! ;
+    private string          _name          = null! ;
+    private short           _rawSignalStrengthInDBm ;
 
     [ TestInitialize ]
     public void Initialize ( )
     {
         _factory = TestFactory ;
 
-        _broadcastTime = new DateTimeOffsetWrapper ( ).Now ;
-        _address = 254682828386071 ;
-        _name = "Name" ;
+        _broadcastTime          = new DateTimeOffsetWrapper ( ).Now ;
+        _address                = 254682828386071 ;
+        _name                   = "Name" ;
         _rawSignalStrengthInDBm = - 50 ;
     }
 
-    private IDevice TestFactory ( IDateTimeOffset broadcastTime ,
-                                  ulong address ,
-                                  string? name ,
-                                  short rawSignalStrengthInDBm )
+    private IDevice TestFactory (
+        IDateTimeOffset broadcastTime ,
+        ulong           address ,
+        string ?        name ,
+        short           rawSignalStrengthInDBm )
     {
-        return new Device ( broadcastTime ,
-                            address ,
-                            name ,
-                            rawSignalStrengthInDBm ) ;
+        return new Device (
+                           broadcastTime ,
+                           address ,
+                           name ,
+                           rawSignalStrengthInDBm ) ;
     }
 
     [ TestMethod ]
     public void Create_ForBroadcastTimesNull_Throws ( )
     {
-        Action action = ( ) =>
-                        {
-                            CreateSut ( ).Create ( null! ,
-                                                   _address ,
-                                                   _name ,
-                                                   _rawSignalStrengthInDBm ) ;
-                        } ;
+        var action = ( ) => {
+                         CreateSut ( ).Create (
+                                               null! ,
+                                               _address ,
+                                               _name ,
+                                               _rawSignalStrengthInDBm ) ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -57,13 +59,13 @@ public class DeviceFactoryTests
     [ TestMethod ]
     public void CreateForInvoked_ReturnsInstance ( )
     {
-        IDevice actual = CreateSut ( ).Create ( _broadcastTime ,
-                                                _address ,
-                                                _name ,
-                                                _rawSignalStrengthInDBm ) ;
+        var actual = CreateSut ( ).Create (
+                                           _broadcastTime ,
+                                           _address ,
+                                           _name ,
+                                           _rawSignalStrengthInDBm ) ;
 
-        using (new AssertionScope ( ))
-        {
+        using ( new AssertionScope ( ) ) {
             actual.BroadcastTime
                   .Should ( )
                   .Be ( _broadcastTime ) ;

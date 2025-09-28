@@ -1,12 +1,12 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
-
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Aop.Aspects ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
-using Core ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Interfaces.Characteristics.Customs ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
+using Idasen.BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 
 /// <summary>
 ///     Provides discovered GATT characteristics mapped by friendly keys.
@@ -24,7 +24,7 @@ public class GattCharacteristicProvider
     private readonly Dictionary < string , IGattCharacteristicWrapper > _characteristics = new ( ) ;
 
     private readonly IGattCharacteristicsResultWrapper _gattCharacteristics ;
-    private readonly ILogger _logger ;
+    private readonly ILogger                           _logger ;
 
     private readonly Dictionary < string , GattCharacteristicProperties > _properties = new ( ) ;
 
@@ -36,15 +36,17 @@ public class GattCharacteristicProvider
     /// <param name="logger">Logger used for discovery diagnostics.</param>
     /// <param name="gattCharacteristics">Discovered characteristics wrapper.</param>
     public GattCharacteristicProvider (
-        ILogger logger ,
+        ILogger                           logger ,
         IGattCharacteristicsResultWrapper gattCharacteristics )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( gattCharacteristics ,
-                                nameof ( gattCharacteristics ) ) ;
+        Guard.ArgumentNotNull (
+                               logger ,
+                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull (
+                               gattCharacteristics ,
+                               nameof ( gattCharacteristics ) ) ;
 
-        _logger = logger ;
+        _logger              = logger ;
         _gattCharacteristics = gattCharacteristics ;
     }
 
@@ -61,32 +63,33 @@ public class GattCharacteristicProvider
     public virtual void Refresh (
         IReadOnlyDictionary < string , Guid > customCharacteristic )
     {
-        Guard.ArgumentNotNull ( customCharacteristic ,
-                                nameof ( customCharacteristic ) ) ;
+        Guard.ArgumentNotNull (
+                               customCharacteristic ,
+                               nameof ( customCharacteristic ) ) ;
 
-        _logger.Information ( "{GattCharacteristicsResultWrapper}" ,
-                              _gattCharacteristics ) ;
+        _logger.Information (
+                             "{GattCharacteristicsResultWrapper}" ,
+                             _gattCharacteristics ) ;
 
         _characteristics.Clear ( ) ;
         _unavailable.Clear ( ) ;
 
-        foreach (KeyValuePair < string , Guid > keyValuePair in customCharacteristic)
-        {
-            IGattCharacteristicWrapper? characteristic = _gattCharacteristics.Characteristics
-                                                                             .FirstOrDefault ( x => x.Uuid == keyValuePair.Value ) ;
+        foreach ( var keyValuePair in customCharacteristic ) {
+            var characteristic = _gattCharacteristics.Characteristics
+                                                     .FirstOrDefault ( x => x.Uuid == keyValuePair.Value ) ;
 
-            if ( characteristic != null )
-            {
-                _logger.Information ( $"Found characteristic {characteristic.Uuid} " +
-                                      $"for description '{keyValuePair.Key}'" ) ;
+            if ( characteristic != null ) {
+                _logger.Information (
+                                     $"Found characteristic {characteristic.Uuid} " +
+                                     $"for description '{keyValuePair.Key}'" ) ;
 
-                _characteristics[keyValuePair.Key] = characteristic ;
-                _properties[keyValuePair.Key] = characteristic.CharacteristicProperties ;
+                _characteristics [ keyValuePair.Key ] = characteristic ;
+                _properties [ keyValuePair.Key ]      = characteristic.CharacteristicProperties ;
             }
-            else
-            {
-                _logger.Information ( "Did not find characteristic " +
-                                      $"for description '{keyValuePair.Key}' and Uuid '{keyValuePair.Value}'" ) ;
+            else {
+                _logger.Information (
+                                     "Did not find characteristic " +
+                                     $"for description '{keyValuePair.Key}' and Uuid '{keyValuePair.Value}'" ) ;
 
                 _unavailable.Add ( keyValuePair.Key ) ;
             }

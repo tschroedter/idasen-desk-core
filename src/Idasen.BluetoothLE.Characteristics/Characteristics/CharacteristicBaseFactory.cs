@@ -1,11 +1,11 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
-
-using Aop.Aspects ;
-using Autofac ;
+﻿using Autofac ;
 using Autofac.Extras.DynamicProxy ;
-using Core ;
-using Core.Interfaces.ServicesDiscovery ;
-using Interfaces.Characteristics ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+
+namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
 /// <summary>
 ///     Factory for creating characteristic instances using Autofac, injecting the required
@@ -23,8 +23,9 @@ public sealed class CharacteristicBaseFactory
     /// <param name="scope">The Autofac lifetime scope used to resolve instances.</param>
     public CharacteristicBaseFactory ( ILifetimeScope scope )
     {
-        Guard.ArgumentNotNull ( scope ,
-                                nameof ( scope ) ) ;
+        Guard.ArgumentNotNull (
+                               scope ,
+                               nameof ( scope ) ) ;
 
         _scope = scope ;
     }
@@ -35,12 +36,15 @@ public sealed class CharacteristicBaseFactory
     /// <typeparam name="T">The service type to resolve.</typeparam>
     /// <param name="device">The device to pass to the resolved constructor.</param>
     /// <returns>An instance of <typeparamref name="T" />.</returns>
-    public T Create<T> ( IDevice device ) where T : notnull
+    public T Create < T > ( IDevice device ) where T : notnull
     {
-        Guard.ArgumentNotNull ( device ,
-                                nameof ( device ) ) ;
+        Guard.ArgumentNotNull (
+                               device ,
+                               nameof ( device ) ) ;
 
-        T instance = _scope.Resolve < T > ( new NamedParameter ( "device" ,
+        var instance = _scope.Resolve < T > (
+                                             new NamedParameter (
+                                                                 "device" ,
                                                                  device ) ) ;
 
         return instance ;

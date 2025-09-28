@@ -1,11 +1,9 @@
-﻿
-
-// ReSharper disable UnusedMemberInSuper.Global
-
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 
 /// <summary>
 ///     Organizes discovered GATT characteristics and exposes their properties by friendly keys.

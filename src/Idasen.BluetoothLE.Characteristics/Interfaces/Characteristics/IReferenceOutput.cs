@@ -1,11 +1,9 @@
-﻿
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
-// ReSharper disable UnusedMemberInSuper.Global
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-
-using BluetoothLE.Characteristics.Characteristics ;
-using Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     Reference Output service contract.
@@ -28,14 +26,14 @@ public interface IReferenceOutput
     /// </summary>
     IEnumerable < byte > RawHeightSpeed { get ; }
 
-    IEnumerable < byte > RawTwo { get ; }
-    IEnumerable < byte > RawThree { get ; }
-    IEnumerable < byte > RawFour { get ; }
-    IEnumerable < byte > RawFive { get ; }
-    IEnumerable < byte > RawSix { get ; }
-    IEnumerable < byte > RawSeven { get ; }
-    IEnumerable < byte > RawEight { get ; }
-    IEnumerable < byte > RawMask { get ; }
+    IEnumerable < byte > RawTwo        { get ; }
+    IEnumerable < byte > RawThree      { get ; }
+    IEnumerable < byte > RawFour       { get ; }
+    IEnumerable < byte > RawFive       { get ; }
+    IEnumerable < byte > RawSix        { get ; }
+    IEnumerable < byte > RawSeven      { get ; }
+    IEnumerable < byte > RawEight      { get ; }
+    IEnumerable < byte > RawMask       { get ; }
     IEnumerable < byte > RawDetectMask { get ; }
 
     /// <summary>

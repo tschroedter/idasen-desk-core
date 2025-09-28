@@ -1,264 +1,303 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using FluentAssertions ;
-using Linak.Control ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Linak.Control ;
 using NSubstitute ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class HasReachedTargetHeightCalculatorTests
 {
     private ILogger _logger = null! ;
 
-    [ DataRow ( 2000u ,
-                1000u ,
-                10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                10 ,
-                Direction.None ,
-                Direction.Up ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                10 ,
-                Direction.None ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                10 ,
-                Direction.Down ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                10 ,
-                Direction.Down ,
-                Direction.Up ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                10 ,
-                Direction.Down ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u , //--
-                1000u ,
-                10 ,
-                Direction.Up ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                10 ,
-                Direction.Up ,
-                Direction.Up ,
-                false ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                10 ,
-                Direction.Up ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1989u ,
-                10 ,
-                Direction.Up ,
-                Direction.Up ,
-                false ) ]
-    [ DataRow ( 2000u ,
-                1990u ,
-                10 ,
-                Direction.Up ,
-                Direction.Up ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1991u ,
-                10 ,
-                Direction.Up ,
-                Direction.Up ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1999u ,
-                10 ,
-                Direction.Up ,
-                Direction.Up ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2000u ,
-                10 ,
-                Direction.Up ,
-                Direction.Up ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2001u ,
-                10 ,
-                Direction.Up ,
-                Direction.Up ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                3000u ,
-                10 ,
-                Direction.Up ,
-                Direction.Up ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                3000u ,
-                - 10 ,
-                Direction.Down ,
-                Direction.Down ,
-                false ) ]
-    [ DataRow ( 2000u ,
-                2011u ,
-                - 10 ,
-                Direction.Down ,
-                Direction.Down ,
-                false ) ]
-    [ DataRow ( 2000u ,
-                2010u ,
-                - 10 ,
-                Direction.Down ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2009u ,
-                - 10 ,
-                Direction.Down ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2001u ,
-                - 10 ,
-                Direction.Down ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2000u ,
-                - 10 ,
-                Direction.Down ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1999u ,
-                - 10 ,
-                Direction.Down ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                - 10 ,
-                Direction.Down ,
-                Direction.Down ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1989u ,
-                10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1990u ,
-                10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1991u ,
-                10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1999u ,
-                10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2000u ,
-                10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2001u ,
-                10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                3000u ,
-                10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1000u ,
-                - 10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1989u ,
-                - 10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1990u ,
-                - 10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1991u ,
-                - 10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                1999u ,
-                - 10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2000u ,
-                - 10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                2001u ,
-                - 10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
-    [ DataRow ( 2000u ,
-                3000u ,
-                - 10 ,
-                Direction.None ,
-                Direction.None ,
-                true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.Up ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  10 ,
+                  Direction.Down ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  10 ,
+                  Direction.Down ,
+                  Direction.Up ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u , //--
+                  1000u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Up ,
+                  false ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1989u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Up ,
+                  false ) ]
+    [ DataRow (
+                  2000u ,
+                  1990u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Up ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1991u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Up ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1999u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Up ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2000u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Up ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2001u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Up ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  3000u ,
+                  10 ,
+                  Direction.Up ,
+                  Direction.Up ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  3000u ,
+                  - 10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  false ) ]
+    [ DataRow (
+                  2000u ,
+                  2011u ,
+                  - 10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  false ) ]
+    [ DataRow (
+                  2000u ,
+                  2010u ,
+                  - 10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2009u ,
+                  - 10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2001u ,
+                  - 10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2000u ,
+                  - 10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1999u ,
+                  - 10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  - 10 ,
+                  Direction.Down ,
+                  Direction.Down ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1989u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1990u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1991u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1999u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2000u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2001u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  3000u ,
+                  10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1000u ,
+                  - 10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1989u ,
+                  - 10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1990u ,
+                  - 10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1991u ,
+                  - 10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  1999u ,
+                  - 10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2000u ,
+                  - 10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  2001u ,
+                  - 10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
+    [ DataRow (
+                  2000u ,
+                  3000u ,
+                  - 10 ,
+                  Direction.None ,
+                  Direction.None ,
+                  true ) ]
     [ TestMethod ]
     public void Calculate_ForParameters_SetsHasReachedTargetHeight (
-        uint targetHeight ,
-        uint stoppingHeight ,
-        int movementUntilStop ,
+        uint      targetHeight ,
+        uint      stoppingHeight ,
+        int       movementUntilStop ,
         Direction moveIntoDirection ,
         Direction startMovingIntoDirection ,
-        bool hasReachedTargetHeight )
+        bool      hasReachedTargetHeight )
     {
-        HasReachedTargetHeightCalculator sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
-        sut.TargetHeight = targetHeight ;
-        sut.StoppingHeight = stoppingHeight ;
-        sut.MovementUntilStop = movementUntilStop ;
-        sut.MoveIntoDirection = moveIntoDirection ;
+        sut.TargetHeight             = targetHeight ;
+        sut.StoppingHeight           = stoppingHeight ;
+        sut.MovementUntilStop        = movementUntilStop ;
+        sut.MoveIntoDirection        = moveIntoDirection ;
         sut.StartMovingIntoDirection = startMovingIntoDirection ;
 
         sut.Calculate ( )
@@ -267,43 +306,48 @@ public class HasReachedTargetHeightCalculatorTests
            .Be ( hasReachedTargetHeight ) ;
     }
 
-    [ DataRow ( 2000u ,
-                2000u ,
-                - 10 ,
-                Direction.None ,
-                0u ) ]
-    [ DataRow ( 2000u ,
-                3000u ,
-                10 ,
-                Direction.None ,
-                1000u ) ]
-    [ DataRow ( 2000u ,
-                3000u ,
-                - 10 ,
-                Direction.None ,
-                1000u ) ]
-    [ DataRow ( 3000u ,
-                2000u ,
-                10 ,
-                Direction.None ,
-                1000u ) ]
-    [ DataRow ( 3000u ,
-                2000u ,
-                - 10 ,
-                Direction.None ,
-                1000u ) ]
+    [ DataRow (
+                  2000u ,
+                  2000u ,
+                  - 10 ,
+                  Direction.None ,
+                  0u ) ]
+    [ DataRow (
+                  2000u ,
+                  3000u ,
+                  10 ,
+                  Direction.None ,
+                  1000u ) ]
+    [ DataRow (
+                  2000u ,
+                  3000u ,
+                  - 10 ,
+                  Direction.None ,
+                  1000u ) ]
+    [ DataRow (
+                  3000u ,
+                  2000u ,
+                  10 ,
+                  Direction.None ,
+                  1000u ) ]
+    [ DataRow (
+                  3000u ,
+                  2000u ,
+                  - 10 ,
+                  Direction.None ,
+                  1000u ) ]
     [ TestMethod ]
     public void Calculate_ForParameters_SetsDelta (
-        uint targetHeight ,
-        uint stoppingHeight ,
-        int movementUntilStop ,
+        uint      targetHeight ,
+        uint      stoppingHeight ,
+        int       movementUntilStop ,
         Direction moveIntoDirection ,
-        uint delta )
+        uint      delta )
     {
-        HasReachedTargetHeightCalculator sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
-        sut.TargetHeight = targetHeight ;
-        sut.StoppingHeight = stoppingHeight ;
+        sut.TargetHeight      = targetHeight ;
+        sut.StoppingHeight    = stoppingHeight ;
         sut.MovementUntilStop = movementUntilStop ;
         sut.MoveIntoDirection = moveIntoDirection ;
 

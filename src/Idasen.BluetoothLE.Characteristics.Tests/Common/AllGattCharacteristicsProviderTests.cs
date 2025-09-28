@@ -1,13 +1,13 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Common ;
 
-using BluetoothLE.Characteristics.Common ;
-using FluentAssertions ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
 [ TestClass ]
 public class AllGattCharacteristicsProviderTests
 {
     private const string UnknownDescription = "Unknown" ;
-    private const string KnownDescription = "Device Name" ;
+    private const string KnownDescription   = "Device Name" ;
 
     private Guid _knownGuid ;
     private Guid _unknownGuid ;
@@ -16,14 +16,15 @@ public class AllGattCharacteristicsProviderTests
     public void Initialize ( )
     {
         _unknownGuid = Guid.Empty ;
-        _knownGuid = Guid.Parse ( "00002a00-0000-1000-8000-00805f9b34fb" ) ;
+        _knownGuid   = Guid.Parse ( "00002a00-0000-1000-8000-00805f9b34fb" ) ;
     }
 
     [ TestMethod ]
     public void TryGetDescription_ForUnknownGuid_False ( )
     {
-        CreateSut ( ).TryGetDescription ( _unknownGuid ,
-                                          out _ )
+        CreateSut ( ).TryGetDescription (
+                                         _unknownGuid ,
+                                         out _ )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -31,8 +32,9 @@ public class AllGattCharacteristicsProviderTests
     [ TestMethod ]
     public void TryGetDescription_ForUnknownGuid_Empty ( )
     {
-        CreateSut ( ).TryGetDescription ( _unknownGuid ,
-                                          out var description ) ;
+        CreateSut ( ).TryGetDescription (
+                                         _unknownGuid ,
+                                         out var description ) ;
 
         description.Should ( )
                    .BeEmpty ( ) ;
@@ -41,8 +43,9 @@ public class AllGattCharacteristicsProviderTests
     [ TestMethod ]
     public void TryGetDescription_ForKnownGuid_True ( )
     {
-        CreateSut ( ).TryGetDescription ( _knownGuid ,
-                                          out _ )
+        CreateSut ( ).TryGetDescription (
+                                         _knownGuid ,
+                                         out _ )
                      .Should ( )
                      .BeTrue ( ) ;
     }
@@ -50,8 +53,9 @@ public class AllGattCharacteristicsProviderTests
     [ TestMethod ]
     public void TryGetDescription_ForKnownGuid_Description ( )
     {
-        CreateSut ( ).TryGetDescription ( _knownGuid ,
-                                          out var description ) ;
+        CreateSut ( ).TryGetDescription (
+                                         _knownGuid ,
+                                         out var description ) ;
 
         description.Should ( )
                    .Be ( KnownDescription ) ;
@@ -60,8 +64,9 @@ public class AllGattCharacteristicsProviderTests
     [ TestMethod ]
     public void TryGetUuid_ForUnknownDescription_False ( )
     {
-        CreateSut ( ).TryGetUuid ( UnknownDescription ,
-                                   out _ )
+        CreateSut ( ).TryGetUuid (
+                                  UnknownDescription ,
+                                  out _ )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -69,8 +74,9 @@ public class AllGattCharacteristicsProviderTests
     [ TestMethod ]
     public void TryGetUuid_ForUnknownDescription_Empty ( )
     {
-        CreateSut ( ).TryGetUuid ( UnknownDescription ,
-                                   out Guid uuid ) ;
+        CreateSut ( ).TryGetUuid (
+                                  UnknownDescription ,
+                                  out var uuid ) ;
 
         uuid.Should ( )
             .BeEmpty ( ) ;
@@ -79,8 +85,9 @@ public class AllGattCharacteristicsProviderTests
     [ TestMethod ]
     public void TryGetUuid_ForKnownDescription_True ( )
     {
-        CreateSut ( ).TryGetUuid ( KnownDescription ,
-                                   out _ )
+        CreateSut ( ).TryGetUuid (
+                                  KnownDescription ,
+                                  out _ )
                      .Should ( )
                      .BeTrue ( ) ;
     }
@@ -88,8 +95,9 @@ public class AllGattCharacteristicsProviderTests
     [ TestMethod ]
     public void TryGetUuid_ForKnownDescription_Guid ( )
     {
-        CreateSut ( ).TryGetUuid ( KnownDescription ,
-                                   out Guid uuid ) ;
+        CreateSut ( ).TryGetUuid (
+                                  KnownDescription ,
+                                  out var uuid ) ;
 
         uuid.Should ( )
             .Be ( _knownGuid ) ;
@@ -100,8 +108,9 @@ public class AllGattCharacteristicsProviderTests
     {
         CreateSut ( ).OfficialGattCharacteristics
                      .Should ( )
-                     .Be ( "Idasen.BluetoothLE.Characteristics.Common." +
-                           AllGattCharacteristicsProvider.Filename ) ;
+                     .Be (
+                          "Idasen.BluetoothLE.Characteristics.Common." +
+                          AllGattCharacteristicsProvider.Filename ) ;
     }
 
     private AllGattCharacteristicsProvider CreateSut ( ) => new ( ) ;

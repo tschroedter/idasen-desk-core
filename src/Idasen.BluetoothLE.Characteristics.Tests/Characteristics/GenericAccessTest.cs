@@ -1,25 +1,25 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
-
-using System.Reactive.Subjects ;
-using BluetoothLE.Characteristics.Characteristics ;
-using BluetoothLE.Characteristics.Common ;
+﻿using System.Reactive.Subjects ;
 using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
+using Idasen.BluetoothLE.Characteristics.Common ;
 using NSubstitute ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
 public class GenericAccessTest
     : CharacteristicBaseTests < GenericAccess >
 {
-    private ISubject < IEnumerable < byte > > _subjectAppearanceChanged = null! ;
-    private ISubject < IEnumerable < byte > > _subjectDeviceNameChanged = null! ;
-    private Func < ISubject < IEnumerable < byte > > > _subjectFactory = null! ;
-    private ISubject < IEnumerable < byte > > _subjectParametersChanged = null! ;
-    private ISubject < IEnumerable < byte > > _subjectResolutionChanged = null! ;
+    private ISubject < IEnumerable < byte > >          _subjectAppearanceChanged = null! ;
+    private ISubject < IEnumerable < byte > >          _subjectDeviceNameChanged = null! ;
+    private Func < ISubject < IEnumerable < byte > > > _subjectFactory           = null! ;
+    private ISubject < IEnumerable < byte > >          _subjectParametersChanged = null! ;
+    private ISubject < IEnumerable < byte > >          _subjectResolutionChanged = null! ;
 
     [ TestMethod ]
     public void RawResolution_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -34,7 +34,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task RawResolution_ForRefreshedAndInvoked_Bytes ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -50,7 +50,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public void RawParameters_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -65,7 +65,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task RawParameters_ForRefreshedAndInvoked_Bytes ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -81,7 +81,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public void RawAppearance_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -96,7 +96,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task RawAppearance_ForRefreshedAndInvoked_Bytes ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -112,7 +112,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public void RawDeviceName_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -127,7 +127,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task RawDeviceName_ForRefreshedAndInvoked_Bytes ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -143,7 +143,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task Refresh_ForInvoked_AppearanceChanged ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -158,7 +158,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task Refresh_ForInvoked_ParametersChanged ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -173,7 +173,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task Refresh_ForInvoked_ResolutionChanged ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -188,7 +188,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task Refresh_ForInvoked_DeviceNameChanged ( )
     {
-        GenericAccess sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -212,35 +212,41 @@ public class GenericAccessTest
         _subjectFactory = Substitute.For < Func < ISubject < IEnumerable < byte > > > > ( ) ;
 
         _subjectFactory.Invoke ( )
-                       .Returns ( _subjectAppearanceChanged ,
-                                  _subjectParametersChanged ,
-                                  _subjectResolutionChanged ,
-                                  _subjectDeviceNameChanged ) ;
+                       .Returns (
+                                 _subjectAppearanceChanged ,
+                                 _subjectParametersChanged ,
+                                 _subjectResolutionChanged ,
+                                 _subjectDeviceNameChanged ) ;
     }
 
     protected override GenericAccess CreateSut ( )
     {
-        return new GenericAccess ( Logger ,
-                                   Scheduler ,
-                                   Device ,
-                                   ProviderFactory ,
-                                   RawValueReader ,
-                                   RawValueWriter ,
-                                   ToStringConverter ,
-                                   DescriptionToUuid ,
-                                   _subjectFactory ,
-                                   new AllGattCharacteristicsProvider ( ) ) ;
+        return new GenericAccess (
+                                  Logger ,
+                                  Scheduler ,
+                                  Device ,
+                                  ProviderFactory ,
+                                  RawValueReader ,
+                                  RawValueWriter ,
+                                  ToStringConverter ,
+                                  DescriptionToUuid ,
+                                  _subjectFactory ,
+                                  new AllGattCharacteristicsProvider ( ) ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add ( GenericAccess.CharacteristicDeviceName ,
-                       CharacteristicWrapper1 ) ;
-        Wrappers.Add ( GenericAccess.CharacteristicAppearance ,
-                       CharacteristicWrapper2 ) ;
-        Wrappers.Add ( GenericAccess.CharacteristicParameters ,
-                       CharacteristicWrapper3 ) ;
-        Wrappers.Add ( GenericAccess.CharacteristicResolution ,
-                       CharacteristicWrapper4 ) ;
+        Wrappers.Add (
+                      GenericAccess.CharacteristicDeviceName ,
+                      CharacteristicWrapper1 ) ;
+        Wrappers.Add (
+                      GenericAccess.CharacteristicAppearance ,
+                      CharacteristicWrapper2 ) ;
+        Wrappers.Add (
+                      GenericAccess.CharacteristicParameters ,
+                      CharacteristicWrapper3 ) ;
+        Wrappers.Add (
+                      GenericAccess.CharacteristicResolution ,
+                      CharacteristicWrapper4 ) ;
     }
 }

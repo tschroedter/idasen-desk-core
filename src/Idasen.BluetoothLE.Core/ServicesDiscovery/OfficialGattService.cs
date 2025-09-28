@@ -9,12 +9,12 @@ public class OfficialGattService
     /// <summary>
     ///     The human-readable name for the service.
     /// </summary>
-    public string? Name { get ; set ; }
+    public string ? Name { get ; set ; }
 
     /// <summary>
     ///     The uniform type identifier to the service.
     /// </summary>
-    public string? UniformTypeIdentifier { get ; set ; }
+    public string ? UniformTypeIdentifier { get ; set ; }
 
     /// <summary>
     ///     The 16-bit assigned number for this service.
@@ -26,5 +26,5 @@ public class OfficialGattService
     ///     The type of specification that this service is.
     ///     (see https://www.bluetooth.com/specifications/gatt/)
     /// </summary>
-    public string? ProfileSpecification { get ; set ; }
+    public string ? ProfileSpecification { get ; set ; }
 }

@@ -1,9 +1,9 @@
-﻿namespace Idasen.BluetoothLE.Common.Tests ;
-
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using FluentAssertions.Primitives ;
 using FluentAssertions.Specialized ;
 using JetBrains.Annotations ;
+
+namespace Idasen.BluetoothLE.Common.Tests ;
 
 public static class ExceptionAssertionsExtensions
 {
@@ -14,14 +14,14 @@ public static class ExceptionAssertionsExtensions
     /// <param name="parameter">The expected parameter name.</param>
     /// <returns></returns>
     [ UsedImplicitly ]
-    public async static Task < AndConstraint < StringAssertions > > WithParameter (
+    public static async Task < AndConstraint < StringAssertions > > WithParameter (
         this Task < ExceptionAssertions < ArgumentNullException > > assertions ,
-        string parameter )
+        string                                                      parameter )
     {
         ArgumentNullException.ThrowIfNull ( assertions ) ;
         ArgumentNullException.ThrowIfNull ( parameter ) ;
 
-        ExceptionAssertions < ArgumentNullException > a = await assertions.ConfigureAwait ( false ) ;
+        var a = await assertions.ConfigureAwait ( false ) ;
         return a.And.ParamName.Should ( ).Be ( parameter ) ;
     }
 
@@ -34,7 +34,7 @@ public static class ExceptionAssertionsExtensions
     [ UsedImplicitly ]
     public static AndConstraint < StringAssertions > WithParameter (
         this ExceptionAssertions < ArgumentNullException > assertions ,
-        string parameter )
+        string                                             parameter )
     {
         ArgumentNullException.ThrowIfNull ( assertions ) ;
         ArgumentNullException.ThrowIfNull ( parameter ) ;
@@ -54,7 +54,7 @@ public static class ExceptionAssertionsExtensions
     [ UsedImplicitly ]
     public static AndConstraint < StringAssertions > WithParameter (
         this ExceptionAssertions < ArgumentException > assertions ,
-        string parameter )
+        string                                         parameter )
     {
         ArgumentNullException.ThrowIfNull ( assertions ) ;
         ArgumentNullException.ThrowIfNull ( parameter ) ;

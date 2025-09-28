@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 [ ExcludeFromCodeCoverage ]
 public class GattWriteResultWrapper
@@ -16,13 +16,14 @@ public class GattWriteResultWrapper
 
     public GattWriteResultWrapper ( GattWriteResult result )
     {
-        Guard.ArgumentNotNull ( result ,
-                                nameof ( result ) ) ;
+        Guard.ArgumentNotNull (
+                               result ,
+                               nameof ( result ) ) ;
 
         _result = result ;
     }
 
     public GattCommunicationStatus Status => _result.Status ;
 
-    public byte? ProtocolError => _result.ProtocolError ;
+    public byte ? ProtocolError => _result.ProtocolError ;
 }

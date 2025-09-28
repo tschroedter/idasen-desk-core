@@ -1,19 +1,19 @@
-﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces ;
 
-using Core ;
-using Core.DevicesDiscovery ;
-using Core.Interfaces ;
-using FluentAssertions ;
+namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
 [ TestClass ]
 public class DeviceTests
 {
-    private const ulong Address = 1234 ;
-    private const string Name = "Name" ;
-    private const short RawSignalStrengthInDBm = - 50 ;
+    private const ulong  Address                = 1234 ;
+    private const string Name                   = "Name" ;
+    private const short  RawSignalStrengthInDBm = - 50 ;
 
     private IDateTimeOffset _broadcastTime = null! ;
-    private DeviceComparer _comparer = null! ;
+    private DeviceComparer  _comparer      = null! ;
 
     [ TestInitialize ]
     public void Initialize ( )
@@ -28,7 +28,7 @@ public class DeviceTests
     public void Constructor_ForDeviceIsNull_Throws ( )
     {
         // ReSharper disable once ObjectCreationAsStatement
-        Action action = ( ) => { new Device ( null! ) ; } ;
+        var action = ( ) => { new Device ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -41,7 +41,7 @@ public class DeviceTests
         _broadcastTime = null! ;
 
         // ReSharper disable once ObjectCreationAsStatement
-        Action action = ( ) => { CreateSut ( ) ; } ;
+        var action = ( ) => { CreateSut ( ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -51,7 +51,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsBroadcastTime ( )
     {
-        Device sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.BroadcastTime
            .Should ( )
@@ -61,7 +61,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsAddress ( )
     {
-        Device sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.Address
            .Should ( )
@@ -71,7 +71,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsName ( )
     {
-        Device sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.Name
            .Should ( )
@@ -81,7 +81,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsRawSignalStrengthInDBm ( )
     {
-        Device sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.RawSignalStrengthInDBm
            .Should ( )
@@ -91,7 +91,7 @@ public class DeviceTests
     [ TestMethod ]
     public void ToString_ForInvoked_ReturnsInstance ( )
     {
-        Device sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.ToString ( )
            .Should ( )
@@ -101,21 +101,23 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForIDevice_ReturnsInstance ( )
     {
-        Device device = CreateSut ( ) ;
+        var device = CreateSut ( ) ;
 
         var sut = new Device ( device ) ;
 
-        _comparer.Equals ( sut ,
-                           device )
+        _comparer.Equals (
+                          sut ,
+                          device )
                  .Should ( )
                  .BeTrue ( ) ;
     }
 
     private Device CreateSut ( )
     {
-        return new Device ( _broadcastTime ,
-                            Address ,
-                            Name ,
-                            RawSignalStrengthInDBm ) ;
+        return new Device (
+                           _broadcastTime ,
+                           Address ,
+                           Name ,
+                           RawSignalStrengthInDBm ) ;
     }
 }

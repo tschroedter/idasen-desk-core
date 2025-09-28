@@ -1,12 +1,12 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
-
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Aop.Aspects ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
-using Core ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Interfaces.Common ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Idasen.BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Characteristics.Common ;
 
 /// <summary>
 ///     Reads raw values from GATT characteristics and exposes the last status and protocol error.
@@ -17,7 +17,7 @@ public sealed class RawValueReader
 {
     private static readonly byte [ ] ArrayEmpty = [] ;
 
-    private readonly ILogger _logger ;
+    private readonly ILogger       _logger ;
     private readonly IBufferReader _reader ;
 
     /// <summary>
@@ -25,13 +25,16 @@ public sealed class RawValueReader
     /// </summary>
     /// <param name="logger">Logger used for warnings and diagnostics.</param>
     /// <param name="reader">Helper used to extract bytes from the platform buffer.</param>
-    public RawValueReader ( ILogger logger ,
-                            IBufferReader reader )
+    public RawValueReader (
+        ILogger       logger ,
+        IBufferReader reader )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( reader ,
-                                nameof ( reader ) ) ;
+        Guard.ArgumentNotNull (
+                               logger ,
+                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull (
+                               reader ,
+                               nameof ( reader ) ) ;
 
         _logger = logger ;
         _reader = reader ;
@@ -40,7 +43,7 @@ public sealed class RawValueReader
     /// <summary>
     ///     Gets the last protocol error from a read operation, if any.
     /// </summary>
-    public byte? ProtocolError { get ; private set ; }
+    public byte ? ProtocolError { get ; private set ; }
 
     /// <summary>
     ///     Gets the last GATT communication status from a read operation.
@@ -51,24 +54,24 @@ public sealed class RawValueReader
     public async Task < (bool , byte [ ]) > TryReadValueAsync (
         IGattCharacteristicWrapper characteristic )
     {
-        Guard.ArgumentNotNull ( characteristic ,
-                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull (
+                               characteristic ,
+                               nameof ( characteristic ) ) ;
 
-        if ( SupportsNotify ( characteristic ) )
-        {
-            _logger.Warning ( $"GattCharacteristic '{characteristic.Uuid}' " +
-                              "doesn't support 'Read' but supports 'Notify'" ) ;
+        if ( SupportsNotify ( characteristic ) ) {
+            _logger.Warning (
+                             $"GattCharacteristic '{characteristic.Uuid}' " +
+                             "doesn't support 'Read' but supports 'Notify'" ) ;
 
             return ( false , ArrayEmpty ) ; // need to subscribe to value change
         }
 
         if ( SupportsRead ( characteristic ) )
-        {
             return await ReadValue ( characteristic ) ;
-        }
 
-        _logger.Information ( $"GattCharacteristic '{characteristic.Uuid}' " +
-                              "doesn't support 'Read'" ) ;
+        _logger.Information (
+                             $"GattCharacteristic '{characteristic.Uuid}' " +
+                             "doesn't support 'Read'" ) ;
 
         return ( false , ArrayEmpty ) ;
     }
@@ -88,26 +91,24 @@ public sealed class RawValueReader
     private async Task < (bool , byte [ ]) > ReadValue (
         IGattCharacteristicWrapper characteristic )
     {
-        Guard.ArgumentNotNull ( characteristic ,
-                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull (
+                               characteristic ,
+                               nameof ( characteristic ) ) ;
 
-        IGattReadResultWrapper readValue = await characteristic.ReadValueAsync ( ) ;
+        var readValue = await characteristic.ReadValueAsync ( ) ;
 
         ProtocolError = readValue.ProtocolError ;
-        Status = readValue.Status ;
+        Status        = readValue.Status ;
 
         if ( GattCommunicationStatus.Success != Status )
-        {
             return ( false , ArrayEmpty ) ;
-        }
 
         if ( readValue.Value == null )
-        {
             return ( false , ArrayEmpty ) ;
-        }
 
-        return _reader.TryReadValue ( readValue.Value ,
-                                      out var bytes )
+        return _reader.TryReadValue (
+                                     readValue.Value ,
+                                     out var bytes )
                    ? ( true , bytes )
                    : ( false , ArrayEmpty ) ;
     }

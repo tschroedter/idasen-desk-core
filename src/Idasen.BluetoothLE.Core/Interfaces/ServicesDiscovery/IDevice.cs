@@ -1,12 +1,10 @@
-﻿
-
-// ReSharper disable UnusedMemberInSuper.Global
-
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     Represents a Bluetooth LE device.

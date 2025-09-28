@@ -1,67 +1,67 @@
-namespace Idasen.BluetoothLE.Linak ;
-
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Core.Interfaces.ServicesDiscovery ;
-using Interfaces ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskConnector
     : IDeskConnector
 {
-    private readonly IDeskCommandExecutorFactory _commandExecutorFactory ;
-    private readonly IDeskCharacteristics _deskCharacteristics ;
-    private readonly IDeskLockerFactory _deskLockerFactory ;
-    private readonly IDevice _device ;
+    private readonly IDeskCommandExecutorFactory       _commandExecutorFactory ;
+    private readonly IDeskCharacteristics              _deskCharacteristics ;
+    private readonly IDeskLockerFactory                _deskLockerFactory ;
+    private readonly IDevice                           _device ;
     private readonly ISubject < IEnumerable < byte > > _deviceNameChanged ;
-    private readonly IErrorManager _errorManager ;
-    private readonly Subject < uint > _finishedSubject = new ( ) ;
-    private readonly IDeskHeightAndSpeedFactory _heightAndSpeedFactory ;
-    private readonly ILogger _logger ;
-    private readonly IDeskMoverFactory _moverFactory ;
-    private readonly IDisposable? _refreshedSubscription ;
-    private readonly IScheduler _scheduler ;
-    private readonly ISubject < uint > _subjectHeight ;
-    private readonly ISubject < HeightSpeedDetails > _subjectHeightAndSpeed ;
-    private readonly ISubject < bool > _subjectRefreshed ;
-    private readonly ISubject < int > _subjectSpeed ;
-    private IDeskLocker? _deskLocker ;
+    private readonly IErrorManager                     _errorManager ;
+    private readonly Subject < uint >                  _finishedSubject = new ( ) ;
+    private readonly IDeskHeightAndSpeedFactory        _heightAndSpeedFactory ;
+    private readonly ILogger                           _logger ;
+    private readonly IDeskMoverFactory                 _moverFactory ;
+    private readonly IDisposable ?                     _refreshedSubscription ;
+    private readonly IScheduler                        _scheduler ;
+    private readonly ISubject < uint >                 _subjectHeight ;
+    private readonly ISubject < HeightSpeedDetails >   _subjectHeightAndSpeed ;
+    private readonly ISubject < bool >                 _subjectRefreshed ;
+    private readonly ISubject < int >                  _subjectSpeed ;
+    private          IDeskLocker ?                     _deskLocker ;
 
     // todo use list of IDisposables
-    private IDeskMover? _deskMover ;
-    private IDisposable? _disposableHeight ;
-    private IDisposable? _disposableHeightAndSpeed ;
-    private IDisposable? _disposableSpeed ;
-    private IDeskCommandExecutor? _executor ;
+    private IDeskMover ?           _deskMover ;
+    private IDisposable ?          _disposableHeight ;
+    private IDisposable ?          _disposableHeightAndSpeed ;
+    private IDisposable ?          _disposableSpeed ;
+    private IDeskCommandExecutor ? _executor ;
 
-    private IDisposable? _finishedSubscription ;
-    private IDeskHeightAndSpeed? _heightAndSpeed ;
-    private IDisposable? _subscriber ;
+    private IDisposable ?         _finishedSubscription ;
+    private IDeskHeightAndSpeed ? _heightAndSpeed ;
+    private IDisposable ?         _subscriber ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskConnector" /> class.
     /// </summary>
     public DeskConnector (
-        ILogger logger ,
-        IScheduler scheduler ,
+        ILogger                                    logger ,
+        IScheduler                                 scheduler ,
         Func < ISubject < IEnumerable < byte > > > subjectFactory ,
-        ISubject < uint > subjectHeight ,
-        ISubject < int > subjectSpeed ,
-        ISubject < bool > subjectRefreshed ,
-        ISubject < HeightSpeedDetails > subjectHeightAndSpeed ,
-        IDevice device ,
-        IDeskCharacteristics deskCharacteristics ,
-        IDeskHeightAndSpeedFactory heightAndSpeedFactory ,
-        IDeskCommandExecutorFactory commandExecutorFactory ,
-        IDeskMoverFactory moverFactory ,
-        IDeskLockerFactory deskLockerFactory ,
-        IErrorManager errorManager )
+        ISubject < uint >                          subjectHeight ,
+        ISubject < int >                           subjectSpeed ,
+        ISubject < bool >                          subjectRefreshed ,
+        ISubject < HeightSpeedDetails >            subjectHeightAndSpeed ,
+        IDevice                                    device ,
+        IDeskCharacteristics                       deskCharacteristics ,
+        IDeskHeightAndSpeedFactory                 heightAndSpeedFactory ,
+        IDeskCommandExecutorFactory                commandExecutorFactory ,
+        IDeskMoverFactory                          moverFactory ,
+        IDeskLockerFactory                         deskLockerFactory ,
+        IErrorManager                              errorManager )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
@@ -78,26 +78,28 @@ public class DeskConnector
         ArgumentNullException.ThrowIfNull ( deskLockerFactory ) ;
         ArgumentNullException.ThrowIfNull ( errorManager ) ;
 
-        _logger = logger ;
-        _scheduler = scheduler ;
-        _subjectHeight = subjectHeight ;
-        _subjectSpeed = subjectSpeed ;
-        _subjectRefreshed = subjectRefreshed ;
-        _subjectHeightAndSpeed = subjectHeightAndSpeed ;
-        _device = device ;
-        _deskCharacteristics = deskCharacteristics ;
-        _heightAndSpeedFactory = heightAndSpeedFactory ;
+        _logger                 = logger ;
+        _scheduler              = scheduler ;
+        _subjectHeight          = subjectHeight ;
+        _subjectSpeed           = subjectSpeed ;
+        _subjectRefreshed       = subjectRefreshed ;
+        _subjectHeightAndSpeed  = subjectHeightAndSpeed ;
+        _device                 = device ;
+        _deskCharacteristics    = deskCharacteristics ;
+        _heightAndSpeedFactory  = heightAndSpeedFactory ;
         _commandExecutorFactory = commandExecutorFactory ;
-        _moverFactory = moverFactory ;
-        _deskLockerFactory = deskLockerFactory ;
-        _errorManager = errorManager ;
+        _moverFactory           = moverFactory ;
+        _deskLockerFactory      = deskLockerFactory ;
+        _errorManager           = errorManager ;
 
         _refreshedSubscription = _device.GattServicesRefreshed
                                         .Throttle ( TimeSpan.FromSeconds ( 1 ) )
                                         .SubscribeOn ( scheduler )
-                                        .SubscribeAsync ( OnGattServicesRefreshed ,
-                                                          ex => _logger.Error ( ex ,
-                                                                                "Error handling GattServicesRefreshed" ) ) ;
+                                        .SubscribeAsync (
+                                                         OnGattServicesRefreshed ,
+                                                         ex => _logger.Error (
+                                                                              ex ,
+                                                                              "Error handling GattServicesRefreshed" ) ) ;
 
         _deviceNameChanged = subjectFactory ( ) ;
     }
@@ -151,10 +153,8 @@ public class DeskConnector
     /// <inheritdoc />
     public async Task < bool > MoveUpAsync ( ) // todo this should be async
     {
-        if ( ! TryGetDeskMover ( out IDeskMover? deskMover ) )
-        {
+        if ( ! TryGetDeskMover ( out var deskMover ) )
             return false ;
-        }
 
         return await deskMover!.Up ( ).ConfigureAwait ( false ) ;
     }
@@ -162,10 +162,8 @@ public class DeskConnector
     /// <inheritdoc />
     public async Task < bool > MoveDownAsync ( ) // todo check test for async
     {
-        if ( ! TryGetDeskMover ( out IDeskMover? deskMover ) )
-        {
+        if ( ! TryGetDeskMover ( out var deskMover ) )
             return false ;
-        }
 
         return await deskMover!.Down ( ).ConfigureAwait ( false ) ;
     }
@@ -176,17 +174,15 @@ public class DeskConnector
     /// <inheritdoc />
     public void MoveTo ( uint targetHeight )
     {
-        if ( ! TryGetDeskMover ( out IDeskMover? deskMover ) )
-        {
+        if ( ! TryGetDeskMover ( out var deskMover ) )
             return ;
-        }
 
         deskMover!.TargetHeight = targetHeight ;
 
-        if ( targetHeight == 0u )
-        {
-            throw new ArgumentException ( "TargetHeight can't be zero" ,
-                                          nameof ( targetHeight ) ) ;
+        if ( targetHeight == 0u ) {
+            throw new ArgumentException (
+                                         "TargetHeight can't be zero" ,
+                                         nameof ( targetHeight ) ) ;
         }
 
         deskMover.Start ( ) ;
@@ -195,10 +191,8 @@ public class DeskConnector
     /// <inheritdoc />
     public async Task < bool > MoveStopAsync ( ) // todo check test for async
     {
-        if ( ! TryGetDeskMover ( out IDeskMover? deskMover ) )
-        {
+        if ( ! TryGetDeskMover ( out var deskMover ) )
             return false ;
-        }
 
         return await deskMover!.Stop ( ).ConfigureAwait ( false ) ;
     }
@@ -206,10 +200,8 @@ public class DeskConnector
     /// <inheritdoc />
     public Task < bool > MoveLockAsync ( ) // todo check test for async
     {
-        if ( ! TryGetDeskLocker ( out IDeskLocker? deskLocker ) )
-        {
+        if ( ! TryGetDeskLocker ( out var deskLocker ) )
             return Task.FromResult ( false ) ;
-        }
 
         deskLocker!.Lock ( ) ;
 
@@ -219,20 +211,17 @@ public class DeskConnector
     /// <inheritdoc />
     public Task < bool > MoveUnlockAsync ( ) // todo check test for async
     {
-        if ( ! TryGetDeskLocker ( out IDeskLocker? deskLocker ) )
-        {
+        if ( ! TryGetDeskLocker ( out var deskLocker ) )
             return Task.FromResult ( false ) ;
-        }
 
         deskLocker!.Unlock ( ) ;
 
         return Task.FromResult ( true ) ;
     }
 
-    private bool TryGetDeskMover ( out IDeskMover? deskMover )
+    private bool TryGetDeskMover ( out IDeskMover ? deskMover )
     {
-        if ( _deskMover == null )
-        {
+        if ( _deskMover == null ) {
             _logger.Error ( "Desk needs to be refreshed first" ) ;
 
             deskMover = null ;
@@ -245,10 +234,9 @@ public class DeskConnector
         return true ;
     }
 
-    private bool TryGetDeskLocker ( out IDeskLocker? deskLocker )
+    private bool TryGetDeskLocker ( out IDeskLocker ? deskLocker )
     {
-        if ( _deskLocker == null )
-        {
+        if ( _deskLocker == null ) {
             _logger.Error ( "Desk needs to be refreshed first" ) ;
 
             deskLocker = null ;
@@ -263,23 +251,18 @@ public class DeskConnector
 
     private async Task OnGattServicesRefreshed ( GattCommunicationStatus status )
     {
-        try
-        {
+        try {
             if ( status != GattCommunicationStatus.Success )
-            {
                 _subjectRefreshed.OnNext ( false ) ;
-            }
             else
-            {
                 await DoRefresh ( status ).ConfigureAwait ( false ) ;
-            }
         }
-        catch ( Exception e )
-        {
+        catch ( Exception e ) {
             const string message = "Failed to refresh Gatt services" ;
 
-            _logger.Error ( e ,
-                            message ) ;
+            _logger.Error (
+                           e ,
+                           message ) ;
 
             _errorManager.PublishForMessage ( message ) ;
 
@@ -289,11 +272,12 @@ public class DeskConnector
 
     private async Task DoRefresh ( GattCommunicationStatus status )
     {
-        _logger.Information ( "[{Id}] ConnectionStatus={ConnectionStatus} GattCommunicationStatus={Status} DeviceGattStatus={DeviceGattStatus}" ,
-                              _device.Id ,
-                              _device.ConnectionStatus ,
-                              status ,
-                              _device.GattCommunicationStatus ) ;
+        _logger.Information (
+                             "[{Id}] ConnectionStatus={ConnectionStatus} GattCommunicationStatus={Status} DeviceGattStatus={DeviceGattStatus}" ,
+                             _device.Id ,
+                             _device.ConnectionStatus ,
+                             status ,
+                             _device.GattCommunicationStatus ) ;
 
         _deskCharacteristics.Initialize ( _device ) ;
 
@@ -302,9 +286,11 @@ public class DeskConnector
         _subscriber = _deskCharacteristics.GenericAccess
                                           .DeviceNameChanged
                                           .SubscribeOn ( _scheduler )
-                                          .Subscribe ( OnDeviceNameChanged ,
-                                                       ex => _logger.Error ( ex ,
-                                                                             "Error handling DeviceNameChanged" ) ) ;
+                                          .Subscribe (
+                                                      OnDeviceNameChanged ,
+                                                      ex => _logger.Error (
+                                                                           ex ,
+                                                                           "Error handling DeviceNameChanged" ) ) ;
 
         await _deskCharacteristics.Refresh ( ).ConfigureAwait ( false ) ;
 
@@ -324,8 +310,9 @@ public class DeskConnector
                                                                    .OnNext ( details ) ) ;
 
         _executor = _commandExecutorFactory.Create ( _deskCharacteristics.Control ) ;
-        _deskMover = _moverFactory.Create ( _executor ,
-                                            _heightAndSpeed ) ??
+        _deskMover = _moverFactory.Create (
+                                           _executor ,
+                                           _heightAndSpeed ) ??
                      throw new ArgumentException ( "Failed to create desk mover instance" ) ;
 
         _deskMover.Initialize ( ) ;
@@ -335,9 +322,10 @@ public class DeskConnector
                                           .SubscribeOn ( _scheduler )
                                           .Subscribe ( value => _finishedSubject.OnNext ( value ) ) ;
 
-        _deskLocker = _deskLockerFactory.Create ( _deskMover ,
-                                                  _executor ,
-                                                  _heightAndSpeed ) ;
+        _deskLocker = _deskLockerFactory.Create (
+                                                 _deskMover ,
+                                                 _executor ,
+                                                 _heightAndSpeed ) ;
 
         _deskLocker.Initialize ( ) ;
 

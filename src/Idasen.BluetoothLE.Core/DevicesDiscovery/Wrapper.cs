@@ -1,15 +1,14 @@
-﻿using AdvertisementWatcher = Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher ;
+﻿using System.Reactive.Concurrency ;
+using System.Reactive.Subjects ;
+using Windows.Devices.Bluetooth.Advertisement ;
+using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using AdvertisementWatcher = Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher ;
 using ExcludeFromCodeCoverage = System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
-
-using System.Reactive.Concurrency ;
-using System.Reactive.Subjects ;
-using Windows.Devices.Bluetooth.Advertisement ;
-using Aop.Aspects ;
-using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
-using Interfaces.DevicesDiscovery ;
 
 // ReSharper disable once InconsistentNaming
 [ ExcludeFromCodeCoverage ]
@@ -18,42 +17,48 @@ public sealed class Wrapper
     : IWrapper
 {
     private readonly Func < DateTimeOffset , IDateTimeOffset > _dateTimeFactory ;
-    private readonly IDeviceFactory _deviceFactory ;
-    private readonly ISubject < IDevice > _received ;
-    private readonly IStatusMapper _statusMapper ;
-    private readonly ISubject < DateTime > _stopped ;
-    private readonly AdvertisementWatcher _watcher ;
+    private readonly IDeviceFactory                            _deviceFactory ;
+    private readonly ISubject < IDevice >                      _received ;
+    private readonly IStatusMapper                             _statusMapper ;
+    private readonly ISubject < DateTime >                     _stopped ;
+    private readonly AdvertisementWatcher                      _watcher ;
 
-    public Wrapper ( IScheduler scheduler ,
-                     IDeviceFactory deviceFactory ,
-                     Func < DateTimeOffset , IDateTimeOffset > dateTimeFactory ,
-                     ISubject < IDevice > received ,
-                     ISubject < DateTime > stopped ,
-                     IStatusMapper statusMapper )
+    public Wrapper (
+        IScheduler                                scheduler ,
+        IDeviceFactory                            deviceFactory ,
+        Func < DateTimeOffset , IDateTimeOffset > dateTimeFactory ,
+        ISubject < IDevice >                      received ,
+        ISubject < DateTime >                     stopped ,
+        IStatusMapper                             statusMapper )
     {
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( deviceFactory ,
-                                nameof ( deviceFactory ) ) ;
-        Guard.ArgumentNotNull ( dateTimeFactory ,
-                                nameof ( dateTimeFactory ) ) ;
-        Guard.ArgumentNotNull ( received ,
-                                nameof ( received ) ) ;
-        Guard.ArgumentNotNull ( stopped ,
-                                nameof ( stopped ) ) ;
-        Guard.ArgumentNotNull ( statusMapper ,
-                                nameof ( statusMapper ) ) ;
+        Guard.ArgumentNotNull (
+                               scheduler ,
+                               nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull (
+                               deviceFactory ,
+                               nameof ( deviceFactory ) ) ;
+        Guard.ArgumentNotNull (
+                               dateTimeFactory ,
+                               nameof ( dateTimeFactory ) ) ;
+        Guard.ArgumentNotNull (
+                               received ,
+                               nameof ( received ) ) ;
+        Guard.ArgumentNotNull (
+                               stopped ,
+                               nameof ( stopped ) ) ;
+        Guard.ArgumentNotNull (
+                               statusMapper ,
+                               nameof ( statusMapper ) ) ;
 
-        _deviceFactory = deviceFactory ;
+        _deviceFactory   = deviceFactory ;
         _dateTimeFactory = dateTimeFactory ;
-        _received = received ;
-        _stopped = stopped ;
-        _statusMapper = statusMapper ;
+        _received        = received ;
+        _stopped         = stopped ;
+        _statusMapper    = statusMapper ;
 
-        _watcher = new AdvertisementWatcher
-        {
-            ScanningMode = BluetoothLEScanningMode.Active
-        } ;
+        _watcher = new AdvertisementWatcher {
+                                                ScanningMode = BluetoothLEScanningMode.Active
+                                            } ;
     }
 
     /// <inheritdoc />
@@ -93,28 +98,31 @@ public sealed class Wrapper
         Unsubscribe ( ) ;
 
         _watcher.Received += OnReceivedHandler ;
-        _watcher.Stopped += OnStoppedHandler ;
+        _watcher.Stopped  += OnStoppedHandler ;
     }
 
     private void Unsubscribe ( )
     {
         _watcher.Received -= OnReceivedHandler ;
-        _watcher.Stopped -= OnStoppedHandler ;
+        _watcher.Stopped  -= OnStoppedHandler ;
     }
 
-    private void OnStoppedHandler ( AdvertisementWatcher sender ,
-                                    BluetoothLEAdvertisementWatcherStoppedEventArgs args ) =>
+    private void OnStoppedHandler (
+        AdvertisementWatcher                            sender ,
+        BluetoothLEAdvertisementWatcherStoppedEventArgs args ) =>
         _stopped.OnNext ( DateTime.Now ) ;
 
-    private void OnReceivedHandler ( BluetoothLEAdvertisementWatcher sender ,
-                                     BluetoothLEAdvertisementReceivedEventArgs args )
+    private void OnReceivedHandler (
+        BluetoothLEAdvertisementWatcher           sender ,
+        BluetoothLEAdvertisementReceivedEventArgs args )
     {
-        IDateTimeOffset dateTimeOffset = _dateTimeFactory.Invoke ( args.Timestamp ) ;
+        var dateTimeOffset = _dateTimeFactory.Invoke ( args.Timestamp ) ;
 
-        IDevice device = _deviceFactory.Create ( dateTimeOffset ,
-                                                 args.BluetoothAddress ,
-                                                 args.Advertisement.LocalName ,
-                                                 args.RawSignalStrengthInDBm ) ;
+        var device = _deviceFactory.Create (
+                                            dateTimeOffset ,
+                                            args.BluetoothAddress ,
+                                            args.Advertisement.LocalName ,
+                                            args.RawSignalStrengthInDBm ) ;
 
         _received.OnNext ( device ) ;
     }

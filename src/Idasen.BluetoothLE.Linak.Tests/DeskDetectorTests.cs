@@ -1,37 +1,37 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using System.Reactive.Subjects ;
-using Common.Tests ;
-using Core.Interfaces.DevicesDiscovery ;
+﻿using System.Reactive.Subjects ;
 using FluentAssertions ;
-using Interfaces ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using JetBrains.Annotations ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
 
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
 [ TestClass ]
 public class DeskDetectorTests : IDisposable
 {
-    private const string DeviceName = nameof ( DeviceName ) ;
-    private const uint DeviceAddress = 123 ;
-    private const uint DeviceTimeout = 456 ;
-    private IDesk _desk = null! ;
-    private ISubject < IDesk > _deskDetected = null! ;
-    private Subject < IDevice > _deskFound = null! ;
-    private IDesk _deskOther = null! ;
-    private IDevice _device = null! ;
-    private Subject < IDevice > _discovered = null! ;
-    private IDeskFactory _factory = null! ;
+    private const string              DeviceName    = nameof ( DeviceName ) ;
+    private const uint                DeviceAddress = 123 ;
+    private const uint                DeviceTimeout = 456 ;
+    private       IDesk               _desk         = null! ;
+    private       ISubject < IDesk >  _deskDetected = null! ;
+    private       Subject < IDevice > _deskFound    = null! ;
+    private       IDesk               _deskOther    = null! ;
+    private       IDevice             _device       = null! ;
+    private       Subject < IDevice > _discovered   = null! ;
+    private       IDeskFactory        _factory      = null! ;
 
-    private ILogger _logger = null! ;
+    private ILogger                  _logger  = null! ;
     private IDeviceMonitorWithExpiry _monitor = null! ;
 
     [ UsedImplicitly ]
     private Subject < IDevice > _nameChanged = null! ;
 
-    private TestScheduler _scheduler = null! ;
-    private Subject < IDevice > _updated = null! ;
+    private TestScheduler       _scheduler = null! ;
+    private Subject < IDevice > _updated   = null! ;
 
     public void Dispose ( )
     {
@@ -51,10 +51,10 @@ public class DeskDetectorTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger = Substitute.For < ILogger > ( ) ;
-        _scheduler = new TestScheduler ( ) ;
-        _monitor = Substitute.For < IDeviceMonitorWithExpiry > ( ) ;
-        _factory = Substitute.For < IDeskFactory > ( ) ;
+        _logger       = Substitute.For < ILogger > ( ) ;
+        _scheduler    = new TestScheduler ( ) ;
+        _monitor      = Substitute.For < IDeviceMonitorWithExpiry > ( ) ;
+        _factory      = Substitute.For < IDeskFactory > ( ) ;
         _deskDetected = new Subject < IDesk > ( ) ;
 
         _updated = new Subject < IDevice > ( ) ;
@@ -73,19 +73,21 @@ public class DeskDetectorTests : IDisposable
         _device.Name.Returns ( DeviceName ) ;
         _device.Address.Returns ( DeviceAddress ) ;
 
-        _desk = Substitute.For < IDesk > ( ) ;
+        _desk      = Substitute.For < IDesk > ( ) ;
         _deskOther = Substitute.For < IDesk > ( ) ;
         _factory.CreateAsync ( _device.Address )
-                .Returns ( _desk ,
-                           _deskOther ) ;
+                .Returns (
+                          _desk ,
+                          _deskOther ) ;
     }
 
     [ TestMethod ]
     public void Initialize_ForDeviceNameIsNull_Throws ( )
     {
-        Action action = ( ) => CreateSut ( ).Initialize ( null! ,
-                                                          DeviceAddress ,
-                                                          DeviceTimeout ) ;
+        Action action = ( ) => CreateSut ( ).Initialize (
+                                                         null! ,
+                                                         DeviceAddress ,
+                                                         DeviceTimeout ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -95,9 +97,10 @@ public class DeskDetectorTests : IDisposable
     [ TestMethod ]
     public void Initialize_Invoked_SetsTimeout ( )
     {
-        CreateSut ( ).Initialize ( DeviceName ,
-                                   DeviceAddress ,
-                                   DeviceTimeout ) ;
+        CreateSut ( ).Initialize (
+                                  DeviceName ,
+                                  DeviceAddress ,
+                                  DeviceTimeout ) ;
 
         _monitor.TimeOut
                 .Should ( )
@@ -107,9 +110,10 @@ public class DeskDetectorTests : IDisposable
     [ TestMethod ]
     public void Start_ConnectedToAnotherDesk_DisposesOldDesk ( )
     {
-        IDeskDetector sut = CreateSut ( ).Initialize ( DeviceName ,
-                                                       DeviceAddress ,
-                                                       DeviceTimeout ) ;
+        var sut = CreateSut ( ).Initialize (
+                                            DeviceName ,
+                                            DeviceAddress ,
+                                            DeviceTimeout ) ;
 
         // connect to desk
         sut.Start ( ) ;
@@ -128,7 +132,7 @@ public class DeskDetectorTests : IDisposable
     [ TestMethod ]
     public void Dispose_Invoked_DisposesMonitor ( )
     {
-        DeskDetector sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.Dispose ( ) ;
 
@@ -141,10 +145,11 @@ public class DeskDetectorTests : IDisposable
 
     private DeskDetector CreateSut ( )
     {
-        return new DeskDetector ( _logger ,
-                                  _scheduler ,
-                                  _monitor ,
-                                  _factory ,
-                                  _deskDetected ) ;
+        return new DeskDetector (
+                                 _logger ,
+                                 _scheduler ,
+                                 _monitor ,
+                                 _factory ,
+                                 _deskDetected ) ;
     }
 }

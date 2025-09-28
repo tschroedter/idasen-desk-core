@@ -1,11 +1,9 @@
-﻿
-
-// ReSharper disable UnusedMemberInSuper.Global
-
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
 using System.Reactive.Subjects ;
-using Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 /// <summary>
 ///     More details can be found here: https://www.bluetooth.com/
@@ -18,22 +16,22 @@ public interface IGenericAccess
     /// <summary>
     ///     Raw Central Address Resolution
     /// </summary>
-    public IEnumerable < byte > RawResolution { get ; }
+    IEnumerable < byte > RawResolution { get ; }
 
     /// <summary>
     ///     Raw Peripheral Preferred Connection Parameters
     /// </summary>
-    public IEnumerable < byte > RawParameters { get ; }
+    IEnumerable < byte > RawParameters { get ; }
 
     /// <summary>
     ///     Raw Appearance
     /// </summary>
-    public IEnumerable < byte > RawAppearance { get ; }
+    IEnumerable < byte > RawAppearance { get ; }
 
     /// <summary>
     ///     Raw Device Name
     /// </summary>
-    public IEnumerable < byte > RawDeviceName { get ; }
+    IEnumerable < byte > RawDeviceName { get ; }
 
     /// <summary>
     ///     Raised when the Appearance changes.

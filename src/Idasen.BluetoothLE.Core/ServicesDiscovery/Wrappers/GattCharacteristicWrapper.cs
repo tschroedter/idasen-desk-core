@@ -1,12 +1,12 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -16,42 +16,48 @@ public class GattCharacteristicWrapper
 {
     public delegate IGattCharacteristicWrapper Factory ( GattCharacteristic characteristic ) ;
 
-    private readonly GattCharacteristic _characteristic ;
-    private readonly ILogger _logger ;
+    private readonly GattCharacteristic                         _characteristic ;
+    private readonly ILogger                                    _logger ;
     private readonly IGattCharacteristicValueChangedObservables _observables ;
-    private readonly IGattReadResultWrapperFactory _readResultFactory ;
-    private readonly IGattWriteResultWrapperFactory _writeResultFactory ;
+    private readonly IGattReadResultWrapperFactory              _readResultFactory ;
+    private readonly IGattWriteResultWrapperFactory             _writeResultFactory ;
 
     public GattCharacteristicWrapper (
-        ILogger logger ,
-        GattCharacteristic characteristic ,
+        ILogger                                    logger ,
+        GattCharacteristic                         characteristic ,
         IGattCharacteristicValueChangedObservables observables ,
-        IGattWriteResultWrapperFactory writeResultFactory ,
-        IGattReadResultWrapperFactory readResultFactory )
+        IGattWriteResultWrapperFactory             writeResultFactory ,
+        IGattReadResultWrapperFactory              readResultFactory )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( characteristic ,
-                                nameof ( characteristic ) ) ;
-        Guard.ArgumentNotNull ( observables ,
-                                nameof ( observables ) ) ;
-        Guard.ArgumentNotNull ( writeResultFactory ,
-                                nameof ( writeResultFactory ) ) ;
-        Guard.ArgumentNotNull ( readResultFactory ,
-                                nameof ( readResultFactory ) ) ;
+        Guard.ArgumentNotNull (
+                               logger ,
+                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull (
+                               characteristic ,
+                               nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull (
+                               observables ,
+                               nameof ( observables ) ) ;
+        Guard.ArgumentNotNull (
+                               writeResultFactory ,
+                               nameof ( writeResultFactory ) ) ;
+        Guard.ArgumentNotNull (
+                               readResultFactory ,
+                               nameof ( readResultFactory ) ) ;
 
-        _logger = logger ;
-        _characteristic = characteristic ;
-        _observables = observables ;
+        _logger             = logger ;
+        _characteristic     = characteristic ;
+        _observables        = observables ;
         _writeResultFactory = writeResultFactory ;
-        _readResultFactory = readResultFactory ;
+        _readResultFactory  = readResultFactory ;
     }
 
     /// <inheritdoc />
     public async Task < IGattCharacteristicWrapper > Initialize ( )
     {
-        _logger.Information ( "Initializing GattCharacteristic with UUID {Uuid}" ,
-                              _characteristic.Uuid ) ;
+        _logger.Information (
+                             "Initializing GattCharacteristic with UUID {Uuid}" ,
+                             _characteristic.Uuid ) ;
 
         await _observables.Initialise ( _characteristic ) ;
 
@@ -76,7 +82,7 @@ public class GattCharacteristicWrapper
     /// <inheritdoc />
     public async Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer )
     {
-        GattWriteResult? result = await _characteristic.WriteValueWithResultAsync ( buffer ) ;
+        var result = await _characteristic.WriteValueWithResultAsync ( buffer ) ;
 
         return _writeResultFactory.Create ( result ) ;
     }
@@ -87,9 +93,9 @@ public class GattCharacteristicWrapper
     /// <inheritdoc />
     public async Task < IGattReadResultWrapper > ReadValueAsync ( )
     {
-        GattReadResult? result = await _characteristic.ReadValueAsync ( ).AsTask ( ) ;
+        var result = await _characteristic.ReadValueAsync ( ).AsTask ( ) ;
 
-        IGattReadResultWrapper wrapper = _readResultFactory.Create ( result ) ;
+        var wrapper = _readResultFactory.Create ( result ) ;
 
         return wrapper ;
     }

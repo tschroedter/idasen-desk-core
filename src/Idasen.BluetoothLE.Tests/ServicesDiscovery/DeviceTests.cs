@@ -1,11 +1,11 @@
-﻿namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
-
-using Windows.Devices.Bluetooth ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Core.ServicesDiscovery ;
+﻿using Windows.Devices.Bluetooth ;
 using FluentAssertions ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class DeviceTests
@@ -14,7 +14,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void GattCommunicationStatus_ForInvoked_Instance (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         sut.GattCommunicationStatus
@@ -24,7 +24,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void Connect_ForConnected_DoesNotCallConnect (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         wrapper.ConnectionStatus
@@ -38,7 +38,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void Connect_ForDisconnected_DoesCallConnect (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         wrapper.ConnectionStatus
@@ -52,7 +52,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void Name_ForInvoked_Instance (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         sut.Name
@@ -62,7 +62,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void Id_ForInvoked_Instance (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         sut.Id
@@ -72,7 +72,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void IsPaired_ForInvoked_Instance (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         sut.IsPaired
@@ -82,7 +82,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void ConnectionStatus_ForInvoked_Instance (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         sut.ConnectionStatus
@@ -92,7 +92,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void GattServices_ForInvoked_Instance (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         sut.GattServices
@@ -102,7 +102,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void GattServicesRefreshed_ForInvoked_Instance (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         sut.GattServicesRefreshed
@@ -112,7 +112,7 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void Dispose_ForInvoked_DisposesWrapper (
-        Device sut ,
+        Device                               sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper wrapper )
     {
         sut.Dispose ( ) ;
@@ -123,9 +123,9 @@ public class DeviceTests
 
     [ AutoDataTestMethod ]
     public void Dispose_ForInvoked_DisposesSubscriber (
-        Lazy < Device > sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper wrapper ,
-        [ Freeze ] IDisposable subscriber ,
+        Lazy < Device >                           sut ,
+        [ Freeze ] IBluetoothLeDeviceWrapper      wrapper ,
+        [ Freeze ] IDisposable                    subscriber ,
         IObservable < BluetoothConnectionStatus > status )
     {
         status.Subscribe ( _ => { } )

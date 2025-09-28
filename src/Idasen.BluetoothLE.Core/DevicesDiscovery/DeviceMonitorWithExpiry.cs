@@ -1,13 +1,13 @@
-﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
-
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
-using Interfaces.DevicesDiscovery ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class DeviceMonitorWithExpiry
@@ -17,42 +17,48 @@ public class DeviceMonitorWithExpiry
 
     private readonly IDateTimeOffset _dateTimeOffset ;
 
-    private readonly ISubject < IDevice > _deviceExpired ;
-    private readonly IDeviceMonitor _deviceMonitor ;
+    private readonly ISubject < IDevice >    _deviceExpired ;
+    private readonly IDeviceMonitor          _deviceMonitor ;
     private readonly IObservableTimerFactory _factory ;
-    private readonly ILogger _logger ;
-    private readonly IScheduler _scheduler ;
-    private TimeSpan _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
+    private readonly ILogger                 _logger ;
+    private readonly IScheduler              _scheduler ;
+    private          TimeSpan                _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
 
-    private IDisposable? _timer ;
+    private IDisposable ? _timer ;
 
     public DeviceMonitorWithExpiry (
-        ILogger logger ,
-        IDateTimeOffset dateTimeOffset ,
-        IDeviceMonitor deviceMonitor ,
-        ISubject < IDevice > deviceExpired ,
+        ILogger                 logger ,
+        IDateTimeOffset         dateTimeOffset ,
+        IDeviceMonitor          deviceMonitor ,
+        ISubject < IDevice >    deviceExpired ,
         IObservableTimerFactory factory ,
-        IScheduler scheduler )
+        IScheduler              scheduler )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( dateTimeOffset ,
-                                nameof ( dateTimeOffset ) ) ;
-        Guard.ArgumentNotNull ( deviceMonitor ,
-                                nameof ( deviceMonitor ) ) ;
-        Guard.ArgumentNotNull ( deviceExpired ,
-                                nameof ( deviceExpired ) ) ;
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull (
+                               logger ,
+                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull (
+                               dateTimeOffset ,
+                               nameof ( dateTimeOffset ) ) ;
+        Guard.ArgumentNotNull (
+                               deviceMonitor ,
+                               nameof ( deviceMonitor ) ) ;
+        Guard.ArgumentNotNull (
+                               deviceExpired ,
+                               nameof ( deviceExpired ) ) ;
+        Guard.ArgumentNotNull (
+                               factory ,
+                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull (
+                               scheduler ,
+                               nameof ( scheduler ) ) ;
 
-        _logger = logger ;
+        _logger         = logger ;
         _dateTimeOffset = dateTimeOffset ;
-        _deviceMonitor = deviceMonitor ;
-        _deviceExpired = deviceExpired ;
-        _factory = factory ;
-        _scheduler = scheduler ;
+        _deviceMonitor  = deviceMonitor ;
+        _deviceExpired  = deviceExpired ;
+        _factory        = factory ;
+        _scheduler      = scheduler ;
 
         // Keep backward compatibility with existing tests: start timer immediately
         StartTimerIfNeeded ( ) ;
@@ -65,20 +71,17 @@ public class DeviceMonitorWithExpiry
         set
         {
             if ( value.TotalSeconds < 0 )
-            {
                 throw new ArgumentException ( "Value must be >= 0" ) ;
-            }
 
             _timeOut = value ;
 
-            _logger.Information ( "TimeOut = {Timeout}" ,
-                                  value ) ;
+            _logger.Information (
+                                 "TimeOut = {Timeout}" ,
+                                 value ) ;
 
             // restart timer if running to apply new timeout
             if ( _timer != null )
-            {
                 RestartTimer ( ) ;
-            }
         }
     }
 
@@ -135,14 +138,11 @@ public class DeviceMonitorWithExpiry
 
     private void CleanUp ( long l )
     {
-        foreach (IDevice device in DiscoveredDevices)
-        {
+        foreach ( var device in DiscoveredDevices ) {
             var delta = _dateTimeOffset.Now.Ticks - device.BroadcastTime.Ticks ;
 
             if ( ! ( delta >= TimeOut.Ticks ) )
-            {
                 continue ;
-            }
 
             RemoveDevice ( device ) ;
 
@@ -153,16 +153,16 @@ public class DeviceMonitorWithExpiry
     private void StartTimerIfNeeded ( )
     {
         if ( _timer != null )
-        {
             return ;
-        }
 
-        _timer = _factory.Create ( TimeOut ,
-                                   _scheduler )
+        _timer = _factory.Create (
+                                  TimeOut ,
+                                  _scheduler )
                          .SubscribeOn ( _scheduler )
-                         .Subscribe ( CleanUp ,
-                                      OnError ,
-                                      OnCompleted ) ;
+                         .Subscribe (
+                                     CleanUp ,
+                                     OnError ,
+                                     OnCompleted ) ;
     }
 
     private void StopTimer ( )

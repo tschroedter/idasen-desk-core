@@ -1,9 +1,9 @@
-﻿namespace Idasen.BluetoothLE.Tests ;
-
-using System.Reactive.Concurrency ;
-using Core ;
+﻿using System.Reactive.Concurrency ;
 using FluentAssertions ;
+using Idasen.BluetoothLE.Core ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Tests ;
 
 [ AutoDataTestClass ]
 public class ObservableTimerFactoryTests
@@ -11,10 +11,11 @@ public class ObservableTimerFactoryTests
     [ AutoDataTestMethod ]
     public void Create_ForInvoked_ReturnsInstance (
         ObservableTimerFactory sut ,
-        IScheduler scheduler )
+        IScheduler             scheduler )
     {
-        sut.Create ( TimeSpan.FromSeconds ( 10 ) ,
-                     scheduler )
+        sut.Create (
+                    TimeSpan.FromSeconds ( 10 ) ,
+                    scheduler )
            .Should ( )
            .NotBeNull ( ) ;
     }

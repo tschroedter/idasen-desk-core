@@ -1,10 +1,10 @@
-﻿namespace Idasen.BluetoothLE.Linak.Control ;
-
-using System.Text.Json ;
-using Aop.Aspects ;
+﻿using System.Text.Json ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -49,19 +49,17 @@ public class HasReachedTargetHeightCalculator
     {
         // Compute absolute difference without casts/Math.Abs (unsigned arithmetic)
         Delta = TargetHeight >= StoppingHeight
-                    ? TargetHeight - StoppingHeight
+                    ? TargetHeight   - StoppingHeight
                     : StoppingHeight - TargetHeight ;
 
-        if ( StartMovingIntoDirection != MoveIntoDirection )
-        {
+        if ( StartMovingIntoDirection != MoveIntoDirection ) {
             // StoppingHeight must be 'behind' TargetHeight when direction changed
             HasReachedTargetHeight = true ;
 
             return this ;
         }
 
-        if ( IsPastTargetHeight ( ) )
-        {
+        if ( IsPastTargetHeight ( ) ) {
             HasReachedTargetHeight = true ;
 
             return this ;
@@ -69,11 +67,10 @@ public class HasReachedTargetHeightCalculator
 
         var isCloseToTargetHeight = Delta <= Math.Abs ( MovementUntilStop ) ;
 
-        HasReachedTargetHeight = MoveIntoDirection switch
-                                 {
-                                     Direction.Up => isCloseToTargetHeight || StoppingHeight >= TargetHeight ,
+        HasReachedTargetHeight = MoveIntoDirection switch {
+                                     Direction.Up   => isCloseToTargetHeight || StoppingHeight >= TargetHeight ,
                                      Direction.Down => isCloseToTargetHeight || StoppingHeight <= TargetHeight ,
-                                     _ => true
+                                     _              => true
                                  } ;
 
         _logger.Debug (
@@ -91,18 +88,18 @@ public class HasReachedTargetHeightCalculator
 
     private bool IsPastTargetHeight ( )
     {
-        switch (MoveIntoDirection)
-        {
-            case Direction.Up:
+        switch ( MoveIntoDirection ) {
+            case Direction.Up :
                 return StoppingHeight >= TargetHeight ;
-            case Direction.Down:
+            case Direction.Down :
                 return StoppingHeight <= TargetHeight ;
-            case Direction.None:
+            case Direction.None :
                 return true ;
-            default:
-                throw new ArgumentOutOfRangeException ( nameof ( MoveIntoDirection ) ,
-                                                        MoveIntoDirection ,
-                                                        "Unknown direction" ) ;
+            default :
+                throw new ArgumentOutOfRangeException (
+                                                       nameof ( MoveIntoDirection ) ,
+                                                       MoveIntoDirection ,
+                                                       "Unknown direction" ) ;
         }
     }
 

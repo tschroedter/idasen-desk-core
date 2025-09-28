@@ -1,21 +1,21 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using System.Reactive.Subjects ;
-using Interfaces ;
-using Linak.Control ;
+﻿using System.Reactive.Subjects ;
+using Idasen.BluetoothLE.Linak.Control ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
 
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
 [ TestClass ]
 public class DeskLockerTests : IDisposable
 {
-    private IDeskMover _deskMover = null! ;
-    private HeightSpeedDetails _details = null! ;
-    private IDeskCommandExecutor _executor = null! ;
-    private IDeskHeightAndSpeed _heightAndSpeed = null! ;
-    private ILogger _logger = null! ;
-    private TestScheduler _scheduler = null! ;
+    private IDeskMover                     _deskMover             = null! ;
+    private HeightSpeedDetails             _details               = null! ;
+    private IDeskCommandExecutor           _executor              = null! ;
+    private IDeskHeightAndSpeed            _heightAndSpeed        = null! ;
+    private ILogger                        _logger                = null! ;
+    private TestScheduler                  _scheduler             = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
 
     public void Dispose ( )
@@ -28,10 +28,10 @@ public class DeskLockerTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger = Substitute.For < ILogger > ( ) ;
-        _scheduler = new TestScheduler ( ) ;
-        _deskMover = Substitute.For < IDeskMover > ( ) ;
-        _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
+        _logger         = Substitute.For < ILogger > ( ) ;
+        _scheduler      = new TestScheduler ( ) ;
+        _deskMover      = Substitute.For < IDeskMover > ( ) ;
+        _executor       = Substitute.For < IDeskCommandExecutor > ( ) ;
         _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
 
         _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
@@ -39,9 +39,10 @@ public class DeskLockerTests : IDisposable
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( _subjectHeightAndSpeed ) ;
 
-        _details = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                            123u ,
-                                            321 ) ;
+        _details = new HeightSpeedDetails (
+                                           DateTimeOffset.Now ,
+                                           123u ,
+                                           321 ) ;
     }
 
     [ TestMethod ]
@@ -50,7 +51,7 @@ public class DeskLockerTests : IDisposable
         _deskMover.IsAllowedToMove
                   .Returns ( true ) ;
 
-        IDeskLocker sut = CreateSutInitialized ( ) ;
+        var sut = CreateSutInitialized ( ) ;
 
         sut.Lock ( ) ;
 
@@ -112,11 +113,12 @@ public class DeskLockerTests : IDisposable
 
     private DeskLocker CreateSut ( )
     {
-        return new DeskLocker ( _logger ,
-                                _scheduler ,
-                                _deskMover ,
-                                _executor ,
-                                _heightAndSpeed ) ;
+        return new DeskLocker (
+                               _logger ,
+                               _scheduler ,
+                               _deskMover ,
+                               _executor ,
+                               _heightAndSpeed ) ;
     }
 
     private IDeskLocker CreateSutInitialized ( ) => CreateSut ( ).Initialize ( ) ;

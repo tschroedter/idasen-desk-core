@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+﻿using Windows.Storage.Streams ;
 
-using Windows.Storage.Streams ;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 
 /// <summary>
 ///     Reads raw byte arrays from Windows runtime <see cref="IBuffer" /> instances.
@@ -14,6 +14,6 @@ public interface IBufferReader
     /// <param name="bytes">When this method returns, contains the copied bytes if successful; otherwise an empty array.</param>
     /// <returns><c>true</c> if bytes were read; otherwise, <c>false</c>.</returns>
     bool TryReadValue (
-        IBuffer buffer ,
+        IBuffer      buffer ,
         out byte [ ] bytes ) ;
 }

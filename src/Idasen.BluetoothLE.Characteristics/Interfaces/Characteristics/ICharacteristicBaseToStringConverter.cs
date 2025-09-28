@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿using Idasen.BluetoothLE.Characteristics.Characteristics ;
 
-using BluetoothLE.Characteristics.Characteristics ;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 /// <summary>
 ///     Converts a <see cref="CharacteristicBase" /> instance to a string

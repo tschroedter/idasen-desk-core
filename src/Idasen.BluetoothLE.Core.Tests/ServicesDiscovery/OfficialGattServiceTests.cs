@@ -1,15 +1,15 @@
-﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
-using Core.ServicesDiscovery ;
-using FluentAssertions ;
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
 [ TestClass ]
 public class OfficialGattServiceTests
 {
-    public const string Name = nameof ( Name ) ;
+    public const string Name                  = nameof ( Name ) ;
     public const string UniformTypeIdentifier = nameof ( UniformTypeIdentifier ) ;
-    public const ushort AssignedNumber = 1 ;
-    public const string ProfileSpecification = nameof ( ProfileSpecification ) ;
+    public const ushort AssignedNumber        = 1 ;
+    public const string ProfileSpecification  = nameof ( ProfileSpecification ) ;
 
     [ TestMethod ]
     public void Constructor_ForInvoke_SetsName ( )
@@ -45,12 +45,11 @@ public class OfficialGattServiceTests
 
     private static OfficialGattService CreateSut ( )
     {
-        return new OfficialGattService
-        {
-            Name = Name ,
-            UniformTypeIdentifier = UniformTypeIdentifier ,
-            AssignedNumber = AssignedNumber ,
-            ProfileSpecification = ProfileSpecification
-        } ;
+        return new OfficialGattService {
+                                           Name                  = Name ,
+                                           UniformTypeIdentifier = UniformTypeIdentifier ,
+                                           AssignedNumber        = AssignedNumber ,
+                                           ProfileSpecification  = ProfileSpecification
+                                       } ;
     }
 }

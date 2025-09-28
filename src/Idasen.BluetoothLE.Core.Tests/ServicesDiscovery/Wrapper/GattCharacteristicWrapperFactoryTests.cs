@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
-
-using Core.ServicesDiscovery.Wrappers ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 
 [ AutoDataTestClass ]
 public class GattCharacteristicWrapperFactoryTests

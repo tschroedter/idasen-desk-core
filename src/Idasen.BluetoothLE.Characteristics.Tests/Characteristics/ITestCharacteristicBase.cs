@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
-using Core.Interfaces.ServicesDiscovery ;
-using Interfaces.Characteristics ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 public interface ITestCharacteristicBase
     : ICharacteristicBase

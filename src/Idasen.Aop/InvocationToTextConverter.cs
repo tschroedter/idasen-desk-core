@@ -1,11 +1,11 @@
-namespace Idasen.Aop ;
-
 using System.Collections ;
 using System.Reflection ;
 using System.Text ;
 using Castle.DynamicProxy ;
-using Interfaces ;
+using Idasen.Aop.Interfaces ;
 using JetBrains.Annotations ;
+
+namespace Idasen.Aop ;
 
 /// <summary>
 ///     Default implementation of <see cref="IInvocationToTextConverter" /> that renders
@@ -23,9 +23,9 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
         ArgumentNullException.ThrowIfNull ( invocation ) ;
 
         // Prefer the declaring type to avoid Castle proxy type names (e.g., SampleProxy)
-        Type? type = invocation.Method.DeclaringType ??
-                     invocation.TargetType ??
-                     invocation.Proxy?.GetType ( ).BaseType ;
+        var type = invocation.Method.DeclaringType ??
+                   invocation.TargetType ??
+                   invocation.Proxy?.GetType ( ).BaseType ;
 
         var typeName = type?.FullName ?? "UnknownType" ;
 
@@ -44,21 +44,16 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
     internal static string ConvertArgumentsToString ( object [ ] arguments )
     {
         if ( arguments.Length == 0 )
-        {
             return string.Empty ;
-        }
 
         var builder = new StringBuilder ( ) ;
 
-        for (var i = 0; i < arguments.Length; i++)
-        {
+        for ( var i = 0 ; i < arguments.Length ; i ++ ) {
             _ = builder.Append ( $"arg{i}=" ) ;
-            _ = builder.Append ( ToValueString ( arguments[i] ) ) ;
+            _ = builder.Append ( ToValueString ( arguments [ i ] ) ) ;
 
             if ( i < arguments.Length - 1 )
-            {
                 _ = builder.Append ( ',' ) ;
-            }
         }
 
         return builder.ToString ( ) ;
@@ -73,128 +68,102 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
         var args = invocation.Arguments ;
 
         if ( args.Length == 0 )
-        {
             return string.Empty ;
-        }
 
-        ParameterInfo [ ] parameters = invocation.Method.GetParameters ( ) ;
-        var builder = new StringBuilder ( ) ;
+        var parameters = invocation.Method.GetParameters ( ) ;
+        var builder    = new StringBuilder ( ) ;
 
-        for (var i = 0; i < args.Length; i++)
-        {
+        for ( var i = 0 ; i < args.Length ; i ++ ) {
             var name = i < parameters.Length
-                           ? parameters[i].Name
+                           ? parameters [ i ].Name
                            : $"arg{i}" ;
-            ParameterInfo? p = i < parameters.Length
-                                   ? parameters[i]
-                                   : null ;
+            var p = i < parameters.Length
+                        ? parameters [ i ]
+                        : null ;
             var modifier = GetParamModifier ( p ) ;
 
             _ = builder.Append ( modifier ) ;
             _ = builder.Append ( name ) ;
             _ = builder.Append ( '=' ) ;
-            _ = builder.Append ( ToValueString ( args[i] ) ) ;
+            _ = builder.Append ( ToValueString ( args [ i ] ) ) ;
 
             if ( i < args.Length - 1 )
-            {
                 _ = builder.Append ( ',' ) ;
-            }
         }
 
         return builder.ToString ( ) ;
     }
 
-    private static string GetParamModifier ( ParameterInfo? p )
+    private static string GetParamModifier ( ParameterInfo ? p )
     {
         if ( p == null )
-        {
             return string.Empty ;
-        }
 
         if ( p.IsOut )
-        {
             return "out " ;
-        }
 
         // IsByRef is true for ref/out
         return p.ParameterType.IsByRef
                    ? "ref "
-                   : p.IsDefined ( typeof ( ParamArrayAttribute ) ,
-                                   false )
+                   : p.IsDefined (
+                                  typeof ( ParamArrayAttribute ) ,
+                                  false )
                        ? "params "
                        : string.Empty ;
     }
 
-    private static string ToValueString ( object? value )
+    private static string ToValueString ( object ? value )
     {
         if ( value is null )
-        {
             return "null" ;
-        }
 
         // Arrays -> length in brackets, e.g., [100]
         if ( value is Array array )
-        {
             return $"[{array.Length}]" ;
-        }
 
         // Non-generic IDictionary -> number of keys in brackets
         if ( value is IDictionary dict )
-        {
             return $"[{dict.Count}]" ;
-        }
 
         // Generic IDictionary<,> or IReadOnlyDictionary<,> -> use Count
         var genericDictCount = TryGetGenericDictionaryCount ( value ) ;
 
         if ( genericDictCount.HasValue )
-        {
             return $"[{genericDictCount.Value}]" ;
-        }
 
         // Other IEnumerable -> just say enumerable
         if ( value is IEnumerable and not string )
-        {
             return "enumerable" ;
-        }
 
         // Fallback: plain ToString
         return value.ToString ( ) ?? value.GetType ( ).Name ;
     }
 
-    private static int? TryGetGenericDictionaryCount ( object value )
+    private static int ? TryGetGenericDictionaryCount ( object value )
     {
-        Type t = value.GetType ( ) ;
+        var t = value.GetType ( ) ;
 
-        foreach (Type i in t.GetInterfaces ( ))
-        {
+        foreach ( var i in t.GetInterfaces ( ) ) {
             if ( ! i.IsGenericType )
-            {
                 continue ;
-            }
 
-            Type def = i.GetGenericTypeDefinition ( ) ;
+            var def = i.GetGenericTypeDefinition ( ) ;
 
             if ( def != typeof ( IDictionary < , > ) &&
                  def != typeof ( IReadOnlyDictionary < , > ) )
-            {
                 continue ;
-            }
 
             // Prefer the Count property on the interface, else try on the concrete type
-            PropertyInfo? prop = i.GetProperty ( "Count" ) ?? t.GetProperty ( "Count" ) ;
+            var prop = i.GetProperty ( "Count" ) ?? t.GetProperty ( "Count" ) ;
 
-            if ( prop == null || prop.PropertyType != typeof ( int ) )
-            {
+            if ( prop              == null ||
+                 prop.PropertyType != typeof ( int ) )
                 continue ;
-            }
 
             var v = prop.GetValue ( value ) ;
 
             if ( v is int c )
-            {
                 return c ;
-            }
         }
 
         return null ;

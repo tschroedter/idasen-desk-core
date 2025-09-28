@@ -1,8 +1,7 @@
-namespace Idasen.BluetoothLE.Core.Tests ;
-
 using System.Globalization ;
 using FluentAssertions ;
-using Interfaces ;
+
+namespace Idasen.BluetoothLE.Core.Tests ;
 
 [ TestClass ]
 public class DateTimeOffsetWrapperTests
@@ -12,7 +11,7 @@ public class DateTimeOffsetWrapperTests
     {
         var now = new DateTimeOffsetWrapper ( DateTimeOffset.UtcNow ) ;
 
-        IDateTimeOffset next = now.Now ;
+        var next = now.Now ;
 
         next.Should ( ).NotBeNull ( ) ;
         next.Ticks.Should ( ).BeGreaterThan ( 0 ) ;
@@ -21,17 +20,19 @@ public class DateTimeOffsetWrapperTests
     [ TestMethod ]
     public void ToString_OFormat_Invariant_ReturnsIso ( )
     {
-        var dt = new DateTimeOffset ( 2025 ,
-                                      01 ,
-                                      02 ,
-                                      03 ,
-                                      04 ,
-                                      05 ,
-                                      TimeSpan.Zero ) ;
+        var dt = new DateTimeOffset (
+                                     2025 ,
+                                     01 ,
+                                     02 ,
+                                     03 ,
+                                     04 ,
+                                     05 ,
+                                     TimeSpan.Zero ) ;
         var wrapper = new DateTimeOffsetWrapper ( dt ) ;
 
-        var text = wrapper.ToString ( "O" ,
-                                      CultureInfo.InvariantCulture ) ;
+        var text = wrapper.ToString (
+                                     "O" ,
+                                     CultureInfo.InvariantCulture ) ;
 
         text.Should ( ).Be ( "2025-01-02T03:04:05.0000000+00:00" ) ;
     }

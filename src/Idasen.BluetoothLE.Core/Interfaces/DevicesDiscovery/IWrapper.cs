@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-using Core.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 // ReSharper disable once InconsistentNaming
 public interface IWrapper

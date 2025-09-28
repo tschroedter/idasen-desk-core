@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Tests ;
-
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using FluentAssertions.Primitives ;
 using FluentAssertions.Specialized ;
+
+namespace Idasen.BluetoothLE.Tests ;
 
 public static class ExceptionAssertionsExtensions
 {
@@ -14,7 +14,7 @@ public static class ExceptionAssertionsExtensions
     /// <returns></returns>
     public static AndConstraint < StringAssertions > WithParameter (
         this ExceptionAssertions < ArgumentNullException > assertions ,
-        string parameter )
+        string                                             parameter )
     {
         return assertions.And
                          .ParamName

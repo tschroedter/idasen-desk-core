@@ -1,9 +1,9 @@
-﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+﻿using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
-using Aop.Aspects ;
-using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
-using Interfaces.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -20,24 +20,28 @@ public class DeviceFactory
     /// </param>
     public DeviceFactory ( Device.Factory factory )
     {
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        Guard.ArgumentNotNull (
+                               factory ,
+                               nameof ( factory ) ) ;
 
         _factory = factory ;
     }
 
     /// <inheritdoc />
-    public IDevice Create ( IDateTimeOffset broadcastTime ,
-                            ulong address ,
-                            string? name ,
-                            short rawSignalStrengthInDBm )
+    public IDevice Create (
+        IDateTimeOffset broadcastTime ,
+        ulong           address ,
+        string ?        name ,
+        short           rawSignalStrengthInDBm )
     {
-        Guard.ArgumentNotNull ( broadcastTime ,
-                                nameof ( broadcastTime ) ) ;
+        Guard.ArgumentNotNull (
+                               broadcastTime ,
+                               nameof ( broadcastTime ) ) ;
 
-        return _factory.Invoke ( broadcastTime ,
-                                 address ,
-                                 name ,
-                                 rawSignalStrengthInDBm ) ;
+        return _factory.Invoke (
+                                broadcastTime ,
+                                address ,
+                                name ,
+                                rawSignalStrengthInDBm ) ;
     }
 }

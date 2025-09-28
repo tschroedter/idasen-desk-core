@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
-
-using Core.ServicesDiscovery.Wrappers ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 
 [ TestClass ]
 public class GattCharacteristicValueChangedDetailsTests
@@ -10,7 +10,7 @@ public class GattCharacteristicValueChangedDetailsTests
     [ AutoDataTestMethod ]
     public void Constructor_ForInvoked_SetsUuid (
         GattCharacteristicValueChangedDetails sut ,
-        [ Freeze ] Guid uuid )
+        [ Freeze ] Guid                       uuid )
     {
         sut.Uuid
            .Should ( )
@@ -20,7 +20,7 @@ public class GattCharacteristicValueChangedDetailsTests
     [ AutoDataTestMethod ]
     public void Constructor_ForInvoked_SetsValue (
         GattCharacteristicValueChangedDetails sut ,
-        [ Freeze ] IEnumerable < byte > value )
+        [ Freeze ] IEnumerable < byte >       value )
     {
         sut.Value
            .Should ( )
@@ -30,7 +30,7 @@ public class GattCharacteristicValueChangedDetailsTests
     [ AutoDataTestMethod ]
     public void Constructor_ForInvoked_SetsTimestamp (
         GattCharacteristicValueChangedDetails sut ,
-        [ Freeze ] DateTimeOffset timestamp )
+        [ Freeze ] DateTimeOffset             timestamp )
     {
         sut.Timestamp
            .Should ( )

@@ -10,6 +10,7 @@ public interface ITaskRunner
     /// </summary>
     /// <param name="action">The action to run.</param>
     /// <param name="token">Cancellation token to stop execution.</param>
-    Task Run ( Action action ,
-               CancellationToken token ) ;
+    Task Run (
+        Action            action ,
+        CancellationToken token ) ;
 }

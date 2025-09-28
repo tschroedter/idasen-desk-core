@@ -1,10 +1,8 @@
-﻿
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
-// ReSharper disable UnusedMemberInSuper.Global
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-
-using Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     DPG (desk panel) service contract.

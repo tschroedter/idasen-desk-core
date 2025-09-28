@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
-using BluetoothLE.Characteristics.Characteristics.Unknowns ;
-using FluentAssertions ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
 [ TestClass ]
 public class UnknownBaseTests

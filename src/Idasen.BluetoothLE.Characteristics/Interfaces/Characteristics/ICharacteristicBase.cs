@@ -11,11 +11,11 @@ public interface ICharacteristicBase
     /// </summary>
     /// <typeparam name="T">The characteristic-specific type to return.</typeparam>
     /// <returns>The current instance cast to <typeparamref name="T" />.</returns>
-    T? Initialize<T> ( )
+    T ? Initialize < T > ( )
         where T : class ;
 
     /// <summary>
     ///     Refreshes the characteristic values by reading from the device and updating internal state.
     /// </summary>
-    public Task Refresh ( ) ;
+    Task Refresh ( ) ;
 }

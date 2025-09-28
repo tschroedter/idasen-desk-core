@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 [ ExcludeFromCodeCoverage ]
 public class GattDeviceServicesResultWrapper
@@ -14,15 +14,17 @@ public class GattDeviceServicesResultWrapper
 
     public GattDeviceServicesResultWrapper (
         GattDeviceServiceWrapper.Factory serviceWrapperFactory ,
-        GattDeviceServicesResult service )
+        GattDeviceServicesResult         service )
     {
-        Guard.ArgumentNotNull ( serviceWrapperFactory ,
-                                nameof ( serviceWrapperFactory ) ) ;
-        Guard.ArgumentNotNull ( service ,
-                                nameof ( service ) ) ;
+        Guard.ArgumentNotNull (
+                               serviceWrapperFactory ,
+                               nameof ( serviceWrapperFactory ) ) ;
+        Guard.ArgumentNotNull (
+                               service ,
+                               nameof ( service ) ) ;
 
         _service = service ;
-        GattDeviceServiceWrapper.Factory serviceWrapperFactory1 = serviceWrapperFactory ;
+        var serviceWrapperFactory1 = serviceWrapperFactory ;
 
         IReadOnlyList < GattDeviceService > services = _service.Services ?? [] ;
 
@@ -32,8 +34,7 @@ public class GattDeviceServicesResultWrapper
 
     public void Dispose ( )
     {
-        foreach (IGattDeviceServiceWrapper s in Services)
-        {
+        foreach ( var s in Services ) {
             s.Dispose ( ) ;
         }
     }
@@ -45,5 +46,5 @@ public class GattDeviceServicesResultWrapper
     public IEnumerable < IGattDeviceServiceWrapper > Services { get ; }
 
     /// <inheritdoc />
-    public byte? ProtocolError => _service.ProtocolError ;
+    public byte ? ProtocolError => _service.ProtocolError ;
 }

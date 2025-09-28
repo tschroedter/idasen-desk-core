@@ -1,10 +1,10 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
-
-using Windows.Devices.Bluetooth ;
+﻿using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using BluetoothLE.Characteristics.Characteristics.Unknowns ;
-using BluetoothLE.Characteristics.Common ;
 using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Idasen.BluetoothLE.Characteristics.Common ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
 [ TestClass ]
 public class DeviceTests
@@ -80,7 +80,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Connect_ForInvoked_DoesNothing ( )
     {
-        Action action = ( ) => CreateSut ( ).Connect ( ) ;
+        var action = ( ) => CreateSut ( ).Connect ( ) ;
 
         action.Should ( )
               .NotThrow < Exception > ( ) ;
@@ -89,7 +89,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Dispose_ForInvoked_DoesNothing ( )
     {
-        Action action = ( ) => CreateSut ( ).Dispose ( ) ;
+        var action = ( ) => CreateSut ( ).Dispose ( ) ;
 
         action.Should ( )
               .NotThrow < Exception > ( ) ;

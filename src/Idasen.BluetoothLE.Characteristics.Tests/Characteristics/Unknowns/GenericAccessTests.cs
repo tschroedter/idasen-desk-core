@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Idasen.BluetoothLE.Characteristics.Common ;
 
-using BluetoothLE.Characteristics.Characteristics.Unknowns ;
-using BluetoothLE.Characteristics.Common ;
-using FluentAssertions ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
 [ TestClass ]
 public class GenericAccessTests

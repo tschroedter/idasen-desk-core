@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Linak ;
+﻿using System.Diagnostics ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 
-using System.Diagnostics ;
-using Interfaces ;
+namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ DebuggerDisplay ( "{ToString(),nq}" ) ]
@@ -15,23 +15,23 @@ public sealed class ErrorDetails // todo testing
     /// <param name="caller">The originating member name or component.</param>
     /// <param name="exception">Optional exception to include.</param>
     public ErrorDetails (
-        string message ,
-        string caller ,
-        Exception? exception = null )
+        string      message ,
+        string      caller ,
+        Exception ? exception = null )
     {
         ArgumentNullException.ThrowIfNull ( message ) ;
         ArgumentNullException.ThrowIfNull ( caller ) ;
 
-        Message = message ;
+        Message   = message ;
         Exception = exception ;
-        Caller = caller ;
+        Caller    = caller ;
     }
 
     /// <inheritdoc />
     public string Message { get ; }
 
     /// <inheritdoc />
-    public Exception? Exception { get ; }
+    public Exception ? Exception { get ; }
 
     /// <inheritdoc />
     public string Caller { get ; }

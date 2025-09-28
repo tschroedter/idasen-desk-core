@@ -1,13 +1,11 @@
-﻿
-
-// ReSharper disable UnusedMember.Global
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+﻿// ReSharper disable UnusedMember.Global
 
 using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -31,8 +29,9 @@ public class GattReadResultWrapper
     /// </summary>
     public GattReadResultWrapper ( GattReadResult result )
     {
-        Guard.ArgumentNotNull ( result ,
-                                nameof ( result ) ) ;
+        Guard.ArgumentNotNull (
+                               result ,
+                               nameof ( result ) ) ;
 
         _result = result ;
     }
@@ -45,10 +44,10 @@ public class GattReadResultWrapper
     /// <summary>
     ///     Gets the protocol error, if provided.
     /// </summary>
-    public byte? ProtocolError => _result.ProtocolError ;
+    public byte ? ProtocolError => _result.ProtocolError ;
 
     /// <summary>
     ///     Gets the underlying value buffer.
     /// </summary>
-    public IBuffer? Value => _result.Value ;
+    public IBuffer ? Value => _result.Value ;
 }

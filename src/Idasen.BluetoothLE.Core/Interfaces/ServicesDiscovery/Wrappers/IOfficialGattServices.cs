@@ -1,10 +1,8 @@
-﻿
+﻿// ReSharper disable UnusedMemberInSuper.Global
 
-// ReSharper disable UnusedMemberInSuper.Global
+using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-
-using Core.ServicesDiscovery ;
 
 /// <summary>
 ///     Known list of Gatt Services.
@@ -31,6 +29,7 @@ public interface IOfficialGattServices
     /// <returns>
     ///     'true' if a matching Gatt service exists, otherwise 'false'.
     /// </returns>
-    bool TryFindByUuid ( Guid guid ,
-                         out OfficialGattService? gattService ) ;
+    bool TryFindByUuid (
+        Guid                      guid ,
+        out OfficialGattService ? gattService ) ;
 }

@@ -1,13 +1,11 @@
-
-
 // ReSharper disable UnusedMember.Global
-
-namespace Idasen.Aop.Aspects ;
 
 using System.Diagnostics.CodeAnalysis ;
 using Castle.DynamicProxy ;
-using Interfaces ;
+using Idasen.Aop.Interfaces ;
 using Serilog ;
+
+namespace Idasen.Aop.Aspects ;
 
 /// <summary>
 ///     Interceptor that executes the invocation and logs any thrown exception along with a formatted
@@ -16,7 +14,7 @@ using Serilog ;
 /// <param name="logger">Logger used to write error messages.</param>
 /// <param name="converter">Converter that formats the intercepted invocation.</param>
 [ ExcludeFromCodeCoverage ]
-public sealed class LogExceptionAspect ( ILogger logger ,
+public sealed class LogExceptionAspect ( ILogger                    logger ,
                                          IInvocationToTextConverter converter )
     : IInterceptor
 {
@@ -26,8 +24,7 @@ public sealed class LogExceptionAspect ( ILogger logger ,
     /// <param name="invocation">The intercepted method invocation.</param>
     public void Intercept ( IInvocation invocation )
     {
-        try
-        {
+        try {
 #pragma warning disable CA1062
             invocation.Proceed ( ) ;
 #pragma warning restore CA1062
@@ -36,9 +33,10 @@ public sealed class LogExceptionAspect ( ILogger logger ,
         catch ( Exception exception )
 #pragma warning restore CA1031
         {
-            logger.Error ( exception ,
-                           "{Invocation}" ,
-                           converter.Convert ( invocation ) ) ;
+            logger.Error (
+                          exception ,
+                          "{Invocation}" ,
+                          converter.Convert ( invocation ) ) ;
         }
     }
 }

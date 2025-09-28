@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿using Windows.Devices.Bluetooth.Advertisement ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-using Windows.Devices.Bluetooth.Advertisement ;
-using Core.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 public interface IStatusMapper
 {

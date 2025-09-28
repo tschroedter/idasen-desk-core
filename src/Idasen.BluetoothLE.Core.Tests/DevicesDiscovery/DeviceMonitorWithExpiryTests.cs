@@ -1,17 +1,17 @@
-﻿namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
-
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using Common.Tests ;
-using Core.DevicesDiscovery ;
 using FluentAssertions ;
-using Interfaces ;
-using Interfaces.DevicesDiscovery ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class DeviceMonitorWithExpiryTests
@@ -19,13 +19,12 @@ public class DeviceMonitorWithExpiryTests
     [ AutoDataTestMethod ]
     public void Constructor_ForLoggerNull_Throws (
         Lazy < DeviceMonitorWithExpiry > sut ,
-        [ BeNull ] ILogger logger )
+        [ BeNull ] ILogger               logger )
     {
         // ReSharper disable once UnusedVariable
-        Action action = ( ) =>
-                        {
-                            DeviceMonitorWithExpiry test = sut.Value ;
-                        } ;
+        var action = ( ) => {
+                         var test = sut.Value ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -35,13 +34,12 @@ public class DeviceMonitorWithExpiryTests
     [ AutoDataTestMethod ]
     public void Constructor_ForDateTimeOffsetNull_Throws (
         Lazy < DeviceMonitorWithExpiry > sut ,
-        [ BeNull ] IDateTimeOffset dateTimeOffset )
+        [ BeNull ] IDateTimeOffset       dateTimeOffset )
     {
         // ReSharper disable once UnusedVariable
-        Action action = ( ) =>
-                        {
-                            DeviceMonitorWithExpiry test = sut.Value ;
-                        } ;
+        var action = ( ) => {
+                         var test = sut.Value ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -51,13 +49,12 @@ public class DeviceMonitorWithExpiryTests
     [ AutoDataTestMethod ]
     public void Constructor_ForDateTimeOffsetNull_Throws (
         Lazy < DeviceMonitorWithExpiry > sut ,
-        [ BeNull ] IDeviceMonitor deviceMonitor )
+        [ BeNull ] IDeviceMonitor        deviceMonitor )
     {
         // ReSharper disable once UnusedVariable
-        Action action = ( ) =>
-                        {
-                            DeviceMonitorWithExpiry test = sut.Value ;
-                        } ;
+        var action = ( ) => {
+                         var test = sut.Value ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -66,14 +63,13 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void Constructor_ForFactoryNull_Throws (
-        Lazy < DeviceMonitorWithExpiry > sut ,
+        Lazy < DeviceMonitorWithExpiry >   sut ,
         [ BeNull ] IObservableTimerFactory factory )
     {
         // ReSharper disable once UnusedVariable
-        Action action = ( ) =>
-                        {
-                            DeviceMonitorWithExpiry test = sut.Value ;
-                        } ;
+        var action = ( ) => {
+                         var test = sut.Value ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -83,13 +79,12 @@ public class DeviceMonitorWithExpiryTests
     [ AutoDataTestMethod ]
     public void Constructor_ForSchedulerIsNull_Throws (
         Lazy < DeviceMonitorWithExpiry > sut ,
-        [ BeNull ] IScheduler scheduler )
+        [ BeNull ] IScheduler            scheduler )
     {
         // ReSharper disable once UnusedVariable
-        Action action = ( ) =>
-                        {
-                            DeviceMonitorWithExpiry test = sut.Value ;
-                        } ;
+        var action = ( ) => {
+                         var test = sut.Value ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -99,13 +94,12 @@ public class DeviceMonitorWithExpiryTests
     [ AutoDataTestMethod ]
     public void Constructor_ForDeviceExpiredNull_Throws (
         Lazy < DeviceMonitorWithExpiry > sut ,
-        [ BeNull ] ISubject < IDevice > deviceExpired )
+        [ BeNull ] ISubject < IDevice >  deviceExpired )
     {
         // ReSharper disable once UnusedVariable
-        Action action = ( ) =>
-                        {
-                            DeviceMonitorWithExpiry test = sut.Value ;
-                        } ;
+        var action = ( ) => {
+                         var test = sut.Value ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -137,9 +131,9 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void RemoveDevice_ForInvoked_CallsDeviceMonitor (
-        DeviceMonitorWithExpiry sut ,
+        DeviceMonitorWithExpiry   sut ,
         [ Freeze ] IDeviceMonitor monitor ,
-        IDevice device )
+        IDevice                   device )
     {
         sut.RemoveDevice ( device ) ;
 
@@ -149,7 +143,7 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void Start_ForInvoked_CallsDeviceMonitor (
-        DeviceMonitorWithExpiry sut ,
+        DeviceMonitorWithExpiry   sut ,
         [ Freeze ] IDeviceMonitor monitor )
     {
         sut.Start ( ) ;
@@ -160,7 +154,7 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void Stop_ForInvoked_CallsDeviceMonitor (
-        DeviceMonitorWithExpiry sut ,
+        DeviceMonitorWithExpiry   sut ,
         [ Freeze ] IDeviceMonitor monitor )
     {
         sut.Stop ( ) ;
@@ -171,7 +165,7 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void Dispose_ForInvoked_DisposesMonitor (
-        DeviceMonitorWithExpiry sut ,
+        DeviceMonitorWithExpiry   sut ,
         [ Freeze ] IDeviceMonitor monitor )
     {
         sut.Dispose ( ) ;
@@ -183,7 +177,7 @@ public class DeviceMonitorWithExpiryTests
     [ AutoDataTestMethod ]
     public void Dispose_ForInvoked_DisposesTimer (
         DeviceMonitorWithExpiry sut ,
-        [ Freeze ] IDisposable timer )
+        [ Freeze ] IDisposable  timer )
     {
         sut.Dispose ( ) ;
 
@@ -193,8 +187,8 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void DiscoveredDevices_ForInvoked_CallsDeviceMonitor (
-        DeviceMonitorWithExpiry sut ,
-        [ Freeze ] IDeviceMonitor monitor ,
+        DeviceMonitorWithExpiry         sut ,
+        [ Freeze ] IDeviceMonitor       monitor ,
         IReadOnlyCollection < IDevice > collection )
     {
         monitor.DiscoveredDevices
@@ -207,7 +201,7 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void IsListening_ForInvoked_CallsDeviceMonitor (
-        DeviceMonitorWithExpiry sut ,
+        DeviceMonitorWithExpiry   sut ,
         [ Freeze ] IDeviceMonitor monitor )
     {
         monitor.IsListening
@@ -220,9 +214,9 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void DeviceUpdated_ForInvoked_CallsDeviceMonitor (
-        DeviceMonitorWithExpiry sut ,
+        DeviceMonitorWithExpiry   sut ,
         [ Freeze ] IDeviceMonitor monitor ,
-        IObservable < IDevice > observable )
+        IObservable < IDevice >   observable )
     {
         monitor.DeviceUpdated
                .Returns ( observable ) ;
@@ -234,9 +228,9 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void DeviceDiscovered_ForInvoked_CallsDeviceMonitor (
-        DeviceMonitorWithExpiry sut ,
+        DeviceMonitorWithExpiry   sut ,
         [ Freeze ] IDeviceMonitor monitor ,
-        IObservable < IDevice > observable )
+        IObservable < IDevice >   observable )
     {
         monitor.DeviceDiscovered
                .Returns ( observable ) ;
@@ -248,9 +242,9 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void DeviceNameUpdated_ForInvoked_CallsDeviceMonitor (
-        DeviceMonitorWithExpiry sut ,
+        DeviceMonitorWithExpiry   sut ,
         [ Freeze ] IDeviceMonitor monitor ,
-        IObservable < IDevice > observable )
+        IObservable < IDevice >   observable )
     {
         monitor.DeviceNameUpdated
                .Returns ( observable ) ;
@@ -262,23 +256,24 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotRemoveDeviceFromCollection (
-        ILogger logger ,
-        IDateTimeOffset dateTimeOffset ,
-        IDeviceMonitor deviceMonitor ,
-        ISubject < IDevice > deviceExpired ,
+        ILogger                logger ,
+        IDateTimeOffset        dateTimeOffset ,
+        IDeviceMonitor         deviceMonitor ,
+        ISubject < IDevice >   deviceExpired ,
         ObservableTimerFactory factory ,
-        TestScheduler scheduler ,
-        IDevice device )
+        TestScheduler          scheduler ,
+        IDevice                device )
     {
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
 
-        var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                dateTimeOffset ,
-                                                deviceMonitor ,
-                                                deviceExpired ,
-                                                factory ,
-                                                scheduler ) ;
+        var sut = new DeviceMonitorWithExpiry (
+                                               logger ,
+                                               dateTimeOffset ,
+                                               deviceMonitor ,
+                                               deviceExpired ,
+                                               factory ,
+                                               scheduler ) ;
 
         dateTimeOffset.Ticks
                       .Returns ( sut.TimeOut.Ticks ) ;
@@ -297,23 +292,24 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotNotifyDeviceExpired (
-        ILogger logger ,
-        IDateTimeOffset dateTimeOffset ,
-        IDeviceMonitor deviceMonitor ,
-        ISubject < IDevice > deviceExpired ,
+        ILogger                logger ,
+        IDateTimeOffset        dateTimeOffset ,
+        IDeviceMonitor         deviceMonitor ,
+        ISubject < IDevice >   deviceExpired ,
         ObservableTimerFactory factory ,
-        TestScheduler scheduler ,
-        IDevice device )
+        TestScheduler          scheduler ,
+        IDevice                device )
     {
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
 
-        var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                dateTimeOffset ,
-                                                deviceMonitor ,
-                                                deviceExpired ,
-                                                factory ,
-                                                scheduler ) ;
+        var sut = new DeviceMonitorWithExpiry (
+                                               logger ,
+                                               dateTimeOffset ,
+                                               deviceMonitor ,
+                                               deviceExpired ,
+                                               factory ,
+                                               scheduler ) ;
 
         dateTimeOffset.Ticks
                       .Returns ( sut.TimeOut.Ticks ) ;
@@ -332,23 +328,24 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void CleanUp_ForOneExpiredDeviceInCollection_RemovesDeviceFromCollection (
-        ILogger logger ,
-        IDateTimeOffset dateTimeOffset ,
-        IDeviceMonitor deviceMonitor ,
-        ISubject < IDevice > deviceExpired ,
+        ILogger                logger ,
+        IDateTimeOffset        dateTimeOffset ,
+        IDeviceMonitor         deviceMonitor ,
+        ISubject < IDevice >   deviceExpired ,
         ObservableTimerFactory factory ,
-        TestScheduler scheduler ,
-        IDevice device )
+        TestScheduler          scheduler ,
+        IDevice                device )
     {
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
 
-        var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                dateTimeOffset ,
-                                                deviceMonitor ,
-                                                deviceExpired ,
-                                                factory ,
-                                                scheduler ) ;
+        var sut = new DeviceMonitorWithExpiry (
+                                               logger ,
+                                               dateTimeOffset ,
+                                               deviceMonitor ,
+                                               deviceExpired ,
+                                               factory ,
+                                               scheduler ) ;
 
         dateTimeOffset.Ticks
                       .Returns ( sut.TimeOut.Ticks ) ;
@@ -367,25 +364,26 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void CleanUp_ForOneExpiredDeviceInCollection_NotifiesDeviceExpired (
-        ILogger logger ,
-        IDateTimeOffset dateTimeOffset ,
-        IDeviceMonitor deviceMonitor ,
-        Subject < IDevice > deviceExpired ,
+        ILogger                logger ,
+        IDateTimeOffset        dateTimeOffset ,
+        IDeviceMonitor         deviceMonitor ,
+        Subject < IDevice >    deviceExpired ,
         ObservableTimerFactory factory ,
-        TestScheduler scheduler ,
-        IDevice device )
+        TestScheduler          scheduler ,
+        IDevice                device )
     {
-        var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                dateTimeOffset ,
-                                                deviceMonitor ,
-                                                deviceExpired ,
-                                                factory ,
-                                                scheduler ) ;
+        var sut = new DeviceMonitorWithExpiry (
+                                               logger ,
+                                               dateTimeOffset ,
+                                               deviceMonitor ,
+                                               deviceExpired ,
+                                               factory ,
+                                               scheduler ) ;
 
         IDevice expiredDevice = null! ;
 
-        using IDisposable disposable = sut.DeviceExpired
-                                          .Subscribe ( expired => expiredDevice = expired ) ;
+        using var disposable = sut.DeviceExpired
+                                  .Subscribe ( expired => expiredDevice = expired ) ;
 
         deviceExpired.OnNext ( device ) ;
 
@@ -397,23 +395,25 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void OnCompleted_ForInvoked_CallsStop (
-        ILogger logger ,
-        IDateTimeOffset dateTimeOffset ,
-        IDeviceMonitor deviceMonitor ,
-        ISubject < IDevice > deviceExpired ,
+        ILogger                 logger ,
+        IDateTimeOffset         dateTimeOffset ,
+        IDeviceMonitor          deviceMonitor ,
+        ISubject < IDevice >    deviceExpired ,
         IObservableTimerFactory factory ,
-        TestScheduler scheduler )
+        TestScheduler           scheduler )
     {
-        factory.Create ( Arg.Any < TimeSpan > ( ) ,
-                         Arg.Any < IScheduler > ( ) )
+        factory.Create (
+                        Arg.Any < TimeSpan > ( ) ,
+                        Arg.Any < IScheduler > ( ) )
                .Returns ( Observable.Empty < long > ( ) ) ;
 
-        var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                dateTimeOffset ,
-                                                deviceMonitor ,
-                                                deviceExpired ,
-                                                factory ,
-                                                scheduler ) ;
+        var sut = new DeviceMonitorWithExpiry (
+                                               logger ,
+                                               dateTimeOffset ,
+                                               deviceMonitor ,
+                                               deviceExpired ,
+                                               factory ,
+                                               scheduler ) ;
 
         scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
 
@@ -423,23 +423,25 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void OnError_ForInvoked_CallsStop (
-        ILogger logger ,
-        IDateTimeOffset dateTimeOffset ,
-        IDeviceMonitor deviceMonitor ,
-        ISubject < IDevice > deviceExpired ,
+        ILogger                 logger ,
+        IDateTimeOffset         dateTimeOffset ,
+        IDeviceMonitor          deviceMonitor ,
+        ISubject < IDevice >    deviceExpired ,
         IObservableTimerFactory factory ,
-        TestScheduler scheduler )
+        TestScheduler           scheduler )
     {
-        factory.Create ( Arg.Any < TimeSpan > ( ) ,
-                         Arg.Any < IScheduler > ( ) )
+        factory.Create (
+                        Arg.Any < TimeSpan > ( ) ,
+                        Arg.Any < IScheduler > ( ) )
                .Returns ( Observable.Throw < long > ( new Exception ( ) ) ) ;
 
-        var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                dateTimeOffset ,
-                                                deviceMonitor ,
-                                                deviceExpired ,
-                                                factory ,
-                                                scheduler ) ;
+        var sut = new DeviceMonitorWithExpiry (
+                                               logger ,
+                                               dateTimeOffset ,
+                                               deviceMonitor ,
+                                               deviceExpired ,
+                                               factory ,
+                                               scheduler ) ;
 
         scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
 

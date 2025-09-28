@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
-using Interfaces.Characteristics ;
+namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
 public class Control
     : UnknownBase , IControl

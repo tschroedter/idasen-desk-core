@@ -1,14 +1,14 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public class HeightSpeedDetailsTests
 {
     [ AutoDataTestMethod ]
     public void Timestamp_ForInvoked_Instance (
-        HeightSpeedDetails sut ,
+        HeightSpeedDetails        sut ,
         [ Freeze ] DateTimeOffset timestamp )
     {
         sut.Timestamp
@@ -19,7 +19,7 @@ public class HeightSpeedDetailsTests
     [ AutoDataTestMethod ]
     public void Height_ForInvoked_Instance (
         HeightSpeedDetails sut ,
-        [ Freeze ] uint height )
+        [ Freeze ] uint    height )
     {
         sut.Height
            .Should ( )
@@ -29,7 +29,7 @@ public class HeightSpeedDetailsTests
     [ AutoDataTestMethod ]
     public void Speed_ForInvoked_Instance (
         HeightSpeedDetails sut ,
-        [ Freeze ] int speed )
+        [ Freeze ] int     speed )
     {
         sut.Speed
            .Should ( )
@@ -38,13 +38,13 @@ public class HeightSpeedDetailsTests
 
     [ AutoDataTestMethod ]
     public void ToString_ForInvoked_Instance (
-        HeightSpeedDetails sut ,
+        HeightSpeedDetails        sut ,
         [ Freeze ] DateTimeOffset timestamp ,
-        [ Freeze ] uint height ,
-        [ Freeze ] int speed )
+        [ Freeze ] uint           height ,
+        [ Freeze ] int            speed )
     {
         var expected = $"Timestamp = {timestamp:O}, " +
-                       $"Height = {height}, " +
+                       $"Height = {height}, "         +
                        $"Speed = {speed}" ;
 
         sut.ToString ( )

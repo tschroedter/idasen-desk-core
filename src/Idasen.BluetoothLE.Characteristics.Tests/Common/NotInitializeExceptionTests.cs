@@ -1,8 +1,8 @@
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
-
-using BluetoothLE.Characteristics.Common ;
 using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Common ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
 [ AutoDataTestClass ]
 public class NotInitializeExceptionTests

@@ -1,15 +1,15 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
-
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
 public static class GattCharacteristicWrapperExtensions
 {
     public static IGattCharacteristicWrapper WithCharacteristicProperties (
         this IGattCharacteristicWrapper characteristic ,
-        GattCharacteristicProperties properties )
+        GattCharacteristicProperties    properties )
     {
         _ = characteristic.CharacteristicProperties
                           .Returns ( properties ) ;
@@ -19,7 +19,7 @@ public static class GattCharacteristicWrapperExtensions
 
     public static IGattCharacteristicWrapper WithWriteValueAsyncResult (
         this IGattCharacteristicWrapper characteristic ,
-        GattCommunicationStatus status )
+        GattCommunicationStatus         status )
     {
         _ = characteristic.WriteValueAsync ( Arg.Any < IBuffer > ( ) )
                           .Returns ( Task.FromResult ( status ) ) ;
@@ -29,7 +29,7 @@ public static class GattCharacteristicWrapperExtensions
 
     public static IGattCharacteristicWrapper WithWriteValueWithResultAsync (
         this IGattCharacteristicWrapper characteristic ,
-        IGattWriteResultWrapper result )
+        IGattWriteResultWrapper         result )
     {
         _ = characteristic.WriteValueWithResultAsync ( Arg.Any < IBuffer > ( ) )
                           .Returns ( Task.FromResult ( result ) ) ;
@@ -39,7 +39,7 @@ public static class GattCharacteristicWrapperExtensions
 
     public static IGattCharacteristicWrapper WithReadValueAsyncResult (
         this IGattCharacteristicWrapper characteristic ,
-        IGattReadResultWrapper result )
+        IGattReadResultWrapper          result )
     {
         _ = characteristic.ReadValueAsync ( )
                           .Returns ( Task.FromResult ( result ) ) ;

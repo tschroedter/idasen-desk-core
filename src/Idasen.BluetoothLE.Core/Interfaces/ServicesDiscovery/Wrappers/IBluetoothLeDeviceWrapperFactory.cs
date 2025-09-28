@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿using Windows.Devices.Bluetooth ;
 
-using Windows.Devices.Bluetooth ;
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Factory to create <see cref="IBluetoothLeDeviceWrapper" /> instances.

@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Linak ;
+﻿using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 
-using Aop.Aspects ;
-using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
+namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -57,10 +57,10 @@ public sealed class Desk
     /// <inheritdoc />
     public void MoveTo ( uint targetHeight )
     {
-        if ( targetHeight == 0u )
-        {
-            throw new ArgumentOutOfRangeException ( nameof ( targetHeight ) ,
-                                                    "Target height must be greater than 0." ) ;
+        if ( targetHeight == 0u ) {
+            throw new ArgumentOutOfRangeException (
+                                                   nameof ( targetHeight ) ,
+                                                   "Target height must be greater than 0." ) ;
         }
 
         _connector.MoveTo ( targetHeight ) ;

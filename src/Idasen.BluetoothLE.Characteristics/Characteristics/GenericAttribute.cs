@@ -1,12 +1,12 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
-
-using System.Reactive.Concurrency ;
-using Core ;
-using Core.Interfaces.ServicesDiscovery ;
-using Interfaces.Characteristics ;
-using Interfaces.Characteristics.Customs ;
-using Interfaces.Common ;
+﻿using System.Reactive.Concurrency ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Idasen.BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
 /// <summary>
 ///     Implements the Generic Attribute service and exposes raw values.
@@ -25,26 +25,28 @@ public class GenericAttribute
     private readonly IAllGattCharacteristicsProvider _allGattCharacteristicsProvider ;
 
     public GenericAttribute (
-        ILogger logger ,
-        IScheduler scheduler ,
-        IDevice device ,
-        IGattCharacteristicsProviderFactory providerFactory ,
-        IRawValueReader rawValueReader ,
-        IRawValueWriter rawValueWriter ,
+        ILogger                              logger ,
+        IScheduler                           scheduler ,
+        IDevice                              device ,
+        IGattCharacteristicsProviderFactory  providerFactory ,
+        IRawValueReader                      rawValueReader ,
+        IRawValueWriter                      rawValueWriter ,
         ICharacteristicBaseToStringConverter toStringConverter ,
-        IDescriptionToUuid descriptionToUuid ,
-        IAllGattCharacteristicsProvider allGattCharacteristicsProvider )
-        : base ( logger ,
-                 scheduler ,
-                 device ,
-                 providerFactory ,
-                 rawValueReader ,
-                 rawValueWriter ,
-                 toStringConverter ,
-                 descriptionToUuid )
+        IDescriptionToUuid                   descriptionToUuid ,
+        IAllGattCharacteristicsProvider      allGattCharacteristicsProvider )
+        : base (
+                logger ,
+                scheduler ,
+                device ,
+                providerFactory ,
+                rawValueReader ,
+                rawValueWriter ,
+                toStringConverter ,
+                descriptionToUuid )
     {
-        Guard.ArgumentNotNull ( allGattCharacteristicsProvider ,
-                                nameof ( allGattCharacteristicsProvider ) ) ;
+        Guard.ArgumentNotNull (
+                               allGattCharacteristicsProvider ,
+                               nameof ( allGattCharacteristicsProvider ) ) ;
 
         _allGattCharacteristicsProvider = allGattCharacteristicsProvider ;
     }
@@ -60,13 +62,12 @@ public class GenericAttribute
     public IEnumerable < byte > RawServiceChanged => GetValueOrEmpty ( CharacteristicServiceChanged ) ;
 
     /// <inheritdoc />
-    protected override T WithMapping<T> ( ) where T : class
+    protected override T WithMapping < T > ( ) where T : class
     {
-        if ( _allGattCharacteristicsProvider.TryGetUuid ( CharacteristicServiceChanged ,
-                                                          out Guid uuid ) )
-        {
-            DescriptionToUuid[CharacteristicServiceChanged] = uuid ;
-        }
+        if ( _allGattCharacteristicsProvider.TryGetUuid (
+                                                         CharacteristicServiceChanged ,
+                                                         out var uuid ) )
+            DescriptionToUuid [ CharacteristicServiceChanged ] = uuid ;
 
         return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
     }

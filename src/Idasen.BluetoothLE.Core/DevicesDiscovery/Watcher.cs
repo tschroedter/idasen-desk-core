@@ -1,9 +1,9 @@
-﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
-
-using System.Reactive.Subjects ;
-using Aop.Aspects ;
+﻿using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces.DevicesDiscovery ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 /// <inheritdoc cref="IWatcher" />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -11,17 +11,20 @@ public class Watcher
     : IWatcher
 {
     private readonly ISubject < DateTime > _startedWatching ;
-    private readonly IWrapper _wrapper ;
+    private readonly IWrapper              _wrapper ;
 
-    public Watcher ( IWrapper wrapper ,
-                     ISubject < DateTime > started )
+    public Watcher (
+        IWrapper              wrapper ,
+        ISubject < DateTime > started )
     {
-        Guard.ArgumentNotNull ( wrapper ,
-                                nameof ( wrapper ) ) ;
-        Guard.ArgumentNotNull ( started ,
-                                nameof ( started ) ) ;
+        Guard.ArgumentNotNull (
+                               wrapper ,
+                               nameof ( wrapper ) ) ;
+        Guard.ArgumentNotNull (
+                               started ,
+                               nameof ( started ) ) ;
 
-        _wrapper = wrapper ;
+        _wrapper         = wrapper ;
         _startedWatching = started ;
     }
 
@@ -41,9 +44,7 @@ public class Watcher
     public void Start ( )
     {
         if ( IsListening )
-        {
             return ;
-        }
 
         _wrapper.Start ( ) ;
 
@@ -54,9 +55,7 @@ public class Watcher
     public void Stop ( )
     {
         if ( ! IsListening )
-        {
             return ;
-        }
 
         _wrapper.Stop ( ) ;
     }

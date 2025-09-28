@@ -1,13 +1,13 @@
-﻿namespace Idasen.BluetoothLE.Linak.Control ;
-
-using Interfaces ;
+﻿using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 public class DeskHeightMonitor
     : IDeskHeightMonitor
 {
-    public const int MinimumNumberOfItems = 5 ;
+    public const     int     MinimumNumberOfItems = 5 ;
     private readonly ILogger _logger ;
 
     private CircularBuffer < ulong > _history = new ( MinimumNumberOfItems ) ;
@@ -23,23 +23,24 @@ public class DeskHeightMonitor
     public bool IsHeightChanging ( )
     {
         if ( _history.Size < MinimumNumberOfItems )
-        {
             return true ;
-        }
 
         var needed = MinimumNumberOfItems ;
-        var skip = Math.Max ( 0 ,
-                              _history.Size - needed ) ;
+        var skip = Math.Max (
+                             0 ,
+                             _history.Size - needed ) ;
         var lastNValues = _history.Skip ( skip )
                                   .ToArray ( ) ;
 
         var differentValues = lastNValues.Distinct ( )
                                          .Count ( ) ;
 
-        _logger.Debug ( "History: {History}; DifferentValues={DifferentValues}" ,
-                        string.Join ( "," ,
-                                      lastNValues ) ,
-                        differentValues ) ;
+        _logger.Debug (
+                       "History: {History}; DifferentValues={DifferentValues}" ,
+                       string.Join (
+                                    "," ,
+                                    lastNValues ) ,
+                       differentValues ) ;
 
         return differentValues > 1 ;
     }

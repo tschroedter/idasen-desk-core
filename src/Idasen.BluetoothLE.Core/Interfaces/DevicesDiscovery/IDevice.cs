@@ -8,22 +8,22 @@ public interface IDevice
     /// <summary>
     ///     The time of the broadcast advertisement message of the device.
     /// </summary>
-    public IDateTimeOffset BroadcastTime { get ; }
+    IDateTimeOffset BroadcastTime { get ; }
 
     /// <summary>
     ///     The address of the device.
     /// </summary>
-    public ulong Address { get ; }
+    ulong Address { get ; }
 
     /// <summary>
     ///     The name of the device.
     /// </summary>
-    public string? Name { get ; }
+    string ? Name { get ; }
 
     /// <summary>
     ///     The signal strength in dB.
     /// </summary>
-    public short RawSignalStrengthInDBm { get ; }
+    short RawSignalStrengthInDBm { get ; }
 
     /// <summary>
     ///     The Mac Address of the device.

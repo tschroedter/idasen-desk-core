@@ -1,9 +1,9 @@
-﻿namespace Idasen.BluetoothLE.Linak.Control ;
+﻿using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 
-using Aop.Aspects ;
-using Autofac.Extras.DynamicProxy ;
-using Characteristics.Interfaces.Characteristics ;
-using Interfaces ;
+namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskCommandExecutorFactory

@@ -1,9 +1,9 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
-
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using BluetoothLE.Characteristics.Characteristics ;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using NSubstitute ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
 public class CharacteristicBaseToStringConverterTests
@@ -15,7 +15,7 @@ public class CharacteristicBaseToStringConverterTests
         const string expected = "TestCharacteristicBase\r\n" +
                                 "RawValueKey = [01-02-03]\r\n" ;
 
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -34,13 +34,14 @@ public class CharacteristicBaseToStringConverterTests
     [ TestMethod ]
     public async Task ToString_ForInvokedWithKeyAndProperty_Instance ( )
     {
-        Properties.Add ( TestCharacteristicBase.RawValueKey ,
-                         GattCharacteristicProperties.None ) ;
+        Properties.Add (
+                        TestCharacteristicBase.RawValueKey ,
+                        GattCharacteristicProperties.None ) ;
 
         const string expected = "TestCharacteristicBase\r\n" +
                                 "RawValueKey = [01-02-03] (None)\r\n" ;
 
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -66,19 +67,21 @@ public class CharacteristicBaseToStringConverterTests
 
     protected override TestCharacteristicBase CreateSut ( )
     {
-        return new TestCharacteristicBase ( Logger ,
-                                            Scheduler ,
-                                            Device ,
-                                            ProviderFactory ,
-                                            RawValueReader ,
-                                            RawValueWriter ,
-                                            new CharacteristicBaseToStringConverter ( ) ,
-                                            DescriptionToUuid ) ;
+        return new TestCharacteristicBase (
+                                           Logger ,
+                                           Scheduler ,
+                                           Device ,
+                                           ProviderFactory ,
+                                           RawValueReader ,
+                                           RawValueWriter ,
+                                           new CharacteristicBaseToStringConverter ( ) ,
+                                           DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                       CharacteristicWrapper1 ) ;
+        Wrappers.Add (
+                      TestCharacteristicBase.RawValueKey ,
+                      CharacteristicWrapper1 ) ;
     }
 }

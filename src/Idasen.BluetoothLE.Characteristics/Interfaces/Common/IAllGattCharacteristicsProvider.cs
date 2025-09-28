@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+﻿using JetBrains.Annotations ;
 
-using JetBrains.Annotations ;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 
 /// <summary>
 ///     Provides lookup between official GATT characteristic UUIDs and their descriptions.
@@ -14,8 +14,9 @@ public interface IAllGattCharacteristicsProvider
     /// <param name="description">Outputs the description if found; otherwise an empty string.</param>
     /// <returns><c>true</c> if found; otherwise, <c>false</c>.</returns>
     [ UsedImplicitly ]
-    bool TryGetDescription ( Guid uuid ,
-                             out string description ) ;
+    bool TryGetDescription (
+        Guid       uuid ,
+        out string description ) ;
 
     /// <summary>
     ///     Tries to get the UUID for the specified official description.
@@ -24,6 +25,7 @@ public interface IAllGattCharacteristicsProvider
     /// <param name="uuid">Outputs the UUID if found.</param>
     /// <returns><c>true</c> if found; otherwise, <c>false</c>.</returns>
     [ UsedImplicitly ]
-    bool TryGetUuid ( string description ,
-                      out Guid uuid ) ;
+    bool TryGetUuid (
+        string   description ,
+        out Guid uuid ) ;
 }

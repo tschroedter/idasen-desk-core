@@ -1,10 +1,10 @@
-namespace Idasen.BluetoothLE.Linak.Tests ;
-
 using System.Reactive.Subjects ;
 using FluentAssertions ;
-using Interfaces ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class ErrorManagerTests
@@ -12,11 +12,12 @@ public class ErrorManagerTests
     [ TestMethod ]
     public void Publish_ForValidDetails_PushesToSubject ( )
     {
-        ILogger? logger = Substitute.For < ILogger > ( ) ;
-        ISubject < IErrorDetails >? subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
-        var sut = new ErrorManager ( logger ,
-                                     subject ) ;
-        IErrorDetails? details = Substitute.For < IErrorDetails > ( ) ;
+        var logger  = Substitute.For < ILogger > ( ) ;
+        var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
+        var sut = new ErrorManager (
+                                    logger ,
+                                    subject ) ;
+        var details = Substitute.For < IErrorDetails > ( ) ;
 
         sut.Publish ( details ) ;
 
@@ -26,14 +27,16 @@ public class ErrorManagerTests
     [ TestMethod ]
     public void PublishForMessage_ForValidMessage_PushesConstructedDetails ( )
     {
-        ILogger? logger = Substitute.For < ILogger > ( ) ;
-        ISubject < IErrorDetails >? subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
-        var sut = new ErrorManager ( logger ,
-                                     subject ) ;
+        var logger  = Substitute.For < ILogger > ( ) ;
+        var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
+        var sut = new ErrorManager (
+                                    logger ,
+                                    subject ) ;
 
         const string caller = "caller" ;
-        sut.PublishForMessage ( "message" ,
-                                caller ) ;
+        sut.PublishForMessage (
+                               "message" ,
+                               caller ) ;
 
         subject.Received ( 1 )
                .OnNext ( Arg.Is < IErrorDetails > ( d => d.Message == "message" && d.Caller == caller ) ) ;
@@ -42,10 +45,11 @@ public class ErrorManagerTests
     [ TestMethod ]
     public void ErrorChanged_ReturnsSubject ( )
     {
-        ILogger? logger = Substitute.For < ILogger > ( ) ;
-        ISubject < IErrorDetails >? subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
-        var sut = new ErrorManager ( logger ,
-                                     subject ) ;
+        var logger  = Substitute.For < ILogger > ( ) ;
+        var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
+        var sut = new ErrorManager (
+                                    logger ,
+                                    subject ) ;
 
         sut.ErrorChanged.Should ( ).Be ( subject ) ;
     }

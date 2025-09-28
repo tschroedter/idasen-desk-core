@@ -1,13 +1,13 @@
-﻿namespace Idasen.Launcher ;
-
 using System.Reflection ;
-using BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core ;
 using JetBrains.Annotations ;
 using Microsoft.Extensions.Configuration ;
 using Serilog ;
 using Serilog.Core ;
 using Serilog.Debugging ;
 using Serilog.Events ;
+
+namespace Idasen.Launcher ;
 
 /// <summary>
 ///     Provides factory methods for creating and managing Serilog loggers for the application.
@@ -16,12 +16,12 @@ using Serilog.Events ;
 public static class LoggerProvider
 {
     private const string LogTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.ffff} " +
-                                       "{Level:u3}] {Message} " +
+                                       "{Level:u3}] {Message} "                 +
                                        "(at {Caller}){NewLine}{Exception}" ;
 
-    private static readonly object Sync = new ( ) ;
-    private static Logger? _logger ;
-    private static bool _selfLogEnabled ;
+    private static readonly object   Sync = new ( ) ;
+    private static          Logger ? _logger ;
+    private static          bool     _selfLogEnabled ;
 
     /// <summary>
     ///     Creates a logger from Serilog configuration in the local <c>appsettings.json</c> next to the entry assembly.
@@ -33,32 +33,29 @@ public static class LoggerProvider
     {
         EnsureSelfLogEnabled ( ) ;
 
-        lock (Sync)
-        {
+        lock ( Sync ) {
             if ( _logger != null )
-            {
                 return _logger ;
-            }
 
             if ( string.IsNullOrEmpty ( baseDir ) )
-            {
                 baseDir = GetBaseDirectoryName ( ) ;
-            }
 
             var environmentName =
                 Environment.GetEnvironmentVariable ( "DOTNET_ENVIRONMENT" ) ??
                 Environment.GetEnvironmentVariable ( "ASPNETCORE_ENVIRONMENT" ) ??
                 "Production" ;
 
-            IConfigurationRoot configuration = new ConfigurationBuilder ( )
-                                              .SetBasePath ( baseDir )
-                                              .AddJsonFile ( "appsettings.json" ,
-                                                             true ,
-                                                             false )
-                                              .AddJsonFile ( $"appsettings.{environmentName}.json" ,
-                                                             true ,
-                                                             false )
-                                              .Build ( ) ;
+            var configuration = new ConfigurationBuilder ( )
+                               .SetBasePath ( baseDir )
+                               .AddJsonFile (
+                                             "appsettings.json" ,
+                                             true ,
+                                             false )
+                               .AddJsonFile (
+                                             $"appsettings.{environmentName}.json" ,
+                                             true ,
+                                             false )
+                               .Build ( ) ;
 
             _logger = new LoggerConfiguration ( )
                      .ReadFrom.Configuration ( configuration )
@@ -83,20 +80,21 @@ public static class LoggerProvider
     /// </exception>
     public static ILogger CreateLogger ( string appName , string appLogFileName )
     {
-        Guard.ArgumentNotEmptyOrWhitespace ( appName ,
-                                             nameof ( appName ) ) ;
-        Guard.ArgumentNotEmptyOrWhitespace ( appLogFileName ,
-                                             nameof ( appLogFileName ) ) ;
+        Guard.ArgumentNotEmptyOrWhitespace (
+                                            appName ,
+                                            nameof ( appName ) ) ;
+        Guard.ArgumentNotEmptyOrWhitespace (
+                                            appLogFileName ,
+                                            nameof ( appLogFileName ) ) ;
 
         EnsureSelfLogEnabled ( ) ;
 
-        lock (Sync)
-        {
-            if ( _logger != null )
-            {
-                _logger.Debug ( "Using existing logger for '{AppName}' in folder {LogFile}" ,
-                                appName ,
-                                appLogFileName ) ;
+        lock ( Sync ) {
+            if ( _logger != null ) {
+                _logger.Debug (
+                               "Using existing logger for '{AppName}' in folder {LogFile}" ,
+                               appName ,
+                               appLogFileName ) ;
                 return _logger ;
             }
 
@@ -105,9 +103,10 @@ public static class LoggerProvider
             // Keep Serilog's global reference in sync for third-party components
             Log.Logger = _logger ;
 
-            _logger.Debug ( "Created logger for '{AppName}' in folder '{LogFile}'" ,
-                            appName ,
-                            appLogFileName ) ;
+            _logger.Debug (
+                           "Created logger for '{AppName}' in folder '{LogFile}'" ,
+                           appName ,
+                           appLogFileName ) ;
             return _logger ;
         }
     }
@@ -120,29 +119,31 @@ public static class LoggerProvider
     /// <returns>A configured <see cref="Logger" /> instance.</returns>
     private static Logger DoCreateLogger ( string appLogFileName )
     {
-        var logFolder = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory ,
-                                       "logs" ) ;
-        var logFile = CreateFullPathLogFileName ( logFolder ,
-                                                  appLogFileName ) ;
+        var logFolder = Path.Combine (
+                                      AppDomain.CurrentDomain.BaseDirectory ,
+                                      "logs" ) ;
+        var logFile = CreateFullPathLogFileName (
+                                                 logFolder ,
+                                                 appLogFileName ) ;
 
         if ( ! Directory.Exists ( logFolder ) )
-        {
             Directory.CreateDirectory ( logFolder ) ;
-        }
 
         // Make the path available immediately; hook will update on open/roll
         LoggingFile.FullPath = logFile ;
 
 #pragma warning disable CA1305
-        LoggerConfiguration loggerConfiguration = new LoggerConfiguration ( )
-                                                 .MinimumLevel.Debug ( )
-                                                 .Enrich.WithCaller ( )
-                                                 .WriteTo.Console ( LogEventLevel.Debug ,
-                                                                    LogTemplate )
-                                                 .WriteTo.File ( logFile ,
-                                                                 LogEventLevel.Debug ,
-                                                                 LogTemplate ,
-                                                                 hooks : new LoggingFileHooks ( ) ) ;
+        var loggerConfiguration = new LoggerConfiguration ( )
+                                 .MinimumLevel.Debug ( )
+                                 .Enrich.WithCaller ( )
+                                 .WriteTo.Console (
+                                                   LogEventLevel.Debug ,
+                                                   LogTemplate )
+                                 .WriteTo.File (
+                                                logFile ,
+                                                LogEventLevel.Debug ,
+                                                LogTemplate ,
+                                                hooks : new LoggingFileHooks ( ) ) ;
 #pragma warning restore CA1305
 
         return loggerConfiguration.CreateLogger ( ) ;
@@ -153,12 +154,9 @@ public static class LoggerProvider
     /// </summary>
     public static void Shutdown ( )
     {
-        lock (Sync)
-        {
+        lock ( Sync ) {
             if ( _logger == null )
-            {
                 return ;
-            }
 
             _logger.Dispose ( ) ;
             _logger = null ;
@@ -183,27 +181,25 @@ public static class LoggerProvider
         ArgumentNullException.ThrowIfNull ( folder ) ;
         ArgumentNullException.ThrowIfNull ( fileName ) ;
 
-        return Path.Combine ( folder ,
-                              fileName ) ;
+        return Path.Combine (
+                             folder ,
+                             fileName ) ;
     }
 
     private static void EnsureSelfLogEnabled ( )
     {
         if ( _selfLogEnabled )
-        {
             return ;
-        }
 
-        SelfLog.Enable ( msg =>
-                         {
-                             try
-                             {
-                                 File.AppendAllText ( Path.Combine ( AppContext.BaseDirectory ,
-                                                                     "serilog-selflog.txt" ) ,
-                                                      msg ) ;
+        SelfLog.Enable ( msg => {
+                             try {
+                                 File.AppendAllText (
+                                                     Path.Combine (
+                                                                   AppContext.BaseDirectory ,
+                                                                   "serilog-selflog.txt" ) ,
+                                                     msg ) ;
                              }
-                             catch
-                             {
+                             catch {
                                  /* ignore IO errors */
                              }
                          } ) ;

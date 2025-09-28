@@ -1,10 +1,10 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-
-using System.Diagnostics.CodeAnalysis ;
+﻿using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class GattCharacteristicWrapperFactory
@@ -15,8 +15,9 @@ public class GattCharacteristicWrapperFactory
     public GattCharacteristicWrapperFactory (
         GattCharacteristicWrapper.Factory factory )
     {
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        Guard.ArgumentNotNull (
+                               factory ,
+                               nameof ( factory ) ) ;
 
         _factory = factory ;
     }
@@ -24,8 +25,9 @@ public class GattCharacteristicWrapperFactory
     [ ExcludeFromCodeCoverage ]
     public IGattCharacteristicWrapper Create ( GattCharacteristic characteristic )
     {
-        Guard.ArgumentNotNull ( characteristic ,
-                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull (
+                               characteristic ,
+                               nameof ( characteristic ) ) ;
 
         return _factory ( characteristic ) ;
     }

@@ -24,9 +24,10 @@ public interface IDeskDetector
     ///     The timeout used for monitored devices after a device expires
     ///     and is removed from the cache.
     /// </param>
-    IDeskDetector Initialize ( string deviceName ,
-                               ulong deviceAddress ,
-                               uint deviceTimeout ) ;
+    IDeskDetector Initialize (
+        string deviceName ,
+        ulong  deviceAddress ,
+        uint   deviceTimeout ) ;
 
     /// <summary>
     ///     Start the detection of a desk by device name or device address.

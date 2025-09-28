@@ -1,18 +1,19 @@
-namespace Idasen.BluetoothLE.Linak.Tests ;
-
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using Interfaces ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public sealed class DeskSpeedChangedTests
     : DeskRaiseEventForDeskBase < int >
 {
-    protected override void SetSubscription ( IDesk desk ,
-                                              TestScheduler scheduler )
+    protected override void SetSubscription (
+        IDesk         desk ,
+        TestScheduler scheduler )
     {
         ArgumentNullException.ThrowIfNull ( desk ) ;
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
@@ -22,8 +23,9 @@ public sealed class DeskSpeedChangedTests
             .Subscribe ( OnRaised ) ;
     }
 
-    protected override void SetSubject ( IDeskConnector connector ,
-                                         Subject < int > subject )
+    protected override void SetSubject (
+        IDeskConnector  connector ,
+        Subject < int > subject )
     {
         ArgumentNullException.ThrowIfNull ( connector ) ;
         ArgumentNullException.ThrowIfNull ( subject ) ;

@@ -1,10 +1,8 @@
-﻿
-
-// ReSharper disable UnusedMember.Global
-
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿// ReSharper disable UnusedMember.Global
 
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Wrapper for <see cref="GattDeviceServicesResult" />.
@@ -24,5 +22,5 @@ public interface IGattDeviceServicesResultWrapper
     /// <summary>
     ///     Gets the protocol error.
     /// </summary>
-    byte? ProtocolError { get ; }
+    byte ? ProtocolError { get ; }
 }

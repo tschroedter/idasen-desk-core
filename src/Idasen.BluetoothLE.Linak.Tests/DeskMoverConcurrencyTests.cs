@@ -1,43 +1,44 @@
-namespace Idasen.BluetoothLE.Linak.Tests ;
-
 using System.Reactive.Subjects ;
 using FluentAssertions ;
-using Interfaces ;
-using Linak.Control ;
+using Idasen.BluetoothLE.Linak.Control ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
 
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
 [ TestClass ]
 public class DeskMoverConcurrencyTests
 {
-    private IStoppingHeightCalculator _calculator = null! ;
-    private IDeskCommandExecutor _executor = null! ;
-    private Subject < uint > _finishedSubject = null! ;
-    private IDeskHeightAndSpeed _heightAndSpeed = null! ;
-    private IDeskHeightMonitor _heightMonitor = null! ;
-    private Subject < HeightSpeedDetails > _heightSpeedSubject = null! ;
-    private IInitialHeightProvider _initialProvider = null! ;
-    private ILogger _logger = null! ;
-    private IDeskMovementMonitorFactory _monitorFactory = null! ;
-    private IDeskMovementMonitor _movementMonitor = null! ;
-    private IInitialHeightAndSpeedProviderFactory _providerFactory = null! ;
-    private TestScheduler _scheduler = null! ;
+    private IStoppingHeightCalculator             _calculator         = null! ;
+    private IDeskCommandExecutor                  _executor           = null! ;
+    private Subject < uint >                      _finishedSubject    = null! ;
+    private IDeskHeightAndSpeed                   _heightAndSpeed     = null! ;
+    private IDeskHeightMonitor                    _heightMonitor      = null! ;
+    private Subject < HeightSpeedDetails >        _heightSpeedSubject = null! ;
+    private IInitialHeightProvider                _initialProvider    = null! ;
+    private ILogger                               _logger             = null! ;
+    private IDeskMovementMonitorFactory           _monitorFactory     = null! ;
+    private IDeskMovementMonitor                  _movementMonitor    = null! ;
+    private IInitialHeightAndSpeedProviderFactory _providerFactory    = null! ;
+    private TestScheduler                         _scheduler          = null! ;
 
     [ TestInitialize ]
     public void Setup ( )
     {
-        _logger = Substitute.For < ILogger > ( ) ;
+        _logger    = Substitute.For < ILogger > ( ) ;
         _scheduler = new TestScheduler ( ) ;
 
         _initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
         _providerFactory = Substitute.For < IInitialHeightAndSpeedProviderFactory > ( ) ;
-        _providerFactory.Create ( Arg.Any < IDeskCommandExecutor > ( ) ,
-                                  Arg.Any < IDeskHeightAndSpeed > ( ) )
+        _providerFactory.Create (
+                                 Arg.Any < IDeskCommandExecutor > ( ) ,
+                                 Arg.Any < IDeskHeightAndSpeed > ( ) )
                         .Returns ( _initialProvider ) ;
 
         _movementMonitor = Substitute.For < IDeskMovementMonitor > ( ) ;
-        _monitorFactory = Substitute.For < IDeskMovementMonitorFactory > ( ) ;
+        _monitorFactory  = Substitute.For < IDeskMovementMonitorFactory > ( ) ;
         _monitorFactory.Create ( Arg.Any < IDeskHeightAndSpeed > ( ) ).Returns ( _movementMonitor ) ;
 
         _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
@@ -61,7 +62,7 @@ public class DeskMoverConcurrencyTests
         _initialProvider.Finished.Returns ( _finishedSubject ) ;
     }
 
-    private DeskMover CreateSut ( IObservable < uint >? finishedStream = null )
+    private DeskMover CreateSut ( IObservable < uint > ? finishedStream = null )
     {
         return new DeskMover (
                               _logger ,
@@ -79,7 +80,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task TimerOverlap_DoesNotInvokeUpConcurrently ( )
     {
-        DeskMover sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
         sut.TargetHeight = 2000u ;
 
         // Arrange Up to block until we release it
@@ -94,14 +95,14 @@ public class DeskMoverConcurrencyTests
         _scheduler.AdvanceBy ( 1 ) ; // process OnFinished
 
         // Simulate first timer tick -> Move starts and calls Up (blocked)
-        Task t1 = sut.OnTimerElapsed ( 0 ) ;
+        var t1 = sut.OnTimerElapsed ( 0 ) ;
 
         // Give a moment for the call to be issued
         await Task.Yield ( ) ;
         await _executor.Received ( 1 ).Up ( ) ;
 
         // Simulate second overlapping timer tick -> should be skipped by semaphore/pending task
-        Task t2 = sut.OnTimerElapsed ( 1 ) ;
+        var t2 = sut.OnTimerElapsed ( 1 ) ;
         await t2 ; // should complete quickly without invoking Up again
 
         await _executor.Received ( 1 ).Up ( ) ;
@@ -116,10 +117,10 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task Stop_InvokedOnceAndFinishedEmittedOnce_WhenTargetReached ( )
     {
-        var finishedEvents = new List < uint > ( ) ;
+        var finishedEvents   = new List < uint > ( ) ;
         var externalFinished = new Subject < uint > ( ) ;
 
-        DeskMover sut = CreateSut ( externalFinished ) ;
+        var sut = CreateSut ( externalFinished ) ;
         externalFinished.Subscribe ( h => finishedEvents.Add ( h ) ) ;
 
         sut.TargetHeight = 2000u ;
@@ -146,10 +147,10 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task Stop_CalledTwice_SecondCallIsNoopAndNoDuplicateFinished ( )
     {
-        var finishedEvents = new List < uint > ( ) ;
+        var finishedEvents   = new List < uint > ( ) ;
         var externalFinished = new Subject < uint > ( ) ;
 
-        DeskMover sut = CreateSut ( externalFinished ) ;
+        var sut = CreateSut ( externalFinished ) ;
         externalFinished.Subscribe ( h => finishedEvents.Add ( h ) ) ;
 
         sut.TargetHeight = 2000u ;
@@ -175,7 +176,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public void Sampling_TakesLastItemPerInterval ( )
     {
-        DeskMover sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
         sut.TargetHeight = 1500u ;
         _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
 
@@ -184,12 +185,14 @@ public class DeskMoverConcurrencyTests
         _finishedSubject.OnNext ( 1000u ) ;
         _scheduler.AdvanceBy ( 1 ) ;
 
-        var d1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                          1100u ,
-                                          50 ) ;
-        var d2 = new HeightSpeedDetails ( DateTimeOffset.Now.AddMilliseconds ( 10 ) ,
-                                          1200u ,
-                                          60 ) ;
+        var d1 = new HeightSpeedDetails (
+                                         DateTimeOffset.Now ,
+                                         1100u ,
+                                         50 ) ;
+        var d2 = new HeightSpeedDetails (
+                                         DateTimeOffset.Now.AddMilliseconds ( 10 ) ,
+                                         1200u ,
+                                         60 ) ;
 
         // Emit two samples within one interval
         _heightSpeedSubject.OnNext ( d1 ) ;
@@ -207,13 +210,14 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task MoveCommand_Failure_AllowsRetry ( )
     {
-        DeskMover sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
         sut.TargetHeight = 2000u ;
         _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
 
         // First Up fails, second succeeds
-        _executor.Up ( ).Returns ( Task.FromResult ( false ) ,
-                                   Task.FromResult ( true ) ) ;
+        _executor.Up ( ).Returns (
+                                  Task.FromResult ( false ) ,
+                                  Task.FromResult ( true ) ) ;
 
         sut.Initialize ( ) ;
         sut.Start ( ) ;
@@ -235,7 +239,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task Stop_Coalesces_MultipleRequests_WhilePending ( )
     {
-        DeskMover sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
         sut.TargetHeight = 1500u ;
         _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
 

@@ -1,12 +1,12 @@
-﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
-
-using System.Diagnostics ;
+﻿using System.Diagnostics ;
 using System.Globalization ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
-using Interfaces.DevicesDiscovery ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Selkie.DefCon.One.Common ;
+
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 /// <inheritdoc />
 [ DebuggerDisplay ( "{Name} {MacAddress}" ) ]
@@ -14,35 +14,39 @@ using Selkie.DefCon.One.Common ;
 public class Device
     : IDevice
 {
-    public delegate IDevice Factory ( IDateTimeOffset broadcastTime ,
-                                      ulong address ,
-                                      string? name ,
-                                      short rawSignalStrengthInDBm ) ;
+    public delegate IDevice Factory (
+        IDateTimeOffset broadcastTime ,
+        ulong           address ,
+        string ?        name ,
+        short           rawSignalStrengthInDBm ) ;
 
     public Device ( IDevice device )
     {
-        Guard.ArgumentNotNull ( device ,
-                                nameof ( device ) ) ;
+        Guard.ArgumentNotNull (
+                               device ,
+                               nameof ( device ) ) ;
 
-        BroadcastTime = device.BroadcastTime ;
-        Address = device.Address ;
-        MacAddress = device.MacAddress ;
-        Name = device.Name ;
+        BroadcastTime          = device.BroadcastTime ;
+        Address                = device.Address ;
+        MacAddress             = device.MacAddress ;
+        Name                   = device.Name ;
         RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
     }
 
-    public Device ( IDateTimeOffset broadcastTime ,
-                    ulong address ,
-                    [ GuardIgnore ] string? name ,
-                    short rawSignalStrengthInDBm )
+    public Device (
+        IDateTimeOffset          broadcastTime ,
+        ulong                    address ,
+        [ GuardIgnore ] string ? name ,
+        short                    rawSignalStrengthInDBm )
     {
-        Guard.ArgumentNotNull ( broadcastTime ,
-                                nameof ( broadcastTime ) ) ;
+        Guard.ArgumentNotNull (
+                               broadcastTime ,
+                               nameof ( broadcastTime ) ) ;
 
-        BroadcastTime = broadcastTime ;
-        Address = address ;
-        MacAddress = address.ToMacAddress ( ) ;
-        Name = name ;
+        BroadcastTime          = broadcastTime ;
+        Address                = address ;
+        MacAddress             = address.ToMacAddress ( ) ;
+        Name                   = name ;
         RawSignalStrengthInDBm = rawSignalStrengthInDBm ;
     }
 
@@ -56,7 +60,7 @@ public class Device
     public string MacAddress { get ; }
 
     /// <inheritdoc />
-    public string? Name { get ; set ; }
+    public string ? Name { get ; set ; }
 
     /// <inheritdoc />
     public short RawSignalStrengthInDBm { get ; set ; }
@@ -72,9 +76,9 @@ public class Device
                        : Name ;
 
         return
-            $"Name = {name}, " +
-            $"MacAddress = {MacAddress}, " +
-            $"Address = {Address}, " +
+            $"Name = {name}, "                                                                   +
+            $"MacAddress = {MacAddress}, "                                                       +
+            $"Address = {Address}, "                                                             +
             $"BroadcastTime = {BroadcastTime.ToString ( "O" , CultureInfo.InvariantCulture )}, " +
             $"RawSignalStrengthInDBm = {RawSignalStrengthInDBm}dB" ;
     }

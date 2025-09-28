@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+﻿using Idasen.BluetoothLE.Linak.Control ;
 
-using Control ;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Provides raw command payloads for desk operations.
@@ -13,6 +13,7 @@ public interface IDeskCommandsProvider
     /// <param name="command">The command for which to resolve the byte payload.</param>
     /// <param name="bytes">When this method returns, contains the bytes if found; otherwise an empty sequence.</param>
     /// <returns>true if the command was found; otherwise, false.</returns>
-    bool TryGetValue ( DeskCommands command ,
-                       out IEnumerable < byte > bytes ) ;
+    bool TryGetValue (
+        DeskCommands             command ,
+        out IEnumerable < byte > bytes ) ;
 }

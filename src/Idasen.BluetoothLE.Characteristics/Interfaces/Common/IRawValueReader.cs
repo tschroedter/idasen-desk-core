@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 
 /// <summary>
 ///     Reads raw byte values from a GATT characteristic.

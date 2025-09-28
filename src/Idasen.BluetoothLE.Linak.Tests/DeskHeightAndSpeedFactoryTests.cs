@@ -1,28 +1,28 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using Characteristics.Interfaces.Characteristics ;
-using Common.Tests ;
-using FluentAssertions ;
-using Interfaces ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class DeskHeightAndSpeedFactoryTests
 {
-    private DeskHeightAndSpeed.Factory _factory = null! ;
-    private IReferenceOutput _referenceOutput = null! ;
+    private DeskHeightAndSpeed.Factory _factory         = null! ;
+    private IReferenceOutput           _referenceOutput = null! ;
 
     [ TestInitialize ]
     public void Initialize ( )
     {
         _referenceOutput = Substitute.For < IReferenceOutput > ( ) ;
-        _factory = TestFactory ;
+        _factory         = TestFactory ;
     }
 
     [ TestMethod ]
     public void Create_ForReferenceOutputNull_Throws ( )
     {
-        Action action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
+        var action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )

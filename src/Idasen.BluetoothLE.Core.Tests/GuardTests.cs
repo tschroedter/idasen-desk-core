@@ -1,17 +1,17 @@
-﻿namespace Idasen.BluetoothLE.Core.Tests ;
-
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using FluentAssertions.Execution ;
+
+namespace Idasen.BluetoothLE.Core.Tests ;
 
 [ TestClass ]
 public class GuardTests
 {
-    public static void AssertException ( Action action ,
-                                         Type type ,
-                                         string parameter )
+    public static void AssertException (
+        Action action ,
+        Type   type ,
+        string parameter )
     {
-        using (new AssertionScope ( ))
-        {
+        using ( new AssertionScope ( ) ) {
             action.Should ( )
                   .Throw < Exception > ( )
                   .And.GetType ( )
@@ -21,39 +21,47 @@ public class GuardTests
     }
 
     [ TestMethod ]
-    [ DynamicData ( nameof ( GuardTestData.NullEmptyOrWhitespace ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
-    public void ArgumentNotEmptyOrWhitespace_ForInvalidValues_Throws ( string value ,
-                                                                       Type type )
+    [ DynamicData (
+                      nameof ( GuardTestData.NullEmptyOrWhitespace ) ,
+                      typeof ( GuardTestData ) ,
+                      DynamicDataSourceType.Method ) ]
+    public void ArgumentNotEmptyOrWhitespace_ForInvalidValues_Throws (
+        string value ,
+        Type   type )
     {
-        AssertException ( ( ) => Guard.ArgumentNotEmptyOrWhitespace ( value ,
-                                                                      "parameter" ) ,
-                          type ,
-                          "parameter" ) ;
+        AssertException (
+                         ( ) => Guard.ArgumentNotEmptyOrWhitespace (
+                                                                    value ,
+                                                                    "parameter" ) ,
+                         type ,
+                         "parameter" ) ;
     }
 
     [ TestMethod ]
-    [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
+    [ DynamicData (
+                      nameof ( GuardTestData.InstanceAndInteger ) ,
+                      typeof ( GuardTestData ) ,
+                      DynamicDataSourceType.Method ) ]
     public void ArgumentNotEmptyOrWhitespace_ForValues_DoesNotThrows ( object value )
     {
-        var action = new Action ( ( ) => Guard.ArgumentNotEmptyOrWhitespace ( value ,
-                                                                              "parameter" ) ) ;
+        var action = new Action ( ( ) => Guard.ArgumentNotEmptyOrWhitespace (
+                                                                             value ,
+                                                                             "parameter" ) ) ;
 
         action.Should ( )
               .NotThrow ( ) ;
     }
 
     [ TestMethod ]
-    [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
+    [ DynamicData (
+                      nameof ( GuardTestData.InstanceAndInteger ) ,
+                      typeof ( GuardTestData ) ,
+                      DynamicDataSourceType.Method ) ]
     public void ArgumentNotNull_ForValueNotNull_DoesNotThrows ( object value )
     {
-        var action = new Action ( ( ) => Guard.ArgumentNotNull ( value ,
-                                                                 "parameter" ) ) ;
+        var action = new Action ( ( ) => Guard.ArgumentNotNull (
+                                                                value ,
+                                                                "parameter" ) ) ;
 
         action.Should ( )
               .NotThrow ( ) ;
@@ -63,8 +71,9 @@ public class GuardTests
     public void ArgumentNotNull_ForValueNull_Throws ( )
     {
         // ReSharper disable once AssignNullToNotNullAttribute
-        var action = new Action ( ( ) => Guard.ArgumentNotNull ( null! ,
-                                                                 "parameter" ) ) ;
+        var action = new Action ( ( ) => Guard.ArgumentNotNull (
+                                                                null! ,
+                                                                "parameter" ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -73,28 +82,34 @@ public class GuardTests
     }
 
     [ TestMethod ]
-    [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
+    [ DynamicData (
+                      nameof ( GuardTestData.InstanceAndInteger ) ,
+                      typeof ( GuardTestData ) ,
+                      DynamicDataSourceType.Method ) ]
     public void ArgumentNotNullOrEmpty_ForValues_DoesNotThrows ( object value )
     {
-        var action = new Action ( ( ) => Guard.ArgumentNotNullOrEmpty ( value ,
-                                                                        "parameter" ) ) ;
+        var action = new Action ( ( ) => Guard.ArgumentNotNullOrEmpty (
+                                                                       value ,
+                                                                       "parameter" ) ) ;
 
         action.Should ( )
               .NotThrow ( ) ;
     }
 
     [ TestMethod ]
-    [ DynamicData ( nameof ( GuardTestData.NullOrEmpty ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
-    public void ArgumentNotNullOrEmpty_ForValues_Throws ( string value ,
-                                                          Type type )
+    [ DynamicData (
+                      nameof ( GuardTestData.NullOrEmpty ) ,
+                      typeof ( GuardTestData ) ,
+                      DynamicDataSourceType.Method ) ]
+    public void ArgumentNotNullOrEmpty_ForValues_Throws (
+        string value ,
+        Type   type )
     {
-        AssertException ( ( ) => Guard.ArgumentNotNullOrEmpty ( value ,
-                                                                "parameter" ) ,
-                          type ,
-                          "parameter" ) ;
+        AssertException (
+                         ( ) => Guard.ArgumentNotNullOrEmpty (
+                                                              value ,
+                                                              "parameter" ) ,
+                         type ,
+                         "parameter" ) ;
     }
 }

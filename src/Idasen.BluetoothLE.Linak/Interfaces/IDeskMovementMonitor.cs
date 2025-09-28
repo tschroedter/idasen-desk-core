@@ -1,6 +1,6 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+﻿using Idasen.BluetoothLE.Linak.Control ;
 
-using Control ;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Observes height changes to detect whether the desk is moving.

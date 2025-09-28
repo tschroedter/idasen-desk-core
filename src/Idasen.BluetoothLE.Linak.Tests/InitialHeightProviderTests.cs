@@ -1,30 +1,30 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using System.Reactive.Linq ;
+﻿using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using Characteristics.Common ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Interfaces ;
-using Linak.Control ;
+using Idasen.BluetoothLE.Characteristics.Common ;
+using Idasen.BluetoothLE.Linak.Control ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class InitialHeightProviderTests : IDisposable
 {
     private const uint SomeHeight = 123u ;
 
-    private HeightSpeedDetails _details1 = null! ;
-    private HeightSpeedDetails _details2 = null! ;
+    private HeightSpeedDetails _details1          = null! ;
+    private HeightSpeedDetails _details2          = null! ;
     private HeightSpeedDetails _detailsZeroHeight = null! ;
 
-    private IDeskCommandExecutor _executor = null! ;
-    private IDeskHeightAndSpeed _heightAndSpeed = null! ;
-    private ILogger _logger = null! ;
-    private TestScheduler _scheduler = null! ;
-    private Subject < uint > _subjectFinished = null! ;
+    private IDeskCommandExecutor           _executor              = null! ;
+    private IDeskHeightAndSpeed            _heightAndSpeed        = null! ;
+    private ILogger                        _logger                = null! ;
+    private TestScheduler                  _scheduler             = null! ;
+    private Subject < uint >               _subjectFinished       = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
 
     public void Dispose ( )
@@ -39,10 +39,10 @@ public class InitialHeightProviderTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _scheduler = new TestScheduler ( ) ;
-        _logger = Substitute.For < ILogger > ( ) ;
-        _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
-        _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
+        _scheduler       = new TestScheduler ( ) ;
+        _logger          = Substitute.For < ILogger > ( ) ;
+        _heightAndSpeed  = Substitute.For < IDeskHeightAndSpeed > ( ) ;
+        _executor        = Substitute.For < IDeskCommandExecutor > ( ) ;
         _subjectFinished = new Subject < uint > ( ) ;
 
         _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
@@ -52,17 +52,20 @@ public class InitialHeightProviderTests : IDisposable
         _heightAndSpeed.Height
                        .Returns ( SomeHeight ) ;
 
-        _details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                             1u ,
-                                             2 ) ;
+        _details1 = new HeightSpeedDetails (
+                                            DateTimeOffset.Now ,
+                                            1u ,
+                                            2 ) ;
 
-        _details2 = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                             11u ,
-                                             22 ) ;
+        _details2 = new HeightSpeedDetails (
+                                            DateTimeOffset.Now ,
+                                            11u ,
+                                            22 ) ;
 
-        _detailsZeroHeight = new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                                      0u ,
-                                                      22 ) ;
+        _detailsZeroHeight = new HeightSpeedDetails (
+                                                     DateTimeOffset.Now ,
+                                                     0u ,
+                                                     22 ) ;
 
         _executor.Up ( )
                  .Returns ( true ) ;
@@ -75,18 +78,19 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void Initialize_ForInvokedTwice_DisposesOldSubscription ( )
     {
-        IDisposable? disposable1 = Substitute.For < IDisposable > ( ) ;
-        IDisposable? disposable2 = Substitute.For < IDisposable > ( ) ;
+        var disposable1 = Substitute.For < IDisposable > ( ) ;
+        var disposable2 = Substitute.For < IDisposable > ( ) ;
 
-        IObservable < HeightSpeedDetails >? heightAndSpeed = Substitute.For < IObservable < HeightSpeedDetails > > ( ) ;
+        var heightAndSpeed = Substitute.For < IObservable < HeightSpeedDetails > > ( ) ;
         heightAndSpeed.Subscribe ( Arg.Any < IObserver < HeightSpeedDetails > > ( ) )
-                      .Returns ( disposable1 ,
-                                 disposable2 ) ;
+                      .Returns (
+                                disposable1 ,
+                                disposable2 ) ;
 
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( heightAndSpeed ) ;
 
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
         sut.Initialize ( ) ;
@@ -100,7 +104,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void Initialize_ForInvoked_SetsHeight ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -112,7 +116,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForInvokedFirstTime_UpdatesHeight ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -128,7 +132,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForInvokedFirstTime_HasReceivedHeightAndSpeedIsTrue ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -144,7 +148,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForInvokedFirstTime_NotifiesFinished ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -166,7 +170,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_UpdatesHeight ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -182,7 +186,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_HasReceivedHeightAndSpeedIsFalse ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -198,7 +202,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForInvokedFirstTimeWithHeightZero_DoesNotNotifiesFinished ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -216,11 +220,10 @@ public class InitialHeightProviderTests : IDisposable
            .BeFalse ( ) ;
     }
 
-
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForInvokedSecondTime_UpdatesHeight ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -237,7 +240,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForInvokedSecondTime_DoesNotNotifiesFinished ( )
     {
-        using InitialHeightProvider sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -261,9 +264,9 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public async Task Start_ForNotInitialized_Throws ( )
     {
-        InitialHeightProvider sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
-        Func < Task > action = async ( ) => await sut.Start ( ) ;
+        var action = async ( ) => await sut.Start ( ) ;
 
         await action.Should ( )
                     .ThrowAsync < NotInitializeException > ( ) ;
@@ -275,7 +278,7 @@ public class InitialHeightProviderTests : IDisposable
         _heightAndSpeed.Height
                        .Returns ( 1u ) ;
 
-        InitialHeightProvider sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -292,7 +295,7 @@ public class InitialHeightProviderTests : IDisposable
         _heightAndSpeed.Height
                        .Returns ( 1u ) ;
 
-        InitialHeightProvider sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -317,7 +320,7 @@ public class InitialHeightProviderTests : IDisposable
         _heightAndSpeed.Height
                        .Returns ( 0u ) ;
 
-        InitialHeightProvider sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -334,7 +337,7 @@ public class InitialHeightProviderTests : IDisposable
         _heightAndSpeed.Height
                        .Returns ( 0u ) ;
 
-        InitialHeightProvider sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -352,7 +355,7 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void HasReceivedHeightAndSpeed_ForInvoked_False ( )
     {
-        InitialHeightProvider sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.HasReceivedHeightAndSpeed
            .Should ( )
@@ -362,8 +365,8 @@ public class InitialHeightProviderTests : IDisposable
     [ TestMethod ]
     public void Dispose_ForInvoked_DisposesHeightAndSpeed ( )
     {
-        IDisposable? disposable = Substitute.For < IDisposable > ( ) ;
-        ISubject < HeightSpeedDetails >? subject = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
+        var disposable = Substitute.For < IDisposable > ( ) ;
+        var subject    = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
 
         subject.Subscribe ( null! )
                .ReturnsForAnyArgs ( disposable ) ;
@@ -371,7 +374,7 @@ public class InitialHeightProviderTests : IDisposable
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( subject ) ;
 
-        InitialHeightProvider sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -383,11 +386,12 @@ public class InitialHeightProviderTests : IDisposable
 
     private InitialHeightProvider CreateSut ( )
     {
-        var deviceMonitor = new InitialHeightProvider ( _logger ,
-                                                        _scheduler ,
-                                                        _heightAndSpeed ,
-                                                        _executor ,
-                                                        _subjectFinished ) ;
+        var deviceMonitor = new InitialHeightProvider (
+                                                       _logger ,
+                                                       _scheduler ,
+                                                       _heightAndSpeed ,
+                                                       _executor ,
+                                                       _subjectFinished ) ;
 
         return deviceMonitor ;
     }

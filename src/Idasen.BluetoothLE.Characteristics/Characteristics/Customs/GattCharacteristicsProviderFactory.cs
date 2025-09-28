@@ -1,10 +1,10 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
+﻿using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
+using Idasen.BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-using Aop.Aspects ;
-using Autofac.Extras.DynamicProxy ;
-using Core ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Interfaces.Characteristics.Customs ;
+namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 
 /// <summary>
 ///     Default factory for creating <see cref="IGattCharacteristicProvider" /> instances.
@@ -22,8 +22,9 @@ public class GattCharacteristicsProviderFactory
     public GattCharacteristicsProviderFactory (
         GattCharacteristicProvider.Factory factory )
     {
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        Guard.ArgumentNotNull (
+                               factory ,
+                               nameof ( factory ) ) ;
 
         _factory = factory ;
     }

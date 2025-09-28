@@ -1,8 +1,8 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
-
-using BluetoothLE.Characteristics.Characteristics ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using NSubstitute ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
 public class DpgTest
@@ -11,7 +11,7 @@ public class DpgTest
     [ TestMethod ]
     public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        Dpg sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -26,7 +26,7 @@ public class DpgTest
     [ TestMethod ]
     public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
     {
-        Dpg sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -41,19 +41,21 @@ public class DpgTest
 
     protected override Dpg CreateSut ( )
     {
-        return new Dpg ( Logger ,
-                         Scheduler ,
-                         Device ,
-                         ProviderFactory ,
-                         RawValueReader ,
-                         RawValueWriter ,
-                         ToStringConverter ,
-                         DescriptionToUuid ) ;
+        return new Dpg (
+                        Logger ,
+                        Scheduler ,
+                        Device ,
+                        ProviderFactory ,
+                        RawValueReader ,
+                        RawValueWriter ,
+                        ToStringConverter ,
+                        DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add ( Dpg.DpgKey ,
-                       CharacteristicWrapper1 ) ;
+        Wrappers.Add (
+                      Dpg.DpgKey ,
+                      CharacteristicWrapper1 ) ;
     }
 }

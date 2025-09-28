@@ -1,40 +1,42 @@
-﻿namespace Idasen.BluetoothLE.Linak.Control ;
-
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskLocker
     : IDeskLocker
 {
-    public delegate IDeskLocker Factory ( IDeskMover deskMover ,
-                                          IDeskCommandExecutor executor ,
-                                          IDeskHeightAndSpeed heightAndSpeed ) ;
+    public delegate IDeskLocker Factory (
+        IDeskMover           deskMover ,
+        IDeskCommandExecutor executor ,
+        IDeskHeightAndSpeed  heightAndSpeed ) ;
 
-    private readonly IDeskMover _deskMover ;
+    private readonly IDeskMover           _deskMover ;
     private readonly IDeskCommandExecutor _executor ;
-    private readonly IDeskHeightAndSpeed _heightAndSpeed ;
+    private readonly IDeskHeightAndSpeed  _heightAndSpeed ;
 
-    private readonly ILogger _logger ;
+    private readonly ILogger    _logger ;
     private readonly IScheduler _scheduler ;
 
-    private IDisposable? _disposalHeightAndSpeed ;
+    private IDisposable ? _disposalHeightAndSpeed ;
 
     private bool _disposed ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskLocker" /> class.
     /// </summary>
-    public DeskLocker ( ILogger logger ,
-                        IScheduler scheduler ,
-                        IDeskMover deskMover ,
-                        IDeskCommandExecutor executor ,
-                        IDeskHeightAndSpeed heightAndSpeed )
+    public DeskLocker (
+        ILogger              logger ,
+        IScheduler           scheduler ,
+        IDeskMover           deskMover ,
+        IDeskCommandExecutor executor ,
+        IDeskHeightAndSpeed  heightAndSpeed )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
@@ -42,10 +44,10 @@ public class DeskLocker
         ArgumentNullException.ThrowIfNull ( executor ) ;
         ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
 
-        _logger = logger ;
-        _scheduler = scheduler ;
-        _deskMover = deskMover ;
-        _executor = executor ;
+        _logger         = logger ;
+        _scheduler      = scheduler ;
+        _deskMover      = deskMover ;
+        _executor       = executor ;
         _heightAndSpeed = heightAndSpeed ;
     }
 
@@ -94,12 +96,9 @@ public class DeskLocker
     protected virtual void Dispose ( bool disposing )
     {
         if ( _disposed )
-        {
             return ;
-        }
 
-        if ( disposing )
-        {
+        if ( disposing ) {
             _disposalHeightAndSpeed?.Dispose ( ) ;
             _disposalHeightAndSpeed = null ;
         }
@@ -110,26 +109,22 @@ public class DeskLocker
     private async Task OnHeightAndSpeedChanged ( HeightSpeedDetails details )
     {
         if ( ! IsLocked )
-        {
             return ;
-        }
 
         if ( _deskMover.IsAllowedToMove )
-        {
             return ;
-        }
 
-        _logger.Information ( "Manual move detected. Calling Stop. Details={Details}" ,
-                              details ) ;
+        _logger.Information (
+                             "Manual move detected. Calling Stop. Details={Details}" ,
+                             details ) ;
 
-        try
-        {
+        try {
             await _executor.Stop ( ).ConfigureAwait ( false ) ;
         }
-        catch ( Exception ex )
-        {
-            _logger.Error ( ex ,
-                            "Error while stopping after manual move detection" ) ;
+        catch ( Exception ex ) {
+            _logger.Error (
+                           ex ,
+                           "Error while stopping after manual move detection" ) ;
         }
     }
 }

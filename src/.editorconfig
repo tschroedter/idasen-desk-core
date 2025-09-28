@@ -1,6 +1,14 @@
+# Top-level EditorConfig for idasen-desk-core
+# ReSharper + .NET analyzers code style configuration
+# Docs:
+#  - https://learn.microsoft.com/dotnet/fundamentals/code-analysis/configuration-options
+#  - https://www.jetbrains.com/help/resharper/EditorConfig_Property_Index.html
+
 root = true
 
-# Global defaults -----------------------------------------------------------
+#############################
+# Global settings
+#############################
 [*]
 charset = utf-8
 end_of_line = crlf
@@ -9,118 +17,158 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
 
-# Solution-wide analyzer baseline (start strict; can tune per group) --------
-[*.{cs,vb}]
-dotnet_analyzer_diagnostic.severity = warning
+[*.md]
+trim_trailing_whitespace = false
+indent_size = 2
 
-# Language version (C# 12 / latest) -----------------------------------------
+#############################
+# C# files
+#############################
 [*.cs]
+# Language version hint (project enforces actual)
 dotnet_language_version = latest
 
-# Formatting / style (approximate common ReSharper defaults) ----------------
-csharp_prefer_braces = true:warning
-csharp_style_namespace_declarations = file_scoped:warning
-csharp_style_var_for_built_in_types = true:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
-csharp_style_var_elsewhere = false:suggestion
-csharp_style_expression_bodied_methods = when_on_single_line:suggestion
-csharp_style_expression_bodied_properties = when_on_single_line:suggestion
-csharp_style_expression_bodied_accessors = when_on_single_line:suggestion
-csharp_style_prefer_switch_expression = true:suggestion
-csharp_style_pattern_local_over_anonymous_function = true:suggestion
-csharp_style_prefer_pattern_matching = true:suggestion
-csharp_style_deconstructed_variable_declaration = true:suggestion
-csharp_style_inlined_variable_declaration = true:suggestion
-csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
-csharp_style_prefer_tuple_swap = true:suggestion
-csharp_style_prefer_extended_property_pattern = true:suggestion
-csharp_style_prefer_collection_expression = true:suggestion
+# Usings
+resharper_place_system_directives_first = true
+dotnet_sort_system_directives_first = true
+csharp_using_directive_placement = outside_namespace:silent
 
-# Qualification -------------------------------------------------------------
+# Qualification
 dotnet_style_qualification_for_field = false:suggestion
 dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_event = false:suggestion
 
-# Using directives ----------------------------------------------------------
-dotnet_sort_system_directives_first = true
-csharp_using_directive_placement = inside_namespace:warning
+# var preferences
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+resharper_csharp_use_var_for_built_in_types = true
+resharper_csharp_use_var_when_type_is_apparent = true
+resharper_csharp_use_var_elsewhere = true
 
-# Parentheses / simplification ---------------------------------------------
-dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
-dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
-dotnet_style_parentheses_in_other_binary_operators = for_clarity:silent
-dotnet_style_parentheses_in_other_operators = for_clarity:silent
+# Expression-bodied members
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = when_on_single_line:suggestion
+csharp_style_expression_bodied_accessors = when_on_single_line:suggestion
+csharp_style_expression_bodied_lambdas = true:suggestion
+
+# Pattern matching / expressions
+csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_conditional_delegate_call = true:suggestion
+
+# Object / collection initializers
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
 dotnet_style_prefer_conditional_expression_over_return = true:suggestion
 
-# Nullability / conditionals -----------------------------------------------
-csharp_style_conditional_delegate_call = true:suggestion
-dotnet_style_coalesce_expression = true:suggestion
-dotnet_style_null_propagation = true:suggestion
+# Discards
+csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
+csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 
-# Fields / modifiers --------------------------------------------------------
-dotnet_style_readonly_field = true:warning
-csharp_prefer_static_local_function = true:suggestion
+# Parentheses
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_other_binary_operators = never_if_unnecessary:suggestion
+dotnet_style_parentheses_in_other_operators = never_if_unnecessary:suggestion
 
-# Remove unused -------------------------------------------------------------
-dotnet_diagnostic.IDE0005.severity = warning   # Unused using
+# Accessibility
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
 
-# General IDE analyzer severities (picked for quality) ----------------------
-dotnet_diagnostic.IDE0044.severity = warning   # Add readonly
+# Modifier ordering
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, required, volatile, async:suggestion
 
-dotnet_diagnostic.IDE0051.severity = suggestion # Unused private member
+# Formatting
+max_line_length = 140
+csharp_new_line_before_open_brace = types, methods, properties, accessors
+csharp_indent_switch_labels = true
+csharp_prefer_braces = when_multiline:suggestion
+csharp_style_namespace_declarations = file_scoped:suggestion
+csharp_style_allow_trailing_comma_in_multi_line_initializers = true:silent
+csharp_style_allow_trailing_comma_in_multi_line_lists = true:silent
 
-# Design / reliability (selected) ------------------------------------------
-dotnet_diagnostic.CA1031.severity = warning    # Do not catch general exception types
-dotnet_diagnostic.CA1062.severity = warning    # Validate arguments of public methods
-dotnet_diagnostic.CA1305.severity = suggestion # Specify IFormatProvider
+# ReSharper formatting specifics
+resharper_csharp_blank_lines_before_single_line_comments = 0
+resharper_csharp_blank_lines_around_single_line_auto_property = 0
+resharper_csharp_blank_lines_around_single_line_property = 0
+resharper_csharp_blank_lines_around_namespace = 1
+resharper_csharp_keep_blank_lines_in_declarations = 1
+resharper_csharp_keep_blank_lines_in_code = 1
+resharper_csharp_wrap_after_declaration_lpar = true
+resharper_csharp_wrap_after_invocation_lpar = true
+resharper_csharp_wrap_arguments_style = chop_if_long
+resharper_csharp_wrap_parameters_style = chop_if_long
+resharper_csharp_indent_case_body = true
+resharper_csharp_indent_case_from_switch = true
+resharper_csharp_stick_comment = false
+resharper_csharp_space_within_single_line_array_initializer_braces = false
 
-# Performance (enable as you add Microsoft.CodeAnalysis.NetAnalyzers) -------
-# dotnet_diagnostic.CA1822.severity = suggestion  # Mark members static
-# dotnet_diagnostic.CA1825.severity = suggestion  # Avoid zero-length array allocations
+# ReSharper member access
+resharper_csharp_qualify_member_access = false
+resharper_csharp_qualify_static_member_access = false
 
-# Logging (custom / 3rd party if present) -----------------------------------
-dotnet_diagnostic.Serilog001.severity = warning
+# ReSharper brace style
+resharper_csharp_braces_for_if = required
+resharper_csharp_braces_for_for = required
+resharper_csharp_braces_for_foreach = required
+resharper_csharp_braces_for_while = required
+resharper_csharp_braces_for_do = required
+resharper_csharp_braces_for_lock = required
+resharper_csharp_braces_for_using = required
 
-# Naming rules --------------------------------------------------------------
-# Private fields with underscore
-DotNetNamingSymbols.private_fields.applicable_kinds = field
-DotNetNamingSymbols.private_fields.applicable_accessibilities = private
-DotNetNamingStyle.underscore_prefix.capitalization = camel_case
-DotNetNamingStyle.underscore_prefix.required_prefix = _
-DotNetNamingRule.private_fields_with_underscore.symbols = private_fields
-DotNetNamingRule.private_fields_with_underscore.style = underscore_prefix
-DotNetNamingRule.private_fields_with_underscore.severity = suggestion
+# Naming (Roslyn)
+# Private instance fields -> _camelCase
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
 
-# Constants PascalCase
-DotNetNamingSymbols.constants.applicable_kinds = field
-DotNetNamingSymbols.constants.required_modifiers = const
-DotNetNamingStyle.pascal_case.capitalization = pascal_case
-DotNetNamingRule.constants_pascal.symbols = constants
-DotNetNamingRule.constants_pascal.style = pascal_case
-DotNetNamingRule.constants_pascal.severity = warning
+dotnet_naming_style.camel_case_underscore.capitalization = camel_case
+dotnet_naming_style.camel_case_underscore.required_prefix = _
 
-# Interfaces start with I
-DotNetNamingSymbols.interfaces.applicable_kinds = interface
-DotNetNamingStyle.interface_prefix.capitalization = pascal_case
-DotNetNamingStyle.interface_prefix.required_prefix = I
-DotNetNamingRule.interfaces_start_with_I.symbols = interfaces
-DotNetNamingRule.interfaces_start_with_I.style = interface_prefix
-DotNetNamingRule.interfaces_start_with_I.severity = warning
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = camel_case_underscore
+dotnet_naming_rule.private_fields_underscore.severity = suggestion
 
-# Async suffix (advisory)
-DotNetNamingSymbols.async_methods.applicable_kinds = method
-DotNetNamingStyle.async_suffix.capitalization = pascal_case
-DotNetNamingStyle.async_suffix.required_suffix = Async
-DotNetNamingRule.async_methods_end_with_async.symbols = async_methods
-DotNetNamingRule.async_methods_end_with_async.style = async_suffix
-DotNetNamingRule.async_methods_end_with_async.severity = suggestion
+# Interfaces -> I pascal
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
 
-# File headers --------------------------------------------------------------
-file_header_template = Licensed under the MIT License.
+dotnet_naming_style.prefix_i.capitalization = pascal_case
+dotnet_naming_style.prefix_i.required_prefix = I
 
-# Generated code suppression (designer / g) --------------------------------
-[*.{g.cs,generated.cs,designer.cs}]
-dotnet_analyzer_diagnostic.severity = silent
+dotnet_naming_rule.interfaces_prefix_i.symbols = interfaces
+dotnet_naming_rule.interfaces_prefix_i.style = prefix_i
+dotnet_naming_rule.interfaces_prefix_i.severity = suggestion
+
+# Constants -> PascalCase
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.required_modifiers = const
+
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_rule.constants_pascal.symbols = constants
+dotnet_naming_rule.constants_pascal.style = pascal_case
+dotnet_naming_rule.constants_pascal.severity = suggestion
+
+# Static readonly fields -> PascalCase
+dotnet_naming_symbols.static_readonly_fields.applicable_kinds = field
+dotnet_naming_symbols.static_readonly_fields.required_modifiers = static, readonly
+
+dotnet_naming_rule.static_readonly_pascal.symbols = static_readonly_fields
+dotnet_naming_rule.static_readonly_pascal.style = pascal_case
+dotnet_naming_rule.static_readonly_pascal.severity = suggestion
+
+# ReSharper naming (mirrors underscore for private fields)
+resharper_csharp_naming_rule.private_instance_fields = aaBb:,_:true
+resharper_csharp_naming_rule.private_static_fields = aaBb:,_:true
+resharper_csharp_naming_rule.private_static_readonly_fields = AaBb
+
+# Nullable reference types
+build_property.Nullable = enable
+
+# Analyzer severities examples
+dotnet_diagnostic.CA2000.severity = warning
+
+# End of file

@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters ;
+﻿using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
-using Common.Tests ;
-using Core.ServicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters ;
 
 [ TestClass ]
 public class OfficialGattServiceConverterConstructorNullTests

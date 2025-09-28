@@ -1,13 +1,13 @@
-﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
-
-using System.Reactive.Concurrency ;
+﻿using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces.ServicesDiscovery ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -16,16 +16,19 @@ public class Device
 {
     public delegate IDevice Factory ( IBluetoothLeDeviceWrapper wrapper ) ;
 
-    private readonly IDisposable _subscriber ;
+    private readonly IDisposable               _subscriber ;
     private readonly IBluetoothLeDeviceWrapper _wrapper ;
 
-    public Device ( IScheduler scheduler ,
-                    IBluetoothLeDeviceWrapper wrapper )
+    public Device (
+        IScheduler                scheduler ,
+        IBluetoothLeDeviceWrapper wrapper )
     {
-        Guard.ArgumentNotNull ( wrapper ,
-                                nameof ( wrapper ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull (
+                               wrapper ,
+                               nameof ( wrapper ) ) ;
+        Guard.ArgumentNotNull (
+                               scheduler ,
+                               nameof ( scheduler ) ) ;
 
         _wrapper = wrapper ;
 
@@ -50,9 +53,7 @@ public class Device
     public void Connect ( )
     {
         if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
-        {
             return ;
-        }
 
         _wrapper.Connect ( ) ;
     }

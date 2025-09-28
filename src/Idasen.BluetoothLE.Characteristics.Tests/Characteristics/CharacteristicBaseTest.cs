@@ -1,20 +1,20 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
-
-using Windows.Storage.Streams ;
-using BluetoothLE.Characteristics.Characteristics ;
-using BluetoothLE.Common.Tests ;
-using Core.Interfaces.ServicesDiscovery ;
-using Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿using Windows.Storage.Streams ;
 using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
 public class CharacteristicBaseTest
     : CharacteristicBaseTests < TestCharacteristicBase >
 {
     protected readonly Guid GattCharacteristicUuid = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
-    protected readonly Guid GattServiceUuid = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
+    protected readonly Guid GattServiceUuid        = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
 
     [ TestMethod ]
     public void GattServiceUuid_ForInvoked_Uuid ( )
@@ -27,7 +27,7 @@ public class CharacteristicBaseTest
     [ AutoDataTestMethod ]
     public void Initialize_ForUnknownGattServiceUuid_Throws (
         TestCharacteristicBase sut ,
-        [ Freeze ] IDevice device )
+        [ Freeze ] IDevice     device )
     {
         IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > gattServices =
             new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( ) ;
@@ -45,13 +45,13 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public void Initialize_ForKnownGattServiceUuid_AddsKeyToDescriptionToUuid ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
 
         sut.Initialize < TestCharacteristicBase > ( )
-           .DescriptionToUuid[TestCharacteristicBase.RawValueKey]
+           .DescriptionToUuid [ TestCharacteristicBase.RawValueKey ]
            .Should ( )
            .Be ( GattCharacteristicUuid ) ;
     }
@@ -59,7 +59,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -74,7 +74,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -90,7 +90,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task Refresh_ForSuccessfulRead_UpdatesRawValuesAsync ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -109,7 +109,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task Refresh_ForFailedRead_UpdatesRawValuesAsync ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -128,7 +128,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task TryWriteRawValue_ForKnownCharacteristics_WritesRawValuesAsync ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -139,20 +139,22 @@ public class CharacteristicBaseTest
         await sut.TryWriteRawValue ( RawValue1 ) ;
 
         await RawValueWriter.Received ( )
-                            .TryWriteValueAsync ( CharacteristicWrapper1 ,
-                                                  Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
+                            .TryWriteValueAsync (
+                                                 CharacteristicWrapper1 ,
+                                                 Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
     }
 
     [ TestMethod ]
     public async Task TryWriteRawValue_ForKnownCharacteristics_ReturnsTrue ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
 
-        RawValueWriter.TryWriteValueAsync ( Arg.Any < IGattCharacteristicWrapper > ( ) ,
-                                            Arg.Any < IBuffer > ( ) )
+        RawValueWriter.TryWriteValueAsync (
+                                           Arg.Any < IGattCharacteristicWrapper > ( ) ,
+                                           Arg.Any < IBuffer > ( ) )
                       .Returns ( Task.FromResult ( true ) ) ;
 
         await sut.Initialize < TestCharacteristicBase > ( )
@@ -167,13 +169,14 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task TryWriteRawValue_ForKnownCharacteristicsAndFailedToWrite_ReturnsFalse ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
 
-        RawValueWriter.TryWriteValueAsync ( Arg.Any < IGattCharacteristicWrapper > ( ) ,
-                                            Arg.Any < IBuffer > ( ) )
+        RawValueWriter.TryWriteValueAsync (
+                                           Arg.Any < IGattCharacteristicWrapper > ( ) ,
+                                           Arg.Any < IBuffer > ( ) )
                       .Returns ( Task.FromResult ( false ) ) ;
 
         await sut.Initialize < TestCharacteristicBase > ( )
@@ -190,7 +193,7 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -209,7 +212,7 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -221,9 +224,11 @@ public class CharacteristicBaseTest
 
         // Accept Serilog's generic Error<T>(string, T) overload
         Logger.Received ( )
-              .Error ( Arg.Is < string > ( s => s.Contains ( "Unknown characteristic" ,
-                                                             StringComparison.OrdinalIgnoreCase ) ) ,
-                       Arg.Any < string > ( ) ) ;
+              .Error (
+                      Arg.Is < string > ( s => s.Contains (
+                                                           "Unknown characteristic" ,
+                                                           StringComparison.OrdinalIgnoreCase ) ) ,
+                      Arg.Any < string > ( ) ) ;
     }
 
     [ TestMethod ]
@@ -232,10 +237,11 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                       null! ) ;
+        Wrappers.Add (
+                      TestCharacteristicBase.RawValueKey ,
+                      null! ) ;
 
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -255,10 +261,11 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                       null! ) ;
+        Wrappers.Add (
+                      TestCharacteristicBase.RawValueKey ,
+                      null! ) ;
 
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -275,7 +282,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task ToString_ForInvoke_Instance ( )
     {
-        TestCharacteristicBase sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -293,19 +300,21 @@ public class CharacteristicBaseTest
 
     protected override TestCharacteristicBase CreateSut ( )
     {
-        return new TestCharacteristicBase ( Logger ,
-                                            Scheduler ,
-                                            Device ,
-                                            ProviderFactory ,
-                                            RawValueReader ,
-                                            RawValueWriter ,
-                                            ToStringConverter ,
-                                            DescriptionToUuid ) ;
+        return new TestCharacteristicBase (
+                                           Logger ,
+                                           Scheduler ,
+                                           Device ,
+                                           ProviderFactory ,
+                                           RawValueReader ,
+                                           RawValueWriter ,
+                                           ToStringConverter ,
+                                           DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
-                       CharacteristicWrapper1 ) ;
+        Wrappers.Add (
+                      TestCharacteristicBase.RawValueKey ,
+                      CharacteristicWrapper1 ) ;
     }
 }

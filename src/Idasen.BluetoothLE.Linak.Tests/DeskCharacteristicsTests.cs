@@ -1,13 +1,13 @@
-﻿namespace Idasen.BluetoothLE.Linak.Tests ;
-
-using Characteristics.Interfaces.Characteristics ;
-using Common.Tests ;
-using Core.Interfaces.ServicesDiscovery ;
-using FluentAssertions ;
+﻿using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Interfaces ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public class DeskCharacteristicsTests
@@ -15,13 +15,15 @@ public class DeskCharacteristicsTests
     [ AutoDataTestMethod ]
     public async Task Refresh_ForInvoked_CallsCharacteristicRefresh (
         DeskCharacteristics sut ,
-        IGenericAccess genericAccess ,
-        IGenericAttribute genericAttribute )
+        IGenericAccess      genericAccess ,
+        IGenericAttribute   genericAttribute )
     {
-        sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
-                                  genericAccess ) ;
-        sut.WithCharacteristics ( DeskCharacteristicKey.GenericAttribute ,
-                                  genericAttribute ) ;
+        sut.WithCharacteristics (
+                                 DeskCharacteristicKey.GenericAccess ,
+                                 genericAccess ) ;
+        sut.WithCharacteristics (
+                                 DeskCharacteristicKey.GenericAttribute ,
+                                 genericAttribute ) ;
 
         await sut.Refresh ( ) ;
 
@@ -36,15 +38,16 @@ public class DeskCharacteristicsTests
 
     [ AutoDataTestMethod ]
     public void Initialize_ForInvoked_CallsCreator (
-        DeskCharacteristics sut ,
-        IDevice device ,
+        DeskCharacteristics                    sut ,
+        IDevice                                device ,
         [ Freeze ] IDeskCharacteristicsCreator creator )
     {
         sut.Initialize ( device ) ;
 
         creator.Received ( )
-               .Create ( sut ,
-                         device ) ;
+               .Create (
+                        sut ,
+                        device ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -62,8 +65,9 @@ public class DeskCharacteristicsTests
     public void WithCharacteristics_ForCharacteristicIsNull_Throws (
         DeskCharacteristics sut )
     {
-        Action action = ( ) => sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
-                                                         null! ) ;
+        Action action = ( ) => sut.WithCharacteristics (
+                                                        DeskCharacteristicKey.GenericAccess ,
+                                                        null! ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -73,27 +77,30 @@ public class DeskCharacteristicsTests
     [ AutoDataTestMethod ]
     public void WithCharacteristics_ForCharacteristic_AddsCharacteristic (
         DeskCharacteristics sut ,
-        IGenericAccess genericAccess )
+        IGenericAccess      genericAccess )
     {
-        sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
-                                  genericAccess ) ;
+        sut.WithCharacteristics (
+                                 DeskCharacteristicKey.GenericAccess ,
+                                 genericAccess ) ;
 
         sut.Characteristics
            .Should ( )
-           .Contain ( x => x.Key == DeskCharacteristicKey.GenericAccess &&
+           .Contain ( x => x.Key   == DeskCharacteristicKey.GenericAccess &&
                            x.Value == genericAccess ) ;
     }
 
     [ AutoDataTestMethod ]
     public void ToString_ForInvoked_Instance (
         DeskCharacteristics sut ,
-        IGenericAccess genericAccess ,
-        IGenericAttribute genericAttribute )
+        IGenericAccess      genericAccess ,
+        IGenericAttribute   genericAttribute )
     {
-        sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
-                                  genericAccess ) ;
-        sut.WithCharacteristics ( DeskCharacteristicKey.GenericAttribute ,
-                                  genericAttribute ) ;
+        sut.WithCharacteristics (
+                                 DeskCharacteristicKey.GenericAccess ,
+                                 genericAccess ) ;
+        sut.WithCharacteristics (
+                                 DeskCharacteristicKey.GenericAttribute ,
+                                 genericAttribute ) ;
 
         using var scope = new AssertionScope ( ) ;
 

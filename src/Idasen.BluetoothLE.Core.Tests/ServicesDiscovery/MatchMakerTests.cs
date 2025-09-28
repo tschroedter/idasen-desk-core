@@ -1,12 +1,12 @@
 ﻿#nullable disable
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
-
-using Core.ServicesDiscovery ;
 using FluentAssertions ;
-using Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class MatchMakerTests
@@ -14,7 +14,7 @@ public class MatchMakerTests
     [ AutoDataTestMethod ]
     public void Create_ForKnownAddress_Instance (
         MatchMaker sut ,
-        ulong address )
+        ulong      address )
     {
         sut.PairToDeviceAsync ( address )
            .Should ( )
@@ -23,19 +23,18 @@ public class MatchMakerTests
 
     [ AutoDataTestMethod ]
     public async Task Create_ForUnknownAddress_Throws (
-        Lazy < MatchMaker > sut ,
+        Lazy < MatchMaker >       sut ,
         [ Freeze ] IDeviceFactory deviceFactory ,
-        ulong address )
+        ulong                     address )
     {
         deviceFactory.FromBluetoothAddressAsync ( Arg.Any < ulong > ( ) )
                      .Returns ( ( IDevice ) null ) ;
 
-        Func < Task > action = async ( ) =>
-                               {
-                                   await sut.Value
-                                            .PairToDeviceAsync ( address )
-                                            .ConfigureAwait ( false ) ;
-                               } ;
+        var action = async ( ) => {
+                         await sut.Value
+                                  .PairToDeviceAsync ( address )
+                                  .ConfigureAwait ( false ) ;
+                     } ;
 
         await action.Should ( )
                     .ThrowAsync < ArgumentNullException > ( ) ;

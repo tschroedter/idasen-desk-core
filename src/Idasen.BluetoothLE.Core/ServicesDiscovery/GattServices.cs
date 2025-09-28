@@ -1,9 +1,9 @@
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
-
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces.ServicesDiscovery ;
-using Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -22,8 +22,7 @@ public class GattServices
     {
         get
         {
-            lock (_padlock)
-            {
+            lock ( _padlock ) {
                 return _dictionary.Count ;
             }
         }
@@ -37,26 +36,25 @@ public class GattServices
     {
         get
         {
-            lock (_padlock)
-            {
-                return _dictionary[service] ;
+            lock ( _padlock ) {
+                return _dictionary [ service ] ;
             }
         }
         set
         {
-            Guard.ArgumentNotNull ( value ,
-                                    nameof ( value ) ) ;
+            Guard.ArgumentNotNull (
+                                   value ,
+                                   nameof ( value ) ) ;
 
-            lock (_padlock)
-            {
-                if ( _dictionary.TryGetValue ( service ,
-                                               out IGattCharacteristicsResultWrapper? existing ) )
-                {
+            lock ( _padlock ) {
+                if ( _dictionary.TryGetValue (
+                                              service ,
+                                              out var existing ) ) {
                     // Dispose previously stored characteristics to avoid leaks
                     existing.Dispose ( ) ;
                 }
 
-                _dictionary[service] = value ;
+                _dictionary [ service ] = value ;
             }
         }
     }
@@ -68,8 +66,7 @@ public class GattServices
     {
         DisposeEntries ( ) ;
 
-        lock (_padlock)
-        {
+        lock ( _padlock ) {
             _dictionary.Clear ( ) ;
         }
     }
@@ -87,8 +84,7 @@ public class GattServices
     {
         get
         {
-            lock (_padlock)
-            {
+            lock ( _padlock ) {
                 return _dictionary ;
             }
         }
@@ -96,10 +92,8 @@ public class GattServices
 
     private void DisposeEntries ( )
     {
-        lock (_padlock)
-        {
-            foreach (KeyValuePair < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > kvp in _dictionary)
-            {
+        lock ( _padlock ) {
+            foreach ( var kvp in _dictionary ) {
                 // Dispose value (characteristics) first, then the service
                 kvp.Value.Dispose ( ) ;
                 kvp.Key.Dispose ( ) ;

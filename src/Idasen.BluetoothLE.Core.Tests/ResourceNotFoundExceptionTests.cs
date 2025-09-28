@@ -1,18 +1,19 @@
-﻿namespace Idasen.BluetoothLE.Core.Tests ;
+﻿using FluentAssertions ;
 
-using FluentAssertions ;
+namespace Idasen.BluetoothLE.Core.Tests ;
 
 [ TestClass ]
 public class ResourceNotFoundExceptionTests
 {
     private const string ResourceName = "ResourceName" ;
-    private const string Message = "Message" ;
+    private const string Message      = "Message" ;
 
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsMessage ( )
     {
-        var sut = new ResourceNotFoundException ( ResourceName ,
-                                                  Message ) ;
+        var sut = new ResourceNotFoundException (
+                                                 ResourceName ,
+                                                 Message ) ;
 
         sut.Message
            .Should ( )
@@ -22,8 +23,9 @@ public class ResourceNotFoundExceptionTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsResourceName ( )
     {
-        var sut = new ResourceNotFoundException ( ResourceName ,
-                                                  Message ) ;
+        var sut = new ResourceNotFoundException (
+                                                 ResourceName ,
+                                                 Message ) ;
 
         sut.ResourceName
            .Should ( )

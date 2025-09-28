@@ -1,9 +1,9 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
+﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Idasen.BluetoothLE.Core ;
 
-using Core ;
-using Interfaces.Common ;
+namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-public class SimpleDictionaryBase<TKey , TValue>
+public class SimpleDictionaryBase < TKey , TValue >
     : ISimpleDictionary < TKey , TValue > where TKey : notnull
 {
     private readonly Dictionary < TKey , TValue > _dictionary = new ( ) ;
@@ -15,19 +15,18 @@ public class SimpleDictionaryBase<TKey , TValue>
     {
         get
         {
-            lock (_padlock)
-            {
-                return _dictionary[key] ;
+            lock ( _padlock ) {
+                return _dictionary [ key ] ;
             }
         }
         set
         {
-            Guard.ArgumentNotNull ( value! ,
-                                    nameof ( value ) ) ;
+            Guard.ArgumentNotNull (
+                                   value! ,
+                                   nameof ( value ) ) ;
 
-            lock (_padlock)
-            {
-                _dictionary[key] = value ;
+            lock ( _padlock ) {
+                _dictionary [ key ] = value ;
             }
         }
     }
@@ -35,8 +34,7 @@ public class SimpleDictionaryBase<TKey , TValue>
     /// <inheritdoc />
     public void Clear ( )
     {
-        lock (_padlock)
-        {
+        lock ( _padlock ) {
             _dictionary.Clear ( ) ;
         }
     }
@@ -46,8 +44,7 @@ public class SimpleDictionaryBase<TKey , TValue>
     {
         get
         {
-            lock (_padlock)
-            {
+            lock ( _padlock ) {
                 return _dictionary.Count ;
             }
         }
@@ -58,8 +55,7 @@ public class SimpleDictionaryBase<TKey , TValue>
     {
         get
         {
-            lock (_padlock)
-            {
+            lock ( _padlock ) {
                 // Avoid invalid casts; only include keys that are truly strings
                 return _dictionary.Keys
                                   .OfType < string > ( )
@@ -73,8 +69,7 @@ public class SimpleDictionaryBase<TKey , TValue>
     {
         get
         {
-            lock (_padlock)
-            {
+            lock ( _padlock ) {
                 // Create a shallow copy snapshot to avoid exposing internal state
                 return new Dictionary < TKey , TValue > ( _dictionary ) ;
             }

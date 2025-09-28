@@ -1,7 +1,7 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+﻿using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
 
-using BluetoothLE.Characteristics.Characteristics ;
-using FluentAssertions ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
 public class RawValueChangedDetailsTests
@@ -9,7 +9,7 @@ public class RawValueChangedDetailsTests
     private const string Description = "Description" ;
 
     private readonly DateTimeOffset _timestamp = DateTimeOffset.Parse ( "2007-10-02T13:02:03.0000000-07:30" ) ;
-    private readonly Guid _uuid = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
+    private readonly Guid           _uuid      = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
 
     private readonly byte [ ] _value = [1 , 2 , 3] ;
 
@@ -48,8 +48,8 @@ public class RawValueChangedDetailsTests
     [ TestMethod ]
     public void ToString_ForInvoked_Instance ( )
     {
-        var expected = "Description = Description, " +
-                       "Value =  01-02-03, " +
+        var expected = "Description = Description, "                     +
+                       "Value =  01-02-03, "                             +
                        "Timestamp = 2007-10-02T13:02:03.0000000-07:30, " +
                        "Uuid = 11111111-1111-1111-1111-111111111111" ;
 
@@ -60,9 +60,10 @@ public class RawValueChangedDetailsTests
 
     private RawValueChangedDetails CreateSut ( )
     {
-        return new RawValueChangedDetails ( Description ,
-                                            _value ,
-                                            _timestamp ,
-                                            _uuid ) ;
+        return new RawValueChangedDetails (
+                                           Description ,
+                                           _value ,
+                                           _timestamp ,
+                                           _uuid ) ;
     }
 }

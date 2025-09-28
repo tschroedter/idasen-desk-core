@@ -1,16 +1,14 @@
-﻿
-
-// [assembly: InternalsVisibleTo("Idasen.BluetoothLE.Tests")]
-
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+﻿// [assembly: InternalsVisibleTo("Idasen.BluetoothLE.Tests")]
 
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Interfaces.DevicesDiscovery ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Serilog ;
+
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 /// <inheritdoc cref="IDeviceMonitor" />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -19,41 +17,46 @@ public class DeviceMonitor
 {
     private readonly ISubject < IDevice > _deviceDiscovered ;
     private readonly ISubject < IDevice > _deviceNameUpdated ;
-    private readonly IDevices _devices ;
+    private readonly IDevices             _devices ;
     private readonly ISubject < IDevice > _deviceUpdated ;
-    private readonly ILogger _logger ;
-    private readonly IScheduler _scheduler ;
-    private readonly IWatcher _watcher ;
+    private readonly ILogger              _logger ;
+    private readonly IScheduler           _scheduler ;
+    private readonly IWatcher             _watcher ;
 
-    private IDisposable? _disposableStarted ;
-    private IDisposable? _disposableStopped ;
-    private IDisposable? _disposableUpdated ;
+    private IDisposable ? _disposableStarted ;
+    private IDisposable ? _disposableStopped ;
+    private IDisposable ? _disposableUpdated ;
 
     public DeviceMonitor (
-        ILogger logger ,
-        IScheduler scheduler ,
+        ILogger                       logger ,
+        IScheduler                    scheduler ,
         Func < ISubject < IDevice > > factory ,
-        IDevices devices ,
-        IWatcher watcher )
+        IDevices                      devices ,
+        IWatcher                      watcher )
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
-        Guard.ArgumentNotNull ( devices ,
-                                nameof ( devices ) ) ;
-        Guard.ArgumentNotNull ( watcher ,
-                                nameof ( watcher ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull (
+                               logger ,
+                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull (
+                               factory ,
+                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull (
+                               devices ,
+                               nameof ( devices ) ) ;
+        Guard.ArgumentNotNull (
+                               watcher ,
+                               nameof ( watcher ) ) ;
+        Guard.ArgumentNotNull (
+                               scheduler ,
+                               nameof ( scheduler ) ) ;
 
-        _logger = logger ;
+        _logger    = logger ;
         _scheduler = scheduler ;
-        _devices = devices ;
-        _watcher = watcher ;
+        _devices   = devices ;
+        _watcher   = watcher ;
 
-        _deviceUpdated = factory.Invoke ( ) ;
-        _deviceDiscovered = factory.Invoke ( ) ;
+        _deviceUpdated     = factory.Invoke ( ) ;
+        _deviceDiscovered  = factory.Invoke ( ) ;
         _deviceNameUpdated = factory.Invoke ( ) ;
     }
 
@@ -129,37 +132,38 @@ public class DeviceMonitor
 
     private void OnDeviceUpdated ( IDevice device )
     {
-        if ( ! _devices.TryGetDevice ( device.Address ,
-                                       out IDevice? storedDevice ) )
-        {
-            _logger.Information ( "[{DeviceMacAddress}] Discovered Device" ,
-                                  device.MacAddress ) ;
+        if ( ! _devices.TryGetDevice (
+                                      device.Address ,
+                                      out var storedDevice ) ) {
+            _logger.Information (
+                                 "[{DeviceMacAddress}] Discovered Device" ,
+                                 device.MacAddress ) ;
 
             _devices.AddOrUpdateDevice ( device ) ;
 
             _deviceDiscovered.OnNext ( device ) ;
         }
-        else
-        {
-            _logger.Information ( $"[{device.MacAddress}] Updated Device " +
-                                  $"(Name = {device.Name}, " +
-                                  $"{device.RawSignalStrengthInDBm}DBm, " +
-                                  $"Address = {device.Address})" ) ;
+        else {
+            _logger.Information (
+                                 $"[{device.MacAddress}] Updated Device " +
+                                 $"(Name = {device.Name}, "               +
+                                 $"{device.RawSignalStrengthInDBm}DBm, "  +
+                                 $"Address = {device.Address})" ) ;
 
-            var hasNameChanged = HasDeviceNameChanged ( device ,
-                                                        storedDevice! ) ;
+            var hasNameChanged = HasDeviceNameChanged (
+                                                       device ,
+                                                       storedDevice! ) ;
 
             _devices.AddOrUpdateDevice ( device ) ;
 
             _deviceUpdated.OnNext ( device ) ;
 
             if ( ! hasNameChanged )
-            {
                 return ;
-            }
 
-            _logger.Information ( "[{DeviceMacAddress}] Device Name Changed" ,
-                                  device.MacAddress ) ;
+            _logger.Information (
+                                 "[{DeviceMacAddress}] Device Name Changed" ,
+                                 device.MacAddress ) ;
 
             _deviceNameUpdated.OnNext ( device ) ;
         }
@@ -169,18 +173,15 @@ public class DeviceMonitor
 
     private void OnStarted ( DateTime dateTime ) => _logger.Information ( "Watcher Started listening" ) ;
 
-    private static bool HasDeviceNameChanged ( IDevice device ,
-                                               IDevice storedDevice )
+    private static bool HasDeviceNameChanged (
+        IDevice device ,
+        IDevice storedDevice )
     {
         if ( ! string.IsNullOrEmpty ( storedDevice.Name ) )
-        {
             return storedDevice.Name != device.Name ;
-        }
 
         if ( ! string.IsNullOrEmpty ( device.Name ) )
-        {
             return true ;
-        }
 
         return storedDevice.Name != device.Name ;
     }

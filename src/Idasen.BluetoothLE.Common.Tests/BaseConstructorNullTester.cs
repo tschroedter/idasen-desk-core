@@ -1,5 +1,3 @@
-namespace Idasen.BluetoothLE.Common.Tests ;
-
 using Autofac ;
 using AutofacSerilogIntegration ;
 using FluentAssertions ;
@@ -11,12 +9,15 @@ using Serilog ;
 using Serilog.Events ;
 using Serilog.Sinks.SystemConsole.Themes ;
 
-public abstract class BaseConstructorNullTester<T> where T : class
-{
-    private IContainer? _container ;
+namespace Idasen.BluetoothLE.Common.Tests ;
 
-    protected BaseConstructorNullTester ( int numberOfConstructorsPassed = 1 ,
-                                          int numberOfConstructorsFailed = 0 )
+public abstract class BaseConstructorNullTester < T > where T : class
+{
+    private IContainer ? _container ;
+
+    protected BaseConstructorNullTester (
+        int numberOfConstructorsPassed = 1 ,
+        int numberOfConstructorsFailed = 0 )
     {
         NumberOfConstructorsPassed = numberOfConstructorsPassed ;
         NumberOfConstructorsFailed = numberOfConstructorsFailed ;
@@ -27,7 +28,8 @@ public abstract class BaseConstructorNullTester<T> where T : class
 
     protected IContainer Container => _container ??
                                       throw new
-                                          InvalidOperationException ( "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
+                                          InvalidOperationException (
+                                                                     "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
 
     [ TestCleanup ]
     public virtual void Cleanup ( )
@@ -35,7 +37,6 @@ public abstract class BaseConstructorNullTester<T> where T : class
         _container?.Dispose ( ) ;
         _container = null ;
     }
-
 
     [ TestInitialize ]
     public virtual void Initialize ( )
@@ -51,9 +52,10 @@ public abstract class BaseConstructorNullTester<T> where T : class
         Log.Logger = new LoggerConfiguration ( )
                     .Enrich.WithCaller ( )
                     .MinimumLevel.Information ( )
-                    .WriteTo.Console ( LogEventLevel.Information ,
-                                       template ,
-                                       theme : AnsiConsoleTheme.Code )
+                    .WriteTo.Console (
+                                      LogEventLevel.Information ,
+                                      template ,
+                                      theme : AnsiConsoleTheme.Code )
                     .CreateLogger ( ) ;
     }
 
@@ -67,7 +69,7 @@ public abstract class BaseConstructorNullTester<T> where T : class
 
     protected virtual IContainer BuildContainer ( )
     {
-        ContainerBuilder builder = CreateContainerBuilder ( ) ;
+        var builder = CreateContainerBuilder ( ) ;
         RegisterModules ( builder ) ;
         return builder.Build ( ) ;
     }
@@ -75,25 +77,26 @@ public abstract class BaseConstructorNullTester<T> where T : class
     [ TestMethod ]
     public virtual void Constructor_ForAnyParameterNullThrows_AllPassing ( )
     {
-        INotNullTester tester = CreateTester ( ) ;
+        var tester = CreateTester ( ) ;
 
         tester.Test < T > ( ) ;
 
-        using (new AssertionScope ( ))
-        {
+        using ( new AssertionScope ( ) ) {
             tester.HasPassed
                   .Should ( )
                   .BeTrue ( "Has Passed" ) ;
 
             tester.ConstructorsToTest
                   .Should ( )
-                  .Be ( NumberOfConstructorsPassed ,
-                        "ConstructorsToTest" ) ;
+                  .Be (
+                       NumberOfConstructorsPassed ,
+                       "ConstructorsToTest" ) ;
 
             tester.ConstructorsFailed
                   .Should ( )
-                  .Be ( NumberOfConstructorsFailed ,
-                        "ConstructorsFailed" ) ;
+                  .Be (
+                       NumberOfConstructorsFailed ,
+                       "ConstructorsFailed" ) ;
         }
     }
 
