@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Autofac ;
-using Idasen.Aop.Aspects ;
-using Idasen.Aop.Interfaces ;
-using Serilog ;
+﻿using System.Diagnostics.CodeAnalysis;
+using Autofac;
+using Idasen.Aop.Aspects;
+using Idasen.Aop.Interfaces;
+using Serilog;
 
 namespace Idasen.Aop
 {
@@ -11,7 +11,7 @@ namespace Idasen.Aop
     ///     Autofac module that registers AOP-related components for BluetoothLE, including
     ///     invocation-to-text conversion and logging aspects.
     /// </summary>
-    [ ExcludeFromCodeCoverage ]
+    [ExcludeFromCodeCoverage]
     public sealed class BluetoothLEAop
         : Module
     {
@@ -19,15 +19,15 @@ namespace Idasen.Aop
         ///     Adds the AOP services to the provided container builder.
         /// </summary>
         /// <param name="builder">The Autofac container builder.</param>
-        protected override void Load ( ContainerBuilder builder )
+        protected override void Load(ContainerBuilder builder)
         {
-            ArgumentNullException.ThrowIfNull ( builder ) ;
+            ArgumentNullException.ThrowIfNull(builder);
 
-            builder.RegisterType < InvocationToTextConverter > ( )
-                   .As < IInvocationToTextConverter > ( ) ;
+            _ = builder.RegisterType<InvocationToTextConverter>()
+                   .As<IInvocationToTextConverter>();
 
-            builder.Register ( c => new LogAspect ( c.Resolve < ILogger > ( ) ,
-                                                    c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
+            _ = builder.Register(c => new LogAspect(c.Resolve<ILogger>(),
+                                                    c.Resolve<IInvocationToTextConverter>()));
         }
     }
 }

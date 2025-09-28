@@ -1,9 +1,9 @@
-﻿using System.Collections ;
-using System.Reflection ;
-using System.Text ;
-using Castle.DynamicProxy ;
-using Idasen.Aop.Interfaces ;
-using JetBrains.Annotations ;
+﻿using System.Collections;
+using System.Reflection;
+using System.Text;
+using Castle.DynamicProxy;
+using Idasen.Aop.Interfaces;
+using JetBrains.Annotations;
 
 namespace Idasen.Aop
 {
@@ -18,20 +18,20 @@ namespace Idasen.Aop
         /// </summary>
         /// <param name="invocation">The intercepted method invocation.</param>
         /// <returns>A string describing the invocation.</returns>
-        public string Convert ( IInvocation invocation )
+        public string Convert(IInvocation invocation)
         {
-            ArgumentNullException.ThrowIfNull ( invocation ) ;
+            ArgumentNullException.ThrowIfNull(invocation);
 
             // Prefer the declaring type to avoid Castle proxy type names (e.g., SampleProxy)
             var type = invocation.Method.DeclaringType ??
                        invocation.TargetType ??
-                       invocation.Proxy?.GetType ( ).BaseType ;
+                       invocation.Proxy?.GetType().BaseType;
 
-            var typeName = type?.FullName ?? "UnknownType" ;
+            var typeName = type?.FullName ?? "UnknownType";
 
-            var arguments = ConvertArgumentsToString ( invocation ) ;
+            var arguments = ConvertArgumentsToString(invocation);
 
-            return $"{typeName}.{invocation.Method.Name}({arguments})" ;
+            return $"{typeName}.{invocation.Method.Name}({arguments})";
         }
 
         /// <summary>
@@ -40,167 +40,164 @@ namespace Idasen.Aop
         /// </summary>
         /// <param name="arguments">The method arguments.</param>
         /// <returns>Formatted argument list.</returns>
-        [ UsedImplicitly ]
-        internal static string ConvertArgumentsToString ( object [ ] arguments )
+        [UsedImplicitly]
+        internal static string ConvertArgumentsToString(object[] arguments)
         {
-            if ( arguments.Length == 0 )
+            if (arguments.Length == 0)
             {
-                return string.Empty ;
+                return string.Empty;
             }
 
-            var builder = new StringBuilder ( ) ;
+            var builder = new StringBuilder();
 
             for (var i = 0; i < arguments.Length; i++)
             {
-                builder.Append ( $"arg{i}=" ) ;
-                builder.Append ( ToValueString ( arguments[i] ) ) ;
+                _ = builder.Append($"arg{i}=");
+                _ = builder.Append(ToValueString(arguments[i]));
 
-                if ( i < arguments.Length - 1 )
+                if (i < arguments.Length - 1)
                 {
-                    builder.Append ( ',' ) ;
+                    _ = builder.Append(',');
                 }
             }
 
-            return builder.ToString ( ) ;
+            return builder.ToString();
         }
 
         /// <summary>
         ///     Converts an invocation's arguments to a comma-separated string including parameter names (and modifiers) with
         ///     values.
         /// </summary>
-        private static string ConvertArgumentsToString ( IInvocation invocation )
+        private static string ConvertArgumentsToString(IInvocation invocation)
         {
-            var args = invocation.Arguments ;
+            var args = invocation.Arguments;
 
-            if ( args.Length == 0 )
+            if (args.Length == 0)
             {
-                return string.Empty ;
+                return string.Empty;
             }
 
-            var parameters = invocation.Method.GetParameters ( ) ;
-            var builder = new StringBuilder ( ) ;
+            var parameters = invocation.Method.GetParameters();
+            var builder = new StringBuilder();
 
             for (var i = 0; i < args.Length; i++)
             {
                 var name = i < parameters.Length
                                ? parameters[i].Name
-                               : $"arg{i}" ;
+                               : $"arg{i}";
                 var p = i < parameters.Length
                             ? parameters[i]
-                            : null ;
-                var modifier = GetParamModifier ( p ) ;
+                            : null;
+                var modifier = GetParamModifier(p);
 
-                builder.Append ( modifier ) ;
-                builder.Append ( name ) ;
-                builder.Append ( '=' ) ;
-                builder.Append ( ToValueString ( args[i] ) ) ;
+                _ = builder.Append(modifier);
+                _ = builder.Append(name);
+                _ = builder.Append('=');
+                _ = builder.Append(ToValueString(args[i]));
 
-                if ( i < args.Length - 1 )
+                if (i < args.Length - 1)
                 {
-                    builder.Append ( ',' ) ;
+                    _ = builder.Append(',');
                 }
             }
 
-            return builder.ToString ( ) ;
+            return builder.ToString();
         }
 
-        private static string GetParamModifier ( ParameterInfo? p )
+        private static string GetParamModifier(ParameterInfo? p)
         {
-            if ( p == null )
+            if (p == null)
             {
-                return string.Empty ;
+                return string.Empty;
             }
 
-            if ( p.IsOut )
+            if (p.IsOut)
             {
-                return "out " ;
+                return "out ";
             }
 
             // IsByRef is true for ref/out
-            if ( p.ParameterType.IsByRef )
-            {
-                return "ref " ;
-            }
-
-            return p.IsDefined ( typeof ( ParamArrayAttribute ) ,
-                                 false )
+            return p.ParameterType.IsByRef
+                ? "ref "
+                : p.IsDefined(typeof(ParamArrayAttribute),
+                                 false)
                        ? "params "
-                       : string.Empty ;
+                       : string.Empty;
         }
 
-        private static string ToValueString ( object? value )
+        private static string ToValueString(object? value)
         {
-            if ( value is null )
+            if (value is null)
             {
-                return "null" ;
+                return "null";
             }
 
             // Arrays -> length in brackets, e.g., [100]
-            if ( value is Array array )
+            if (value is Array array)
             {
-                return $"[{array.Length}]" ;
+                return $"[{array.Length}]";
             }
 
             // Non-generic IDictionary -> number of keys in brackets
-            if ( value is IDictionary dict )
+            if (value is IDictionary dict)
             {
-                return $"[{dict.Count}]" ;
+                return $"[{dict.Count}]";
             }
 
             // Generic IDictionary<,> or IReadOnlyDictionary<,> -> use Count
-            var genericDictCount = TryGetGenericDictionaryCount ( value ) ;
+            var genericDictCount = TryGetGenericDictionaryCount(value);
 
-            if ( genericDictCount.HasValue )
+            if (genericDictCount.HasValue)
             {
-                return $"[{genericDictCount.Value}]" ;
+                return $"[{genericDictCount.Value}]";
             }
 
             // Other IEnumerable -> just say enumerable
-            if ( value is IEnumerable and not string )
+            if (value is IEnumerable and not string)
             {
-                return "enumerable" ;
+                return "enumerable";
             }
 
             // Fallback: plain ToString
-            return value.ToString ( ) ?? value.GetType ( ).Name ;
+            return value.ToString() ?? value.GetType().Name;
         }
 
-        private static int? TryGetGenericDictionaryCount ( object value )
+        private static int? TryGetGenericDictionaryCount(object value)
         {
-            var t = value.GetType ( ) ;
+            var t = value.GetType();
 
-            foreach (var i in t.GetInterfaces ( ))
+            foreach (var i in t.GetInterfaces())
             {
-                if ( ! i.IsGenericType )
+                if (!i.IsGenericType)
                 {
-                    continue ;
+                    continue;
                 }
 
-                var def = i.GetGenericTypeDefinition ( ) ;
+                var def = i.GetGenericTypeDefinition();
 
-                if ( def != typeof ( IDictionary < , > ) &&
-                     def != typeof ( IReadOnlyDictionary < , > ) )
+                if (def != typeof(IDictionary<,>) &&
+                     def != typeof(IReadOnlyDictionary<,>))
                 {
-                    continue ;
+                    continue;
                 }
 
                 // Prefer the Count property on the interface, else try on the concrete type
-                var prop = i.GetProperty ( "Count" ) ?? t.GetProperty ( "Count" ) ;
+                var prop = i.GetProperty("Count") ?? t.GetProperty("Count");
 
-                if ( prop == null || prop.PropertyType != typeof ( int ) )
+                if (prop == null || prop.PropertyType != typeof(int))
                 {
-                    continue ;
+                    continue;
                 }
 
-                var v = prop.GetValue ( value ) ;
+                var v = prop.GetValue(value);
 
-                if ( v is int c )
+                if (v is int c)
                 {
-                    return c ;
+                    return c;
                 }
             }
 
-            return null ;
+            return null;
         }
     }
 }
