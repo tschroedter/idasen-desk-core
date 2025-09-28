@@ -67,16 +67,17 @@ jobs:
       - name: Pack NuGet packages (${{ env.BUILD_CONFIGURATION }})
         run: |
           New-Item -ItemType Directory -Path $env:PACKAGE_OUTPUT -Force | Out-Null
-          dotnet pack src/Idasen.Launcher.csproj --configuration $env:BUILD_CONFIGURATION --no-build --output $env:PACKAGE_OUTPUT
+          # Fixed path: project resides in folder src/Idasen.Launcher/Idasen.Launcher.csproj
+          dotnet pack src/Idasen.Launcher/Idasen.Launcher.csproj --configuration $env:BUILD_CONFIGURATION --no-build --output $env:PACKAGE_OUTPUT
           Get-ChildItem $env:PACKAGE_OUTPUT
 
       - name: Upload NuGet packages artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nuget-packages
-          path: ${{ env.PACKAGE_OUTPUT }}\idasen.desk.core.*.nupkg
-          if-no-files-found: error
-          retention-days: 14
+            name: nuget-packages
+            path: ${{ env.PACKAGE_OUTPUT }}\idasen.desk.core.*.nupkg
+            if-no-files-found: error
+            retention-days: 14
 
       - name: Create and push git tag (optional)
         if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/')
