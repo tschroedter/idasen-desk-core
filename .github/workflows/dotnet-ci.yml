@@ -64,6 +64,12 @@ jobs:
       - name: Test (${{ env.BUILD_CONFIGURATION }})
         run: dotnet test src/idasen-desk-core.sln --configuration $env:BUILD_CONFIGURATION --no-build --verbosity normal
 
+      - name: Pack NuGet packages (${{ env.BUILD_CONFIGURATION }})
+        run: |
+          New-Item -ItemType Directory -Path $env:PACKAGE_OUTPUT -Force | Out-Null
+          dotnet pack Idasen.Launcher.csproj --configuration $env:BUILD_CONFIGURATION --no-build --output $env:PACKAGE_OUTPUT
+          Get-ChildItem $env:PACKAGE_OUTPUT
+
       - name: Upload NuGet packages artifact
         uses: actions/upload-artifact@v4
         with:
