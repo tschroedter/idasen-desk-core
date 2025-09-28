@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Common.Tests ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+using BluetoothLE.Characteristics.Common ;
+using BluetoothLE.Common.Tests ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class ByteArrayExtensionsTests
@@ -13,7 +13,7 @@ public class ByteArrayExtensionsTests
         byte [ ] bytes = null! ;
 
         // ReSharper disable once AssignNullToNotNullAttribute
-        var action = ( ) => { bytes.ToHex ( ) ; } ;
+        Action action = ( ) => { bytes.ToHex ( ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )

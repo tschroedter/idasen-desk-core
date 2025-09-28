@@ -1,11 +1,11 @@
-﻿using FluentAssertions ;
-using FluentAssertions.Execution ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+using Core ;
+using Core.DevicesDiscovery ;
+using Core.Interfaces ;
+using Core.Interfaces.DevicesDiscovery ;
+using FluentAssertions ;
+using FluentAssertions.Execution ;
 
 [ TestClass ]
 public class DeviceFactoryTests
@@ -41,13 +41,13 @@ public class DeviceFactoryTests
     [ TestMethod ]
     public void Create_ForBroadcastTimesNull_Throws ( )
     {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).Create ( null! ,
-                                                _address ,
-                                                _name ,
-                                                _rawSignalStrengthInDBm ) ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            CreateSut ( ).Create ( null! ,
+                                                   _address ,
+                                                   _name ,
+                                                   _rawSignalStrengthInDBm ) ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -57,10 +57,10 @@ public class DeviceFactoryTests
     [ TestMethod ]
     public void CreateForInvoked_ReturnsInstance ( )
     {
-        var actual = CreateSut ( ).Create ( _broadcastTime ,
-                                            _address ,
-                                            _name ,
-                                            _rawSignalStrengthInDBm ) ;
+        IDevice actual = CreateSut ( ).Create ( _broadcastTime ,
+                                                _address ,
+                                                _name ,
+                                                _rawSignalStrengthInDBm ) ;
 
         using (new AssertionScope ( ))
         {
@@ -82,8 +82,5 @@ public class DeviceFactoryTests
         }
     }
 
-    private DeviceFactory CreateSut ( )
-    {
-        return new DeviceFactory ( _factory ) ;
-    }
+    private DeviceFactory CreateSut ( ) => new ( _factory ) ;
 }

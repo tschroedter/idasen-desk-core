@@ -1,11 +1,12 @@
-﻿using CsvHelper ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+
+using System.Reflection ;
+using Common.Tests ;
+using Core.ServicesDiscovery ;
+using CsvHelper ;
 using CsvHelper.Configuration ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 using NSubstitute ;
-
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
 [ TestClass ]
 public class OfficialGattServiceConverterTests
@@ -26,8 +27,8 @@ public class OfficialGattServiceConverterTests
         _readerRow = Substitute.For < IReaderRow > ( ) ;
         _writerRow = Substitute.For < IWriterRow > ( ) ;
 
-        var memberInfo = typeof ( TestClass ).GetMember ( "One" )
-                                             .First ( ) ;
+        MemberInfo memberInfo = typeof ( TestClass ).GetMember ( "One" )
+                                                    .First ( ) ;
 
         _memberMapData = new MemberMapData ( memberInfo ) ;
     }
@@ -45,12 +46,12 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertFromString_ForReaderRowNull_Throws ( )
     {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).ConvertFromString ( _text ,
-                                                           null! ,
-                                                           _memberMapData ) ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            CreateSut ( ).ConvertFromString ( _text ,
+                                                              null! ,
+                                                              _memberMapData ) ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -60,12 +61,12 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertFromString_ForMemberMapDataNull_Throws ( )
     {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).ConvertFromString ( _text ,
-                                                           _readerRow ,
-                                                           null! ) ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            CreateSut ( ).ConvertFromString ( _text ,
+                                                              _readerRow ,
+                                                              null! ) ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -105,12 +106,12 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertToString_ForWriterRowNull_Throws ( )
     {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).ConvertToString ( _value ,
-                                                         null! ,
-                                                         _memberMapData ) ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            CreateSut ( ).ConvertToString ( _value ,
+                                                            null! ,
+                                                            _memberMapData ) ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -120,12 +121,12 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertToString_ForMemberMapDataNull_Throws ( )
     {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).ConvertToString ( _value ,
-                                                         _writerRow ,
-                                                         null! ) ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            CreateSut ( ).ConvertToString ( _value ,
+                                                            _writerRow ,
+                                                            null! ) ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -152,10 +153,7 @@ public class OfficialGattServiceConverterTests
                      .Be ( NotANumber ) ;
     }
 
-    private OfficialGattServiceConverter CreateSut ( )
-    {
-        return new OfficialGattServiceConverter ( ) ;
-    }
+    private OfficialGattServiceConverter CreateSut ( ) => new ( ) ;
 
     public class TestClass
     {

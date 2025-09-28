@@ -1,10 +1,10 @@
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
 using System.Reactive.Subjects ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class ErrorManagerTests
@@ -12,11 +12,11 @@ public class ErrorManagerTests
     [ TestMethod ]
     public void Publish_ForValidDetails_PushesToSubject ( )
     {
-        var logger = Substitute.For < ILogger > ( ) ;
-        var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
+        ILogger? logger = Substitute.For < ILogger > ( ) ;
+        ISubject < IErrorDetails >? subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
         var sut = new ErrorManager ( logger ,
                                      subject ) ;
-        var details = Substitute.For < IErrorDetails > ( ) ;
+        IErrorDetails? details = Substitute.For < IErrorDetails > ( ) ;
 
         sut.Publish ( details ) ;
 
@@ -26,8 +26,8 @@ public class ErrorManagerTests
     [ TestMethod ]
     public void PublishForMessage_ForValidMessage_PushesConstructedDetails ( )
     {
-        var logger = Substitute.For < ILogger > ( ) ;
-        var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
+        ILogger? logger = Substitute.For < ILogger > ( ) ;
+        ISubject < IErrorDetails >? subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
         var sut = new ErrorManager ( logger ,
                                      subject ) ;
 
@@ -42,8 +42,8 @@ public class ErrorManagerTests
     [ TestMethod ]
     public void ErrorChanged_ReturnsSubject ( )
     {
-        var logger = Substitute.For < ILogger > ( ) ;
-        var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
+        ILogger? logger = Substitute.For < ILogger > ( ) ;
+        ISubject < IErrorDetails >? subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
         var sut = new ErrorManager ( logger ,
                                      subject ) ;
 

@@ -1,9 +1,11 @@
-﻿using System.Runtime.CompilerServices ;
-using JetBrains.Annotations ;
+﻿
 
 // ReSharper disable UnusedMember.Global
 
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+using System.Runtime.CompilerServices ;
+using JetBrains.Annotations ;
 
 /// <summary>
 ///     Publishes error notifications to interested subscribers and helpers to create standard error messages.

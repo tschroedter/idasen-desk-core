@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Linak.Control ;
 
-namespace Idasen.BluetoothLE.Linak.Control ;
+using Interfaces ;
+using Serilog ;
 
 /// <inheritdoc />
 public class DeskHeightMonitor
@@ -45,14 +45,8 @@ public class DeskHeightMonitor
     }
 
     /// <inheritdoc />
-    public void Reset ( )
-    {
-        _history = new CircularBuffer < ulong > ( MinimumNumberOfItems ) ;
-    }
+    public void Reset ( ) => _history = new CircularBuffer < ulong > ( MinimumNumberOfItems ) ;
 
     /// <inheritdoc />
-    public void AddHeight ( uint height )
-    {
-        _history.PushBack ( height ) ;
-    }
+    public void AddHeight ( uint height ) => _history.PushBack ( height ) ;
 }

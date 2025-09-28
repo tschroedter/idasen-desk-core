@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Characteristics.Common ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+using BluetoothLE.Characteristics.Common ;
 
 public sealed class TestSimpleDictionaryBase
     : SimpleDictionaryBase < string , Guid > ;

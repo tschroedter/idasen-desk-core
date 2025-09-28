@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+using BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class ControlTests
@@ -31,8 +31,5 @@ public class ControlTests
               .BeFalse ( ) ;
     }
 
-    private Control CreateSut ( )
-    {
-        return new Control ( ) ;
-    }
+    private Control CreateSut ( ) => new ( ) ;
 }

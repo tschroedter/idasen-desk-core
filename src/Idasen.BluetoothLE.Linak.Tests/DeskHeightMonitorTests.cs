@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Control ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using FluentAssertions ;
+using Linak.Control ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class DeskHeightMonitorTests
@@ -11,15 +11,9 @@ public class DeskHeightMonitorTests
     private ILogger _logger = null! ;
 
     [ TestInitialize ]
-    public void Initialize ( )
-    {
-        _logger = Substitute.For < ILogger > ( ) ;
-    }
+    public void Initialize ( ) => _logger = Substitute.For < ILogger > ( ) ;
 
-    private DeskHeightMonitor CreateSut ( )
-    {
-        return new DeskHeightMonitor ( _logger ) ;
-    }
+    private DeskHeightMonitor CreateSut ( ) => new ( _logger ) ;
 
     [ TestMethod ]
     [ DataRow ( "0" ,
@@ -75,7 +69,7 @@ public class DeskHeightMonitorTests
                             .Select ( uint.Parse )
                             .ToArray ( ) ;
 
-        var sut = CreateSut ( ) ;
+        DeskHeightMonitor sut = CreateSut ( ) ;
 
         foreach (var height in heights)
         {
@@ -90,7 +84,7 @@ public class DeskHeightMonitorTests
     [ TestMethod ]
     public void Reset_ForInvoked_ResetsValues ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskHeightMonitor sut = CreateSut ( ) ;
 
         PopulateWithSameHeight ( sut ) ;
 

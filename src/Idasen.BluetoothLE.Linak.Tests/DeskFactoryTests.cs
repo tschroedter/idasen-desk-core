@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
 
-namespace Idasen.BluetoothLE.Linak.Tests ;
+using Core.Interfaces.ServicesDiscovery ;
+using FluentAssertions ;
+using Interfaces ;
+using NSubstitute ;
 
 [ TestClass ]
 public class DeskFactoryTests
@@ -23,7 +23,7 @@ public class DeskFactoryTests
     [ TestMethod ]
     public async Task CreateAsync_ForInvoked_ReturnsInstance ( )
     {
-        var actual = await CreateSut ( ).CreateAsync ( 1u ) ;
+        IDesk actual = await CreateSut ( ).CreateAsync ( 1u ) ;
 
         actual.Should ( )
               .NotBeNull ( ) ;

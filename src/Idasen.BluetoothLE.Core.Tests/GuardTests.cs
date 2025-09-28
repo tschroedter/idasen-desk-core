@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using FluentAssertions.Execution ;
+﻿namespace Idasen.BluetoothLE.Core.Tests ;
 
-namespace Idasen.BluetoothLE.Core.Tests ;
+using FluentAssertions ;
+using FluentAssertions.Execution ;
 
 [ TestClass ]
 public class GuardTests

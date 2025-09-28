@@ -1,14 +1,16 @@
-﻿using System.Reactive.Concurrency ;
-using System.Reactive.Linq ;
-using System.Reactive.Subjects ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Serilog ;
+﻿
 
 // [assembly: InternalsVisibleTo("Idasen.BluetoothLE.Tests")]
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+
+using System.Reactive.Concurrency ;
+using System.Reactive.Linq ;
+using System.Reactive.Subjects ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces.DevicesDiscovery ;
+using Serilog ;
 
 /// <inheritdoc cref="IDeviceMonitor" />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -87,10 +89,7 @@ public class DeviceMonitor
     }
 
     /// <inheritdoc />
-    public void RemoveDevice ( IDevice device )
-    {
-        _devices.RemoveDevice ( device ) ;
-    }
+    public void RemoveDevice ( IDevice device ) => _devices.RemoveDevice ( device ) ;
 
     /// <inheritdoc />
     public void Dispose ( )
@@ -131,7 +130,7 @@ public class DeviceMonitor
     private void OnDeviceUpdated ( IDevice device )
     {
         if ( ! _devices.TryGetDevice ( device.Address ,
-                                       out var storedDevice ) )
+                                       out IDevice? storedDevice ) )
         {
             _logger.Information ( "[{DeviceMacAddress}] Discovered Device" ,
                                   device.MacAddress ) ;
@@ -166,15 +165,9 @@ public class DeviceMonitor
         }
     }
 
-    private void OnStopped ( DateTime dateTime )
-    {
-        _logger.Information ( "Watcher Stopped listening" ) ;
-    }
+    private void OnStopped ( DateTime dateTime ) => _logger.Information ( "Watcher Stopped listening" ) ;
 
-    private void OnStarted ( DateTime dateTime )
-    {
-        _logger.Information ( "Watcher Started listening" ) ;
-    }
+    private void OnStarted ( DateTime dateTime ) => _logger.Information ( "Watcher Started listening" ) ;
 
     private static bool HasDeviceNameChanged ( IDevice device ,
                                                IDevice storedDevice )

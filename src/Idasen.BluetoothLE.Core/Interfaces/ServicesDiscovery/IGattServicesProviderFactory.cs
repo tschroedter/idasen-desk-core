@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Wrappers ;
 
 /// <summary>
 ///     Factory for creating <see cref="IGattServicesProvider" /> instances.

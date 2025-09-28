@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
+﻿namespace Idasen.BluetoothLE.Common.Tests ;
+
+using FluentAssertions ;
 using FluentAssertions.Primitives ;
 using FluentAssertions.Specialized ;
 using JetBrains.Annotations ;
-
-namespace Idasen.BluetoothLE.Common.Tests ;
 
 public static class ExceptionAssertionsExtensions
 {
@@ -21,7 +21,7 @@ public static class ExceptionAssertionsExtensions
         ArgumentNullException.ThrowIfNull ( assertions ) ;
         ArgumentNullException.ThrowIfNull ( parameter ) ;
 
-        var a = await assertions.ConfigureAwait ( false ) ;
+        ExceptionAssertions < ArgumentNullException > a = await assertions.ConfigureAwait ( false ) ;
         return a.And.ParamName.Should ( ).Be ( parameter ) ;
     }
 

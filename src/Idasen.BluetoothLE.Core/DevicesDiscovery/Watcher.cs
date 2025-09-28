@@ -1,9 +1,9 @@
-﻿using System.Reactive.Subjects ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using System.Reactive.Subjects ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces.DevicesDiscovery ;
 
 /// <inheritdoc cref="IWatcher" />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -62,8 +62,5 @@ public class Watcher
     }
 
     /// <inheritdoc />
-    public void Dispose ( )
-    {
-        _wrapper.Dispose ( ) ;
-    }
+    public void Dispose ( ) => _wrapper.Dispose ( ) ;
 }

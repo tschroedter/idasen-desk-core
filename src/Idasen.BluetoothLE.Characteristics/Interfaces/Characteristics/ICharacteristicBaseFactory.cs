@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     Creates characteristic instances with a supplied device.

@@ -1,8 +1,10 @@
-﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+
+using Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     DPG (desk panel) service contract.

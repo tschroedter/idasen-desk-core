@@ -1,6 +1,6 @@
-using Idasen.BluetoothLE.Linak.Control ;
-
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+using Control ;
 
 /// <summary>
 ///     Issues movement commands and tracks the currently commanded direction.

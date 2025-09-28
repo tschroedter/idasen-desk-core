@@ -1,6 +1,6 @@
-﻿using Windows.Storage.Streams ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Windows.Storage.Streams ;
 
 /// <summary>
 ///     Reads raw byte arrays from Windows runtime <see cref="IBuffer" /> instances.

@@ -1,7 +1,7 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Wrappers ;
 
 public interface IGattServicesProvider
     : IDisposable

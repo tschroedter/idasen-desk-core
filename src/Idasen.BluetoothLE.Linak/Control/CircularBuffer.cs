@@ -1,9 +1,9 @@
 #nullable disable
 
+namespace Idasen.BluetoothLE.Linak.Control ;
+
 using System.Collections ;
 using JetBrains.Annotations ;
-
-namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <summary>
 ///     Circular buffer.
@@ -174,7 +174,7 @@ public class CircularBuffer<T> : IEnumerable < T >
     /// <returns>An enumerator that can be used to iterate this collection.</returns>
     public IEnumerator < T > GetEnumerator ( )
     {
-        var segment1 = ArrayOne ( ) ;
+        ArraySegment < T > segment1 = ArrayOne ( ) ;
 
         for (var i = 0; i < segment1.Count; i++)
         {
@@ -184,7 +184,7 @@ public class CircularBuffer<T> : IEnumerable < T >
             }
         }
 
-        var segment2 = ArrayTwo ( ) ;
+        ArraySegment < T > segment2 = ArrayTwo ( ) ;
 
         for (var i = 0; i < segment2.Count; i++)
         {
@@ -199,10 +199,7 @@ public class CircularBuffer<T> : IEnumerable < T >
 
     #region IEnumerable implementation
 
-    IEnumerator IEnumerable.GetEnumerator ( )
-    {
-        return GetEnumerator ( ) ;
-    }
+    IEnumerator IEnumerable.GetEnumerator ( ) => GetEnumerator ( ) ;
 
     #endregion
 
@@ -312,7 +309,7 @@ public class CircularBuffer<T> : IEnumerable < T >
         var newArray = new T[Size] ;
         var newArrayOffset = 0 ;
 
-        var segment1 = ArrayOne ( ) ;
+        ArraySegment < T > segment1 = ArrayOne ( ) ;
 
         if ( segment1.Array == null )
         {
@@ -326,7 +323,7 @@ public class CircularBuffer<T> : IEnumerable < T >
                      segment1.Count ) ;
         newArrayOffset += segment1.Count ;
 
-        var segment2 = ArrayTwo ( ) ;
+        ArraySegment < T > segment2 = ArrayTwo ( ) ;
 
         if ( segment2.Array != null )
         {

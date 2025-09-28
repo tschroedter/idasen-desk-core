@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+using BluetoothLE.Characteristics.Characteristics ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class RawValueChangedDetailsTests

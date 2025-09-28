@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces ;
+using Characteristics.Interfaces.Characteristics ;
 
 /// <summary>
 ///     Factory for creating <see cref="IDeskCommandExecutor" /> instances bound to a control characteristic.

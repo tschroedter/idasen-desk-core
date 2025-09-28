@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Control ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
 
-namespace Idasen.BluetoothLE.Linak.Tests ;
+using FluentAssertions ;
+using Linak.Control ;
 
 [ TestClass ]
 public class DeskCommandsProviderTests
@@ -22,7 +22,7 @@ public class DeskCommandsProviderTests
         var expected = new byte [ ] { 0x46 , 0x00 } ;
 
         CreateSut ( ).TryGetValue ( DeskCommands.MoveDown ,
-                                    out var bytes ) ;
+                                    out IEnumerable < byte > bytes ) ;
 
         bytes.Should ( )
              .BeEquivalentTo ( expected ) ;
@@ -44,7 +44,7 @@ public class DeskCommandsProviderTests
         var expected = new byte [ ] { 0x47 , 0x00 } ;
 
         CreateSut ( ).TryGetValue ( DeskCommands.MoveUp ,
-                                    out var bytes ) ;
+                                    out IEnumerable < byte > bytes ) ;
 
         bytes.Should ( )
              .BeEquivalentTo ( expected ) ;
@@ -66,14 +66,11 @@ public class DeskCommandsProviderTests
         var expected = new byte [ ] { 0x48 , 0x00 } ;
 
         CreateSut ( ).TryGetValue ( DeskCommands.MoveStop ,
-                                    out var bytes ) ;
+                                    out IEnumerable < byte > bytes ) ;
 
         bytes.Should ( )
              .BeEquivalentTo ( expected ) ;
     }
 
-    private static DeskCommandsProvider CreateSut ( )
-    {
-        return new DeskCommandsProvider ( ) ;
-    }
+    private static DeskCommandsProvider CreateSut ( ) => new ( ) ;
 }

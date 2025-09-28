@@ -1,11 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Windows.Storage.Streams ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿
 
 // ReSharper disable UnusedMember.Global
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Windows.Storage.Streams ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]

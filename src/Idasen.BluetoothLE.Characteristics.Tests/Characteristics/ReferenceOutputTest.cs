@@ -1,12 +1,12 @@
-﻿using System.Reactive.Concurrency ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
+using BluetoothLE.Characteristics.Characteristics ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
-
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
 public class ReferenceOutputTest
@@ -17,7 +17,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawHeightSpeed_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -32,7 +32,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawHeightSpeed_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -48,7 +48,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawTwo_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -63,7 +63,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawTwo_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -79,7 +79,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawThree_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -94,7 +94,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawThree_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -110,7 +110,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawFour_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -125,7 +125,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawFour_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -141,7 +141,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawFive_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -156,7 +156,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawFive_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -172,7 +172,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawSix_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -187,7 +187,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawSix_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -203,7 +203,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawSeven_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -218,7 +218,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawSeven_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -234,7 +234,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawEight_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -249,7 +249,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawEight_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -265,7 +265,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawMask_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -280,7 +280,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawMask_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -296,7 +296,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public void RawDetectMask_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -311,7 +311,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task RawDetectMask_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -327,7 +327,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task Refresh_ForCharacteristicsHeightSpeedNotFound_DoesNotNotify ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -345,7 +345,7 @@ public class ReferenceOutputTest
     [ TestMethod ]
     public async Task Refresh_ForCharacteristicsHeightSpeedFound_Notifies ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceOutput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -365,8 +365,8 @@ public class ReferenceOutputTest
         var scheduler = new TestScheduler ( ) ;
         var subject = new Subject < RawValueChangedDetails > ( ) ;
 
-        var sut = CreateSut ( scheduler ,
-                              subject ) ;
+        ReferenceOutput sut = CreateSut ( scheduler ,
+                                          subject ) ;
 
         RawValueChangedDetails heightAndSpeed = null! ;
 

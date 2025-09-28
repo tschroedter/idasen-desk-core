@@ -1,12 +1,12 @@
-﻿using System.Reactive.Subjects ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests.Control ;
+
+using System.Reactive.Subjects ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Control ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
+using Linak.Control ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 
 [ TestClass ]
 public class DeskMovementMonitorTests : IDisposable
@@ -88,13 +88,13 @@ public class DeskMovementMonitorTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForThreeEventsWithDifferentHeightAndSpeed_DoesNotThrow ( )
     {
-        using var sut = CreateSut ( ) ;
+        using DeskMovementMonitor sut = CreateSut ( ) ;
 
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _subjectHeightAndSpeed.OnNext ( _details2 ) ;
         _subjectHeightAndSpeed.OnNext ( _details3 ) ;
 
-        var action = ( ) => _scheduler.Start ( ) ;
+        Action action = ( ) => _scheduler.Start ( ) ;
 
         action.Should ( )
               .NotThrow < ApplicationException > ( ) ;
@@ -103,13 +103,13 @@ public class DeskMovementMonitorTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForThreeEventsWithSameHeight_Throws ( )
     {
-        using var sut = CreateSut ( ) ;
+        using DeskMovementMonitor sut = CreateSut ( ) ;
 
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _subjectHeightAndSpeed.OnNext ( _details4SameHeightAsDetails1 ) ;
         _subjectHeightAndSpeed.OnNext ( _details5SameHeightAsDetails1 ) ;
 
-        var action = ( ) => _scheduler.Start ( ) ;
+        Action action = ( ) => _scheduler.Start ( ) ;
 
         action.Should ( )
               .Throw < ApplicationException > ( )
@@ -119,13 +119,13 @@ public class DeskMovementMonitorTests : IDisposable
     [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForThreeEventsWithSpeedZero_Throws ( )
     {
-        using var sut = CreateSut ( ) ;
+        using DeskMovementMonitor sut = CreateSut ( ) ;
 
         _subjectHeightAndSpeed.OnNext ( _details6WithSpeedZero ) ;
         _subjectHeightAndSpeed.OnNext ( _details7WithSpeedZero ) ;
         _subjectHeightAndSpeed.OnNext ( _details8WithSpeedZero ) ;
 
-        var action = ( ) => _scheduler.Start ( ) ;
+        Action action = ( ) => _scheduler.Start ( ) ;
 
         action.Should ( )
               .Throw < ApplicationException > ( )

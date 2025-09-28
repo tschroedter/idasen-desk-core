@@ -1,11 +1,11 @@
-﻿using System.Reactive.Subjects ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
+
+using System.Reactive.Subjects ;
+using Core.DevicesDiscovery ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using Interfaces.DevicesDiscovery ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class WatcherTests
@@ -38,7 +38,7 @@ public class WatcherTests
         _wrapper.Status
                 .Returns ( status ) ;
 
-        using var sut = CreateSut ( ) ;
+        using Watcher sut = CreateSut ( ) ;
 
         sut.IsListening
            .Should ( )
@@ -131,7 +131,7 @@ public class WatcherTests
         Watcher sut ,
         [ Freeze ] ISubject < DateTime > subject )
     {
-        using var disposable = sut.Started.Subscribe ( ) ;
+        using IDisposable disposable = sut.Started.Subscribe ( ) ;
 
         subject.ReceivedWithAnyArgs ( )
                .Subscribe ( ) ;
@@ -146,8 +146,8 @@ public class WatcherTests
         wrapper.Stopped
                .Returns ( subject ) ;
 
-        using var disposable = sut.Stopped
-                                  .Subscribe ( ) ;
+        using IDisposable disposable = sut.Stopped
+                                          .Subscribe ( ) ;
 
         subject.ReceivedWithAnyArgs ( )
                .Subscribe ( ) ;
@@ -162,8 +162,8 @@ public class WatcherTests
         wrapper.Received
                .Returns ( subject ) ;
 
-        using var disposable = sut.Received
-                                  .Subscribe ( ) ;
+        using IDisposable disposable = sut.Received
+                                          .Subscribe ( ) ;
 
         subject.ReceivedWithAnyArgs ( )
                .Subscribe ( ) ;

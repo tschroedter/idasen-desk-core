@@ -1,9 +1,9 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Interfaces.DevicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]

@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 [ ExcludeFromCodeCoverage ]
 public class GattDeviceServicesResultWrapper
@@ -22,9 +22,9 @@ public class GattDeviceServicesResultWrapper
                                 nameof ( service ) ) ;
 
         _service = service ;
-        var serviceWrapperFactory1 = serviceWrapperFactory ;
+        GattDeviceServiceWrapper.Factory serviceWrapperFactory1 = serviceWrapperFactory ;
 
-        var services = _service.Services ?? [] ;
+        IReadOnlyList < GattDeviceService > services = _service.Services ?? [] ;
 
         Services = services.Select ( s => serviceWrapperFactory1 ( s ) )
                            .ToArray ( ) ;
@@ -32,7 +32,7 @@ public class GattDeviceServicesResultWrapper
 
     public void Dispose ( )
     {
-        foreach (var s in Services)
+        foreach (IGattDeviceServiceWrapper s in Services)
         {
             s.Dispose ( ) ;
         }

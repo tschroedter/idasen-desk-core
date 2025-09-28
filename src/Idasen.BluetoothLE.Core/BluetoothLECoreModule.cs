@@ -1,22 +1,27 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using System.Reactive.Concurrency ;
-using System.Reactive.Subjects ;
-using Autofac ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-using Device = Idasen.BluetoothLE.Core.DevicesDiscovery.Device ;
+﻿using Device = Idasen.BluetoothLE.Core.DevicesDiscovery.Device ;
 using DeviceFactory = Idasen.BluetoothLE.Core.DevicesDiscovery.DeviceFactory ;
 using IDevice = Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery.IDevice ;
 using IDeviceFactory = Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery.IDeviceFactory ;
 
 namespace Idasen.BluetoothLE.Core ;
+
+using System.Diagnostics.CodeAnalysis ;
+using System.Reactive.Concurrency ;
+using System.Reactive.Subjects ;
+using Aop ;
+using Autofac ;
+using Autofac.Extras.DynamicProxy ;
+using DevicesDiscovery ;
+using Interfaces ;
+using Interfaces.DevicesDiscovery ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
+using ServicesDiscovery ;
+using ServicesDiscovery.Wrappers ;
+using Device = DevicesDiscovery.Device ;
+using DeviceFactory = DevicesDiscovery.DeviceFactory ;
+using IDevice = Interfaces.DevicesDiscovery.IDevice ;
+using IDeviceFactory = Interfaces.DevicesDiscovery.IDeviceFactory ;
 
 // ReSharper disable once InconsistentNaming
 /// <summary>

@@ -1,12 +1,12 @@
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
 using System.Reactive.Subjects ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Control ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
+using Linak.Control ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class DeskMoverConcurrencyTests
@@ -79,7 +79,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task TimerOverlap_DoesNotInvokeUpConcurrently ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskMover sut = CreateSut ( ) ;
         sut.TargetHeight = 2000u ;
 
         // Arrange Up to block until we release it
@@ -94,14 +94,14 @@ public class DeskMoverConcurrencyTests
         _scheduler.AdvanceBy ( 1 ) ; // process OnFinished
 
         // Simulate first timer tick -> Move starts and calls Up (blocked)
-        var t1 = sut.OnTimerElapsed ( 0 ) ;
+        Task t1 = sut.OnTimerElapsed ( 0 ) ;
 
         // Give a moment for the call to be issued
         await Task.Yield ( ) ;
         await _executor.Received ( 1 ).Up ( ) ;
 
         // Simulate second overlapping timer tick -> should be skipped by semaphore/pending task
-        var t2 = sut.OnTimerElapsed ( 1 ) ;
+        Task t2 = sut.OnTimerElapsed ( 1 ) ;
         await t2 ; // should complete quickly without invoking Up again
 
         await _executor.Received ( 1 ).Up ( ) ;
@@ -119,7 +119,7 @@ public class DeskMoverConcurrencyTests
         var finishedEvents = new List < uint > ( ) ;
         var externalFinished = new Subject < uint > ( ) ;
 
-        var sut = CreateSut ( externalFinished ) ;
+        DeskMover sut = CreateSut ( externalFinished ) ;
         externalFinished.Subscribe ( h => finishedEvents.Add ( h ) ) ;
 
         sut.TargetHeight = 2000u ;
@@ -149,7 +149,7 @@ public class DeskMoverConcurrencyTests
         var finishedEvents = new List < uint > ( ) ;
         var externalFinished = new Subject < uint > ( ) ;
 
-        var sut = CreateSut ( externalFinished ) ;
+        DeskMover sut = CreateSut ( externalFinished ) ;
         externalFinished.Subscribe ( h => finishedEvents.Add ( h ) ) ;
 
         sut.TargetHeight = 2000u ;
@@ -175,7 +175,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public void Sampling_TakesLastItemPerInterval ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskMover sut = CreateSut ( ) ;
         sut.TargetHeight = 1500u ;
         _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
 
@@ -207,7 +207,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task MoveCommand_Failure_AllowsRetry ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskMover sut = CreateSut ( ) ;
         sut.TargetHeight = 2000u ;
         _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
 
@@ -235,7 +235,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task Stop_Coalesces_MultipleRequests_WhilePending ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskMover sut = CreateSut ( ) ;
         sut.TargetHeight = 1500u ;
         _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
 

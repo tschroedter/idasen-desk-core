@@ -1,8 +1,10 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿
 
 // ReSharper disable UnusedMember.Global
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
 /// <summary>
 ///     Wrapper for <see cref="GattCharacteristicsResult" />.

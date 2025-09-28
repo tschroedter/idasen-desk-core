@@ -1,14 +1,14 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Windows.Storage.Streams ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Windows.Storage.Streams ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Core ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Core.ServicesDiscovery.Wrappers ;
+using Interfaces.Common ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -33,7 +33,7 @@ public class RawValueWriter
             return false ;
         }
 
-        var status = await characteristic.WriteValueAsync ( buffer ) ;
+        GattCommunicationStatus status = await characteristic.WriteValueAsync ( buffer ) ;
 
         return status == GattCommunicationStatus.Success ;
     }
@@ -56,7 +56,7 @@ public class RawValueWriter
             return false ;
         }
 
-        var status = await characteristic.WriteValueAsync ( buffer ) ;
+        GattCommunicationStatus status = await characteristic.WriteValueAsync ( buffer ) ;
 
         return status == GattCommunicationStatus.Success ;
     }
@@ -79,16 +79,14 @@ public class RawValueWriter
             return GattWriteResultWrapper.NotSupported ;
         }
 
-        var status = await characteristic.WriteValueWithResultAsync ( buffer ) ;
+        IGattWriteResultWrapper status = await characteristic.WriteValueWithResultAsync ( buffer ) ;
 
         return status ;
     }
 
     private static bool IsSupported ( IGattCharacteristicWrapper characteristic ,
-                                      GattCharacteristicProperties needed )
-    {
-        return ( characteristic.CharacteristicProperties & needed ) == needed ;
-    }
+                                      GattCharacteristicProperties needed ) =>
+        ( characteristic.CharacteristicProperties & needed ) == needed ;
 
     private static void LogUnsupported ( IGattCharacteristicWrapper characteristic ,
                                          string capability )

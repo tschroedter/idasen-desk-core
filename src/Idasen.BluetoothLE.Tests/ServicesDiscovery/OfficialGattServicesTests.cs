@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
+using Core.ServicesDiscovery ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class OfficialGattServicesTests
@@ -31,7 +31,7 @@ public class OfficialGattServicesTests
     public void TryFindByUuid_ForUnknownUuid_ReturnsNull ( )
     {
         CreateSut ( ).TryFindByUuid ( Guid.Empty ,
-                                      out var gattService ) ;
+                                      out OfficialGattService? gattService ) ;
 
         gattService.Should ( )
                    .BeNull ( ) ;
@@ -50,7 +50,7 @@ public class OfficialGattServicesTests
     public void TryFindByUuid_ForKnownUuid_ReturnsGattService ( )
     {
         CreateSut ( ).TryFindByUuid ( _knownGuid ,
-                                      out var gattService ) ;
+                                      out OfficialGattService? gattService ) ;
 
         gattService.Should ( )
                    .NotBeNull ( ) ;
@@ -59,7 +59,7 @@ public class OfficialGattServicesTests
     [ TestMethod ]
     public void TryFindByUuid_ForAllKnownUUIDs_ReturnsGattService ( )
     {
-        var sut = CreateSut ( ) ;
+        OfficialGattServices sut = CreateSut ( ) ;
 
         foreach (var assignedNumber in CreateUuidCollection ( ))
         {
@@ -68,7 +68,7 @@ public class OfficialGattServicesTests
                                          "-0000-1000-8000-00805f9b34fb" ) ;
 
             sut.TryFindByUuid ( knownGuid ,
-                                out var gattService ) ;
+                                out OfficialGattService? gattService ) ;
 
             gattService.Should ( )
                        .NotBeNull ( ) ;
@@ -124,8 +124,5 @@ public class OfficialGattServicesTests
         ] ;
     }
 
-    private static OfficialGattServices CreateSut ( )
-    {
-        return new OfficialGattServices ( ) ;
-    }
+    private static OfficialGattServices CreateSut ( ) => new ( ) ;
 }

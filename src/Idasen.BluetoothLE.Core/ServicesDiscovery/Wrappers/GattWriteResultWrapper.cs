@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 [ ExcludeFromCodeCoverage ]
 public class GattWriteResultWrapper

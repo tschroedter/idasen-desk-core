@@ -1,12 +1,12 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs ;
+
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using BluetoothLE.Characteristics.Characteristics.Customs ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs ;
 
 [ TestClass ]
 public class GattCharacteristicProviderTests
@@ -56,7 +56,7 @@ public class GattCharacteristicProviderTests
     [ TestMethod ]
     public void Refresh_ForReadOnlyDictionaryIsEmpty_CharacteristicsEmpty ( )
     {
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 
@@ -68,7 +68,7 @@ public class GattCharacteristicProviderTests
     [ TestMethod ]
     public void Refresh_ForReadOnlyDictionaryIsEmpty_UnavailableCharacteristicsEmpty ( )
     {
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 
@@ -85,7 +85,7 @@ public class GattCharacteristicProviderTests
         _foundCharacteristicsDictionary.Add ( Description1 ,
                                               _characteristics1Uuid ) ;
 
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 
@@ -111,7 +111,7 @@ public class GattCharacteristicProviderTests
         _foundCharacteristicsDictionary.Add ( Description1 ,
                                               _characteristics1Uuid ) ;
 
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 
@@ -128,7 +128,7 @@ public class GattCharacteristicProviderTests
         _foundCharacteristicsDictionary.Add ( Description1 ,
                                               _characteristics1Uuid ) ;
 
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 
@@ -150,7 +150,7 @@ public class GattCharacteristicProviderTests
         _foundCharacteristicsDictionary.Add ( Description2 ,
                                               _characteristics2Uuid ) ;
 
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 
@@ -184,7 +184,7 @@ public class GattCharacteristicProviderTests
         _foundCharacteristicsDictionary.Add ( Description2 ,
                                               _characteristics2Uuid ) ;
 
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 
@@ -212,7 +212,7 @@ public class GattCharacteristicProviderTests
         _foundCharacteristicsDictionary.Add ( Description2 ,
                                               _characteristics2Uuid ) ;
 
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 
@@ -228,7 +228,7 @@ public class GattCharacteristicProviderTests
         _foundCharacteristicsDictionary.Add ( Description1 ,
                                               _characteristics1Uuid ) ;
 
-        var sut = CreateSut ( ) ;
+        GattCharacteristicProvider sut = CreateSut ( ) ;
 
         sut.Refresh ( _customs ) ;
 

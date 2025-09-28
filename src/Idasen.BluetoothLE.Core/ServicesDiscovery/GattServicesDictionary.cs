@@ -1,9 +1,9 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -50,7 +50,7 @@ public class GattServicesDictionary
             lock (_padlock)
             {
                 if ( _dictionary.TryGetValue ( service ,
-                                               out var existing ) )
+                                               out IGattCharacteristicsResultWrapper? existing ) )
                 {
                     // Dispose previously stored characteristics to avoid leaks
                     existing.Dispose ( ) ;
@@ -77,10 +77,7 @@ public class GattServicesDictionary
     /// <summary>
     ///     Disposes stored entries (service and characteristics).
     /// </summary>
-    public void Dispose ( )
-    {
-        DisposeEntries ( ) ;
-    }
+    public void Dispose ( ) => DisposeEntries ( ) ;
 
     /// <summary>
     ///     Gets a read-only view of the dictionary.
@@ -101,7 +98,7 @@ public class GattServicesDictionary
     {
         lock (_padlock)
         {
-            foreach (var kvp in _dictionary)
+            foreach (KeyValuePair < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > kvp in _dictionary)
             {
                 // Dispose value (characteristics) first, then the service
                 kvp.Value.Dispose ( ) ;

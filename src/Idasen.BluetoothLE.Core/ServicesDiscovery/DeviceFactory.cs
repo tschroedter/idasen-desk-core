@@ -1,10 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -36,7 +37,7 @@ public class DeviceFactory
     [ ExcludeFromCodeCoverage ]
     public async Task < IDevice > FromBluetoothAddressAsync ( ulong address )
     {
-        var device = await _deviceProvider.FromBluetoothAddressAsync ( address ) ;
+        BluetoothLEDevice? device = await _deviceProvider.FromBluetoothAddressAsync ( address ) ;
 
         return device is null
                    ? throw new InvalidOperationException ( $"Failed to get BluetoothLEDevice for address {address}" )

@@ -1,9 +1,9 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces.DevicesDiscovery ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -45,7 +45,7 @@ public class Devices
         lock (_padLock)
         {
             if ( _discoveredDevices.TryGetValue ( device.Address ,
-                                                  out var storedDevice ) )
+                                                  out Device? storedDevice ) )
             {
                 UpdateDevice ( device ,
                                storedDevice ) ;
@@ -100,7 +100,7 @@ public class Devices
         lock (_padLock)
         {
             var result = _discoveredDevices.TryGetValue ( address ,
-                                                          out var storedDevice ) ;
+                                                          out Device? storedDevice ) ;
 
             device = storedDevice ;
 

@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Common ;
+using Interfaces.Characteristics ;
 
 public sealed class ReferenceOutput
     : UnknownBase , IReferenceOutput

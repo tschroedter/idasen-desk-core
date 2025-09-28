@@ -1,8 +1,10 @@
-﻿using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+
+using Core.ServicesDiscovery ;
 
 /// <summary>
 ///     Known list of Gatt Services.

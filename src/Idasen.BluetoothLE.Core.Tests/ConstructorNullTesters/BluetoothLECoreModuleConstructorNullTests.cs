@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Common.Tests ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ConstructorNullTesters ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ConstructorNullTesters ;
+using Common.Tests ;
 
 [ TestClass ]
 // ReSharper disable once InconsistentNaming

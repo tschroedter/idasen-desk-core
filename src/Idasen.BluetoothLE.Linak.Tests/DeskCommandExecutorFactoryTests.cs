@@ -1,11 +1,11 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Linak.Control ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
 
-namespace Idasen.BluetoothLE.Linak.Tests ;
+using Characteristics.Interfaces.Characteristics ;
+using Common.Tests ;
+using FluentAssertions ;
+using Interfaces ;
+using Linak.Control ;
+using NSubstitute ;
 
 [ TestClass ]
 public class DeskCommandExecutorFactoryTests
@@ -21,15 +21,12 @@ public class DeskCommandExecutorFactoryTests
         _control = Substitute.For < IControl > ( ) ;
     }
 
-    private IDeskCommandExecutor TestFactory ( IControl executor )
-    {
-        return Substitute.For < IDeskCommandExecutor > ( ) ;
-    }
+    private IDeskCommandExecutor TestFactory ( IControl executor ) => Substitute.For < IDeskCommandExecutor > ( ) ;
 
     [ TestMethod ]
     public void Create_ForControlNull_Throws ( )
     {
-        var action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
+        Action action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -44,8 +41,5 @@ public class DeskCommandExecutorFactoryTests
                      .NotBeNull ( ) ;
     }
 
-    private DeskCommandExecutorFactory CreateSut ( )
-    {
-        return new DeskCommandExecutorFactory ( _factory ) ;
-    }
+    private DeskCommandExecutorFactory CreateSut ( ) => new ( _factory ) ;
 }

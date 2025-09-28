@@ -1,14 +1,14 @@
-﻿using System.Reactive.Linq ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
+using Characteristics.Characteristics ;
+using Characteristics.Interfaces.Characteristics ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class DeskHeightAndSpeedTests : IDisposable
@@ -43,8 +43,8 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public void Initialize_ForInvokedTwice_DisposesSubscriber ( )
     {
-        var subscriber = Substitute.For < IDisposable > ( ) ;
-        var subject = Substitute.For < ISubject < RawValueChangedDetails > > ( ) ;
+        IDisposable? subscriber = Substitute.For < IDisposable > ( ) ;
+        ISubject < RawValueChangedDetails >? subject = Substitute.For < ISubject < RawValueChangedDetails > > ( ) ;
 
         subject.Subscribe ( Arg.Any < IObserver < RawValueChangedDetails > > ( ) )
                .Returns ( subscriber ) ;
@@ -52,7 +52,7 @@ public class DeskHeightAndSpeedTests : IDisposable
         _referenceOutput.HeightSpeedChanged
                         .Returns ( subject ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -65,8 +65,8 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public void Dispose_ForInvokedTwice_DisposesSubscriber ( )
     {
-        var subscriber = Substitute.For < IDisposable > ( ) ;
-        var subject = Substitute.For < ISubject < RawValueChangedDetails > > ( ) ;
+        IDisposable? subscriber = Substitute.For < IDisposable > ( ) ;
+        ISubject < RawValueChangedDetails >? subject = Substitute.For < ISubject < RawValueChangedDetails > > ( ) ;
 
         subject.Subscribe ( Arg.Any < IObserver < RawValueChangedDetails > > ( ) )
                .Returns ( subscriber ) ;
@@ -74,7 +74,7 @@ public class DeskHeightAndSpeedTests : IDisposable
         _referenceOutput.HeightSpeedChanged
                         .Returns ( subject ) ;
 
-        var sut = CreateSut ( ) ;
+        DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -87,7 +87,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public void Dispose_ForInvokedTwice_DisposesReferenceOutput ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -101,7 +101,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public async Task Refresh_ForInvoked_CallsReferenceOutputRefresh ( )
     {
-        using var sut = CreateSut ( ) ;
+        using DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         await sut.Refresh ( ) ;
 
@@ -112,7 +112,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public async Task Refresh_ForInvoked_CallsInitialize ( )
     {
-        using var sut = CreateSut ( ) ;
+        using DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         await sut.Refresh ( ) ;
 
@@ -125,7 +125,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public async Task Refresh_ForInvokedAndHeightAvailable_SetsHeight ( )
     {
-        using var sut = CreateSut ( ) ;
+        using DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         await sut.Refresh ( ) ;
 
@@ -137,7 +137,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public async Task Refresh_ForInvokedAndSpeedAvailable_SetsSpeed ( )
     {
-        using var sut = CreateSut ( ) ;
+        using DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         await sut.Refresh ( ) ;
 
@@ -154,7 +154,7 @@ public class DeskHeightAndSpeedTests : IDisposable
                         DefaultHeight ,
                         DefaultSpeed ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         await sut.Refresh ( ) ;
 
@@ -171,7 +171,7 @@ public class DeskHeightAndSpeedTests : IDisposable
                         DefaultHeight ,
                         DefaultSpeed ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeskHeightAndSpeed sut = CreateSut ( ) ;
 
         await sut.Refresh ( ) ;
 
@@ -238,7 +238,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public void OnHeightSpeedChanged_ForInvoked_SetsHeight ( )
     {
-        var sut = CreateSut ( ).Initialize ( ) ;
+        IDeskHeightAndSpeed sut = CreateSut ( ).Initialize ( ) ;
 
         _subjectRawHeightAndSpeed.OnNext ( _rawDetailsDummy ) ;
 
@@ -254,7 +254,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        IDeskHeightAndSpeed sut = CreateSut ( ).Initialize ( ) ;
 
         sut.HeightChanged
            .ObserveOn ( _scheduler )
@@ -274,7 +274,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        IDeskHeightAndSpeed sut = CreateSut ( ).Initialize ( ) ;
 
         sut.SpeedChanged
            .ObserveOn ( _scheduler )
@@ -294,7 +294,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        IDeskHeightAndSpeed sut = CreateSut ( ).Initialize ( ) ;
 
         sut.HeightAndSpeedChanged
            .ObserveOn ( _scheduler )
@@ -319,7 +319,7 @@ public class DeskHeightAndSpeedTests : IDisposable
 
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        IDeskHeightAndSpeed sut = CreateSut ( ).Initialize ( ) ;
 
         sut.HeightChanged
            .ObserveOn ( _scheduler )
@@ -344,7 +344,7 @@ public class DeskHeightAndSpeedTests : IDisposable
 
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        IDeskHeightAndSpeed sut = CreateSut ( ).Initialize ( ) ;
 
         sut.SpeedChanged
            .ObserveOn ( _scheduler )
@@ -369,7 +369,7 @@ public class DeskHeightAndSpeedTests : IDisposable
 
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        IDeskHeightAndSpeed sut = CreateSut ( ).Initialize ( ) ;
 
         sut.HeightAndSpeedChanged
            .ObserveOn ( _scheduler )

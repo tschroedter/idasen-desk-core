@@ -1,9 +1,9 @@
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
-
 namespace Idasen.BluetoothLE.Linak.Control ;
+
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Serilog ;
 
 /// <summary>
 ///     Encapsulates stop decision logic: near-target tolerance, predicted crossing, and stall detection.
@@ -60,7 +60,7 @@ internal class DeskStopper : IDeskStopper
         _calculator.StartMovingIntoDirection = startMovingIntoDirection ;
         _calculator.Calculate ( ) ;
 
-        var desired = _calculator.MoveIntoDirection ;
+        Direction desired = _calculator.MoveIntoDirection ;
         var movementAbs = ( uint ) Math.Abs ( _calculator.MovementUntilStop ) ;
 
         // Enable predictive crossing only after we have reached a minimum speed to avoid

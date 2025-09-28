@@ -1,7 +1,7 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Windows.Storage.Streams ;
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Windows.Storage.Streams ;
 
 public interface IGattReadResultWrapper
 {

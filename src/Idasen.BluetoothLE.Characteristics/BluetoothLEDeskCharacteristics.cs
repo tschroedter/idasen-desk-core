@@ -1,15 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+﻿namespace Idasen.BluetoothLE.Characteristics ;
+
+using System.Diagnostics.CodeAnalysis ;
 using Autofac ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
-
-namespace Idasen.BluetoothLE.Characteristics ;
+using Characteristics ;
+using Characteristics.Customs ;
+using Common ;
+using Core ;
+using Interfaces.Characteristics ;
+using Interfaces.Characteristics.Customs ;
+using Interfaces.Common ;
 
 // ReSharper disable once InconsistentNaming
 /// <summary>

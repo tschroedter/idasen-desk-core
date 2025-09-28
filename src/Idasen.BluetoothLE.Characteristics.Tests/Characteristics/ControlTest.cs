@@ -1,9 +1,9 @@
-﻿using Windows.Storage.Streams ;
-using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+using Windows.Storage.Streams ;
+using BluetoothLE.Characteristics.Characteristics ;
+using FluentAssertions ;
+using NSubstitute ;
 
 [ TestClass ]
 public class ControlTest
@@ -12,7 +12,7 @@ public class ControlTest
     [ TestMethod ]
     public void RawControl2_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        Control sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -27,7 +27,7 @@ public class ControlTest
     [ TestMethod ]
     public async Task RawControl2_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        Control sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -43,7 +43,7 @@ public class ControlTest
     [ TestMethod ]
     public void RawControl3_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        Control sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -58,7 +58,7 @@ public class ControlTest
     [ TestMethod ]
     public async Task RawControl3_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        Control sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -74,7 +74,7 @@ public class ControlTest
     [ TestMethod ]
     public async Task TryWriteRawValue_ForKnownCharacteristics_WritesRawValuesAsync ( )
     {
-        var sut = CreateSut ( ) ;
+        Control sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;

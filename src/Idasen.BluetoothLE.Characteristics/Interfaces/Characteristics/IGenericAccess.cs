@@ -1,9 +1,11 @@
-﻿using System.Reactive.Subjects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+
+using System.Reactive.Subjects ;
+using Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     More details can be found here: https://www.bluetooth.com/

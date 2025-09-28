@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+using Core ;
+using Core.DevicesDiscovery ;
+using Core.Interfaces ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class DeviceTests
@@ -28,7 +28,7 @@ public class DeviceTests
     public void Constructor_ForDeviceIsNull_Throws ( )
     {
         // ReSharper disable once ObjectCreationAsStatement
-        var action = ( ) => { new Device ( null! ) ; } ;
+        Action action = ( ) => { new Device ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -41,7 +41,7 @@ public class DeviceTests
         _broadcastTime = null! ;
 
         // ReSharper disable once ObjectCreationAsStatement
-        var action = ( ) => { CreateSut ( ) ; } ;
+        Action action = ( ) => { CreateSut ( ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -51,7 +51,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsBroadcastTime ( )
     {
-        var sut = CreateSut ( ) ;
+        Device sut = CreateSut ( ) ;
 
         sut.BroadcastTime
            .Should ( )
@@ -61,7 +61,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsAddress ( )
     {
-        var sut = CreateSut ( ) ;
+        Device sut = CreateSut ( ) ;
 
         sut.Address
            .Should ( )
@@ -71,7 +71,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsName ( )
     {
-        var sut = CreateSut ( ) ;
+        Device sut = CreateSut ( ) ;
 
         sut.Name
            .Should ( )
@@ -81,7 +81,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsRawSignalStrengthInDBm ( )
     {
-        var sut = CreateSut ( ) ;
+        Device sut = CreateSut ( ) ;
 
         sut.RawSignalStrengthInDBm
            .Should ( )
@@ -91,7 +91,7 @@ public class DeviceTests
     [ TestMethod ]
     public void ToString_ForInvoked_ReturnsInstance ( )
     {
-        var sut = CreateSut ( ) ;
+        Device sut = CreateSut ( ) ;
 
         sut.ToString ( )
            .Should ( )
@@ -101,7 +101,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForIDevice_ReturnsInstance ( )
     {
-        var device = CreateSut ( ) ;
+        Device device = CreateSut ( ) ;
 
         var sut = new Device ( device ) ;
 

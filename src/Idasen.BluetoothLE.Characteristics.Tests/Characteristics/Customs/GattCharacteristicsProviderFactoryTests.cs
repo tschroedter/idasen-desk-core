@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Selkie.AutoMocking ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs ;
+using BluetoothLE.Characteristics.Characteristics.Customs ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using FluentAssertions ;
+using Selkie.AutoMocking ;
 
 [ AutoDataTestClass ]
 public class GattCharacteristicsProviderFactoryTests

@@ -1,6 +1,6 @@
-﻿using JetBrains.Annotations ;
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using JetBrains.Annotations ;
 
 /// <summary>
 ///     The collection contains the discovered devices.

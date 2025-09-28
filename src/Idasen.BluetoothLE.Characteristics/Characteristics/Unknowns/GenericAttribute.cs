@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Interfaces.Characteristics ;
 
 public class GenericAttribute
     : UnknownBase , IGenericAttribute

@@ -1,16 +1,17 @@
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
 using System.Reactive.Concurrency ;
 using System.Reactive.Subjects ;
 using System.Reflection ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Characteristics.Interfaces.Characteristics ;
+using Common.Tests ;
+using Core.Interfaces.ServicesDiscovery ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using FluentAssertions.Specialized ;
+using Interfaces ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class DeskConnectorTests
@@ -123,8 +124,8 @@ public class DeskConnectorTests
 
     private async static Task InvokeOnGattServicesRefreshedAsync ( DeskConnector sut , GattCommunicationStatus status )
     {
-        var method = typeof ( DeskConnector ).GetMethod ( "OnGattServicesRefreshed" ,
-                                                          BindingFlags.NonPublic | BindingFlags.Instance ) ;
+        MethodInfo? method = typeof ( DeskConnector ).GetMethod ( "OnGattServicesRefreshed" ,
+                                                                  BindingFlags.NonPublic | BindingFlags.Instance ) ;
         method.Should ( ).NotBeNull ( ) ;
         var task = ( Task ) method.Invoke ( sut ,
                                             [status] )! ;
@@ -134,7 +135,7 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task MoveUp_BeforeRefresh_ReturnsFalseAndLogs ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskConnector sut = CreateSut ( ) ;
 
         var result = await sut.MoveUpAsync ( ) ;
 
@@ -146,7 +147,7 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task MoveUp_AfterRefresh_CallsMoverUp ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskConnector sut = CreateSut ( ) ;
         _mover.Up ( ).Returns ( Task.FromResult ( true ) ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
@@ -161,7 +162,7 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task MoveDown_Stop_AfterRefresh_CallMover ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskConnector sut = CreateSut ( ) ;
         _mover.Down ( ).Returns ( Task.FromResult ( true ) ) ;
         _mover.Stop ( ).Returns ( Task.FromResult ( true ) ) ;
 
@@ -178,7 +179,7 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task MoveLockUnlock_BeforeAndAfterRefresh ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskConnector sut = CreateSut ( ) ;
 
         ( await sut.MoveLockAsync ( ) ).Should ( ).BeFalse ( ) ;
         ( await sut.MoveUnlockAsync ( ) ).Should ( ).BeFalse ( ) ;
@@ -196,29 +197,29 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task MoveTo_Zero_ThrowsAfterRefresh ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskConnector sut = CreateSut ( ) ;
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
-        var act = ( ) => Task.Run ( ( ) => sut.MoveTo ( 0 ) ) ;
-        var assertions = await act.Should ( ).ThrowAsync < ArgumentException > ( ) ;
+        Func < Task > act = ( ) => Task.Run ( ( ) => sut.MoveTo ( 0 ) ) ;
+        ExceptionAssertions < ArgumentException >? assertions = await act.Should ( ).ThrowAsync < ArgumentException > ( ) ;
         assertions.WithParameter ( "targetHeight" ) ;
     }
 
     [ TestMethod ]
     public async Task Streams_Forwarded_From_HeightSpeed_And_Mover_Finished ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskConnector sut = CreateSut ( ) ;
 
         uint? receivedHeight = null ;
         int? receivedSpeed = null ;
         HeightSpeedDetails? receivedDetails = null ;
         uint? receivedFinished = null ;
 
-        using var h = sut.HeightChanged.Subscribe ( v => receivedHeight = v ) ;
-        using var s = sut.SpeedChanged.Subscribe ( v => receivedSpeed = v ) ;
-        using var hs = sut.HeightAndSpeedChanged.Subscribe ( v => receivedDetails = v ) ;
-        using var f = sut.FinishedChanged.Subscribe ( v => receivedFinished = v ) ;
+        using IDisposable h = sut.HeightChanged.Subscribe ( v => receivedHeight = v ) ;
+        using IDisposable s = sut.SpeedChanged.Subscribe ( v => receivedSpeed = v ) ;
+        using IDisposable hs = sut.HeightAndSpeedChanged.Subscribe ( v => receivedDetails = v ) ;
+        using IDisposable f = sut.FinishedChanged.Subscribe ( v => receivedFinished = v ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
@@ -242,10 +243,10 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task DeviceNameChanged_Forwarded ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskConnector sut = CreateSut ( ) ;
 
         IEnumerable < byte >? received = null ;
-        using var sub = sut.DeviceNameChanged.Subscribe ( v => received = v ) ;
+        using IDisposable sub = sut.DeviceNameChanged.Subscribe ( v => received = v ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
@@ -262,17 +263,17 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task Dispose_Disposes_And_Completes_Subjects ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskConnector sut = CreateSut ( ) ;
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
         var finishedCompleted = false ;
         var deviceNameCompleted = false ;
 
-        using var f = sut.FinishedChanged.Subscribe ( _ => { } ,
-                                                      ( ) => finishedCompleted = true ) ;
-        using var d = sut.DeviceNameChanged.Subscribe ( _ => { } ,
-                                                        ( ) => deviceNameCompleted = true ) ;
+        using IDisposable f = sut.FinishedChanged.Subscribe ( _ => { } ,
+                                                              ( ) => finishedCompleted = true ) ;
+        using IDisposable d = sut.DeviceNameChanged.Subscribe ( _ => { } ,
+                                                                ( ) => deviceNameCompleted = true ) ;
 
         sut.Dispose ( ) ;
 

@@ -1,8 +1,8 @@
-﻿using Windows.Devices.Bluetooth.Advertisement ;
-using FluentAssertions ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+using Windows.Devices.Bluetooth.Advertisement ;
+using Core.DevicesDiscovery ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class StatusMapperTests

@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
-using FluentAssertions.Execution ;
-using Idasen.BluetoothLE.Linak.Control ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters ;
 
-namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters ;
+using FluentAssertions ;
+using FluentAssertions.Execution ;
+using Linak.Control ;
 
 /// <summary>
 ///     The original source code from https://github.com/joaoportela/CircularBuffer-CSharp.

@@ -1,13 +1,13 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Linak.Control ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using Characteristics.Interfaces.Characteristics ;
+using Common.Tests ;
+using FluentAssertions ;
+using Interfaces ;
+using Linak.Control ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public class DeskCommandExecutorTests
@@ -18,10 +18,10 @@ public class DeskCommandExecutorTests
         [ BeNull ] ILogger logger )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeskCommandExecutor test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -34,10 +34,10 @@ public class DeskCommandExecutorTests
         [ BeNull ] IDeskCommandsProvider provider )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeskCommandExecutor test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -50,10 +50,10 @@ public class DeskCommandExecutorTests
         [ BeNull ] IControl control )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeskCommandExecutor test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )

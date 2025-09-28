@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Wrappers ;
 
 /// <summary>
 ///     Thread-safe mapping between GATT device services and their characteristics.

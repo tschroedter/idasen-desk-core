@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+using BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class UnknownBaseTests
@@ -24,8 +24,5 @@ public class UnknownBaseTests
               .NotThrow < Exception > ( ) ;
     }
 
-    private UnknownBase CreateSut ( )
-    {
-        return new UnknownBase ( ) ;
-    }
+    private UnknownBase CreateSut ( ) => new ( ) ;
 }

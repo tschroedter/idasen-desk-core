@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+using Core ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class ResourceNotFoundExceptionTests

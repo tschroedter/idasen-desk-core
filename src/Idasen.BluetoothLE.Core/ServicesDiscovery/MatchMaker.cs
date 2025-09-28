@@ -1,11 +1,11 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
+using Serilog ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class MatchMaker
@@ -36,7 +36,7 @@ public class MatchMaker
     /// <returns></returns>
     public async Task < IDevice > PairToDeviceAsync ( ulong address )
     {
-        var device = await _deviceFactory.FromBluetoothAddressAsync ( address ) ;
+        IDevice? device = await _deviceFactory.FromBluetoothAddressAsync ( address ) ;
 
         var macAddress = address.ToMacAddress ( ) ;
 

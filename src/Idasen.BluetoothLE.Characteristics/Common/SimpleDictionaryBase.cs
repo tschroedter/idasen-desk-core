@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common ;
+using Core ;
+using Interfaces.Common ;
 
 public class SimpleDictionaryBase<TKey , TValue>
     : ISimpleDictionary < TKey , TValue > where TKey : notnull

@@ -1,13 +1,14 @@
-﻿using System.Reactive ;
+﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+
+using System.Collections.ObjectModel ;
+using System.Reactive ;
 using System.Reactive.Subjects ;
+using Core.DevicesDiscovery ;
+using Core.Interfaces.DevicesDiscovery ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
 [ TestClass ]
 public class DeviceMonitorTests
@@ -65,7 +66,7 @@ public class DeviceMonitorTests
 
         var time = 0 ;
 
-        foreach (var device in devices)
+        foreach (IDevice device in devices)
         {
             list.Add ( OnNext ( time++ ,
                                 device ) ) ;
@@ -83,17 +84,14 @@ public class DeviceMonitorTests
                                                            Notification.CreateOnNext ( device ) ) ;
     }
 
-    private ISubject < IDevice > Factory ( )
-    {
-        return _subjects.Dequeue ( ) ;
-    }
+    private ISubject < IDevice > Factory ( ) => _subjects.Dequeue ( ) ;
 
     [ TestMethod ]
     public void Constructor_ForLoggerNull_Throws ( )
     {
         _logger = null! ;
 
-        var action = ( ) => { CreateSut ( ) ; } ;
+        Action action = ( ) => { CreateSut ( ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -105,7 +103,7 @@ public class DeviceMonitorTests
     {
         _factory = null! ;
 
-        var action = ( ) => { CreateSut ( ) ; } ;
+        Action action = ( ) => { CreateSut ( ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -117,7 +115,7 @@ public class DeviceMonitorTests
     {
         _devices = null! ;
 
-        var action = ( ) => { CreateSut ( ) ; } ;
+        Action action = ( ) => { CreateSut ( ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -129,7 +127,7 @@ public class DeviceMonitorTests
     {
         _watcher = null! ;
 
-        var action = ( ) => { CreateSut ( ) ; } ;
+        Action action = ( ) => { CreateSut ( ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -159,7 +157,7 @@ public class DeviceMonitorTests
     {
         ConfigureDeviceDiscovered ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         sut.Start ( ) ;
 
@@ -175,12 +173,12 @@ public class DeviceMonitorTests
     {
         ConfigureDeviceDiscovered ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         IDevice discovered = null! ;
 
-        using var observer = sut.DeviceDiscovered
-                                .Subscribe ( x => discovered = x ) ;
+        using IDisposable observer = sut.DeviceDiscovered
+                                        .Subscribe ( x => discovered = x ) ;
 
         sut.Start ( ) ;
 
@@ -195,14 +193,14 @@ public class DeviceMonitorTests
     {
         ConfigureNameUpdated ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         sut.Start ( ) ;
 
         _scheduler.Start ( ) ;
 
         _devices.TryGetDevice ( _device.Address ,
-                                out var device )
+                                out IDevice? device )
                 .Should ( )
                 .BeTrue ( ) ;
 
@@ -216,12 +214,12 @@ public class DeviceMonitorTests
     {
         ConfigureSameDevice ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         IDevice updated = null! ;
 
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
+        using IDisposable observer = sut.DeviceUpdated
+                                        .Subscribe ( x => updated = x ) ;
 
         sut.Start ( ) ;
 
@@ -236,14 +234,14 @@ public class DeviceMonitorTests
     {
         ConfigureNameUpdatedTwice ( ) ; // maybe, later allow name change?
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         sut.Start ( ) ;
 
         _scheduler.Start ( ) ;
 
         _devices.TryGetDevice ( _device.Address ,
-                                out var device )
+                                out IDevice? device )
                 .Should ( )
                 .BeTrue ( ) ;
 
@@ -257,12 +255,12 @@ public class DeviceMonitorTests
     {
         ConfigureNameUpdated ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         IDevice updated = null! ;
 
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
+        using IDisposable observer = sut.DeviceUpdated
+                                        .Subscribe ( x => updated = x ) ;
 
         sut.Start ( ) ;
 
@@ -274,7 +272,7 @@ public class DeviceMonitorTests
 
     private void ConfigureNameUpdatedTwice ( )
     {
-        var messages = new [ ]
+        IDevice [ ] messages = new [ ]
         {
             _device ,
             _deviceNewName ,
@@ -287,7 +285,7 @@ public class DeviceMonitorTests
 
     private void ConfigureNameUpdated ( )
     {
-        var messages = new [ ]
+        IDevice [ ] messages = new [ ]
         {
             _device ,
             _deviceNewName
@@ -299,7 +297,7 @@ public class DeviceMonitorTests
 
     private void ConfigureDeviceDiscovered ( )
     {
-        var messages = new [ ]
+        IDevice [ ] messages = new [ ]
         {
             _device
         } ;
@@ -310,7 +308,7 @@ public class DeviceMonitorTests
 
     private void ConfigureSameDevice ( )
     {
-        var messages = new [ ]
+        IDevice [ ] messages = new [ ]
         {
             _device ,
             _device
@@ -325,12 +323,12 @@ public class DeviceMonitorTests
     {
         ConfigureNameUpdated ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         IDevice updated = null! ;
 
-        using var observer = sut.DeviceNameUpdated
-                                .Subscribe ( x => updated = x ) ;
+        using IDisposable observer = sut.DeviceNameUpdated
+                                        .Subscribe ( x => updated = x ) ;
 
         sut.Start ( ) ;
 
@@ -345,12 +343,12 @@ public class DeviceMonitorTests
     {
         ConfigureSameDevice ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         IDevice updated = null! ;
 
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
+        using IDisposable observer = sut.DeviceUpdated
+                                        .Subscribe ( x => updated = x ) ;
 
         sut.Start ( ) ;
 
@@ -374,7 +372,7 @@ public class DeviceMonitorTests
     [ TestMethod ]
     public void DiscoveredDevices_ForInvoked_CallsDevices ( )
     {
-        var list = new List < IDevice > ( ).AsReadOnly ( ) ;
+        ReadOnlyCollection < IDevice > list = new List < IDevice > ( ).AsReadOnly ( ) ;
 
         _devices = Substitute.For < IDevices > ( ) ;
         _devices.DiscoveredDevices
@@ -390,7 +388,7 @@ public class DeviceMonitorTests
     {
         _devices = Substitute.For < IDevices > ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using DeviceMonitor sut = CreateSut ( ) ;
 
         sut.RemoveDevice ( _device ) ;
 

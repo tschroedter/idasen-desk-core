@@ -1,11 +1,11 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Linak.Control ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using Common.Tests ;
+using FluentAssertions ;
+using Interfaces ;
+using Linak.Control ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class StoppingHeightCalculatorTests
@@ -75,7 +75,7 @@ public class StoppingHeightCalculatorTests
         float fudgeFactor ,
         uint stoppingHeight )
     {
-        var sut = CreateSut ( ) ;
+        StoppingHeightCalculator sut = CreateSut ( ) ;
 
         sut.TargetHeight = targetHeight ;
         sut.Height = height ;
@@ -183,7 +183,7 @@ public class StoppingHeightCalculatorTests
         float fudgeFactor ,
         uint delta )
     {
-        var sut = CreateSut ( ) ;
+        StoppingHeightCalculator sut = CreateSut ( ) ;
 
         sut.TargetHeight = targetHeight ;
         sut.Height = height ;
@@ -231,7 +231,7 @@ public class StoppingHeightCalculatorTests
         float fudgeFactor ,
         int movementUntilStop )
     {
-        var sut = CreateSut ( ) ;
+        StoppingHeightCalculator sut = CreateSut ( ) ;
 
         sut.TargetHeight = targetHeight ;
         sut.Height = height ;
@@ -548,7 +548,7 @@ public class StoppingHeightCalculatorTests
         float fudgeFactor ,
         bool hasReachedTargetHeight )
     {
-        var sut = CreateSut ( ) ;
+        StoppingHeightCalculator sut = CreateSut ( ) ;
 
         sut.MoveIntoDirection = moveIntoDirection ;
         sut.TargetHeight = targetHeight ;
@@ -666,7 +666,7 @@ public class StoppingHeightCalculatorTests
         float fudgeFactor ,
         Direction moveIntoDirection )
     {
-        var sut = CreateSut ( ) ;
+        StoppingHeightCalculator sut = CreateSut ( ) ;
 
         sut.MoveIntoDirection = moveIntoDirection ;
         sut.TargetHeight = targetHeight ;

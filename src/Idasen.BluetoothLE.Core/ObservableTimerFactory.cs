@@ -1,10 +1,10 @@
-﻿using System.Reactive.Concurrency ;
-using System.Reactive.Linq ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Core ;
+using System.Reactive.Concurrency ;
+using System.Reactive.Linq ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces.DevicesDiscovery ;
 
 /// <summary>
 ///     Factory that creates observable timers using Rx.

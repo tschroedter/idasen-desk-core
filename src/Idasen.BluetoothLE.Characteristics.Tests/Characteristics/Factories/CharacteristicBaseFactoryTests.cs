@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Selkie.AutoMocking ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Factories ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Factories ;
+using BluetoothLE.Characteristics.Characteristics ;
+using Core.Interfaces.ServicesDiscovery ;
+using FluentAssertions ;
+using Selkie.AutoMocking ;
 
 [ AutoDataTestClass ]
 public class CharacteristicBaseFactoryTests

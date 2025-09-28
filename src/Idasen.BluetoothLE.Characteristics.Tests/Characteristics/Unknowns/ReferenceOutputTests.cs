@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
-using Idasen.BluetoothLE.Characteristics.Common ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+using BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using BluetoothLE.Characteristics.Common ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class ReferenceOutputTests
@@ -108,14 +108,11 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void Dispose_ForInvoked_DoesNothing ( )
     {
-        var action = ( ) => CreateSut ( ).Dispose ( ) ;
+        Action action = ( ) => CreateSut ( ).Dispose ( ) ;
 
         action.Should ( )
               .NotThrow < Exception > ( ) ;
     }
 
-    private ReferenceOutput CreateSut ( )
-    {
-        return new ReferenceOutput ( ) ;
-    }
+    private ReferenceOutput CreateSut ( ) => new ( ) ;
 }

@@ -1,12 +1,12 @@
-﻿using System.Reactive.Concurrency ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+using System.Reactive.Concurrency ;
+using BluetoothLE.Characteristics.Characteristics ;
+using Core.Interfaces.ServicesDiscovery ;
+using Interfaces.Characteristics ;
+using Interfaces.Characteristics.Customs ;
+using Interfaces.Common ;
+using Serilog ;
 
 public class TestCharacteristicBase ( ILogger logger ,
                                       IScheduler scheduler ,

@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-using Selkie.AutoMocking ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
+using Core.ServicesDiscovery.Wrappers ;
+using FluentAssertions ;
+using Selkie.AutoMocking ;
 
 [ TestClass ]
 public class GattCharacteristicValueChangedDetailsTests

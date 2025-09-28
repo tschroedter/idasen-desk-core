@@ -1,6 +1,6 @@
-﻿using FluentAssertions ;
+﻿namespace Idasen.BluetoothLE.Core.Tests ;
 
-namespace Idasen.BluetoothLE.Core.Tests ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class ULongExtensionsTests

@@ -1,16 +1,17 @@
-﻿using System.Reactive.Concurrency ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
+
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+using Common ;
+using Core ;
+using Core.Interfaces.ServicesDiscovery ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Core.ServicesDiscovery.Wrappers ;
+using Interfaces.Characteristics ;
+using Interfaces.Characteristics.Customs ;
+using Interfaces.Common ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
 public class ReferenceOutput
     : CharacteristicBase ,
@@ -95,7 +96,7 @@ public class ReferenceOutput
         }
 
         if ( ! Characteristics.Characteristics.TryGetValue ( HeightSpeed ,
-                                                             out var heightAndSpeed ) )
+                                                             out IGattCharacteristicWrapper? heightAndSpeed ) )
         {
             Logger.Error ( "Failed to find characteristic for Height and Speed with key {Key}" ,
                            HeightSpeed ) ;

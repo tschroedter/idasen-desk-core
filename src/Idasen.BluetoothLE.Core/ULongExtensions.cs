@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions ;
+﻿namespace Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Core ;
+using System.Text.RegularExpressions ;
 
 /// <summary>
 ///     Extensions for <see cref="ulong" /> values.

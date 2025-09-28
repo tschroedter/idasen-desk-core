@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using FluentAssertions ;
+using Interfaces ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public class DeskTests

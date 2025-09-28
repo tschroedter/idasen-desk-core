@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
-using Idasen.BluetoothLE.Characteristics.Common ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+using BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using BluetoothLE.Characteristics.Common ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class GenericAccessTests
@@ -87,8 +87,5 @@ public class GenericAccessTests
               .Throw < NotInitializeException > ( ) ;
     }
 
-    private GenericAccess CreateSut ( )
-    {
-        return new GenericAccess ( ) ;
-    }
+    private GenericAccess CreateSut ( ) => new ( ) ;
 }

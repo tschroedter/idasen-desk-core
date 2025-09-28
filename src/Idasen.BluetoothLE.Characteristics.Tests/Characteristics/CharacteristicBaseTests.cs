@@ -1,16 +1,16 @@
-﻿using System.Reactive.Concurrency ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+
+using System.Reactive.Concurrency ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using BluetoothLE.Characteristics.Characteristics ;
+using Core.Interfaces.ServicesDiscovery ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.Characteristics ;
+using Interfaces.Characteristics.Customs ;
+using Interfaces.Common ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
 public abstract class CharacteristicBaseTests<T>
@@ -163,7 +163,7 @@ public abstract class CharacteristicBaseTests<T>
     [ TestMethod ]
     public void Initialize_ForKnownGattServiceUuid_SetsCharacteristics ( )
     {
-        var sut = CreateSut ( ) ;
+        T sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;

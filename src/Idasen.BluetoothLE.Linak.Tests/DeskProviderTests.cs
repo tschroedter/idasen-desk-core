@@ -1,10 +1,10 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using Common.Tests ;
+using FluentAssertions ;
+using Interfaces ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public class DeskProviderTests
@@ -194,10 +194,10 @@ public class DeskProviderTests
                                             deviceTimeout ) )
                 .Do ( _ => { source.Cancel ( ) ; } ) ;
 
-        var (_ , desk) = await sut.Initialize ( deviceName ,
-                                                deviceAddress ,
-                                                deviceTimeout )
-                                  .TryGetDesk ( source.Token ) ;
+        ( _ , IDesk? desk ) = await sut.Initialize ( deviceName ,
+                                                     deviceAddress ,
+                                                     deviceTimeout )
+                                       .TryGetDesk ( source.Token ) ;
 
         desk.Should ( )
             .BeNull ( ) ;

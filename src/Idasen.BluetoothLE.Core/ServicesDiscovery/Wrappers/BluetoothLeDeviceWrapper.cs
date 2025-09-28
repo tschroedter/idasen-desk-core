@@ -1,17 +1,17 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+using System.Diagnostics.CodeAnalysis ;
 using System.Reactive ;
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -62,7 +62,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         _connectionStatusChanged = connectionStatusChanged ;
         _device = device ;
 
-        var statusChanged =
+        IObservable < EventPattern < object > > statusChanged =
             Observable.FromEventPattern < object > (
                                                     _device ,
                                                     nameof ( BluetoothLEDevice.ConnectionStatusChanged ) ) ;
@@ -105,7 +105,7 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
     /// <inheritdoc />
     public async Task < IGattDeviceServicesResultWrapper > GetGattServicesAsync ( )
     {
-        var gattServicesResult = await _device.GetGattServicesAsync ( ).AsTask ( ) ;
+        GattDeviceServicesResult? gattServicesResult = await _device.GetGattServicesAsync ( ).AsTask ( ) ;
         return _servicesFactory.Create ( gattServicesResult ) ;
     }
 

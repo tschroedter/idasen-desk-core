@@ -1,14 +1,14 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+﻿namespace Idasen.Launcher ;
+
+using System.Diagnostics.CodeAnalysis ;
 using Autofac ;
 using Autofac.Core ;
 using AutofacSerilogIntegration ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Linak ;
+using BluetoothLE.Core ;
+using BluetoothLE.Linak ;
 using Microsoft.Extensions.Configuration ;
 using Serilog ;
 using Serilog.Configuration ;
-
-namespace Idasen.Launcher ;
 
 /// <summary>
 ///     Provides factory methods to create and configure an Autofac <see cref="IContainer" />, wiring up Serilog and the
@@ -72,9 +72,9 @@ public static class ContainerProvider
     {
         ArgumentNullException.ThrowIfNull ( configuration ) ;
 
-        var loggerConfiguration = new LoggerConfiguration ( ).ReadFrom
-                                                             .Configuration ( configuration )
-                                                             .Enrich.WithCaller ( ) ;
+        LoggerConfiguration loggerConfiguration = new LoggerConfiguration ( ).ReadFrom
+                                                                             .Configuration ( configuration )
+                                                                             .Enrich.WithCaller ( ) ;
 
         Log.Logger = loggerConfiguration.CreateLogger ( ) ;
 
@@ -101,7 +101,7 @@ public static class ContainerProvider
 
         if ( otherModules != null )
         {
-            foreach (var otherModule in otherModules)
+            foreach (IModule otherModule in otherModules)
             {
                 builder.RegisterModule ( otherModule ) ;
             }

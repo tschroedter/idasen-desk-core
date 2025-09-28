@@ -1,9 +1,11 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
+
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Organizes discovered GATT characteristics and exposes their properties by friendly keys.

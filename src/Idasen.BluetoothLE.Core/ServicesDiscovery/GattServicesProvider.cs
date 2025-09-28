@@ -1,13 +1,13 @@
-﻿using System.Reactive.Subjects ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+
+using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -97,14 +97,11 @@ public class GattServicesProvider
         _services.ReadOnlyDictionary ;
 
     /// <inheritdoc />
-    public void Dispose ( )
-    {
-        _services.Dispose ( ) ;
-    }
+    public void Dispose ( ) => _services.Dispose ( ) ;
 
     private async Task GetCharacteristicsAsync ( IGattDeviceServicesResultWrapper gatt )
     {
-        foreach (var service in gatt.Services)
+        foreach (IGattDeviceServiceWrapper service in gatt.Services)
         {
             IGattCharacteristicsResultWrapper characteristics ;
 

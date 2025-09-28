@@ -1,10 +1,12 @@
-﻿using Windows.Devices.Bluetooth ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+
+using Windows.Devices.Bluetooth ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Wrappers ;
 
 /// <summary>
 ///     Represents a Bluetooth LE device.

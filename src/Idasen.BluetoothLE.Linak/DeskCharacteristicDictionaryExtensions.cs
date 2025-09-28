@@ -1,8 +1,8 @@
-﻿using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using JetBrains.Annotations ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using Characteristics.Characteristics.Unknowns ;
+using Characteristics.Interfaces.Characteristics ;
+using JetBrains.Annotations ;
 
 /// <summary>
 ///     Helper methods for accessing desk characteristics from a dictionary with safe fallbacks.
@@ -60,7 +60,7 @@ public static class DeskCharacteristicDictionaryExtensions
         }
 
         if ( dictionary.TryGetValue ( key ,
-                                      out var characteristicBase ) )
+                                      out ICharacteristicBase? characteristicBase ) )
         {
             if ( characteristicBase is T typed )
             {
@@ -72,9 +72,9 @@ public static class DeskCharacteristicDictionaryExtensions
         }
 
         if ( UnknownFactories.TryGetValue ( key ,
-                                            out var factory ) )
+                                            out Func < ICharacteristicBase >? factory ) )
         {
-            var unknown = factory ( ) ;
+            ICharacteristicBase unknown = factory ( ) ;
 
             if ( unknown is T typedUnknown )
             {

@@ -1,14 +1,14 @@
-﻿using System.Reactive.Concurrency ;
+namespace Idasen.BluetoothLE.Linak ;
+
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Core.Interfaces.ServicesDiscovery ;
+using Interfaces ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -146,15 +146,12 @@ public class DeskConnector
     public string DeviceName => _device.Name ;
 
     /// <inheritdoc />
-    public void Connect ( )
-    {
-        _device.Connect ( ) ;
-    }
+    public void Connect ( ) => _device.Connect ( ) ;
 
     /// <inheritdoc />
     public async Task < bool > MoveUpAsync ( ) // todo this should be async
     {
-        if ( ! TryGetDeskMover ( out var deskMover ) )
+        if ( ! TryGetDeskMover ( out IDeskMover? deskMover ) )
         {
             return false ;
         }
@@ -165,7 +162,7 @@ public class DeskConnector
     /// <inheritdoc />
     public async Task < bool > MoveDownAsync ( ) // todo check test for async
     {
-        if ( ! TryGetDeskMover ( out var deskMover ) )
+        if ( ! TryGetDeskMover ( out IDeskMover? deskMover ) )
         {
             return false ;
         }
@@ -179,7 +176,7 @@ public class DeskConnector
     /// <inheritdoc />
     public void MoveTo ( uint targetHeight )
     {
-        if ( ! TryGetDeskMover ( out var deskMover ) )
+        if ( ! TryGetDeskMover ( out IDeskMover? deskMover ) )
         {
             return ;
         }
@@ -198,7 +195,7 @@ public class DeskConnector
     /// <inheritdoc />
     public async Task < bool > MoveStopAsync ( ) // todo check test for async
     {
-        if ( ! TryGetDeskMover ( out var deskMover ) )
+        if ( ! TryGetDeskMover ( out IDeskMover? deskMover ) )
         {
             return false ;
         }
@@ -209,7 +206,7 @@ public class DeskConnector
     /// <inheritdoc />
     public Task < bool > MoveLockAsync ( ) // todo check test for async
     {
-        if ( ! TryGetDeskLocker ( out var deskLocker ) )
+        if ( ! TryGetDeskLocker ( out IDeskLocker? deskLocker ) )
         {
             return Task.FromResult ( false ) ;
         }
@@ -222,7 +219,7 @@ public class DeskConnector
     /// <inheritdoc />
     public Task < bool > MoveUnlockAsync ( ) // todo check test for async
     {
-        if ( ! TryGetDeskLocker ( out var deskLocker ) )
+        if ( ! TryGetDeskLocker ( out IDeskLocker? deskLocker ) )
         {
             return Task.FromResult ( false ) ;
         }
@@ -347,8 +344,5 @@ public class DeskConnector
         _subjectRefreshed.OnNext ( true ) ;
     }
 
-    private void OnDeviceNameChanged ( IEnumerable < byte > value )
-    {
-        _deviceNameChanged.OnNext ( value ) ;
-    }
+    private void OnDeviceNameChanged ( IEnumerable < byte > value ) => _deviceNameChanged.OnNext ( value ) ;
 }

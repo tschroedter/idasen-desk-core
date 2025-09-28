@@ -1,9 +1,9 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Core.Interfaces.ServicesDiscovery ;
+using Interfaces ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -37,9 +37,9 @@ public class DeskFactory
     /// <inheritdoc />
     public async Task < IDesk > CreateAsync ( ulong address )
     {
-        var device = await _deviceFactory.FromBluetoothAddressAsync ( address )
-                                         .ConfigureAwait ( false ) ;
-        var connector = _deskConnectorFactory.Invoke ( device ) ;
+        IDevice device = await _deviceFactory.FromBluetoothAddressAsync ( address )
+                                             .ConfigureAwait ( false ) ;
+        IDeskConnector connector = _deskConnectorFactory.Invoke ( device ) ;
 
         return _deskFactory.Invoke ( connector ) ;
     }

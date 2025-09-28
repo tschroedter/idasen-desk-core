@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
+﻿namespace Idasen.BluetoothLE.Tests ;
+
+using FluentAssertions ;
 using FluentAssertions.Primitives ;
 using FluentAssertions.Specialized ;
-
-namespace Idasen.BluetoothLE.Tests ;
 
 public static class ExceptionAssertionsExtensions
 {

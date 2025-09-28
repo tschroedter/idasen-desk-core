@@ -1,13 +1,13 @@
-﻿using System.Globalization ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
+
+using System.Globalization ;
 using System.Reflection ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
+using Core ;
 using CsvHelper ;
 using CsvHelper.Configuration ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
-
-namespace Idasen.BluetoothLE.Characteristics.Common ;
+using Interfaces.Common ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public sealed class AllGattCharacteristicsProvider
@@ -49,12 +49,12 @@ public sealed class AllGattCharacteristicsProvider
 
     private void Populate ( IEnumerable < CsvGattCharacteristic > records )
     {
-        foreach (var record in records)
+        foreach (CsvGattCharacteristic record in records)
         {
             _uuidToDescription[Guid.Parse ( record.Uuid )] = record.Name ;
         }
 
-        foreach (var (uuid , description) in _uuidToDescription)
+        foreach (( Guid uuid , var description ) in _uuidToDescription)
         {
             _descriptionToUuid[description] = uuid ;
         }
@@ -62,8 +62,8 @@ public sealed class AllGattCharacteristicsProvider
 
     private IEnumerable < CsvGattCharacteristic > ReadCsvFile ( )
     {
-        var stream = Assembly.GetExecutingAssembly ( )
-                             .GetManifestResourceStream ( OfficialGattCharacteristics ) ;
+        Stream? stream = Assembly.GetExecutingAssembly ( )
+                                 .GetManifestResourceStream ( OfficialGattCharacteristics ) ;
 
         if ( stream == null )
         {
@@ -82,8 +82,8 @@ public sealed class AllGattCharacteristicsProvider
         using var csv = new CsvReader ( reader ,
                                         config ) ;
 
-        var readCsvFile = csv.GetRecords < CsvGattCharacteristic > ( )
-                             .ToArray ( ) ;
+        CsvGattCharacteristic [ ] readCsvFile = csv.GetRecords < CsvGattCharacteristic > ( )
+                                                   .ToArray ( ) ;
 
         return readCsvFile ;
     }

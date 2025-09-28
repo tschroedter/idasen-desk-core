@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces ;
+using Characteristics.Interfaces.Characteristics ;
 
 /// <summary>
 ///     Creates <see cref="IDeskHeightAndSpeed" /> instances bound to a reference output characteristic.

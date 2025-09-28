@@ -1,17 +1,18 @@
-﻿using System.Reactive.Concurrency ;
-using System.Reactive.Disposables ;
-using System.Reactive.Linq ;
-using System.Reactive.Subjects ;
 using System.Runtime.CompilerServices ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
 
 [ assembly : InternalsVisibleTo ( "Idasen.BluetoothLE.Linak.Tests" ) ]
 
 namespace Idasen.BluetoothLE.Linak.Control ;
+
+using System.Reactive.Concurrency ;
+using System.Reactive.Disposables ;
+using System.Reactive.Linq ;
+using System.Reactive.Subjects ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Core ;
+using Interfaces ;
+using Serilog ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskMover
@@ -48,10 +49,10 @@ public class DeskMover
 
     private bool _isAllowedToMove ;
     private IDeskMovementMonitor? _monitor ;
+    private volatile bool _pendingEvaluation ;
 
     private Task < bool >? _pendingStopTask ;
     private IDisposable? _rawHeightAndSpeedSubscription ;
-    private volatile bool _pendingEvaluation ;
 
     public DeskMover ( ILogger logger ,
                        IScheduler scheduler ,
@@ -348,10 +349,7 @@ public class DeskMover
         StartAfterReceivingCurrentHeight ( ) ;
     }
 
-    internal async Task OnTimerElapsed ( long time )
-    {
-        await TryEvaluateMoveAsync ( true ).ConfigureAwait ( false ) ;
-    }
+    internal async Task OnTimerElapsed ( long time ) => await TryEvaluateMoveAsync ( true ).ConfigureAwait ( false ) ;
 
     private async Task TryEvaluateMoveAsync ( bool fromTimer = false )
     {
@@ -387,11 +385,11 @@ public class DeskMover
                     _logger.Debug ( "TargetHeight = 0 -> forcing stop" ) ;
                 }
 
-                var result = _stopper.ShouldStop ( Height ,
-                                                   Speed ,
-                                                   TargetHeight ,
-                                                   StartMovingIntoDirection ,
-                                                   _engine.CurrentDirection ) ;
+                StopDetails result = _stopper.ShouldStop ( Height ,
+                                                           Speed ,
+                                                           TargetHeight ,
+                                                           StartMovingIntoDirection ,
+                                                           _engine.CurrentDirection ) ;
 
                 _logger.Debug ( "StopEval result stop={Stop} desired={Desired} engineDir={EngineDir}" ,
                                 result.ShouldStop ,
@@ -416,7 +414,7 @@ public class DeskMover
                 _engine.Move ( result.Desired ,
                                fromTimer ) ;
                 // If another evaluation was requested during this run, loop again
-            } while ( _pendingEvaluation ) ;
+            } while (_pendingEvaluation) ;
         }
         catch ( Exception e )
         {

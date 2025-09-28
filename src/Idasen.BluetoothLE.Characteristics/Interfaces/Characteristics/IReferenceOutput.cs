@@ -1,9 +1,11 @@
-﻿using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+
+using BluetoothLE.Characteristics.Characteristics ;
+using Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     Reference Output service contract.

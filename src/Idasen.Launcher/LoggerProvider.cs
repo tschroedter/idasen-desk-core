@@ -1,13 +1,13 @@
-﻿using System.Reflection ;
-using Idasen.BluetoothLE.Core ;
+﻿namespace Idasen.Launcher ;
+
+using System.Reflection ;
+using BluetoothLE.Core ;
 using JetBrains.Annotations ;
 using Microsoft.Extensions.Configuration ;
 using Serilog ;
 using Serilog.Core ;
 using Serilog.Debugging ;
 using Serilog.Events ;
-
-namespace Idasen.Launcher ;
 
 /// <summary>
 ///     Provides factory methods for creating and managing Serilog loggers for the application.
@@ -50,15 +50,15 @@ public static class LoggerProvider
                 Environment.GetEnvironmentVariable ( "ASPNETCORE_ENVIRONMENT" ) ??
                 "Production" ;
 
-            var configuration = new ConfigurationBuilder ( )
-                               .SetBasePath ( baseDir )
-                               .AddJsonFile ( "appsettings.json" ,
-                                              true ,
-                                              false )
-                               .AddJsonFile ( $"appsettings.{environmentName}.json" ,
-                                              true ,
-                                              false )
-                               .Build ( ) ;
+            IConfigurationRoot configuration = new ConfigurationBuilder ( )
+                                              .SetBasePath ( baseDir )
+                                              .AddJsonFile ( "appsettings.json" ,
+                                                             true ,
+                                                             false )
+                                              .AddJsonFile ( $"appsettings.{environmentName}.json" ,
+                                                             true ,
+                                                             false )
+                                              .Build ( ) ;
 
             _logger = new LoggerConfiguration ( )
                      .ReadFrom.Configuration ( configuration )
@@ -134,15 +134,15 @@ public static class LoggerProvider
         LoggingFile.FullPath = logFile ;
 
 #pragma warning disable CA1305
-        var loggerConfiguration = new LoggerConfiguration ( )
-                                 .MinimumLevel.Debug ( )
-                                 .Enrich.WithCaller ( )
-                                 .WriteTo.Console ( LogEventLevel.Debug ,
-                                                    LogTemplate )
-                                 .WriteTo.File ( logFile ,
-                                                 LogEventLevel.Debug ,
-                                                 LogTemplate ,
-                                                 hooks : new LoggingFileHooks ( ) ) ;
+        LoggerConfiguration loggerConfiguration = new LoggerConfiguration ( )
+                                                 .MinimumLevel.Debug ( )
+                                                 .Enrich.WithCaller ( )
+                                                 .WriteTo.Console ( LogEventLevel.Debug ,
+                                                                    LogTemplate )
+                                                 .WriteTo.File ( logFile ,
+                                                                 LogEventLevel.Debug ,
+                                                                 LogTemplate ,
+                                                                 hooks : new LoggingFileHooks ( ) ) ;
 #pragma warning restore CA1305
 
         return loggerConfiguration.CreateLogger ( ) ;
@@ -210,8 +210,6 @@ public static class LoggerProvider
         _selfLogEnabled = true ;
     }
 
-    private static string GetBaseDirectoryName ( )
-    {
-        return Path.GetDirectoryName ( Assembly.GetEntryAssembly ( )?.Location ?? AppContext.BaseDirectory ) ?? AppContext.BaseDirectory ;
-    }
+    private static string GetBaseDirectoryName ( ) =>
+        Path.GetDirectoryName ( Assembly.GetEntryAssembly ( )?.Location ?? AppContext.BaseDirectory ) ?? AppContext.BaseDirectory ;
 }

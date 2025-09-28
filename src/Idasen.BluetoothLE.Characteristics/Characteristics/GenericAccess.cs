@@ -1,13 +1,13 @@
-﻿using System.Reactive.Concurrency ;
-using System.Reactive.Subjects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
+using System.Reactive.Concurrency ;
+using System.Reactive.Subjects ;
+using Core ;
+using Core.Interfaces.ServicesDiscovery ;
+using Interfaces.Characteristics ;
+using Interfaces.Characteristics.Customs ;
+using Interfaces.Common ;
+using Serilog ;
 
 public class GenericAccess
     : CharacteristicBase ,
@@ -94,7 +94,7 @@ public class GenericAccess
     protected override T WithMapping<T> ( ) where T : class
     {
         if ( _allGattCharacteristicsProvider.TryGetUuid ( CharacteristicDeviceName ,
-                                                          out var uuid ) )
+                                                          out Guid uuid ) )
         {
             DescriptionToUuid[CharacteristicDeviceName] = uuid ;
         }

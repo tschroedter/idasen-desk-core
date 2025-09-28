@@ -1,4 +1,6 @@
-﻿using Autofac ;
+namespace Idasen.BluetoothLE.Common.Tests ;
+
+using Autofac ;
 using AutofacSerilogIntegration ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
@@ -9,14 +11,12 @@ using Serilog ;
 using Serilog.Events ;
 using Serilog.Sinks.SystemConsole.Themes ;
 
-namespace Idasen.BluetoothLE.Common.Tests ;
-
 public abstract class BaseConstructorNullTester<T> where T : class
 {
     private IContainer? _container ;
 
-    protected BaseConstructorNullTester ( int numberOfConstructorsPassed = 1,
-                                          int numberOfConstructorsFailed = 0)
+    protected BaseConstructorNullTester ( int numberOfConstructorsPassed = 1 ,
+                                          int numberOfConstructorsFailed = 0 )
     {
         NumberOfConstructorsPassed = numberOfConstructorsPassed ;
         NumberOfConstructorsFailed = numberOfConstructorsFailed ;
@@ -57,10 +57,7 @@ public abstract class BaseConstructorNullTester<T> where T : class
                     .CreateLogger ( ) ;
     }
 
-    protected virtual ContainerBuilder CreateContainerBuilder ( )
-    {
-        return new ContainerBuilder ( ) ;
-    }
+    protected virtual ContainerBuilder CreateContainerBuilder ( ) => new ( ) ;
 
     protected virtual void RegisterModules ( ContainerBuilder builder )
     {
@@ -70,7 +67,7 @@ public abstract class BaseConstructorNullTester<T> where T : class
 
     protected virtual IContainer BuildContainer ( )
     {
-        var builder = CreateContainerBuilder ( ) ;
+        ContainerBuilder builder = CreateContainerBuilder ( ) ;
         RegisterModules ( builder ) ;
         return builder.Build ( ) ;
     }
@@ -78,7 +75,7 @@ public abstract class BaseConstructorNullTester<T> where T : class
     [ TestMethod ]
     public virtual void Constructor_ForAnyParameterNullThrows_AllPassing ( )
     {
-        var tester = CreateTester ( ) ;
+        INotNullTester tester = CreateTester ( ) ;
 
         tester.Test < T > ( ) ;
 
@@ -100,8 +97,5 @@ public abstract class BaseConstructorNullTester<T> where T : class
         }
     }
 
-    protected virtual INotNullTester CreateTester ( )
-    {
-        return Container.Resolve < INotNullTester > ( ) ;
-    }
+    protected virtual INotNullTester CreateTester ( ) => Container.Resolve < INotNullTester > ( ) ;
 }

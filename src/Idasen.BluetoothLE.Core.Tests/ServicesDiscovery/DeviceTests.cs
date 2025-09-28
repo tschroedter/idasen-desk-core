@@ -1,11 +1,11 @@
-﻿using Windows.Devices.Bluetooth ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+
+using Windows.Devices.Bluetooth ;
+using Core.ServicesDiscovery ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class DeviceTests

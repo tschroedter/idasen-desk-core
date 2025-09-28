@@ -1,12 +1,12 @@
-﻿using System.Text ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using System.Text ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Characteristics.Interfaces.Characteristics ;
+using Core.Interfaces.ServicesDiscovery ;
+using Interfaces ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -35,7 +35,7 @@ public class DeskCharacteristics
     /// <inheritdoc />
     public async Task Refresh ( )
     {
-        foreach (var characteristicBase in _available.Values)
+        foreach (ICharacteristicBase characteristicBase in _available.Values)
         {
             await characteristicBase.Refresh ( ).ConfigureAwait ( false ) ;
         }
@@ -84,7 +84,7 @@ public class DeskCharacteristics
         characteristic.Initialize < ICharacteristicBase > ( ) ;
 
         if ( _available.TryGetValue ( key ,
-                                      out var oldCharacteristic ) )
+                                      out ICharacteristicBase? oldCharacteristic ) )
         {
             oldCharacteristic.Dispose ( ) ;
         }

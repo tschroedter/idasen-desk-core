@@ -1,7 +1,7 @@
-﻿using Windows.Devices.Bluetooth.Advertisement ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Windows.Devices.Bluetooth.Advertisement ;
+using Interfaces.DevicesDiscovery ;
 
 public sealed class StatusMapper
     : IStatusMapper

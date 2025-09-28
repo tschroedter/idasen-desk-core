@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+using BluetoothLE.Characteristics.Characteristics ;
+using FluentAssertions ;
+using NSubstitute ;
 
 [ TestClass ]
 public class ReferenceInputTest
@@ -11,7 +11,7 @@ public class ReferenceInputTest
     [ TestMethod ]
     public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceInput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -26,7 +26,7 @@ public class ReferenceInputTest
     [ TestMethod ]
     public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        ReferenceInput sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;

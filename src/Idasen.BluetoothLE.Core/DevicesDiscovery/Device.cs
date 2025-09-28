@@ -1,12 +1,12 @@
-﻿using System.Diagnostics ;
-using System.Globalization ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Selkie.DefCon.One.Common ;
+﻿namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using System.Diagnostics ;
+using System.Globalization ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Interfaces.DevicesDiscovery ;
+using Selkie.DefCon.One.Common ;
 
 /// <inheritdoc />
 [ DebuggerDisplay ( "{Name} {MacAddress}" ) ]

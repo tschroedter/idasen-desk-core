@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Common ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+using BluetoothLE.Characteristics.Common ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class AllGattCharacteristicsProviderTests
@@ -70,7 +70,7 @@ public class AllGattCharacteristicsProviderTests
     public void TryGetUuid_ForUnknownDescription_Empty ( )
     {
         CreateSut ( ).TryGetUuid ( UnknownDescription ,
-                                   out var uuid ) ;
+                                   out Guid uuid ) ;
 
         uuid.Should ( )
             .BeEmpty ( ) ;
@@ -89,7 +89,7 @@ public class AllGattCharacteristicsProviderTests
     public void TryGetUuid_ForKnownDescription_Guid ( )
     {
         CreateSut ( ).TryGetUuid ( KnownDescription ,
-                                   out var uuid ) ;
+                                   out Guid uuid ) ;
 
         uuid.Should ( )
             .Be ( _knownGuid ) ;
@@ -104,8 +104,5 @@ public class AllGattCharacteristicsProviderTests
                            AllGattCharacteristicsProvider.Filename ) ;
     }
 
-    private AllGattCharacteristicsProvider CreateSut ( )
-    {
-        return new AllGattCharacteristicsProvider ( ) ;
-    }
+    private AllGattCharacteristicsProvider CreateSut ( ) => new ( ) ;
 }

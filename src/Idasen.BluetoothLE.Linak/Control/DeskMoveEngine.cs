@@ -1,9 +1,9 @@
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
-
 namespace Idasen.BluetoothLE.Linak.Control ;
+
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Serilog ;
 
 /// <summary>
 ///     Handles issuing movement commands to the desk and keeps track of the current commanded direction.
@@ -65,7 +65,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
         {
             if ( fromTimer )
             {
-                var now = DateTime.UtcNow ;
+                DateTime now = DateTime.UtcNow ;
 
                 if ( now - _lastKeepAlive >= _keepAliveInterval )
                 {
@@ -106,7 +106,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
         _logger.Debug ( "Engine stopping (currentDir={Dir})" ,
                         CurrentDirection ) ;
 
-        var task = _executor.Stop ( ) ;
+        Task < bool > task = _executor.Stop ( ) ;
 
         if ( task.IsCompleted )
         {
@@ -171,9 +171,9 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
         _logger.Debug ( "Sending move command {Dir}" ,
                         desired ) ;
-        var task = desired == Direction.Up
-                       ? _executor.Up ( )
-                       : _executor.Down ( ) ;
+        Task < bool > task = desired == Direction.Up
+                                 ? _executor.Up ( )
+                                 : _executor.Down ( ) ;
 
         if ( task.IsCompleted )
         {

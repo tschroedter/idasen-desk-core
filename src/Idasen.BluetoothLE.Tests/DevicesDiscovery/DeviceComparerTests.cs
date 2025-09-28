@@ -1,11 +1,11 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+
+using Core ;
+using Core.DevicesDiscovery ;
+using Core.Interfaces.DevicesDiscovery ;
+using FluentAssertions ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class DeviceComparerTests

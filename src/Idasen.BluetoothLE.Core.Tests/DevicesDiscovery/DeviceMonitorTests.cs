@@ -1,15 +1,15 @@
-﻿using System.Reactive ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
+
+using System.Reactive ;
 using System.Reactive.Subjects ;
+using Common.Tests ;
+using Core.DevicesDiscovery ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using Interfaces.DevicesDiscovery ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class DeviceMonitorTests
@@ -67,7 +67,7 @@ public class DeviceMonitorTests
 
         var time = 0 ;
 
-        foreach (var device in devices)
+        foreach (IDevice device in devices)
         {
             list.Add ( OnNext ( time++ ,
                                 device ) ) ;
@@ -85,10 +85,7 @@ public class DeviceMonitorTests
                                                            Notification.CreateOnNext ( device ) ) ;
     }
 
-    private ISubject < IDevice > Factory ( )
-    {
-        return _subjects.Dequeue ( ) ;
-    }
+    private ISubject < IDevice > Factory ( ) => _subjects.Dequeue ( ) ;
 
     [ AutoDataTestMethod ]
     public void Constructor_ForLoggerNull_Throws (
@@ -96,10 +93,10 @@ public class DeviceMonitorTests
         [ BeNull ] ILogger logger )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitor test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -112,10 +109,10 @@ public class DeviceMonitorTests
         [ BeNull ] Func < ISubject < IDevice > > factory )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitor test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -128,10 +125,10 @@ public class DeviceMonitorTests
         [ BeNull ] IDevices devices )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitor test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -144,10 +141,10 @@ public class DeviceMonitorTests
         [ BeNull ] IWatcher watcher )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitor test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -181,7 +178,7 @@ public class DeviceMonitorTests
     {
         ConfigureDeviceDiscovered ( ) ;
 
-        using var sut = CreateSutSubscribed ( ) ;
+        using DeviceMonitor sut = CreateSutSubscribed ( ) ;
 
         _scheduler.Start ( ) ;
 
@@ -195,12 +192,12 @@ public class DeviceMonitorTests
     {
         ConfigureDeviceDiscovered ( ) ;
 
-        using var sut = CreateSutSubscribed ( ) ;
+        using DeviceMonitor sut = CreateSutSubscribed ( ) ;
 
         IDevice discovered = null! ;
 
-        using var observer = sut.DeviceDiscovered
-                                .Subscribe ( x => discovered = x ) ;
+        using IDisposable observer = sut.DeviceDiscovered
+                                        .Subscribe ( x => discovered = x ) ;
 
         _scheduler.Start ( ) ;
 
@@ -213,12 +210,12 @@ public class DeviceMonitorTests
     {
         ConfigureNameUpdated ( ) ;
 
-        using var sut = CreateSutSubscribed ( ) ;
+        using DeviceMonitor sut = CreateSutSubscribed ( ) ;
 
         _scheduler.Start ( ) ;
 
         _devices.TryGetDevice ( _device.Address ,
-                                out var device )
+                                out IDevice? device )
                 .Should ( )
                 .BeTrue ( ) ;
 
@@ -232,12 +229,12 @@ public class DeviceMonitorTests
     {
         ConfigureSameDevice ( ) ;
 
-        using var sut = CreateSutSubscribed ( ) ;
+        using DeviceMonitor sut = CreateSutSubscribed ( ) ;
 
         IDevice updated = null! ;
 
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
+        using IDisposable observer = sut.DeviceUpdated
+                                        .Subscribe ( x => updated = x ) ;
 
         _scheduler.Start ( ) ;
 
@@ -250,12 +247,12 @@ public class DeviceMonitorTests
     {
         ConfigureNameUpdatedTwice ( ) ; // maybe, later allow name change?
 
-        using var sut = CreateSutSubscribed ( ) ;
+        using DeviceMonitor sut = CreateSutSubscribed ( ) ;
 
         _scheduler.Start ( ) ;
 
         _devices.TryGetDevice ( _device.Address ,
-                                out var device )
+                                out IDevice? device )
                 .Should ( )
                 .BeTrue ( ) ;
 
@@ -266,7 +263,7 @@ public class DeviceMonitorTests
 
     private DeviceMonitor CreateSutSubscribed ( )
     {
-        var sut = CreateSut ( ) ;
+        DeviceMonitor sut = CreateSut ( ) ;
         sut.Start ( ) ;
 
         return sut ;
@@ -277,12 +274,12 @@ public class DeviceMonitorTests
     {
         ConfigureNameUpdated ( ) ;
 
-        using var sut = CreateSutSubscribed ( ) ;
+        using DeviceMonitor sut = CreateSutSubscribed ( ) ;
 
         IDevice updated = null! ;
 
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
+        using IDisposable observer = sut.DeviceUpdated
+                                        .Subscribe ( x => updated = x ) ;
 
         _scheduler.Start ( ) ;
 
@@ -292,7 +289,7 @@ public class DeviceMonitorTests
 
     private void ConfigureNameUpdatedTwice ( )
     {
-        var messages = new [ ]
+        IDevice [ ] messages = new [ ]
         {
             _device ,
             _deviceNewName ,
@@ -305,7 +302,7 @@ public class DeviceMonitorTests
 
     private void ConfigureNameUpdated ( )
     {
-        var messages = new [ ]
+        IDevice [ ] messages = new [ ]
         {
             _device ,
             _deviceNewName
@@ -317,7 +314,7 @@ public class DeviceMonitorTests
 
     private void ConfigureDeviceDiscovered ( )
     {
-        var messages = new [ ]
+        IDevice [ ] messages = new [ ]
         {
             _device
         } ;
@@ -328,7 +325,7 @@ public class DeviceMonitorTests
 
     private void ConfigureSameDevice ( )
     {
-        var messages = new [ ]
+        IDevice [ ] messages = new [ ]
         {
             _device ,
             _device
@@ -343,12 +340,12 @@ public class DeviceMonitorTests
     {
         ConfigureNameUpdated ( ) ;
 
-        using var sut = CreateSutSubscribed ( ) ;
+        using DeviceMonitor sut = CreateSutSubscribed ( ) ;
 
         IDevice updated = null! ;
 
-        using var observer = sut.DeviceNameUpdated
-                                .Subscribe ( x => updated = x ) ;
+        using IDisposable observer = sut.DeviceNameUpdated
+                                        .Subscribe ( x => updated = x ) ;
 
         _scheduler.Start ( ) ;
 
@@ -361,12 +358,12 @@ public class DeviceMonitorTests
     {
         ConfigureSameDevice ( ) ;
 
-        using var sut = CreateSutSubscribed ( ) ;
+        using DeviceMonitor sut = CreateSutSubscribed ( ) ;
 
         IDevice updated = null! ;
 
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
+        using IDisposable observer = sut.DeviceUpdated
+                                        .Subscribe ( x => updated = x ) ;
 
         _scheduler.Start ( ) ;
 

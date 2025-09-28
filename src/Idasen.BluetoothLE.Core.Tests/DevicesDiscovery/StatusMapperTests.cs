@@ -1,8 +1,8 @@
-﻿using Windows.Devices.Bluetooth.Advertisement ;
-using FluentAssertions ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
+using Windows.Devices.Bluetooth.Advertisement ;
+using Core.DevicesDiscovery ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class StatusMapperTests
@@ -32,7 +32,7 @@ public class StatusMapperTests
     {
         var unknown = ( BluetoothLEAdvertisementWatcherStatus ) 999 ;
 
-        var action = ( ) => CreateSut ( ).Map ( unknown ) ;
+        Func < Status > action = ( ) => CreateSut ( ).Map ( unknown ) ;
 
         action.Should ( )
               .Throw < ArgumentException > ( )

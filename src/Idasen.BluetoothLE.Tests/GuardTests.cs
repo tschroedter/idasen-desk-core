@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
+﻿namespace Idasen.BluetoothLE.Tests ;
+
+using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Tests ;
 
 [ TestClass ]
 public class GuardTests

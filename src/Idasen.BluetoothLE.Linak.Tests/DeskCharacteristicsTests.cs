@@ -1,13 +1,13 @@
-﻿using FluentAssertions ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using Characteristics.Interfaces.Characteristics ;
+using Common.Tests ;
+using Core.Interfaces.ServicesDiscovery ;
+using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public class DeskCharacteristicsTests

@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Common.Tests ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters ;
+using Common.Tests ;
 
 [ TestClass ]
 public class DateTimeOffsetWrapperConstructorNullTests

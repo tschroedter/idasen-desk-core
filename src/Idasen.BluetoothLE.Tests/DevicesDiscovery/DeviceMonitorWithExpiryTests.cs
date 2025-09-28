@@ -1,17 +1,17 @@
-﻿using System.Reactive.Concurrency ;
+﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
+using Core ;
+using Core.DevicesDiscovery ;
+using Core.Interfaces ;
+using Core.Interfaces.DevicesDiscovery ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class DeviceMonitorWithExpiryTests
@@ -22,10 +22,10 @@ public class DeviceMonitorWithExpiryTests
         [ BeNull ] ILogger logger )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitorWithExpiry test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -38,10 +38,10 @@ public class DeviceMonitorWithExpiryTests
         [ BeNull ] IDateTimeOffset dateTimeOffset )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitorWithExpiry test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -54,10 +54,10 @@ public class DeviceMonitorWithExpiryTests
         [ BeNull ] IDeviceMonitor deviceMonitor )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitorWithExpiry test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -70,10 +70,10 @@ public class DeviceMonitorWithExpiryTests
         [ BeNull ] IObservableTimerFactory factory )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitorWithExpiry test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -86,10 +86,10 @@ public class DeviceMonitorWithExpiryTests
         [ BeNull ] IScheduler scheduler )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitorWithExpiry test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -102,10 +102,10 @@ public class DeviceMonitorWithExpiryTests
         [ BeNull ] ISubject < IDevice > deviceExpired )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            DeviceMonitorWithExpiry test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -384,8 +384,8 @@ public class DeviceMonitorWithExpiryTests
 
         IDevice expiredDevice = null! ;
 
-        using var disposable = sut.DeviceExpired
-                                  .Subscribe ( expired => expiredDevice = expired ) ;
+        using IDisposable disposable = sut.DeviceExpired
+                                          .Subscribe ( expired => expiredDevice = expired ) ;
 
         deviceExpired.OnNext ( device ) ;
 

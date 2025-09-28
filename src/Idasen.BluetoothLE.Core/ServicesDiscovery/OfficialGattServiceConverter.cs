@@ -1,11 +1,11 @@
-﻿using System.Globalization ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+
+using System.Globalization ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
 using CsvHelper ;
 using CsvHelper.Configuration ;
 using CsvHelper.TypeConversion ;
-using Idasen.Aop.Aspects ;
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class OfficialGattServiceConverter

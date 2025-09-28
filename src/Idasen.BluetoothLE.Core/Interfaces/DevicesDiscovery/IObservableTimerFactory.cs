@@ -1,6 +1,6 @@
-﻿using System.Reactive.Concurrency ;
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using System.Reactive.Concurrency ;
 
 public interface IObservableTimerFactory
 {

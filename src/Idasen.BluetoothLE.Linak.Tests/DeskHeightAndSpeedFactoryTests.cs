@@ -1,10 +1,10 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
 
-namespace Idasen.BluetoothLE.Linak.Tests ;
+using Characteristics.Interfaces.Characteristics ;
+using Common.Tests ;
+using FluentAssertions ;
+using Interfaces ;
+using NSubstitute ;
 
 [ TestClass ]
 public class DeskHeightAndSpeedFactoryTests
@@ -22,7 +22,7 @@ public class DeskHeightAndSpeedFactoryTests
     [ TestMethod ]
     public void Create_ForReferenceOutputNull_Throws ( )
     {
-        var action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
+        Action action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -37,13 +37,7 @@ public class DeskHeightAndSpeedFactoryTests
                      .NotBeNull ( ) ;
     }
 
-    private IDeskHeightAndSpeed TestFactory ( IReferenceOutput _ )
-    {
-        return Substitute.For < IDeskHeightAndSpeed > ( ) ;
-    }
+    private IDeskHeightAndSpeed TestFactory ( IReferenceOutput _ ) => Substitute.For < IDeskHeightAndSpeed > ( ) ;
 
-    private DeskHeightAndSpeedFactory CreateSut ( )
-    {
-        return new DeskHeightAndSpeedFactory ( _factory ) ;
-    }
+    private DeskHeightAndSpeedFactory CreateSut ( ) => new ( _factory ) ;
 }

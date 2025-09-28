@@ -1,7 +1,8 @@
+namespace Idasen.BluetoothLE.Core.Tests ;
+
 using System.Globalization ;
 using FluentAssertions ;
-
-namespace Idasen.BluetoothLE.Core.Tests ;
+using Interfaces ;
 
 [ TestClass ]
 public class DateTimeOffsetWrapperTests
@@ -11,7 +12,7 @@ public class DateTimeOffsetWrapperTests
     {
         var now = new DateTimeOffsetWrapper ( DateTimeOffset.UtcNow ) ;
 
-        var next = now.Now ;
+        IDateTimeOffset next = now.Now ;
 
         next.Should ( ).NotBeNull ( ) ;
         next.Ticks.Should ( ).BeGreaterThan ( 0 ) ;

@@ -1,11 +1,11 @@
-﻿using System.Reactive.Subjects ;
-using System.Runtime.CompilerServices ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using System.Reactive.Subjects ;
+using System.Runtime.CompilerServices ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]

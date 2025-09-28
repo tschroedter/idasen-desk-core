@@ -1,7 +1,7 @@
-﻿using Serilog ;
-using Serilog.Configuration ;
+﻿namespace Idasen.Launcher ;
 
-namespace Idasen.Launcher ;
+using Serilog ;
+using Serilog.Configuration ;
 
 /// <summary>
 ///     Extension methods for configuring Serilog caller enrichment.

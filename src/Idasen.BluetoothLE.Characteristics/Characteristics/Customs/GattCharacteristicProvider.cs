@@ -1,12 +1,12 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Core ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.Characteristics.Customs ;
+using Serilog ;
 
 /// <summary>
 ///     Provides discovered GATT characteristics mapped by friendly keys.
@@ -70,10 +70,10 @@ public class GattCharacteristicProvider
         _characteristics.Clear ( ) ;
         _unavailable.Clear ( ) ;
 
-        foreach (var keyValuePair in customCharacteristic)
+        foreach (KeyValuePair < string , Guid > keyValuePair in customCharacteristic)
         {
-            var characteristic = _gattCharacteristics.Characteristics
-                                                     .FirstOrDefault ( x => x.Uuid == keyValuePair.Value ) ;
+            IGattCharacteristicWrapper? characteristic = _gattCharacteristics.Characteristics
+                                                                             .FirstOrDefault ( x => x.Uuid == keyValuePair.Value ) ;
 
             if ( characteristic != null )
             {

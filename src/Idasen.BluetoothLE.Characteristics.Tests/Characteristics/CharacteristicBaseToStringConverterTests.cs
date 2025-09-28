@@ -1,9 +1,9 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using BluetoothLE.Characteristics.Characteristics ;
+using FluentAssertions ;
+using NSubstitute ;
 
 [ TestClass ]
 public class CharacteristicBaseToStringConverterTests
@@ -15,7 +15,7 @@ public class CharacteristicBaseToStringConverterTests
         const string expected = "TestCharacteristicBase\r\n" +
                                 "RawValueKey = [01-02-03]\r\n" ;
 
-        var sut = CreateSut ( ) ;
+        TestCharacteristicBase sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -40,7 +40,7 @@ public class CharacteristicBaseToStringConverterTests
         const string expected = "TestCharacteristicBase\r\n" +
                                 "RawValueKey = [01-02-03] (None)\r\n" ;
 
-        var sut = CreateSut ( ) ;
+        TestCharacteristicBase sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;

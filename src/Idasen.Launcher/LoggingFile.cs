@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using JetBrains.Annotations ;
+﻿namespace Idasen.Launcher ;
 
-namespace Idasen.Launcher ;
+using System.Diagnostics.CodeAnalysis ;
+using JetBrains.Annotations ;
 
 /// <summary>
 ///     Provides access to the current log file path for the application.

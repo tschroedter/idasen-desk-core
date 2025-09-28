@@ -1,12 +1,12 @@
-﻿using FluentAssertions ;
+﻿namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+
+using Core.DevicesDiscovery ;
+using Core.Interfaces.DevicesDiscovery ;
+using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class DevicesTests
@@ -17,10 +17,10 @@ public class DevicesTests
         [ BeNull ] ILogger logger )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sutLazy.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            Devices test = sutLazy.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -39,7 +39,7 @@ public class DevicesTests
     public void AddOrUpdateDevice_ForDeviceIsNull_Throws (
         Devices sut )
     {
-        var action = ( ) => { sut.AddOrUpdateDevice ( null! ) ; } ;
+        Action action = ( ) => { sut.AddOrUpdateDevice ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -50,7 +50,7 @@ public class DevicesTests
     public void RemoveDevice_ForDeviceIsNull_Throws (
         Devices sut )
     {
-        var action = ( ) => { sut.RemoveDevice ( null! ) ; } ;
+        Action action = ( ) => { sut.RemoveDevice ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -61,7 +61,7 @@ public class DevicesTests
     public void ContainsDevice_ForDeviceIsNull_Throws (
         Devices sut )
     {
-        var action = ( ) => { sut.ContainsDevice ( null! ) ; } ;
+        Action action = ( ) => { sut.ContainsDevice ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -310,7 +310,7 @@ public class DevicesTests
         sut.AddOrUpdateDevice ( device ) ;
 
         sut.TryGetDevice ( device.Address ,
-                           out var actual ) ;
+                           out IDevice? actual ) ;
 
         comparer.Equals ( actual ,
                           device )

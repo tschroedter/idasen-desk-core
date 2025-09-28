@@ -1,13 +1,13 @@
-﻿using System.Reactive.Concurrency ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]

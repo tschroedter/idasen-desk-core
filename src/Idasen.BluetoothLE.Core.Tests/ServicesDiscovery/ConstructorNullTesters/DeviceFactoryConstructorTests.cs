@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters ;
+using Common.Tests ;
+using Core.ServicesDiscovery ;
 
 [ TestClass ]
 public class DeviceFactoryConstructorTests

@@ -1,10 +1,10 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+using Core.ServicesDiscovery ;
+using FluentAssertions ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
+using NSubstitute ;
 
 [ TestClass ]
 public class DeviceFactoryTests

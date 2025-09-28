@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Control ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using FluentAssertions ;
+using Linak.Control ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class HasReachedTargetHeightCalculatorTests
@@ -253,7 +253,7 @@ public class HasReachedTargetHeightCalculatorTests
         Direction startMovingIntoDirection ,
         bool hasReachedTargetHeight )
     {
-        var sut = CreateSut ( ) ;
+        HasReachedTargetHeightCalculator sut = CreateSut ( ) ;
 
         sut.TargetHeight = targetHeight ;
         sut.StoppingHeight = stoppingHeight ;
@@ -300,7 +300,7 @@ public class HasReachedTargetHeightCalculatorTests
         Direction moveIntoDirection ,
         uint delta )
     {
-        var sut = CreateSut ( ) ;
+        HasReachedTargetHeightCalculator sut = CreateSut ( ) ;
 
         sut.TargetHeight = targetHeight ;
         sut.StoppingHeight = stoppingHeight ;
@@ -314,13 +314,7 @@ public class HasReachedTargetHeightCalculatorTests
     }
 
     [ TestInitialize ]
-    public void Initialize ( )
-    {
-        _logger = Substitute.For < ILogger > ( ) ;
-    }
+    public void Initialize ( ) => _logger = Substitute.For < ILogger > ( ) ;
 
-    private HasReachedTargetHeightCalculator CreateSut ( )
-    {
-        return new HasReachedTargetHeightCalculator ( _logger ) ;
-    }
+    private HasReachedTargetHeightCalculator CreateSut ( ) => new ( _logger ) ;
 }

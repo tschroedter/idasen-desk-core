@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Factory for creating <see cref="IGattCharacteristicProvider" /> instances from platform wrappers.

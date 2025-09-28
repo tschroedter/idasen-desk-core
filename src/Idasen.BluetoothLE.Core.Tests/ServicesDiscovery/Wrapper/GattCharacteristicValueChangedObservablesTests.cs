@@ -1,12 +1,12 @@
-﻿using System.Reactive.Concurrency ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
+
+using System.Reactive.Concurrency ;
 using System.Reactive.Subjects ;
+using Core.ServicesDiscovery.Wrappers ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 
 [ AutoDataTestClass ]
 public class GattCharacteristicValueChangedObservablesTests
@@ -38,13 +38,13 @@ public class GattCharacteristicValueChangedObservablesTests
     [ TestMethod ]
     public void ValueChanged_ForSubscribe_Notifies ( )
     {
-        var uuid = Guid.Empty ;
+        Guid uuid = Guid.Empty ;
 
         var sut = new GattCharacteristicValueChangedObservables ( _logger ,
                                                                   _scheduler ,
                                                                   _subject ) ;
-        using var disposable = sut.ValueChanged
-                                  .Subscribe ( x => { uuid = x.Uuid ; } ) ;
+        using IDisposable disposable = sut.ValueChanged
+                                          .Subscribe ( x => { uuid = x.Uuid ; } ) ;
 
         _subject.OnNext ( _details ) ;
 

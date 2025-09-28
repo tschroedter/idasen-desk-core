@@ -1,6 +1,6 @@
-using Idasen.BluetoothLE.Linak.Control ;
-
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+using Control ;
 
 /// <summary>
 ///     Encapsulates logic to decide when to stop the desk and the desired direction to move next.

@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Selkie.AutoMocking ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
 
-namespace Idasen.BluetoothLE.Linak.Tests ;
+using FluentAssertions ;
+using Selkie.AutoMocking ;
 
 [ AutoDataTestClass ]
 public class RawValueToHeightAndSpeedConverterTests

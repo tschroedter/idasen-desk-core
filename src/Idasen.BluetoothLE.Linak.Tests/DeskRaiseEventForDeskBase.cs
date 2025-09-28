@@ -1,10 +1,10 @@
-﻿using System.Reactive.Subjects ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using System.Reactive.Subjects ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
 using Microsoft.Reactive.Testing ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public abstract class DeskRaiseEventForDeskBase<TSubject>
@@ -44,8 +44,5 @@ public abstract class DeskRaiseEventForDeskBase<TSubject>
     protected abstract void SetSubject ( IDeskConnector connector ,
                                          Subject < TSubject > subject ) ;
 
-    public void OnRaised ( TSubject value )
-    {
-        WasCalled = true ;
-    }
+    public void OnRaised ( TSubject value ) => WasCalled = true ;
 }

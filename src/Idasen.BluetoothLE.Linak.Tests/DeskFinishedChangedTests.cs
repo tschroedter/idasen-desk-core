@@ -1,11 +1,11 @@
-﻿using System.Reactive.Linq ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ AutoDataTestClass ]
 public sealed class DeskFinishedChangedTests

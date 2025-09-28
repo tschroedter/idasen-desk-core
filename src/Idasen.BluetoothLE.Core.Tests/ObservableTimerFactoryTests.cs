@@ -1,8 +1,8 @@
-﻿using System.Reactive.Concurrency ;
+﻿namespace Idasen.BluetoothLE.Core.Tests ;
+
+using System.Reactive.Concurrency ;
 using FluentAssertions ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Core.Tests ;
 
 [ AutoDataTestClass ]
 public class ObservableTimerFactoryTests

@@ -1,14 +1,14 @@
-﻿using System.Collections ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+
+using System.Collections ;
 using System.Diagnostics.CodeAnalysis ;
 using System.Globalization ;
 using System.Reflection ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
 using CsvHelper ;
 using CsvHelper.Configuration ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -32,17 +32,11 @@ public class OfficialGattServices
     public string ResourceName { get ; }
 
     /// <inheritdoc />
-    public IEnumerator < OfficialGattService > GetEnumerator ( )
-    {
-        return _dictionary.Values.GetEnumerator ( ) ;
-    }
+    public IEnumerator < OfficialGattService > GetEnumerator ( ) => _dictionary.Values.GetEnumerator ( ) ;
 
     /// <inheritdoc />
     [ ExcludeFromCodeCoverage ]
-    IEnumerator IEnumerable.GetEnumerator ( )
-    {
-        return GetEnumerator ( ) ;
-    }
+    IEnumerator IEnumerable.GetEnumerator ( ) => GetEnumerator ( ) ;
 
     /// <inheritdoc />
     public int Count => _dictionary.Count ;
@@ -78,7 +72,7 @@ public class OfficialGattServices
 
     private void Populate ( IEnumerable < OfficialGattService > records )
     {
-        foreach (var record in records)
+        foreach (OfficialGattService record in records)
         {
             _dictionary[record.AssignedNumber] = record ;
         }
@@ -86,8 +80,8 @@ public class OfficialGattServices
 
     private static IEnumerable < OfficialGattService > ReadCsvFile ( string resourceName )
     {
-        var stream = Assembly.GetExecutingAssembly ( )
-                             .GetManifestResourceStream ( resourceName ) ;
+        Stream? stream = Assembly.GetExecutingAssembly ( )
+                                 .GetManifestResourceStream ( resourceName ) ;
 
         if ( stream == null )
         {
@@ -109,8 +103,8 @@ public class OfficialGattServices
 
         csv.Context.RegisterClassMap < GattServiceCsvHelperMap > ( ) ;
 
-        var readCsvFile = csv.GetRecords < OfficialGattService > ( )
-                             .ToArray ( ) ;
+        OfficialGattService [ ] readCsvFile = csv.GetRecords < OfficialGattService > ( )
+                                                 .ToArray ( ) ;
 
         return readCsvFile ;
     }

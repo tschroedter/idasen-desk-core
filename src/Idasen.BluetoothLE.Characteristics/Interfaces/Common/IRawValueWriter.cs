@@ -1,9 +1,11 @@
-﻿using Windows.Storage.Streams ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿
 
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+
+using Windows.Storage.Streams ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Writes raw byte values to GATT characteristics.

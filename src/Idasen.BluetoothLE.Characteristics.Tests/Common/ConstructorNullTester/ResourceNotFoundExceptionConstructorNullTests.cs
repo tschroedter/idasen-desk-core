@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common.ConstructorNullTester ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common.ConstructorNullTester ;
+using BluetoothLE.Common.Tests ;
+using Core ;
 
 [ TestClass ]
 public class ResourceNotFoundExceptionConstructorNullTests

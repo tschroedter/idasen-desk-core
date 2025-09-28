@@ -1,15 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+﻿namespace Idasen.BluetoothLE.Linak ;
+
+using System.Diagnostics.CodeAnalysis ;
 using System.Reactive.Concurrency ;
+using Aop ;
 using Autofac ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop ;
-using Idasen.BluetoothLE.Characteristics ;
-using Idasen.BluetoothLE.Linak.Control ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Characteristics ;
+using Control ;
+using Interfaces ;
 using Microsoft.Extensions.Configuration ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak ;
 
 /// <summary>
 ///     Autofac module that wires up LINAK desk services, control components, and characteristics.
@@ -83,10 +83,10 @@ public class BluetoothLELinakModule
 
         builder.Register ( ctx =>
                            {
-                               var logger = ctx.Resolve < ILogger > ( ) ;
-                               var settings = ctx.Resolve < DeskMoverSettings > ( ) ;
-                               var heightMonitor = ctx.Resolve < IDeskHeightMonitor > ( ) ;
-                               var calculator = ctx.Resolve < IStoppingHeightCalculator > ( ) ;
+                               ILogger logger = ctx.Resolve < ILogger > ( ) ;
+                               DeskMoverSettings settings = ctx.Resolve < DeskMoverSettings > ( ) ;
+                               IDeskHeightMonitor heightMonitor = ctx.Resolve < IDeskHeightMonitor > ( ) ;
+                               IStoppingHeightCalculator calculator = ctx.Resolve < IStoppingHeightCalculator > ( ) ;
                                return new DeskStopper ( logger ,
                                                         settings ,
                                                         heightMonitor ,
@@ -163,17 +163,17 @@ public class BluetoothLELinakModule
                                    return DeskMoverSettings.Default ;
                                }
 
-                               var section = config.GetSection ( "DeskMoverSettings" ) ;
+                               IConfigurationSection section = config.GetSection ( "DeskMoverSettings" ) ;
 
                                if ( ! section.Exists ( ) )
                                {
                                    return DeskMoverSettings.Default ;
                                }
 
-                               var defaults = DeskMoverSettings.Default ;
+                               DeskMoverSettings defaults = DeskMoverSettings.Default ;
 
                                if ( ! TimeSpan.TryParse ( section[nameof ( DeskMoverSettings.TimerInterval )] ,
-                                                          out var timerInterval ) )
+                                                          out TimeSpan timerInterval ) )
                                {
                                    timerInterval = long.TryParse ( section[nameof ( DeskMoverSettings.TimerInterval )] ,
                                                                    out var ms )
@@ -182,7 +182,7 @@ public class BluetoothLELinakModule
                                }
 
                                if ( ! TimeSpan.TryParse ( section[nameof ( DeskMoverSettings.KeepAliveInterval )] ,
-                                                          out var keepAliveInterval ) )
+                                                          out TimeSpan keepAliveInterval ) )
                                {
                                    keepAliveInterval = long.TryParse ( section[nameof ( DeskMoverSettings.KeepAliveInterval )] ,
                                                                        out var kam )

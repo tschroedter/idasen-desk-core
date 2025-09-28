@@ -1,9 +1,9 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Windows.Storage.Streams ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Windows.Storage.Streams ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using NSubstitute ;
 
 public static class GattCharacteristicWrapperExtensions
 {

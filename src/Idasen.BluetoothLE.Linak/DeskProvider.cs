@@ -1,12 +1,12 @@
-﻿using System.Reactive.Concurrency ;
-using System.Reactive.Linq ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using System.Reactive.Concurrency ;
+using System.Reactive.Linq ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Characteristics.Common ;
+using Interfaces ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -189,7 +189,7 @@ public class DeskProvider
             return ;
         }
 
-        var handles = new [ ]
+        WaitHandle [ ] handles = new [ ]
         {
             DeskDetectedEvent ,
             token.WaitHandle

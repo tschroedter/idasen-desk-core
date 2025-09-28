@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using System.Diagnostics.CodeAnalysis ;
+using Interfaces ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]

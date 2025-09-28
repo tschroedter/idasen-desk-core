@@ -1,11 +1,11 @@
-﻿using System.Reactive.Concurrency ;
-using System.Reactive.Linq ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Linak.Control ;
 
-namespace Idasen.BluetoothLE.Linak.Control ;
+using System.Reactive.Concurrency ;
+using System.Reactive.Linq ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]

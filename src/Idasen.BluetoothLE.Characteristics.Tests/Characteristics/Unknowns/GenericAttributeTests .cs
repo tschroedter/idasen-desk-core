@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+using BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class GenericAttributeTests
@@ -14,8 +14,5 @@ public class GenericAttributeTests
                      .BeEmpty ( ) ;
     }
 
-    private GenericAttribute CreateSut ( )
-    {
-        return new GenericAttribute ( ) ;
-    }
+    private GenericAttribute CreateSut ( ) => new ( ) ;
 }

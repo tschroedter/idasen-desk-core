@@ -1,8 +1,8 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Windows.Storage.Streams ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Windows.Storage.Streams ;
+using Core.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Wrapper for <see cref="GattCharacteristic" /> .

@@ -1,12 +1,13 @@
-﻿using Autofac ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Idasen.Launcher ;
-using JetBrains.Annotations ;
-using Microsoft.Extensions.Configuration ;
-using Serilog ;
-using static System.Console ;
+﻿using static System.Console ;
 
 namespace Idasen.ConsoleApp ;
+
+using Autofac ;
+using BluetoothLE.Linak.Interfaces ;
+using JetBrains.Annotations ;
+using Launcher ;
+using Microsoft.Extensions.Configuration ;
+using Serilog ;
 
 internal sealed class Program
 {
@@ -21,10 +22,10 @@ internal sealed class Program
     private async static Task Main ( )
     {
         using var tokenSource = new CancellationTokenSource ( TimeSpan.FromSeconds ( 60 ) ) ;
-        var token = tokenSource.Token ;
+        CancellationToken token = tokenSource.Token ;
 
-        var builder = new ConfigurationBuilder ( ).SetBasePath ( Directory.GetCurrentDirectory ( ) )
-                                                  .AddJsonFile ( "Appsettings.json" ) ;
+        IConfigurationBuilder builder = new ConfigurationBuilder ( ).SetBasePath ( Directory.GetCurrentDirectory ( ) )
+                                                                    .AddJsonFile ( "Appsettings.json" ) ;
 
         IContainer? container = null ;
 
@@ -32,14 +33,14 @@ internal sealed class Program
         {
             container = ContainerProvider.Create ( builder.Build ( ) ) ;
 
-            var logger = container.Resolve < ILogger > ( ) ;
-            var provider = container.Resolve < IDeskProvider > ( ) ;
+            ILogger logger = container.Resolve < ILogger > ( ) ;
+            IDeskProvider provider = container.Resolve < IDeskProvider > ( ) ;
 
             provider.Initialize ( DefaultDeviceName ,
                                   DefaultDeviceAddress ,
                                   DefaultDeviceMonitoringTimeout ) ;
 
-            var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
+            ( var isSuccess , IDesk? desk ) = await provider.TryGetDesk ( token ) ;
 
             if ( isSuccess )
             {

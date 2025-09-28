@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+using Core.ServicesDiscovery ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class OfficialGattServiceTests

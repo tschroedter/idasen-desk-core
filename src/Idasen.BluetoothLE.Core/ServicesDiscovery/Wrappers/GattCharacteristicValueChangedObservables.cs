@@ -1,16 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+using System.Diagnostics.CodeAnalysis ;
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using System.Runtime.InteropServices.WindowsRuntime ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Foundation ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class GattCharacteristicValueChangedObservables
@@ -43,8 +43,8 @@ public class GattCharacteristicValueChangedObservables
     [ ExcludeFromCodeCoverage ]
     public async Task Initialise ( GattCharacteristic characteristic )
     {
-        var properties = characteristic.CharacteristicProperties ;
-        var serviceUuid = characteristic.Service?.Uuid ?? Guid.Empty ;
+        GattCharacteristicProperties properties = characteristic.CharacteristicProperties ;
+        Guid serviceUuid = characteristic.Service?.Uuid ?? Guid.Empty ;
 
         _logger.Information ( "Service UUID = {ServiceUuid} Characteristic UUID = {CharacteristicUuid} Notify = {Notify} Indicate = {Indicate} Write = {Write} WriteWithoutResponse = {WriteWithoutResponse}" ,
                               serviceUuid ,
@@ -59,13 +59,13 @@ public class GattCharacteristicValueChangedObservables
             (properties.HasFlag(GattCharacteristicProperties.Write) ||
              properties.HasFlag(GattCharacteristicProperties.WriteWithoutResponse)))*/
         {
-            var value = properties.HasFlag ( GattCharacteristicProperties.Notify )
-                            ? GattClientCharacteristicConfigurationDescriptorValue.Notify
-                            : GattClientCharacteristicConfigurationDescriptorValue.Indicate ;
+            GattClientCharacteristicConfigurationDescriptorValue value = properties.HasFlag ( GattCharacteristicProperties.Notify )
+                                                                             ? GattClientCharacteristicConfigurationDescriptorValue.Notify
+                                                                             : GattClientCharacteristicConfigurationDescriptorValue.Indicate ;
 
             try
             {
-                var status =
+                GattCommunicationStatus status =
                     await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync ( value ) ;
 
                 if ( status == GattCommunicationStatus.Success )
@@ -95,7 +95,8 @@ public class GattCharacteristicValueChangedObservables
                                                           "Failed to subscribe to ValueChanged" ) ;
                 }
 
-                var result = await characteristic.ReadClientCharacteristicConfigurationDescriptorAsync ( ) ;
+                GattReadClientCharacteristicConfigurationDescriptorResult? result =
+                    await characteristic.ReadClientCharacteristicConfigurationDescriptorAsync ( ) ;
 
                 if ( result.Status == GattCommunicationStatus.Success )
                 {

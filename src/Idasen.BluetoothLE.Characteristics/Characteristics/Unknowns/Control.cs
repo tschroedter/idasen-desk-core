@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Interfaces.Characteristics ;
 
 public class Control
     : UnknownBase , IControl
@@ -8,8 +8,5 @@ public class Control
     public IEnumerable < byte > RawControl2 { get ; } = RawArrayEmpty ;
     public IEnumerable < byte > RawControl3 { get ; } = RawArrayEmpty ;
 
-    public Task < bool > TryWriteRawControl2 ( IEnumerable < byte > bytes )
-    {
-        return Task.FromResult ( false ) ;
-    }
+    public Task < bool > TryWriteRawControl2 ( IEnumerable < byte > bytes ) => Task.FromResult ( false ) ;
 }

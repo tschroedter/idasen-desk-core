@@ -1,14 +1,15 @@
-﻿using System.Reactive.Concurrency ;
-using System.Reactive.Subjects ;
-using Windows.Devices.Bluetooth.Advertisement ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using AdvertisementWatcher = Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher ;
+﻿using AdvertisementWatcher = Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher ;
 using ExcludeFromCodeCoverage = System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+
+using System.Reactive.Concurrency ;
+using System.Reactive.Subjects ;
+using Windows.Devices.Bluetooth.Advertisement ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Interfaces.DevicesDiscovery ;
 
 // ReSharper disable once InconsistentNaming
 [ ExcludeFromCodeCoverage ]
@@ -102,20 +103,18 @@ public sealed class Wrapper
     }
 
     private void OnStoppedHandler ( AdvertisementWatcher sender ,
-                                    BluetoothLEAdvertisementWatcherStoppedEventArgs args )
-    {
+                                    BluetoothLEAdvertisementWatcherStoppedEventArgs args ) =>
         _stopped.OnNext ( DateTime.Now ) ;
-    }
 
     private void OnReceivedHandler ( BluetoothLEAdvertisementWatcher sender ,
                                      BluetoothLEAdvertisementReceivedEventArgs args )
     {
-        var dateTimeOffset = _dateTimeFactory.Invoke ( args.Timestamp ) ;
+        IDateTimeOffset dateTimeOffset = _dateTimeFactory.Invoke ( args.Timestamp ) ;
 
-        var device = _deviceFactory.Create ( dateTimeOffset ,
-                                             args.BluetoothAddress ,
-                                             args.Advertisement.LocalName ,
-                                             args.RawSignalStrengthInDBm ) ;
+        IDevice device = _deviceFactory.Create ( dateTimeOffset ,
+                                                 args.BluetoothAddress ,
+                                                 args.Advertisement.LocalName ,
+                                                 args.RawSignalStrengthInDBm ) ;
 
         _received.OnNext ( device ) ;
     }

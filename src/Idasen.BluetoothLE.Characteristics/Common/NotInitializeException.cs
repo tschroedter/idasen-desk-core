@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Core ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common ;
+using Core ;
 
 public class NotInitializeException
     : Exception

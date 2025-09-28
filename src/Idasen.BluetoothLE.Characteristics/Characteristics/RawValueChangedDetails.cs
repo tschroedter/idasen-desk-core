@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Core ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
+using Common ;
+using Core ;
 
 public class RawValueChangedDetails
 {

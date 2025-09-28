@@ -1,12 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+
+using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -76,23 +76,20 @@ public class GattCharacteristicWrapper
     /// <inheritdoc />
     public async Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer )
     {
-        var result = await _characteristic.WriteValueWithResultAsync ( buffer ) ;
+        GattWriteResult? result = await _characteristic.WriteValueWithResultAsync ( buffer ) ;
 
         return _writeResultFactory.Create ( result ) ;
     }
 
     /// <inheritdoc />
-    public async Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer )
-    {
-        return await _characteristic.WriteValueAsync ( buffer ) ;
-    }
+    public async Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer ) => await _characteristic.WriteValueAsync ( buffer ) ;
 
     /// <inheritdoc />
     public async Task < IGattReadResultWrapper > ReadValueAsync ( )
     {
-        var result = await _characteristic.ReadValueAsync ( ).AsTask ( ) ;
+        GattReadResult? result = await _characteristic.ReadValueAsync ( ).AsTask ( ) ;
 
-        var wrapper = _readResultFactory.Create ( result ) ;
+        IGattReadResultWrapper wrapper = _readResultFactory.Create ( result ) ;
 
         return wrapper ;
     }

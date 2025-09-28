@@ -1,14 +1,14 @@
-﻿using System.Reactive.Subjects ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using System.Reactive.Subjects ;
+using Common.Tests ;
+using Core.Interfaces.DevicesDiscovery ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
 using JetBrains.Annotations ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class DeskDetectorTests : IDisposable
@@ -107,9 +107,9 @@ public class DeskDetectorTests : IDisposable
     [ TestMethod ]
     public void Start_ConnectedToAnotherDesk_DisposesOldDesk ( )
     {
-        var sut = CreateSut ( ).Initialize ( DeviceName ,
-                                             DeviceAddress ,
-                                             DeviceTimeout ) ;
+        IDeskDetector sut = CreateSut ( ).Initialize ( DeviceName ,
+                                                       DeviceAddress ,
+                                                       DeviceTimeout ) ;
 
         // connect to desk
         sut.Start ( ) ;
@@ -128,7 +128,7 @@ public class DeskDetectorTests : IDisposable
     [ TestMethod ]
     public void Dispose_Invoked_DisposesMonitor ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskDetector sut = CreateSut ( ) ;
 
         sut.Dispose ( ) ;
 

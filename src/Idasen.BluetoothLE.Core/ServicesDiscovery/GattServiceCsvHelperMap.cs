@@ -1,6 +1,6 @@
-﻿using CsvHelper.Configuration ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using CsvHelper.Configuration ;
 
 public sealed class GattServiceCsvHelperMap
     : ClassMap < OfficialGattService >

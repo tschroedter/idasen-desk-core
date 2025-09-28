@@ -1,10 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class GattCharacteristicWrapperFactory

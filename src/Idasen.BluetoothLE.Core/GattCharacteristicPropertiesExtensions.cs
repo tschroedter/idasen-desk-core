@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+﻿namespace Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Core ;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
 [ ExcludeFromCodeCoverage ]
 public static class GattCharacteristicPropertiesExtensions

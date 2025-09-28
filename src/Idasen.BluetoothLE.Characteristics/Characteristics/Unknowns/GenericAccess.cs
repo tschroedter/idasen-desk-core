@@ -1,8 +1,8 @@
-﻿using System.Reactive.Subjects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using System.Reactive.Subjects ;
+using Common ;
+using Interfaces.Characteristics ;
 
 public class GenericAccess
     : UnknownBase , IGenericAccess

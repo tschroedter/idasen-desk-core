@@ -1,12 +1,12 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Core ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.Common ;
+using Serilog ;
 
 /// <summary>
 ///     Reads raw values from GATT characteristics and exposes the last status and protocol error.
@@ -91,7 +91,7 @@ public sealed class RawValueReader
         Guard.ArgumentNotNull ( characteristic ,
                                 nameof ( characteristic ) ) ;
 
-        var readValue = await characteristic.ReadValueAsync ( ) ;
+        IGattReadResultWrapper readValue = await characteristic.ReadValueAsync ( ) ;
 
         ProtocolError = readValue.ProtocolError ;
         Status = readValue.Status ;

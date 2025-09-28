@@ -1,6 +1,6 @@
-﻿using Selkie.DefCon.One.Common ;
+﻿namespace Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Core ;
+using Selkie.DefCon.One.Common ;
 
 public class ResourceNotFoundException : Exception
 {

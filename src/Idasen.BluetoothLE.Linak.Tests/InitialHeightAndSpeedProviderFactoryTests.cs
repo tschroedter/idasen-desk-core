@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Linak.Control ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Selkie.AutoMocking ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests ;
 
-namespace Idasen.BluetoothLE.Linak.Tests ;
+using FluentAssertions ;
+using Interfaces ;
+using Linak.Control ;
+using Selkie.AutoMocking ;
 
 [ AutoDataTestClass ]
 public class InitialHeightAndSpeedProviderFactoryTests

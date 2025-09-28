@@ -1,11 +1,11 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Linak.Control ;
 
-namespace Idasen.BluetoothLE.Linak.Control ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Characteristics.Common ;
+using Characteristics.Interfaces.Characteristics ;
+using Interfaces ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -40,27 +40,18 @@ public class DeskCommandExecutor
     }
 
     /// <inheritdoc />
-    public Task < bool > Up ( )
-    {
-        return Execute ( DeskCommands.MoveUp ) ;
-    }
+    public Task < bool > Up ( ) => Execute ( DeskCommands.MoveUp ) ;
 
     /// <inheritdoc />
-    public Task < bool > Down ( )
-    {
-        return Execute ( DeskCommands.MoveDown ) ;
-    }
+    public Task < bool > Down ( ) => Execute ( DeskCommands.MoveDown ) ;
 
     /// <inheritdoc />
-    public Task < bool > Stop ( )
-    {
-        return Execute ( DeskCommands.MoveStop ) ;
-    }
+    public Task < bool > Stop ( ) => Execute ( DeskCommands.MoveStop ) ;
 
     private async Task < bool > Execute ( DeskCommands deskCommand )
     {
         if ( ! _provider.TryGetValue ( deskCommand ,
-                                       out var bytes ) )
+                                       out IEnumerable < byte > bytes ) )
         {
             _logger.Error ( "Failed for unknown command {Command}" ,
                             deskCommand ) ;

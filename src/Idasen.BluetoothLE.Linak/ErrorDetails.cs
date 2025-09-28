@@ -1,7 +1,7 @@
-﻿using System.Diagnostics ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using System.Diagnostics ;
+using Interfaces ;
 
 /// <inheritdoc />
 [ DebuggerDisplay ( "{ToString(),nq}" ) ]

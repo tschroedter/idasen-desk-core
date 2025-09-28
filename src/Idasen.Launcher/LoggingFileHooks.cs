@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+﻿namespace Idasen.Launcher ;
+
+using System.Diagnostics.CodeAnalysis ;
 using System.Text ;
 using JetBrains.Annotations ;
 using Serilog.Sinks.File ;
-
-namespace Idasen.Launcher ;
 
 /// <summary>
 ///     Serilog file sink lifecycle hooks that capture the fully-resolved log file path when the sink opens the file.

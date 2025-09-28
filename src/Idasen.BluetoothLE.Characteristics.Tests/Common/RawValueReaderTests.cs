@@ -1,15 +1,15 @@
-﻿using System.Collections ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+
+using System.Collections ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
+using BluetoothLE.Characteristics.Common ;
+using BluetoothLE.Common.Tests ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.Common ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
 [ AutoDataTestClass ]
 public class RawValueReaderTests
@@ -18,7 +18,7 @@ public class RawValueReaderTests
     public async Task TryReadValueAsync_ForCharacteristicIsNull_Throws (
         RawValueReader sut )
     {
-        var action = async ( ) => { await sut.TryReadValueAsync ( null! ) ; } ;
+        Func < Task > action = async ( ) => { await sut.TryReadValueAsync ( null! ) ; } ;
 
         await action.Should ( )
                     .ThrowAsync < ArgumentNullException > ( )

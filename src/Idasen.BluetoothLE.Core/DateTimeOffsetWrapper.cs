@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Idasen.BluetoothLE.Core.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Core ;
+using System.Diagnostics.CodeAnalysis ;
+using Interfaces ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -29,8 +29,5 @@ public class DateTimeOffsetWrapper ( DateTimeOffset dateTimeOffset )
     }
 
     /// <inheritdoc />
-    public override string ToString ( )
-    {
-        return dateTimeOffset.ToString ( ) ;
-    }
+    public override string ToString ( ) => dateTimeOffset.ToString ( ) ;
 }

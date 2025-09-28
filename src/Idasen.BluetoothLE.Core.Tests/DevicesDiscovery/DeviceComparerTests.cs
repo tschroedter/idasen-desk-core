@@ -1,9 +1,9 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using NSubstitute ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
+using Core.DevicesDiscovery ;
+using FluentAssertions ;
+using Interfaces.DevicesDiscovery ;
+using NSubstitute ;
 
 [ TestClass ]
 public class DeviceComparerTests
@@ -204,8 +204,5 @@ public class DeviceComparerTests
                      .BeFalse ( ) ;
     }
 
-    private DeviceComparer CreateSut ( )
-    {
-        return new DeviceComparer ( ) ;
-    }
+    private DeviceComparer CreateSut ( ) => new ( ) ;
 }

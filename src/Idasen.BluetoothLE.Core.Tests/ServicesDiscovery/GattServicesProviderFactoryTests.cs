@@ -1,10 +1,10 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
-using Selkie.AutoMocking ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+using Common.Tests ;
+using Core.ServicesDiscovery ;
+using FluentAssertions ;
+using Interfaces.ServicesDiscovery.Wrappers ;
+using Selkie.AutoMocking ;
 
 [ AutoDataTestClass ]
 public class GattServicesProviderFactoryTests

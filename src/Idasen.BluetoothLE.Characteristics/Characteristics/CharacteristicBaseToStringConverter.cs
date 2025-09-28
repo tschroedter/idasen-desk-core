@@ -1,11 +1,12 @@
-﻿using System.Text ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Core ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
+using System.Text ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Common ;
+using Core ;
+using Interfaces.Characteristics ;
 
 /// <summary>
 ///     Default implementation of <see cref="ICharacteristicBaseToStringConverter" /> that renders
@@ -31,8 +32,8 @@ public class CharacteristicBaseToStringConverter
 
         foreach (var key in characteristic.DescriptionToUuid.Keys)
         {
-            var value = TryGetValueOrEmpty ( characteristic ,
-                                             key ) ;
+            IEnumerable < byte > value = TryGetValueOrEmpty ( characteristic ,
+                                                              key ) ;
 
             var rawValueOrUnavailable = RawValueOrUnavailable ( characteristic ,
                                                                 key ,
@@ -42,7 +43,7 @@ public class CharacteristicBaseToStringConverter
 
             if ( characteristic.Characteristics != null &&
                  characteristic.Characteristics.Properties.TryGetValue ( key ,
-                                                                         out var properties )
+                                                                         out GattCharacteristicProperties properties )
                )
             {
                 builder.AppendLine ( $" ({properties.ToCsv ( )})" ) ;

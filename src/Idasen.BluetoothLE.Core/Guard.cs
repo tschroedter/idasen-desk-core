@@ -1,8 +1,8 @@
-﻿using System.Globalization ;
+﻿namespace Idasen.BluetoothLE.Core ;
+
+using System.Globalization ;
 using System.Runtime.CompilerServices ;
 using JetBrains.Annotations ;
-
-namespace Idasen.BluetoothLE.Core ;
 
 /// <summary>
 ///     Common guard helpers for argument validation.

@@ -1,6 +1,6 @@
-﻿using JetBrains.Annotations ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using JetBrains.Annotations ;
 
 /// <summary>
 ///     Provides lookup between official GATT characteristic UUIDs and their descriptions.

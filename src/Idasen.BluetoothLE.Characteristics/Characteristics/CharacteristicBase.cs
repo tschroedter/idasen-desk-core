@@ -1,19 +1,21 @@
-﻿using System.Reactive.Concurrency ;
-using System.Runtime.CompilerServices ;
-using System.Runtime.InteropServices.WindowsRuntime ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Serilog ;
+﻿using System.Runtime.CompilerServices ;
 
 [ assembly : InternalsVisibleTo ( "Idasen.BluetoothLE.Characteristics.Tests" ) ]
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
+
+using System.Reactive.Concurrency ;
+using System.Runtime.InteropServices.WindowsRuntime ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Common ;
+using Core ;
+using Core.Interfaces.ServicesDiscovery ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Interfaces.Characteristics ;
+using Interfaces.Characteristics.Customs ;
+using Interfaces.Common ;
+using Serilog ;
 
 /// <summary>
 ///     Abstract base for Bluetooth LE characteristic classes. Centralizes service discovery, characteristic mapping, raw
@@ -100,19 +102,19 @@ public abstract class CharacteristicBase
         Guard.ArgumentNotNull ( GattServiceUuid ,
                                 nameof ( GattServiceUuid ) ) ;
 
-        var (service , characteristicsResultWrapper) = Device.GattServices
-                                                             .FirstOrDefault ( x => x.Key.Uuid ==
-                                                                                    GattServiceUuid ) ;
+        ( IGattDeviceServiceWrapper? service , IGattCharacteristicsResultWrapper? characteristicsResultWrapper ) = Device.GattServices
+           .FirstOrDefault ( x => x.Key.Uuid ==
+                                  GattServiceUuid ) ;
 
         if ( service == null )
         {
-            foreach (var service1 in Device.GattServices)
+            foreach (KeyValuePair < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > service1 in Device.GattServices)
             {
                 Logger.Information ( "Service: DeviceId = {DeviceId}, Uuid = {Uuid}" ,
                                      service1.Key.DeviceId ,
                                      service1.Key.Uuid ) ;
 
-                foreach (var characteristic in service1.Value.Characteristics)
+                foreach (IGattCharacteristicWrapper characteristic in service1.Value.Characteristics)
                 {
                     Logger.Information ( "Characteristic: {ServiceUuid} {Uuid} {UserDescription}" ,
                                          characteristic.ServiceUuid ,
@@ -156,7 +158,7 @@ public abstract class CharacteristicBase
         foreach (var key in keys)
         {
             if ( ! Characteristics.Characteristics.TryGetValue ( key ,
-                                                                 out var characteristic ) )
+                                                                 out IGattCharacteristicWrapper? characteristic ) )
             {
                 Logger.Warning ( "Failed to get value for key {Key}" ,
                                  key ) ;
@@ -180,10 +182,7 @@ public abstract class CharacteristicBase
     /// <summary>
     ///     Disposes this instance. Multiple calls are safe.
     /// </summary>
-    public void Dispose ( )
-    {
-        Dispose ( true ) ;
-    }
+    public void Dispose ( ) => Dispose ( true ) ;
 
     protected abstract T WithMapping<T> ( )
         where T : class ;
@@ -227,7 +226,7 @@ public abstract class CharacteristicBase
         }
 
         if ( ! Characteristics.Characteristics.TryGetValue ( key ,
-                                                             out var characteristic ) )
+                                                             out IGattCharacteristicWrapper? characteristic ) )
         {
             // Keep single-argument overload for unit test expectations
             Logger.Error ( "Unknown characteristic with key '{Key}'" ,
@@ -251,10 +250,7 @@ public abstract class CharacteristicBase
     ///     Returns a logging-friendly string for this characteristic.
     /// </summary>
     /// <returns>A string representation for diagnostics/logging.</returns>
-    public override string ToString ( )
-    {
-        return _toStringConverter.ToString ( this ) ;
-    }
+    public override string ToString ( ) => _toStringConverter.ToString ( this ) ;
 
     protected virtual void Dispose ( bool disposing )
     {

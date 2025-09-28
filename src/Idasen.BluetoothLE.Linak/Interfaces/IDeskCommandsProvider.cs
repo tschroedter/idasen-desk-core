@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Linak.Control ;
+﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces ;
+using Control ;
 
 /// <summary>
 ///     Provides raw command payloads for desk operations.

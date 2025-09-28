@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Core ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common ;
+using Core ;
+using Serilog ;
 
 /// <summary>
 ///     Extensions for handling and logging Bluetooth-related exceptions.

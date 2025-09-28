@@ -1,12 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Windows.Storage.Streams ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common ;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Storage.Streams ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Core ;
+using Interfaces.Common ;
+using Serilog ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]

@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
+
+using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Selkie.AutoMocking ;
-
-namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
 [ AutoDataTestClass ]
 public class SimpleDictionaryBaseTests
@@ -74,7 +74,7 @@ public class SimpleDictionaryBaseTests
     {
         sut[key] = guid ;
 
-        var actual = sut.ReadOnlyDictionary ;
+        IReadOnlyDictionary < string , Guid > actual = sut.ReadOnlyDictionary ;
 
         using var scope = new AssertionScope ( ) ;
 

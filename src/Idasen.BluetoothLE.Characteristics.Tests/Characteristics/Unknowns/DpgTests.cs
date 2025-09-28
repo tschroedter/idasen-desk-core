@@ -1,7 +1,7 @@
-﻿using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+using BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using FluentAssertions ;
 
 [ TestClass ]
 public class DpgTests
@@ -14,8 +14,5 @@ public class DpgTests
                      .BeEmpty ( ) ;
     }
 
-    private Dpg CreateSut ( )
-    {
-        return new Dpg ( ) ;
-    }
+    private Dpg CreateSut ( ) => new ( ) ;
 }

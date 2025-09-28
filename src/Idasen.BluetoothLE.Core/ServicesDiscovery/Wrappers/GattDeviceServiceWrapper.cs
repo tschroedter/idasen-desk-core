@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
 [ ExcludeFromCodeCoverage ]
@@ -45,9 +45,9 @@ public class GattDeviceServiceWrapper
     /// <inheritdoc />
     public async Task < IGattCharacteristicsResultWrapper > GetCharacteristicsAsync ( )
     {
-        var characteristics = await _gattDeviceService.GetCharacteristicsAsync ( ).AsTask ( ) ;
+        GattCharacteristicsResult? characteristics = await _gattDeviceService.GetCharacteristicsAsync ( ).AsTask ( ) ;
 
-        var result = _characteristicsFactory.Create ( characteristics ) ;
+        IGattCharacteristicsResultWrapper result = _characteristicsFactory.Create ( characteristics ) ;
 
         _lastCharacteristics?.Dispose ( ) ;
         _lastCharacteristics = await result.Initialize ( ) ;

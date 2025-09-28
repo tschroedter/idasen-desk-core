@@ -1,11 +1,11 @@
-﻿using System.Reactive.Concurrency ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
+using System.Reactive.Concurrency ;
+using Core.Interfaces.ServicesDiscovery ;
+using Interfaces.Characteristics ;
+using Interfaces.Characteristics.Customs ;
+using Interfaces.Common ;
+using Serilog ;
 
 /// <summary>
 ///     Implements the Control service for sending raw control commands.

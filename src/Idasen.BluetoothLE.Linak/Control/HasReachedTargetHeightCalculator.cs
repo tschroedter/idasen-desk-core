@@ -1,10 +1,10 @@
-﻿using System.Text.Json ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Linak.Control ;
 
-namespace Idasen.BluetoothLE.Linak.Control ;
+using System.Text.Json ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -109,8 +109,5 @@ public class HasReachedTargetHeightCalculator
     /// <summary>
     ///     Returns a JSON representation of the calculation state.
     /// </summary>
-    public override string ToString ( )
-    {
-        return $"{JsonSerializer.Serialize ( this )}" ;
-    }
+    public override string ToString ( ) => $"{JsonSerializer.Serialize ( this )}" ;
 }

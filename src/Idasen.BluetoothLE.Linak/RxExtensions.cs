@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+﻿namespace Idasen.BluetoothLE.Linak ;
+
+using System.Diagnostics.CodeAnalysis ;
 using System.Reactive ;
 using System.Reactive.Linq ;
 using JetBrains.Annotations ;
-
-namespace Idasen.BluetoothLE.Linak ;
 
 [ ExcludeFromCodeCoverage ]
 public static class RxExtensions
@@ -23,11 +23,11 @@ public static class RxExtensions
         ArgumentNullException.ThrowIfNull ( source ) ;
         ArgumentNullException.ThrowIfNull ( asyncAction ) ;
 
-        var query = source.SelectMany ( _ => Observable.FromAsync ( async ( ) =>
-                                                                    {
-                                                                        await asyncAction ( ).ConfigureAwait ( false ) ;
-                                                                        return Unit.Default ;
-                                                                    } ) ) ;
+        IObservable < Unit > query = source.SelectMany ( _ => Observable.FromAsync ( async ( ) =>
+                                                                                     {
+                                                                                         await asyncAction ( ).ConfigureAwait ( false ) ;
+                                                                                         return Unit.Default ;
+                                                                                     } ) ) ;
 
         return handler == null
                    ? query.Subscribe ( _ => { } ,
@@ -51,11 +51,11 @@ public static class RxExtensions
         ArgumentNullException.ThrowIfNull ( source ) ;
         ArgumentNullException.ThrowIfNull ( asyncAction ) ;
 
-        var query = source.SelectMany ( t => Observable.FromAsync ( async ( ) =>
-                                                                    {
-                                                                        await asyncAction ( t ).ConfigureAwait ( false ) ;
-                                                                        return Unit.Default ;
-                                                                    } ) ) ;
+        IObservable < Unit > query = source.SelectMany ( t => Observable.FromAsync ( async ( ) =>
+                                                                                     {
+                                                                                         await asyncAction ( t ).ConfigureAwait ( false ) ;
+                                                                                         return Unit.Default ;
+                                                                                     } ) ) ;
 
         return handler == null
                    ? query.Subscribe ( _ => { } ,

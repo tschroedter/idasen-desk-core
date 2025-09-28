@@ -1,9 +1,9 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Characteristics.Interfaces.Characteristics ;
+using Interfaces ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]

@@ -1,17 +1,17 @@
-﻿using System.Reactive ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+
+using System.Reactive ;
 using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Common.Tests ;
+using Core.ServicesDiscovery ;
 using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery ;
+using Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
 [ AutoDataTestClass ]
 public class GattServicesProviderTests
@@ -22,10 +22,10 @@ public class GattServicesProviderTests
         [ BeNull ] ILogger logger )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            GattServicesProvider test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -38,10 +38,10 @@ public class GattServicesProviderTests
         [ BeNull ] IGattServicesDictionary services )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            GattServicesProvider test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -54,10 +54,10 @@ public class GattServicesProviderTests
         [ BeNull ] ISubject < GattCommunicationStatus > refreshed )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            GattServicesProvider test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -70,10 +70,10 @@ public class GattServicesProviderTests
         [ BeNull ] IBluetoothLeDeviceWrapper device )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        Action action = ( ) =>
+                        {
+                            GattServicesProvider test = sut.Value ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -181,7 +181,7 @@ public class GattServicesProviderTests
         [ Freeze ] ISubject < GattCommunicationStatus > refreshed ,
         IGattDeviceServicesResultWrapper result )
     {
-        var expected = GattCommunicationStatus.ProtocolError ;
+        GattCommunicationStatus expected = GattCommunicationStatus.ProtocolError ;
 
         result.Status
               .Returns ( expected ) ;
@@ -273,8 +273,8 @@ public class GattServicesProviderTests
         GattServicesProvider sut ,
         [ Freeze ] ISubject < GattCommunicationStatus > refreshed )
     {
-        using var disposable = sut.Refreshed
-                                  .Subscribe ( DoNothing ) ;
+        using IDisposable disposable = sut.Refreshed
+                                          .Subscribe ( DoNothing ) ;
 
         refreshed.Received ( )
                  .Subscribe ( Arg.Any < AnonymousObserver < GattCommunicationStatus > > ( ) ) ;

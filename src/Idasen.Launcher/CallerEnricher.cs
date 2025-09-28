@@ -1,9 +1,10 @@
-﻿using System.Diagnostics ;
+﻿namespace Idasen.Launcher ;
+
+using System.Diagnostics ;
+using System.Reflection ;
 using Serilog ;
 using Serilog.Core ;
 using Serilog.Events ;
-
-namespace Idasen.Launcher ;
 
 /// <summary>
 ///     Serilog enricher that populates the <c>Caller</c> property with the fully-qualified method
@@ -37,7 +38,7 @@ public sealed class CallerEnricher : ILogEventEnricher
                 return ;
             }
 
-            var method = stack.GetMethod ( ) ;
+            MethodBase? method = stack.GetMethod ( ) ;
 
             if ( method != null &&
                  method.DeclaringType != null )

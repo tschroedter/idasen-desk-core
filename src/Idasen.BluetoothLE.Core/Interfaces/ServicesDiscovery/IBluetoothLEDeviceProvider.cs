@@ -1,6 +1,6 @@
-using Windows.Devices.Bluetooth ;
-
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+
+using Windows.Devices.Bluetooth ;
 
 /// <summary>
 ///     Abstraction over platform BluetoothLEDevice retrieval for testability.

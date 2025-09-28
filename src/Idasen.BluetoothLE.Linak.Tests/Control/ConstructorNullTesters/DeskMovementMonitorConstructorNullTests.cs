@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Common.Tests ;
+﻿namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters ;
 
-namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters ;
+using Common.Tests ;
 
 [ TestClass ]
 public class DeskMovementMonitorConstructorNullTests

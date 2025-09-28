@@ -1,11 +1,11 @@
-﻿using System.Buffers.Binary ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using System.Buffers.Binary ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Characteristics.Common ;
+using Interfaces ;
+using Serilog ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -52,7 +52,7 @@ public class RawValueToHeightAndSpeedConverter
                     return false ;
                 }
 
-                var span = arr.AsSpan ( ) ;
+                Span < byte > span = arr.AsSpan ( ) ;
                 var rawHeight = BinaryPrimitives.ReadUInt16LittleEndian ( span.Slice ( 0 ,
                                                                                        2 ) ) ;
                 var rawSpeed = BinaryPrimitives.ReadInt16LittleEndian ( span.Slice ( 2 ,

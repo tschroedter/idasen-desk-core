@@ -1,8 +1,8 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+﻿namespace Idasen.BluetoothLE.Linak ;
 
-namespace Idasen.BluetoothLE.Linak ;
+using Aop.Aspects ;
+using Autofac.Extras.DynamicProxy ;
+using Interfaces ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -30,10 +30,7 @@ public sealed class Desk
     public string BluetoothAddressType => _connector.BluetoothAddressType ;
 
     /// <inheritdoc />
-    public void Connect ( )
-    {
-        _connector.Connect ( ) ;
-    }
+    public void Connect ( ) => _connector.Connect ( ) ;
 
     /// <inheritdoc />
     public IObservable < IEnumerable < byte > > DeviceNameChanged => _connector.DeviceNameChanged ;
@@ -70,40 +67,22 @@ public sealed class Desk
     }
 
     /// <inheritdoc />
-    public Task < bool > MoveUpAsync ( )
-    {
-        return _connector.MoveUpAsync ( ) ;
-    }
+    public Task < bool > MoveUpAsync ( ) => _connector.MoveUpAsync ( ) ;
 
     /// <inheritdoc />
-    public Task < bool > MoveDownAsync ( )
-    {
-        return _connector.MoveDownAsync ( ) ;
-    }
+    public Task < bool > MoveDownAsync ( ) => _connector.MoveDownAsync ( ) ;
 
     /// <inheritdoc />
-    public Task < bool > MoveStopAsync ( )
-    {
-        return _connector.MoveStopAsync ( ) ;
-    }
+    public Task < bool > MoveStopAsync ( ) => _connector.MoveStopAsync ( ) ;
 
     /// <inheritdoc />
-    public Task < bool > MoveLockAsync ( )
-    {
-        return _connector.MoveLockAsync ( ) ;
-    }
+    public Task < bool > MoveLockAsync ( ) => _connector.MoveLockAsync ( ) ;
 
     /// <inheritdoc />
-    public Task < bool > MoveUnlockAsync ( )
-    {
-        return _connector.MoveUnlockAsync ( ) ;
-    }
+    public Task < bool > MoveUnlockAsync ( ) => _connector.MoveUnlockAsync ( ) ;
 
     /// <inheritdoc />
-    public void Dispose ( )
-    {
-        _connector.Dispose ( ) ;
-    }
+    public void Dispose ( ) => _connector.Dispose ( ) ;
 
     /// <inheritdoc />
     public string DeviceName => _connector.DeviceName ;

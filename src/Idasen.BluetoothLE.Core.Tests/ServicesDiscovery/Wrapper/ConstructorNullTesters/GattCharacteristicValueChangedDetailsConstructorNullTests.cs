@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
+﻿namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper.ConstructorNullTesters ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper.ConstructorNullTesters ;
+using Common.Tests ;
+using Core.ServicesDiscovery.Wrappers ;
 
 [ TestClass ]
 public class GattCharacteristicValueChangedDetailsConstructorNullTests

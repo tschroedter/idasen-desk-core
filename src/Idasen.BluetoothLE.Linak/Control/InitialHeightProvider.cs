@@ -1,13 +1,13 @@
-﻿using System.Reactive.Concurrency ;
+namespace Idasen.BluetoothLE.Linak.Control ;
+
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
+using Aop.Aspects ;
 using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Characteristics.Common ;
+using Interfaces ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
@@ -65,10 +65,7 @@ public class InitialHeightProvider
     }
 
     /// <inheritdoc />
-    public Task Start ( )
-    {
-        return Start ( CancellationToken.None ) ;
-    }
+    public Task Start ( ) => Start ( CancellationToken.None ) ;
 
     /// <inheritdoc />
     public IObservable < uint > Finished => _subjectFinished ;

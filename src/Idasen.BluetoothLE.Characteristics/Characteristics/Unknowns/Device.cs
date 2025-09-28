@@ -1,11 +1,11 @@
-﻿using System.Collections.Immutable ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+
+using System.Collections.Immutable ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Common ;
+using Core.Interfaces.ServicesDiscovery ;
+using Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 public class Device
     : IDevice

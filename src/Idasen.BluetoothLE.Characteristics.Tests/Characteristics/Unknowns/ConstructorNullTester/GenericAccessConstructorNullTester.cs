@@ -1,7 +1,7 @@
-﻿using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
-using Idasen.BluetoothLE.Common.Tests ;
+﻿namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns.ConstructorNullTester ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns.ConstructorNullTester ;
+using BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using BluetoothLE.Common.Tests ;
 
 [ TestClass ]
 public class DeviceConstructorNullTester

@@ -1,14 +1,14 @@
-﻿using System.Reactive.Linq ;
+namespace Idasen.BluetoothLE.Linak.Tests ;
+
+using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Idasen.BluetoothLE.Linak.Control ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
+using Interfaces ;
+using Linak.Control ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
-
-namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
 public class DeskMoverTests : IDisposable
@@ -116,7 +116,7 @@ public class DeskMoverTests : IDisposable
 
     private DeskMover CreateSutInitialized ( )
     {
-        var sut = CreateSut ( ) ;
+        DeskMover sut = CreateSut ( ) ;
 
         sut.Initialize ( ) ;
 
@@ -125,7 +125,7 @@ public class DeskMoverTests : IDisposable
 
     private DeskMover CreateSutWithTargetHeight ( )
     {
-        var sut = CreateSutInitialized ( ) ;
+        DeskMover sut = CreateSutInitialized ( ) ;
 
         sut.TargetHeight = DefaultTargetHeight ;
 
@@ -134,7 +134,7 @@ public class DeskMoverTests : IDisposable
 
     private DeskMover CreateSutWithIsAllowedToMoveIsTrue ( )
     {
-        var sut = CreateSutWithTargetHeight ( ) ;
+        DeskMover sut = CreateSutWithTargetHeight ( ) ;
 
         _subjectFinished.OnNext ( InitialHeight ) ;
 
@@ -146,7 +146,7 @@ public class DeskMoverTests : IDisposable
 
     private DeskMover CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( )
     {
-        var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        DeskMover sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         _heightAndSpeed.Height.Returns ( _details1.Height ) ;
         _heightAndSpeed.Speed.Returns ( _details1.Speed ) ;
@@ -177,7 +177,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public void StartAfterRefreshed_ForInvoked_CallsCalculator ( )
     {
-        using var _ = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        using DeskMover _ = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         using var scope = new AssertionScope ( ) ;
 
@@ -226,7 +226,7 @@ public class DeskMoverTests : IDisposable
         _executor.Up ( )
                  .Returns ( true ) ;
 
-        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        using DeskMover sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         _heightMonitor.Received ( )
                       .Reset ( ) ;
@@ -238,7 +238,7 @@ public class DeskMoverTests : IDisposable
         _executor.Up ( )
                  .Returns ( true ) ;
 
-        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        using DeskMover sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         var actual = await sut.Up ( ) ;
 
@@ -252,7 +252,7 @@ public class DeskMoverTests : IDisposable
         _executor.Up ( )
                  .Returns ( false ) ;
 
-        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        using DeskMover sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         var actual = await sut.Up ( ) ;
 
@@ -263,7 +263,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public void Height_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesHeight ( )
     {
-        using var sut = CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( ) ;
+        using DeskMover sut = CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( ) ;
 
         sut.Height
            .Should ( )
@@ -273,7 +273,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public void Speed_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesSpeed ( )
     {
-        using var sut = CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( ) ;
+        using DeskMover sut = CreateSutWithIsAllowedToMoveIsTrueAndHeightChanged ( ) ;
 
         sut.Speed
            .Should ( )
@@ -286,7 +286,7 @@ public class DeskMoverTests : IDisposable
         _calculator.MoveIntoDirection
                    .Returns ( Direction.Up ) ;
 
-        using var sut = CreateSutInitialized ( ) ;
+        using DeskMover sut = CreateSutInitialized ( ) ;
 
         await sut.Stop ( ) ; // make sure timer is null
 
@@ -302,7 +302,7 @@ public class DeskMoverTests : IDisposable
         _calculator.MoveIntoDirection
                    .Returns ( Direction.Down ) ;
 
-        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        using DeskMover sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         await sut.OnTimerElapsed ( 1 ) ;
 
@@ -316,7 +316,7 @@ public class DeskMoverTests : IDisposable
         _calculator.MoveIntoDirection
                    .Returns ( Direction.None ) ;
 
-        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        using DeskMover sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         await sut.OnTimerElapsed ( 1 ) ;
 
@@ -332,7 +332,7 @@ public class DeskMoverTests : IDisposable
         _calculator.MoveIntoDirection
                    .Returns ( Direction.None ) ;
 
-        using var sut = CreateSutInitialized ( ) ;
+        using DeskMover sut = CreateSutInitialized ( ) ;
 
         await sut.OnTimerElapsed ( 1 ) ;
 
@@ -350,7 +350,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public async Task Finished_ForMoveFinished_Notifies ( )
     {
-        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        using DeskMover sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         var wasNotified = false ;
 
@@ -369,7 +369,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public async Task Up_ForIsAllowedToMoveIsTrue_DoesNotMoveUp ( )
     {
-        using var sut = CreateSutInitialized ( ) ;
+        using DeskMover sut = CreateSutInitialized ( ) ;
 
         await sut.Up ( ) ;
 
@@ -380,7 +380,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public async Task Up_ForIsAllowedToMoveIsTrue_ReturnsFalse ( )
     {
-        using var sut = CreateSutInitialized ( ) ;
+        using DeskMover sut = CreateSutInitialized ( ) ;
 
         var actual = await sut.Up ( ) ;
 
@@ -391,7 +391,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public async Task Down_ForIsAllowedToMoveIsTrue_DoesNotMoveDown ( )
     {
-        using var sut = CreateSutInitialized ( ) ;
+        using DeskMover sut = CreateSutInitialized ( ) ;
 
         await sut.Down ( ) ;
 
@@ -402,7 +402,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public async Task Down_ForIsAllowedToMoveIsTrue_ReturnsFalse ( )
     {
-        using var sut = CreateSutInitialized ( ) ;
+        using DeskMover sut = CreateSutInitialized ( ) ;
 
         var actual = await sut.Down ( ) ;
 
@@ -413,7 +413,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public void Start_ForInvoked_CallsProvider ( )
     {
-        using var sut = CreateSutInitialized ( ) ;
+        using DeskMover sut = CreateSutInitialized ( ) ;
 
         sut.Start ( ) ;
 
@@ -424,7 +424,7 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public void Dispose_ForInvoked_DisposesMonitor ( )
     {
-        var sut = CreateSutInitialized ( ) ;
+        DeskMover sut = CreateSutInitialized ( ) ;
 
         sut.Dispose ( ) ;
 
@@ -439,7 +439,7 @@ public class DeskMoverTests : IDisposable
                                   _heightAndSpeed )
                         .Returns ( _disposableProvider ) ;
 
-        var sut = CreateSutInitialized ( ) ;
+        DeskMover sut = CreateSutInitialized ( ) ;
 
         sut.Dispose ( ) ;
 
@@ -450,9 +450,9 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public void Dispose_ForInvoked_DisposalHeightAndSpeed ( )
     {
-        var disposable = Substitute.For < IDisposable > ( ) ;
+        IDisposable? disposable = Substitute.For < IDisposable > ( ) ;
 
-        var subject = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
+        ISubject < HeightSpeedDetails >? subject = Substitute.For < ISubject < HeightSpeedDetails > > ( ) ;
 
         subject.Subscribe ( Arg.Any < IObserver < HeightSpeedDetails > > ( ) )
                .Returns ( disposable ) ;
@@ -460,7 +460,7 @@ public class DeskMoverTests : IDisposable
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( subject ) ;
 
-        var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+        DeskMover sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
 
         sut.Dispose ( ) ;
 
@@ -480,7 +480,7 @@ public class DeskMoverTests : IDisposable
         _calculator.MovementUntilStop.Returns ( 120 ) ; // enough to cross from 1000 to >= 1120
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var sut = CreateSut ( ) ;
+        DeskMover sut = CreateSut ( ) ;
         sut.TargetHeight = 1080u ; // below predicted stopping height
 
         sut.Initialize ( ) ;
@@ -510,7 +510,7 @@ public class DeskMoverTests : IDisposable
         _calculator.MovementUntilStop.Returns ( - 150 ) ; // magnitude 150
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var sut = CreateSut ( ) ;
+        DeskMover sut = CreateSut ( ) ;
         sut.TargetHeight = 1100u ; // predicted stop 1050 <= target
 
         sut.Initialize ( ) ;
