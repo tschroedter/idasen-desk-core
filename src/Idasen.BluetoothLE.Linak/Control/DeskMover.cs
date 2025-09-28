@@ -51,6 +51,7 @@ public class DeskMover
 
     private Task < bool >? _pendingStopTask ;
     private IDisposable? _rawHeightAndSpeedSubscription ;
+    private volatile bool _pendingEvaluation ;
 
     public DeskMover ( ILogger logger ,
                        IScheduler scheduler ,
@@ -359,53 +360,63 @@ public class DeskMover
             return ;
         }
 
+        // Try to enter the semaphore
         if ( ! await _moveSemaphore.WaitAsync ( 0 ).ConfigureAwait ( false ) )
         {
-            _logger.Debug ( "Evaluation skipped: previous evaluation still running" ) ;
+            // Instead of skipping, set pending flag
+            _pendingEvaluation = true ;
+            _logger.Debug ( "Evaluation deferred: previous evaluation still running" ) ;
             return ;
         }
 
         try
         {
-            _logger.Debug ( "Evaluate move (height={Height} speed={Speed} target={Target} engineDir={EngineDir})" ,
-                            Height ,
-                            Speed ,
-                            TargetHeight ,
-                            _engine.CurrentDirection ) ;
-
-            if ( TargetHeight == 0u )
+            do
             {
-                _logger.Debug ( "TargetHeight = 0 -> forcing stop" ) ;
-            }
+                // Clear pending flag before running
+                _pendingEvaluation = false ;
 
-            var result = _stopper.ShouldStop ( Height ,
-                                               Speed ,
-                                               TargetHeight ,
-                                               StartMovingIntoDirection ,
-                                               _engine.CurrentDirection ) ;
+                _logger.Debug ( "Evaluate move (height={Height} speed={Speed} target={Target} engineDir={EngineDir})" ,
+                                Height ,
+                                Speed ,
+                                TargetHeight ,
+                                _engine.CurrentDirection ) ;
 
-            _logger.Debug ( "StopEval result stop={Stop} desired={Desired} engineDir={EngineDir}" ,
-                            result.ShouldStop ,
-                            result.Desired ,
-                            _engine.CurrentDirection ) ;
-
-            if ( result.ShouldStop )
-            {
-                if ( fromTimer || _engine.IsMoving )
+                if ( TargetHeight == 0u )
                 {
-                    _logger.Debug ( "Issuing stop (fromTimer={FromTimer} engineMoving={Moving})" ,
-                                    fromTimer ,
-                                    _engine.IsMoving ) ;
-                    IssueStopIfNotPending ( ) ;
+                    _logger.Debug ( "TargetHeight = 0 -> forcing stop" ) ;
                 }
 
-                return ;
-            }
+                var result = _stopper.ShouldStop ( Height ,
+                                                   Speed ,
+                                                   TargetHeight ,
+                                                   StartMovingIntoDirection ,
+                                                   _engine.CurrentDirection ) ;
 
-            _logger.Debug ( "Continuing movement desired={Desired}" ,
-                            result.Desired ) ;
-            _engine.Move ( result.Desired ,
-                           fromTimer ) ;
+                _logger.Debug ( "StopEval result stop={Stop} desired={Desired} engineDir={EngineDir}" ,
+                                result.ShouldStop ,
+                                result.Desired ,
+                                _engine.CurrentDirection ) ;
+
+                if ( result.ShouldStop )
+                {
+                    if ( fromTimer || _engine.IsMoving )
+                    {
+                        _logger.Debug ( "Issuing stop (fromTimer={FromTimer} engineMoving={Moving})" ,
+                                        fromTimer ,
+                                        _engine.IsMoving ) ;
+                        IssueStopIfNotPending ( ) ;
+                    }
+
+                    return ;
+                }
+
+                _logger.Debug ( "Continuing movement desired={Desired}" ,
+                                result.Desired ) ;
+                _engine.Move ( result.Desired ,
+                               fromTimer ) ;
+                // If another evaluation was requested during this run, loop again
+            } while ( _pendingEvaluation ) ;
         }
         catch ( Exception e )
         {
