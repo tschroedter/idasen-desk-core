@@ -1,4 +1,4 @@
-﻿// [assembly: InternalsVisibleTo("Idasen.BluetoothLE.Tests")]
+// [assembly: InternalsVisibleTo("Idasen.BluetoothLE.Tests")]
 
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
@@ -37,15 +37,19 @@ public class DeviceMonitor
         Guard.ArgumentNotNull (
                                logger ,
                                nameof ( logger ) ) ;
+
         Guard.ArgumentNotNull (
                                factory ,
                                nameof ( factory ) ) ;
+
         Guard.ArgumentNotNull (
                                devices ,
                                nameof ( devices ) ) ;
+
         Guard.ArgumentNotNull (
                                watcher ,
                                nameof ( watcher ) ) ;
+
         Guard.ArgumentNotNull (
                                scheduler ,
                                nameof ( scheduler ) ) ;
@@ -115,9 +119,11 @@ public class DeviceMonitor
         _disposableStarted = _watcher.Started
                                      .SubscribeOn ( _scheduler )
                                      .Subscribe ( OnStarted ) ;
+
         _disposableStopped = _watcher.Stopped
                                      .SubscribeOn ( _scheduler )
                                      .Subscribe ( OnStopped ) ;
+
         _disposableUpdated = _watcher.Received
                                      .SubscribeOn ( _scheduler )
                                      .Subscribe ( OnDeviceUpdated ) ;
@@ -145,10 +151,11 @@ public class DeviceMonitor
         }
         else {
             _logger.Information (
-                                 $"[{device.MacAddress}] Updated Device " +
-                                 $"(Name = {device.Name}, "               +
-                                 $"{device.RawSignalStrengthInDBm}DBm, "  +
-                                 $"Address = {device.Address})" ) ;
+                                 "[{DeviceMacAddress}] Updated Device (Name = {DeviceName}, {SignalStrengthInDBm}DBm, Address = {DeviceAddress})" ,
+                                 device.MacAddress ,
+                                 device.Name ,
+                                 device.RawSignalStrengthInDBm ,
+                                 device.Address ) ;
 
             var hasNameChanged = HasDeviceNameChanged (
                                                        device ,

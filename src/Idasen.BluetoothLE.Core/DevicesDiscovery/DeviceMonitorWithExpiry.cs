@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
@@ -37,18 +37,23 @@ public class DeviceMonitorWithExpiry
         Guard.ArgumentNotNull (
                                logger ,
                                nameof ( logger ) ) ;
+
         Guard.ArgumentNotNull (
                                dateTimeOffset ,
                                nameof ( dateTimeOffset ) ) ;
+
         Guard.ArgumentNotNull (
                                deviceMonitor ,
                                nameof ( deviceMonitor ) ) ;
+
         Guard.ArgumentNotNull (
                                deviceExpired ,
                                nameof ( deviceExpired ) ) ;
+
         Guard.ArgumentNotNull (
                                factory ,
                                nameof ( factory ) ) ;
+
         Guard.ArgumentNotNull (
                                scheduler ,
                                nameof ( scheduler ) ) ;
@@ -131,7 +136,11 @@ public class DeviceMonitorWithExpiry
 
     private void OnError ( Exception ex )
     {
-        _logger.Error ( ex.Message ) ;
+        _logger.Error (
+                       ex ,
+                       "Unhandled exception in {Class}.{Method}" ,
+                       nameof ( DeviceMonitorWithExpiry ) ,
+                       nameof ( OnError ) ) ;
 
         Stop ( ) ;
     }

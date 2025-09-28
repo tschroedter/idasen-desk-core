@@ -1,4 +1,4 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
@@ -60,8 +60,10 @@ public sealed class RawValueReader
 
         if ( SupportsNotify ( characteristic ) ) {
             _logger.Warning (
-                             $"GattCharacteristic '{characteristic.Uuid}' " +
-                             "doesn't support 'Read' but supports 'Notify'" ) ;
+                             "GattCharacteristic {CharacteristicUuid} doesn't support {UnsupportedOperation} but supports {SupportedOperation}" ,
+                             characteristic.Uuid ,
+                             "Read" ,
+                             "Notify" ) ;
 
             return ( false , ArrayEmpty ) ; // need to subscribe to value change
         }
@@ -70,8 +72,9 @@ public sealed class RawValueReader
             return await ReadValue ( characteristic ) ;
 
         _logger.Information (
-                             $"GattCharacteristic '{characteristic.Uuid}' " +
-                             "doesn't support 'Read'" ) ;
+                             "GattCharacteristic {CharacteristicUuid} doesn't support {UnsupportedOperation}" ,
+                             characteristic.Uuid ,
+                             "Read" ) ;
 
         return ( false , ArrayEmpty ) ;
     }
