@@ -13,7 +13,7 @@ on:
           - Debug
   push:
     branches: [ main ]
-    tags: [ 'V*' ]
+    tags: [ 'v*' ]
   pull_request:
     branches: [ main ]
 
@@ -66,9 +66,8 @@ jobs:
       - name: Create and push git tag (optional)
         if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/')
         run: |
-          $date = (Get-Date -Format 'yyyyMMdd')
           $run  = $env:GITHUB_RUN_NUMBER
-          $tag  = "V0.1.$run-$date"
+          $tag  = "v0.1.$run"
           git fetch --tags --quiet
           if (git rev-parse -q --verify "refs/tags/$tag") {
             Write-Host "Tag $tag already exists, skipping."
