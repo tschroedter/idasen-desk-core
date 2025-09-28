@@ -16,7 +16,7 @@ namespace Idasen.BluetoothLE.Characteristics;
 ///     Autofac module registering Bluetooth LE characteristics, providers, and helpers
 ///     with interface interceptors for AOP logging.
 /// </summary>
-[ ExcludeFromCodeCoverage ]
+[ExcludeFromCodeCoverage]
 public sealed class BluetoothLEDeskCharacteristics : Module
 {
     /// <summary>
@@ -28,23 +28,23 @@ public sealed class BluetoothLEDeskCharacteristics : Module
         Guard.ArgumentNotNull( builder,
                                 nameof( builder ) );
 
-        builder.RegisterModule< BluetoothLECoreModule >();
+        builder.RegisterModule<BluetoothLECoreModule>();
 
-        RegisterWithInterceptors< IAllGattCharacteristicsProvider, AllGattCharacteristicsProvider >( builder );
-        RegisterWithInterceptors< IGattCharacteristicProvider, GattCharacteristicProvider >( builder );
-        RegisterWithInterceptors< IGattCharacteristicsProviderFactory, GattCharacteristicsProviderFactory >( builder );
-        RegisterWithInterceptors< IRawValueReader, RawValueReader >( builder );
-        RegisterWithInterceptors< IRawValueWriter, RawValueWriter >( builder );
-        RegisterWithInterceptors< IGenericAccess, GenericAccess >( builder );
-        RegisterWithInterceptors< IGenericAttribute, GenericAttribute >( builder );
-        RegisterWithInterceptors< IReferenceInput, ReferenceInput >( builder );
-        RegisterWithInterceptors< IReferenceOutput, ReferenceOutput >( builder );
-        RegisterWithInterceptors< IDpg, Dpg >( builder );
-        RegisterWithInterceptors< IControl, Control >( builder );
-        RegisterWithInterceptors< ICharacteristicBaseToStringConverter, CharacteristicBaseToStringConverter >( builder );
-        RegisterWithInterceptors< IBufferReader, BufferReader >( builder );
-        RegisterWithInterceptors< IDescriptionToUuid, DescriptionToUuid >( builder );
-        RegisterWithInterceptors< ICharacteristicBaseFactory, CharacteristicBaseFactory >( builder );
+        RegisterWithInterceptors<IAllGattCharacteristicsProvider, AllGattCharacteristicsProvider>(builder);
+        RegisterWithInterceptors<IGattCharacteristicProvider, GattCharacteristicProvider>(builder);
+        RegisterWithInterceptors<IGattCharacteristicsProviderFactory, GattCharacteristicsProviderFactory>(builder);
+        RegisterWithInterceptors<IRawValueReader, RawValueReader>(builder);
+        RegisterWithInterceptors<IRawValueWriter, RawValueWriter>(builder);
+        RegisterWithInterceptors<IGenericAccess, GenericAccess>(builder);
+        RegisterWithInterceptors<IGenericAttribute, GenericAttribute>(builder);
+        RegisterWithInterceptors<IReferenceInput, ReferenceInput>(builder);
+        RegisterWithInterceptors<IReferenceOutput, ReferenceOutput>(builder);
+        RegisterWithInterceptors<IDpg, Dpg>(builder);
+        RegisterWithInterceptors<IControl, Control>(builder);
+        RegisterWithInterceptors<ICharacteristicBaseToStringConverter, CharacteristicBaseToStringConverter>(builder);
+        RegisterWithInterceptors<IBufferReader, BufferReader>(builder);
+        RegisterWithInterceptors<IDescriptionToUuid, DescriptionToUuid>(builder);
+        RegisterWithInterceptors<ICharacteristicBaseFactory, CharacteristicBaseFactory>(builder);
     }
 
     /// <summary>
@@ -53,8 +53,8 @@ public sealed class BluetoothLEDeskCharacteristics : Module
     private static void RegisterWithInterceptors<TInterface, TImplementation>( ContainerBuilder builder )
         where TImplementation : TInterface where TInterface : notnull
     {
-        builder.RegisterType< TImplementation >()
-               .As< TInterface >()
+        builder.RegisterType<TImplementation>()
+               .As<TInterface>()
                .EnableInterfaceInterceptors();
     }
 }
