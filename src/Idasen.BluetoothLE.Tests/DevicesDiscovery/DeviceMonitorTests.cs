@@ -137,7 +137,8 @@ public class DeviceMonitorTests
     [ TestMethod ]
     public void Start_ForInvoked_CallsStart ( )
     {
-        CreateSut ( ).Start ( ) ;
+        using var sut = CreateSut ( ) ;
+        sut.Start ( ) ;
 
         _watcher.Received ( )
                 .Start ( ) ;
@@ -146,7 +147,8 @@ public class DeviceMonitorTests
     [ TestMethod ]
     public void Stop_ForInvoked_CallsStop ( )
     {
-        CreateSut ( ).Stop ( ) ;
+        using var sut = CreateSut ( ) ;
+        sut.Stop ( ) ;
 
         _watcher.Received ( )
                 .Stop ( ) ;
@@ -362,9 +364,10 @@ public class DeviceMonitorTests
         _watcher.IsListening
                 .Returns ( true ) ;
 
-        CreateSut ( ).IsListening
-                     .Should ( )
-                     .BeTrue ( ) ;
+        using var sut = CreateSut ( ) ;
+        sut.IsListening
+           .Should ( )
+           .BeTrue ( ) ;
     }
 
     [ TestMethod ]
@@ -376,9 +379,10 @@ public class DeviceMonitorTests
         _devices.DiscoveredDevices
                 .Returns ( list ) ;
 
-        CreateSut ( ).DiscoveredDevices
-                     .Should ( )
-                     .BeEquivalentTo ( list ) ;
+        using var sut = CreateSut ( ) ;
+        sut.DiscoveredDevices
+           .Should ( )
+           .BeEquivalentTo ( list ) ;
     }
 
     [ TestMethod ]
