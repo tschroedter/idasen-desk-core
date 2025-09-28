@@ -1,0 +1,85 @@
+name: .NET CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: Build configuration
+        required: true
+        default: Release
+        type: choice
+        options:
+          - Release
+          - Debug
+  push:
+    branches: [ main ]
+    tags: [ 'V*' ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and Test (idasen-desk-core)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: .
+    env:
+      BUILD_CONFIGURATION: ${{ github.event_name == 'workflow_dispatch' && inputs.configuration || 'Release' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup .NET 8.x SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\NuGet\v3-cache
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: .NET info
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore idasen-desk-core.sln
+
+      - name: Build (${{ env.BUILD_CONFIGURATION }})
+        run: dotnet build idasen-desk-core.sln --configuration $env:BUILD_CONFIGURATION --no-restore
+
+      - name: Test (${{ env.BUILD_CONFIGURATION }})
+        run: dotnet test idasen-desk-core.sln --configuration $env:BUILD_CONFIGURATION --no-build --verbosity normal
+
+      - name: Format Check
+        run: |
+          dotnet tool restore || true
+          dotnet format idasen-desk-core.sln --verify-no-changes --verbosity minimal || exit 1
+
+      - name: Create and push git tag (optional)
+        if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/')
+        run: |
+          $date = (Get-Date -Format 'yyyyMMdd')
+          $run  = $env:GITHUB_RUN_NUMBER
+          $tag  = "V0.1.$run-$date"
+          git fetch --tags --quiet
+          if (git rev-parse -q --verify "refs/tags/$tag") {
+            Write-Host "Tag $tag already exists, skipping."
+          } else {
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git tag -a $tag -m "Automated build $tag"
+            git push origin $tag
+          }
