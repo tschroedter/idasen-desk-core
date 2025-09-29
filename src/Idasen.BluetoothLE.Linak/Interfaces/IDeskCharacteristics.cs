@@ -75,7 +75,6 @@ public interface IDeskCharacteristics
     /// <returns>
     ///     The current instance of <see cref="IDeskCharacteristics" />.
     /// </returns>
-    IDeskCharacteristics WithCharacteristics (
-        DeskCharacteristicKey key ,
-        ICharacteristicBase   characteristic ) ;
+    IDeskCharacteristics WithCharacteristics ( DeskCharacteristicKey key ,
+                                               ICharacteristicBase   characteristic ) ;
 }

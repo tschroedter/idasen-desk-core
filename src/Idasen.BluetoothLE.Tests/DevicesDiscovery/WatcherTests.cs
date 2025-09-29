@@ -21,24 +21,18 @@ public class WatcherTests
     }
 
     [ TestMethod ]
-    [ DataRow (
-                  Status.Created ,
-                  false ) ]
-    [ DataRow (
-                  Status.Started ,
-                  true ) ]
-    [ DataRow (
-                  Status.Stopping ,
-                  false ) ]
-    [ DataRow (
-                  Status.Stopped ,
-                  false ) ]
-    [ DataRow (
-                  Status.Aborted ,
-                  false ) ]
-    public void IsListening_ForStatus_ReturnsExpected (
-        Status status ,
-        bool   expected )
+    [ DataRow ( Status.Created ,
+                false ) ]
+    [ DataRow ( Status.Started ,
+                true ) ]
+    [ DataRow ( Status.Stopping ,
+                false ) ]
+    [ DataRow ( Status.Stopped ,
+                false ) ]
+    [ DataRow ( Status.Aborted ,
+                false ) ]
+    public void IsListening_ForStatus_ReturnsExpected ( Status status ,
+                                                        bool   expected )
     {
         _wrapper.Status
                 .Returns ( status ) ;
@@ -51,9 +45,8 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Start_ForIsListeningTrue_DoesNotCallWatcherStart (
-        Watcher             sut ,
-        [ Freeze ] IWrapper wrapper )
+    public void Start_ForIsListeningTrue_DoesNotCallWatcherStart ( Watcher             sut ,
+                                                                   [ Freeze ] IWrapper wrapper )
     {
         wrapper.Status
                .Returns ( Status.Started ) ;
@@ -65,9 +58,8 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Start_ForIsListeningFalse_CallsWatcherStart (
-        Watcher             sut ,
-        [ Freeze ] IWrapper wrapper )
+    public void Start_ForIsListeningFalse_CallsWatcherStart ( Watcher             sut ,
+                                                              [ Freeze ] IWrapper wrapper )
     {
         wrapper.Status
                .Returns ( Status.Created ) ;
@@ -79,10 +71,9 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Start_ForIsListeningFalse_PublishesStarted (
-        Watcher                          sut ,
-        [ Freeze ] IWrapper              wrapper ,
-        [ Freeze ] ISubject < DateTime > subject )
+    public void Start_ForIsListeningFalse_PublishesStarted ( Watcher                          sut ,
+                                                             [ Freeze ] IWrapper              wrapper ,
+                                                             [ Freeze ] ISubject < DateTime > subject )
     {
         wrapper.Status
                .Returns ( Status.Created ) ;
@@ -93,9 +84,8 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Stop_ForIsListeningTrue_CallsWatcherStop (
-        Watcher             sut ,
-        [ Freeze ] IWrapper wrapper )
+    public void Stop_ForIsListeningTrue_CallsWatcherStop ( Watcher             sut ,
+                                                           [ Freeze ] IWrapper wrapper )
     {
         wrapper.Status
                .Returns ( Status.Started ) ;
@@ -107,9 +97,8 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Stop_ForIsListeningFalse_DoesNotCallWatcherStop (
-        Watcher             sut ,
-        [ Freeze ] IWrapper wrapper )
+    public void Stop_ForIsListeningFalse_DoesNotCallWatcherStop ( Watcher             sut ,
+                                                                  [ Freeze ] IWrapper wrapper )
     {
         wrapper.Status
                .Returns ( Status.Created ) ;
@@ -121,9 +110,8 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesWrapper (
-        Watcher             sut ,
-        [ Freeze ] IWrapper wrapper )
+    public void Dispose_ForInvoked_DisposesWrapper ( Watcher             sut ,
+                                                     [ Freeze ] IWrapper wrapper )
     {
         sut.Dispose ( ) ;
 
@@ -132,9 +120,8 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Started_ForSubscribe_CallsSubscribe (
-        Watcher                          sut ,
-        [ Freeze ] ISubject < DateTime > subject )
+    public void Started_ForSubscribe_CallsSubscribe ( Watcher                          sut ,
+                                                      [ Freeze ] ISubject < DateTime > subject )
     {
         using var disposable = sut.Started.Subscribe ( ) ;
 
@@ -143,10 +130,9 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Stopped_ForSubscribe_CallsSubscribe (
-        Watcher               sut ,
-        ISubject < DateTime > subject ,
-        [ Freeze ] IWrapper   wrapper )
+    public void Stopped_ForSubscribe_CallsSubscribe ( Watcher               sut ,
+                                                      ISubject < DateTime > subject ,
+                                                      [ Freeze ] IWrapper   wrapper )
     {
         wrapper.Stopped
                .Returns ( subject ) ;
@@ -159,10 +145,9 @@ public class WatcherTests
     }
 
     [ AutoDataTestMethod ]
-    public void Received_ForSubscribe_CallsSubscribe (
-        Watcher              sut ,
-        ISubject < IDevice > subject ,
-        [ Freeze ] IWrapper  wrapper )
+    public void Received_ForSubscribe_CallsSubscribe ( Watcher              sut ,
+                                                       ISubject < IDevice > subject ,
+                                                       [ Freeze ] IWrapper  wrapper )
     {
         wrapper.Received
                .Returns ( subject ) ;
@@ -176,8 +161,7 @@ public class WatcherTests
 
     private Watcher CreateSut ( )
     {
-        return new Watcher (
-                            _wrapper ,
-                            _subject ) ;
+        return new Watcher ( _wrapper ,
+                             _subject ) ;
     }
 }

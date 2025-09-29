@@ -19,16 +19,13 @@ public class Device
     private readonly IDisposable               _subscriber ;
     private readonly IBluetoothLeDeviceWrapper _wrapper ;
 
-    public Device (
-        IScheduler                scheduler ,
-        IBluetoothLeDeviceWrapper wrapper )
+    public Device ( IScheduler                scheduler ,
+                    IBluetoothLeDeviceWrapper wrapper )
     {
-        Guard.ArgumentNotNull (
-                               wrapper ,
-                               nameof ( wrapper ) ) ;
-        Guard.ArgumentNotNull (
-                               scheduler ,
-                               nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( wrapper ,
+                                nameof ( wrapper ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
 
         _wrapper = wrapper ;
 

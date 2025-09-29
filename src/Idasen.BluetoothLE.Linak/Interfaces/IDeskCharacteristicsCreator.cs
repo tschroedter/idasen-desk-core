@@ -17,7 +17,6 @@ public interface IDeskCharacteristicsCreator
     /// <param name="device">
     ///     The device providing the characteristics.
     /// </param>
-    void Create (
-        IDeskCharacteristics characteristics ,
-        IDevice              device ) ;
+    void Create ( IDeskCharacteristics characteristics ,
+                  IDevice              device ) ;
 }

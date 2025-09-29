@@ -22,18 +22,16 @@ public class DeskLockerFactory
     }
 
     /// <inheritdoc />
-    public IDeskLocker Create (
-        IDeskMover           deskMover ,
-        IDeskCommandExecutor executor ,
-        IDeskHeightAndSpeed  heightAndSpeed )
+    public IDeskLocker Create ( IDeskMover           deskMover ,
+                                IDeskCommandExecutor executor ,
+                                IDeskHeightAndSpeed  heightAndSpeed )
     {
         ArgumentNullException.ThrowIfNull ( deskMover ) ;
         ArgumentNullException.ThrowIfNull ( executor ) ;
         ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
 
-        return _factory (
-                         deskMover ,
-                         executor ,
-                         heightAndSpeed ) ;
+        return _factory ( deskMover ,
+                          executor ,
+                          heightAndSpeed ) ;
     }
 }

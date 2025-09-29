@@ -15,9 +15,8 @@ public class ErrorManagerTests
         var logger  = Substitute.For < ILogger > ( ) ;
         var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
 
-        using var sut = new ErrorManager (
-                                          logger ,
-                                          subject ) ;
+        using var sut = new ErrorManager ( logger ,
+                                           subject ) ;
 
         var details = Substitute.For < IErrorDetails > ( ) ;
 
@@ -32,14 +31,12 @@ public class ErrorManagerTests
         var logger  = Substitute.For < ILogger > ( ) ;
         var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
 
-        using var sut = new ErrorManager (
-                                          logger ,
-                                          subject ) ;
+        using var sut = new ErrorManager ( logger ,
+                                           subject ) ;
 
         const string caller = "caller" ;
-        sut.PublishForMessage (
-                               "message" ,
-                               caller ) ;
+        sut.PublishForMessage ( "message" ,
+                                caller ) ;
 
         subject.Received ( 1 )
                .OnNext ( Arg.Is < IErrorDetails > ( d => d.Message == "message" && d.Caller == caller ) ) ;
@@ -51,9 +48,8 @@ public class ErrorManagerTests
         var logger  = Substitute.For < ILogger > ( ) ;
         var subject = Substitute.For < ISubject < IErrorDetails > > ( ) ;
 
-        using var sut = new ErrorManager (
-                                          logger ,
-                                          subject ) ;
+        using var sut = new ErrorManager ( logger ,
+                                           subject ) ;
 
         sut.ErrorChanged.Should ( ).Be ( subject ) ;
     }

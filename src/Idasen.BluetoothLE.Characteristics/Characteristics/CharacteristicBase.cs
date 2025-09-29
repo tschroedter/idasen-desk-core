@@ -34,7 +34,7 @@ public abstract class CharacteristicBase
     protected readonly IRawValueReader                     RawValueReader ;
 
     internal readonly Dictionary < string , IEnumerable < byte > >
-        RawValues = new ( ) ;
+        RawValues = new( ) ;
 
     protected readonly IRawValueWriter RawValueWriter ;
 
@@ -44,40 +44,31 @@ public abstract class CharacteristicBase
 
     internal IGattCharacteristicProvider ? Characteristics ;
 
-    protected CharacteristicBase (
-        ILogger                              logger ,
-        IScheduler                           scheduler ,
-        IDevice                              device ,
-        IGattCharacteristicsProviderFactory  providerFactory ,
-        IRawValueReader                      rawValueReader ,
-        IRawValueWriter                      rawValueWriter ,
-        ICharacteristicBaseToStringConverter toStringConverter ,
-        IDescriptionToUuid                   descriptionToUuid )
+    protected CharacteristicBase ( ILogger                              logger ,
+                                   IScheduler                           scheduler ,
+                                   IDevice                              device ,
+                                   IGattCharacteristicsProviderFactory  providerFactory ,
+                                   IRawValueReader                      rawValueReader ,
+                                   IRawValueWriter                      rawValueWriter ,
+                                   ICharacteristicBaseToStringConverter toStringConverter ,
+                                   IDescriptionToUuid                   descriptionToUuid )
     {
-        Guard.ArgumentNotNull (
-                               logger ,
-                               nameof ( logger ) ) ;
-        Guard.ArgumentNotNull (
-                               scheduler ,
-                               nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull (
-                               device ,
-                               nameof ( device ) ) ;
-        Guard.ArgumentNotNull (
-                               providerFactory ,
-                               nameof ( providerFactory ) ) ;
-        Guard.ArgumentNotNull (
-                               rawValueReader ,
-                               nameof ( rawValueReader ) ) ;
-        Guard.ArgumentNotNull (
-                               rawValueWriter ,
-                               nameof ( rawValueWriter ) ) ;
-        Guard.ArgumentNotNull (
-                               toStringConverter ,
-                               nameof ( toStringConverter ) ) ;
-        Guard.ArgumentNotNull (
-                               descriptionToUuid ,
-                               nameof ( descriptionToUuid ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( device ,
+                                nameof ( device ) ) ;
+        Guard.ArgumentNotNull ( providerFactory ,
+                                nameof ( providerFactory ) ) ;
+        Guard.ArgumentNotNull ( rawValueReader ,
+                                nameof ( rawValueReader ) ) ;
+        Guard.ArgumentNotNull ( rawValueWriter ,
+                                nameof ( rawValueWriter ) ) ;
+        Guard.ArgumentNotNull ( toStringConverter ,
+                                nameof ( toStringConverter ) ) ;
+        Guard.ArgumentNotNull ( descriptionToUuid ,
+                                nameof ( descriptionToUuid ) ) ;
 
         Device             = device ;
         Logger             = logger ;
@@ -105,39 +96,35 @@ public abstract class CharacteristicBase
     public virtual T Initialize < T > ( )
         where T : class
     {
-        Guard.ArgumentNotNull (
-                               GattServiceUuid ,
-                               nameof ( GattServiceUuid ) ) ;
+        Guard.ArgumentNotNull ( GattServiceUuid ,
+                                nameof ( GattServiceUuid ) ) ;
 
         var (service , characteristicsResultWrapper) = Device.GattServices
                                                              .FirstOrDefault ( x => x.Key.Uuid ==
-                                                                                    GattServiceUuid ) ;
+                                                                                   GattServiceUuid ) ;
 
-        if ( service == null ) {
-            foreach ( var service1 in Device.GattServices ) {
-                Logger.Information (
-                                    "Service: DeviceId = {DeviceId}, Uuid = {Uuid}" ,
-                                    service1.Key.DeviceId ,
-                                    service1.Key.Uuid ) ;
+        if ( service == null )
+        {
+            foreach ( var service1 in Device.GattServices )
+            {
+                Logger.Information ( "Service: DeviceId = {DeviceId}, Uuid = {Uuid}" ,
+                                     service1.Key.DeviceId ,
+                                     service1.Key.Uuid ) ;
 
-                foreach ( var characteristic in service1.Value.Characteristics ) {
-                    Logger.Information (
-                                        "Characteristic: {ServiceUuid} {Uuid} {UserDescription}" ,
-                                        characteristic.ServiceUuid ,
-                                        characteristic.Uuid ,
-                                        characteristic.UserDescription ) ;
-                }
+                foreach ( var characteristic in service1.Value.Characteristics )
+                    Logger.Information ( "Characteristic: {ServiceUuid} {Uuid} {UserDescription}" ,
+                                         characteristic.ServiceUuid ,
+                                         characteristic.Uuid ,
+                                         characteristic.UserDescription ) ;
             }
 
-            throw new ArgumentException (
-                                         "Failed, can't find GattDeviceService for " +
-                                         $"UUID {GattServiceUuid}" ,
-                                         nameof ( GattServiceUuid ) ) ;
+            throw new ArgumentException ( "Failed, can't find GattDeviceService for " +
+                                          $"UUID {GattServiceUuid}" ,
+                                          nameof ( GattServiceUuid ) ) ;
         }
 
-        Logger.Information (
-                            "Found GattDeviceService with UUID {Uuid}" ,
-                            GattServiceUuid ) ;
+        Logger.Information ( "Found GattDeviceService with UUID {Uuid}" ,
+                             GattServiceUuid ) ;
 
         Characteristics = ProviderFactory.Create ( characteristicsResultWrapper ) ;
 
@@ -151,10 +138,10 @@ public abstract class CharacteristicBase
     /// </summary>
     public virtual async Task Refresh ( )
     {
-        if ( Characteristics == null ) {
-            Logger.Error (
-                          "{Property} is null" ,
-                          nameof ( Characteristics ) ) ;
+        if ( Characteristics == null )
+        {
+            Logger.Error ( "{Property} is null" ,
+                           nameof ( Characteristics ) ) ;
 
             return ;
         }
@@ -163,21 +150,20 @@ public abstract class CharacteristicBase
 
         var keys = Characteristics.Characteristics.Keys.ToArray ( ) ;
 
-        foreach ( var key in keys ) {
-            if ( ! Characteristics.Characteristics.TryGetValue (
-                                                                key ,
-                                                                out var characteristic ) ) {
-                Logger.Warning (
-                                "Failed to get value for key {Key}" ,
-                                key ) ;
+        foreach ( var key in keys )
+        {
+            if ( ! Characteristics.Characteristics.TryGetValue ( key ,
+                                                                 out var characteristic ) )
+            {
+                Logger.Warning ( "Failed to get value for key {Key}" ,
+                                 key ) ;
 
                 continue ;
             }
 
-            Logger.Debug (
-                          "Reading raw value for {Key} and characteristic {Uuid}" ,
-                          key ,
-                          characteristic.Uuid ) ;
+            Logger.Debug ( "Reading raw value for {Key} and characteristic {Uuid}" ,
+                           key ,
+                           characteristic.Uuid ) ;
 
             (bool success , byte [ ] value) result =
                 await RawValueReader.TryReadValueAsync ( characteristic ) ;
@@ -191,79 +177,77 @@ public abstract class CharacteristicBase
     /// <summary>
     ///     Disposes this instance. Multiple calls are safe.
     /// </summary>
-    public void Dispose ( ) => Dispose ( true ) ;
+    public void Dispose ( )
+    {
+        Dispose ( true ) ;
+    }
 
     protected abstract T WithMapping < T > ( )
         where T : class ;
 
-    protected async Task < bool > TryWriteValueAsync (
-        string               key ,
-        IEnumerable < byte > bytes )
+    protected async Task < bool > TryWriteValueAsync ( string               key ,
+                                                       IEnumerable < byte > bytes )
     {
-        try {
-            return await DoTryWriteValueAsync (
-                                               key ,
-                                               bytes ) ;
+        try
+        {
+            return await DoTryWriteValueAsync ( key ,
+                                                bytes ) ;
         }
-        catch ( Exception e ) {
+        catch ( Exception e )
+        {
             const string message = "Failed to write value async!" ;
 
-            if ( e.IsBluetoothDisabledException ( ) ) {
-                e.LogBluetoothStatusException (
-                                               Logger ,
-                                               message ) ;
-            }
-            else {
-                Logger.Error (
-                              e ,
-                              message ) ;
-            }
+            if ( e.IsBluetoothDisabledException ( ) )
+                e.LogBluetoothStatusException ( Logger ,
+                                                message ) ;
+            else
+                Logger.Error ( e ,
+                               message ) ;
 
             return false ;
         }
     }
 
-    private async Task < bool > DoTryWriteValueAsync (
-        string               key ,
-        IEnumerable < byte > bytes )
+    private async Task < bool > DoTryWriteValueAsync ( string               key ,
+                                                       IEnumerable < byte > bytes )
     {
-        if ( Characteristics == null ) {
-            Logger.Error (
-                          "{Property} is null" ,
-                          nameof ( Characteristics ) ) ;
+        if ( Characteristics == null )
+        {
+            Logger.Error ( "{Property} is null" ,
+                           nameof ( Characteristics ) ) ;
 
             return false ;
         }
 
-        if ( ! Characteristics.Characteristics.TryGetValue (
-                                                            key ,
-                                                            out var characteristic ) ) {
+        if ( ! Characteristics.Characteristics.TryGetValue ( key ,
+                                                             out var characteristic ) )
+        {
             // Keep single-argument overload for unit test expectations
-            Logger.Error (
-                          "Unknown characteristic with key '{Key}'" ,
-                          key ) ;
+            Logger.Error ( "Unknown characteristic with key '{Key}'" ,
+                           key ) ;
 
             return false ;
         }
 
-        return await RawValueWriter.TryWriteValueAsync (
-                                                        characteristic ,
-                                                        bytes.ToArray ( )
-                                                             .AsBuffer ( ) ) ;
+        return await RawValueWriter.TryWriteValueAsync ( characteristic ,
+                                                         bytes.ToArray ( )
+                                                              .AsBuffer ( ) ) ;
     }
 
     protected IEnumerable < byte > GetValueOrEmpty ( string key )
     {
-        return RawValues.GetValueOrDefault (
-                                            key ,
-                                            RawArrayEmpty ) ;
+        return RawValues.GetValueOrDefault ( key ,
+                                             RawArrayEmpty ) ;
     }
 
     /// <summary>
     ///     Returns a logging-friendly string for this characteristic.
     /// </summary>
     /// <returns>A string representation for diagnostics/logging.</returns>
-    public override string ToString ( ) => _toStringConverter.ToString ( this ) ;
+    public override string ToString ( )
+    {
+        return _toStringConverter.ToString ( this ) ;
+    }
 
     protected virtual void Dispose ( bool disposing )
     {

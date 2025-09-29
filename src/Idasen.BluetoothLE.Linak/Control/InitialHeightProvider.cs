@@ -14,9 +14,8 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 public class InitialHeightProvider
     : IInitialHeightProvider
 {
-    public delegate IInitialHeightProvider Factory (
-        IDeskCommandExecutor executor ,
-        IDeskHeightAndSpeed  heightAndSpeed ) ;
+    public delegate IInitialHeightProvider Factory ( IDeskCommandExecutor executor ,
+                                                     IDeskHeightAndSpeed  heightAndSpeed ) ;
 
     private readonly IDeskCommandExecutor _executor ;
     private readonly IDeskHeightAndSpeed  _heightAndSpeed ;
@@ -32,12 +31,11 @@ public class InitialHeightProvider
     /// <summary>
     ///     Initializes a new instance of the <see cref="InitialHeightProvider" /> class.
     /// </summary>
-    public InitialHeightProvider (
-        ILogger              logger ,
-        IScheduler           scheduler ,
-        IDeskHeightAndSpeed  heightAndSpeed ,
-        IDeskCommandExecutor executor ,
-        ISubject < uint >    subjectFinished )
+    public InitialHeightProvider ( ILogger              logger ,
+                                   IScheduler           scheduler ,
+                                   IDeskHeightAndSpeed  heightAndSpeed ,
+                                   IDeskCommandExecutor executor ,
+                                   ISubject < uint >    subjectFinished )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
@@ -59,17 +57,18 @@ public class InitialHeightProvider
 
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
                                                  .ObserveOn ( _scheduler )
-                                                 .Subscribe (
-                                                             OnHeightAndSpeedChanged ,
-                                                             ex => _logger.Error (
-                                                                                  ex ,
-                                                                                  "Error while observing height/speed changes" ) ) ;
+                                                 .Subscribe ( OnHeightAndSpeedChanged ,
+                                                              ex => _logger.Error ( ex ,
+                                                                       "Error while observing height/speed changes" ) ) ;
 
         Height = _heightAndSpeed.Height ;
     }
 
     /// <inheritdoc />
-    public Task Start ( ) => Start ( CancellationToken.None ) ;
+    public Task Start ( )
+    {
+        return Start ( CancellationToken.None ) ;
+    }
 
     /// <inheritdoc />
     public IObservable < uint > Finished => _subjectFinished ;
@@ -77,13 +76,16 @@ public class InitialHeightProvider
     /// <inheritdoc />
     public void Dispose ( )
     {
-        try {
+        try
+        {
             _cts?.Cancel ( ) ;
         }
-        catch {
+        catch
+        {
             // ignore
         }
-        finally {
+        finally
+        {
             _cts?.Dispose ( ) ;
             _cts = null ;
         }
@@ -116,10 +118,10 @@ public class InitialHeightProvider
 
         cancellationToken.ThrowIfCancellationRequested ( ) ;
 
-        if ( _heightAndSpeed.Height > 0 ) {
-            _logger.Information (
-                                 "Current height is {Height}" ,
-                                 _heightAndSpeed.Height ) ;
+        if ( _heightAndSpeed.Height > 0 )
+        {
+            _logger.Information ( "Current height is {Height}" ,
+                                  _heightAndSpeed.Height ) ;
 
             HasReceivedHeightAndSpeed = true ;
 
@@ -132,7 +134,8 @@ public class InitialHeightProvider
 
         HasReceivedHeightAndSpeed = false ;
 
-        try {
+        try
+        {
             cancellationToken.ThrowIfCancellationRequested ( ) ;
 
             var movedUp = await _executor.Up ( ).ConfigureAwait ( false ) ;
@@ -146,7 +149,8 @@ public class InitialHeightProvider
 
             _logger.Error ( "Failed to move desk up and down" ) ;
         }
-        catch ( OperationCanceledException ) {
+        catch ( OperationCanceledException )
+        {
             await SafeStopAsync ( ).ConfigureAwait ( false ) ;
             throw ;
         }
@@ -154,13 +158,14 @@ public class InitialHeightProvider
 
     private async Task SafeStopAsync ( )
     {
-        try {
+        try
+        {
             await _executor.Stop ( ).ConfigureAwait ( false ) ;
         }
-        catch ( Exception ex ) {
-            _logger.Warning (
-                             ex ,
-                             "Attempt to stop after cancellation failed" ) ;
+        catch ( Exception ex )
+        {
+            _logger.Warning ( ex ,
+                              "Attempt to stop after cancellation failed" ) ;
         }
     }
 
@@ -171,11 +176,11 @@ public class InitialHeightProvider
         if ( HasReceivedHeightAndSpeed )
             return ;
 
-        if ( details.Height == 0 ) {
-            _logger.Information (
-                                 "Received invalid height {Height} and speed {Speed} ..." ,
-                                 details.Height ,
-                                 details.Speed ) ;
+        if ( details.Height == 0 )
+        {
+            _logger.Information ( "Received invalid height {Height} and speed {Speed} ..." ,
+                                  details.Height ,
+                                  details.Speed ) ;
 
             return ;
         }
@@ -183,8 +188,7 @@ public class InitialHeightProvider
         _subjectFinished.OnNext ( Height ) ;
         HasReceivedHeightAndSpeed = true ;
 
-        _logger.Information (
-                             "Received valid height {Height}" ,
-                             details.Height ) ;
+        _logger.Information ( "Received valid height {Height}" ,
+                              details.Height ) ;
     }
 }

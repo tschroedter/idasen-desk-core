@@ -9,12 +9,15 @@ public class ReferenceInputTests
     [ TestMethod ]
     public void Ctrl1_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut ( );
+        using var sut = CreateSut ( ) ;
 
         sut.Ctrl1
            .Should ( )
            .BeEmpty ( ) ;
     }
 
-    private ReferenceInput CreateSut ( ) => new ( ) ;
+    private ReferenceInput CreateSut ( )
+    {
+        return new ReferenceInput ( ) ;
+    }
 }

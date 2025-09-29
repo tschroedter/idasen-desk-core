@@ -14,9 +14,8 @@ public class DeviceComparerTests
     [ TestMethod ]
     public void IsEquivalentTo_ForBothNull_ReturnsFalse ( )
     {
-        CreateSut ( ).IsEquivalentTo (
-                                      null ,
-                                      null )
+        CreateSut ( ).IsEquivalentTo ( null ,
+                                       null )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -24,9 +23,8 @@ public class DeviceComparerTests
     [ TestMethod ]
     public void IsEquivalentTo_ForDeviceAIsNull_ReturnsFalse ( )
     {
-        CreateSut ( ).IsEquivalentTo (
-                                      null ,
-                                      _deviceA )
+        CreateSut ( ).IsEquivalentTo ( null ,
+                                       _deviceA )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -34,9 +32,8 @@ public class DeviceComparerTests
     [ TestMethod ]
     public void IsEquivalentTo_ForDeviceBIsNull_ReturnsFalse ( )
     {
-        CreateSut ( ).IsEquivalentTo (
-                                      _deviceA ,
-                                      null )
+        CreateSut ( ).IsEquivalentTo ( _deviceA ,
+                                       null )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -44,9 +41,8 @@ public class DeviceComparerTests
     [ TestMethod ]
     public void IsEquivalentTo_ForSameDevice_ReturnsTrue ( )
     {
-        CreateSut ( ).IsEquivalentTo (
-                                      _deviceA ,
-                                      _deviceB )
+        CreateSut ( ).IsEquivalentTo ( _deviceA ,
+                                       _deviceB )
                      .Should ( )
                      .BeTrue ( ) ;
     }
@@ -58,9 +54,8 @@ public class DeviceComparerTests
         _deviceB.Name.Returns ( "Other Name" ) ;
         _deviceB.RawSignalStrengthInDBm.Returns ( _deviceA.RawSignalStrengthInDBm ) ;
 
-        CreateSut ( ).IsEquivalentTo (
-                                      _deviceA ,
-                                      _deviceB )
+        CreateSut ( ).IsEquivalentTo ( _deviceA ,
+                                       _deviceB )
                      .Should ( )
                      .BeTrue ( ) ;
     }
@@ -72,9 +67,8 @@ public class DeviceComparerTests
         _deviceB.Name.Returns ( _deviceA.Name ) ;
         _deviceB.RawSignalStrengthInDBm.Returns ( _deviceA.RawSignalStrengthInDBm ) ;
 
-        CreateSut ( ).IsEquivalentTo (
-                                      _deviceA ,
-                                      _deviceB )
+        CreateSut ( ).IsEquivalentTo ( _deviceA ,
+                                       _deviceB )
                      .Should ( )
                      .BeTrue ( ) ;
     }
@@ -83,17 +77,15 @@ public class DeviceComparerTests
     public void IsEquivalentTo_For2DeviceRawSignalStrengthInDBm_ReturnsTrue ( )
     {
         _deviceA.RawSignalStrengthInDBm
-                .Returns ( ( short ) - 1 ) ;
+                .Returns ( ( short )- 1 ) ;
 
-        var deviceB = new Device (
-                                  _deviceA.BroadcastTime ,
-                                  _deviceA.Address ,
-                                  _deviceA.Name ,
-                                  0 ) ;
+        var deviceB = new Device ( _deviceA.BroadcastTime ,
+                                   _deviceA.Address ,
+                                   _deviceA.Name ,
+                                   0 ) ;
 
-        CreateSut ( ).IsEquivalentTo (
-                                      _deviceA ,
-                                      deviceB )
+        CreateSut ( ).IsEquivalentTo ( _deviceA ,
+                                       deviceB )
                      .Should ( )
                      .BeTrue ( ) ;
     }
@@ -104,15 +96,13 @@ public class DeviceComparerTests
         _deviceA.Address
                 .Returns ( 0ul ) ;
 
-        var deviceB = new Device (
-                                  _deviceA.BroadcastTime ,
-                                  1ul ,
-                                  _deviceA.Name ,
-                                  _deviceA.RawSignalStrengthInDBm ) ;
+        var deviceB = new Device ( _deviceA.BroadcastTime ,
+                                   1ul ,
+                                   _deviceA.Name ,
+                                   _deviceA.RawSignalStrengthInDBm ) ;
 
-        CreateSut ( ).IsEquivalentTo (
-                                      _deviceA ,
-                                      deviceB )
+        CreateSut ( ).IsEquivalentTo ( _deviceA ,
+                                       deviceB )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -120,9 +110,8 @@ public class DeviceComparerTests
     [ TestMethod ]
     public void Equals_ForBothNull_ReturnsFalse ( )
     {
-        CreateSut ( ).Equals (
-                              null ,
-                              null )
+        CreateSut ( ).Equals ( null ,
+                               null )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -130,9 +119,8 @@ public class DeviceComparerTests
     [ TestMethod ]
     public void Equals_ForDeviceAIsNull_ReturnsFalse ( )
     {
-        CreateSut ( ).Equals (
-                              null ,
-                              _deviceA )
+        CreateSut ( ).Equals ( null ,
+                               _deviceA )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -140,9 +128,8 @@ public class DeviceComparerTests
     [ TestMethod ]
     public void Equals_ForDeviceBIsNull_ReturnsFalse ( )
     {
-        CreateSut ( ).Equals (
-                              _deviceA ,
-                              null )
+        CreateSut ( ).Equals ( _deviceA ,
+                               null )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -150,9 +137,8 @@ public class DeviceComparerTests
     [ TestMethod ]
     public void Equals_ForTheSameDevice_ReturnsTrue ( )
     {
-        CreateSut ( ).Equals (
-                              _deviceA ,
-                              _deviceA )
+        CreateSut ( ).Equals ( _deviceA ,
+                               _deviceA )
                      .Should ( )
                      .BeTrue ( ) ;
     }
@@ -165,9 +151,8 @@ public class DeviceComparerTests
         _deviceB.Name.Returns ( "Other Name" ) ;
         _deviceB.RawSignalStrengthInDBm.Returns ( _deviceA.RawSignalStrengthInDBm ) ;
 
-        CreateSut ( ).Equals (
-                              _deviceA ,
-                              _deviceB )
+        CreateSut ( ).Equals ( _deviceA ,
+                               _deviceB )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -179,9 +164,8 @@ public class DeviceComparerTests
         _deviceB.Name.Returns ( _deviceA.Name ) ;
         _deviceB.RawSignalStrengthInDBm.Returns ( _deviceA.RawSignalStrengthInDBm ) ;
 
-        CreateSut ( ).Equals (
-                              _deviceA ,
-                              _deviceB )
+        CreateSut ( ).Equals ( _deviceA ,
+                               _deviceB )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -190,15 +174,14 @@ public class DeviceComparerTests
     public void Equals_For2DeviceRawSignalStrengthInDBm_ReturnsTrue ( )
     {
         _deviceA.RawSignalStrengthInDBm
-                .Returns ( ( short ) - 1 ) ;
+                .Returns ( ( short )- 1 ) ;
 
         _deviceB.BroadcastTime.Returns ( _deviceA.BroadcastTime ) ;
         _deviceB.Address.Returns ( _deviceA.Address ) ;
         _deviceB.Name.Returns ( _deviceA.Name ) ;
 
-        CreateSut ( ).Equals (
-                              _deviceA ,
-                              _deviceB )
+        CreateSut ( ).Equals ( _deviceA ,
+                               _deviceB )
                      .Should ( )
                      .BeFalse ( ) ;
     }
@@ -214,12 +197,14 @@ public class DeviceComparerTests
         _deviceB.Name.Returns ( _deviceA.Name ) ;
         _deviceB.RawSignalStrengthInDBm.Returns ( _deviceA.RawSignalStrengthInDBm ) ;
 
-        CreateSut ( ).Equals (
-                              _deviceA ,
-                              _deviceB )
+        CreateSut ( ).Equals ( _deviceA ,
+                               _deviceB )
                      .Should ( )
                      .BeFalse ( ) ;
     }
 
-    private DeviceComparer CreateSut ( ) => new ( ) ;
+    private DeviceComparer CreateSut ( )
+    {
+        return new DeviceComparer ( ) ;
+    }
 }

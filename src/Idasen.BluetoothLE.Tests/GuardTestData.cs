@@ -9,43 +9,24 @@ public static class GuardTestData
 
     private const int Integer = 1 ;
 
-    private static readonly object Instance = new ( ) ;
+    private static readonly object Instance = new( ) ;
 
     public static IEnumerable < object [ ] > InstanceAndInteger ( )
     {
-        yield return [
-                         Instance
-                     ] ;
-        yield return [
-                         Integer
-                     ] ;
+        yield return [Instance] ;
+        yield return [Integer] ;
     }
 
     public static IEnumerable < object [ ] > NullEmptyOrWhitespace ( )
     {
-        yield return [
-                         null ,
-                         typeof ( ArgumentNullException )
-                     ] ;
-        yield return [
-                         Empty ,
-                         typeof ( ArgumentException )
-                     ] ;
-        yield return [
-                         Whitespace ,
-                         typeof ( ArgumentException )
-                     ] ;
+        yield return [null , typeof ( ArgumentNullException )] ;
+        yield return [Empty , typeof ( ArgumentException )] ;
+        yield return [Whitespace , typeof ( ArgumentException )] ;
     }
 
     public static IEnumerable < object [ ] > NullOrEmpty ( )
     {
-        yield return [
-                         null ,
-                         typeof ( ArgumentNullException )
-                     ] ;
-        yield return [
-                         Empty ,
-                         typeof ( ArgumentException )
-                     ] ;
+        yield return [null , typeof ( ArgumentNullException )] ;
+        yield return [Empty , typeof ( ArgumentException )] ;
     }
 }

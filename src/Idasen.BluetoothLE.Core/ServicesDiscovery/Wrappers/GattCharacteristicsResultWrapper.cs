@@ -21,20 +21,16 @@ public class GattCharacteristicsResultWrapper
     private readonly ILogger                   _logger ;
     private readonly GattCharacteristicsResult _result ;
 
-    public GattCharacteristicsResultWrapper (
-        ILogger                           logger ,
-        IGattCharacteristicWrapperFactory factory ,
-        GattCharacteristicsResult         result )
+    public GattCharacteristicsResultWrapper ( ILogger                           logger ,
+                                              IGattCharacteristicWrapperFactory factory ,
+                                              GattCharacteristicsResult         result )
     {
-        Guard.ArgumentNotNull (
-                               logger ,
-                               nameof ( logger ) ) ;
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
-        Guard.ArgumentNotNull (
-                               result ,
-                               nameof ( result ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
         _logger  = logger ;
         _factory = factory ;
@@ -56,7 +52,8 @@ public class GattCharacteristicsResultWrapper
         // Safeguard against unsuccessful status or missing characteristics
         if ( _result.Status != GattCommunicationStatus.Success ||
              _result.Characteristics is null                   ||
-             _result.Characteristics.Count == 0 ) {
+             _result.Characteristics.Count == 0 )
+        {
             Characteristics = [] ;
             return this ;
         }
@@ -66,29 +63,32 @@ public class GattCharacteristicsResultWrapper
                               .ToList ( ) ;
 
         // Initialize all wrappers in parallel; continue on failure of any item
-        IEnumerable < Task < IGattCharacteristicWrapper ? > > initTasks = wrappers.Select ( async w => {
-                                                                                                try {
-                                                                                                    await w.Initialize ( ) ;
-                                                                                                    return w ;
-                                                                                                }
-                                                                                                catch ( Exception ex ) {
-                                                                                                    try {
-                                                                                                        _logger.Warning (
-                                                                                                             ex ,
-                                                                                                             "Failed to initialize GATT characteristic wrapper {Uuid}" ,
-                                                                                                             w.Uuid ) ;
-                                                                                                    }
-                                                                                                    catch {
-                                                                                                        _logger.Warning (
-                                                                                                             ex ,
-                                                                                                             "Failed to initialize a GATT characteristic wrapper" ) ;
-                                                                                                    }
+        IEnumerable < Task < IGattCharacteristicWrapper ? > > initTasks = wrappers.Select ( async w =>
+        {
+            try
+            {
+                await w.Initialize ( ) ;
+                return w ;
+            }
+            catch ( Exception ex )
+            {
+                try
+                {
+                    _logger.Warning ( ex ,
+                                      "Failed to initialize GATT characteristic wrapper {Uuid}" ,
+                                      w.Uuid ) ;
+                }
+                catch
+                {
+                    _logger.Warning ( ex ,
+                                      "Failed to initialize a GATT characteristic wrapper" ) ;
+                }
 
-                                                                                                    // swallow to continue; problematic wrapper is excluded
-                                                                                                    w.Dispose ( ) ;
-                                                                                                    return null ;
-                                                                                                }
-                                                                                            } ) ;
+                // swallow to continue; problematic wrapper is excluded
+                w.Dispose ( ) ;
+                return null ;
+            }
+        } ) ;
 
         var initialized = await Task.WhenAll ( initTasks ) ;
 
@@ -100,11 +100,9 @@ public class GattCharacteristicsResultWrapper
     public void Dispose ( )
     {
         // Dispose individual characteristic wrappers to release event subscriptions
-        if ( Characteristics is {Count: > 0} ) {
-            foreach ( var c in Characteristics ) {
+        if ( Characteristics is { Count: > 0 } )
+            foreach ( var c in Characteristics )
                 c.Dispose ( ) ;
-            }
-        }
 
         Characteristics = [] ;
     }
@@ -122,23 +120,22 @@ public class GattCharacteristicsResultWrapper
     {
         var list = new List < string > ( ) ;
 
-        foreach ( var characteristic in Characteristics ) {
+        foreach ( var characteristic in Characteristics )
+        {
             var properties = characteristic.CharacteristicProperties.ToCsv ( ) ;
             var formats    = PresentationFormatsToString ( characteristic.PresentationFormats ) ;
 
-            list.Add (
-                      $"Service UUID = {characteristic.ServiceUuid} "         +
-                      $"Characteristic UUID = {characteristic.Uuid}, "        +
-                      $"UserDescription = {characteristic.UserDescription}, " +
-                      $"ProtectionLevel = {characteristic.ProtectionLevel}, " +
-                      $"AttributeHandle = {characteristic.AttributeHandle}, " +
-                      $"CharacteristicProperties = [{properties}] "           +
-                      $"PresentationFormats = [{formats}]" ) ;
+            list.Add ( $"Service UUID = {characteristic.ServiceUuid} "         +
+                       $"Characteristic UUID = {characteristic.Uuid}, "        +
+                       $"UserDescription = {characteristic.UserDescription}, " +
+                       $"ProtectionLevel = {characteristic.ProtectionLevel}, " +
+                       $"AttributeHandle = {characteristic.AttributeHandle}, " +
+                       $"CharacteristicProperties = [{properties}] "           +
+                       $"PresentationFormats = [{formats}]" ) ;
         }
 
-        return string.Join (
-                            Environment.NewLine ,
-                            list ) ;
+        return string.Join ( Environment.NewLine ,
+                             list ) ;
     }
 
     private static string PresentationFormatsToString (
@@ -146,18 +143,15 @@ public class GattCharacteristicsResultWrapper
     {
         var list = new List < string > ( ) ;
 
-        foreach ( var format in characteristicPresentationFormats ) {
-            list.Add (
-                      "GattPresentationFormat - "             +
-                      $"Description = {format.Description}, " +
-                      $"FormatType = {format.FormatType}, "   +
-                      $"Namespace = {format.Namespace}, "     +
-                      $"Exponent = {format.Exponent}, "       +
-                      $"Unit = {format.Unit}" ) ;
-        }
+        foreach ( var format in characteristicPresentationFormats )
+            list.Add ( "GattPresentationFormat - "             +
+                       $"Description = {format.Description}, " +
+                       $"FormatType = {format.FormatType}, "   +
+                       $"Namespace = {format.Namespace}, "     +
+                       $"Exponent = {format.Exponent}, "       +
+                       $"Unit = {format.Unit}" ) ;
 
-        return string.Join (
-                            ", " ,
-                            list ) ;
+        return string.Join ( ", " ,
+                             list ) ;
     }
 }

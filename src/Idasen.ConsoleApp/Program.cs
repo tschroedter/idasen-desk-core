@@ -28,16 +28,16 @@ internal sealed class Program
 
         IContainer ? container = null ;
 
-        try {
+        try
+        {
             container = ContainerProvider.Create ( builder.Build ( ) ) ;
 
             var logger   = container.Resolve < ILogger > ( ) ;
             var provider = container.Resolve < IDeskProvider > ( ) ;
 
-            provider.Initialize (
-                                 DefaultDeviceName ,
-                                 DefaultDeviceAddress ,
-                                 DefaultDeviceMonitoringTimeout ) ;
+            provider.Initialize ( DefaultDeviceName ,
+                                  DefaultDeviceAddress ,
+                                  DefaultDeviceMonitoringTimeout ) ;
 
             var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
 
@@ -50,7 +50,8 @@ internal sealed class Program
 
             desk?.Dispose ( ) ;
         }
-        finally {
+        finally
+        {
             container?.Dispose ( ) ;
             LoggerProvider.Shutdown ( ) ;
         }

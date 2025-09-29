@@ -27,28 +27,26 @@ public class DeviceFactoryTests
         _rawSignalStrengthInDBm = - 50 ;
     }
 
-    private IDevice TestFactory (
-        IDateTimeOffset broadcastTime ,
-        ulong           address ,
-        string ?        name ,
-        short           rawSignalStrengthInDBm )
+    private IDevice TestFactory ( IDateTimeOffset broadcastTime ,
+                                  ulong           address ,
+                                  string ?        name ,
+                                  short           rawSignalStrengthInDBm )
     {
-        return new Device (
-                           broadcastTime ,
-                           address ,
-                           name ,
-                           rawSignalStrengthInDBm ) ;
+        return new Device ( broadcastTime ,
+                            address ,
+                            name ,
+                            rawSignalStrengthInDBm ) ;
     }
 
     [ TestMethod ]
     public void Create_ForBroadcastTimesNull_Throws ( )
     {
-        var action = ( ) => {
-                         CreateSut ( ).Create (
-                                               null! ,
-                                               _address ,
-                                               _name ,
-                                               _rawSignalStrengthInDBm ) ;
+        var action = ( ) =>
+                     {
+                         CreateSut ( ).Create ( null! ,
+                                                _address ,
+                                                _name ,
+                                                _rawSignalStrengthInDBm ) ;
                      } ;
 
         action.Should ( )
@@ -59,13 +57,13 @@ public class DeviceFactoryTests
     [ TestMethod ]
     public void CreateForInvoked_ReturnsInstance ( )
     {
-        var actual = CreateSut ( ).Create (
-                                           _broadcastTime ,
-                                           _address ,
-                                           _name ,
-                                           _rawSignalStrengthInDBm ) ;
+        var actual = CreateSut ( ).Create ( _broadcastTime ,
+                                            _address ,
+                                            _name ,
+                                            _rawSignalStrengthInDBm ) ;
 
-        using ( new AssertionScope ( ) ) {
+        using ( new AssertionScope ( ) )
+        {
             actual.BroadcastTime
                   .Should ( )
                   .Be ( _broadcastTime ) ;
@@ -84,5 +82,8 @@ public class DeviceFactoryTests
         }
     }
 
-    private DeviceFactory CreateSut ( ) => new ( _factory ) ;
+    private DeviceFactory CreateSut ( )
+    {
+        return new DeviceFactory ( _factory ) ;
+    }
 }

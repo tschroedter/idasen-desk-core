@@ -81,16 +81,16 @@ public class BluetoothLELinakModule
                .As < IDeskMoveEngine > ( )
                .EnableInterfaceInterceptors ( ) ;
 
-        builder.Register ( ctx => {
+        builder.Register ( ctx =>
+                           {
                                var logger        = ctx.Resolve < ILogger > ( ) ;
                                var settings      = ctx.Resolve < DeskMoverSettings > ( ) ;
                                var heightMonitor = ctx.Resolve < IDeskHeightMonitor > ( ) ;
                                var calculator    = ctx.Resolve < IStoppingHeightCalculator > ( ) ;
-                               return new DeskStopper (
-                                                       logger ,
-                                                       settings ,
-                                                       heightMonitor ,
-                                                       calculator ) ;
+                               return new DeskStopper ( logger ,
+                                                        settings ,
+                                                        heightMonitor ,
+                                                        calculator ) ;
                            } )
                .As < IDeskStopper > ( )
                .EnableInterfaceInterceptors ( ) ;
@@ -156,7 +156,8 @@ public class BluetoothLELinakModule
                .EnableInterfaceInterceptors ( ) ;
 
         // Bind DeskMoverSettings from configuration (if available), fallback to defaults
-        builder.Register ( ctx => {
+        builder.Register ( ctx =>
+                           {
                                if ( ! ctx.TryResolve ( out IConfiguration ? config ) )
                                    return DeskMoverSettings.Default ;
 
@@ -167,48 +168,44 @@ public class BluetoothLELinakModule
 
                                var defaults = DeskMoverSettings.Default ;
 
-                               if ( ! TimeSpan.TryParse (
-                                                         section [ nameof ( DeskMoverSettings.TimerInterval ) ] ,
-                                                         out var timerInterval ) ) {
-                                   timerInterval = long.TryParse (
-                                                                  section [ nameof ( DeskMoverSettings.TimerInterval ) ] ,
-                                                                  out var ms )
-                                                       ? TimeSpan.FromMilliseconds ( ms )
-                                                       : defaults.TimerInterval ;
-                               }
+                               if ( ! TimeSpan.TryParse ( section [ nameof ( DeskMoverSettings.TimerInterval ) ] ,
+                                                          out var timerInterval ) )
+                                   timerInterval =
+                                       long.TryParse ( section [ nameof ( DeskMoverSettings.TimerInterval ) ] ,
+                                                       out var ms )
+                                           ? TimeSpan.FromMilliseconds ( ms )
+                                           : defaults.TimerInterval ;
 
-                               if ( ! TimeSpan.TryParse (
-                                                         section [ nameof ( DeskMoverSettings.KeepAliveInterval ) ] ,
-                                                         out var keepAliveInterval ) ) {
-                                   keepAliveInterval = long.TryParse (
-                                                                      section [ nameof ( DeskMoverSettings.KeepAliveInterval ) ] ,
-                                                                      out var kam )
-                                                           ? TimeSpan.FromMilliseconds ( kam )
-                                                           : defaults.KeepAliveInterval ;
-                               }
+                               if ( ! TimeSpan.TryParse ( section [ nameof ( DeskMoverSettings.KeepAliveInterval ) ] ,
+                                                          out var keepAliveInterval ) )
+                                   keepAliveInterval =
+                                       long.TryParse ( section [ nameof ( DeskMoverSettings.KeepAliveInterval ) ] ,
+                                                       out var kam )
+                                           ? TimeSpan.FromMilliseconds ( kam )
+                                           : defaults.KeepAliveInterval ;
 
                                uint ReadUInt ( string key , uint fallback )
                                {
-                                   return uint.TryParse (
-                                                         section [ key ] ,
-                                                         out var v )
+                                   return uint.TryParse ( section [ key ] ,
+                                                          out var v )
                                               ? v
                                               : fallback ;
                                }
 
-                               return new DeskMoverSettings {
-                                                                TimerInterval = timerInterval ,
-                                                                NearTargetBaseTolerance = ReadUInt (
-                                                                     nameof ( DeskMoverSettings.NearTargetBaseTolerance ) ,
-                                                                     defaults.NearTargetBaseTolerance ) ,
-                                                                NearTargetMaxDynamicTolerance = ReadUInt (
-                                                                     nameof ( DeskMoverSettings.NearTargetMaxDynamicTolerance ) ,
-                                                                     defaults.NearTargetMaxDynamicTolerance ) ,
-                                                                OvershootCompensation = ReadUInt (
-                                                                     nameof ( DeskMoverSettings.OvershootCompensation ) ,
-                                                                     defaults.OvershootCompensation ) ,
-                                                                KeepAliveInterval = keepAliveInterval
-                                                            } ;
+                               return new DeskMoverSettings
+                                      {
+                                          TimerInterval = timerInterval ,
+                                          NearTargetBaseTolerance =
+                                              ReadUInt ( nameof ( DeskMoverSettings.NearTargetBaseTolerance ) ,
+                                                         defaults.NearTargetBaseTolerance ) ,
+                                          NearTargetMaxDynamicTolerance =
+                                              ReadUInt ( nameof ( DeskMoverSettings.NearTargetMaxDynamicTolerance ) ,
+                                                         defaults.NearTargetMaxDynamicTolerance ) ,
+                                          OvershootCompensation =
+                                              ReadUInt ( nameof ( DeskMoverSettings.OvershootCompensation ) ,
+                                                         defaults.OvershootCompensation ) ,
+                                          KeepAliveInterval = keepAliveInterval
+                                      } ;
                            } )
                .AsSelf ( )
                .SingleInstance ( ) ;

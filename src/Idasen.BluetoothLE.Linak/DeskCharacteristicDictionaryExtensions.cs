@@ -13,41 +13,31 @@ public static class DeskCharacteristicDictionaryExtensions
     ///     A map of default unknown characteristic instances used when a specific characteristic is missing.
     ///     Kept for backward compatibility; prefer the internal factories in this class.
     /// </summary>
-    [ UsedImplicitly ]
-    public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
-        new ( ) {
-                    {DeskCharacteristicKey.GenericAccess , new GenericAccess ( )} ,
-                    {DeskCharacteristicKey.GenericAttribute , new GenericAttribute ( )} ,
-                    {DeskCharacteristicKey.ReferenceInput , new ReferenceInput ( )} ,
-                    {DeskCharacteristicKey.ReferenceOutput , new ReferenceOutput ( )} ,
-                    {DeskCharacteristicKey.Dpg , new Dpg ( )} ,
-                    {DeskCharacteristicKey.Control , new Characteristics.Characteristics.Unknowns.Control ( )}
-                } ;
+    [ UsedImplicitly ] public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
+        new( )
+        {
+            { DeskCharacteristicKey.GenericAccess , new GenericAccess ( ) } ,
+            { DeskCharacteristicKey.GenericAttribute , new GenericAttribute ( ) } ,
+            { DeskCharacteristicKey.ReferenceInput , new ReferenceInput ( ) } ,
+            { DeskCharacteristicKey.ReferenceOutput , new ReferenceOutput ( ) } ,
+            { DeskCharacteristicKey.Dpg , new Dpg ( ) } ,
+            { DeskCharacteristicKey.Control , new Characteristics.Characteristics.Unknowns.Control ( ) }
+        } ;
 
-    private static readonly IReadOnlyDictionary < DeskCharacteristicKey , Func < ICharacteristicBase > > UnknownFactories =
-        new Dictionary < DeskCharacteristicKey , Func < ICharacteristicBase > > {
-                                                                                    {
-                                                                                        DeskCharacteristicKey.GenericAccess ,
-                                                                                        static ( ) => new GenericAccess ( )
-                                                                                    } , {
-                                                                                        DeskCharacteristicKey.GenericAttribute ,
-                                                                                        static ( ) => new GenericAttribute ( )
-                                                                                    } , {
-                                                                                        DeskCharacteristicKey.ReferenceInput ,
-                                                                                        static ( ) => new ReferenceInput ( )
-                                                                                    } , {
-                                                                                        DeskCharacteristicKey.ReferenceOutput ,
-                                                                                        static ( ) => new ReferenceOutput ( )
-                                                                                    } , {
-                                                                                        DeskCharacteristicKey.Dpg ,
-                                                                                        static ( ) => new Dpg ( )
-                                                                                    } , {
-                                                                                        DeskCharacteristicKey.Control ,
-                                                                                        static ( ) =>
-                                                                                            new Characteristics.Characteristics.Unknowns.
-                                                                                                Control ( )
-                                                                                    }
-                                                                                } ;
+    private static readonly IReadOnlyDictionary < DeskCharacteristicKey , Func < ICharacteristicBase > >
+        UnknownFactories =
+            new Dictionary < DeskCharacteristicKey , Func < ICharacteristicBase > >
+            {
+                { DeskCharacteristicKey.GenericAccess , static ( ) => new GenericAccess ( ) } ,
+                { DeskCharacteristicKey.GenericAttribute , static ( ) => new GenericAttribute ( ) } ,
+                { DeskCharacteristicKey.ReferenceInput , static ( ) => new ReferenceInput ( ) } ,
+                { DeskCharacteristicKey.ReferenceOutput , static ( ) => new ReferenceOutput ( ) } ,
+                { DeskCharacteristicKey.Dpg , static ( ) => new Dpg ( ) } ,
+                {
+                    DeskCharacteristicKey.Control , static ( ) =>
+                                                        new Characteristics.Characteristics.Unknowns.Control ( )
+                }
+            } ;
 
     /// <summary>
     ///     Attempts to retrieve a typed characteristic from the dictionary. Falls back to an unknown instance if not present.
@@ -59,46 +49,40 @@ public static class DeskCharacteristicDictionaryExtensions
     /// <exception cref="ArgumentNullException">Thrown when the dictionary is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the key is invalid or not recognized.</exception>
     /// <exception cref="InvalidCastException">Thrown when the characteristic does not implement the requested type.</exception>
-    public static T As < T > (
-        this IReadOnlyDictionary < DeskCharacteristicKey , ICharacteristicBase > dictionary ,
-        DeskCharacteristicKey                                                    key )
+    public static T As < T > ( this IReadOnlyDictionary < DeskCharacteristicKey , ICharacteristicBase > dictionary ,
+                               DeskCharacteristicKey                                                    key )
     {
         ArgumentNullException.ThrowIfNull ( dictionary ) ;
 
-        if ( key == DeskCharacteristicKey.None ) {
-            throw new ArgumentOutOfRangeException (
-                                                   nameof ( key ) ,
-                                                   key ,
-                                                   "Key must not be None." ) ;
-        }
+        if ( key == DeskCharacteristicKey.None )
+            throw new ArgumentOutOfRangeException ( nameof ( key ) ,
+                                                    key ,
+                                                    "Key must not be None." ) ;
 
-        if ( dictionary.TryGetValue (
-                                     key ,
-                                     out var characteristicBase ) ) {
+        if ( dictionary.TryGetValue ( key ,
+                                      out var characteristicBase ) )
+        {
             if ( characteristicBase is T typed )
                 return typed ;
 
             throw new
-                InvalidCastException (
-                                      $"Characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {characteristicBase.GetType ( ).Name})." ) ;
+                InvalidCastException ( $"Characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {characteristicBase.GetType ( ).Name})." ) ;
         }
 
-        if ( UnknownFactories.TryGetValue (
-                                           key ,
-                                           out var factory ) ) {
+        if ( UnknownFactories.TryGetValue ( key ,
+                                            out var factory ) )
+        {
             var unknown = factory ( ) ;
 
             if ( unknown is T typedUnknown )
                 return typedUnknown ;
 
             throw new
-                InvalidCastException (
-                                      $"Unknown characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {unknown.GetType ( ).Name})." ) ;
+                InvalidCastException ( $"Unknown characteristic for key '{key}' is not of type {typeof ( T ).Name} (actual: {unknown.GetType ( ).Name})." ) ;
         }
 
-        throw new ArgumentOutOfRangeException (
-                                               nameof ( key ) ,
-                                               key ,
-                                               "Unknown characteristic key." ) ;
+        throw new ArgumentOutOfRangeException ( nameof ( key ) ,
+                                                key ,
+                                                "Unknown characteristic key." ) ;
     }
 }

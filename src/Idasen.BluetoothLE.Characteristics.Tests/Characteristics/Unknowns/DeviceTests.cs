@@ -22,7 +22,8 @@ public class DeviceTests
     [ TestMethod ]
     public void GattServicesRefreshed_ForInvoked_Throws ( )
     {
-        var action = ( ) => {
+        var action = ( ) =>
+                     {
                          using var sut = CreateSut ( ) ;
 
                          sut.GattServicesRefreshed
@@ -36,7 +37,7 @@ public class DeviceTests
     [ TestMethod ]
     public void GattCommunicationStatus_ForInvoked_Unreachable ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.GattCommunicationStatus
            .Should ( )
@@ -46,7 +47,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Name_ForInvoked_UnknownName ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.Name
            .Should ( )
@@ -56,7 +57,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Id_ForInvoked_UnknownId ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.Id
            .Should ( )
@@ -66,7 +67,7 @@ public class DeviceTests
     [ TestMethod ]
     public void Constructor_ForInvoked_False ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.IsPaired
            .Should ( )
@@ -76,7 +77,7 @@ public class DeviceTests
     [ TestMethod ]
     public void GattServices_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.GattServices
            .Should ( )
@@ -86,7 +87,7 @@ public class DeviceTests
     [ TestMethod ]
     public void ConnectionStatus_ForInvoked_Disconnected ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.ConnectionStatus
            .Should ( )
@@ -111,5 +112,8 @@ public class DeviceTests
               .NotThrow < Exception > ( ) ;
     }
 
-    private Device CreateSut ( ) => new ( ) ;
+    private Device CreateSut ( )
+    {
+        return new Device ( ) ;
+    }
 }

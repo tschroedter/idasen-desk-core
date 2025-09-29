@@ -27,8 +27,7 @@ public class DeskDetectorTests : IDisposable
     private ILogger                  _logger  = null! ;
     private IDeviceMonitorWithExpiry _monitor = null! ;
 
-    [ UsedImplicitly ]
-    private Subject < IDevice > _nameChanged = null! ;
+    [ UsedImplicitly ] private Subject < IDevice > _nameChanged = null! ;
 
     private TestScheduler       _scheduler = null! ;
     private Subject < IDevice > _updated   = null! ;
@@ -76,18 +75,16 @@ public class DeskDetectorTests : IDisposable
         _desk      = Substitute.For < IDesk > ( ) ;
         _deskOther = Substitute.For < IDesk > ( ) ;
         _factory.CreateAsync ( _device.Address )
-                .Returns (
-                          _desk ,
-                          _deskOther ) ;
+                .Returns ( _desk ,
+                           _deskOther ) ;
     }
 
     [ TestMethod ]
     public void Initialize_ForDeviceNameIsNull_Throws ( )
     {
-        Action action = ( ) => CreateSut ( ).Initialize (
-                                                         null! ,
-                                                         DeviceAddress ,
-                                                         DeviceTimeout ) ;
+        Action action = ( ) => CreateSut ( ).Initialize ( null! ,
+                                                          DeviceAddress ,
+                                                          DeviceTimeout ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -99,10 +96,9 @@ public class DeskDetectorTests : IDisposable
     {
         using var sut = CreateSut ( ) ;
 
-        sut.Initialize (
-                        DeviceName ,
-                        DeviceAddress ,
-                        DeviceTimeout ) ;
+        sut.Initialize ( DeviceName ,
+                         DeviceAddress ,
+                         DeviceTimeout ) ;
 
         _monitor.TimeOut
                 .Should ( )
@@ -114,10 +110,9 @@ public class DeskDetectorTests : IDisposable
     {
         using var sut = CreateSut ( ) ;
 
-        sut.Initialize (
-                        DeviceName ,
-                        DeviceAddress ,
-                        DeviceTimeout ) ;
+        sut.Initialize ( DeviceName ,
+                         DeviceAddress ,
+                         DeviceTimeout ) ;
 
         // connect to desk
         sut.Start ( ) ;
@@ -149,11 +144,10 @@ public class DeskDetectorTests : IDisposable
 
     private DeskDetector CreateSut ( )
     {
-        return new DeskDetector (
-                                 _logger ,
-                                 _scheduler ,
-                                 _monitor ,
-                                 _factory ,
-                                 _deskDetected ) ;
+        return new DeskDetector ( _logger ,
+                                  _scheduler ,
+                                  _monitor ,
+                                  _factory ,
+                                  _deskDetected ) ;
     }
 }

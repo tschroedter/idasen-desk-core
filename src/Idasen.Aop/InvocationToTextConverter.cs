@@ -48,7 +48,8 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
         var builder = new StringBuilder ( ) ;
 
-        for ( var i = 0 ; i < arguments.Length ; i ++ ) {
+        for ( var i = 0 ; i < arguments.Length ; i ++ )
+        {
             _ = builder.Append ( $"arg{i}=" ) ;
             _ = builder.Append ( ToValueString ( arguments [ i ] ) ) ;
 
@@ -73,7 +74,8 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
         var parameters = invocation.Method.GetParameters ( ) ;
         var builder    = new StringBuilder ( ) ;
 
-        for ( var i = 0 ; i < args.Length ; i ++ ) {
+        for ( var i = 0 ; i < args.Length ; i ++ )
+        {
             var name = i < parameters.Length
                            ? parameters [ i ].Name
                            : $"arg{i}" ;
@@ -105,9 +107,8 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
         // IsByRef is true for ref/out
         return p.ParameterType.IsByRef
                    ? "ref "
-                   : p.IsDefined (
-                                  typeof ( ParamArrayAttribute ) ,
-                                  false )
+                   : p.IsDefined ( typeof ( ParamArrayAttribute ) ,
+                                   false )
                        ? "params "
                        : string.Empty ;
     }
@@ -143,7 +144,8 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
     {
         var t = value.GetType ( ) ;
 
-        foreach ( var i in t.GetInterfaces ( ) ) {
+        foreach ( var i in t.GetInterfaces ( ) )
+        {
             if ( ! i.IsGenericType )
                 continue ;
 

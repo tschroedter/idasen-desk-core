@@ -29,9 +29,8 @@ public class GattReadResultWrapper
     /// </summary>
     public GattReadResultWrapper ( GattReadResult result )
     {
-        Guard.ArgumentNotNull (
-                               result ,
-                               nameof ( result ) ) ;
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
         _result = result ;
     }

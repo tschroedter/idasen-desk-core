@@ -17,23 +17,22 @@ public sealed class CallerEnricher : ILogEventEnricher
     /// </summary>
     /// <param name="logEvent">The log event to enrich.</param>
     /// <param name="propertyFactory">Factory for creating log event properties.</param>
-    public void Enrich (
-        LogEvent                 logEvent ,
-        ILogEventPropertyFactory propertyFactory )
+    public void Enrich ( LogEvent                 logEvent ,
+                         ILogEventPropertyFactory propertyFactory )
     {
         ArgumentNullException.ThrowIfNull ( logEvent ) ;
         ArgumentNullException.ThrowIfNull ( propertyFactory ) ;
 
         var skip = 3 ;
 
-        while ( true ) {
+        while ( true )
+        {
             var stack = new StackFrame ( skip ) ;
 
-            if ( ! stack.HasMethod ( ) ) {
-                logEvent.AddPropertyIfAbsent (
-                                              new LogEventProperty (
-                                                                    "Caller" ,
-                                                                    new ScalarValue ( "<unknown method>" ) ) ) ;
+            if ( ! stack.HasMethod ( ) )
+            {
+                logEvent.AddPropertyIfAbsent ( new LogEventProperty ( "Caller" ,
+                                                                      new ScalarValue ( "<unknown method>" ) ) ) ;
 
                 return ;
             }
@@ -41,18 +40,16 @@ public sealed class CallerEnricher : ILogEventEnricher
             var method = stack.GetMethod ( ) ;
 
             if ( method               != null &&
-                 method.DeclaringType != null ) {
-                if ( method.DeclaringType.Assembly != typeof ( Log ).Assembly ) {
+                 method.DeclaringType != null )
+                if ( method.DeclaringType.Assembly != typeof ( Log ).Assembly )
+                {
                     var caller =
                         $"{method.DeclaringType.FullName}.{method.Name}({string.Join ( ", " , method.GetParameters ( ).Select ( pi => pi.ParameterType.FullName ) )})" ;
-                    logEvent.AddPropertyIfAbsent (
-                                                  new LogEventProperty (
-                                                                        "Caller" ,
-                                                                        new ScalarValue ( caller ) ) ) ;
+                    logEvent.AddPropertyIfAbsent ( new LogEventProperty ( "Caller" ,
+                                                                          new ScalarValue ( caller ) ) ) ;
 
                     return ;
                 }
-            }
 
             skip ++ ;
         }

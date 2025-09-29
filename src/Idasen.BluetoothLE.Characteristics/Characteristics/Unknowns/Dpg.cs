@@ -3,7 +3,8 @@
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
 public class Dpg
-    : UnknownBase , IDpg
+    : UnknownBase ,
+      IDpg
 {
     public IEnumerable < byte > RawDpg { get ; } = RawArrayEmpty ;
 }

@@ -8,24 +8,18 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 public class StatusMapperTests
 {
     [ TestMethod ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Started ,
-                  Status.Started ) ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Aborted ,
-                  Status.Aborted ) ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Created ,
-                  Status.Created ) ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Stopped ,
-                  Status.Stopped ) ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Stopping ,
-                  Status.Stopping ) ]
-    public void Map_ForStatus_ReturnsWatcherStatus (
-        BluetoothLEAdvertisementWatcherStatus bluetoothStatus ,
-        Status                                status )
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Started ,
+                Status.Started ) ]
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Aborted ,
+                Status.Aborted ) ]
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Created ,
+                Status.Created ) ]
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Stopped ,
+                Status.Stopped ) ]
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Stopping ,
+                Status.Stopping ) ]
+    public void Map_ForStatus_ReturnsWatcherStatus ( BluetoothLEAdvertisementWatcherStatus bluetoothStatus ,
+                                                     Status                                status )
     {
         CreateSut ( ).Map ( bluetoothStatus )
                      .Should ( )

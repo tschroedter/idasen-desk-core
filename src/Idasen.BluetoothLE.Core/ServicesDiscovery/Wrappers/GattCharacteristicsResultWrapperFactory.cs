@@ -14,23 +14,19 @@ public class GattCharacteristicsResultWrapperFactory
 {
     private readonly GattCharacteristicsResultWrapper.Factory _factory ;
 
-    public GattCharacteristicsResultWrapperFactory (
-        GattCharacteristicsResultWrapper.Factory factory )
+    public GattCharacteristicsResultWrapperFactory ( GattCharacteristicsResultWrapper.Factory factory )
     {
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
         _factory = factory ;
     }
 
     /// <inheritdoc />
-    public IGattCharacteristicsResultWrapper Create (
-        GattCharacteristicsResult result )
+    public IGattCharacteristicsResultWrapper Create ( GattCharacteristicsResult result )
     {
-        Guard.ArgumentNotNull (
-                               result ,
-                               nameof ( result ) ) ;
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
         return _factory ( result ) ;
     }

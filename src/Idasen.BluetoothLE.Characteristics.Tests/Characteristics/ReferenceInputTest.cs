@@ -41,21 +41,19 @@ public class ReferenceInputTest
 
     protected override ReferenceInput CreateSut ( )
     {
-        return new ReferenceInput (
-                                   Logger ,
-                                   Scheduler ,
-                                   Device ,
-                                   ProviderFactory ,
-                                   RawValueReader ,
-                                   RawValueWriter ,
-                                   ToStringConverter ,
-                                   DescriptionToUuid ) ;
+        return new ReferenceInput ( Logger ,
+                                    Scheduler ,
+                                    Device ,
+                                    ProviderFactory ,
+                                    RawValueReader ,
+                                    RawValueWriter ,
+                                    ToStringConverter ,
+                                    DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add (
-                      ReferenceInput.Ctrl1Key ,
-                      CharacteristicWrapper1 ) ;
+        Wrappers.Add ( ReferenceInput.Ctrl1Key ,
+                       CharacteristicWrapper1 ) ;
     }
 }

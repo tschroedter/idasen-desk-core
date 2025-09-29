@@ -38,9 +38,8 @@ public interface IDevices
     ///     address is found; otherwise, the default null. This parameter is passed uninitialized.
     /// </param>
     /// <returns>true if the dictionary contains an element with the specified key; otherwise, false.</returns>
-    bool TryGetDevice (
-        ulong         address ,
-        out IDevice ? device ) ;
+    bool TryGetDevice ( ulong         address ,
+                        out IDevice ? device ) ;
 
     /// <summary>
     ///     Remove the given device from the collection.

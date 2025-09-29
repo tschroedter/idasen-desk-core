@@ -41,21 +41,19 @@ public class DpgTest
 
     protected override Dpg CreateSut ( )
     {
-        return new Dpg (
-                        Logger ,
-                        Scheduler ,
-                        Device ,
-                        ProviderFactory ,
-                        RawValueReader ,
-                        RawValueWriter ,
-                        ToStringConverter ,
-                        DescriptionToUuid ) ;
+        return new Dpg ( Logger ,
+                         Scheduler ,
+                         Device ,
+                         ProviderFactory ,
+                         RawValueReader ,
+                         RawValueWriter ,
+                         ToStringConverter ,
+                         DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add (
-                      Dpg.DpgKey ,
-                      CharacteristicWrapper1 ) ;
+        Wrappers.Add ( Dpg.DpgKey ,
+                       CharacteristicWrapper1 ) ;
     }
 }

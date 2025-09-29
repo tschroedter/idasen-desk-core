@@ -19,9 +19,8 @@ public class ErrorManager // todo testing, move to more general project
     /// <summary>
     ///     Initializes a new instance of the <see cref="ErrorManager" /> class.
     /// </summary>
-    public ErrorManager (
-        ILogger                    logger ,
-        ISubject < IErrorDetails > subject )
+    public ErrorManager ( ILogger                    logger ,
+                          ISubject < IErrorDetails > subject )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( subject ) ;
@@ -42,28 +41,23 @@ public class ErrorManager // todo testing, move to more general project
     {
         ArgumentNullException.ThrowIfNull ( details ) ;
 
-        _logger.Debug (
-                       "Received {Details}" ,
-                       details ) ;
+        _logger.Debug ( "Received {Details}" ,
+                        details ) ;
 
         _subject.OnNext ( details ) ;
     }
 
     /// <inheritdoc />
-    public void PublishForMessage (
-        string                      message ,
-        [ CallerMemberName ] string caller = "" )
+    public void PublishForMessage ( string                      message ,
+                                    [ CallerMemberName ] string caller = "" )
     {
         ArgumentNullException.ThrowIfNull ( message ) ;
 
-        _logger.Debug (
-                       "Received {Message}" ,
-                       message ) ;
+        _logger.Debug ( "Received {Message}" ,
+                        message ) ;
 
-        _subject.OnNext (
-                         new ErrorDetails (
-                                           message ,
-                                           caller ) ) ;
+        _subject.OnNext ( new ErrorDetails ( message ,
+                                             caller ) ) ;
     }
 
     // Return the underlying subject to satisfy existing unit tests
@@ -74,17 +68,17 @@ public class ErrorManager // todo testing, move to more general project
         if ( _disposed )
             return ;
 
-        if ( disposing ) {
+        if ( disposing )
             // Complete the stream to release subscribers in long-running apps
-            try {
+            try
+            {
                 _subject.OnCompleted ( ) ;
             }
-            catch ( Exception ex ) {
-                _logger.Warning (
-                                 ex ,
-                                 "Error completing ErrorChanged stream" ) ;
+            catch ( Exception ex )
+            {
+                _logger.Warning ( ex ,
+                                  "Error completing ErrorChanged stream" ) ;
             }
-        }
 
         _disposed = true ;
     }

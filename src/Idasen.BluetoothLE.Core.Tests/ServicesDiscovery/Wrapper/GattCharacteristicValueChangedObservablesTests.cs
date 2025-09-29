@@ -22,15 +22,13 @@ public class GattCharacteristicValueChangedObservablesTests
         _logger    = Substitute.For < ILogger > ( ) ;
         _subject   = new Subject < GattCharacteristicValueChangedDetails > ( ) ;
         _scheduler = Substitute.For < IScheduler > ( ) ;
-        _details = new GattCharacteristicValueChangedDetails (
-                                                              Guid.NewGuid ( ) ,
-                                                              [] ,
-                                                              DateTimeOffset.Now ) ;
+        _details = new GattCharacteristicValueChangedDetails ( Guid.NewGuid ( ) ,
+                                                               [] ,
+                                                               DateTimeOffset.Now ) ;
     }
 
     [ AutoDataTestMethod ]
-    public void Create_ForInvoked_Instance (
-        GattCharacteristicValueChangedObservables sut )
+    public void Create_ForInvoked_Instance ( GattCharacteristicValueChangedObservables sut )
     {
         sut.Should ( )
            .NotBeNull ( ) ;
@@ -41,10 +39,9 @@ public class GattCharacteristicValueChangedObservablesTests
     {
         var uuid = Guid.Empty ;
 
-        using var sut = new GattCharacteristicValueChangedObservables (
-                                                                       _logger ,
-                                                                       _scheduler ,
-                                                                       _subject ) ;
+        using var sut = new GattCharacteristicValueChangedObservables ( _logger ,
+                                                                        _scheduler ,
+                                                                        _subject ) ;
 
         using var disposable = sut.ValueChanged
                                   .Subscribe ( x => { uuid = x.Uuid ; } ) ;

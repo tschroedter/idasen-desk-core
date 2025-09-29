@@ -8,9 +8,8 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 public class GattCharacteristicValueChangedDetailsTests
 {
     [ AutoDataTestMethod ]
-    public void Constructor_ForInvoked_SetsUuid (
-        GattCharacteristicValueChangedDetails sut ,
-        [ Freeze ] Guid                       uuid )
+    public void Constructor_ForInvoked_SetsUuid ( GattCharacteristicValueChangedDetails sut ,
+                                                  [ Freeze ] Guid                       uuid )
     {
         sut.Uuid
            .Should ( )
@@ -18,9 +17,8 @@ public class GattCharacteristicValueChangedDetailsTests
     }
 
     [ AutoDataTestMethod ]
-    public void Constructor_ForInvoked_SetsValue (
-        GattCharacteristicValueChangedDetails sut ,
-        [ Freeze ] IEnumerable < byte >       value )
+    public void Constructor_ForInvoked_SetsValue ( GattCharacteristicValueChangedDetails sut ,
+                                                   [ Freeze ] IEnumerable < byte >       value )
     {
         sut.Value
            .Should ( )
@@ -28,9 +26,8 @@ public class GattCharacteristicValueChangedDetailsTests
     }
 
     [ AutoDataTestMethod ]
-    public void Constructor_ForInvoked_SetsTimestamp (
-        GattCharacteristicValueChangedDetails sut ,
-        [ Freeze ] DateTimeOffset             timestamp )
+    public void Constructor_ForInvoked_SetsTimestamp ( GattCharacteristicValueChangedDetails sut ,
+                                                       [ Freeze ] DateTimeOffset             timestamp )
     {
         sut.Timestamp
            .Should ( )

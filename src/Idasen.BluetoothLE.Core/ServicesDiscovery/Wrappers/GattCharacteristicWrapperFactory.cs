@@ -12,12 +12,10 @@ public class GattCharacteristicWrapperFactory
 {
     private readonly GattCharacteristicWrapper.Factory _factory ;
 
-    public GattCharacteristicWrapperFactory (
-        GattCharacteristicWrapper.Factory factory )
+    public GattCharacteristicWrapperFactory ( GattCharacteristicWrapper.Factory factory )
     {
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
         _factory = factory ;
     }
@@ -25,9 +23,8 @@ public class GattCharacteristicWrapperFactory
     [ ExcludeFromCodeCoverage ]
     public IGattCharacteristicWrapper Create ( GattCharacteristic characteristic )
     {
-        Guard.ArgumentNotNull (
-                               characteristic ,
-                               nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
 
         return _factory ( characteristic ) ;
     }

@@ -10,7 +10,7 @@ public class GenericAccessTests
     [ TestMethod ]
     public void GattServiceUuid_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.GattServiceUuid
            .Should ( )
@@ -20,7 +20,7 @@ public class GenericAccessTests
     [ TestMethod ]
     public void RawResolution_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawResolution
            .Should ( )
@@ -30,7 +30,7 @@ public class GenericAccessTests
     [ TestMethod ]
     public void RawParameters_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawParameters
            .Should ( )
@@ -40,7 +40,7 @@ public class GenericAccessTests
     [ TestMethod ]
     public void RawAppearance_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawAppearance
            .Should ( )
@@ -50,7 +50,7 @@ public class GenericAccessTests
     [ TestMethod ]
     public void RawDeviceName_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawDeviceName
            .Should ( )
@@ -97,5 +97,8 @@ public class GenericAccessTests
               .Throw < NotInitializeException > ( ) ;
     }
 
-    private GenericAccess CreateSut ( ) => new ( ) ;
+    private GenericAccess CreateSut ( )
+    {
+        return new GenericAccess ( ) ;
+    }
 }

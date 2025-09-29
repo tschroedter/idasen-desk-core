@@ -9,9 +9,8 @@ public class DeviceComparer
     : IDeviceComparer
 {
     /// <inheritdoc />
-    public bool Equals (
-        IDevice ? deviceA ,
-        IDevice ? deviceB )
+    public bool Equals ( IDevice ? deviceA ,
+                         IDevice ? deviceB )
     {
         if ( deviceA == null ||
              deviceB == null )
@@ -24,9 +23,8 @@ public class DeviceComparer
     }
 
     /// <inheritdoc />
-    public bool IsEquivalentTo (
-        IDevice ? deviceA ,
-        IDevice ? deviceB )
+    public bool IsEquivalentTo ( IDevice ? deviceA ,
+                                 IDevice ? deviceB )
     {
         if ( deviceA == null ||
              deviceB == null )

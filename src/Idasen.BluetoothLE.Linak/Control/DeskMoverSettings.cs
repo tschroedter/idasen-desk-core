@@ -35,5 +35,5 @@ public class DeskMoverSettings // todo make all the properties settable via ISet
     /// <summary>
     ///     Provides a shared default <see cref="DeskMoverSettings" /> instance with standard values.
     /// </summary>
-    public static DeskMoverSettings Default { get ; } = new ( ) ;
+    public static DeskMoverSettings Default { get ; } = new( ) ;
 }

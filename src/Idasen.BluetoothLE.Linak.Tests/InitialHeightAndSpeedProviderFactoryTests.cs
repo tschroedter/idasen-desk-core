@@ -9,14 +9,12 @@ namespace Idasen.BluetoothLE.Linak.Tests ;
 public class InitialHeightAndSpeedProviderFactoryTests
 {
     [ AutoDataTestMethod ]
-    public void Create_ForInvoked_Instance (
-        InitialHeightAndSpeedProviderFactory sut ,
-        IDeskCommandExecutor                 executor ,
-        IDeskHeightAndSpeed                  heightAndSpeed )
+    public void Create_ForInvoked_Instance ( InitialHeightAndSpeedProviderFactory sut ,
+                                             IDeskCommandExecutor                 executor ,
+                                             IDeskHeightAndSpeed                  heightAndSpeed )
     {
-        sut.Create (
-                    executor ,
-                    heightAndSpeed )
+        sut.Create ( executor ,
+                     heightAndSpeed )
            .Should ( )
            .NotBeNull ( ) ;
     }

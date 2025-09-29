@@ -15,10 +15,9 @@ public interface IDeskStopper
     /// <summary>
     ///     Evaluates current state and returns stop decision and desired direction.
     /// </summary>
-    StopDetails ShouldStop (
-        uint      height ,
-        int       speed ,
-        uint      targetHeight ,
-        Direction startMovingIntoDirection ,
-        Direction currentCommandedDirection ) ;
+    StopDetails ShouldStop ( uint      height ,
+                             int       speed ,
+                             uint      targetHeight ,
+                             Direction startMovingIntoDirection ,
+                             Direction currentCommandedDirection ) ;
 }

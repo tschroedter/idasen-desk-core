@@ -16,9 +16,8 @@ public class BluetoothLeDeviceWrapperFactory
 
     public BluetoothLeDeviceWrapperFactory ( BluetoothLeDeviceWrapper.Factory factory )
     {
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
         _factory = factory ;
     }

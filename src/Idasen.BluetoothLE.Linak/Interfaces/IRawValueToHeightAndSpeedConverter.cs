@@ -20,8 +20,7 @@ public interface IRawValueToHeightAndSpeedConverter
     /// <returns>
     ///     true if the bytes could be converted successfully; otherwise, false.
     /// </returns>
-    bool TryConvert (
-        IEnumerable < byte > bytes ,
-        out uint             height ,
-        out int              speed ) ;
+    bool TryConvert ( IEnumerable < byte > bytes ,
+                      out uint             height ,
+                      out int              speed ) ;
 }

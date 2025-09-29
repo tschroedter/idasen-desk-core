@@ -12,25 +12,22 @@ public abstract class DeskRaiseEventForDeskBase < TSubject >
     public bool WasCalled { get ; private set ; }
 
     [ AutoDataTestMethod ]
-    public void RefreshedChanged_ForEventRaised_GetsNotified (
-        Desk                 _ ,
-        IDeskConnector       connector ,
-        Subject < TSubject > subject ,
-        TestScheduler        scheduler )
+    public void RefreshedChanged_ForEventRaised_GetsNotified ( Desk                 _ ,
+                                                               IDeskConnector       connector ,
+                                                               Subject < TSubject > subject ,
+                                                               TestScheduler        scheduler )
     {
         ArgumentNullException.ThrowIfNull ( connector ) ;
         ArgumentNullException.ThrowIfNull ( subject ) ;
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
 
-        SetSubject (
-                    connector ,
-                    subject ) ;
+        SetSubject ( connector ,
+                     subject ) ;
 
         using var sut = new Desk ( connector ) ;
 
-        SetSubscription (
-                         sut ,
-                         scheduler ) ;
+        SetSubscription ( sut ,
+                          scheduler ) ;
 
         subject.OnNext ( default! ) ;
 
@@ -40,13 +37,14 @@ public abstract class DeskRaiseEventForDeskBase < TSubject >
                  .BeTrue ( ) ;
     }
 
-    protected abstract void SetSubscription (
-        IDesk         desk ,
-        TestScheduler scheduler ) ;
+    protected abstract void SetSubscription ( IDesk         desk ,
+                                              TestScheduler scheduler ) ;
 
-    protected abstract void SetSubject (
-        IDeskConnector       connector ,
-        Subject < TSubject > subject ) ;
+    protected abstract void SetSubject ( IDeskConnector       connector ,
+                                         Subject < TSubject > subject ) ;
 
-    public void OnRaised ( TSubject value ) => WasCalled = true ;
+    public void OnRaised ( TSubject value )
+    {
+        WasCalled = true ;
+    }
 }

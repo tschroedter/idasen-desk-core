@@ -12,10 +12,9 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 public class DeskLocker
     : IDeskLocker
 {
-    public delegate IDeskLocker Factory (
-        IDeskMover           deskMover ,
-        IDeskCommandExecutor executor ,
-        IDeskHeightAndSpeed  heightAndSpeed ) ;
+    public delegate IDeskLocker Factory ( IDeskMover           deskMover ,
+                                          IDeskCommandExecutor executor ,
+                                          IDeskHeightAndSpeed  heightAndSpeed ) ;
 
     private readonly IDeskMover           _deskMover ;
     private readonly IDeskCommandExecutor _executor ;
@@ -31,12 +30,11 @@ public class DeskLocker
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskLocker" /> class.
     /// </summary>
-    public DeskLocker (
-        ILogger              logger ,
-        IScheduler           scheduler ,
-        IDeskMover           deskMover ,
-        IDeskCommandExecutor executor ,
-        IDeskHeightAndSpeed  heightAndSpeed )
+    public DeskLocker ( ILogger              logger ,
+                        IScheduler           scheduler ,
+                        IDeskMover           deskMover ,
+                        IDeskCommandExecutor executor ,
+                        IDeskHeightAndSpeed  heightAndSpeed )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
@@ -98,7 +96,8 @@ public class DeskLocker
         if ( _disposed )
             return ;
 
-        if ( disposing ) {
+        if ( disposing )
+        {
             _disposalHeightAndSpeed?.Dispose ( ) ;
             _disposalHeightAndSpeed = null ;
         }
@@ -114,17 +113,17 @@ public class DeskLocker
         if ( _deskMover.IsAllowedToMove )
             return ;
 
-        _logger.Information (
-                             "Manual move detected. Calling Stop. Details={Details}" ,
-                             details ) ;
+        _logger.Information ( "Manual move detected. Calling Stop. Details={Details}" ,
+                              details ) ;
 
-        try {
+        try
+        {
             await _executor.Stop ( ).ConfigureAwait ( false ) ;
         }
-        catch ( Exception ex ) {
-            _logger.Error (
-                           ex ,
-                           "Error while stopping after manual move detection" ) ;
+        catch ( Exception ex )
+        {
+            _logger.Error ( ex ,
+                            "Error while stopping after manual move detection" ) ;
         }
     }
 }

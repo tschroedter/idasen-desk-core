@@ -20,10 +20,9 @@ public class DeskFactory
     /// <param name="deviceFactory">The device factory.</param>
     /// <param name="deskConnectorFactory">The desk connector factory.</param>
     /// <param name="deskFactory">The desk factory.</param>
-    public DeskFactory (
-        IDeviceFactory                    deviceFactory ,
-        Func < IDevice , IDeskConnector > deskConnectorFactory ,
-        Func < IDeskConnector , IDesk >   deskFactory )
+    public DeskFactory ( IDeviceFactory                    deviceFactory ,
+                         Func < IDevice , IDeskConnector > deskConnectorFactory ,
+                         Func < IDeskConnector , IDesk >   deskFactory )
     {
         ArgumentNullException.ThrowIfNull ( deskConnectorFactory ) ;
         ArgumentNullException.ThrowIfNull ( deviceFactory ) ;

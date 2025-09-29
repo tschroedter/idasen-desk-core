@@ -9,7 +9,7 @@ public class ControlTests
     [ TestMethod ]
     public void RawControl2_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawControl2
            .Should ( )
@@ -19,7 +19,7 @@ public class ControlTests
     [ TestMethod ]
     public void RawControl3_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawControl3
            .Should ( )
@@ -29,7 +29,7 @@ public class ControlTests
     [ TestMethod ]
     public async Task TryWriteRawControl2_ForInvoked_ReturnsFalse ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         var result = await sut.TryWriteRawControl2 ( [] ) ;
 
@@ -37,5 +37,8 @@ public class ControlTests
               .BeFalse ( ) ;
     }
 
-    private Control CreateSut ( ) => new ( ) ;
+    private Control CreateSut ( )
+    {
+        return new Control ( ) ;
+    }
 }

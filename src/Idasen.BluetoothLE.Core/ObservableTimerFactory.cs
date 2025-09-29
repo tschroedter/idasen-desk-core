@@ -15,21 +15,17 @@ public sealed class ObservableTimerFactory
     : IObservableTimerFactory
 {
     /// <inheritdoc />
-    public IObservable < long > Create (
-        TimeSpan   period ,
-        IScheduler scheduler )
+    public IObservable < long > Create ( TimeSpan   period ,
+                                         IScheduler scheduler )
     {
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
 
-        if ( period < TimeSpan.Zero ) {
-            throw new ArgumentOutOfRangeException (
-                                                   nameof ( period ) ,
-                                                   period ,
-                                                   "The period must be non-negative." ) ;
-        }
+        if ( period < TimeSpan.Zero )
+            throw new ArgumentOutOfRangeException ( nameof ( period ) ,
+                                                    period ,
+                                                    "The period must be non-negative." ) ;
 
-        return Observable.Interval (
-                                    period ,
-                                    scheduler ) ;
+        return Observable.Interval ( period ,
+                                     scheduler ) ;
     }
 }

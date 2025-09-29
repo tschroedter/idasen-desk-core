@@ -34,7 +34,7 @@ public class DeviceMonitorTests
 
         _device = Substitute.For < IDevice > ( ) ;
         _device.Name
-               .Returns ( ( string ) null! ) ;
+               .Returns ( ( string )null! ) ;
 
         _deviceNewName = Substitute.For < IDevice > ( ) ;
         _deviceNewName.Name
@@ -65,26 +65,24 @@ public class DeviceMonitorTests
 
         var time = 0 ;
 
-        foreach ( var device in devices ) {
-            list.Add (
-                      OnNext (
-                              time ++ ,
-                              device ) ) ;
-        }
+        foreach ( var device in devices )
+            list.Add ( OnNext ( time ++ ,
+                                device ) ) ;
 
         return list.ToArray ( ) ;
     }
 
-    private Recorded < Notification < IDevice > > OnNext (
-        long    time ,
-        IDevice device )
+    private Recorded < Notification < IDevice > > OnNext ( long    time ,
+                                                           IDevice device )
     {
-        return new Recorded < Notification < IDevice > > (
-                                                          time ,
-                                                          Notification.CreateOnNext ( device ) ) ;
+        return new Recorded < Notification < IDevice > > ( time ,
+                                                           Notification.CreateOnNext ( device ) ) ;
     }
 
-    private ISubject < IDevice > Factory ( ) => _subjects.Dequeue ( ) ;
+    private ISubject < IDevice > Factory ( )
+    {
+        return _subjects.Dequeue ( ) ;
+    }
 
     [ TestMethod ]
     public void Constructor_ForLoggerNull_Throws ( )
@@ -201,9 +199,8 @@ public class DeviceMonitorTests
 
         _scheduler.Start ( ) ;
 
-        _devices.TryGetDevice (
-                               _device.Address ,
-                               out var device )
+        _devices.TryGetDevice ( _device.Address ,
+                                out var device )
                 .Should ( )
                 .BeTrue ( ) ;
 
@@ -243,9 +240,8 @@ public class DeviceMonitorTests
 
         _scheduler.Start ( ) ;
 
-        _devices.TryGetDevice (
-                               _device.Address ,
-                               out var device )
+        _devices.TryGetDevice ( _device.Address ,
+                                out var device )
                 .Should ( )
                 .BeTrue ( ) ;
 
@@ -276,11 +272,12 @@ public class DeviceMonitorTests
 
     private void ConfigureNameUpdatedTwice ( )
     {
-        var messages = new [ ] {
-                                   _device ,
-                                   _deviceNewName ,
-                                   _deviceOtherNewName
-                               } ;
+        var messages = new [ ]
+                       {
+                           _device ,
+                           _deviceNewName ,
+                           _deviceOtherNewName
+                       } ;
 
         _watcher.Received
                 .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
@@ -288,10 +285,11 @@ public class DeviceMonitorTests
 
     private void ConfigureNameUpdated ( )
     {
-        var messages = new [ ] {
-                                   _device ,
-                                   _deviceNewName
-                               } ;
+        var messages = new [ ]
+                       {
+                           _device ,
+                           _deviceNewName
+                       } ;
 
         _watcher.Received
                 .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
@@ -299,9 +297,10 @@ public class DeviceMonitorTests
 
     private void ConfigureDeviceDiscovered ( )
     {
-        var messages = new [ ] {
-                                   _device
-                               } ;
+        var messages = new [ ]
+                       {
+                           _device
+                       } ;
 
         _watcher.Received
                 .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
@@ -309,10 +308,11 @@ public class DeviceMonitorTests
 
     private void ConfigureSameDevice ( )
     {
-        var messages = new [ ] {
-                                   _device ,
-                                   _device
-                               } ;
+        var messages = new [ ]
+                       {
+                           _device ,
+                           _device
+                       } ;
 
         _watcher.Received
                 .Returns ( _scheduler.CreateColdObservable ( OnMultipleNext ( messages ) ) ) ;
@@ -400,12 +400,11 @@ public class DeviceMonitorTests
 
     private DeviceMonitor CreateSut ( )
     {
-        var deviceMonitor = new DeviceMonitor (
-                                               _logger ,
-                                               _scheduler ,
-                                               _factory ,
-                                               _devices ,
-                                               _watcher ) ;
+        var deviceMonitor = new DeviceMonitor ( _logger ,
+                                                _scheduler ,
+                                                _factory ,
+                                                _devices ,
+                                                _watcher ) ;
 
         return deviceMonitor ;
     }

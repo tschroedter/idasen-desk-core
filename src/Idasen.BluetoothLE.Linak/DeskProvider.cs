@@ -19,7 +19,7 @@ public class DeskProvider
     private readonly IScheduler    _scheduler ;
     private readonly ITaskRunner   _taskRunner ;
 
-    internal readonly AutoResetEvent DeskDetectedEvent = new ( false ) ;
+    internal readonly AutoResetEvent DeskDetectedEvent = new(false) ;
 
     // Backing field for Desk with volatile memory semantics
     private IDesk ? _desk ;
@@ -27,12 +27,11 @@ public class DeskProvider
     private IDisposable ? _deskDetected ;
     private bool          _disposed ;
 
-    public DeskProvider (
-        ILogger       logger ,
-        ITaskRunner   taskRunner ,
-        IScheduler    scheduler ,
-        IDeskDetector detector ,
-        IErrorManager errorManager )
+    public DeskProvider ( ILogger       logger ,
+                          ITaskRunner   taskRunner ,
+                          IScheduler    scheduler ,
+                          IDeskDetector detector ,
+                          IErrorManager errorManager )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( taskRunner ) ;
@@ -53,12 +52,12 @@ public class DeskProvider
         Desk?.Dispose ( ) ;
         Desk = null ;
 
-        try {
+        try
+        {
             _detector.Start ( ) ;
 
-            await _taskRunner.Run (
-                                   ( ) => DoTryGetDesk ( token ) ,
-                                   token )
+            await _taskRunner.Run ( ( ) => DoTryGetDesk ( token ) ,
+                                    token )
                              .ConfigureAwait ( false ) ;
 
             return token.IsCancellationRequested
@@ -67,21 +66,19 @@ public class DeskProvider
                            ? ( false , null )
                            : ( true , Desk ) ;
         }
-        catch ( Exception e ) {
-            if ( e.IsBluetoothDisabledException ( ) ) {
-                e.LogBluetoothStatusException (
-                                               _logger ,
-                                               string.Empty ) ;
-            }
-            else {
-                _logger.Error (
-                               e ,
-                               "Failed to detect desk" ) ;
-            }
+        catch ( Exception e )
+        {
+            if ( e.IsBluetoothDisabledException ( ) )
+                e.LogBluetoothStatusException ( _logger ,
+                                                string.Empty ) ;
+            else
+                _logger.Error ( e ,
+                                "Failed to detect desk" ) ;
 
             return ( false , null ) ;
         }
-        finally {
+        finally
+        {
             _detector.Stop ( ) ;
             DeskDetectedEvent.Reset ( ) ;
         }
@@ -91,26 +88,22 @@ public class DeskProvider
     public IObservable < IDesk > DeskDetected => _detector.DeskDetected ;
 
     /// <inheritdoc />
-    public IDeskProvider Initialize (
-        string deviceName ,
-        ulong  deviceAddress ,
-        uint   deviceTimeout )
+    public IDeskProvider Initialize ( string deviceName ,
+                                      ulong  deviceAddress ,
+                                      uint   deviceTimeout )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace ( deviceName ) ;
 
-        _detector.Initialize (
-                              deviceName ,
-                              deviceAddress ,
-                              deviceTimeout ) ;
+        _detector.Initialize ( deviceName ,
+                               deviceAddress ,
+                               deviceTimeout ) ;
 
         _deskDetected?.Dispose ( ) ;
         _deskDetected = _detector.DeskDetected
                                  .ObserveOn ( _scheduler )
-                                 .Subscribe (
-                                             OnDeskDetected ,
-                                             ex => _logger.Error (
-                                                                  ex ,
-                                                                  "Error while handling detected desk" ) ) ;
+                                 .Subscribe ( OnDeskDetected ,
+                                              ex => _logger.Error ( ex ,
+                                                                    "Error while handling detected desk" ) ) ;
 
         return this ;
     }
@@ -120,13 +113,14 @@ public class DeskProvider
     {
         _logger.Information ( "Start trying to detect desk" ) ;
 
-        try {
+        try
+        {
             _detector.Start ( ) ;
         }
-        catch ( Exception e ) {
-            _logger.Error (
-                           e ,
-                           "Failed Start Detecting" ) ;
+        catch ( Exception e )
+        {
+            _logger.Error ( e ,
+                            "Failed Start Detecting" ) ;
 
             _errorManager.PublishForMessage ( "Failed Start Detecting" ) ;
         }
@@ -139,13 +133,14 @@ public class DeskProvider
     {
         _logger.Information ( "Stop trying to detect desk" ) ;
 
-        try {
+        try
+        {
             _detector.Stop ( ) ;
         }
-        catch ( Exception e ) {
-            _logger.Error (
-                           e ,
-                           "Failed Stop Detecting" ) ;
+        catch ( Exception e )
+        {
+            _logger.Error ( e ,
+                            "Failed Stop Detecting" ) ;
 
             _errorManager.PublishForMessage ( "Failed Stop Detecting" ) ;
         }
@@ -175,9 +170,9 @@ public class DeskProvider
     public IDesk ? Desk
     {
         get => Volatile.Read ( ref _desk ) ;
-        private set => Volatile.Write (
-                                       ref _desk ,
-                                       value ) ;
+        private set =>
+            Volatile.Write ( ref _desk ,
+                             value ) ;
     }
 
     internal void DoTryGetDesk ( CancellationToken token )
@@ -187,19 +182,20 @@ public class DeskProvider
              token.IsCancellationRequested )
             return ;
 
-        var handles = new [ ] {
-                                  DeskDetectedEvent ,
-                                  token.WaitHandle
-                              } ;
+        var handles = new [ ]
+                      {
+                          DeskDetectedEvent ,
+                          token.WaitHandle
+                      } ;
 
         while ( Desk == null &&
-                ! token.IsCancellationRequested ) {
+                ! token.IsCancellationRequested )
+        {
             _logger.Information ( "Trying to find desk" ) ;
 
             // Wait up to 1s for either the desk-detected event or cancellation
-            var index = WaitHandle.WaitAny (
-                                            handles ,
-                                            1000 ) ;
+            var index = WaitHandle.WaitAny ( handles ,
+                                             1000 ) ;
 
             // If cancellation was signaled, leave immediately
             if ( index == 1 )
@@ -216,23 +212,25 @@ public class DeskProvider
         Desk = desk ;
         DeskDetectedEvent.Set ( ) ;
 
-        try {
+        try
+        {
             _detector.Stop ( ) ;
         }
-        catch ( Exception e ) {
-            _logger.Error (
-                           e ,
-                           "Failed stopping detector after detection" ) ;
+        catch ( Exception e )
+        {
+            _logger.Error ( e ,
+                            "Failed stopping detector after detection" ) ;
             _errorManager.PublishForMessage ( "Failed Stop Detecting" ) ;
         }
 
-        try {
-            _logger.Information (
-                                 "Detected desk {Name} with Bluetooth address {Address}" ,
-                                 desk.Name ,
-                                 desk.BluetoothAddress ) ;
+        try
+        {
+            _logger.Information ( "Detected desk {Name} with Bluetooth address {Address}" ,
+                                  desk.Name ,
+                                  desk.BluetoothAddress ) ;
         }
-        catch {
+        catch
+        {
             // Swallow logging issues to not impact state used in tests
         }
     }

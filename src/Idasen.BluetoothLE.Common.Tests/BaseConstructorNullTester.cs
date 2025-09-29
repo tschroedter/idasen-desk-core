@@ -11,13 +11,13 @@ using Serilog.Sinks.SystemConsole.Themes ;
 
 namespace Idasen.BluetoothLE.Common.Tests ;
 
-public abstract class BaseConstructorNullTester < T > where T : class
+public abstract class BaseConstructorNullTester < T >
+    where T : class
 {
     private IContainer ? _container ;
 
-    protected BaseConstructorNullTester (
-        int numberOfConstructorsPassed = 1 ,
-        int numberOfConstructorsFailed = 0 )
+    protected BaseConstructorNullTester ( int numberOfConstructorsPassed = 1 ,
+                                          int numberOfConstructorsFailed = 0 )
     {
         NumberOfConstructorsPassed = numberOfConstructorsPassed ;
         NumberOfConstructorsFailed = numberOfConstructorsFailed ;
@@ -26,10 +26,10 @@ public abstract class BaseConstructorNullTester < T > where T : class
     public virtual int NumberOfConstructorsPassed { get ; } = 1 ;
     public virtual int NumberOfConstructorsFailed { get ; }
 
-    protected IContainer Container => _container ??
-                                      throw new
-                                          InvalidOperationException (
-                                                                     "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
+    protected IContainer Container =>
+        _container ??
+        throw new
+            InvalidOperationException ( "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
 
     [ TestCleanup ]
     public virtual void Cleanup ( )
@@ -52,14 +52,16 @@ public abstract class BaseConstructorNullTester < T > where T : class
         Log.Logger = new LoggerConfiguration ( )
                     .Enrich.WithCaller ( )
                     .MinimumLevel.Information ( )
-                    .WriteTo.Console (
-                                      LogEventLevel.Information ,
-                                      template ,
-                                      theme : AnsiConsoleTheme.Code )
+                    .WriteTo.Console ( LogEventLevel.Information ,
+                                       template ,
+                                       theme : AnsiConsoleTheme.Code )
                     .CreateLogger ( ) ;
     }
 
-    protected virtual ContainerBuilder CreateContainerBuilder ( ) => new ( ) ;
+    protected virtual ContainerBuilder CreateContainerBuilder ( )
+    {
+        return new ContainerBuilder ( ) ;
+    }
 
     protected virtual void RegisterModules ( ContainerBuilder builder )
     {
@@ -81,24 +83,26 @@ public abstract class BaseConstructorNullTester < T > where T : class
 
         tester.Test < T > ( ) ;
 
-        using ( new AssertionScope ( ) ) {
+        using ( new AssertionScope ( ) )
+        {
             tester.HasPassed
                   .Should ( )
                   .BeTrue ( "Has Passed" ) ;
 
             tester.ConstructorsToTest
                   .Should ( )
-                  .Be (
-                       NumberOfConstructorsPassed ,
-                       "ConstructorsToTest" ) ;
+                  .Be ( NumberOfConstructorsPassed ,
+                        "ConstructorsToTest" ) ;
 
             tester.ConstructorsFailed
                   .Should ( )
-                  .Be (
-                       NumberOfConstructorsFailed ,
-                       "ConstructorsFailed" ) ;
+                  .Be ( NumberOfConstructorsFailed ,
+                        "ConstructorsFailed" ) ;
         }
     }
 
-    protected virtual INotNullTester CreateTester ( ) => Container.Resolve < INotNullTester > ( ) ;
+    protected virtual INotNullTester CreateTester ( )
+    {
+        return Container.Resolve < INotNullTester > ( ) ;
+    }
 }

@@ -12,9 +12,8 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 public class MatchMakerTests
 {
     [ AutoDataTestMethod ]
-    public void Create_ForKnownAddress_Instance (
-        MatchMaker sut ,
-        ulong      address )
+    public void Create_ForKnownAddress_Instance ( MatchMaker sut ,
+                                                  ulong      address )
     {
         sut.PairToDeviceAsync ( address )
            .Should ( )
@@ -22,15 +21,15 @@ public class MatchMakerTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Create_ForUnknownAddress_Throws (
-        Lazy < MatchMaker >       sut ,
-        [ Freeze ] IDeviceFactory deviceFactory ,
-        ulong                     address )
+    public async Task Create_ForUnknownAddress_Throws ( Lazy < MatchMaker >       sut ,
+                                                        [ Freeze ] IDeviceFactory deviceFactory ,
+                                                        ulong                     address )
     {
         deviceFactory.FromBluetoothAddressAsync ( Arg.Any < ulong > ( ) )
-                     .Returns ( ( IDevice ) null ) ;
+                     .Returns ( ( IDevice )null ) ;
 
-        var action = async ( ) => {
+        var action = async ( ) =>
+                     {
                          await sut.Value
                                   .PairToDeviceAsync ( address )
                                   .ConfigureAwait ( false ) ;

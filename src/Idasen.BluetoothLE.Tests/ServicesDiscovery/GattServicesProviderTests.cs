@@ -15,12 +15,12 @@ namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
 public class GattServicesProviderTests
 {
     [ AutoDataTestMethod ]
-    public void Constructor_ForLoggerNull_Throws (
-        Lazy < GattServicesProvider > sut ,
-        [ BeNull ] ILogger            logger )
+    public void Constructor_ForLoggerNull_Throws ( Lazy < GattServicesProvider > sut ,
+                                                   [ BeNull ] ILogger            logger )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) => {
+        var action = ( ) =>
+                     {
                          var test = sut.Value ;
                      } ;
 
@@ -30,12 +30,12 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public void Constructor_ForServicesNull_Throws (
-        Lazy < GattServicesProvider > sut ,
-        [ BeNull ] IGattServices      services )
+    public void Constructor_ForServicesNull_Throws ( Lazy < GattServicesProvider > sut ,
+                                                     [ BeNull ] IGattServices      services )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) => {
+        var action = ( ) =>
+                     {
                          var test = sut.Value ;
                      } ;
 
@@ -45,12 +45,12 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public void Constructor_ForRefreshedNull_Throws (
-        Lazy < GattServicesProvider >                   sut ,
-        [ BeNull ] ISubject < GattCommunicationStatus > refreshed )
+    public void Constructor_ForRefreshedNull_Throws ( Lazy < GattServicesProvider >                   sut ,
+                                                      [ BeNull ] ISubject < GattCommunicationStatus > refreshed )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) => {
+        var action = ( ) =>
+                     {
                          var test = sut.Value ;
                      } ;
 
@@ -60,12 +60,12 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public void Constructor_ForDeviceNull_Throws (
-        Lazy < GattServicesProvider >        sut ,
-        [ BeNull ] IBluetoothLeDeviceWrapper device )
+    public void Constructor_ForDeviceNull_Throws ( Lazy < GattServicesProvider >        sut ,
+                                                   [ BeNull ] IBluetoothLeDeviceWrapper device )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) => {
+        var action = ( ) =>
+                     {
                          var test = sut.Value ;
                      } ;
 
@@ -75,8 +75,7 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public void GattCommunicationStatus_ForGattResultIsNull_Unreachable (
-        GattServicesProvider sut )
+    public void GattCommunicationStatus_ForGattResultIsNull_Unreachable ( GattServicesProvider sut )
     {
         sut.GattCommunicationStatus
            .Should ( )
@@ -84,9 +83,8 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Refresh_ForDisconnected_SetsGattCommunicationStatusUnreachable (
-        GattServicesProvider                 sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper device )
+    public async Task Refresh_ForDisconnected_SetsGattCommunicationStatusUnreachable ( GattServicesProvider sut ,
+        [ Freeze ] IBluetoothLeDeviceWrapper                                                                device )
     {
         device.ConnectionStatus
               .Returns ( BluetoothConnectionStatus.Disconnected ) ;
@@ -99,10 +97,9 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task GattCommunicationStatus_ForConnectedAndServicesAvailable_Success (
-        GattServicesProvider                 sut ,
+    public async Task GattCommunicationStatus_ForConnectedAndServicesAvailable_Success ( GattServicesProvider sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper device ,
-        IGattDeviceServicesResultWrapper     resultWrapper )
+        IGattDeviceServicesResultWrapper resultWrapper )
     {
         resultWrapper.Status
                      .Returns ( GattCommunicationStatus.Success ) ;
@@ -121,10 +118,9 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Refresh_ForDisconnected_Notifies (
-        GattServicesProvider                            sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper            device ,
-        [ Freeze ] ISubject < GattCommunicationStatus > refreshed )
+    public async Task Refresh_ForDisconnected_Notifies ( GattServicesProvider                            sut ,
+                                                         [ Freeze ] IBluetoothLeDeviceWrapper            device ,
+                                                         [ Freeze ] ISubject < GattCommunicationStatus > refreshed )
     {
         device.ConnectionStatus
               .Returns ( BluetoothConnectionStatus.Disconnected ) ;
@@ -136,10 +132,9 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Refresh_ForConnected_SetsGattCommunicationStatusUnreachable (
-        GattServicesProvider                 sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper device ,
-        IGattDeviceServicesResultWrapper     result )
+    public async Task Refresh_ForConnected_SetsGattCommunicationStatusUnreachable ( GattServicesProvider sut ,
+        [ Freeze ] IBluetoothLeDeviceWrapper                                                             device ,
+        IGattDeviceServicesResultWrapper                                                                 result )
     {
         result.Status
               .Returns ( GattCommunicationStatus.Unreachable ) ;
@@ -158,9 +153,8 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Refresh_ForInvoked_ClearsServices (
-        GattServicesProvider     sut ,
-        [ Freeze ] IGattServices services )
+    public async Task Refresh_ForInvoked_ClearsServices ( GattServicesProvider     sut ,
+                                                          [ Freeze ] IGattServices services )
     {
         await sut.Refresh ( ) ;
 
@@ -169,11 +163,10 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Refresh_ForConnected_Notifies (
-        GattServicesProvider                            sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper            device ,
-        [ Freeze ] ISubject < GattCommunicationStatus > refreshed ,
-        IGattDeviceServicesResultWrapper                result )
+    public async Task Refresh_ForConnected_Notifies ( GattServicesProvider                            sut ,
+                                                      [ Freeze ] IBluetoothLeDeviceWrapper            device ,
+                                                      [ Freeze ] ISubject < GattCommunicationStatus > refreshed ,
+                                                      IGattDeviceServicesResultWrapper                result )
     {
         var expected = GattCommunicationStatus.ProtocolError ;
 
@@ -193,14 +186,13 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Refresh_ForConnectedAndCharacteristicsSuccess_AddsService (
-        GattServicesProvider                            sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper            device ,
-        [ Freeze ] ISubject < GattCommunicationStatus > refreshed ,
-        [ Freeze ] IGattServices                        services ,
-        IGattDeviceServicesResultWrapper                result ,
-        IGattDeviceServiceWrapper                       service ,
-        IGattCharacteristicsResultWrapper               characteristics )
+    public async Task Refresh_ForConnectedAndCharacteristicsSuccess_AddsService ( GattServicesProvider sut ,
+        [ Freeze ] IBluetoothLeDeviceWrapper                                                           device ,
+        [ Freeze ] ISubject < GattCommunicationStatus >                                                refreshed ,
+        [ Freeze ] IGattServices                                                                       services ,
+        IGattDeviceServicesResultWrapper                                                               result ,
+        IGattDeviceServiceWrapper                                                                      service ,
+        IGattCharacteristicsResultWrapper                                                              characteristics )
     {
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -228,13 +220,12 @@ public class GattServicesProviderTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Refresh_ForConnectedAndCharacteristicsUnreachable_DoesNotAddService (
-        GattServicesProvider                 sut ,
+    public async Task Refresh_ForConnectedAndCharacteristicsUnreachable_DoesNotAddService ( GattServicesProvider sut ,
         [ Freeze ] IBluetoothLeDeviceWrapper device ,
-        [ Freeze ] IGattServices             services ,
-        IGattDeviceServicesResultWrapper     result ,
-        IGattDeviceServiceWrapper            service ,
-        IGattCharacteristicsResultWrapper    characteristics )
+        [ Freeze ] IGattServices services ,
+        IGattDeviceServicesResultWrapper result ,
+        IGattDeviceServiceWrapper service ,
+        IGattCharacteristicsResultWrapper characteristics )
     {
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;

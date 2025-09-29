@@ -32,9 +32,8 @@ public class DeskMoverConcurrencyTests
 
         _initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
         _providerFactory = Substitute.For < IInitialHeightAndSpeedProviderFactory > ( ) ;
-        _providerFactory.Create (
-                                 Arg.Any < IDeskCommandExecutor > ( ) ,
-                                 Arg.Any < IDeskHeightAndSpeed > ( ) )
+        _providerFactory.Create ( Arg.Any < IDeskCommandExecutor > ( ) ,
+                                  Arg.Any < IDeskHeightAndSpeed > ( ) )
                         .Returns ( _initialProvider ) ;
 
         _movementMonitor = Substitute.For < IDeskMovementMonitor > ( ) ;
@@ -64,19 +63,17 @@ public class DeskMoverConcurrencyTests
 
     private DeskMover CreateSut ( IObservable < uint > ? finishedStream = null )
     {
-        return new DeskMover (
-                              _logger ,
-                              _scheduler ,
-                              _providerFactory ,
-                              _monitorFactory ,
-                              _executor ,
-                              _heightAndSpeed ,
-                              _calculator ,
+        return new DeskMover ( _logger ,
+                               _scheduler ,
+                               _providerFactory ,
+                               _monitorFactory ,
+                               _executor ,
+                               _heightAndSpeed ,
+                               _calculator ,
 #pragma warning disable CA2000
-                              finishedStream as ISubject < uint > ?? new Subject < uint > ( ) ,
+                               finishedStream as ISubject < uint > ?? new Subject < uint > ( ) ,
 #pragma warning restore CA2000
-                              _heightMonitor
-                             ) ;
+                               _heightMonitor ) ;
     }
 
     [ TestMethod ]
@@ -118,7 +115,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task Stop_InvokedOnceAndFinishedEmittedOnce_WhenTargetReached ( )
     {
-        var finishedEvents = new List < uint > ( ) ;
+        var       finishedEvents   = new List < uint > ( ) ;
         using var externalFinished = new Subject < uint > ( ) ;
 
         using var sut = CreateSut ( externalFinished ) ;
@@ -146,7 +143,7 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task Stop_CalledTwice_SecondCallIsNoopAndNoDuplicateFinished ( )
     {
-        var finishedEvents = new List < uint > ( ) ;
+        var       finishedEvents   = new List < uint > ( ) ;
         using var externalFinished = new Subject < uint > ( ) ; // CA2000 fix: ensure disposal
 
         using var sut = CreateSut ( externalFinished ) ;
@@ -182,15 +179,13 @@ public class DeskMoverConcurrencyTests
         _finishedSubject.OnNext ( 1000u ) ;
         _scheduler.AdvanceBy ( 1 ) ;
 
-        var d1 = new HeightSpeedDetails (
-                                         DateTimeOffset.Now ,
-                                         1100u ,
-                                         50 ) ;
+        var d1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                          1100u ,
+                                          50 ) ;
 
-        var d2 = new HeightSpeedDetails (
-                                         DateTimeOffset.Now.AddMilliseconds ( 10 ) ,
-                                         1200u ,
-                                         60 ) ;
+        var d2 = new HeightSpeedDetails ( DateTimeOffset.Now.AddMilliseconds ( 10 ) ,
+                                          1200u ,
+                                          60 ) ;
 
         // Emit two samples within one interval
         _heightSpeedSubject.OnNext ( d1 ) ;
@@ -211,9 +206,8 @@ public class DeskMoverConcurrencyTests
         _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
 
         // First Up fails, second succeeds
-        _executor.Up ( ).Returns (
-                                  Task.FromResult ( false ) ,
-                                  Task.FromResult ( true ) ) ;
+        _executor.Up ( ).Returns ( Task.FromResult ( false ) ,
+                                   Task.FromResult ( true ) ) ;
 
         sut.Initialize ( ) ;
         sut.Start ( ) ;

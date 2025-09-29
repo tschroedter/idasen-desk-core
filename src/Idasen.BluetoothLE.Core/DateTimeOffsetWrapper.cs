@@ -20,16 +20,17 @@ public class DateTimeOffsetWrapper ( DateTimeOffset dateTimeOffset )
     public long Ticks => dateTimeOffset.Ticks ;
 
     /// <inheritdoc />
-    public string ToString (
-        string ?          format ,
-        IFormatProvider ? formatProvider )
+    public string ToString ( string ?          format ,
+                             IFormatProvider ? formatProvider )
     {
         // Allow nulls per .NET guidelines. Underlying API handles nulls.
-        return dateTimeOffset.ToString (
-                                        format ,
-                                        formatProvider ) ;
+        return dateTimeOffset.ToString ( format ,
+                                         formatProvider ) ;
     }
 
     /// <inheritdoc />
-    public override string ToString ( ) => dateTimeOffset.ToString ( ) ;
+    public override string ToString ( )
+    {
+        return dateTimeOffset.ToString ( ) ;
+    }
 }

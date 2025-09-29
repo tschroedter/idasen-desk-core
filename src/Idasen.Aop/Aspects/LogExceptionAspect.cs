@@ -24,7 +24,8 @@ public sealed class LogExceptionAspect ( ILogger                    logger ,
     /// <param name="invocation">The intercepted method invocation.</param>
     public void Intercept ( IInvocation invocation )
     {
-        try {
+        try
+        {
 #pragma warning disable CA1062
             invocation.Proceed ( ) ;
 #pragma warning restore CA1062
@@ -33,10 +34,9 @@ public sealed class LogExceptionAspect ( ILogger                    logger ,
         catch ( Exception exception )
 #pragma warning restore CA1031
         {
-            logger.Error (
-                          exception ,
-                          "{Invocation}" ,
-                          converter.Convert ( invocation ) ) ;
+            logger.Error ( exception ,
+                           "{Invocation}" ,
+                           converter.Convert ( invocation ) ) ;
         }
     }
 }

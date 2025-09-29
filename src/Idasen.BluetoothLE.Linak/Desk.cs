@@ -15,8 +15,7 @@ public sealed class Desk
     ///     Initializes a new instance of the <see cref="Desk" /> class.
     /// </summary>
     /// <param name="connector">Connector handling the actual BLE communication and state.</param>
-    public Desk (
-        IDeskConnector connector )
+    public Desk ( IDeskConnector connector )
     {
         ArgumentNullException.ThrowIfNull ( connector ) ;
 
@@ -30,7 +29,10 @@ public sealed class Desk
     public string BluetoothAddressType => _connector.BluetoothAddressType ;
 
     /// <inheritdoc />
-    public void Connect ( ) => _connector.Connect ( ) ;
+    public void Connect ( )
+    {
+        _connector.Connect ( ) ;
+    }
 
     /// <inheritdoc />
     public IObservable < IEnumerable < byte > > DeviceNameChanged => _connector.DeviceNameChanged ;
@@ -42,8 +44,7 @@ public sealed class Desk
     public IObservable < int > SpeedChanged => _connector.SpeedChanged ;
 
     /// <inheritdoc />
-    public IObservable < HeightSpeedDetails > HeightAndSpeedChanged =>
-        _connector.HeightAndSpeedChanged ;
+    public IObservable < HeightSpeedDetails > HeightAndSpeedChanged => _connector.HeightAndSpeedChanged ;
 
     /// <inheritdoc />
     public IObservable < uint > FinishedChanged => _connector.FinishedChanged ;
@@ -57,32 +58,48 @@ public sealed class Desk
     /// <inheritdoc />
     public void MoveTo ( uint targetHeight )
     {
-        if ( targetHeight == 0u ) {
-            throw new ArgumentOutOfRangeException (
-                                                   nameof ( targetHeight ) ,
-                                                   "Target height must be greater than 0." ) ;
-        }
+        if ( targetHeight == 0u )
+            throw new ArgumentOutOfRangeException ( nameof ( targetHeight ) ,
+                                                    "Target height must be greater than 0." ) ;
 
         _connector.MoveTo ( targetHeight ) ;
     }
 
     /// <inheritdoc />
-    public Task < bool > MoveUpAsync ( ) => _connector.MoveUpAsync ( ) ;
+    public Task < bool > MoveUpAsync ( )
+    {
+        return _connector.MoveUpAsync ( ) ;
+    }
 
     /// <inheritdoc />
-    public Task < bool > MoveDownAsync ( ) => _connector.MoveDownAsync ( ) ;
+    public Task < bool > MoveDownAsync ( )
+    {
+        return _connector.MoveDownAsync ( ) ;
+    }
 
     /// <inheritdoc />
-    public Task < bool > MoveStopAsync ( ) => _connector.MoveStopAsync ( ) ;
+    public Task < bool > MoveStopAsync ( )
+    {
+        return _connector.MoveStopAsync ( ) ;
+    }
 
     /// <inheritdoc />
-    public Task < bool > MoveLockAsync ( ) => _connector.MoveLockAsync ( ) ;
+    public Task < bool > MoveLockAsync ( )
+    {
+        return _connector.MoveLockAsync ( ) ;
+    }
 
     /// <inheritdoc />
-    public Task < bool > MoveUnlockAsync ( ) => _connector.MoveUnlockAsync ( ) ;
+    public Task < bool > MoveUnlockAsync ( )
+    {
+        return _connector.MoveUnlockAsync ( ) ;
+    }
 
     /// <inheritdoc />
-    public void Dispose ( ) => _connector.Dispose ( ) ;
+    public void Dispose ( )
+    {
+        _connector.Dispose ( ) ;
+    }
 
     /// <inheritdoc />
     public string DeviceName => _connector.DeviceName ;

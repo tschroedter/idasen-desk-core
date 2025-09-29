@@ -8,8 +8,7 @@ public class GattCharacteristicsResultWrapperTests
     {
         // GattCharacteristicsResult is a sealed WinRT type and cannot be proxied/substituted.
         // This test requires a real instance or an adapter to mock. Marking inconclusive for now.
-        Assert.Inconclusive (
-                             "Cannot mock sealed WinRT type GattCharacteristicsResult. Provide an adapter or helper to create a real instance for testing." ) ;
+        Assert.Inconclusive ( "Cannot mock sealed WinRT type GattCharacteristicsResult. Provide an adapter or helper to create a real instance for testing." ) ;
 
         return Task.CompletedTask ;
     }

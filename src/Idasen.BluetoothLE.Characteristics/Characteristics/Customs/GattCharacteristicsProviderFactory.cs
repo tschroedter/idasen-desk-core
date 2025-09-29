@@ -19,18 +19,17 @@ public class GattCharacteristicsProviderFactory
     ///     Initializes a new instance of the <see cref="GattCharacteristicsProviderFactory" /> class.
     /// </summary>
     /// <param name="factory">The delegate factory to create providers.</param>
-    public GattCharacteristicsProviderFactory (
-        GattCharacteristicProvider.Factory factory )
+    public GattCharacteristicsProviderFactory ( GattCharacteristicProvider.Factory factory )
     {
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
         _factory = factory ;
     }
 
     /// <inheritdoc />
-    public IGattCharacteristicProvider Create (
-        IGattCharacteristicsResultWrapper wrapper ) =>
-        _factory ( wrapper ) ;
+    public IGattCharacteristicProvider Create ( IGattCharacteristicsResultWrapper wrapper )
+    {
+        return _factory ( wrapper ) ;
+    }
 }

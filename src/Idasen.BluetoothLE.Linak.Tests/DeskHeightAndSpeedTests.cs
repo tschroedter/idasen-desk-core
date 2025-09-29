@@ -149,11 +149,10 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public async Task Refresh_ForInvokedAndHeightNotAvailable_DoesNotSetsHeight ( )
     {
-        SetTryConvert (
-                       _converter ,
-                       false ,
-                       DefaultHeight ,
-                       DefaultSpeed ) ;
+        SetTryConvert ( _converter ,
+                        false ,
+                        DefaultHeight ,
+                        DefaultSpeed ) ;
 
         using var sut = CreateSut ( ) ;
 
@@ -167,11 +166,10 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public async Task Refresh_ForInvokedAndSpeedNotAvailable_DoesNotSetsSpeed ( )
     {
-        SetTryConvert (
-                       _converter ,
-                       false ,
-                       DefaultHeight ,
-                       DefaultSpeed ) ;
+        SetTryConvert ( _converter ,
+                        false ,
+                        DefaultHeight ,
+                        DefaultSpeed ) ;
 
         using var sut = CreateSut ( ) ;
 
@@ -194,33 +192,30 @@ public class DeskHeightAndSpeedTests : IDisposable
         _subjectHeightAndSpeed    = new Subject < HeightSpeedDetails > ( ) ;
         _subjectRawHeightAndSpeed = new Subject < RawValueChangedDetails > ( ) ;
 
-        SetTryConvert (
-                       _converter ,
-                       true ,
-                       DefaultHeight ,
-                       DefaultSpeed ) ;
+        SetTryConvert ( _converter ,
+                        true ,
+                        DefaultHeight ,
+                        DefaultSpeed ) ;
 
         _referenceOutput.HeightSpeedChanged
                         .Returns ( _subjectRawHeightAndSpeed ) ;
 
-        _rawDetailsDummy = new RawValueChangedDetails (
-                                                       string.Empty ,
-                                                       [] ,
-                                                       DateTimeOffset.Now ,
-                                                       Guid.Empty ) ;
+        _rawDetailsDummy = new RawValueChangedDetails ( string.Empty ,
+                                                        [] ,
+                                                        DateTimeOffset.Now ,
+                                                        Guid.Empty ) ;
     }
 
-    private static void SetTryConvert (
-        IRawValueToHeightAndSpeedConverter converter ,
-        bool                               result ,
-        uint                               height ,
-        int                                speed )
+    private static void SetTryConvert ( IRawValueToHeightAndSpeedConverter converter ,
+                                        bool                               result ,
+                                        uint                               height ,
+                                        int                                speed )
     {
-        converter.TryConvert (
-                              Arg.Any < IEnumerable < byte > > ( ) ,
-                              out _ ,
-                              out _ )
-                 .Returns ( x => {
+        converter.TryConvert ( Arg.Any < IEnumerable < byte > > ( ) ,
+                               out _ ,
+                               out _ )
+                 .Returns ( x =>
+                            {
                                 x [ 1 ] = height ;
                                 x [ 2 ] = speed ;
 
@@ -230,14 +225,13 @@ public class DeskHeightAndSpeedTests : IDisposable
 
     private DeskHeightAndSpeed CreateSut ( )
     {
-        return new DeskHeightAndSpeed (
-                                       _logger ,
-                                       _scheduler ,
-                                       _referenceOutput ,
-                                       _converter ,
-                                       _subjectHeight ,
-                                       _subjectSpeed ,
-                                       _subjectHeightAndSpeed ) ;
+        return new DeskHeightAndSpeed ( _logger ,
+                                        _scheduler ,
+                                        _referenceOutput ,
+                                        _converter ,
+                                        _subjectHeight ,
+                                        _subjectSpeed ,
+                                        _subjectHeightAndSpeed ) ;
     }
 
     [ TestMethod ]
@@ -261,9 +255,9 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        sut.Initialize();
+        sut.Initialize ( ) ;
 
         sut.HeightChanged
            .ObserveOn ( _scheduler )
@@ -283,9 +277,9 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        sut.Initialize();
+        sut.Initialize ( ) ;
 
         sut.SpeedChanged
            .ObserveOn ( _scheduler )
@@ -305,9 +299,9 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        sut.Initialize();
+        sut.Initialize ( ) ;
 
         sut.HeightAndSpeedChanged
            .ObserveOn ( _scheduler )
@@ -325,17 +319,16 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public void OnHeightSpeedChanged_ForInvokedAndCanNotConvert_DoesNotNotifyHeightChanged ( )
     {
-        SetTryConvert (
-                       _converter ,
-                       false ,
-                       DefaultHeight ,
-                       DefaultSpeed ) ;
+        SetTryConvert ( _converter ,
+                        false ,
+                        DefaultHeight ,
+                        DefaultSpeed ) ;
 
         var wasNotified = false ;
 
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        sut.Initialize();
+        sut.Initialize ( ) ;
 
         sut.HeightChanged
            .ObserveOn ( _scheduler )
@@ -353,17 +346,16 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public void OnHeightSpeedChanged_ForInvokedAndCanNotConvert_DoesNotNotifySpeedChanged ( )
     {
-        SetTryConvert (
-                       _converter ,
-                       false ,
-                       DefaultHeight ,
-                       DefaultSpeed ) ;
+        SetTryConvert ( _converter ,
+                        false ,
+                        DefaultHeight ,
+                        DefaultSpeed ) ;
 
         var wasNotified = false ;
 
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        sut.Initialize();
+        sut.Initialize ( ) ;
 
         sut.SpeedChanged
            .ObserveOn ( _scheduler )
@@ -381,17 +373,16 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public void OnHeightSpeedChanged_ForInvokedAndCanNotConvert_DoesNotNotifyHeightSpeedChanged ( )
     {
-        SetTryConvert (
-                       _converter ,
-                       false ,
-                       DefaultHeight ,
-                       DefaultSpeed ) ;
+        SetTryConvert ( _converter ,
+                        false ,
+                        DefaultHeight ,
+                        DefaultSpeed ) ;
 
         var wasNotified = false ;
 
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        sut.Initialize();
+        sut.Initialize ( ) ;
 
         sut.HeightAndSpeedChanged
            .ObserveOn ( _scheduler )

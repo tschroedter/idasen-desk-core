@@ -20,7 +20,7 @@ public abstract class CharacteristicBaseTests < T >
 
     protected readonly Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > WrappersReadOnly
         =
-        new ( ) ;
+        new( ) ;
 
     protected IGattCharacteristicProvider                          CharacteristicProvider  = null! ;
     protected IGattCharacteristicWrapper                           CharacteristicWrapper1  = null! ;
@@ -73,9 +73,8 @@ public abstract class CharacteristicBaseTests < T >
         ServiceWrapper = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
         ResultWrapper  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
 
-        WrappersReadOnly.Add (
-                              ServiceWrapper ,
-                              ResultWrapper ) ;
+        WrappersReadOnly.Add ( ServiceWrapper ,
+                               ResultWrapper ) ;
 
         IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > gattServices =
             WrappersReadOnly ;

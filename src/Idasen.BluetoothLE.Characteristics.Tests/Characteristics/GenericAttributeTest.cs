@@ -42,22 +42,20 @@ public class GenericAttributeTest
 
     protected override GenericAttribute CreateSut ( )
     {
-        return new GenericAttribute (
-                                     Logger ,
-                                     Scheduler ,
-                                     Device ,
-                                     ProviderFactory ,
-                                     RawValueReader ,
-                                     RawValueWriter ,
-                                     ToStringConverter ,
-                                     DescriptionToUuid ,
-                                     new AllGattCharacteristicsProvider ( ) ) ;
+        return new GenericAttribute ( Logger ,
+                                      Scheduler ,
+                                      Device ,
+                                      ProviderFactory ,
+                                      RawValueReader ,
+                                      RawValueWriter ,
+                                      ToStringConverter ,
+                                      DescriptionToUuid ,
+                                      new AllGattCharacteristicsProvider ( ) ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add (
-                      GenericAttribute.CharacteristicServiceChanged ,
-                      CharacteristicWrapper1 ) ;
+        Wrappers.Add ( GenericAttribute.CharacteristicServiceChanged ,
+                       CharacteristicWrapper1 ) ;
     }
 }

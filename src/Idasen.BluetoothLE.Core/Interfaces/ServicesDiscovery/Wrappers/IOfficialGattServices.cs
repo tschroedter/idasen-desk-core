@@ -29,7 +29,6 @@ public interface IOfficialGattServices
     /// <returns>
     ///     'true' if a matching Gatt service exists, otherwise 'false'.
     /// </returns>
-    bool TryFindByUuid (
-        Guid                      guid ,
-        out OfficialGattService ? gattService ) ;
+    bool TryFindByUuid ( Guid                      guid ,
+                         out OfficialGattService ? gattService ) ;
 }

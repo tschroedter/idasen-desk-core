@@ -23,9 +23,8 @@ public interface IDeviceFactory
     /// <returns>
     ///     A new device.
     /// </returns>
-    IDevice Create (
-        IDateTimeOffset broadcastTime ,
-        ulong           address ,
-        string ?        name ,
-        short           rawSignalStrengthInDBm ) ;
+    IDevice Create ( IDateTimeOffset broadcastTime ,
+                     ulong           address ,
+                     string ?        name ,
+                     short           rawSignalStrengthInDBm ) ;
 }

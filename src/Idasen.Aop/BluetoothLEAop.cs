@@ -26,8 +26,7 @@ public sealed class BluetoothLEAop
         _ = builder.RegisterType < InvocationToTextConverter > ( )
                    .As < IInvocationToTextConverter > ( ) ;
 
-        _ = builder.Register ( c => new LogAspect (
-                                                   c.Resolve < ILogger > ( ) ,
-                                                   c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
+        _ = builder.Register ( c => new LogAspect ( c.Resolve < ILogger > ( ) ,
+                                                    c.Resolve < IInvocationToTextConverter > ( ) ) ) ;
     }
 }

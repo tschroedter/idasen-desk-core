@@ -16,26 +16,24 @@ public static class RxExtensions
     /// <param name="asyncAction">An asynchronous action to run for each element.</param>
     /// <param name="handler">Optional error handler for the subscription.</param>
     [ UsedImplicitly ]
-    public static IDisposable SubscribeAsync < T > (
-        this IObservable < T > source ,
-        Func < Task >          asyncAction ,
-        Action < Exception > ? handler = null )
+    public static IDisposable SubscribeAsync < T > ( this IObservable < T > source ,
+                                                     Func < Task >          asyncAction ,
+                                                     Action < Exception > ? handler = null )
     {
         ArgumentNullException.ThrowIfNull ( source ) ;
         ArgumentNullException.ThrowIfNull ( asyncAction ) ;
 
-        var query = source.SelectMany ( _ => Observable.FromAsync ( async ( ) => {
+        var query = source.SelectMany ( _ => Observable.FromAsync ( async ( ) =>
+                                                                    {
                                                                         await asyncAction ( ).ConfigureAwait ( false ) ;
                                                                         return Unit.Default ;
                                                                     } ) ) ;
 
         return handler == null
-                   ? query.Subscribe (
-                                      _ => { } ,
-                                      _ => { } )
-                   : query.Subscribe (
-                                      _ => { } ,
-                                      handler ) ;
+                   ? query.Subscribe ( _ => { } ,
+                                       _ => { } )
+                   : query.Subscribe ( _ => { } ,
+                                       handler ) ;
     }
 
     /// <summary>
@@ -46,25 +44,24 @@ public static class RxExtensions
     /// <param name="asyncAction">An asynchronous action to run for each element.</param>
     /// <param name="handler">Optional error handler for the subscription.</param>
     [ UsedImplicitly ]
-    public static IDisposable SubscribeAsync < T > (
-        this IObservable < T > source ,
-        Func < T , Task >      asyncAction ,
-        Action < Exception > ? handler = null )
+    public static IDisposable SubscribeAsync < T > ( this IObservable < T > source ,
+                                                     Func < T , Task >      asyncAction ,
+                                                     Action < Exception > ? handler = null )
     {
         ArgumentNullException.ThrowIfNull ( source ) ;
         ArgumentNullException.ThrowIfNull ( asyncAction ) ;
 
-        var query = source.SelectMany ( t => Observable.FromAsync ( async ( ) => {
-                                                                        await asyncAction ( t ).ConfigureAwait ( false ) ;
+        var query = source.SelectMany ( t => Observable.FromAsync ( async ( ) =>
+                                                                    {
+                                                                        await asyncAction ( t )
+                                                                           .ConfigureAwait ( false ) ;
                                                                         return Unit.Default ;
                                                                     } ) ) ;
 
         return handler == null
-                   ? query.Subscribe (
-                                      _ => { } ,
-                                      _ => { } )
-                   : query.Subscribe (
-                                      _ => { } ,
-                                      handler ) ;
+                   ? query.Subscribe ( _ => { } ,
+                                       _ => { } )
+                   : query.Subscribe ( _ => { } ,
+                                       handler ) ;
     }
 }

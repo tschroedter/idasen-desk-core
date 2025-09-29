@@ -13,7 +13,6 @@ public interface IBufferReader
     /// <param name="buffer">The Windows runtime buffer to read.</param>
     /// <param name="bytes">When this method returns, contains the copied bytes if successful; otherwise an empty array.</param>
     /// <returns><c>true</c> if bytes were read; otherwise, <c>false</c>.</returns>
-    bool TryReadValue (
-        IBuffer      buffer ,
-        out byte [ ] bytes ) ;
+    bool TryReadValue ( IBuffer      buffer ,
+                        out byte [ ] bytes ) ;
 }

@@ -13,16 +13,13 @@ public class Watcher
     private readonly ISubject < DateTime > _startedWatching ;
     private readonly IWrapper              _wrapper ;
 
-    public Watcher (
-        IWrapper              wrapper ,
-        ISubject < DateTime > started )
+    public Watcher ( IWrapper              wrapper ,
+                     ISubject < DateTime > started )
     {
-        Guard.ArgumentNotNull (
-                               wrapper ,
-                               nameof ( wrapper ) ) ;
-        Guard.ArgumentNotNull (
-                               started ,
-                               nameof ( started ) ) ;
+        Guard.ArgumentNotNull ( wrapper ,
+                                nameof ( wrapper ) ) ;
+        Guard.ArgumentNotNull ( started ,
+                                nameof ( started ) ) ;
 
         _wrapper         = wrapper ;
         _startedWatching = started ;
@@ -61,5 +58,8 @@ public class Watcher
     }
 
     /// <inheritdoc />
-    public void Dispose ( ) => _wrapper.Dispose ( ) ;
+    public void Dispose ( )
+    {
+        _wrapper.Dispose ( ) ;
+    }
 }

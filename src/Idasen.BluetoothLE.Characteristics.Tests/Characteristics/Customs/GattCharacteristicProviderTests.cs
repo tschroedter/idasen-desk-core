@@ -81,9 +81,8 @@ public class GattCharacteristicProviderTests
     {
         _expectedCharacteristics.Add ( _characteristic1 ) ;
 
-        _foundCharacteristicsDictionary.Add (
-                                             Description1 ,
-                                             _characteristics1Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description1 ,
+                                              _characteristics1Uuid ) ;
 
         var sut = CreateSut ( ) ;
 
@@ -94,15 +93,13 @@ public class GattCharacteristicProviderTests
         sut.Characteristics
            .Count
            .Should ( )
-           .Be (
-                1 ,
-                "Characteristics Count" ) ;
+           .Be ( 1 ,
+                 "Characteristics Count" ) ;
 
         sut.Characteristics [ Description1 ]
            .Should ( )
-           .Be (
-                _characteristic1 ,
-                "Contains Characteristic1" ) ;
+           .Be ( _characteristic1 ,
+                 "Contains Characteristic1" ) ;
     }
 
     [ TestMethod ]
@@ -110,9 +107,8 @@ public class GattCharacteristicProviderTests
     {
         _expectedCharacteristics.Add ( _characteristic1 ) ;
 
-        _foundCharacteristicsDictionary.Add (
-                                             Description1 ,
-                                             _characteristics1Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description1 ,
+                                              _characteristics1Uuid ) ;
 
         var sut = CreateSut ( ) ;
 
@@ -128,9 +124,8 @@ public class GattCharacteristicProviderTests
     {
         _expectedCharacteristics.Add ( _characteristic1 ) ;
 
-        _foundCharacteristicsDictionary.Add (
-                                             Description1 ,
-                                             _characteristics1Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description1 ,
+                                              _characteristics1Uuid ) ;
 
         var sut = CreateSut ( ) ;
 
@@ -139,9 +134,8 @@ public class GattCharacteristicProviderTests
         sut.UnavailableCharacteristics
            .Count
            .Should ( )
-           .Be (
-                0 ,
-                "Unavailable Characteristics should be empty" ) ;
+           .Be ( 0 ,
+                 "Unavailable Characteristics should be empty" ) ;
     }
 
     [ TestMethod ]
@@ -150,12 +144,10 @@ public class GattCharacteristicProviderTests
         _expectedCharacteristics.Add ( _characteristic1 ) ;
         _expectedCharacteristics.Add ( _characteristic2 ) ;
 
-        _foundCharacteristicsDictionary.Add (
-                                             Description1 ,
-                                             _characteristics1Uuid ) ;
-        _foundCharacteristicsDictionary.Add (
-                                             Description2 ,
-                                             _characteristics2Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description1 ,
+                                              _characteristics1Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description2 ,
+                                              _characteristics2Uuid ) ;
 
         var sut = CreateSut ( ) ;
 
@@ -166,21 +158,18 @@ public class GattCharacteristicProviderTests
         sut.Characteristics
            .Count
            .Should ( )
-           .Be (
-                2 ,
-                "Characteristics Count" ) ;
+           .Be ( 2 ,
+                 "Characteristics Count" ) ;
 
         sut.Characteristics [ Description1 ]
            .Should ( )
-           .Be (
-                _characteristic1 ,
-                "Contains Characteristic1" ) ;
+           .Be ( _characteristic1 ,
+                 "Contains Characteristic1" ) ;
 
         sut.Characteristics [ Description2 ]
            .Should ( )
-           .Be (
-                _characteristic2 ,
-                "Contains Characteristic2" ) ;
+           .Be ( _characteristic2 ,
+                 "Contains Characteristic2" ) ;
     }
 
     [ TestMethod ]
@@ -189,12 +178,10 @@ public class GattCharacteristicProviderTests
         _expectedCharacteristics.Add ( _characteristic1 ) ;
         _expectedCharacteristics.Add ( _characteristic2 ) ;
 
-        _foundCharacteristicsDictionary.Add (
-                                             Description1 ,
-                                             _characteristics1Uuid ) ;
-        _foundCharacteristicsDictionary.Add (
-                                             Description2 ,
-                                             _characteristics2Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description1 ,
+                                              _characteristics1Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description2 ,
+                                              _characteristics2Uuid ) ;
 
         var sut = CreateSut ( ) ;
 
@@ -204,15 +191,13 @@ public class GattCharacteristicProviderTests
 
         sut.Properties [ Description1 ]
            .Should ( )
-           .Be (
-                _characteristic1.CharacteristicProperties ,
-                "Characteristic1" ) ;
+           .Be ( _characteristic1.CharacteristicProperties ,
+                 "Characteristic1" ) ;
 
         sut.Properties [ Description2 ]
            .Should ( )
-           .Be (
-                _characteristic2.CharacteristicProperties ,
-                "Characteristic2" ) ;
+           .Be ( _characteristic2.CharacteristicProperties ,
+                 "Characteristic2" ) ;
     }
 
     [ TestMethod ]
@@ -221,12 +206,10 @@ public class GattCharacteristicProviderTests
         _expectedCharacteristics.Add ( _characteristic1 ) ;
         _expectedCharacteristics.Add ( _characteristic2 ) ;
 
-        _foundCharacteristicsDictionary.Add (
-                                             Description1 ,
-                                             _characteristics1Uuid ) ;
-        _foundCharacteristicsDictionary.Add (
-                                             Description2 ,
-                                             _characteristics2Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description1 ,
+                                              _characteristics1Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description2 ,
+                                              _characteristics2Uuid ) ;
 
         var sut = CreateSut ( ) ;
 
@@ -241,9 +224,8 @@ public class GattCharacteristicProviderTests
     [ TestMethod ]
     public void Refresh_ForReadOnlyDictionaryNotContainingExpectedCharacteristics_UnavailableCharacteristics ( )
     {
-        _foundCharacteristicsDictionary.Add (
-                                             Description1 ,
-                                             _characteristics1Uuid ) ;
+        _foundCharacteristicsDictionary.Add ( Description1 ,
+                                              _characteristics1Uuid ) ;
 
         var sut = CreateSut ( ) ;
 
@@ -257,8 +239,7 @@ public class GattCharacteristicProviderTests
 
     private GattCharacteristicProvider CreateSut ( )
     {
-        return new GattCharacteristicProvider (
-                                               _logger ,
-                                               _gattCharacteristics ) ;
+        return new GattCharacteristicProvider ( _logger ,
+                                                _gattCharacteristics ) ;
     }
 }

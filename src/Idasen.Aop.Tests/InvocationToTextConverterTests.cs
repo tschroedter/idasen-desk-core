@@ -7,7 +7,10 @@ namespace Idasen.Aop.Tests ;
 [ TestClass ]
 public class InvocationToTextConverterTests
 {
-    private static InvocationToTextConverter CreateConverter ( ) => new ( ) ;
+    private static InvocationToTextConverter CreateConverter ( )
+    {
+        return new InvocationToTextConverter ( ) ;
+    }
 
     [ TestMethod ]
     public void Convert_NoArgs_PrintsMethod ( )
@@ -16,9 +19,8 @@ public class InvocationToTextConverterTests
         var proxy     = CreateProxy ( target ) ;
         var converter = CreateConverter ( ) ;
 
-        var invocation = Intercept (
-                                    proxy ,
-                                    p => p.NoArgs ( ) ) ;
+        var invocation = Intercept ( proxy ,
+                                     p => p.NoArgs ( ) ) ;
         var text = converter.Convert ( invocation ) ;
 
         text.Should ( ).Contain ( "Sample.NoArgs(" ) ;
@@ -32,11 +34,9 @@ public class InvocationToTextConverterTests
         var proxy     = CreateProxy ( target ) ;
         var converter = CreateConverter ( ) ;
 
-        var invocation = Intercept (
-                                    proxy ,
-                                    p => p.Primitives (
-                                                       42 ,
-                                                       "abc" ) ) ;
+        var invocation = Intercept ( proxy ,
+                                     p => p.Primitives ( 42 ,
+                                                         "abc" ) ) ;
         var text = converter.Convert ( invocation ) ;
 
         text.Should ( ).Contain ( "x=42" ) ;
@@ -50,9 +50,8 @@ public class InvocationToTextConverterTests
         var proxy     = CreateProxy ( target ) ;
         var converter = CreateConverter ( ) ;
 
-        var invocation = Intercept (
-                                    proxy ,
-                                    p => p.WithArray ( new byte[ 100 ] ) ) ;
+        var invocation = Intercept ( proxy ,
+                                     p => p.WithArray ( new byte[ 100 ] ) ) ;
         var text = converter.Convert ( invocation ) ;
 
         text.Should ( ).Contain ( "bytes=[100]" ) ;
@@ -65,12 +64,12 @@ public class InvocationToTextConverterTests
         var proxy     = CreateProxy ( target ) ;
         var converter = CreateConverter ( ) ;
 
-        var invocation = Intercept (
-                                    proxy ,
-                                    p => p.SampleProperty = 123 ) ;
+        var invocation = Intercept ( proxy ,
+                                     p => p.SampleProperty = 123 ) ;
         var text = converter.Convert ( invocation ) ;
 
-        text.Should ( ).Contain ( "Idasen.Aop.Tests.InvocationToTextConverterTests+Sample.set_SampleProperty(value=123)" ) ;
+        text.Should ( )
+            .Contain ( "Idasen.Aop.Tests.InvocationToTextConverterTests+Sample.set_SampleProperty(value=123)" ) ;
     }
 
     [ TestMethod ]
@@ -83,9 +82,8 @@ public class InvocationToTextConverterTests
         var node = new Node ( "root" ) ;
         node.Next = node ; // direct cycle
 
-        var invocation = Intercept (
-                                    proxy ,
-                                    p => p.WithObject ( node ) ) ;
+        var invocation = Intercept ( proxy ,
+                                     p => p.WithObject ( node ) ) ;
 
         // Should not recurse infinitely or throw
         FluentActions.Invoking ( ( ) => converter.Convert ( invocation ) )
@@ -99,21 +97,22 @@ public class InvocationToTextConverterTests
         // text.Should().Contain("<cycle>");
     }
 
-    private static T CreateProxy < T > ( T target ) where T : class
+    private static T CreateProxy < T > ( T target )
+        where T : class
     {
         var generator = new ProxyGenerator ( ) ;
         return generator.CreateClassProxyWithTarget ( target ) ;
     }
 
-    private static IInvocation Intercept < T > ( T proxy , Action < T > call ) where T : class
+    private static IInvocation Intercept < T > ( T proxy , Action < T > call )
+        where T : class
     {
         IInvocation ? captured = null ;
 
         var generator   = new ProxyGenerator ( ) ;
         var interceptor = new CaptureInterceptor ( i => captured = i ) ;
-        var proxied = generator.CreateClassProxyWithTarget (
-                                                            proxy ,
-                                                            interceptor ) ;
+        var proxied = generator.CreateClassProxyWithTarget ( proxy ,
+                                                             interceptor ) ;
         call ( proxied ) ;
         return captured ?? throw new AssertFailedException ( "Invocation was not captured" ) ;
     }
@@ -151,10 +150,8 @@ public class InvocationToTextConverterTests
 
     private sealed class Node ( string name )
     {
-        [ UsedImplicitly ]
-        public string Name { get ; } = name ;
+        [ UsedImplicitly ] public string Name { get ; } = name ;
 
-        [ UsedImplicitly ]
-        public Node ? Next { get ; set ; }
+        [ UsedImplicitly ] public Node ? Next { get ; set ; }
     }
 }

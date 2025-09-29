@@ -20,28 +20,24 @@ public class DeviceFactory
     /// </param>
     public DeviceFactory ( Device.Factory factory )
     {
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
         _factory = factory ;
     }
 
     /// <inheritdoc />
-    public IDevice Create (
-        IDateTimeOffset broadcastTime ,
-        ulong           address ,
-        string ?        name ,
-        short           rawSignalStrengthInDBm )
+    public IDevice Create ( IDateTimeOffset broadcastTime ,
+                            ulong           address ,
+                            string ?        name ,
+                            short           rawSignalStrengthInDBm )
     {
-        Guard.ArgumentNotNull (
-                               broadcastTime ,
-                               nameof ( broadcastTime ) ) ;
+        Guard.ArgumentNotNull ( broadcastTime ,
+                                nameof ( broadcastTime ) ) ;
 
-        return _factory.Invoke (
-                                broadcastTime ,
-                                address ,
-                                name ,
-                                rawSignalStrengthInDBm ) ;
+        return _factory.Invoke ( broadcastTime ,
+                                 address ,
+                                 name ,
+                                 rawSignalStrengthInDBm ) ;
     }
 }

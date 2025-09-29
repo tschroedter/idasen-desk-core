@@ -27,32 +27,26 @@ public class DeviceMonitor
     private IDisposable ? _disposableStopped ;
     private IDisposable ? _disposableUpdated ;
 
-    public DeviceMonitor (
-        ILogger                       logger ,
-        IScheduler                    scheduler ,
-        Func < ISubject < IDevice > > factory ,
-        IDevices                      devices ,
-        IWatcher                      watcher )
+    public DeviceMonitor ( ILogger                       logger ,
+                           IScheduler                    scheduler ,
+                           Func < ISubject < IDevice > > factory ,
+                           IDevices                      devices ,
+                           IWatcher                      watcher )
     {
-        Guard.ArgumentNotNull (
-                               logger ,
-                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
 
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
-        Guard.ArgumentNotNull (
-                               devices ,
-                               nameof ( devices ) ) ;
+        Guard.ArgumentNotNull ( devices ,
+                                nameof ( devices ) ) ;
 
-        Guard.ArgumentNotNull (
-                               watcher ,
-                               nameof ( watcher ) ) ;
+        Guard.ArgumentNotNull ( watcher ,
+                                nameof ( watcher ) ) ;
 
-        Guard.ArgumentNotNull (
-                               scheduler ,
-                               nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
 
         _logger    = logger ;
         _scheduler = scheduler ;
@@ -96,7 +90,10 @@ public class DeviceMonitor
     }
 
     /// <inheritdoc />
-    public void RemoveDevice ( IDevice device ) => _devices.RemoveDevice ( device ) ;
+    public void RemoveDevice ( IDevice device )
+    {
+        _devices.RemoveDevice ( device ) ;
+    }
 
     /// <inheritdoc />
     public void Dispose ( )
@@ -138,28 +135,26 @@ public class DeviceMonitor
 
     private void OnDeviceUpdated ( IDevice device )
     {
-        if ( ! _devices.TryGetDevice (
-                                      device.Address ,
-                                      out var storedDevice ) ) {
-            _logger.Information (
-                                 "[{DeviceMacAddress}] Discovered Device" ,
-                                 device.MacAddress ) ;
+        if ( ! _devices.TryGetDevice ( device.Address ,
+                                       out var storedDevice ) )
+        {
+            _logger.Information ( "[{DeviceMacAddress}] Discovered Device" ,
+                                  device.MacAddress ) ;
 
             _devices.AddOrUpdateDevice ( device ) ;
 
             _deviceDiscovered.OnNext ( device ) ;
         }
-        else {
-            _logger.Information (
-                                 "[{DeviceMacAddress}] Updated Device (Name = {DeviceName}, {SignalStrengthInDBm}DBm, Address = {DeviceAddress})" ,
-                                 device.MacAddress ,
-                                 device.Name ,
-                                 device.RawSignalStrengthInDBm ,
-                                 device.Address ) ;
+        else
+        {
+            _logger.Information ( "[{DeviceMacAddress}] Updated Device (Name = {DeviceName}, {SignalStrengthInDBm}DBm, Address = {DeviceAddress})" ,
+                                  device.MacAddress ,
+                                  device.Name ,
+                                  device.RawSignalStrengthInDBm ,
+                                  device.Address ) ;
 
-            var hasNameChanged = HasDeviceNameChanged (
-                                                       device ,
-                                                       storedDevice! ) ;
+            var hasNameChanged = HasDeviceNameChanged ( device ,
+                                                        storedDevice! ) ;
 
             _devices.AddOrUpdateDevice ( device ) ;
 
@@ -168,21 +163,25 @@ public class DeviceMonitor
             if ( ! hasNameChanged )
                 return ;
 
-            _logger.Information (
-                                 "[{DeviceMacAddress}] Device Name Changed" ,
-                                 device.MacAddress ) ;
+            _logger.Information ( "[{DeviceMacAddress}] Device Name Changed" ,
+                                  device.MacAddress ) ;
 
             _deviceNameUpdated.OnNext ( device ) ;
         }
     }
 
-    private void OnStopped ( DateTime dateTime ) => _logger.Information ( "Watcher Stopped listening" ) ;
+    private void OnStopped ( DateTime dateTime )
+    {
+        _logger.Information ( "Watcher Stopped listening" ) ;
+    }
 
-    private void OnStarted ( DateTime dateTime ) => _logger.Information ( "Watcher Started listening" ) ;
+    private void OnStarted ( DateTime dateTime )
+    {
+        _logger.Information ( "Watcher Started listening" ) ;
+    }
 
-    private static bool HasDeviceNameChanged (
-        IDevice device ,
-        IDevice storedDevice )
+    private static bool HasDeviceNameChanged ( IDevice device ,
+                                               IDevice storedDevice )
     {
         if ( ! string.IsNullOrEmpty ( storedDevice.Name ) )
             return storedDevice.Name != device.Name ;

@@ -42,9 +42,8 @@ public class CircularBuffer < T > : IEnumerable < T >
     ///     Buffer capacity. Must be positive.
     /// </param>
     public CircularBuffer ( int capacity )
-        : this (
-                capacity ,
-                [] )
+        : this ( capacity ,
+                 [] )
     {
     }
 
@@ -59,31 +58,25 @@ public class CircularBuffer < T > : IEnumerable < T >
     ///     Suggestion: use Skip(x).Take(y).ToArray() to build this argument from
     ///     any enumerable.
     /// </param>
-    public CircularBuffer (
-        int   capacity ,
-        T [ ] items )
+    public CircularBuffer ( int   capacity ,
+                            T [ ] items )
     {
-        if ( capacity < 1 ) {
-            throw new ArgumentOutOfRangeException (
-                                                   nameof ( capacity ) ,
-                                                   capacity ,
-                                                   "Capacity must be positive." ) ;
-        }
+        if ( capacity < 1 )
+            throw new ArgumentOutOfRangeException ( nameof ( capacity ) ,
+                                                    capacity ,
+                                                    "Capacity must be positive." ) ;
 
         ArgumentNullException.ThrowIfNull ( items ) ;
 
-        if ( items.Length > capacity ) {
-            throw new ArgumentException (
-                                         "Too many items to fit circular buffer" ,
-                                         nameof ( items ) ) ;
-        }
+        if ( items.Length > capacity )
+            throw new ArgumentException ( "Too many items to fit circular buffer" ,
+                                          nameof ( items ) ) ;
 
         _buffer = new T[ capacity ] ;
 
-        Array.Copy (
-                    items ,
-                    _buffer ,
-                    items.Length ) ;
+        Array.Copy ( items ,
+                     _buffer ,
+                     items.Length ) ;
         _size = items.Length ;
 
         _start = 0 ;
@@ -172,24 +165,25 @@ public class CircularBuffer < T > : IEnumerable < T >
     {
         var segment1 = ArrayOne ( ) ;
 
-        for ( var i = 0 ; i < segment1.Count ; i ++ ) {
+        for ( var i = 0 ; i < segment1.Count ; i ++ )
             if ( segment1.Array != null )
                 yield return segment1.Array [ segment1.Offset + i ] ;
-        }
 
         var segment2 = ArrayTwo ( ) ;
 
-        for ( var i = 0 ; i < segment2.Count ; i ++ ) {
+        for ( var i = 0 ; i < segment2.Count ; i ++ )
             if ( segment2.Array != null )
                 yield return segment2.Array [ segment2.Offset + i ] ;
-        }
     }
 
     #endregion
 
     #region IEnumerable implementation
 
-    IEnumerator IEnumerable.GetEnumerator ( ) => GetEnumerator ( ) ;
+    IEnumerator IEnumerable.GetEnumerator ( )
+    {
+        return GetEnumerator ( ) ;
+    }
 
     #endregion
 
@@ -227,12 +221,14 @@ public class CircularBuffer < T > : IEnumerable < T >
     /// <param name="item">Item to push to the back of the buffer</param>
     public void PushBack ( T item )
     {
-        if ( IsFull ) {
+        if ( IsFull )
+        {
             _buffer [ _end ] = item ;
             Increment ( ref _end ) ;
             _start = _end ;
         }
-        else {
+        else
+        {
             _buffer [ _end ] = item ;
             Increment ( ref _end ) ;
             ++ _size ;
@@ -248,12 +244,14 @@ public class CircularBuffer < T > : IEnumerable < T >
     /// <param name="item">Item to push to the front of the buffer</param>
     public void PushFront ( T item )
     {
-        if ( IsFull ) {
+        if ( IsFull )
+        {
             Decrement ( ref _start ) ;
             _end               = _start ;
             _buffer [ _start ] = item ;
         }
-        else {
+        else
+        {
             Decrement ( ref _start ) ;
             _buffer [ _start ] = item ;
             ++ _size ;
@@ -300,24 +298,21 @@ public class CircularBuffer < T > : IEnumerable < T >
         if ( segment1.Array == null )
             return newArray ;
 
-        Array.Copy (
-                    segment1.Array ,
-                    segment1.Offset ,
-                    newArray ,
-                    newArrayOffset ,
-                    segment1.Count ) ;
+        Array.Copy ( segment1.Array ,
+                     segment1.Offset ,
+                     newArray ,
+                     newArrayOffset ,
+                     segment1.Count ) ;
         newArrayOffset += segment1.Count ;
 
         var segment2 = ArrayTwo ( ) ;
 
-        if ( segment2.Array != null ) {
-            Array.Copy (
-                        segment2.Array ,
-                        segment2.Offset ,
-                        newArray ,
-                        newArrayOffset ,
-                        segment2.Count ) ;
-        }
+        if ( segment2.Array != null )
+            Array.Copy ( segment2.Array ,
+                         segment2.Offset ,
+                         newArray ,
+                         newArrayOffset ,
+                         segment2.Count ) ;
 
         return newArray ;
     }
@@ -386,17 +381,14 @@ public class CircularBuffer < T > : IEnumerable < T >
         if ( IsEmpty )
             return new ArraySegment < T > ( [] ) ;
 
-        if ( _start < _end ) {
-            return new ArraySegment < T > (
-                                           _buffer ,
-                                           _start ,
-                                           _end - _start ) ;
-        }
+        if ( _start < _end )
+            return new ArraySegment < T > ( _buffer ,
+                                            _start ,
+                                            _end - _start ) ;
 
-        return new ArraySegment < T > (
-                                       _buffer ,
-                                       _start ,
-                                       _buffer.Length - _start ) ;
+        return new ArraySegment < T > ( _buffer ,
+                                        _start ,
+                                        _buffer.Length - _start ) ;
     }
 
     private ArraySegment < T > ArrayTwo ( )
@@ -404,17 +396,14 @@ public class CircularBuffer < T > : IEnumerable < T >
         if ( IsEmpty )
             return new ArraySegment < T > ( [] ) ;
 
-        if ( _start < _end ) {
-            return new ArraySegment < T > (
-                                           _buffer ,
-                                           _end ,
-                                           0 ) ;
-        }
+        if ( _start < _end )
+            return new ArraySegment < T > ( _buffer ,
+                                            _end ,
+                                            0 ) ;
 
-        return new ArraySegment < T > (
-                                       _buffer ,
-                                       0 ,
-                                       _end ) ;
+        return new ArraySegment < T > ( _buffer ,
+                                        0 ,
+                                        _end ) ;
     }
 
     #endregion

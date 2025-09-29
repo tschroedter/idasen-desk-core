@@ -37,9 +37,8 @@ public static class GattCharacteristicWrapperExtensions
         return characteristic ;
     }
 
-    public static IGattCharacteristicWrapper WithReadValueAsyncResult (
-        this IGattCharacteristicWrapper characteristic ,
-        IGattReadResultWrapper          result )
+    public static IGattCharacteristicWrapper WithReadValueAsyncResult ( this IGattCharacteristicWrapper characteristic ,
+                                                                        IGattReadResultWrapper          result )
     {
         _ = characteristic.ReadValueAsync ( )
                           .Returns ( Task.FromResult ( result ) ) ;

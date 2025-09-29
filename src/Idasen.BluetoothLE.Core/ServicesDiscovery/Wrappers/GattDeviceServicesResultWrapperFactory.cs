@@ -14,12 +14,10 @@ public class GattDeviceServicesResultWrapperFactory
 {
     private readonly GattDeviceServicesResultWrapper.Factory _servicesFactory ;
 
-    public GattDeviceServicesResultWrapperFactory (
-        GattDeviceServicesResultWrapper.Factory servicesFactory )
+    public GattDeviceServicesResultWrapperFactory ( GattDeviceServicesResultWrapper.Factory servicesFactory )
     {
-        Guard.ArgumentNotNull (
-                               servicesFactory ,
-                               nameof ( servicesFactory ) ) ;
+        Guard.ArgumentNotNull ( servicesFactory ,
+                                nameof ( servicesFactory ) ) ;
 
         _servicesFactory = servicesFactory ;
     }
@@ -27,9 +25,8 @@ public class GattDeviceServicesResultWrapperFactory
     /// <inheritdoc />
     public IGattDeviceServicesResultWrapper Create ( GattDeviceServicesResult result )
     {
-        Guard.ArgumentNotNull (
-                               result ,
-                               nameof ( result ) ) ;
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
         return _servicesFactory.Invoke ( result ) ;
     }

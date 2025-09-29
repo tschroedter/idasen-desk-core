@@ -212,41 +212,35 @@ public class GenericAccessTest
         _subjectFactory = Substitute.For < Func < ISubject < IEnumerable < byte > > > > ( ) ;
 
         _subjectFactory.Invoke ( )
-                       .Returns (
-                                 _subjectAppearanceChanged ,
-                                 _subjectParametersChanged ,
-                                 _subjectResolutionChanged ,
-                                 _subjectDeviceNameChanged ) ;
+                       .Returns ( _subjectAppearanceChanged ,
+                                  _subjectParametersChanged ,
+                                  _subjectResolutionChanged ,
+                                  _subjectDeviceNameChanged ) ;
     }
 
     protected override GenericAccess CreateSut ( )
     {
-        return new GenericAccess (
-                                  Logger ,
-                                  Scheduler ,
-                                  Device ,
-                                  ProviderFactory ,
-                                  RawValueReader ,
-                                  RawValueWriter ,
-                                  ToStringConverter ,
-                                  DescriptionToUuid ,
-                                  _subjectFactory ,
-                                  new AllGattCharacteristicsProvider ( ) ) ;
+        return new GenericAccess ( Logger ,
+                                   Scheduler ,
+                                   Device ,
+                                   ProviderFactory ,
+                                   RawValueReader ,
+                                   RawValueWriter ,
+                                   ToStringConverter ,
+                                   DescriptionToUuid ,
+                                   _subjectFactory ,
+                                   new AllGattCharacteristicsProvider ( ) ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add (
-                      GenericAccess.CharacteristicDeviceName ,
-                      CharacteristicWrapper1 ) ;
-        Wrappers.Add (
-                      GenericAccess.CharacteristicAppearance ,
-                      CharacteristicWrapper2 ) ;
-        Wrappers.Add (
-                      GenericAccess.CharacteristicParameters ,
-                      CharacteristicWrapper3 ) ;
-        Wrappers.Add (
-                      GenericAccess.CharacteristicResolution ,
-                      CharacteristicWrapper4 ) ;
+        Wrappers.Add ( GenericAccess.CharacteristicDeviceName ,
+                       CharacteristicWrapper1 ) ;
+        Wrappers.Add ( GenericAccess.CharacteristicAppearance ,
+                       CharacteristicWrapper2 ) ;
+        Wrappers.Add ( GenericAccess.CharacteristicParameters ,
+                       CharacteristicWrapper3 ) ;
+        Wrappers.Add ( GenericAccess.CharacteristicResolution ,
+                       CharacteristicWrapper4 ) ;
     }
 }

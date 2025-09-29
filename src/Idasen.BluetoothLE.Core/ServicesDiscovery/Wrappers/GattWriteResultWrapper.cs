@@ -16,9 +16,8 @@ public class GattWriteResultWrapper
 
     public GattWriteResultWrapper ( GattWriteResult result )
     {
-        Guard.ArgumentNotNull (
-                               result ,
-                               nameof ( result ) ) ;
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
         _result = result ;
     }

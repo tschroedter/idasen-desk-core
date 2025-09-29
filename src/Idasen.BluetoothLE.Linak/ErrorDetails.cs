@@ -14,10 +14,9 @@ public sealed class ErrorDetails // todo testing
     /// <param name="message">The human-readable message.</param>
     /// <param name="caller">The originating member name or component.</param>
     /// <param name="exception">Optional exception to include.</param>
-    public ErrorDetails (
-        string      message ,
-        string      caller ,
-        Exception ? exception = null )
+    public ErrorDetails ( string      message ,
+                          string      caller ,
+                          Exception ? exception = null )
     {
         ArgumentNullException.ThrowIfNull ( message ) ;
         ArgumentNullException.ThrowIfNull ( caller ) ;

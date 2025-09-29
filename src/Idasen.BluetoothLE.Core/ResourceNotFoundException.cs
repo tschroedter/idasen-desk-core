@@ -4,14 +4,12 @@ namespace Idasen.BluetoothLE.Core ;
 
 public class ResourceNotFoundException : Exception
 {
-    public ResourceNotFoundException (
-        string                   resourceName ,
-        [ GuardIgnore ] string ? message )
+    public ResourceNotFoundException ( string                   resourceName ,
+                                       [ GuardIgnore ] string ? message )
         : base ( message )
     {
-        Guard.ArgumentNotNull (
-                               resourceName ,
-                               nameof ( resourceName ) ) ;
+        Guard.ArgumentNotNull ( resourceName ,
+                                nameof ( resourceName ) ) ;
 
         ResourceName = resourceName ;
     }

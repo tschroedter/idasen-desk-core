@@ -34,9 +34,8 @@ public class CharacteristicBaseToStringConverterTests
     [ TestMethod ]
     public async Task ToString_ForInvokedWithKeyAndProperty_Instance ( )
     {
-        Properties.Add (
-                        TestCharacteristicBase.RawValueKey ,
-                        GattCharacteristicProperties.None ) ;
+        Properties.Add ( TestCharacteristicBase.RawValueKey ,
+                         GattCharacteristicProperties.None ) ;
 
         const string expected = "TestCharacteristicBase\r\n" +
                                 "RawValueKey = [01-02-03] (None)\r\n" ;
@@ -67,21 +66,19 @@ public class CharacteristicBaseToStringConverterTests
 
     protected override TestCharacteristicBase CreateSut ( )
     {
-        return new TestCharacteristicBase (
-                                           Logger ,
-                                           Scheduler ,
-                                           Device ,
-                                           ProviderFactory ,
-                                           RawValueReader ,
-                                           RawValueWriter ,
-                                           new CharacteristicBaseToStringConverter ( ) ,
-                                           DescriptionToUuid ) ;
+        return new TestCharacteristicBase ( Logger ,
+                                            Scheduler ,
+                                            Device ,
+                                            ProviderFactory ,
+                                            RawValueReader ,
+                                            RawValueWriter ,
+                                            new CharacteristicBaseToStringConverter ( ) ,
+                                            DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add (
-                      TestCharacteristicBase.RawValueKey ,
-                      CharacteristicWrapper1 ) ;
+        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
+                       CharacteristicWrapper1 ) ;
     }
 }

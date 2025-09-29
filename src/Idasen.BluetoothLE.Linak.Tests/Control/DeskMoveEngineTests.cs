@@ -26,18 +26,14 @@ public class DeskMoveEngineTests
 
     private DeskMoveEngine CreateSut ( DeskMoverSettings ? settings = null )
     {
-        return new DeskMoveEngine (
-                                   _logger ,
-                                   _executor ,
-                                   settings ) ;
+        return new DeskMoveEngine ( _logger ,
+                                    _executor ,
+                                    settings ) ;
     }
 
     private DeskMoveEngine CreateSutWithKeepAlive ( TimeSpan keepAlive )
     {
-        return CreateSut (
-                          new DeskMoverSettings {
-                                                    KeepAliveInterval = keepAlive
-                                                } ) ;
+        return CreateSut ( new DeskMoverSettings { KeepAliveInterval = keepAlive } ) ;
     }
 
     [ TestMethod ]
@@ -54,9 +50,8 @@ public class DeskMoveEngineTests
     {
         var sut = CreateSut ( ) ;
 
-        sut.Move (
-                  Direction.None ,
-                  false ) ;
+        sut.Move ( Direction.None ,
+                   false ) ;
 
         _ = _executor.DidNotReceive ( ).Up ( ) ;
         _ = _executor.DidNotReceive ( ).Down ( ) ;
@@ -67,9 +62,8 @@ public class DeskMoveEngineTests
     {
         var sut = CreateSut ( ) ;
 
-        sut.Move (
-                  Direction.Up ,
-                  false ) ;
+        sut.Move ( Direction.Up ,
+                   false ) ;
 
         _ = _executor.Received ( 1 ).Up ( ) ;
         sut.CurrentDirection.Should ( ).Be ( Direction.Up ) ;
@@ -81,9 +75,8 @@ public class DeskMoveEngineTests
     {
         var sut = CreateSut ( ) ;
 
-        sut.Move (
-                  Direction.Down ,
-                  false ) ;
+        sut.Move ( Direction.Down ,
+                   false ) ;
 
         _ = _executor.Received ( 1 ).Down ( ) ;
         sut.CurrentDirection.Should ( ).Be ( Direction.Down ) ;
@@ -95,12 +88,10 @@ public class DeskMoveEngineTests
     {
         var sut = CreateSut ( ) ;
 
-        sut.Move (
-                  Direction.Up ,
-                  false ) ;
-        sut.Move (
-                  Direction.Up ,
-                  false ) ;
+        sut.Move ( Direction.Up ,
+                   false ) ;
+        sut.Move ( Direction.Up ,
+                   false ) ;
 
         _ = _executor.Received ( 1 ).Up ( ) ;
     }
@@ -111,12 +102,10 @@ public class DeskMoveEngineTests
         // disable throttling for this behavior test
         var sut = CreateSutWithKeepAlive ( TimeSpan.Zero ) ;
 
-        sut.Move (
-                  Direction.Up ,
-                  false ) ; // first start
-        sut.Move (
-                  Direction.Up ,
-                  true ) ; // keep-alive should reissue immediately
+        sut.Move ( Direction.Up ,
+                   false ) ; // first start
+        sut.Move ( Direction.Up ,
+                   true ) ; // keep-alive should reissue immediately
 
         _ = _executor.Received ( 2 ).Up ( ) ;
     }
@@ -129,20 +118,17 @@ public class DeskMoveEngineTests
         var tcs = new TaskCompletionSource < bool > ( ) ;
         _executor.Up ( ).Returns ( _ => tcs.Task ) ;
 
-        sut.Move (
-                  Direction.Up ,
-                  false ) ; // first call returns pending
-        sut.Move (
-                  Direction.Up ,
-                  true ) ; // should be throttled due to pending task
+        sut.Move ( Direction.Up ,
+                   false ) ; // first call returns pending
+        sut.Move ( Direction.Up ,
+                   true ) ; // should be throttled due to pending task
 
         _ = _executor.Received ( 1 ).Up ( ) ;
 
         // complete first, then keep-alive should be sent again
         tcs.SetResult ( true ) ;
-        sut.Move (
-                  Direction.Up ,
-                  true ) ;
+        sut.Move ( Direction.Up ,
+                   true ) ;
 
         _ = _executor.Received ( 2 ).Up ( ) ;
     }
@@ -152,12 +138,10 @@ public class DeskMoveEngineTests
     {
         var sut = CreateSut ( ) ;
 
-        sut.Move (
-                  Direction.Up ,
-                  false ) ;
-        sut.Move (
-                  Direction.Down ,
-                  false ) ;
+        sut.Move ( Direction.Up ,
+                   false ) ;
+        sut.Move ( Direction.Down ,
+                   false ) ;
 
         _ = _executor.Received ( 1 ).Up ( ) ;
         _ = _executor.DidNotReceive ( ).Down ( ) ;
@@ -168,9 +152,8 @@ public class DeskMoveEngineTests
     public async Task StopAsync_CallsExecutor_AndResetsDirection_OnSuccess ( )
     {
         var sut = CreateSut ( ) ;
-        sut.Move (
-                  Direction.Down ,
-                  false ) ;
+        sut.Move ( Direction.Down ,
+                   false ) ;
         sut.CurrentDirection.Should ( ).Be ( Direction.Down ) ;
 
         var ok = await sut.StopAsync ( ) ;
@@ -187,9 +170,8 @@ public class DeskMoveEngineTests
         var sut = CreateSut ( ) ;
         _executor.Up ( ).Returns ( false ) ; // completes synchronously with failure
 
-        sut.Move (
-                  Direction.Up ,
-                  false ) ;
+        sut.Move ( Direction.Up ,
+                   false ) ;
 
         sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
         _ = _executor.Received ( 1 ).Up ( ) ;
@@ -201,9 +183,8 @@ public class DeskMoveEngineTests
         var sut = CreateSut ( ) ;
         _executor.Up ( ).Returns ( Task.FromException < bool > ( new Exception ( "boom" ) ) ) ;
 
-        sut.Move (
-                  Direction.Up ,
-                  false ) ;
+        sut.Move ( Direction.Up ,
+                   false ) ;
 
         sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
         _ = _executor.Received ( 1 ).Up ( ) ;
@@ -213,9 +194,8 @@ public class DeskMoveEngineTests
     public async Task StopAsync_IsIdempotent_WhilePending ( )
     {
         var sut = CreateSut ( ) ;
-        sut.Move (
-                  Direction.Up ,
-                  false ) ;
+        sut.Move ( Direction.Up ,
+                   false ) ;
 
         var tcs = new TaskCompletionSource < bool > ( ) ;
         _executor.Stop ( ).Returns ( _ => tcs.Task ) ;
@@ -236,9 +216,8 @@ public class DeskMoveEngineTests
     public async Task StopAsync_Failure_DoesNotResetDirection ( )
     {
         var sut = CreateSut ( ) ;
-        sut.Move (
-                  Direction.Up ,
-                  false ) ;
+        sut.Move ( Direction.Up ,
+                   false ) ;
 
         _executor.Stop ( ).Returns ( false ) ;
 

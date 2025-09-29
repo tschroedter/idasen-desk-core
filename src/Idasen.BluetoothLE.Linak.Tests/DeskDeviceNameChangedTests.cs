@@ -11,9 +11,8 @@ namespace Idasen.BluetoothLE.Linak.Tests ;
 public sealed class DeskDeviceNameChangedTests
     : DeskRaiseEventForDeskBase < IEnumerable < byte > >
 {
-    protected override void SetSubscription (
-        IDesk         desk ,
-        TestScheduler scheduler )
+    protected override void SetSubscription ( IDesk         desk ,
+                                              TestScheduler scheduler )
     {
         ArgumentNullException.ThrowIfNull ( desk ) ;
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
@@ -23,9 +22,8 @@ public sealed class DeskDeviceNameChangedTests
             .Subscribe ( OnRaised ) ;
     }
 
-    protected override void SetSubject (
-        IDeskConnector                   connector ,
-        Subject < IEnumerable < byte > > subject )
+    protected override void SetSubject ( IDeskConnector                   connector ,
+                                         Subject < IEnumerable < byte > > subject )
     {
         ArgumentNullException.ThrowIfNull ( connector ) ;
         ArgumentNullException.ThrowIfNull ( subject ) ;

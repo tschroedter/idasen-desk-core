@@ -35,29 +35,26 @@ public class ReferenceOutput
 
     private IDisposable ? _subscriber ;
 
-    public ReferenceOutput (
-        ILogger                              logger ,
-        IScheduler                           scheduler ,
-        IDevice                              device ,
-        IGattCharacteristicsProviderFactory  providerFactory ,
-        IRawValueReader                      rawValueReader ,
-        IRawValueWriter                      rawValueWriter ,
-        ICharacteristicBaseToStringConverter toStringConverter ,
-        IDescriptionToUuid                   descriptionToUuid ,
-        ISubject < RawValueChangedDetails >  subjectHeightSpeed )
-        : base (
-                logger ,
-                scheduler ,
-                device ,
-                providerFactory ,
-                rawValueReader ,
-                rawValueWriter ,
-                toStringConverter ,
-                descriptionToUuid )
+    public ReferenceOutput ( ILogger                              logger ,
+                             IScheduler                           scheduler ,
+                             IDevice                              device ,
+                             IGattCharacteristicsProviderFactory  providerFactory ,
+                             IRawValueReader                      rawValueReader ,
+                             IRawValueWriter                      rawValueWriter ,
+                             ICharacteristicBaseToStringConverter toStringConverter ,
+                             IDescriptionToUuid                   descriptionToUuid ,
+                             ISubject < RawValueChangedDetails >  subjectHeightSpeed )
+        : base ( logger ,
+                 scheduler ,
+                 device ,
+                 providerFactory ,
+                 rawValueReader ,
+                 rawValueWriter ,
+                 toStringConverter ,
+                 descriptionToUuid )
     {
-        Guard.ArgumentNotNull (
-                               subjectHeightSpeed ,
-                               nameof ( subjectHeightSpeed ) ) ;
+        Guard.ArgumentNotNull ( subjectHeightSpeed ,
+                                nameof ( subjectHeightSpeed ) ) ;
 
         _subjectHeightSpeed = subjectHeightSpeed ;
     }
@@ -88,20 +85,19 @@ public class ReferenceOutput
     {
         await base.Refresh ( ) ;
 
-        if ( Characteristics == null ) {
-            Logger.Error (
-                          "{Property} is null" ,
-                          nameof ( Characteristics ) ) ;
+        if ( Characteristics == null )
+        {
+            Logger.Error ( "{Property} is null" ,
+                           nameof ( Characteristics ) ) ;
 
             return ;
         }
 
-        if ( ! Characteristics.Characteristics.TryGetValue (
-                                                            HeightSpeed ,
-                                                            out var heightAndSpeed ) ) {
-            Logger.Error (
-                          "Failed to find characteristic for Height and Speed with key {Key}" ,
-                          HeightSpeed ) ;
+        if ( ! Characteristics.Characteristics.TryGetValue ( HeightSpeed ,
+                                                             out var heightAndSpeed ) )
+        {
+            Logger.Error ( "Failed to find characteristic for Height and Speed with key {Key}" ,
+                           HeightSpeed ) ;
 
             return ;
         }
@@ -114,11 +110,10 @@ public class ReferenceOutput
 
         var rawValue = GetValueOrEmpty ( HeightSpeed ).ToArray ( ) ;
 
-        var details = new RawValueChangedDetails (
-                                                  HeightSpeed ,
-                                                  rawValue ,
-                                                  DateTimeOffset.Now ,
-                                                  GattServiceUuid ) ;
+        var details = new RawValueChangedDetails ( HeightSpeed ,
+                                                   rawValue ,
+                                                   DateTimeOffset.Now ,
+                                                   GattServiceUuid ) ;
 
         _subjectHeightSpeed.OnNext ( details ) ;
     }
@@ -136,7 +131,8 @@ public class ReferenceOutput
         base.Dispose ( disposing ) ;
     }
 
-    protected override T WithMapping < T > ( ) where T : class
+    protected override T WithMapping < T > ( )
+        where T : class
     {
         DescriptionToUuid [ HeightSpeed ] = Guid.Parse ( "99FA0021-338A-1024-8A49-009C0215F78A" ) ;
         DescriptionToUuid [ Mask ]        = Guid.Parse ( "99FA0029-338A-1024-8A49-009C0215F78A" ) ;
@@ -147,27 +143,25 @@ public class ReferenceOutput
 
     private void OnValueChanged ( GattCharacteristicValueChangedDetails details )
     {
-        Logger.Debug (
-                      "Value={ValueHex}, Timestamp={Timestamp}, Uuid={Uuid}" ,
-                      details.Value.ToHex ( ) ,
-                      details.Timestamp ,
-                      details.Uuid ) ;
+        Logger.Debug ( "Value={ValueHex}, Timestamp={Timestamp}, Uuid={Uuid}" ,
+                       details.Value.ToHex ( ) ,
+                       details.Timestamp ,
+                       details.Uuid ) ;
 
         var count = details.Value.Count ( ) ;
 
-        if ( count != 4 ) {
-            Logger.Error (
-                          "Failed, expected 4 bytes but received {Count}" ,
-                          count ) ;
+        if ( count != 4 )
+        {
+            Logger.Error ( "Failed, expected 4 bytes but received {Count}" ,
+                           count ) ;
 
             return ;
         }
 
-        var valueChanged = new RawValueChangedDetails (
-                                                       HeightSpeed ,
-                                                       details.Value ,
-                                                       details.Timestamp ,
-                                                       details.Uuid ) ;
+        var valueChanged = new RawValueChangedDetails ( HeightSpeed ,
+                                                        details.Value ,
+                                                        details.Timestamp ,
+                                                        details.Uuid ) ;
 
         _subjectHeightSpeed.OnNext ( valueChanged ) ;
     }

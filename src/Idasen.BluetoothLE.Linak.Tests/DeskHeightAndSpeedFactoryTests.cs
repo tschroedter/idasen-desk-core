@@ -37,7 +37,13 @@ public class DeskHeightAndSpeedFactoryTests
                      .NotBeNull ( ) ;
     }
 
-    private IDeskHeightAndSpeed TestFactory ( IReferenceOutput _ ) => Substitute.For < IDeskHeightAndSpeed > ( ) ;
+    private IDeskHeightAndSpeed TestFactory ( IReferenceOutput _ )
+    {
+        return Substitute.For < IDeskHeightAndSpeed > ( ) ;
+    }
 
-    private DeskHeightAndSpeedFactory CreateSut ( ) => new ( _factory ) ;
+    private DeskHeightAndSpeedFactory CreateSut ( )
+    {
+        return new DeskHeightAndSpeedFactory ( _factory ) ;
+    }
 }

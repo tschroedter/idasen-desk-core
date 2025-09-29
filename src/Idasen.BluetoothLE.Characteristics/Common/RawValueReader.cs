@@ -25,16 +25,13 @@ public sealed class RawValueReader
     /// </summary>
     /// <param name="logger">Logger used for warnings and diagnostics.</param>
     /// <param name="reader">Helper used to extract bytes from the platform buffer.</param>
-    public RawValueReader (
-        ILogger       logger ,
-        IBufferReader reader )
+    public RawValueReader ( ILogger       logger ,
+                            IBufferReader reader )
     {
-        Guard.ArgumentNotNull (
-                               logger ,
-                               nameof ( logger ) ) ;
-        Guard.ArgumentNotNull (
-                               reader ,
-                               nameof ( reader ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( reader ,
+                                nameof ( reader ) ) ;
 
         _logger = logger ;
         _reader = reader ;
@@ -51,19 +48,17 @@ public sealed class RawValueReader
     public GattCommunicationStatus Status { get ; private set ; } = GattCommunicationStatus.Unreachable ;
 
     /// <inheritdoc />
-    public async Task < (bool , byte [ ]) > TryReadValueAsync (
-        IGattCharacteristicWrapper characteristic )
+    public async Task < (bool , byte [ ]) > TryReadValueAsync ( IGattCharacteristicWrapper characteristic )
     {
-        Guard.ArgumentNotNull (
-                               characteristic ,
-                               nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
 
-        if ( SupportsNotify ( characteristic ) ) {
-            _logger.Warning (
-                             "GattCharacteristic {CharacteristicUuid} doesn't support {UnsupportedOperation} but supports {SupportedOperation}" ,
-                             characteristic.Uuid ,
-                             "Read" ,
-                             "Notify" ) ;
+        if ( SupportsNotify ( characteristic ) )
+        {
+            _logger.Warning ( "GattCharacteristic {CharacteristicUuid} doesn't support {UnsupportedOperation} but supports {SupportedOperation}" ,
+                              characteristic.Uuid ,
+                              "Read" ,
+                              "Notify" ) ;
 
             return ( false , ArrayEmpty ) ; // need to subscribe to value change
         }
@@ -71,10 +66,9 @@ public sealed class RawValueReader
         if ( SupportsRead ( characteristic ) )
             return await ReadValue ( characteristic ) ;
 
-        _logger.Information (
-                             "GattCharacteristic {CharacteristicUuid} doesn't support {UnsupportedOperation}" ,
-                             characteristic.Uuid ,
-                             "Read" ) ;
+        _logger.Information ( "GattCharacteristic {CharacteristicUuid} doesn't support {UnsupportedOperation}" ,
+                              characteristic.Uuid ,
+                              "Read" ) ;
 
         return ( false , ArrayEmpty ) ;
     }
@@ -91,12 +85,10 @@ public sealed class RawValueReader
                GattCharacteristicProperties.Notify ;
     }
 
-    private async Task < (bool , byte [ ]) > ReadValue (
-        IGattCharacteristicWrapper characteristic )
+    private async Task < (bool , byte [ ]) > ReadValue ( IGattCharacteristicWrapper characteristic )
     {
-        Guard.ArgumentNotNull (
-                               characteristic ,
-                               nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
 
         var readValue = await characteristic.ReadValueAsync ( ) ;
 
@@ -109,9 +101,8 @@ public sealed class RawValueReader
         if ( readValue.Value == null )
             return ( false , ArrayEmpty ) ;
 
-        return _reader.TryReadValue (
-                                     readValue.Value ,
-                                     out var bytes )
+        return _reader.TryReadValue ( readValue.Value ,
+                                      out var bytes )
                    ? ( true , bytes )
                    : ( false , ArrayEmpty ) ;
     }

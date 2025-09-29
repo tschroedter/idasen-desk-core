@@ -9,6 +9,8 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 // ReSharper disable once InconsistentNaming
 public class BluetoothLEDeviceProvider : IBluetoothLEDeviceProvider
 {
-    public async Task < BluetoothLEDevice ? > FromBluetoothAddressAsync ( ulong address ) =>
-        await BluetoothLEDevice.FromBluetoothAddressAsync ( address ) ;
+    public async Task < BluetoothLEDevice ? > FromBluetoothAddressAsync ( ulong address )
+    {
+        return await BluetoothLEDevice.FromBluetoothAddressAsync ( address ) ;
+    }
 }

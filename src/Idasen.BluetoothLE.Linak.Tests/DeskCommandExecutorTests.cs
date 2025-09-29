@@ -13,12 +13,12 @@ namespace Idasen.BluetoothLE.Linak.Tests ;
 public class DeskCommandExecutorTests
 {
     [ AutoDataTestMethod ]
-    public void Constructor_ForLoggerNull_Throws (
-        Lazy < DeskCommandExecutor > sut ,
-        [ BeNull ] ILogger           logger )
+    public void Constructor_ForLoggerNull_Throws ( Lazy < DeskCommandExecutor > sut ,
+                                                   [ BeNull ] ILogger           logger )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) => {
+        var action = ( ) =>
+                     {
                          var test = sut.Value ;
                      } ;
 
@@ -28,12 +28,12 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public void Constructor_ForProviderNull_Throws (
-        Lazy < DeskCommandExecutor >     sut ,
-        [ BeNull ] IDeskCommandsProvider provider )
+    public void Constructor_ForProviderNull_Throws ( Lazy < DeskCommandExecutor >     sut ,
+                                                     [ BeNull ] IDeskCommandsProvider provider )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) => {
+        var action = ( ) =>
+                     {
                          var test = sut.Value ;
                      } ;
 
@@ -43,12 +43,12 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public void Constructor_ForControlNull_Throws (
-        Lazy < DeskCommandExecutor > sut ,
-        [ BeNull ] IControl          control )
+    public void Constructor_ForControlNull_Throws ( Lazy < DeskCommandExecutor > sut ,
+                                                    [ BeNull ] IControl          control )
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) => {
+        var action = ( ) =>
+                     {
                          var test = sut.Value ;
                      } ;
 
@@ -58,15 +58,14 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Up_ForInvokedWithUnknownCommand_ReturnsFalse (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider ,
-        [ Freeze ] IControl              control )
+    public async Task Up_ForInvokedWithUnknownCommand_ReturnsFalse ( DeskCommandExecutor              sut ,
+                                                                     [ Freeze ] IDeskCommandsProvider provider ,
+                                                                     [ Freeze ] IControl              control )
     {
-        provider.TryGetValue (
-                              DeskCommands.MoveUp ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveUp ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = null ;
 
                                return false ;
@@ -78,17 +77,20 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Up_ForInvoked_ReturnsTrueForSuccess (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider ,
-        [ Freeze ] IControl              control )
+    public async Task Up_ForInvoked_ReturnsTrueForSuccess ( DeskCommandExecutor              sut ,
+                                                            [ Freeze ] IDeskCommandsProvider provider ,
+                                                            [ Freeze ] IControl              control )
     {
-        var bytes = new byte [ ] {0 , 1} ;
+        var bytes = new byte [ ]
+                    {
+                        0 ,
+                        1
+                    } ;
 
-        provider.TryGetValue (
-                              DeskCommands.MoveUp ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveUp ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = bytes ;
 
                                return true ;
@@ -100,17 +102,20 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Up_ForInvoked_CallsControl (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider ,
-        [ Freeze ] IControl              control )
+    public async Task Up_ForInvoked_CallsControl ( DeskCommandExecutor              sut ,
+                                                   [ Freeze ] IDeskCommandsProvider provider ,
+                                                   [ Freeze ] IControl              control )
     {
-        var bytes = new byte [ ] {0 , 1} ;
+        var bytes = new byte [ ]
+                    {
+                        0 ,
+                        1
+                    } ;
 
-        provider.TryGetValue (
-                              DeskCommands.MoveUp ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveUp ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = bytes ;
 
                                return true ;
@@ -122,15 +127,14 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Down_ForInvokedWithUnknownCommand_ReturnsFalse (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider ,
-        [ Freeze ] IControl              control )
+    public async Task Down_ForInvokedWithUnknownCommand_ReturnsFalse ( DeskCommandExecutor              sut ,
+                                                                       [ Freeze ] IDeskCommandsProvider provider ,
+                                                                       [ Freeze ] IControl              control )
     {
-        provider.TryGetValue (
-                              DeskCommands.MoveDown ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveDown ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = null ;
 
                                return false ;
@@ -142,16 +146,19 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Down_ForInvoked_ReturnsTrueForSuccess (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider )
+    public async Task Down_ForInvoked_ReturnsTrueForSuccess ( DeskCommandExecutor              sut ,
+                                                              [ Freeze ] IDeskCommandsProvider provider )
     {
-        var bytes = new byte [ ] {0 , 1} ;
+        var bytes = new byte [ ]
+                    {
+                        0 ,
+                        1
+                    } ;
 
-        provider.TryGetValue (
-                              DeskCommands.MoveDown ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveDown ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = bytes ;
 
                                return true ;
@@ -163,17 +170,20 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Down_ForInvoked_CallsControl (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider ,
-        [ Freeze ] IControl              control )
+    public async Task Down_ForInvoked_CallsControl ( DeskCommandExecutor              sut ,
+                                                     [ Freeze ] IDeskCommandsProvider provider ,
+                                                     [ Freeze ] IControl              control )
     {
-        var bytes = new byte [ ] {0 , 1} ;
+        var bytes = new byte [ ]
+                    {
+                        0 ,
+                        1
+                    } ;
 
-        provider.TryGetValue (
-                              DeskCommands.MoveDown ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveDown ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = bytes ;
 
                                return true ;
@@ -185,15 +195,14 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Stop_ForInvokedWithUnknownCommand_ReturnsFalse (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider ,
-        [ Freeze ] IControl              control )
+    public async Task Stop_ForInvokedWithUnknownCommand_ReturnsFalse ( DeskCommandExecutor              sut ,
+                                                                       [ Freeze ] IDeskCommandsProvider provider ,
+                                                                       [ Freeze ] IControl              control )
     {
-        provider.TryGetValue (
-                              DeskCommands.MoveStop ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveStop ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = null ;
 
                                return false ;
@@ -205,16 +214,19 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Stop_ForInvoked_ReturnsTrueForSuccess (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider )
+    public async Task Stop_ForInvoked_ReturnsTrueForSuccess ( DeskCommandExecutor              sut ,
+                                                              [ Freeze ] IDeskCommandsProvider provider )
     {
-        var bytes = new byte [ ] {0 , 1} ;
+        var bytes = new byte [ ]
+                    {
+                        0 ,
+                        1
+                    } ;
 
-        provider.TryGetValue (
-                              DeskCommands.MoveStop ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveStop ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = bytes ;
 
                                return true ;
@@ -226,17 +238,20 @@ public class DeskCommandExecutorTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task Stop_ForInvoked_CallsControl (
-        DeskCommandExecutor              sut ,
-        [ Freeze ] IDeskCommandsProvider provider ,
-        [ Freeze ] IControl              control )
+    public async Task Stop_ForInvoked_CallsControl ( DeskCommandExecutor              sut ,
+                                                     [ Freeze ] IDeskCommandsProvider provider ,
+                                                     [ Freeze ] IControl              control )
     {
-        var bytes = new byte [ ] {0 , 1} ;
+        var bytes = new byte [ ]
+                    {
+                        0 ,
+                        1
+                    } ;
 
-        provider.TryGetValue (
-                              DeskCommands.MoveStop ,
-                              out Arg.Any < IEnumerable < byte > > ( ) )
-                .Returns ( x => {
+        provider.TryGetValue ( DeskCommands.MoveStop ,
+                               out Arg.Any < IEnumerable < byte > > ( ) )
+                .Returns ( x =>
+                           {
                                x [ 1 ] = bytes ;
 
                                return true ;

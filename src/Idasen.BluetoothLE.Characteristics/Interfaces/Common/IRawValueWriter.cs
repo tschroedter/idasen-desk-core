@@ -16,9 +16,8 @@ public interface IRawValueWriter
     /// <param name="characteristic">The characteristic to write to.</param>
     /// <param name="buffer">The value as a Windows <see cref="IBuffer" />.</param>
     /// <returns><c>true</c> on success; otherwise, <c>false</c>.</returns>
-    Task < bool > TryWriteValueAsync (
-        IGattCharacteristicWrapper characteristic ,
-        IBuffer                    buffer ) ;
+    Task < bool > TryWriteValueAsync ( IGattCharacteristicWrapper characteristic ,
+                                       IBuffer                    buffer ) ;
 
     /// <summary>
     ///     Attempts to write the given value using the WritableAuxiliaries capability.
@@ -26,9 +25,8 @@ public interface IRawValueWriter
     /// <param name="characteristic">The characteristic to write to.</param>
     /// <param name="buffer">The value as a Windows <see cref="IBuffer" />.</param>
     /// <returns><c>true</c> on success; otherwise, <c>false</c>.</returns>
-    Task < bool > TryWritableAuxiliariesValueAsync (
-        IGattCharacteristicWrapper characteristic ,
-        IBuffer                    buffer ) ;
+    Task < bool > TryWritableAuxiliariesValueAsync ( IGattCharacteristicWrapper characteristic ,
+                                                     IBuffer                    buffer ) ;
 
     /// <summary>
     ///     Writes without requiring a response and returns the detailed write result.
@@ -36,7 +34,6 @@ public interface IRawValueWriter
     /// <param name="characteristic">The characteristic to write to.</param>
     /// <param name="buffer">The value as a Windows <see cref="IBuffer" />.</param>
     /// <returns>The platform write result wrapper.</returns>
-    Task < IGattWriteResultWrapper > TryWriteWithoutResponseAsync (
-        IGattCharacteristicWrapper characteristic ,
-        IBuffer                    buffer ) ;
+    Task < IGattWriteResultWrapper > TryWriteWithoutResponseAsync ( IGattCharacteristicWrapper characteristic ,
+                                                                    IBuffer                    buffer ) ;
 }

@@ -44,39 +44,35 @@ public class StoppingHeightCalculatorTests
               .WithParameter ( "calculator" ) ;
     }
 
-    [ DataRow (
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1000u ) ]
-    [ DataRow (
-                  2000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1020u ) ]
-    [ DataRow (
-                  2000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  980u ) ]
+    [ DataRow ( 2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1000u ) ]
+    [ DataRow ( 2000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1020u ) ]
+    [ DataRow ( 2000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                980u ) ]
     [ TestMethod ]
-    public void Calculate_ForParameters_SetsStoppingHeight (
-        uint  targetHeight ,
-        uint  height ,
-        int   speed ,
-        int   maxSpeed ,
-        uint  maxMovement ,
-        float fudgeFactor ,
-        uint  stoppingHeight )
+    public void Calculate_ForParameters_SetsStoppingHeight ( uint  targetHeight ,
+                                                             uint  height ,
+                                                             int   speed ,
+                                                             int   maxSpeed ,
+                                                             uint  maxMovement ,
+                                                             float fudgeFactor ,
+                                                             uint  stoppingHeight )
     {
         var sut = CreateSut ( ) ;
 
@@ -93,107 +89,97 @@ public class StoppingHeightCalculatorTests
            .Be ( stoppingHeight ) ;
     }
 
-    [ DataRow (
-                  Direction.None ,
-                  Direction.Up ,
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1000u ) ]
-    [ DataRow (
-                  Direction.None ,
-                  Direction.Down ,
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1000u ) ]
-    [ DataRow (
-                  Direction.None ,
-                  Direction.None ,
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1000u ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1000u ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  2000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  980u ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  2000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1020u ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  1000u ,
-                  2000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1000u ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  1000u ,
-                  2000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  1020u ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  1000u ,
-                  2000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  980u ) ]
+    [ DataRow ( Direction.None ,
+                Direction.Up ,
+                2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1000u ) ]
+    [ DataRow ( Direction.None ,
+                Direction.Down ,
+                2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1000u ) ]
+    [ DataRow ( Direction.None ,
+                Direction.None ,
+                2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1000u ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1000u ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                2000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                980u ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                2000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1020u ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                1000u ,
+                2000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1000u ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                1000u ,
+                2000u ,
+                100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                1020u ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                1000u ,
+                2000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                980u ) ]
     [ TestMethod ]
-    public void Calculate_ForParameters_SetsDelta (
-        Direction moveIntoDirection ,
-        Direction startMovingIntoDirection ,
-        uint      targetHeight ,
-        uint      height ,
-        int       speed ,
-        int       maxSpeed ,
-        uint      maxMovement ,
-        float     fudgeFactor ,
-        uint      delta )
+    public void Calculate_ForParameters_SetsDelta ( Direction moveIntoDirection ,
+                                                    Direction startMovingIntoDirection ,
+                                                    uint      targetHeight ,
+                                                    uint      height ,
+                                                    int       speed ,
+                                                    int       maxSpeed ,
+                                                    uint      maxMovement ,
+                                                    float     fudgeFactor ,
+                                                    uint      delta )
     {
         var sut = CreateSut ( ) ;
 
@@ -212,39 +198,35 @@ public class StoppingHeightCalculatorTests
            .Be ( delta ) ;
     }
 
-    [ DataRow (
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  0 ) ]
-    [ DataRow (
-                  2000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  20 ) ]
-    [ DataRow (
-                  2000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  - 20 ) ]
+    [ DataRow ( 2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                0 ) ]
+    [ DataRow ( 2000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                20 ) ]
+    [ DataRow ( 2000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                - 20 ) ]
     [ TestMethod ]
-    public void Calculate_ForParameters_SetsMovementUntilStop (
-        uint  targetHeight ,
-        uint  height ,
-        int   speed ,
-        int   maxSpeed ,
-        uint  maxMovement ,
-        float fudgeFactor ,
-        int   movementUntilStop )
+    public void Calculate_ForParameters_SetsMovementUntilStop ( uint  targetHeight ,
+                                                                uint  height ,
+                                                                int   speed ,
+                                                                int   maxSpeed ,
+                                                                uint  maxMovement ,
+                                                                float fudgeFactor ,
+                                                                int   movementUntilStop )
     {
         var sut = CreateSut ( ) ;
 
@@ -262,338 +244,305 @@ public class StoppingHeightCalculatorTests
     }
 
     // Same Direction
-    [ DataRow (
-                  Direction.None ,
-                  Direction.None ,
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  2000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  false ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  2000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.None ,
-                  Direction.None ,
-                  1000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  1000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  1000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  1000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  20u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  1000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  21u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  1000u ,
-                  1001u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  1000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  1000u ,
-                  980u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Up ,
-                  1000u ,
-                  979u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  false ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  1000u ,
-                  1021u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  false ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  1000u ,
-                  1020u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  1000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Down ,
-                  1000u ,
-                  999u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
+    [ DataRow ( Direction.None ,
+                Direction.None ,
+                2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                2000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                false ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                2000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.None ,
+                Direction.None ,
+                1000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                1000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                1000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                1000u ,
+                1000u ,
+                100 ,
+                100 ,
+                20u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                1000u ,
+                1000u ,
+                100 ,
+                100 ,
+                21u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                1000u ,
+                1001u ,
+                100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                1000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                1000u ,
+                980u ,
+                100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Up ,
+                1000u ,
+                979u ,
+                100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                false ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                1000u ,
+                1021u ,
+                - 100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                false ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                1000u ,
+                1020u ,
+                - 100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                1000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Down ,
+                1000u ,
+                999u ,
+                - 100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
     // Opposite Direction
-    [ DataRow (
-                  Direction.None ,
-                  Direction.Up ,
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  false ) ]
-    [ DataRow (
-                  Direction.None ,
-                  Direction.Down ,
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Down ,
-                  2000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Up ,
-                  2000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  false ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Down ,
-                  1000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Up ,
-                  1000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Down ,
-                  1000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  20u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Down ,
-                  1000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  21u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Down ,
-                  1000u ,
-                  1001u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Down ,
-                  1000u ,
-                  1000u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Down ,
-                  1000u ,
-                  980u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Up ,
-                  Direction.Down ,
-                  1000u ,
-                  979u ,
-                  100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Up ,
-                  1000u ,
-                  1021u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Up ,
-                  1000u ,
-                  1020u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Up ,
-                  1000u ,
-                  1000u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
-    [ DataRow (
-                  Direction.Down ,
-                  Direction.Up ,
-                  1000u ,
-                  999u ,
-                  - 100 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  true ) ]
+    [ DataRow ( Direction.None ,
+                Direction.Up ,
+                2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                false ) ]
+    [ DataRow ( Direction.None ,
+                Direction.Down ,
+                2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Down ,
+                2000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Up ,
+                2000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                false ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Down ,
+                1000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Up ,
+                1000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                2.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Down ,
+                1000u ,
+                1000u ,
+                100 ,
+                100 ,
+                20u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Down ,
+                1000u ,
+                1000u ,
+                100 ,
+                100 ,
+                21u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Down ,
+                1000u ,
+                1001u ,
+                100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Down ,
+                1000u ,
+                1000u ,
+                100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Down ,
+                1000u ,
+                980u ,
+                100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Up ,
+                Direction.Down ,
+                1000u ,
+                979u ,
+                100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Up ,
+                1000u ,
+                1021u ,
+                - 100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Up ,
+                1000u ,
+                1020u ,
+                - 100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Up ,
+                1000u ,
+                1000u ,
+                - 100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
+    [ DataRow ( Direction.Down ,
+                Direction.Up ,
+                1000u ,
+                999u ,
+                - 100 ,
+                100 ,
+                10u ,
+                1.0f ,
+                true ) ]
     [ TestMethod ]
-    public void Calculate_ForParameters_SetsHasReachedTargetHeight (
-        Direction moveIntoDirection ,
-        Direction startMovingIntoDirection ,
-        uint      targetHeight ,
-        uint      height ,
-        int       speed ,
-        int       maxSpeed ,
-        uint      maxMovement ,
-        float     fudgeFactor ,
-        bool      hasReachedTargetHeight )
+    public void Calculate_ForParameters_SetsHasReachedTargetHeight ( Direction moveIntoDirection ,
+                                                                     Direction startMovingIntoDirection ,
+                                                                     uint      targetHeight ,
+                                                                     uint      height ,
+                                                                     int       speed ,
+                                                                     int       maxSpeed ,
+                                                                     uint      maxMovement ,
+                                                                     float     fudgeFactor ,
+                                                                     bool      hasReachedTargetHeight )
     {
         var sut = CreateSut ( ) ;
 
@@ -612,119 +561,105 @@ public class StoppingHeightCalculatorTests
            .Be ( hasReachedTargetHeight ) ;
     }
 
-    [ DataRow (
-                  2000u ,
-                  1000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.Up ) ]
-    [ DataRow (
-                  2000u ,
-                  1989u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.Up ) ]
-    [ DataRow (
-                  2000u ,
-                  1990u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.None ) ]
-    [ DataRow (
-                  2000u ,
-                  1999u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.None ) ]
-    [ DataRow (
-                  2000u ,
-                  2000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.None ) ]
-    [ DataRow (
-                  2000u ,
-                  3000u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.Down ) ]
-    [ DataRow (
-                  2000u ,
-                  2011u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.Down ) ]
-    [ DataRow (
-                  2000u ,
-                  2010u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.None ) ]
-    [ DataRow (
-                  2000u ,
-                  2001u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  1.0f ,
-                  Direction.None ) ]
-    [ DataRow (
-                  2000u ,
-                  1979u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  Direction.Up ) ]
-    [ DataRow (
-                  2000u ,
-                  1980u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  Direction.None ) ]
-    [ DataRow (
-                  2000u ,
-                  2020u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  Direction.None ) ]
-    [ DataRow (
-                  2000u ,
-                  2021u ,
-                  0 ,
-                  100 ,
-                  10u ,
-                  2.0f ,
-                  Direction.Down ) ]
+    [ DataRow ( 2000u ,
+                1000u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.Up ) ]
+    [ DataRow ( 2000u ,
+                1989u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.Up ) ]
+    [ DataRow ( 2000u ,
+                1990u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.None ) ]
+    [ DataRow ( 2000u ,
+                1999u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.None ) ]
+    [ DataRow ( 2000u ,
+                2000u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.None ) ]
+    [ DataRow ( 2000u ,
+                3000u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.Down ) ]
+    [ DataRow ( 2000u ,
+                2011u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.Down ) ]
+    [ DataRow ( 2000u ,
+                2010u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.None ) ]
+    [ DataRow ( 2000u ,
+                2001u ,
+                0 ,
+                100 ,
+                10u ,
+                1.0f ,
+                Direction.None ) ]
+    [ DataRow ( 2000u ,
+                1979u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                Direction.Up ) ]
+    [ DataRow ( 2000u ,
+                1980u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                Direction.None ) ]
+    [ DataRow ( 2000u ,
+                2020u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                Direction.None ) ]
+    [ DataRow ( 2000u ,
+                2021u ,
+                0 ,
+                100 ,
+                10u ,
+                2.0f ,
+                Direction.Down ) ]
     [ TestMethod ]
-    public void Calculate_ForParameters_SetsMoveIntoDirection (
-        uint      targetHeight ,
-        uint      height ,
-        int       speed ,
-        int       maxSpeed ,
-        uint      maxMovement ,
-        float     fudgeFactor ,
-        Direction moveIntoDirection )
+    public void Calculate_ForParameters_SetsMoveIntoDirection ( uint      targetHeight ,
+                                                                uint      height ,
+                                                                int       speed ,
+                                                                int       maxSpeed ,
+                                                                uint      maxMovement ,
+                                                                float     fudgeFactor ,
+                                                                Direction moveIntoDirection )
     {
         var sut = CreateSut ( ) ;
 
@@ -744,8 +679,7 @@ public class StoppingHeightCalculatorTests
 
     private StoppingHeightCalculator CreateSut ( )
     {
-        return new StoppingHeightCalculator (
-                                             _logger ,
-                                             _calculator ) ;
+        return new StoppingHeightCalculator ( _logger ,
+                                              _calculator ) ;
     }
 }

@@ -21,7 +21,10 @@ public class DeskCommandExecutorFactoryTests
         _control = Substitute.For < IControl > ( ) ;
     }
 
-    private IDeskCommandExecutor TestFactory ( IControl executor ) => Substitute.For < IDeskCommandExecutor > ( ) ;
+    private IDeskCommandExecutor TestFactory ( IControl executor )
+    {
+        return Substitute.For < IDeskCommandExecutor > ( ) ;
+    }
 
     [ TestMethod ]
     public void Create_ForControlNull_Throws ( )
@@ -41,5 +44,8 @@ public class DeskCommandExecutorFactoryTests
                      .NotBeNull ( ) ;
     }
 
-    private DeskCommandExecutorFactory CreateSut ( ) => new ( _factory ) ;
+    private DeskCommandExecutorFactory CreateSut ( )
+    {
+        return new DeskCommandExecutorFactory ( _factory ) ;
+    }
 }

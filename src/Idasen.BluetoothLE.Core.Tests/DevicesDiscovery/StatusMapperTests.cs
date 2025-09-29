@@ -8,24 +8,18 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
 public class StatusMapperTests
 {
     [ TestMethod ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Started ,
-                  Status.Started ) ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Aborted ,
-                  Status.Aborted ) ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Created ,
-                  Status.Created ) ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Stopped ,
-                  Status.Stopped ) ]
-    [ DataRow (
-                  BluetoothLEAdvertisementWatcherStatus.Stopping ,
-                  Status.Stopping ) ]
-    public void Map_ForStatus_ReturnsWatcherStatus (
-        BluetoothLEAdvertisementWatcherStatus bluetoothStatus ,
-        Status                                status )
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Started ,
+                Status.Started ) ]
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Aborted ,
+                Status.Aborted ) ]
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Created ,
+                Status.Created ) ]
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Stopped ,
+                Status.Stopped ) ]
+    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Stopping ,
+                Status.Stopping ) ]
+    public void Map_ForStatus_ReturnsWatcherStatus ( BluetoothLEAdvertisementWatcherStatus bluetoothStatus ,
+                                                     Status                                status )
     {
         CreateSut ( ).Map ( bluetoothStatus )
                      .Should ( )
@@ -35,7 +29,7 @@ public class StatusMapperTests
     [ TestMethod ]
     public void Map_ForUnknownStatus_ThrowsArgumentException ( )
     {
-        var unknown = ( BluetoothLEAdvertisementWatcherStatus ) 999 ;
+        var unknown = ( BluetoothLEAdvertisementWatcherStatus )999 ;
 
         var action = ( ) => CreateSut ( ).Map ( unknown ) ;
 

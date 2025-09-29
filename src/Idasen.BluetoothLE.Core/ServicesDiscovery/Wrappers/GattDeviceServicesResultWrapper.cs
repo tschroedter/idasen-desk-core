@@ -6,22 +6,20 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 [ ExcludeFromCodeCoverage ]
 public class GattDeviceServicesResultWrapper
-    : IGattDeviceServicesResultWrapper , IDisposable
+    : IGattDeviceServicesResultWrapper ,
+      IDisposable
 {
     public delegate IGattDeviceServicesResultWrapper Factory ( GattDeviceServicesResult service ) ;
 
     private readonly GattDeviceServicesResult _service ;
 
-    public GattDeviceServicesResultWrapper (
-        GattDeviceServiceWrapper.Factory serviceWrapperFactory ,
-        GattDeviceServicesResult         service )
+    public GattDeviceServicesResultWrapper ( GattDeviceServiceWrapper.Factory serviceWrapperFactory ,
+                                             GattDeviceServicesResult         service )
     {
-        Guard.ArgumentNotNull (
-                               serviceWrapperFactory ,
-                               nameof ( serviceWrapperFactory ) ) ;
-        Guard.ArgumentNotNull (
-                               service ,
-                               nameof ( service ) ) ;
+        Guard.ArgumentNotNull ( serviceWrapperFactory ,
+                                nameof ( serviceWrapperFactory ) ) ;
+        Guard.ArgumentNotNull ( service ,
+                                nameof ( service ) ) ;
 
         _service = service ;
         var serviceWrapperFactory1 = serviceWrapperFactory ;
@@ -34,9 +32,7 @@ public class GattDeviceServicesResultWrapper
 
     public void Dispose ( )
     {
-        foreach ( var s in Services ) {
-            s.Dispose ( ) ;
-        }
+        foreach ( var s in Services ) s.Dispose ( ) ;
     }
 
     /// <inheritdoc />

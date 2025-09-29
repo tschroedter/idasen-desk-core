@@ -18,15 +18,14 @@ public class Control ( ILogger                              logger ,
                        IRawValueWriter                      rawValueWriter ,
                        ICharacteristicBaseToStringConverter toStringConverter ,
                        IDescriptionToUuid                   descriptionToUuid )
-    : CharacteristicBase (
-                          logger ,
-                          scheduler ,
-                          device ,
-                          providerFactory ,
-                          rawValueReader ,
-                          rawValueWriter ,
-                          toStringConverter ,
-                          descriptionToUuid ) ,
+    : CharacteristicBase ( logger ,
+                           scheduler ,
+                           device ,
+                           providerFactory ,
+                           rawValueReader ,
+                           rawValueWriter ,
+                           toStringConverter ,
+                           descriptionToUuid ) ,
       IControl
 {
     /// <summary>
@@ -57,13 +56,13 @@ public class Control ( ILogger                              logger ,
     /// </summary>
     public async Task < bool > TryWriteRawControl2 ( IEnumerable < byte > bytes )
     {
-        return await TryWriteValueAsync (
-                                         Control2Key ,
-                                         bytes ) ;
+        return await TryWriteValueAsync ( Control2Key ,
+                                          bytes ) ;
     }
 
     /// <inheritdoc />
-    protected override T WithMapping < T > ( ) where T : class
+    protected override T WithMapping < T > ( )
+        where T : class
     {
         DescriptionToUuid [ Control2Key ] = Guid.Parse ( "99fa0002-338a-1024-8a49-009c0215f78a" ) ;
         DescriptionToUuid [ Control3Key ] = Guid.Parse ( "99fa0003-338a-1024-8a49-009c0215f78a" ) ;

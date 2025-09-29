@@ -24,5 +24,8 @@ public class UnknownBaseTests
               .NotThrow < Exception > ( ) ;
     }
 
-    private UnknownBase CreateSut ( ) => new ( ) ;
+    private UnknownBase CreateSut ( )
+    {
+        return new UnknownBase ( ) ;
+    }
 }

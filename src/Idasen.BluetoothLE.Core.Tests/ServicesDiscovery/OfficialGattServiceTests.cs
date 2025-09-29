@@ -45,11 +45,12 @@ public class OfficialGattServiceTests
 
     private static OfficialGattService CreateSut ( )
     {
-        return new OfficialGattService {
-                                           Name                  = Name ,
-                                           UniformTypeIdentifier = UniformTypeIdentifier ,
-                                           AssignedNumber        = AssignedNumber ,
-                                           ProfileSpecification  = ProfileSpecification
-                                       } ;
+        return new OfficialGattService
+               {
+                   Name                  = Name ,
+                   UniformTypeIdentifier = UniformTypeIdentifier ,
+                   AssignedNumber        = AssignedNumber ,
+                   ProfileSpecification  = ProfileSpecification
+               } ;
     }
 }

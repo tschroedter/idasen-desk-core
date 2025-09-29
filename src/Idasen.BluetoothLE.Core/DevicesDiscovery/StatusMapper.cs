@@ -8,13 +8,14 @@ public sealed class StatusMapper
 {
     public Status Map ( BluetoothLEAdvertisementWatcherStatus status )
     {
-        return status switch {
-                   BluetoothLEAdvertisementWatcherStatus.Started  => Status.Started ,
-                   BluetoothLEAdvertisementWatcherStatus.Aborted  => Status.Aborted ,
-                   BluetoothLEAdvertisementWatcherStatus.Created  => Status.Created ,
-                   BluetoothLEAdvertisementWatcherStatus.Stopped  => Status.Stopped ,
+        return status switch
+               {
+                   BluetoothLEAdvertisementWatcherStatus.Started => Status.Started ,
+                   BluetoothLEAdvertisementWatcherStatus.Aborted => Status.Aborted ,
+                   BluetoothLEAdvertisementWatcherStatus.Created => Status.Created ,
+                   BluetoothLEAdvertisementWatcherStatus.Stopped => Status.Stopped ,
                    BluetoothLEAdvertisementWatcherStatus.Stopping => Status.Stopping ,
-                   _                                              => throw new ArgumentException ( $"Unknown status: '{status}'!" )
+                   _ => throw new ArgumentException ( $"Unknown status: '{status}'!" )
                } ;
     }
 }

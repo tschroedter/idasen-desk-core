@@ -10,7 +10,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void GattServiceUuid_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut ( );
+        using var sut = CreateSut ( ) ;
 
         sut.GattServiceUuid
            .Should ( )
@@ -20,7 +20,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawHeightSpeed_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawHeightSpeed
            .Should ( )
@@ -30,7 +30,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawTwo_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawTwo
            .Should ( )
@@ -40,7 +40,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawThree_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawThree
            .Should ( )
@@ -50,7 +50,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawFour_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawFour
            .Should ( )
@@ -60,7 +60,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawFive_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawFive
            .Should ( )
@@ -70,7 +70,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawSix_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawSix
            .Should ( )
@@ -80,7 +80,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawSeven_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawSeven
            .Should ( )
@@ -90,7 +90,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawEight_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawEight
            .Should ( )
@@ -100,7 +100,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawMask_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawMask
            .Should ( )
@@ -110,7 +110,7 @@ public class ReferenceOutputTests
     [ TestMethod ]
     public void RawDetectMask_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawDetectMask
            .Should ( )
@@ -136,5 +136,8 @@ public class ReferenceOutputTests
               .NotThrow < Exception > ( ) ;
     }
 
-    private ReferenceOutput CreateSut ( ) => new ( ) ;
+    private ReferenceOutput CreateSut ( )
+    {
+        return new ReferenceOutput ( ) ;
+    }
 }

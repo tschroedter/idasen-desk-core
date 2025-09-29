@@ -8,8 +8,7 @@ public class NotInitializeException
     public NotInitializeException ( string message )
         : base ( message )
     {
-        Guard.ArgumentNotNull (
-                               message ,
-                               nameof ( message ) ) ;
+        Guard.ArgumentNotNull ( message ,
+                                nameof ( message ) ) ;
     }
 }

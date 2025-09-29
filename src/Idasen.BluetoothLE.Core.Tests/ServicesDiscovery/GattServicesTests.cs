@@ -11,9 +11,8 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 public class GattServicesTests
 {
     [ AutoDataTestMethod ]
-    public void Indexer_ForServiceAndResultNull_Throws (
-        GattServices              sut ,
-        IGattDeviceServiceWrapper service )
+    public void Indexer_ForServiceAndResultNull_Throws ( GattServices              sut ,
+                                                         IGattDeviceServiceWrapper service )
     {
         Action action = ( ) => sut [ service ] = null! ;
 
@@ -23,10 +22,9 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Indexer_ForServiceAndResult_SetsKeyAndValue (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service ,
-        IGattCharacteristicsResultWrapper result )
+    public void Indexer_ForServiceAndResult_SetsKeyAndValue ( GattServices                      sut ,
+                                                              IGattDeviceServiceWrapper         service ,
+                                                              IGattCharacteristicsResultWrapper result )
     {
         sut [ service ] = result ;
 
@@ -36,10 +34,9 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Indexer_ForServiceAndResult_UpdatesCount (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service ,
-        IGattCharacteristicsResultWrapper result )
+    public void Indexer_ForServiceAndResult_UpdatesCount ( GattServices                      sut ,
+                                                           IGattDeviceServiceWrapper         service ,
+                                                           IGattCharacteristicsResultWrapper result )
     {
         sut [ service ] = result ;
 
@@ -49,11 +46,10 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Indexer_ForExistingService_DisposesOldValueOnly (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service ,
-        IGattCharacteristicsResultWrapper first ,
-        IGattCharacteristicsResultWrapper second )
+    public void Indexer_ForExistingService_DisposesOldValueOnly ( GattServices                      sut ,
+                                                                  IGattDeviceServiceWrapper         service ,
+                                                                  IGattCharacteristicsResultWrapper first ,
+                                                                  IGattCharacteristicsResultWrapper second )
     {
         sut [ service ] = first ;
         sut [ service ] = second ;
@@ -71,12 +67,11 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_DisposesService1 (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service1 ,
-        IGattCharacteristicsResultWrapper result1 ,
-        IGattDeviceServiceWrapper         service2 ,
-        IGattCharacteristicsResultWrapper result2 )
+    public void Clear_ForInvoked_DisposesService1 ( GattServices                      sut ,
+                                                    IGattDeviceServiceWrapper         service1 ,
+                                                    IGattCharacteristicsResultWrapper result1 ,
+                                                    IGattDeviceServiceWrapper         service2 ,
+                                                    IGattCharacteristicsResultWrapper result2 )
     {
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
@@ -88,12 +83,11 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_DisposesService2 (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service1 ,
-        IGattCharacteristicsResultWrapper result1 ,
-        IGattDeviceServiceWrapper         service2 ,
-        IGattCharacteristicsResultWrapper result2 )
+    public void Clear_ForInvoked_DisposesService2 ( GattServices                      sut ,
+                                                    IGattDeviceServiceWrapper         service1 ,
+                                                    IGattCharacteristicsResultWrapper result1 ,
+                                                    IGattDeviceServiceWrapper         service2 ,
+                                                    IGattCharacteristicsResultWrapper result2 )
     {
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
@@ -105,12 +99,11 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_DisposesValues (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service1 ,
-        IGattCharacteristicsResultWrapper result1 ,
-        IGattDeviceServiceWrapper         service2 ,
-        IGattCharacteristicsResultWrapper result2 )
+    public void Clear_ForInvoked_DisposesValues ( GattServices                      sut ,
+                                                  IGattDeviceServiceWrapper         service1 ,
+                                                  IGattCharacteristicsResultWrapper result1 ,
+                                                  IGattDeviceServiceWrapper         service2 ,
+                                                  IGattCharacteristicsResultWrapper result2 )
     {
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
@@ -124,10 +117,9 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_SetsCountToZero (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service ,
-        IGattCharacteristicsResultWrapper result )
+    public void Clear_ForInvoked_SetsCountToZero ( GattServices                      sut ,
+                                                   IGattDeviceServiceWrapper         service ,
+                                                   IGattCharacteristicsResultWrapper result )
     {
         sut [ service ] = result ;
 
@@ -139,12 +131,11 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesService1 (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service1 ,
-        IGattCharacteristicsResultWrapper result1 ,
-        IGattDeviceServiceWrapper         service2 ,
-        IGattCharacteristicsResultWrapper result2 )
+    public void Dispose_ForInvoked_DisposesService1 ( GattServices                      sut ,
+                                                      IGattDeviceServiceWrapper         service1 ,
+                                                      IGattCharacteristicsResultWrapper result1 ,
+                                                      IGattDeviceServiceWrapper         service2 ,
+                                                      IGattCharacteristicsResultWrapper result2 )
     {
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
@@ -156,12 +147,11 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesService2 (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service1 ,
-        IGattCharacteristicsResultWrapper result1 ,
-        IGattDeviceServiceWrapper         service2 ,
-        IGattCharacteristicsResultWrapper result2 )
+    public void Dispose_ForInvoked_DisposesService2 ( GattServices                      sut ,
+                                                      IGattDeviceServiceWrapper         service1 ,
+                                                      IGattCharacteristicsResultWrapper result1 ,
+                                                      IGattDeviceServiceWrapper         service2 ,
+                                                      IGattCharacteristicsResultWrapper result2 )
     {
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
@@ -173,12 +163,11 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesValues (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service1 ,
-        IGattCharacteristicsResultWrapper result1 ,
-        IGattDeviceServiceWrapper         service2 ,
-        IGattCharacteristicsResultWrapper result2 )
+    public void Dispose_ForInvoked_DisposesValues ( GattServices                      sut ,
+                                                    IGattDeviceServiceWrapper         service1 ,
+                                                    IGattCharacteristicsResultWrapper result1 ,
+                                                    IGattDeviceServiceWrapper         service2 ,
+                                                    IGattCharacteristicsResultWrapper result2 )
     {
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
@@ -192,10 +181,9 @@ public class GattServicesTests
     }
 
     [ AutoDataTestMethod ]
-    public void ReadOnlyDictionary_ForInvoked_ContainsService1 (
-        GattServices                      sut ,
-        IGattDeviceServiceWrapper         service ,
-        IGattCharacteristicsResultWrapper result )
+    public void ReadOnlyDictionary_ForInvoked_ContainsService1 ( GattServices                      sut ,
+                                                                 IGattDeviceServiceWrapper         service ,
+                                                                 IGattCharacteristicsResultWrapper result )
     {
         sut [ service ] = result ;
 

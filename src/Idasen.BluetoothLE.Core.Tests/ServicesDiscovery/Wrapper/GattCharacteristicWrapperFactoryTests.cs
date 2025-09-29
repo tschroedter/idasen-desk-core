@@ -8,8 +8,7 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 public class GattCharacteristicWrapperFactoryTests
 {
     [ AutoDataTestMethod ]
-    public void Create_ForCharacteristicNull_Throws (
-        GattCharacteristicWrapperFactory sut )
+    public void Create_ForCharacteristicNull_Throws ( GattCharacteristicWrapperFactory sut )
     {
         Action action = ( ) => sut.Create ( null! ) ;
 

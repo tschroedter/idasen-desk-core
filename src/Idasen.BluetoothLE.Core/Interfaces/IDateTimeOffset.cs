@@ -37,7 +37,6 @@ public interface IDateTimeOffset
     ///     A string representation of the value of the current DateTimeOffset
     ///     object, as specified by format and provider.
     /// </returns>
-    string ToString (
-        string ?          format ,
-        IFormatProvider ? formatProvider ) ;
+    string ToString ( string ?          format ,
+                      IFormatProvider ? formatProvider ) ;
 }

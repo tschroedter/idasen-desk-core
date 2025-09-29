@@ -34,7 +34,6 @@ public interface IErrorManager : IDisposable
     /// <param name="caller">
     ///     The caller information.
     /// </param>
-    void PublishForMessage (
-        string                      message ,
-        [ CallerMemberName ] string caller = "" ) ;
+    void PublishForMessage ( string                      message ,
+                             [ CallerMemberName ] string caller = "" ) ;
 }

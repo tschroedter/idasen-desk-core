@@ -18,11 +18,12 @@ public class DeskStopperTests
     public void Init ( )
     {
         _logger = Substitute.For < ILogger > ( ) ;
-        _settings = new DeskMoverSettings {
-                                              TimerInterval                 = TimeSpan.FromMilliseconds ( 100 ) ,
-                                              NearTargetBaseTolerance       = 2 ,
-                                              NearTargetMaxDynamicTolerance = 10
-                                          } ;
+        _settings = new DeskMoverSettings
+                    {
+                        TimerInterval                 = TimeSpan.FromMilliseconds ( 100 ) ,
+                        NearTargetBaseTolerance       = 2 ,
+                        NearTargetMaxDynamicTolerance = 10
+                    } ;
 
         _heightMonitor = Substitute.For < IDeskHeightMonitor > ( ) ;
         _heightMonitor.IsHeightChanging ( ).Returns ( true ) ; // default: moving
@@ -36,11 +37,10 @@ public class DeskStopperTests
 
     private DeskStopper CreateSut ( )
     {
-        return new DeskStopper (
-                                _logger ,
-                                _settings ,
-                                _heightMonitor ,
-                                _calculator ) ;
+        return new DeskStopper ( _logger ,
+                                 _settings ,
+                                 _heightMonitor ,
+                                 _calculator ) ;
     }
 
     [ TestMethod ]
@@ -64,12 +64,11 @@ public class DeskStopperTests
 
         _heightMonitor.IsHeightChanging ( ).Returns ( true ) ;
 
-        var result = sut.ShouldStop (
-                                     height ,
-                                     speed ,
-                                     target ,
-                                     start ,
-                                     current ) ;
+        var result = sut.ShouldStop ( height ,
+                                      speed ,
+                                      target ,
+                                      start ,
+                                      current ) ;
 
         result.Should ( ).NotBeNull ( ) ;
 
@@ -98,12 +97,11 @@ public class DeskStopperTests
         _calculator.MovementUntilStop.Returns ( 5 ) ; // tolerance becomes 5
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var details = sut.ShouldStop (
-                                      height ,
-                                      speed ,
-                                      target ,
-                                      Direction.Up ,
-                                      Direction.Up ) ;
+        var details = sut.ShouldStop ( height ,
+                                       speed ,
+                                       target ,
+                                       Direction.Up ,
+                                       Direction.Up ) ;
 
         details.ShouldStop.Should ( ).BeTrue ( ) ;
     }
@@ -121,12 +119,11 @@ public class DeskStopperTests
         _calculator.MovementUntilStop.Returns ( 200 ) ; // predicted stop 1100 >= target
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var details = sut.ShouldStop (
-                                      height ,
-                                      100 ,
-                                      target ,
-                                      Direction.Up ,
-                                      Direction.Up ) ;
+        var details = sut.ShouldStop ( height ,
+                                       100 ,
+                                       target ,
+                                       Direction.Up ,
+                                       Direction.Up ) ;
 
         details.ShouldStop.Should ( ).BeTrue ( ) ;
     }
@@ -144,12 +141,11 @@ public class DeskStopperTests
         _calculator.MovementUntilStop.Returns ( - 150 ) ; // abs -> 150, predicted stop 1050 <= target
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var details = sut.ShouldStop (
-                                      height ,
-                                      - 100 ,
-                                      target ,
-                                      Direction.Down ,
-                                      Direction.Down ) ;
+        var details = sut.ShouldStop ( height ,
+                                       - 100 ,
+                                       target ,
+                                       Direction.Down ,
+                                       Direction.Down ) ;
 
         details.ShouldStop.Should ( ).BeTrue ( ) ;
     }
@@ -163,12 +159,11 @@ public class DeskStopperTests
         _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var details = sut.ShouldStop (
-                                      1000 ,
-                                      0 ,
-                                      2000 ,
-                                      Direction.Up ,
-                                      Direction.Up ) ;
+        var details = sut.ShouldStop ( 1000 ,
+                                       0 ,
+                                       2000 ,
+                                       Direction.Up ,
+                                       Direction.Up ) ;
 
         details.ShouldStop.Should ( ).BeTrue ( ) ;
     }
@@ -182,12 +177,11 @@ public class DeskStopperTests
         _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
         _calculator.HasReachedTargetHeight.Returns ( true ) ;
 
-        var details = sut.ShouldStop (
-                                      1500 ,
-                                      10 ,
-                                      1500 ,
-                                      Direction.Up ,
-                                      Direction.Up ) ;
+        var details = sut.ShouldStop ( 1500 ,
+                                       10 ,
+                                       1500 ,
+                                       Direction.Up ,
+                                       Direction.Up ) ;
 
         details.ShouldStop.Should ( ).BeTrue ( ) ;
     }
@@ -204,20 +198,18 @@ public class DeskStopperTests
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
         // First call seeds last height; second call with same height and speed 0 triggers stall
-        var d1 = sut.ShouldStop (
-                                 1000 ,
-                                 0 ,
-                                 5000 ,
-                                 Direction.Up ,
-                                 Direction.None ) ;
+        var d1 = sut.ShouldStop ( 1000 ,
+                                  0 ,
+                                  5000 ,
+                                  Direction.Up ,
+                                  Direction.None ) ;
         d1.ShouldStop.Should ( ).BeFalse ( ) ;
 
-        var details = sut.ShouldStop (
-                                      1000 ,
-                                      0 ,
-                                      5000 ,
-                                      Direction.Up ,
-                                      Direction.None ) ;
+        var details = sut.ShouldStop ( 1000 ,
+                                       0 ,
+                                       5000 ,
+                                       Direction.Up ,
+                                       Direction.None ) ;
 
         details.ShouldStop.Should ( ).BeTrue ( ) ;
     }
@@ -233,22 +225,21 @@ public class DeskStopperTests
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
         // Seed first distinct sample so that subsequent calls count as stall ticks
-        var seed = sut.ShouldStop (
-                                   1000 ,
-                                   0 ,
-                                   5000 ,
-                                   Direction.Up ,
-                                   Direction.Up ) ;
-        seed.ShouldStop.Should ( ).BeFalse ( ) ;
-
-        // 50 polls with no movement while actively commanding should NOT trigger stop anymore
-        for ( var i = 0 ; i < 50 ; i ++ ) {
-            var d = sut.ShouldStop (
-                                    1000 ,
+        var seed = sut.ShouldStop ( 1000 ,
                                     0 ,
                                     5000 ,
                                     Direction.Up ,
                                     Direction.Up ) ;
+        seed.ShouldStop.Should ( ).BeFalse ( ) ;
+
+        // 50 polls with no movement while actively commanding should NOT trigger stop anymore
+        for ( var i = 0 ; i < 50 ; i ++ )
+        {
+            var d = sut.ShouldStop ( 1000 ,
+                                     0 ,
+                                     5000 ,
+                                     Direction.Up ,
+                                     Direction.Up ) ;
             d.ShouldStop.Should ( ).BeFalse ( ) ;
         }
     }
@@ -264,43 +255,40 @@ public class DeskStopperTests
 
         // Seed first distinct sample
         _heightMonitor.IsHeightChanging ( ).Returns ( false ) ;
-        var seed = sut.ShouldStop (
-                                   1000 ,
-                                   0 ,
-                                   5000 ,
-                                   Direction.Up ,
-                                   Direction.Up ) ;
-        seed.ShouldStop.Should ( ).BeFalse ( ) ;
-
-        // 10 non-changing polls while actively commanding (speed 0 so they count as stall ticks)
-        for ( var i = 0 ; i < 10 ; i ++ ) {
-            var d = sut.ShouldStop (
-                                    1000 ,
+        var seed = sut.ShouldStop ( 1000 ,
                                     0 ,
                                     5000 ,
                                     Direction.Up ,
                                     Direction.Up ) ;
+        seed.ShouldStop.Should ( ).BeFalse ( ) ;
+
+        // 10 non-changing polls while actively commanding (speed 0 so they count as stall ticks)
+        for ( var i = 0 ; i < 10 ; i ++ )
+        {
+            var d = sut.ShouldStop ( 1000 ,
+                                     0 ,
+                                     5000 ,
+                                     Direction.Up ,
+                                     Direction.Up ) ;
             d.ShouldStop.Should ( ).BeFalse ( ) ;
         }
 
         // one changing poll -> reset internal counter
         _heightMonitor.IsHeightChanging ( ).Returns ( true ) ;
-        var resetEffect = sut.ShouldStop (
-                                          1001 ,
-                                          10 ,
-                                          5000 ,
-                                          Direction.Up ,
-                                          Direction.Up ) ;
+        var resetEffect = sut.ShouldStop ( 1001 ,
+                                           10 ,
+                                           5000 ,
+                                           Direction.Up ,
+                                           Direction.Up ) ;
         resetEffect.ShouldStop.Should ( ).BeFalse ( ) ; // no other stop condition met
 
         // back to non-changing: should not stop immediately (counter restarted)
         _heightMonitor.IsHeightChanging ( ).Returns ( false ) ;
-        var afterReset = sut.ShouldStop (
-                                         1002 ,
-                                         0 ,
-                                         5000 ,
-                                         Direction.Up ,
-                                         Direction.Up ) ;
+        var afterReset = sut.ShouldStop ( 1002 ,
+                                          0 ,
+                                          5000 ,
+                                          Direction.Up ,
+                                          Direction.Up ) ;
         afterReset.ShouldStop.Should ( ).BeFalse ( ) ;
     }
 
@@ -314,12 +302,11 @@ public class DeskStopperTests
         _calculator.MovementUntilStop.Returns ( 0 ) ;
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var details = sut.ShouldStop (
-                                      1000 ,
-                                      10 ,
-                                      5000 ,
-                                      Direction.Up ,
-                                      Direction.Up ) ;
+        var details = sut.ShouldStop ( 1000 ,
+                                       10 ,
+                                       5000 ,
+                                       Direction.Up ,
+                                       Direction.Up ) ;
 
         details.ShouldStop.Should ( ).BeFalse ( ) ;
     }

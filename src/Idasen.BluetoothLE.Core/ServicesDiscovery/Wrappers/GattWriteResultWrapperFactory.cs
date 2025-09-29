@@ -14,9 +14,8 @@ public class GattWriteResultWrapperFactory
 
     public GattWriteResultWrapperFactory ( GattWriteResultWrapper.Factory factory )
     {
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
         _factory = factory ;
     }
@@ -24,9 +23,8 @@ public class GattWriteResultWrapperFactory
     /// <inheritdoc />
     public IGattWriteResultWrapper Create ( GattWriteResult result )
     {
-        Guard.ArgumentNotNull (
-                               result ,
-                               nameof ( result ) ) ;
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
         return _factory.Invoke ( result ) ;
     }

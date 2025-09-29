@@ -10,8 +10,7 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 public class GattServicesProviderFactoryTests
 {
     [ AutoDataTestMethod ]
-    public void Create_ForWrapperNull_Throws (
-        GattServicesProviderFactory sut )
+    public void Create_ForWrapperNull_Throws ( GattServicesProviderFactory sut )
     {
         Action action = ( ) => sut.Create ( null! ) ;
 
@@ -21,9 +20,8 @@ public class GattServicesProviderFactoryTests
     }
 
     [ AutoDataTestMethod ]
-    public void Create_ForWrapper_Instance (
-        GattServicesProviderFactory sut ,
-        IBluetoothLeDeviceWrapper   wrapper )
+    public void Create_ForWrapper_Instance ( GattServicesProviderFactory sut ,
+                                             IBluetoothLeDeviceWrapper   wrapper )
     {
         sut.Create ( wrapper )
            .Should ( )

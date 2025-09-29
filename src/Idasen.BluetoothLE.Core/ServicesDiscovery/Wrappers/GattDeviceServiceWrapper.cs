@@ -15,16 +15,13 @@ public class GattDeviceServiceWrapper
     private readonly GattDeviceService                        _gattDeviceService ;
     private          IGattCharacteristicsResultWrapper ?      _lastCharacteristics ;
 
-    public GattDeviceServiceWrapper (
-        IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
-        GattDeviceService                        gattDeviceService )
+    public GattDeviceServiceWrapper ( IGattCharacteristicsResultWrapperFactory characteristicsFactory ,
+                                      GattDeviceService                        gattDeviceService )
     {
-        Guard.ArgumentNotNull (
-                               characteristicsFactory ,
-                               nameof ( characteristicsFactory ) ) ;
-        Guard.ArgumentNotNull (
-                               gattDeviceService ,
-                               nameof ( gattDeviceService ) ) ;
+        Guard.ArgumentNotNull ( characteristicsFactory ,
+                                nameof ( characteristicsFactory ) ) ;
+        Guard.ArgumentNotNull ( gattDeviceService ,
+                                nameof ( gattDeviceService ) ) ;
 
         _characteristicsFactory = characteristicsFactory ;
         _gattDeviceService      = gattDeviceService ;

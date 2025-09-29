@@ -11,9 +11,8 @@ public class ResourceNotFoundExceptionTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsMessage ( )
     {
-        var sut = new ResourceNotFoundException (
-                                                 ResourceName ,
-                                                 Message ) ;
+        var sut = new ResourceNotFoundException ( ResourceName ,
+                                                  Message ) ;
 
         sut.Message
            .Should ( )
@@ -23,9 +22,8 @@ public class ResourceNotFoundExceptionTests
     [ TestMethod ]
     public void Constructor_ForInvoked_SetsResourceName ( )
     {
-        var sut = new ResourceNotFoundException (
-                                                 ResourceName ,
-                                                 Message ) ;
+        var sut = new ResourceNotFoundException ( ResourceName ,
+                                                  Message ) ;
 
         sut.ResourceName
            .Should ( )

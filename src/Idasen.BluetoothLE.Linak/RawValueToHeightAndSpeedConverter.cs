@@ -28,10 +28,9 @@ public class RawValueToHeightAndSpeedConverter
     }
 
     /// <inheritdoc />
-    public bool TryConvert (
-        IEnumerable < byte > bytes ,
-        out uint             height ,
-        out int              speed )
+    public bool TryConvert ( IEnumerable < byte > bytes ,
+                             out uint             height ,
+                             out int              speed )
     {
         ArgumentNullException.ThrowIfNull ( bytes ) ;
 
@@ -40,26 +39,24 @@ public class RawValueToHeightAndSpeedConverter
 
         var enumerable = bytes as byte [ ] ?? bytes.ToArray ( ) ;
 
-        try {
+        try
+        {
             // Fast path if we already have a byte[]
-            if ( bytes is byte [ ] arr ) {
-                if ( arr.Length < 4 ) {
-                    _logger.Warning (
-                                     "Failed to convert raw value {Hex} to height and speed. Payload too short ({Length})" ,
-                                     arr.ToHex ( ) ,
-                                     arr.Length ) ;
+            if ( bytes is byte [ ] arr )
+            {
+                if ( arr.Length < 4 )
+                {
+                    _logger.Warning ( "Failed to convert raw value {Hex} to height and speed. Payload too short ({Length})" ,
+                                      arr.ToHex ( ) ,
+                                      arr.Length ) ;
                     return false ;
                 }
 
                 var span = arr.AsSpan ( ) ;
-                var rawHeight = BinaryPrimitives.ReadUInt16LittleEndian (
-                                                                         span.Slice (
-                                                                                     0 ,
-                                                                                     2 ) ) ;
-                var rawSpeed = BinaryPrimitives.ReadInt16LittleEndian (
-                                                                       span.Slice (
-                                                                                   2 ,
+                var rawHeight = BinaryPrimitives.ReadUInt16LittleEndian ( span.Slice ( 0 ,
                                                                                    2 ) ) ;
+                var rawSpeed = BinaryPrimitives.ReadInt16LittleEndian ( span.Slice ( 2 ,
+                                                                                 2 ) ) ;
 
                 height = HeightBaseInMicroMeter + rawHeight ;
                 speed  = rawSpeed ;
@@ -70,49 +67,47 @@ public class RawValueToHeightAndSpeedConverter
             Span < byte > buffer = stackalloc byte [ 4 ] ;
             var           i      = 0 ;
 
-            foreach ( var b in enumerable ) {
-                if ( i < 4 ) {
+            foreach ( var b in enumerable )
+                if ( i < 4 )
+                {
                     buffer [ i ++ ] = b ;
 
                     if ( i == 4 )
                         break ;
                 }
                 else
+                {
                     break ;
-            }
+                }
 
-            if ( i < 4 ) {
+            if ( i < 4 )
+            {
                 // Only allocate for logging on failure
                 var hex = enumerable.ToArray ( ).ToHex ( ) ;
-                _logger.Warning (
-                                 "Failed to convert raw value {Hex} to height and speed. Payload too short ({Length})" ,
-                                 hex ,
-                                 i ) ;
+                _logger.Warning ( "Failed to convert raw value {Hex} to height and speed. Payload too short ({Length})" ,
+                                  hex ,
+                                  i ) ;
                 return false ;
             }
 
-            var h = BinaryPrimitives.ReadUInt16LittleEndian (
-                                                             buffer.Slice (
-                                                                           0 ,
-                                                                           2 ) ) ;
-            var s = BinaryPrimitives.ReadInt16LittleEndian (
-                                                            buffer.Slice (
-                                                                          2 ,
-                                                                          2 ) ) ;
+            var h = BinaryPrimitives.ReadUInt16LittleEndian ( buffer.Slice ( 0 ,
+                                                                             2 ) ) ;
+            var s = BinaryPrimitives.ReadInt16LittleEndian ( buffer.Slice ( 2 ,
+                                                                            2 ) ) ;
 
             height = HeightBaseInMicroMeter + h ;
             speed  = s ;
             return true ;
         }
-        catch ( Exception e ) {
+        catch ( Exception e )
+        {
             // Allocate only for logging
             var hex = bytes is byte [ ] a
                           ? a.ToHex ( )
                           : enumerable.ToArray ( ).ToHex ( ) ;
-            _logger.Warning (
-                             e ,
-                             "Failed to convert raw value {Hex} to height and speed" ,
-                             hex ) ;
+            _logger.Warning ( e ,
+                              "Failed to convert raw value {Hex} to height and speed" ,
+                              hex ) ;
             height = 0 ;
             speed  = 0 ;
             return false ;

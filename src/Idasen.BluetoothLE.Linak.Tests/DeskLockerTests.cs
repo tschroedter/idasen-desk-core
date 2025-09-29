@@ -39,10 +39,9 @@ public class DeskLockerTests : IDisposable
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( _subjectHeightAndSpeed ) ;
 
-        _details = new HeightSpeedDetails (
-                                           DateTimeOffset.Now ,
-                                           123u ,
-                                           321 ) ;
+        _details = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                            123u ,
+                                            321 ) ;
     }
 
     [ TestMethod ]
@@ -85,7 +84,7 @@ public class DeskLockerTests : IDisposable
         _deskMover.IsAllowedToMove
                   .Returns ( true ) ;
 
-        using var sut = CreateSutInitialized().Lock();
+        using var sut = CreateSutInitialized ( ).Lock ( ) ;
 
         _subjectHeightAndSpeed.OnNext ( _details ) ;
 
@@ -115,15 +114,17 @@ public class DeskLockerTests : IDisposable
 
     private DeskLocker CreateSut ( )
     {
-        return new DeskLocker (
-                               _logger ,
-                               _scheduler ,
-                               _deskMover ,
-                               _executor ,
-                               _heightAndSpeed ) ;
+        return new DeskLocker ( _logger ,
+                                _scheduler ,
+                                _deskMover ,
+                                _executor ,
+                                _heightAndSpeed ) ;
     }
 
 #pragma warning disable CA2000
-    private IDeskLocker CreateSutInitialized ( ) => CreateSut ( ).Initialize ( ) ;
+    private IDeskLocker CreateSutInitialized ( )
+    {
+        return CreateSut ( ).Initialize ( ) ;
+    }
 #pragma warning restore CA2000
 }

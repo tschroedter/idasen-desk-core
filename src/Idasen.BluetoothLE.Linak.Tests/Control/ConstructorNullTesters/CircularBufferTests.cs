@@ -23,9 +23,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_ConstructorSizeIndexAccess_CorrectContent ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3] ) ;
 
         using var scope = new AssertionScope ( ) ;
 
@@ -36,19 +35,17 @@ public class CircularBufferTests
               .Should ( )
               .Be ( 4 ) ;
 
-        for ( var i = 0 ; i < 4 ; i ++ ) {
+        for ( var i = 0 ; i < 4 ; i ++ )
             buffer [ i ].Should ( )
                         .Be ( i ) ;
-        }
     }
 
     [ TestMethod ]
     public void CircularBuffer_Constructor_ExceptionWhenSourceIsLargerThanCapacity ( )
     {
         // ReSharper disable once ObjectCreationAsStatement
-        Action action = ( ) => new CircularBuffer < int > (
-                                                           3 ,
-                                                           [0 , 1 , 2 , 3] ) ;
+        Action action = ( ) => new CircularBuffer < int > ( 3 ,
+                                                            [0 , 1 , 2 , 3] ) ;
 
         action.Should ( )
               .Throw < ArgumentException > ( )
@@ -58,15 +55,15 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_GetEnumeratorConstructorDefinedArray_CorrectContent ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3] ) ;
 
         using var scope = new AssertionScope ( ) ;
 
         var x = 0 ;
 
-        foreach ( var item in buffer ) {
+        foreach ( var item in buffer )
+        {
             item.Should ( )
                 .Be ( x ) ;
             x ++ ;
@@ -78,9 +75,7 @@ public class CircularBufferTests
     {
         var buffer = new CircularBuffer < int > ( 5 ) ;
 
-        for ( var i = 0 ; i < 5 ; i ++ ) {
-            buffer.PushBack ( i ) ;
-        }
+        for ( var i = 0 ; i < 5 ; i ++ ) buffer.PushBack ( i ) ;
 
         using var scope = new AssertionScope ( ) ;
 
@@ -88,10 +83,9 @@ public class CircularBufferTests
               .Should ( )
               .Be ( 0 ) ;
 
-        for ( var i = 0 ; i < 5 ; i ++ ) {
+        for ( var i = 0 ; i < 5 ; i ++ )
             buffer [ i ].Should ( )
                         .Be ( i ) ;
-        }
     }
 
     [ TestMethod ]
@@ -99,9 +93,7 @@ public class CircularBufferTests
     {
         var buffer = new CircularBuffer < int > ( 5 ) ;
 
-        for ( var i = 0 ; i < 10 ; i ++ ) {
-            buffer.PushBack ( i ) ;
-        }
+        for ( var i = 0 ; i < 10 ; i ++ ) buffer.PushBack ( i ) ;
 
         buffer.ToArray ( )
               .Should ( )
@@ -113,16 +105,15 @@ public class CircularBufferTests
     {
         var buffer = new CircularBuffer < int > ( 5 ) ;
 
-        for ( var i = 0 ; i < 10 ; i ++ ) {
-            buffer.PushBack ( i ) ;
-        }
+        for ( var i = 0 ; i < 10 ; i ++ ) buffer.PushBack ( i ) ;
 
         using var scope = new AssertionScope ( ) ;
 
         // buffer should have [5,6,7,8,9]
         var x = 5 ;
 
-        foreach ( var item in buffer ) {
+        foreach ( var item in buffer )
+        {
             item.Should ( )
                 .Be ( x ) ;
             x ++ ;
@@ -132,9 +123,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_ToArrayConstructorDefinedArray_CorrectContent ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3] ) ;
 
         buffer.ToArray ( )
               .Should ( )
@@ -146,9 +136,7 @@ public class CircularBufferTests
     {
         var buffer = new CircularBuffer < int > ( 5 ) ;
 
-        for ( var i = 0 ; i < 10 ; i ++ ) {
-            buffer.PushBack ( i ) ;
-        }
+        for ( var i = 0 ; i < 10 ; i ++ ) buffer.PushBack ( i ) ;
 
         buffer.ToArray ( )
               .Should ( )
@@ -160,9 +148,7 @@ public class CircularBufferTests
     {
         var buffer = new CircularBuffer < int > ( 5 ) ;
 
-        for ( var i = 0 ; i < 5 ; i ++ ) {
-            buffer.PushFront ( i ) ;
-        }
+        for ( var i = 0 ; i < 5 ; i ++ ) buffer.PushFront ( i ) ;
 
         buffer.ToArray ( )
               .Should ( )
@@ -174,9 +160,7 @@ public class CircularBufferTests
     {
         var buffer = new CircularBuffer < int > ( 5 ) ;
 
-        for ( var i = 0 ; i < 10 ; i ++ ) {
-            buffer.PushFront ( i ) ;
-        }
+        for ( var i = 0 ; i < 10 ; i ++ ) buffer.PushFront ( i ) ;
 
         buffer.ToArray ( )
               .Should ( )
@@ -186,9 +170,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_Front_CorrectItem ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) ;
 
         buffer.Front ( )
               .Should ( )
@@ -198,9 +181,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_Back_CorrectItem ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) ;
 
         buffer.Back ( )
               .Should ( )
@@ -210,9 +192,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_BackOfBufferOverflowByOne_CorrectItem ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) ;
         buffer.PushBack ( 42 ) ;
 
         using var scope = new AssertionScope ( ) ;
@@ -252,9 +233,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_PopBack_RemovesBackElement ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) ;
 
         buffer.Size
               .Should ( )
@@ -275,9 +255,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_PopBackInOverflowBuffer_RemovesBackElement ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) ;
         buffer.PushBack ( 5 ) ;
 
         using var scope = new AssertionScope ( ) ;
@@ -302,9 +281,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_PopFront_RemovesBackElement ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) ;
 
         using var scope = new AssertionScope ( ) ;
 
@@ -325,9 +303,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_PopFrontInOverflowBuffer_RemovesBackElement ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) ;
         buffer.PushFront ( 5 ) ;
 
         using var scope = new AssertionScope ( ) ;
@@ -352,9 +329,8 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_SetIndex_ReplacesElement ( )
     {
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) {[ 1 ] = 10 , [ 3 ] = 30} ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) { [ 1 ] = 10 , [ 3 ] = 30 } ;
 
         buffer.ToArray ( )
               .Should ( )
@@ -367,9 +343,8 @@ public class CircularBufferTests
         // test to confirm this issue does not happen anymore:
         // https://github.com/joaoportela/CircularBuffer-CSharp/issues/2
 
-        var buffer = new CircularBuffer < int > (
-                                                 5 ,
-                                                 [0 , 1 , 2 , 3 , 4] ) ;
+        var buffer = new CircularBuffer < int > ( 5 ,
+                                                  [0 , 1 , 2 , 3 , 4] ) ;
 
         buffer.PopFront ( ) ; // (make size and capacity different)
 

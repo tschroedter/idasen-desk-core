@@ -354,20 +354,18 @@ public class ReferenceOutputTest
                  .Refresh ( ) ;
 
         _subjectHeightSpeed.Received ( )
-                           .OnNext (
-                                    Arg.Is < RawValueChangedDetails > ( x => x.Description ==
-                                                                             ReferenceOutput.HeightSpeed ) ) ;
+                           .OnNext ( Arg.Is < RawValueChangedDetails > ( x => x.Description ==
+                                                                              ReferenceOutput.HeightSpeed ) ) ;
     }
 
     [ TestMethod ]
     public async Task Refresh_ForInvoked_NotifiesHeightAndSpeed ( )
     {
-        var scheduler = new TestScheduler ( ) ;
+        var       scheduler = new TestScheduler ( ) ;
         using var subject   = new Subject < RawValueChangedDetails > ( ) ;
 
-        using var sut = CreateSut (
-                                   scheduler ,
-                                   subject ) ;
+        using var sut = CreateSut ( scheduler ,
+                                    subject ) ;
 
         RawValueChangedDetails heightAndSpeed = null! ;
 
@@ -389,34 +387,31 @@ public class ReferenceOutputTest
                       .BeEquivalentTo ( RawValue1 ) ;
     }
 
-    private ReferenceOutput CreateSut (
-        IScheduler                          scheduler ,
-        ISubject < RawValueChangedDetails > subject )
+    private ReferenceOutput CreateSut ( IScheduler                          scheduler ,
+                                        ISubject < RawValueChangedDetails > subject )
     {
-        return new ReferenceOutput (
-                                    Logger ,
-                                    scheduler ,
-                                    Device ,
-                                    ProviderFactory ,
-                                    RawValueReader ,
-                                    RawValueWriter ,
-                                    ToStringConverter ,
-                                    DescriptionToUuid ,
-                                    subject ) ;
+        return new ReferenceOutput ( Logger ,
+                                     scheduler ,
+                                     Device ,
+                                     ProviderFactory ,
+                                     RawValueReader ,
+                                     RawValueWriter ,
+                                     ToStringConverter ,
+                                     DescriptionToUuid ,
+                                     subject ) ;
     }
 
     protected override ReferenceOutput CreateSut ( )
     {
-        return new ReferenceOutput (
-                                    Logger ,
-                                    Scheduler ,
-                                    Device ,
-                                    ProviderFactory ,
-                                    RawValueReader ,
-                                    RawValueWriter ,
-                                    ToStringConverter ,
-                                    DescriptionToUuid ,
-                                    _subjectHeightSpeed ) ;
+        return new ReferenceOutput ( Logger ,
+                                     Scheduler ,
+                                     Device ,
+                                     ProviderFactory ,
+                                     RawValueReader ,
+                                     RawValueWriter ,
+                                     ToStringConverter ,
+                                     DescriptionToUuid ,
+                                     _subjectHeightSpeed ) ;
     }
 
     protected override void AfterInitialize ( )
@@ -428,44 +423,34 @@ public class ReferenceOutputTest
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add (
-                      ReferenceOutput.HeightSpeed ,
-                      CharacteristicWrapper1 ) ;
+        Wrappers.Add ( ReferenceOutput.HeightSpeed ,
+                       CharacteristicWrapper1 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.Two ,
-                      CharacteristicWrapper2 ) ;
+        Wrappers.Add ( ReferenceOutput.Two ,
+                       CharacteristicWrapper2 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.Three ,
-                      CharacteristicWrapper3 ) ;
+        Wrappers.Add ( ReferenceOutput.Three ,
+                       CharacteristicWrapper3 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.Four ,
-                      CharacteristicWrapper4 ) ;
+        Wrappers.Add ( ReferenceOutput.Four ,
+                       CharacteristicWrapper4 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.Five ,
-                      CharacteristicWrapper5 ) ;
+        Wrappers.Add ( ReferenceOutput.Five ,
+                       CharacteristicWrapper5 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.Six ,
-                      CharacteristicWrapper6 ) ;
+        Wrappers.Add ( ReferenceOutput.Six ,
+                       CharacteristicWrapper6 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.Seven ,
-                      CharacteristicWrapper7 ) ;
+        Wrappers.Add ( ReferenceOutput.Seven ,
+                       CharacteristicWrapper7 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.Eight ,
-                      CharacteristicWrapper8 ) ;
+        Wrappers.Add ( ReferenceOutput.Eight ,
+                       CharacteristicWrapper8 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.Mask ,
-                      CharacteristicWrapper9 ) ;
+        Wrappers.Add ( ReferenceOutput.Mask ,
+                       CharacteristicWrapper9 ) ;
 
-        Wrappers.Add (
-                      ReferenceOutput.DetectMask ,
-                      CharacteristicWrapper10 ) ;
+        Wrappers.Add ( ReferenceOutput.DetectMask ,
+                       CharacteristicWrapper10 ) ;
     }
 }

@@ -26,37 +26,30 @@ public class DeviceMonitorWithExpiry
 
     private IDisposable ? _timer ;
 
-    public DeviceMonitorWithExpiry (
-        ILogger                 logger ,
-        IDateTimeOffset         dateTimeOffset ,
-        IDeviceMonitor          deviceMonitor ,
-        ISubject < IDevice >    deviceExpired ,
-        IObservableTimerFactory factory ,
-        IScheduler              scheduler )
+    public DeviceMonitorWithExpiry ( ILogger                 logger ,
+                                     IDateTimeOffset         dateTimeOffset ,
+                                     IDeviceMonitor          deviceMonitor ,
+                                     ISubject < IDevice >    deviceExpired ,
+                                     IObservableTimerFactory factory ,
+                                     IScheduler              scheduler )
     {
-        Guard.ArgumentNotNull (
-                               logger ,
-                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
 
-        Guard.ArgumentNotNull (
-                               dateTimeOffset ,
-                               nameof ( dateTimeOffset ) ) ;
+        Guard.ArgumentNotNull ( dateTimeOffset ,
+                                nameof ( dateTimeOffset ) ) ;
 
-        Guard.ArgumentNotNull (
-                               deviceMonitor ,
-                               nameof ( deviceMonitor ) ) ;
+        Guard.ArgumentNotNull ( deviceMonitor ,
+                                nameof ( deviceMonitor ) ) ;
 
-        Guard.ArgumentNotNull (
-                               deviceExpired ,
-                               nameof ( deviceExpired ) ) ;
+        Guard.ArgumentNotNull ( deviceExpired ,
+                                nameof ( deviceExpired ) ) ;
 
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
-        Guard.ArgumentNotNull (
-                               scheduler ,
-                               nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
 
         _logger         = logger ;
         _dateTimeOffset = dateTimeOffset ;
@@ -80,9 +73,8 @@ public class DeviceMonitorWithExpiry
 
             _timeOut = value ;
 
-            _logger.Information (
-                                 "TimeOut = {Timeout}" ,
-                                 value ) ;
+            _logger.Information ( "TimeOut = {Timeout}" ,
+                                  value ) ;
 
             // restart timer if running to apply new timeout
             if ( _timer != null )
@@ -130,24 +122,30 @@ public class DeviceMonitorWithExpiry
     }
 
     /// <inheritdoc />
-    public void RemoveDevice ( IDevice device ) => _deviceMonitor.RemoveDevice ( device ) ;
+    public void RemoveDevice ( IDevice device )
+    {
+        _deviceMonitor.RemoveDevice ( device ) ;
+    }
 
-    private void OnCompleted ( ) => Stop ( ) ;
+    private void OnCompleted ( )
+    {
+        Stop ( ) ;
+    }
 
     private void OnError ( Exception ex )
     {
-        _logger.Error (
-                       ex ,
-                       "Unhandled exception in {Class}.{Method}" ,
-                       nameof ( DeviceMonitorWithExpiry ) ,
-                       nameof ( OnError ) ) ;
+        _logger.Error ( ex ,
+                        "Unhandled exception in {Class}.{Method}" ,
+                        nameof ( DeviceMonitorWithExpiry ) ,
+                        nameof ( OnError ) ) ;
 
         Stop ( ) ;
     }
 
     private void CleanUp ( long l )
     {
-        foreach ( var device in DiscoveredDevices ) {
+        foreach ( var device in DiscoveredDevices )
+        {
             var delta = _dateTimeOffset.Now.Ticks - device.BroadcastTime.Ticks ;
 
             if ( ! ( delta >= TimeOut.Ticks ) )
@@ -164,14 +162,12 @@ public class DeviceMonitorWithExpiry
         if ( _timer != null )
             return ;
 
-        _timer = _factory.Create (
-                                  TimeOut ,
-                                  _scheduler )
+        _timer = _factory.Create ( TimeOut ,
+                                   _scheduler )
                          .SubscribeOn ( _scheduler )
-                         .Subscribe (
-                                     CleanUp ,
-                                     OnError ,
-                                     OnCompleted ) ;
+                         .Subscribe ( CleanUp ,
+                                      OnError ,
+                                      OnCompleted ) ;
     }
 
     private void StopTimer ( )

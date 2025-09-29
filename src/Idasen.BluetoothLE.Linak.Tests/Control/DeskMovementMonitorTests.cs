@@ -45,48 +45,39 @@ public class DeskMovementMonitorTests : IDisposable
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( _subjectHeightAndSpeed ) ;
 
-        _details1 = new HeightSpeedDetails (
-                                            DateTimeOffset.Now ,
-                                            1u ,
-                                            2 ) ;
-        _details2 = new HeightSpeedDetails (
-                                            DateTimeOffset.Now ,
-                                            3u ,
-                                            4 ) ;
-        _details3 = new HeightSpeedDetails (
-                                            DateTimeOffset.Now ,
-                                            5u ,
-                                            6 ) ;
+        _details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                             1u ,
+                                             2 ) ;
+        _details2 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                             3u ,
+                                             4 ) ;
+        _details3 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                             5u ,
+                                             6 ) ;
 
-        _details4SameHeightAsDetails1 = new HeightSpeedDetails (
-                                                                DateTimeOffset.Now ,
-                                                                1u ,
-                                                                22 ) ;
-        _details5SameHeightAsDetails1 = new HeightSpeedDetails (
-                                                                DateTimeOffset.Now ,
-                                                                1u ,
-                                                                33 ) ;
+        _details4SameHeightAsDetails1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                                 1u ,
+                                                                 22 ) ;
+        _details5SameHeightAsDetails1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                                 1u ,
+                                                                 33 ) ;
 
-        _details6WithSpeedZero = new HeightSpeedDetails (
-                                                         DateTimeOffset.Now ,
-                                                         1u ,
-                                                         0 ) ;
-        _details7WithSpeedZero = new HeightSpeedDetails (
-                                                         DateTimeOffset.Now ,
-                                                         3u ,
-                                                         0 ) ;
-        _details8WithSpeedZero = new HeightSpeedDetails (
-                                                         DateTimeOffset.Now ,
-                                                         5u ,
-                                                         0 ) ;
+        _details6WithSpeedZero = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                          1u ,
+                                                          0 ) ;
+        _details7WithSpeedZero = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                          3u ,
+                                                          0 ) ;
+        _details8WithSpeedZero = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                          5u ,
+                                                          0 ) ;
     }
 
     private DeskMovementMonitor CreateSut ( )
     {
-        var sut = new DeskMovementMonitor (
-                                           _logger ,
-                                           _scheduler ,
-                                           _heightAndSpeed ) ;
+        var sut = new DeskMovementMonitor ( _logger ,
+                                            _scheduler ,
+                                            _heightAndSpeed ) ;
 
         sut.Initialize ( DefaultCapacity ) ;
 

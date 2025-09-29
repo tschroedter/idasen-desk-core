@@ -93,46 +93,41 @@ public class DeskConnectorTests
         _mover         = Substitute.For < IDeskMover > ( ) ;
         _moverFinished = new Subject < uint > ( ) ;
         _mover.Finished.Returns ( _moverFinished ) ;
-        _moverFactory.Create (
-                              _executor ,
-                              _heightAndSpeed ).Returns ( _mover ) ;
+        _moverFactory.Create ( _executor ,
+                               _heightAndSpeed ).Returns ( _mover ) ;
 
         _deskLockerFactory = Substitute.For < IDeskLockerFactory > ( ) ;
         _deskLocker        = Substitute.For < IDeskLocker > ( ) ;
-        _deskLockerFactory.Create (
-                                   _mover ,
-                                   _executor ,
-                                   _heightAndSpeed ).Returns ( _deskLocker ) ;
+        _deskLockerFactory.Create ( _mover ,
+                                    _executor ,
+                                    _heightAndSpeed ).Returns ( _deskLocker ) ;
 
         _errorManager = Substitute.For < IErrorManager > ( ) ;
 
-        return new DeskConnector (
-                                  _logger ,
-                                  _scheduler ,
-                                  ( ) => new Subject < IEnumerable < byte > > ( ) ,
-                                  _heightSubject ,
-                                  _speedSubject ,
-                                  _refreshedSubject ,
-                                  _heightSpeedSubject ,
-                                  _device ,
-                                  _deskCharacteristics ,
-                                  _heightAndSpeedFactory ,
-                                  _commandExecutorFactory ,
-                                  _moverFactory ,
-                                  _deskLockerFactory ,
-                                  _errorManager ) ;
+        return new DeskConnector ( _logger ,
+                                   _scheduler ,
+                                   ( ) => new Subject < IEnumerable < byte > > ( ) ,
+                                   _heightSubject ,
+                                   _speedSubject ,
+                                   _refreshedSubject ,
+                                   _heightSpeedSubject ,
+                                   _device ,
+                                   _deskCharacteristics ,
+                                   _heightAndSpeedFactory ,
+                                   _commandExecutorFactory ,
+                                   _moverFactory ,
+                                   _deskLockerFactory ,
+                                   _errorManager ) ;
     }
 
     private static async Task InvokeOnGattServicesRefreshedAsync ( DeskConnector sut , GattCommunicationStatus status )
     {
-        var method = typeof ( DeskConnector ).GetMethod (
-                                                         "OnGattServicesRefreshed" ,
-                                                         BindingFlags.NonPublic | BindingFlags.Instance ) ;
+        var method = typeof ( DeskConnector ).GetMethod ( "OnGattServicesRefreshed" ,
+                                                          BindingFlags.NonPublic | BindingFlags.Instance ) ;
 
         method.Should ( ).NotBeNull ( ) ;
 
-        var task = ( Task ) method.Invoke (
-                                           sut ,
+        var task = ( Task )method.Invoke ( sut ,
                                            [status] )! ;
 
         await task.ConfigureAwait ( false ) ;
@@ -149,9 +144,8 @@ public class DeskConnectorTests
         _logger.Received ( ).Error (
 #pragma warning disable CA2254
 #pragma warning disable Serilog004
-                                    Arg.Is < string > ( s => s.Contains (
-                                                                         "refreshed" ,
-                                                                         StringComparison.OrdinalIgnoreCase ) ) ) ;
+                                    Arg.Is < string > ( s => s.Contains ( "refreshed" ,
+                                                                          StringComparison.OrdinalIgnoreCase ) ) ) ;
 #pragma warning restore Serilog004
 #pragma warning restore CA2254
     }
@@ -163,9 +157,8 @@ public class DeskConnectorTests
 
         _mover.Up ( ).Returns ( Task.FromResult ( true ) ) ;
 
-        await InvokeOnGattServicesRefreshedAsync (
-                                                  sut ,
-                                                  GattCommunicationStatus.Success ) ;
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
         var result = await sut.MoveUpAsync ( ) ;
 
@@ -181,9 +174,8 @@ public class DeskConnectorTests
         _mover.Down ( ).Returns ( Task.FromResult ( true ) ) ;
         _mover.Stop ( ).Returns ( Task.FromResult ( true ) ) ;
 
-        await InvokeOnGattServicesRefreshedAsync (
-                                                  sut ,
-                                                  GattCommunicationStatus.Success ) ;
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
         ( await sut.MoveDownAsync ( ) ).Should ( ).BeTrue ( ) ;
         await _mover.Received ( ).Down ( ) ;
@@ -200,9 +192,8 @@ public class DeskConnectorTests
         ( await sut.MoveLockAsync ( ) ).Should ( ).BeFalse ( ) ;
         ( await sut.MoveUnlockAsync ( ) ).Should ( ).BeFalse ( ) ;
 
-        await InvokeOnGattServicesRefreshedAsync (
-                                                  sut ,
-                                                  GattCommunicationStatus.Success ) ;
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
         ( await sut.MoveLockAsync ( ) ).Should ( ).BeTrue ( ) ;
         _deskLocker.Received ( ).Lock ( ) ;
@@ -216,9 +207,8 @@ public class DeskConnectorTests
     {
         using var sut = CreateSut ( ) ;
 
-        await InvokeOnGattServicesRefreshedAsync (
-                                                  sut ,
-                                                  GattCommunicationStatus.Success ) ;
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
         // ReSharper disable once AccessToDisposedClosure
         var act        = ( ) => Task.Run ( ( ) => sut.MoveTo ( 0 ) ) ;
@@ -241,16 +231,14 @@ public class DeskConnectorTests
         using var hs = sut.HeightAndSpeedChanged.Subscribe ( v => receivedDetails = v ) ;
         using var f  = sut.FinishedChanged.Subscribe ( v => receivedFinished = v ) ;
 
-        await InvokeOnGattServicesRefreshedAsync (
-                                                  sut ,
-                                                  GattCommunicationStatus.Success ) ;
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
         _heightChanged.OnNext ( 100u ) ;
         _speedChanged.OnNext ( 5 ) ;
-        var details = new HeightSpeedDetails (
-                                              DateTimeOffset.Now ,
-                                              100u ,
-                                              5 ) ;
+        var details = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                               100u ,
+                                               5 ) ;
 
         _heightAndSpeedChanged.OnNext ( details ) ;
         _moverFinished.OnNext ( 123u ) ;
@@ -271,9 +259,8 @@ public class DeskConnectorTests
         IEnumerable < byte > ? received = null ;
         using var              sub      = sut.DeviceNameChanged.Subscribe ( v => received = v ) ;
 
-        await InvokeOnGattServicesRefreshedAsync (
-                                                  sut ,
-                                                  GattCommunicationStatus.Success ) ;
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
         var name = "ABC"u8.ToArray ( ) ;
         _genericAccessDeviceNameChanged.OnNext ( name ) ;
@@ -288,20 +275,17 @@ public class DeskConnectorTests
     public async Task Dispose_Disposes_And_Completes_Subjects ( )
     {
         var sut = CreateSut ( ) ;
-        await InvokeOnGattServicesRefreshedAsync (
-                                                  sut ,
-                                                  GattCommunicationStatus.Success ) ;
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
         var finishedCompleted   = false ;
         var deviceNameCompleted = false ;
 
-        using var f = sut.FinishedChanged.Subscribe (
-                                                     _ => { } ,
-                                                     ( ) => finishedCompleted = true ) ;
+        using var f = sut.FinishedChanged.Subscribe ( _ => { } ,
+                                                      ( ) => finishedCompleted = true ) ;
 
-        using var d = sut.DeviceNameChanged.Subscribe (
-                                                       _ => { } ,
-                                                       ( ) => deviceNameCompleted = true ) ;
+        using var d = sut.DeviceNameChanged.Subscribe ( _ => { } ,
+                                                        ( ) => deviceNameCompleted = true ) ;
 
         sut.Dispose ( ) ;
 

@@ -8,8 +8,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 public class NotInitializeExceptionTests
 {
     [ AutoDataTestMethod ]
-    public void Constructor_ForInvoked_SetsMessage (
-        string message )
+    public void Constructor_ForInvoked_SetsMessage ( string message )
     {
         var sut = new NotInitializeException ( message ) ;
 

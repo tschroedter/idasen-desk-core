@@ -27,12 +27,11 @@ public class DeskMovementMonitor
     private IDisposable ? _disposalHeightAndSpeed ;
 
     internal CircularBuffer < HeightSpeedDetails > History = // todo interface and test
-        new ( 5 ) ;
+        new(5) ;
 
-    public DeskMovementMonitor (
-        ILogger             logger ,
-        IScheduler          scheduler ,
-        IDeskHeightAndSpeed heightAndSpeed )
+    public DeskMovementMonitor ( ILogger             logger ,
+                                 IScheduler          scheduler ,
+                                 IDeskHeightAndSpeed heightAndSpeed )
     {
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
         ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
@@ -56,34 +55,28 @@ public class DeskMovementMonitor
     /// <param name="capacity">The number of samples to retain in history.</param>
     public void Initialize ( int capacity = DefaultCapacity )
     {
-        if ( capacity <= 0 ) {
-            throw new ArgumentOutOfRangeException (
-                                                   nameof ( capacity ) ,
-                                                   capacity ,
-                                                   "Capacity must be positive." ) ;
-        }
+        if ( capacity <= 0 )
+            throw new ArgumentOutOfRangeException ( nameof ( capacity ) ,
+                                                    capacity ,
+                                                    "Capacity must be positive." ) ;
 
         History = new CircularBuffer < HeightSpeedDetails > ( capacity ) ;
 
         _disposalHeightAndSpeed?.Dispose ( ) ;
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
                                                  .ObserveOn ( _scheduler )
-                                                 .Subscribe (
-                                                             OnHeightAndSpeedChanged ,
-                                                             ex => _logger.Error (
-                                                                                  ex ,
-                                                                                  "Error observing height/speed changes" ) ) ;
+                                                 .Subscribe ( OnHeightAndSpeedChanged ,
+                                                              ex => _logger.Error ( ex ,
+                                                                       "Error observing height/speed changes" ) ) ;
     }
 
     private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
     {
         History.PushBack ( details ) ;
 
-        _logger.Debug (
-                       "History: {History}" ,
-                       string.Join (
-                                    ',' ,
-                                    History ) ) ;
+        _logger.Debug ( "History: {History}" ,
+                        string.Join ( ',' ,
+                                      History ) ) ;
 
         if ( History.Size < History.Capacity )
             return ;

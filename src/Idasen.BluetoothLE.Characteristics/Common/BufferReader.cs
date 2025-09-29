@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+using System.Diagnostics.CodeAnalysis ;
 using Windows.Storage.Streams ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
@@ -22,35 +22,33 @@ public class BufferReader
     /// <param name="logger">Logger used for error reporting.</param>
     public BufferReader ( ILogger logger )
     {
-        Guard.ArgumentNotNull (
-                               logger ,
-                               nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
 
         _logger = logger ;
     }
 
     /// <inheritdoc />
-    public bool TryReadValue (
-        IBuffer      buffer ,
-        out byte [ ] bytes )
+    public bool TryReadValue ( IBuffer      buffer ,
+                               out byte [ ] bytes )
     {
-        Guard.ArgumentNotNull (
-                               buffer ,
-                               nameof ( buffer ) ) ;
+        Guard.ArgumentNotNull ( buffer ,
+                                nameof ( buffer ) ) ;
 
-        try {
+        try
+        {
             var reader = DataReader.FromBuffer ( buffer ) ;
             bytes = new byte[ reader.UnconsumedBufferLength ] ;
             reader.ReadBytes ( bytes ) ;
 
             return true ;
         }
-        catch ( Exception e ) {
+        catch ( Exception e )
+        {
             const string message = "Failed to read from buffer" ;
 
-            _logger.Error (
-                           e ,
-                           message ) ;
+            _logger.Error ( e ,
+                            message ) ;
         }
 
         bytes = [] ;

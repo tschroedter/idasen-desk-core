@@ -6,9 +6,8 @@ public static partial class ULongExtensions
 {
     private const string Replace = "$1:$2:$3:$4:$5:$6" ;
 
-    [ GeneratedRegex (
-                         "(.{2})(.{2})(.{2})(.{2})(.{2})(.{2})" ,
-                         RegexOptions.CultureInvariant | RegexOptions.Compiled ) ]
+    [ GeneratedRegex ( "(.{2})(.{2})(.{2})(.{2})(.{2})(.{2})" ,
+                       RegexOptions.CultureInvariant | RegexOptions.Compiled ) ]
     private static partial Regex MacGroupingRegex ( ) ;
 
     /// <summary>
@@ -20,8 +19,7 @@ public static partial class ULongExtensions
     {
         var lower48 = value & 0x0000FFFFFFFFFFFFUL ;
         var hex     = lower48.ToString ( "X12" ) ;
-        return MacGroupingRegex ( ).Replace (
-                                             hex ,
-                                             Replace ) ;
+        return MacGroupingRegex ( ).Replace ( hex ,
+                                              Replace ) ;
     }
 }

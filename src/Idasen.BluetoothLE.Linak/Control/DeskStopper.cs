@@ -26,11 +26,10 @@ internal class DeskStopper : IDeskStopper
 
     private int _noMovementPolls ;
 
-    public DeskStopper (
-        ILogger                   logger ,
-        DeskMoverSettings         settings ,
-        IDeskHeightMonitor        heightMonitor ,
-        IStoppingHeightCalculator calculator )
+    public DeskStopper ( ILogger                   logger ,
+                         DeskMoverSettings         settings ,
+                         IDeskHeightMonitor        heightMonitor ,
+                         IStoppingHeightCalculator calculator )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( settings ) ;
@@ -51,12 +50,11 @@ internal class DeskStopper : IDeskStopper
         _logger.Debug ( "Stopper reset" ) ;
     }
 
-    public StopDetails ShouldStop (
-        uint      height ,
-        int       speed ,
-        uint      targetHeight ,
-        Direction startMovingIntoDirection ,
-        Direction currentCommandedDirection )
+    public StopDetails ShouldStop ( uint      height ,
+                                    int       speed ,
+                                    uint      targetHeight ,
+                                    Direction startMovingIntoDirection ,
+                                    Direction currentCommandedDirection )
     {
         // compute desired and movement using calculator
         _calculator.Height                   = height ;
@@ -66,7 +64,7 @@ internal class DeskStopper : IDeskStopper
         _calculator.Calculate ( ) ;
 
         var desired     = _calculator.MoveIntoDirection ;
-        var movementAbs = ( uint ) Math.Abs ( _calculator.MovementUntilStop ) ;
+        var movementAbs = ( uint )Math.Abs ( _calculator.MovementUntilStop ) ;
 
         // Enable predictive crossing only after we have reached a minimum speed to avoid
         // an early tiny predicted movement triggering a premature S    top/Restart jitter.
@@ -77,39 +75,42 @@ internal class DeskStopper : IDeskStopper
         // keep raw prediction to avoid immediate stop pulses.
         var compensatedMovementForPrediction = movementAbs ;
 
-        if ( predictiveActive ) {
-            try {
-                checked {
+        if ( predictiveActive )
+        {
+            try
+            {
+                checked
+                {
                     compensatedMovementForPrediction = movementAbs + _settings.OvershootCompensation ;
                 }
             }
-            catch ( OverflowException ) {
+            catch ( OverflowException )
+            {
                 // fall back to raw value on overflow.
                 compensatedMovementForPrediction = movementAbs ;
             }
 
             if ( _settings.OvershootCompensation > 0 &&
-                 movementAbs                     > 0 ) {
-                _logger.Debug (
-                               "Predictive active speed={Speed} rawMove={Raw} comp={Comp} used={Used}" ,
-                               speed ,
-                               movementAbs ,
-                               _settings.OvershootCompensation ,
-                               compensatedMovementForPrediction ) ;
-            }
+                 movementAbs                     > 0 )
+                _logger.Debug ( "Predictive active speed={Speed} rawMove={Raw} comp={Comp} used={Used}" ,
+                                speed ,
+                                movementAbs ,
+                                _settings.OvershootCompensation ,
+                                compensatedMovementForPrediction ) ;
         }
-        else if ( movementAbs > 0 ) {
-            _logger.Debug (
-                           "Predictive disabled speed={Speed} (<{Min}) rawMove={Raw}" ,
-                           speed ,
-                           MinPredictiveSpeed ,
-                           movementAbs ) ;
+        else if ( movementAbs > 0 )
+        {
+            _logger.Debug ( "Predictive disabled speed={Speed} (<{Min}) rawMove={Raw}" ,
+                            speed ,
+                            MinPredictiveSpeed ,
+                            movementAbs ) ;
         }
 
         // Only push distinct heights to the monitor to avoid false "no change" from repeated evaluations
         var isNewSample = _lastHeight is null || _lastHeight.Value != height ;
 
-        if ( isNewSample ) {
+        if ( isNewSample )
+        {
             _heightMonitor.AddHeight ( height ) ;
             _lastHeight = height ;
         }
@@ -118,113 +119,109 @@ internal class DeskStopper : IDeskStopper
         var activelyCommanding = currentCommandedDirection != Direction.None ;
         var stalledTick        = ! isNewSample && Math.Abs ( speed ) <= StallSpeedThreshold ;
 
-        if ( stalledTick ) {
+        if ( stalledTick )
+        {
             _noMovementPolls ++ ;
-            _logger.Debug (
-                           "Stall tick count={Cnt} activelyCommanding={Commanding}" ,
-                           _noMovementPolls ,
-                           activelyCommanding ) ;
+            _logger.Debug ( "Stall tick count={Cnt} activelyCommanding={Commanding}" ,
+                            _noMovementPolls ,
+                            activelyCommanding ) ;
 
-            if ( ! activelyCommanding ) {
+            if ( ! activelyCommanding )
+            {
                 _logger.Debug ( "Returning stop due to stall and not actively commanding" ) ;
-                return new StopDetails (
-                                        true ,
-                                        desired ) ;
+                return new StopDetails ( true ,
+                                         desired ) ;
             }
         }
-        else if ( _noMovementPolls != 0 ) {
-            _logger.Debug (
-                           "Reset stall counter from {Cnt}" ,
-                           _noMovementPolls ) ;
+        else if ( _noMovementPolls != 0 )
+        {
+            _logger.Debug ( "Reset stall counter from {Cnt}" ,
+                            _noMovementPolls ) ;
             _noMovementPolls = 0 ;
         }
 
         // tolerance based stop (dynamic tolerance limited by predicted raw movement, NOT compensated one)
-        var toleranceDynamic = Math.Min (
-                                         _settings.NearTargetMaxDynamicTolerance ,
-                                         movementAbs ) ;
-        var tolerance = Math.Max (
-                                  _settings.NearTargetBaseTolerance ,
-                                  toleranceDynamic ) ;
+        var toleranceDynamic = Math.Min ( _settings.NearTargetMaxDynamicTolerance ,
+                                          movementAbs ) ;
+        var tolerance = Math.Max ( _settings.NearTargetBaseTolerance ,
+                                   toleranceDynamic ) ;
         var diff = height > targetHeight
                        ? height       - targetHeight
                        : targetHeight - height ;
 
-        _logger.Debug (
-                       "Tolerance eval diff={Diff} tol={Tol} dynTol={DynTol} movementAbs={MoveAbs}" ,
-                       diff ,
-                       tolerance ,
-                       toleranceDynamic ,
-                       movementAbs ) ;
+        _logger.Debug ( "Tolerance eval diff={Diff} tol={Tol} dynTol={DynTol} movementAbs={MoveAbs}" ,
+                        diff ,
+                        tolerance ,
+                        toleranceDynamic ,
+                        movementAbs ) ;
 
-        if ( diff <= tolerance ) {
-            _logger.Debug (
-                           "Returning stop due to tolerance diff={Diff} tol={Tol}" ,
-                           diff ,
-                           tolerance ) ;
-            return new StopDetails (
-                                    true ,
-                                    desired ) ;
+        if ( diff <= tolerance )
+        {
+            _logger.Debug ( "Returning stop due to tolerance diff={Diff} tol={Tol}" ,
+                            diff ,
+                            tolerance ) ;
+            return new StopDetails ( true ,
+                                     desired ) ;
         }
 
         // predictive crossing (use compensated movement to trigger earlier stop) - only if active
-        if ( predictiveActive ) {
-            if ( desired == Direction.Up ) {
+        if ( predictiveActive )
+        {
+            if ( desired == Direction.Up )
+            {
                 if ( compensatedMovementForPrediction > 0 &&
-                     height                           < targetHeight ) {
+                     height                           < targetHeight )
+                {
                     var predictedStop = height + compensatedMovementForPrediction ;
-                    _logger.Debug (
-                                   "Predictive Up predictedStop={Pred} target={Target}" ,
-                                   predictedStop ,
-                                   targetHeight ) ;
+                    _logger.Debug ( "Predictive Up predictedStop={Pred} target={Target}" ,
+                                    predictedStop ,
+                                    targetHeight ) ;
 
-                    if ( predictedStop >= targetHeight ) {
+                    if ( predictedStop >= targetHeight )
+                    {
                         _logger.Debug ( "Returning stop due to predictive up crossing" ) ;
-                        return new StopDetails (
-                                                true ,
-                                                desired ) ;
+                        return new StopDetails ( true ,
+                                                 desired ) ;
                     }
                 }
             }
-            else if ( desired == Direction.Down ) {
+            else if ( desired == Direction.Down )
+            {
                 if ( compensatedMovementForPrediction > 0 &&
-                     height                           > targetHeight ) {
+                     height                           > targetHeight )
+                {
                     var delta = compensatedMovementForPrediction > height
                                     ? height
                                     : compensatedMovementForPrediction ;
                     var predictedStop = height - delta ;
 
-                    _logger.Debug (
-                                   "Predictive Down predictedStop={Pred} target={Target}" ,
-                                   predictedStop ,
-                                   targetHeight ) ;
+                    _logger.Debug ( "Predictive Down predictedStop={Pred} target={Target}" ,
+                                    predictedStop ,
+                                    targetHeight ) ;
 
-                    if ( predictedStop <= targetHeight ) {
+                    if ( predictedStop <= targetHeight )
+                    {
                         _logger.Debug ( "Returning stop due to predictive down crossing" ) ;
-                        return new StopDetails (
-                                                true ,
-                                                desired ) ;
+                        return new StopDetails ( true ,
+                                                 desired ) ;
                     }
                 }
             }
         }
 
         if ( desired == Direction.None ||
-             _calculator.HasReachedTargetHeight ) {
-            _logger.Debug (
-                           "Returning stop due to calculator state desired={Desired} reached={Reached}" ,
-                           desired ,
-                           _calculator.HasReachedTargetHeight ) ;
-            return new StopDetails (
-                                    true ,
-                                    desired ) ;
+             _calculator.HasReachedTargetHeight )
+        {
+            _logger.Debug ( "Returning stop due to calculator state desired={Desired} reached={Reached}" ,
+                            desired ,
+                            _calculator.HasReachedTargetHeight ) ;
+            return new StopDetails ( true ,
+                                     desired ) ;
         }
 
-        _logger.Debug (
-                       "Continue movement desired={Desired}" ,
-                       desired ) ;
-        return new StopDetails (
-                                false ,
-                                desired ) ;
+        _logger.Debug ( "Continue movement desired={Desired}" ,
+                        desired ) ;
+        return new StopDetails ( false ,
+                                 desired ) ;
     }
 }

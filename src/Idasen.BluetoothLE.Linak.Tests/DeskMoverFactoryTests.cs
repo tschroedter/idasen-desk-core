@@ -22,18 +22,19 @@ public class DeskMoverFactoryTests
         _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
     }
 
-    private IDeskMover TestFactory (
-        IDeskCommandExecutor executor ,
-        IDeskHeightAndSpeed  heightAndSpeed ) =>
-        Substitute.For < IDeskMover > ( ) ;
+    private IDeskMover TestFactory ( IDeskCommandExecutor executor ,
+                                     IDeskHeightAndSpeed  heightAndSpeed )
+    {
+        return Substitute.For < IDeskMover > ( ) ;
+    }
 
     [ TestMethod ]
     public void Create_ForExecutorNull_Throws ( )
     {
-        var action = ( ) => {
-                         CreateSut ( ).Create (
-                                               null! ,
-                                               _heightAndSpeed ) ;
+        var action = ( ) =>
+                     {
+                         CreateSut ( ).Create ( null! ,
+                                                _heightAndSpeed ) ;
                      } ;
 
         action.Should ( )
@@ -44,12 +45,14 @@ public class DeskMoverFactoryTests
     [ TestMethod ]
     public void CreateForInvoked_ReturnsInstance ( )
     {
-        CreateSut ( ).Create (
-                              _executor ,
-                              _heightAndSpeed )
+        CreateSut ( ).Create ( _executor ,
+                               _heightAndSpeed )
                      .Should ( )
                      .NotBeNull ( ) ;
     }
 
-    private DeskMoverFactory CreateSut ( ) => new ( _factory ) ;
+    private DeskMoverFactory CreateSut ( )
+    {
+        return new DeskMoverFactory ( _factory ) ;
+    }
 }

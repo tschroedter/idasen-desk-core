@@ -31,9 +31,8 @@ public class DeskFactoryTests
 
     private DeskFactory CreateSut ( )
     {
-        return new DeskFactory (
-                                _deviceFactory ,
-                                _deskConnectorFactory ,
-                                _deskFactory ) ;
+        return new DeskFactory ( _deviceFactory ,
+                                 _deskConnectorFactory ,
+                                 _deskFactory ) ;
     }
 }

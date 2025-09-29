@@ -16,15 +16,14 @@ public class TestCharacteristicBase ( ILogger                              logge
                                       IRawValueWriter                      rawValueWriter ,
                                       ICharacteristicBaseToStringConverter toStringConverter ,
                                       IDescriptionToUuid                   descriptionToUuid )
-    : CharacteristicBase (
-                          logger ,
-                          scheduler ,
-                          device ,
-                          providerFactory ,
-                          rawValueReader ,
-                          rawValueWriter ,
-                          toStringConverter ,
-                          descriptionToUuid )
+    : CharacteristicBase ( logger ,
+                           scheduler ,
+                           device ,
+                           providerFactory ,
+                           rawValueReader ,
+                           rawValueWriter ,
+                           toStringConverter ,
+                           descriptionToUuid )
 {
     public delegate ITestCharacteristicBase Factory ( IDevice device ) ;
 
@@ -35,12 +34,12 @@ public class TestCharacteristicBase ( ILogger                              logge
 
     public async Task < bool > TryWriteRawValue ( IEnumerable < byte > bytes )
     {
-        return await TryWriteValueAsync (
-                                         RawValueKey ,
-                                         bytes ) ;
+        return await TryWriteValueAsync ( RawValueKey ,
+                                          bytes ) ;
     }
 
-    protected override T WithMapping < T > ( ) where T : class
+    protected override T WithMapping < T > ( )
+        where T : class
     {
         DescriptionToUuid [ RawValueKey ] = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
 

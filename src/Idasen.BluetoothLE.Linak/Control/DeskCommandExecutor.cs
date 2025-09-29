@@ -23,11 +23,10 @@ public class DeskCommandExecutor
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskCommandExecutor" /> class.
     /// </summary>
-    public DeskCommandExecutor (
-        ILogger               logger ,
-        IErrorManager         errorManager ,
-        IDeskCommandsProvider provider ,
-        IControl              control )
+    public DeskCommandExecutor ( ILogger               logger ,
+                                 IErrorManager         errorManager ,
+                                 IDeskCommandsProvider provider ,
+                                 IControl              control )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( provider ) ;
@@ -41,22 +40,30 @@ public class DeskCommandExecutor
     }
 
     /// <inheritdoc />
-    public Task < bool > Up ( ) => Execute ( DeskCommands.MoveUp ) ;
+    public Task < bool > Up ( )
+    {
+        return Execute ( DeskCommands.MoveUp ) ;
+    }
 
     /// <inheritdoc />
-    public Task < bool > Down ( ) => Execute ( DeskCommands.MoveDown ) ;
+    public Task < bool > Down ( )
+    {
+        return Execute ( DeskCommands.MoveDown ) ;
+    }
 
     /// <inheritdoc />
-    public Task < bool > Stop ( ) => Execute ( DeskCommands.MoveStop ) ;
+    public Task < bool > Stop ( )
+    {
+        return Execute ( DeskCommands.MoveStop ) ;
+    }
 
     private async Task < bool > Execute ( DeskCommands deskCommand )
     {
-        if ( ! _provider.TryGetValue (
-                                      deskCommand ,
-                                      out var bytes ) ) {
-            _logger.Error (
-                           "Failed for unknown command {Command}" ,
-                           deskCommand ) ;
+        if ( ! _provider.TryGetValue ( deskCommand ,
+                                       out var bytes ) )
+        {
+            _logger.Error ( "Failed for unknown command {Command}" ,
+                            deskCommand ) ;
 
             return false ;
         }
@@ -72,10 +79,9 @@ public class DeskCommandExecutor
 
     private void ExecutionFailed ( DeskCommands deskCommand )
     {
-        _logger.Error (
-                       "Failed for '{Command}' command. {Hint}" ,
-                       deskCommand ,
-                       Constants.CheckAndEnableBluetooth ) ;
+        _logger.Error ( "Failed for '{Command}' command. {Hint}" ,
+                        deskCommand ,
+                        Constants.CheckAndEnableBluetooth ) ;
 
         _errorManager.PublishForMessage ( Constants.CheckAndEnableBluetooth ) ;
     }

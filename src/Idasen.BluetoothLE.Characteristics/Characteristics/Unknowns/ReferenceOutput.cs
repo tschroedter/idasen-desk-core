@@ -4,7 +4,8 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
 public sealed class ReferenceOutput
-    : UnknownBase , IReferenceOutput
+    : UnknownBase ,
+      IReferenceOutput
 {
     internal const string               Message = "Can't use a anknown Instance" ;
     public         Guid                 GattServiceUuid { get ; } = Guid.Empty ;
@@ -19,6 +20,5 @@ public sealed class ReferenceOutput
     public         IEnumerable < byte > RawMask         { get ; } = RawArrayEmpty ;
     public         IEnumerable < byte > RawDetectMask   { get ; } = RawArrayEmpty ;
 
-    public IObservable < RawValueChangedDetails > HeightSpeedChanged =>
-        throw new NotInitializeException ( Message ) ;
+    public IObservable < RawValueChangedDetails > HeightSpeedChanged => throw new NotInitializeException ( Message ) ;
 }

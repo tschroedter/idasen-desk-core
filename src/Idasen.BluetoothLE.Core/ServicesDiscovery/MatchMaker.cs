@@ -14,20 +14,16 @@ public class MatchMaker
     private readonly IDeviceFactory _deviceFactory ;
     private readonly ILogger        _logger ;
 
-    public MatchMaker (
-        ILogger               logger ,
-        IOfficialGattServices bluetoothGattServices ,
-        IDeviceFactory        deviceFactory )
+    public MatchMaker ( ILogger               logger ,
+                        IOfficialGattServices bluetoothGattServices ,
+                        IDeviceFactory        deviceFactory )
     {
-        Guard.ArgumentNotNull (
-                               logger ,
-                               nameof ( logger ) ) ;
-        Guard.ArgumentNotNull (
-                               bluetoothGattServices ,
-                               nameof ( bluetoothGattServices ) ) ;
-        Guard.ArgumentNotNull (
-                               deviceFactory ,
-                               nameof ( deviceFactory ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( bluetoothGattServices ,
+                                nameof ( bluetoothGattServices ) ) ;
+        Guard.ArgumentNotNull ( deviceFactory ,
+                                nameof ( deviceFactory ) ) ;
 
         _logger        = logger ;
         _deviceFactory = deviceFactory ;
@@ -45,21 +41,20 @@ public class MatchMaker
         var macAddress = address.ToMacAddress ( ) ;
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        if ( device == null ) {
+        if ( device == null )
+        {
             var message = $"Failed to find device with MAC Address '{macAddress}' " +
                           $"(Address {address})" ;
 
             throw new ArgumentNullException ( message ) ;
         }
 
-        _logger.Information (
-                             "[{MacAddress}] DeviceId after FromBluetoothAddressAsync: {DeviceId}" ,
-                             macAddress ,
-                             device.Id ) ;
-        _logger.Information (
-                             "[{MacAddress}] ConnectionStatus after FromBluetoothAddressAsync: {BluetoothConnectionStatus}" ,
-                             macAddress ,
-                             device.ConnectionStatus ) ;
+        _logger.Information ( "[{MacAddress}] DeviceId after FromBluetoothAddressAsync: {DeviceId}" ,
+                              macAddress ,
+                              device.Id ) ;
+        _logger.Information ( "[{MacAddress}] ConnectionStatus after FromBluetoothAddressAsync: {BluetoothConnectionStatus}" ,
+                              macAddress ,
+                              device.ConnectionStatus ) ;
 
         return device ;
     }

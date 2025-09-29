@@ -13,14 +13,13 @@ namespace Idasen.BluetoothLE.Linak ;
 public class DeskCharacteristics
     : IDeskCharacteristics
 {
-    private readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > _available = new ( ) ;
+    private readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > _available = new( ) ;
 
     private readonly IDeskCharacteristicsCreator _creator ;
     private readonly ILogger                     _logger ;
 
-    public DeskCharacteristics (
-        ILogger                     logger ,
-        IDeskCharacteristicsCreator creator )
+    public DeskCharacteristics ( ILogger                     logger ,
+                                 IDeskCharacteristicsCreator creator )
     {
         ArgumentNullException.ThrowIfNull ( creator ) ;
         ArgumentNullException.ThrowIfNull ( logger ) ;
@@ -35,9 +34,8 @@ public class DeskCharacteristics
     /// <inheritdoc />
     public async Task Refresh ( )
     {
-        foreach ( var characteristicBase in _available.Values ) {
+        foreach ( var characteristicBase in _available.Values )
             await characteristicBase.Refresh ( ).ConfigureAwait ( false ) ;
-        }
     }
 
     /// <inheritdoc />
@@ -45,16 +43,14 @@ public class DeskCharacteristics
     {
         ArgumentNullException.ThrowIfNull ( device ) ;
 
-        _creator.Create (
-                         this ,
-                         device ) ;
+        _creator.Create ( this ,
+                          device ) ;
 
         return this ;
     }
 
     /// <inheritdoc />
-    public IGenericAccess GenericAccess =>
-        _available.As < IGenericAccess > ( DeskCharacteristicKey.GenericAccess ) ;
+    public IGenericAccess GenericAccess => _available.As < IGenericAccess > ( DeskCharacteristicKey.GenericAccess ) ;
 
     /// <inheritdoc />
     public IGenericAttribute GenericAttribute =>
@@ -75,25 +71,22 @@ public class DeskCharacteristics
     public IControl Control => _available.As < IControl > ( DeskCharacteristicKey.Control ) ;
 
     /// <inheritdoc />
-    public IDeskCharacteristics WithCharacteristics (
-        DeskCharacteristicKey key ,
-        ICharacteristicBase   characteristic )
+    public IDeskCharacteristics WithCharacteristics ( DeskCharacteristicKey key ,
+                                                      ICharacteristicBase   characteristic )
     {
         ArgumentNullException.ThrowIfNull ( characteristic ) ;
 
         characteristic.Initialize < ICharacteristicBase > ( ) ;
 
-        if ( _available.TryGetValue (
-                                     key ,
-                                     out var oldCharacteristic ) )
+        if ( _available.TryGetValue ( key ,
+                                      out var oldCharacteristic ) )
             oldCharacteristic.Dispose ( ) ;
 
         _available [ key ] = characteristic ;
 
-        _logger.Debug (
-                       "Added characteristic {Characteristic} for key {Key}" ,
-                       characteristic ,
-                       key ) ;
+        _logger.Debug ( "Added characteristic {Characteristic} for key {Key}" ,
+                        characteristic ,
+                        key ) ;
 
         return this ;
     }

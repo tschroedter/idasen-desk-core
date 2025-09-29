@@ -23,7 +23,12 @@ public class ByteArrayExtensionsTests
     [ TestMethod ]
     public void ToHex_ForBytes_Instance ( )
     {
-        var bytes = new byte [ ] {1 , 2 , 3} ;
+        var bytes = new byte [ ]
+                    {
+                        1 ,
+                        2 ,
+                        3
+                    } ;
 
         bytes.ToHex ( )
              .Should ( )

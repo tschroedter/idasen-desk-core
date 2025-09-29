@@ -16,23 +16,19 @@ public class RawValueWriter
     : IRawValueWriter
 {
     /// <inheritdoc />
-    public async Task < bool > TryWriteValueAsync (
-        IGattCharacteristicWrapper characteristic ,
-        IBuffer                    buffer )
+    public async Task < bool > TryWriteValueAsync ( IGattCharacteristicWrapper characteristic ,
+                                                    IBuffer                    buffer )
     {
-        Guard.ArgumentNotNull (
-                               characteristic ,
-                               nameof ( characteristic ) ) ;
-        Guard.ArgumentNotNull (
-                               buffer ,
-                               nameof ( buffer ) ) ;
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( buffer ,
+                                nameof ( buffer ) ) ;
 
-        if ( ! IsSupported (
-                            characteristic ,
-                            GattCharacteristicProperties.Write ) ) {
-            LogUnsupported (
-                            characteristic ,
-                            "Write" ) ;
+        if ( ! IsSupported ( characteristic ,
+                             GattCharacteristicProperties.Write ) )
+        {
+            LogUnsupported ( characteristic ,
+                             "Write" ) ;
             return false ;
         }
 
@@ -42,23 +38,19 @@ public class RawValueWriter
     }
 
     /// <inheritdoc />
-    public async Task < bool > TryWritableAuxiliariesValueAsync (
-        IGattCharacteristicWrapper characteristic ,
-        IBuffer                    buffer )
+    public async Task < bool > TryWritableAuxiliariesValueAsync ( IGattCharacteristicWrapper characteristic ,
+                                                                  IBuffer                    buffer )
     {
-        Guard.ArgumentNotNull (
-                               characteristic ,
-                               nameof ( characteristic ) ) ;
-        Guard.ArgumentNotNull (
-                               buffer ,
-                               nameof ( buffer ) ) ;
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( buffer ,
+                                nameof ( buffer ) ) ;
 
-        if ( ! IsSupported (
-                            characteristic ,
-                            GattCharacteristicProperties.WritableAuxiliaries ) ) {
-            LogUnsupported (
-                            characteristic ,
-                            "WritableAuxiliaries" ) ;
+        if ( ! IsSupported ( characteristic ,
+                             GattCharacteristicProperties.WritableAuxiliaries ) )
+        {
+            LogUnsupported ( characteristic ,
+                             "WritableAuxiliaries" ) ;
             return false ;
         }
 
@@ -72,19 +64,16 @@ public class RawValueWriter
         IGattCharacteristicWrapper characteristic ,
         IBuffer                    buffer )
     {
-        Guard.ArgumentNotNull (
-                               characteristic ,
-                               nameof ( characteristic ) ) ;
-        Guard.ArgumentNotNull (
-                               buffer ,
-                               nameof ( buffer ) ) ;
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( buffer ,
+                                nameof ( buffer ) ) ;
 
-        if ( ! IsSupported (
-                            characteristic ,
-                            GattCharacteristicProperties.WriteWithoutResponse ) ) {
-            LogUnsupported (
-                            characteristic ,
-                            "WriteWithoutResponse" ) ;
+        if ( ! IsSupported ( characteristic ,
+                             GattCharacteristicProperties.WriteWithoutResponse ) )
+        {
+            LogUnsupported ( characteristic ,
+                             "WriteWithoutResponse" ) ;
             return GattWriteResultWrapper.NotSupported ;
         }
 
@@ -93,18 +82,17 @@ public class RawValueWriter
         return status ;
     }
 
-    private static bool IsSupported (
-        IGattCharacteristicWrapper   characteristic ,
-        GattCharacteristicProperties needed ) =>
-        ( characteristic.CharacteristicProperties & needed ) == needed ;
-
-    private static void LogUnsupported (
-        IGattCharacteristicWrapper characteristic ,
-        string                     capability )
+    private static bool IsSupported ( IGattCharacteristicWrapper   characteristic ,
+                                      GattCharacteristicProperties needed )
     {
-        Log.Information (
-                         "GattCharacteristic '{Uuid}' doesn't support '{Capability}'" ,
-                         characteristic.Uuid ,
-                         capability ) ;
+        return ( characteristic.CharacteristicProperties & needed ) == needed ;
+    }
+
+    private static void LogUnsupported ( IGattCharacteristicWrapper characteristic ,
+                                         string                     capability )
+    {
+        Log.Information ( "GattCharacteristic '{Uuid}' doesn't support '{Capability}'" ,
+                          characteristic.Uuid ,
+                          capability ) ;
     }
 }

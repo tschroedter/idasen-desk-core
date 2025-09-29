@@ -9,12 +9,15 @@ public class GenericAttributeTests
     [ TestMethod ]
     public void RawServiceChanged_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawServiceChanged
            .Should ( )
            .BeEmpty ( ) ;
     }
 
-    private GenericAttribute CreateSut ( ) => new ( ) ;
+    private GenericAttribute CreateSut ( )
+    {
+        return new GenericAttribute ( ) ;
+    }
 }

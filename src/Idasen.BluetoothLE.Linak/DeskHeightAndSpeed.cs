@@ -32,14 +32,13 @@ public class DeskHeightAndSpeed
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskHeightAndSpeed" /> class.
     /// </summary>
-    public DeskHeightAndSpeed (
-        ILogger                            logger ,
-        IScheduler                         scheduler ,
-        IReferenceOutput                   referenceOutput ,
-        IRawValueToHeightAndSpeedConverter converter ,
-        ISubject < uint >                  subjectHeight ,
-        ISubject < int >                   subjectSpeed ,
-        ISubject < HeightSpeedDetails >    subjectHeightAndSpeed )
+    public DeskHeightAndSpeed ( ILogger                            logger ,
+                                IScheduler                         scheduler ,
+                                IReferenceOutput                   referenceOutput ,
+                                IRawValueToHeightAndSpeedConverter converter ,
+                                ISubject < uint >                  subjectHeight ,
+                                ISubject < int >                   subjectSpeed ,
+                                ISubject < HeightSpeedDetails >    subjectHeightAndSpeed )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( scheduler ) ;
@@ -88,22 +87,17 @@ public class DeskHeightAndSpeed
 
         _subscriber = _referenceOutput.HeightSpeedChanged
                                       .ObserveOn ( _scheduler )
-                                      .Subscribe (
-                                                  OnHeightSpeedChanged ,
-                                                  ex => _logger.Error (
-                                                                       ex ,
-                                                                       "Error while handling HeightSpeedChanged" ) ) ;
+                                      .Subscribe ( OnHeightSpeedChanged ,
+                                                   ex => _logger.Error ( ex ,
+                                                                         "Error while handling HeightSpeedChanged" ) ) ;
 
-        if ( _referenceOutput is UnknownBase ) {
-            _logger.Warning (
-                             "{ReferenceOutput} is set to Unknown" ,
-                             nameof ( _referenceOutput ) ) ;
-        }
+        if ( _referenceOutput is UnknownBase )
+            _logger.Warning ( "{ReferenceOutput} is set to Unknown" ,
+                              nameof ( _referenceOutput ) ) ;
 
-        if ( ! _converter.TryConvert (
-                                      _referenceOutput.RawHeightSpeed ,
-                                      out var height ,
-                                      out var speed ) )
+        if ( ! _converter.TryConvert ( _referenceOutput.RawHeightSpeed ,
+                                       out var height ,
+                                       out var speed ) )
             return this ;
 
         Height = height ;
@@ -122,10 +116,9 @@ public class DeskHeightAndSpeed
 
     private void OnHeightSpeedChanged ( RawValueChangedDetails details )
     {
-        if ( ! _converter.TryConvert (
-                                      details.Value ,
-                                      out var height ,
-                                      out var speed ) )
+        if ( ! _converter.TryConvert ( details.Value ,
+                                       out var height ,
+                                       out var speed ) )
             return ;
 
         Height = height ;
@@ -134,16 +127,14 @@ public class DeskHeightAndSpeed
         _subjectHeight.OnNext ( Height ) ;
         _subjectSpeed.OnNext ( Speed ) ;
 
-        var value = new HeightSpeedDetails (
-                                            details.Timestamp ,
-                                            Height ,
-                                            Speed ) ;
+        var value = new HeightSpeedDetails ( details.Timestamp ,
+                                             Height ,
+                                             Speed ) ;
 
         _subjectHeightAndSpeed.OnNext ( value ) ;
 
-        _logger.Debug (
-                       "Height={Height} (10ths of a millimeter), Speed={Speed} (100/RPM)" ,
-                       Height ,
-                       Speed ) ;
+        _logger.Debug ( "Height={Height} (10ths of a millimeter), Speed={Speed} (100/RPM)" ,
+                        Height ,
+                        Speed ) ;
     }
 }

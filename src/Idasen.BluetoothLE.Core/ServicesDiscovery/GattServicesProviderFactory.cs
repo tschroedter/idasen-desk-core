@@ -17,9 +17,8 @@ public class GattServicesProviderFactory
     /// </summary>
     public GattServicesProviderFactory ( GattServicesProvider.Factory factory )
     {
-        Guard.ArgumentNotNull (
-                               factory ,
-                               nameof ( factory ) ) ;
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
         _factory = factory ;
     }
@@ -30,9 +29,8 @@ public class GattServicesProviderFactory
     /// </summary>
     public IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper )
     {
-        Guard.ArgumentNotNull (
-                               wrapper ,
-                               nameof ( wrapper ) ) ;
+        Guard.ArgumentNotNull ( wrapper ,
+                                nameof ( wrapper ) ) ;
 
         return _factory.Invoke ( wrapper ) ;
     }

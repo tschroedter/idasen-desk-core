@@ -53,20 +53,17 @@ public class InitialHeightProviderTests : IDisposable
         _heightAndSpeed.Height
                        .Returns ( SomeHeight ) ;
 
-        _details1 = new HeightSpeedDetails (
-                                            DateTimeOffset.Now ,
-                                            1u ,
-                                            2 ) ;
+        _details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                             1u ,
+                                             2 ) ;
 
-        _details2 = new HeightSpeedDetails (
-                                            DateTimeOffset.Now ,
-                                            11u ,
-                                            22 ) ;
+        _details2 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                             11u ,
+                                             22 ) ;
 
-        _detailsZeroHeight = new HeightSpeedDetails (
-                                                     DateTimeOffset.Now ,
-                                                     0u ,
-                                                     22 ) ;
+        _detailsZeroHeight = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                      0u ,
+                                                      22 ) ;
 
         _executor.Up ( )
                  .Returns ( true ) ;
@@ -86,9 +83,8 @@ public class InitialHeightProviderTests : IDisposable
 
         var heightAndSpeed = Substitute.For < IObservable < HeightSpeedDetails > > ( ) ;
         heightAndSpeed.Subscribe ( Arg.Any < IObserver < HeightSpeedDetails > > ( ) )
-                      .Returns (
-                                disposable1 ,
-                                disposable2 ) ;
+                      .Returns ( disposable1 ,
+                                 disposable2 ) ;
 
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( heightAndSpeed ) ;
@@ -390,12 +386,11 @@ public class InitialHeightProviderTests : IDisposable
 
     private InitialHeightProvider CreateSut ( )
     {
-        var deviceMonitor = new InitialHeightProvider (
-                                                       _logger ,
-                                                       _scheduler ,
-                                                       _heightAndSpeed ,
-                                                       _executor ,
-                                                       _subjectFinished ) ;
+        var deviceMonitor = new InitialHeightProvider ( _logger ,
+                                                        _scheduler ,
+                                                        _heightAndSpeed ,
+                                                        _executor ,
+                                                        _subjectFinished ) ;
 
         return deviceMonitor ;
     }

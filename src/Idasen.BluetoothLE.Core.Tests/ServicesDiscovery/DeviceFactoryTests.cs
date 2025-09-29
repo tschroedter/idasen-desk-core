@@ -30,9 +30,8 @@ public class DeviceFactoryTests
 
     private DeviceFactory CreateSut ( )
     {
-        return new DeviceFactory (
-                                  _deviceFactory ,
-                                  _wrapperFactory ,
-                                  _deviceProvider ) ;
+        return new DeviceFactory ( _deviceFactory ,
+                                   _wrapperFactory ,
+                                   _deviceProvider ) ;
     }
 }

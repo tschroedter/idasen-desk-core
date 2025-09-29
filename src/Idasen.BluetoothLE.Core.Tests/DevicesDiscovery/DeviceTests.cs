@@ -95,12 +95,11 @@ public class DeviceTests
 
         sut.ToString ( )
            .Should ( )
-           .Be (
-                "Name = Name, "                                       +
-                "MacAddress = B3:A7:3C:E2:FF:23, "                    +
-                "Address = 197530862419747, "                         +
-                "BroadcastTime = 2007-10-02T13:02:03.0000000-07:30, " +
-                "RawSignalStrengthInDBm = -50dB" ) ;
+           .Be ( "Name = Name, "                                       +
+                 "MacAddress = B3:A7:3C:E2:FF:23, "                    +
+                 "Address = 197530862419747, "                         +
+                 "BroadcastTime = 2007-10-02T13:02:03.0000000-07:30, " +
+                 "RawSignalStrengthInDBm = -50dB" ) ;
     }
 
     [ TestMethod ]
@@ -110,19 +109,17 @@ public class DeviceTests
 
         var sut = new Device ( device ) ;
 
-        _comparer.Equals (
-                          sut ,
-                          device )
+        _comparer.Equals ( sut ,
+                           device )
                  .Should ( )
                  .BeTrue ( ) ;
     }
 
     private Device CreateSut ( )
     {
-        return new Device (
-                           _broadcastTime ,
-                           Address ,
-                           Name ,
-                           RawSignalStrengthInDBm ) ;
+        return new Device ( _broadcastTime ,
+                            Address ,
+                            Name ,
+                            RawSignalStrengthInDBm ) ;
     }
 }

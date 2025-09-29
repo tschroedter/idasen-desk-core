@@ -15,20 +15,16 @@ public class DeviceFactory
     private readonly IBluetoothLEDeviceProvider       _deviceProvider ;
     private readonly IBluetoothLeDeviceWrapperFactory _deviceWrapperFactory ;
 
-    public DeviceFactory (
-        Device.Factory                   deviceFactory ,
-        IBluetoothLeDeviceWrapperFactory deviceWrapperFactory ,
-        IBluetoothLEDeviceProvider       deviceProvider )
+    public DeviceFactory ( Device.Factory                   deviceFactory ,
+                           IBluetoothLeDeviceWrapperFactory deviceWrapperFactory ,
+                           IBluetoothLEDeviceProvider       deviceProvider )
     {
-        Guard.ArgumentNotNull (
-                               deviceFactory ,
-                               nameof ( deviceFactory ) ) ;
-        Guard.ArgumentNotNull (
-                               deviceWrapperFactory ,
-                               nameof ( deviceWrapperFactory ) ) ;
-        Guard.ArgumentNotNull (
-                               deviceProvider ,
-                               nameof ( deviceProvider ) ) ;
+        Guard.ArgumentNotNull ( deviceFactory ,
+                                nameof ( deviceFactory ) ) ;
+        Guard.ArgumentNotNull ( deviceWrapperFactory ,
+                                nameof ( deviceWrapperFactory ) ) ;
+        Guard.ArgumentNotNull ( deviceProvider ,
+                                nameof ( deviceProvider ) ) ;
 
         _deviceFactory        = deviceFactory ;
         _deviceWrapperFactory = deviceWrapperFactory ;

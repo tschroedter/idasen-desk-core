@@ -51,31 +51,33 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
         // If a different direction is currently commanded, manager must stop first.
         if ( CurrentDirection != Direction.None &&
-             desired          != CurrentDirection ) {
-            _logger.Debug (
-                           "Ignoring move request: already moving {Current} cannot switch to {Desired} without stop" ,
-                           CurrentDirection ,
-                           desired ) ;
+             desired          != CurrentDirection )
+        {
+            _logger.Debug ( "Ignoring move request: already moving {Current} cannot switch to {Desired} without stop" ,
+                            CurrentDirection ,
+                            desired ) ;
             return ;
         }
 
         // If same direction and from timer, re-issue as keep-alive but throttle.
-        if ( CurrentDirection == desired ) {
-            if ( fromTimer ) {
+        if ( CurrentDirection == desired )
+        {
+            if ( fromTimer )
+            {
                 var now = DateTime.UtcNow ;
 
-                if ( now - _lastKeepAlive >= _keepAliveInterval ) {
+                if ( now - _lastKeepAlive >= _keepAliveInterval )
+                {
                     _lastKeepAlive = now ;
-                    _logger.Debug (
-                                   "Re-issuing keep-alive move {Dir}" ,
-                                   desired ) ;
+                    _logger.Debug ( "Re-issuing keep-alive move {Dir}" ,
+                                    desired ) ;
                     IssueMoveCommand ( desired ) ;
                 }
-                else {
-                    _logger.Debug (
-                                   "Skipping keep-alive (throttled) dir={Dir} remainingMs={Remaining}" ,
-                                   desired ,
-                                   ( _keepAliveInterval - ( now - _lastKeepAlive ) ).TotalMilliseconds ) ;
+                else
+                {
+                    _logger.Debug ( "Skipping keep-alive (throttled) dir={Dir} remainingMs={Remaining}" ,
+                                    desired ,
+                                    ( _keepAliveInterval - ( now - _lastKeepAlive ) ).TotalMilliseconds ) ;
                 }
             }
 
@@ -83,9 +85,8 @@ internal class DeskMoveEngine : IDeskMoveEngine
         }
 
         // Start moving in desired direction from idle
-        _logger.Debug (
-                       "Issuing initial move {Dir}" ,
-                       desired ) ;
+        _logger.Debug ( "Issuing initial move {Dir}" ,
+                        desired ) ;
         _lastKeepAlive = DateTime.UtcNow ;
         IssueMoveCommand ( desired ) ;
     }
@@ -95,84 +96,89 @@ internal class DeskMoveEngine : IDeskMoveEngine
     /// </summary>
     public Task < bool > StopAsync ( )
     {
-        if ( _pendingStopTask is {IsCompleted: false} ) {
+        if ( _pendingStopTask is { IsCompleted: false } )
+        {
             _logger.Debug ( "Stop already pending (coalesced)" ) ;
             return _pendingStopTask ;
         }
 
-        _logger.Debug (
-                       "Engine stopping (currentDir={Dir})" ,
-                       CurrentDirection ) ;
+        _logger.Debug ( "Engine stopping (currentDir={Dir})" ,
+                        CurrentDirection ) ;
 
         var task = _executor.Stop ( ) ;
 
-        if ( task.IsCompleted ) {
-            var ok = task is {Status: TaskStatus.RanToCompletion , Result: true} ;
+        if ( task.IsCompleted )
+        {
+            var ok = task is { Status: TaskStatus.RanToCompletion , Result: true } ;
 
-            if ( ok ) {
+            if ( ok )
+            {
                 _logger.Debug ( "Stop completed synchronously" ) ;
                 CurrentDirection = Direction.None ;
             }
             else
+            {
                 _logger.Debug ( "Stop failed synchronously" ) ;
+            }
 
             return task ;
         }
 
         _pendingStopTask = task ;
 
-        _ = task.ContinueWith (
-                               t => {
-                                   if ( t.IsFaulted ) {
-                                       _logger.Error (
-                                                      t.Exception ,
-                                                      "Stop command faulted" ) ;
-                                   }
+        _ = task.ContinueWith ( t =>
+                                {
+                                    if ( t.IsFaulted )
+                                        _logger.Error ( t.Exception ,
+                                                        "Stop command faulted" ) ;
 
-                                   var ok = t is {Status: TaskStatus.RanToCompletion , Result: true} ;
+                                    var ok = t is { Status: TaskStatus.RanToCompletion , Result: true } ;
 
-                                   if ( ok ) {
-                                       _logger.Debug ( "Stop completed (async)" ) ;
-                                       CurrentDirection = Direction.None ;
-                                   }
-                                   else
-                                       _logger.Debug ( "Stop failed (async)" ) ;
+                                    if ( ok )
+                                    {
+                                        _logger.Debug ( "Stop completed (async)" ) ;
+                                        CurrentDirection = Direction.None ;
+                                    }
+                                    else
+                                    {
+                                        _logger.Debug ( "Stop failed (async)" ) ;
+                                    }
 
-                                   Interlocked.Exchange (
-                                                         ref _pendingStopTask ,
-                                                         null ) ;
-                               } ,
-                               CancellationToken.None ,
-                               TaskContinuationOptions.ExecuteSynchronously ,
-                               TaskScheduler.Default ) ;
+                                    Interlocked.Exchange ( ref _pendingStopTask ,
+                                                           null ) ;
+                                } ,
+                                CancellationToken.None ,
+                                TaskContinuationOptions.ExecuteSynchronously ,
+                                TaskScheduler.Default ) ;
 
         return task ;
     }
 
     private void IssueMoveCommand ( Direction desired )
     {
-        if ( _pendingMoveCommandTask is {IsCompleted: false} ) {
-            _logger.Debug (
-                           "Move command already pending (dir={Dir})" ,
-                           desired ) ;
+        if ( _pendingMoveCommandTask is { IsCompleted: false } )
+        {
+            _logger.Debug ( "Move command already pending (dir={Dir})" ,
+                            desired ) ;
             return ;
         }
 
         // optimistic set to avoid duplicate sends
         CurrentDirection = desired ;
 
-        _logger.Debug (
-                       "Sending move command {Dir}" ,
-                       desired ) ;
+        _logger.Debug ( "Sending move command {Dir}" ,
+                        desired ) ;
         var task = desired == Direction.Up
                        ? _executor.Up ( )
                        : _executor.Down ( ) ;
 
-        if ( task.IsCompleted ) {
-            var ok = task is {Status: TaskStatus.RanToCompletion , Result: true} ;
+        if ( task.IsCompleted )
+        {
+            var ok = task is { Status: TaskStatus.RanToCompletion , Result: true } ;
 
             if ( ! ok &&
-                 CurrentDirection == desired ) {
+                 CurrentDirection == desired )
+            {
                 _logger.Debug ( "Move command failed synchronously -> reset direction" ) ;
                 CurrentDirection = Direction.None ;
             }
@@ -182,33 +188,31 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
         _pendingMoveCommandTask = task ;
 
-        _ = task.ContinueWith (
-                               t => {
-                                   if ( t.IsFaulted ) {
-                                       _logger.Error (
-                                                      t.Exception ,
-                                                      "Move command faulted" ) ;
-                                   }
+        _ = task.ContinueWith ( t =>
+                                {
+                                    if ( t.IsFaulted )
+                                        _logger.Error ( t.Exception ,
+                                                        "Move command faulted" ) ;
 
-                                   var ok = t is {Status: TaskStatus.RanToCompletion , Result: true} ;
+                                    var ok = t is { Status: TaskStatus.RanToCompletion , Result: true } ;
 
-                                   if ( ! ok &&
-                                        CurrentDirection == desired ) {
-                                       _logger.Debug ( "Move command failed (async) -> reset direction" ) ;
-                                       CurrentDirection = Direction.None ;
-                                   }
-                                   else if ( ok ) {
-                                       _logger.Debug (
-                                                      "Move command completed (async) ok={Ok}" ,
-                                                      ok ) ;
-                                   }
+                                    if ( ! ok &&
+                                         CurrentDirection == desired )
+                                    {
+                                        _logger.Debug ( "Move command failed (async) -> reset direction" ) ;
+                                        CurrentDirection = Direction.None ;
+                                    }
+                                    else if ( ok )
+                                    {
+                                        _logger.Debug ( "Move command completed (async) ok={Ok}" ,
+                                                        ok ) ;
+                                    }
 
-                                   Interlocked.Exchange (
-                                                         ref _pendingMoveCommandTask ,
-                                                         null ) ;
-                               } ,
-                               CancellationToken.None ,
-                               TaskContinuationOptions.ExecuteSynchronously ,
-                               TaskScheduler.Default ) ;
+                                    Interlocked.Exchange ( ref _pendingMoveCommandTask ,
+                                                           null ) ;
+                                } ,
+                                CancellationToken.None ,
+                                TaskContinuationOptions.ExecuteSynchronously ,
+                                TaskScheduler.Default ) ;
     }
 }

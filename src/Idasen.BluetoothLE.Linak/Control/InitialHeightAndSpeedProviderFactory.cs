@@ -23,15 +23,13 @@ public class InitialHeightAndSpeedProviderFactory
     }
 
     /// <inheritdoc />
-    public IInitialHeightProvider Create (
-        IDeskCommandExecutor executor ,
-        IDeskHeightAndSpeed  heightAndSpeed )
+    public IInitialHeightProvider Create ( IDeskCommandExecutor executor ,
+                                           IDeskHeightAndSpeed  heightAndSpeed )
     {
         ArgumentNullException.ThrowIfNull ( executor ) ;
         ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
 
-        return _factory (
-                         executor ,
-                         heightAndSpeed ) ;
+        return _factory ( executor ,
+                          heightAndSpeed ) ;
     }
 }

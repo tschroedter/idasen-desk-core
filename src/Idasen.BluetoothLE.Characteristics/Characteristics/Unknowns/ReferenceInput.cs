@@ -3,7 +3,8 @@
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
 public class ReferenceInput
-    : UnknownBase , IReferenceInput
+    : UnknownBase ,
+      IReferenceInput
 {
     public IEnumerable < byte > Ctrl1 { get ; } = RawArrayEmpty ;
 }

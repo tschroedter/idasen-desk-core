@@ -85,32 +85,28 @@ public class ControlTest
         await sut.TryWriteRawControl2 ( RawValue1 ) ;
 
         await RawValueWriter.Received ( )
-                            .TryWriteValueAsync (
-                                                 CharacteristicWrapper1 ,
-                                                 Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
+                            .TryWriteValueAsync ( CharacteristicWrapper1 ,
+                                                  Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
     }
 
     protected override Control CreateSut ( )
     {
-        return new Control (
-                            Logger ,
-                            Scheduler ,
-                            Device ,
-                            ProviderFactory ,
-                            RawValueReader ,
-                            RawValueWriter ,
-                            ToStringConverter ,
-                            DescriptionToUuid ) ;
+        return new Control ( Logger ,
+                             Scheduler ,
+                             Device ,
+                             ProviderFactory ,
+                             RawValueReader ,
+                             RawValueWriter ,
+                             ToStringConverter ,
+                             DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add (
-                      Control.Control2Key ,
-                      CharacteristicWrapper1 ) ;
+        Wrappers.Add ( Control.Control2Key ,
+                       CharacteristicWrapper1 ) ;
 
-        Wrappers.Add (
-                      Control.Control3Key ,
-                      CharacteristicWrapper1 ) ;
+        Wrappers.Add ( Control.Control3Key ,
+                       CharacteristicWrapper1 ) ;
     }
 }

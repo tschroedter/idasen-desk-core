@@ -14,17 +14,15 @@ namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 public class Device
     : IDevice
 {
-    public delegate IDevice Factory (
-        IDateTimeOffset broadcastTime ,
-        ulong           address ,
-        string ?        name ,
-        short           rawSignalStrengthInDBm ) ;
+    public delegate IDevice Factory ( IDateTimeOffset broadcastTime ,
+                                      ulong           address ,
+                                      string ?        name ,
+                                      short           rawSignalStrengthInDBm ) ;
 
     public Device ( IDevice device )
     {
-        Guard.ArgumentNotNull (
-                               device ,
-                               nameof ( device ) ) ;
+        Guard.ArgumentNotNull ( device ,
+                                nameof ( device ) ) ;
 
         BroadcastTime          = device.BroadcastTime ;
         Address                = device.Address ;
@@ -33,15 +31,13 @@ public class Device
         RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
     }
 
-    public Device (
-        IDateTimeOffset          broadcastTime ,
-        ulong                    address ,
-        [ GuardIgnore ] string ? name ,
-        short                    rawSignalStrengthInDBm )
+    public Device ( IDateTimeOffset          broadcastTime ,
+                    ulong                    address ,
+                    [ GuardIgnore ] string ? name ,
+                    short                    rawSignalStrengthInDBm )
     {
-        Guard.ArgumentNotNull (
-                               broadcastTime ,
-                               nameof ( broadcastTime ) ) ;
+        Guard.ArgumentNotNull ( broadcastTime ,
+                                nameof ( broadcastTime ) ) ;
 
         BroadcastTime          = broadcastTime ;
         Address                = address ;

@@ -18,15 +18,14 @@ public class Dpg ( ILogger                              logger ,
                    IRawValueWriter                      rawValueWriter ,
                    ICharacteristicBaseToStringConverter toStringConverter ,
                    IDescriptionToUuid                   descriptionToUuid )
-    : CharacteristicBase (
-                          logger ,
-                          scheduler ,
-                          device ,
-                          providerFactory ,
-                          rawValueReader ,
-                          rawValueWriter ,
-                          toStringConverter ,
-                          descriptionToUuid ) ,
+    : CharacteristicBase ( logger ,
+                           scheduler ,
+                           device ,
+                           providerFactory ,
+                           rawValueReader ,
+                           rawValueWriter ,
+                           toStringConverter ,
+                           descriptionToUuid ) ,
       IDpg
 {
     /// <summary>
@@ -50,7 +49,8 @@ public class Dpg ( ILogger                              logger ,
     /// <summary>
     ///     Provides the mapping of the characteristic.
     /// </summary>
-    protected override T WithMapping < T > ( ) where T : class
+    protected override T WithMapping < T > ( )
+        where T : class
     {
         DescriptionToUuid [ DpgKey ] = Guid.Parse ( "99FA0011-338A-1024-8A49-009C0215F78A" ) ;
 

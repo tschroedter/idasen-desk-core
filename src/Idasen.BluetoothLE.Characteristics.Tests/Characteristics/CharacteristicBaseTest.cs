@@ -19,7 +19,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public void GattServiceUuid_ForInvoked_Uuid ( )
     {
-        using var sut = CreateSut ( );
+        using var sut = CreateSut ( ) ;
 
         sut.GattServiceUuid
            .Should ( )
@@ -27,9 +27,8 @@ public class CharacteristicBaseTest
     }
 
     [ AutoDataTestMethod ]
-    public void Initialize_ForUnknownGattServiceUuid_Throws (
-        TestCharacteristicBase sut ,
-        [ Freeze ] IDevice     device )
+    public void Initialize_ForUnknownGattServiceUuid_Throws ( TestCharacteristicBase sut ,
+                                                              [ Freeze ] IDevice     device )
     {
         IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > gattServices =
             new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( ) ;
@@ -141,9 +140,8 @@ public class CharacteristicBaseTest
         await sut.TryWriteRawValue ( RawValue1 ) ;
 
         await RawValueWriter.Received ( )
-                            .TryWriteValueAsync (
-                                                 CharacteristicWrapper1 ,
-                                                 Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
+                            .TryWriteValueAsync ( CharacteristicWrapper1 ,
+                                                  Arg.Is < IBuffer > ( x => x.Length == RawValue1.Length ) ) ;
     }
 
     [ TestMethod ]
@@ -154,9 +152,8 @@ public class CharacteristicBaseTest
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
 
-        RawValueWriter.TryWriteValueAsync (
-                                           Arg.Any < IGattCharacteristicWrapper > ( ) ,
-                                           Arg.Any < IBuffer > ( ) )
+        RawValueWriter.TryWriteValueAsync ( Arg.Any < IGattCharacteristicWrapper > ( ) ,
+                                            Arg.Any < IBuffer > ( ) )
                       .Returns ( Task.FromResult ( true ) ) ;
 
         await sut.Initialize < TestCharacteristicBase > ( )
@@ -176,9 +173,8 @@ public class CharacteristicBaseTest
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
 
-        RawValueWriter.TryWriteValueAsync (
-                                           Arg.Any < IGattCharacteristicWrapper > ( ) ,
-                                           Arg.Any < IBuffer > ( ) )
+        RawValueWriter.TryWriteValueAsync ( Arg.Any < IGattCharacteristicWrapper > ( ) ,
+                                            Arg.Any < IBuffer > ( ) )
                       .Returns ( Task.FromResult ( false ) ) ;
 
         await sut.Initialize < TestCharacteristicBase > ( )
@@ -227,9 +223,8 @@ public class CharacteristicBaseTest
         const string messageTemplate = "Unknown characteristic with key '{Key}'" ;
 
         Logger.Received ( )
-              .Error (
-                      messageTemplate ,
-                      Arg.Any < string > ( ) ) ;
+              .Error ( messageTemplate ,
+                       Arg.Any < string > ( ) ) ;
     }
 
     [ TestMethod ]
@@ -238,9 +233,8 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        Wrappers.Add (
-                      TestCharacteristicBase.RawValueKey ,
-                      null! ) ;
+        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
+                       null! ) ;
 
         using var sut = CreateSut ( ) ;
 
@@ -262,9 +256,8 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        Wrappers.Add (
-                      TestCharacteristicBase.RawValueKey ,
-                      null! ) ;
+        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
+                       null! ) ;
 
         using var sut = CreateSut ( ) ;
 
@@ -277,7 +270,8 @@ public class CharacteristicBaseTest
         await sut.TryWriteRawValue ( RawValue1 ) ;
 
         Logger.ReceivedWithAnyArgs ( )
-              .Error ( "Ignored test error {Key}" , Arg.Any < string > ( ) ) ;
+              .Error ( "Ignored test error {Key}" ,
+                       Arg.Any < string > ( ) ) ;
     }
 
     [ TestMethod ]
@@ -301,21 +295,19 @@ public class CharacteristicBaseTest
 
     protected override TestCharacteristicBase CreateSut ( )
     {
-        return new TestCharacteristicBase (
-                                           Logger ,
-                                           Scheduler ,
-                                           Device ,
-                                           ProviderFactory ,
-                                           RawValueReader ,
-                                           RawValueWriter ,
-                                           ToStringConverter ,
-                                           DescriptionToUuid ) ;
+        return new TestCharacteristicBase ( Logger ,
+                                            Scheduler ,
+                                            Device ,
+                                            ProviderFactory ,
+                                            RawValueReader ,
+                                            RawValueWriter ,
+                                            ToStringConverter ,
+                                            DescriptionToUuid ) ;
     }
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add (
-                      TestCharacteristicBase.RawValueKey ,
-                      CharacteristicWrapper1 ) ;
+        Wrappers.Add ( TestCharacteristicBase.RawValueKey ,
+                       CharacteristicWrapper1 ) ;
     }
 }

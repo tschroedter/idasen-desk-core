@@ -105,19 +105,17 @@ public class DeviceTests
 
         var sut = new Device ( device ) ;
 
-        _comparer.Equals (
-                          sut ,
-                          device )
+        _comparer.Equals ( sut ,
+                           device )
                  .Should ( )
                  .BeTrue ( ) ;
     }
 
     private Device CreateSut ( )
     {
-        return new Device (
-                           _broadcastTime ,
-                           Address ,
-                           Name ,
-                           RawSignalStrengthInDBm ) ;
+        return new Device ( _broadcastTime ,
+                            Address ,
+                            Name ,
+                            RawSignalStrengthInDBm ) ;
     }
 }

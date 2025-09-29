@@ -21,13 +21,11 @@ public static class GattCharacteristicPropertiesExtensions
         var list = new List < GattCharacteristicProperties > ( ) ;
 
         foreach ( GattCharacteristicProperties property in
-                 Enum.GetValues ( typeof ( GattCharacteristicProperties ) ) ) {
+                 Enum.GetValues ( typeof ( GattCharacteristicProperties ) ) )
             if ( ( properties & property ) == property )
                 list.Add ( property ) ;
-        }
 
-        return string.Join (
-                            ", " ,
-                            list ) ;
+        return string.Join ( ", " ,
+                             list ) ;
     }
 }

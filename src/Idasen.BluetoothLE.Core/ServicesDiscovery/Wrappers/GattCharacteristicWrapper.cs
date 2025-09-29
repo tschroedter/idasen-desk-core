@@ -22,28 +22,22 @@ public class GattCharacteristicWrapper
     private readonly IGattReadResultWrapperFactory              _readResultFactory ;
     private readonly IGattWriteResultWrapperFactory             _writeResultFactory ;
 
-    public GattCharacteristicWrapper (
-        ILogger                                    logger ,
-        GattCharacteristic                         characteristic ,
-        IGattCharacteristicValueChangedObservables observables ,
-        IGattWriteResultWrapperFactory             writeResultFactory ,
-        IGattReadResultWrapperFactory              readResultFactory )
+    public GattCharacteristicWrapper ( ILogger                                    logger ,
+                                       GattCharacteristic                         characteristic ,
+                                       IGattCharacteristicValueChangedObservables observables ,
+                                       IGattWriteResultWrapperFactory             writeResultFactory ,
+                                       IGattReadResultWrapperFactory              readResultFactory )
     {
-        Guard.ArgumentNotNull (
-                               logger ,
-                               nameof ( logger ) ) ;
-        Guard.ArgumentNotNull (
-                               characteristic ,
-                               nameof ( characteristic ) ) ;
-        Guard.ArgumentNotNull (
-                               observables ,
-                               nameof ( observables ) ) ;
-        Guard.ArgumentNotNull (
-                               writeResultFactory ,
-                               nameof ( writeResultFactory ) ) ;
-        Guard.ArgumentNotNull (
-                               readResultFactory ,
-                               nameof ( readResultFactory ) ) ;
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( characteristic ,
+                                nameof ( characteristic ) ) ;
+        Guard.ArgumentNotNull ( observables ,
+                                nameof ( observables ) ) ;
+        Guard.ArgumentNotNull ( writeResultFactory ,
+                                nameof ( writeResultFactory ) ) ;
+        Guard.ArgumentNotNull ( readResultFactory ,
+                                nameof ( readResultFactory ) ) ;
 
         _logger             = logger ;
         _characteristic     = characteristic ;
@@ -55,9 +49,8 @@ public class GattCharacteristicWrapper
     /// <inheritdoc />
     public async Task < IGattCharacteristicWrapper > Initialize ( )
     {
-        _logger.Information (
-                             "Initializing GattCharacteristic with UUID {Uuid}" ,
-                             _characteristic.Uuid ) ;
+        _logger.Information ( "Initializing GattCharacteristic with UUID {Uuid}" ,
+                              _characteristic.Uuid ) ;
 
         await _observables.Initialise ( _characteristic ) ;
 
@@ -88,7 +81,10 @@ public class GattCharacteristicWrapper
     }
 
     /// <inheritdoc />
-    public async Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer ) => await _characteristic.WriteValueAsync ( buffer ) ;
+    public async Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer )
+    {
+        return await _characteristic.WriteValueAsync ( buffer ) ;
+    }
 
     /// <inheritdoc />
     public async Task < IGattReadResultWrapper > ReadValueAsync ( )

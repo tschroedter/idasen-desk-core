@@ -60,10 +60,9 @@ public class RawValueChangedDetailsTests
 
     private RawValueChangedDetails CreateSut ( )
     {
-        return new RawValueChangedDetails (
-                                           Description ,
-                                           _value ,
-                                           _timestamp ,
-                                           _uuid ) ;
+        return new RawValueChangedDetails ( Description ,
+                                            _value ,
+                                            _timestamp ,
+                                            _uuid ) ;
     }
 }

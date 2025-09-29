@@ -14,6 +14,5 @@ public interface IRawValueReader
     /// <returns>
     ///     A tuple where the first item indicates success, and the second item contains the value bytes when successful.
     /// </returns>
-    Task < (bool , byte [ ]) > TryReadValueAsync (
-        IGattCharacteristicWrapper characteristic ) ;
+    Task < (bool , byte [ ]) > TryReadValueAsync ( IGattCharacteristicWrapper characteristic ) ;
 }

@@ -9,9 +9,8 @@ namespace Idasen.BluetoothLE.Linak.Tests ;
 public class DeskTests
 {
     [ AutoDataTestMethod ]
-    public void Connect_ForInvoked_CallsDeskConnector (
-        Desk                      sut ,
-        [ Freeze ] IDeskConnector connector )
+    public void Connect_ForInvoked_CallsDeskConnector ( Desk                      sut ,
+                                                        [ Freeze ] IDeskConnector connector )
     {
         sut.Connect ( ) ;
 
@@ -20,9 +19,8 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public void MoveTo_ForTargetHeight_CallsConnector (
-        Desk                      sut ,
-        [ Freeze ] IDeskConnector connector )
+    public void MoveTo_ForTargetHeight_CallsConnector ( Desk                      sut ,
+                                                        [ Freeze ] IDeskConnector connector )
     {
         const uint targetHeight = 100u ;
 
@@ -33,9 +31,8 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task MoveUpAsync_ForInvoked_CallsConnector (
-        Desk                      sut ,
-        [ Freeze ] IDeskConnector connector )
+    public async Task MoveUpAsync_ForInvoked_CallsConnector ( Desk                      sut ,
+                                                              [ Freeze ] IDeskConnector connector )
     {
         await sut.MoveUpAsync ( ) ;
 
@@ -44,9 +41,8 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task MoveDownAsync_ForInvoked_CallsConnector (
-        Desk                      sut ,
-        [ Freeze ] IDeskConnector connector )
+    public async Task MoveDownAsync_ForInvoked_CallsConnector ( Desk                      sut ,
+                                                                [ Freeze ] IDeskConnector connector )
     {
         await sut.MoveDownAsync ( ) ;
 
@@ -55,9 +51,8 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public async Task MoveStopAsync_ForInvoked_CallsConnector (
-        Desk                      sut ,
-        [ Freeze ] IDeskConnector connector )
+    public async Task MoveStopAsync_ForInvoked_CallsConnector ( Desk                      sut ,
+                                                                [ Freeze ] IDeskConnector connector )
     {
         await sut.MoveStopAsync ( ) ;
 
@@ -66,9 +61,8 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_CallsDeskConnector (
-        Desk                      sut ,
-        [ Freeze ] IDeskConnector connector )
+    public void Dispose_ForInvoked_CallsDeskConnector ( Desk                      sut ,
+                                                        [ Freeze ] IDeskConnector connector )
     {
         sut.Dispose ( ) ;
 
@@ -77,9 +71,8 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public void DeviceName_ForInvoked_DeviceName (
-        Desk              sut ,
-        [ Freeze ] string deviceName )
+    public void DeviceName_ForInvoked_DeviceName ( Desk              sut ,
+                                                   [ Freeze ] string deviceName )
     {
         sut.DeviceName
            .Should ( )
@@ -87,9 +80,8 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public void BluetoothAddress_ForInvoked_BluetoothAddress (
-        Desk             sut ,
-        [ Freeze ] ulong bluetoothAddress )
+    public void BluetoothAddress_ForInvoked_BluetoothAddress ( Desk             sut ,
+                                                               [ Freeze ] ulong bluetoothAddress )
     {
         sut.BluetoothAddress
            .Should ( )
@@ -97,9 +89,8 @@ public class DeskTests
     }
 
     [ AutoDataTestMethod ]
-    public void BluetoothAddressType_ForInvoked_BluetoothAddressType (
-        Desk              sut ,
-        [ Freeze ] string bluetoothAddressType )
+    public void BluetoothAddressType_ForInvoked_BluetoothAddressType ( Desk              sut ,
+                                                                       [ Freeze ] string bluetoothAddressType )
     {
         sut.BluetoothAddressType
            .Should ( )

@@ -25,15 +25,15 @@ public sealed class BluetoothLEDeskCharacteristics : Module
     /// <param name="builder">The container builder.</param>
     protected override void Load ( ContainerBuilder builder )
     {
-        Guard.ArgumentNotNull (
-                               builder ,
-                               nameof ( builder ) ) ;
+        Guard.ArgumentNotNull ( builder ,
+                                nameof ( builder ) ) ;
 
         builder.RegisterModule < BluetoothLECoreModule > ( ) ;
 
         RegisterWithInterceptors < IAllGattCharacteristicsProvider , AllGattCharacteristicsProvider > ( builder ) ;
         RegisterWithInterceptors < IGattCharacteristicProvider , GattCharacteristicProvider > ( builder ) ;
-        RegisterWithInterceptors < IGattCharacteristicsProviderFactory , GattCharacteristicsProviderFactory > ( builder ) ;
+        RegisterWithInterceptors < IGattCharacteristicsProviderFactory ,
+            GattCharacteristicsProviderFactory > ( builder ) ;
         RegisterWithInterceptors < IRawValueReader , RawValueReader > ( builder ) ;
         RegisterWithInterceptors < IRawValueWriter , RawValueWriter > ( builder ) ;
         RegisterWithInterceptors < IGenericAccess , GenericAccess > ( builder ) ;
@@ -42,7 +42,8 @@ public sealed class BluetoothLEDeskCharacteristics : Module
         RegisterWithInterceptors < IReferenceOutput , ReferenceOutput > ( builder ) ;
         RegisterWithInterceptors < IDpg , Dpg > ( builder ) ;
         RegisterWithInterceptors < IControl , Control > ( builder ) ;
-        RegisterWithInterceptors < ICharacteristicBaseToStringConverter , CharacteristicBaseToStringConverter > ( builder ) ;
+        RegisterWithInterceptors < ICharacteristicBaseToStringConverter ,
+            CharacteristicBaseToStringConverter > ( builder ) ;
         RegisterWithInterceptors < IBufferReader , BufferReader > ( builder ) ;
         RegisterWithInterceptors < IDescriptionToUuid , DescriptionToUuid > ( builder ) ;
         RegisterWithInterceptors < ICharacteristicBaseFactory , CharacteristicBaseFactory > ( builder ) ;

@@ -30,7 +30,8 @@ public class Device
     public bool                      IsPaired                { get ; } = false ;
     public BluetoothConnectionStatus ConnectionStatus        { get ; } = BluetoothConnectionStatus.Disconnected ;
 
-    public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > GattServices { get ; } =
+    public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper >
+        GattServices { get ; } =
         new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( )
            .ToImmutableDictionary ( ) ;
 

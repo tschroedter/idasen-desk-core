@@ -52,14 +52,16 @@ public class HasReachedTargetHeightCalculator
                     ? TargetHeight   - StoppingHeight
                     : StoppingHeight - TargetHeight ;
 
-        if ( StartMovingIntoDirection != MoveIntoDirection ) {
+        if ( StartMovingIntoDirection != MoveIntoDirection )
+        {
             // StoppingHeight must be 'behind' TargetHeight when direction changed
             HasReachedTargetHeight = true ;
 
             return this ;
         }
 
-        if ( IsPastTargetHeight ( ) ) {
+        if ( IsPastTargetHeight ( ) )
+        {
             HasReachedTargetHeight = true ;
 
             return this ;
@@ -67,28 +69,29 @@ public class HasReachedTargetHeightCalculator
 
         var isCloseToTargetHeight = Delta <= Math.Abs ( MovementUntilStop ) ;
 
-        HasReachedTargetHeight = MoveIntoDirection switch {
+        HasReachedTargetHeight = MoveIntoDirection switch
+                                 {
                                      Direction.Up   => isCloseToTargetHeight || StoppingHeight >= TargetHeight ,
                                      Direction.Down => isCloseToTargetHeight || StoppingHeight <= TargetHeight ,
                                      _              => true
                                  } ;
 
-        _logger.Debug (
-                       "ReachedCalc Target={TargetHeight} Stop={StoppingHeight} Move={MoveIntoDirection} Start={StartMovingIntoDirection} Delta={Delta} UntilStop={MovementUntilStop} Reached={HasReachedTargetHeight}" ,
-                       TargetHeight ,
-                       StoppingHeight ,
-                       MoveIntoDirection ,
-                       StartMovingIntoDirection ,
-                       Delta ,
-                       MovementUntilStop ,
-                       HasReachedTargetHeight ) ;
+        _logger.Debug ( "ReachedCalc Target={TargetHeight} Stop={StoppingHeight} Move={MoveIntoDirection} Start={StartMovingIntoDirection} Delta={Delta} UntilStop={MovementUntilStop} Reached={HasReachedTargetHeight}" ,
+                        TargetHeight ,
+                        StoppingHeight ,
+                        MoveIntoDirection ,
+                        StartMovingIntoDirection ,
+                        Delta ,
+                        MovementUntilStop ,
+                        HasReachedTargetHeight ) ;
 
         return this ;
     }
 
     private bool IsPastTargetHeight ( )
     {
-        switch ( MoveIntoDirection ) {
+        switch ( MoveIntoDirection )
+        {
             case Direction.Up :
                 return StoppingHeight >= TargetHeight ;
             case Direction.Down :
@@ -96,15 +99,17 @@ public class HasReachedTargetHeightCalculator
             case Direction.None :
                 return true ;
             default :
-                throw new ArgumentOutOfRangeException (
-                                                       nameof ( MoveIntoDirection ) ,
-                                                       MoveIntoDirection ,
-                                                       "Unknown direction" ) ;
+                throw new ArgumentOutOfRangeException ( nameof ( MoveIntoDirection ) ,
+                                                        MoveIntoDirection ,
+                                                        "Unknown direction" ) ;
         }
     }
 
     /// <summary>
     ///     Returns a JSON representation of the calculation state.
     /// </summary>
-    public override string ToString ( ) => $"{JsonSerializer.Serialize ( this )}" ;
+    public override string ToString ( )
+    {
+        return $"{JsonSerializer.Serialize ( this )}" ;
+    }
 }

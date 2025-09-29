@@ -35,10 +35,9 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertFromString_ForTextNull_Zero ( )
     {
-        CreateSut ( ).ConvertFromString (
-                                         null! ,
-                                         _readerRow ,
-                                         _memberMapData )
+        CreateSut ( ).ConvertFromString ( null! ,
+                                          _readerRow ,
+                                          _memberMapData )
                      .Should ( )
                      .Be ( 0 ) ;
     }
@@ -46,11 +45,11 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertFromString_ForReaderRowNull_Throws ( )
     {
-        var action = ( ) => {
-                         CreateSut ( ).ConvertFromString (
-                                                          _text ,
-                                                          null! ,
-                                                          _memberMapData ) ;
+        var action = ( ) =>
+                     {
+                         CreateSut ( ).ConvertFromString ( _text ,
+                                                           null! ,
+                                                           _memberMapData ) ;
                      } ;
 
         action.Should ( )
@@ -61,11 +60,11 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertFromString_ForMemberMapDataNull_Throws ( )
     {
-        var action = ( ) => {
-                         CreateSut ( ).ConvertFromString (
-                                                          _text ,
-                                                          _readerRow ,
-                                                          null! ) ;
+        var action = ( ) =>
+                     {
+                         CreateSut ( ).ConvertFromString ( _text ,
+                                                           _readerRow ,
+                                                           null! ) ;
                      } ;
 
         action.Should ( )
@@ -76,10 +75,9 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertFromString_ForTextIsNumber_Number ( )
     {
-        CreateSut ( ).ConvertFromString (
-                                         _text ,
-                                         _readerRow ,
-                                         _memberMapData )
+        CreateSut ( ).ConvertFromString ( _text ,
+                                          _readerRow ,
+                                          _memberMapData )
                      .Should ( )
                      .Be ( 6144u ) ;
     }
@@ -87,10 +85,9 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertFromString_ForTextIsNotANumber_MaxValue ( )
     {
-        CreateSut ( ).ConvertFromString (
-                                         NotANumber ,
-                                         _readerRow ,
-                                         _memberMapData )
+        CreateSut ( ).ConvertFromString ( NotANumber ,
+                                          _readerRow ,
+                                          _memberMapData )
                      .Should ( )
                      .Be ( ushort.MaxValue ) ;
     }
@@ -98,10 +95,9 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertToString_ForValueNull_NullText ( )
     {
-        CreateSut ( ).ConvertToString (
-                                       null! ,
-                                       _writerRow ,
-                                       _memberMapData )
+        CreateSut ( ).ConvertToString ( null! ,
+                                        _writerRow ,
+                                        _memberMapData )
                      .Should ( )
                      .Be ( "null" ) ;
     }
@@ -109,11 +105,11 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertToString_ForWriterRowNull_Throws ( )
     {
-        var action = ( ) => {
-                         CreateSut ( ).ConvertToString (
-                                                        _value ,
-                                                        null! ,
-                                                        _memberMapData ) ;
+        var action = ( ) =>
+                     {
+                         CreateSut ( ).ConvertToString ( _value ,
+                                                         null! ,
+                                                         _memberMapData ) ;
                      } ;
 
         action.Should ( )
@@ -124,11 +120,11 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertToString_ForMemberMapDataNull_Throws ( )
     {
-        var action = ( ) => {
-                         CreateSut ( ).ConvertToString (
-                                                        _value ,
-                                                        _writerRow ,
-                                                        null! ) ;
+        var action = ( ) =>
+                     {
+                         CreateSut ( ).ConvertToString ( _value ,
+                                                         _writerRow ,
+                                                         null! ) ;
                      } ;
 
         action.Should ( )
@@ -139,10 +135,9 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertToString_ForValueIsNumber_String ( )
     {
-        CreateSut ( ).ConvertToString (
-                                       _value ,
-                                       _writerRow ,
-                                       _memberMapData )
+        CreateSut ( ).ConvertToString ( _value ,
+                                        _writerRow ,
+                                        _memberMapData )
                      .Should ( )
                      .Be ( "6144" ) ;
     }
@@ -150,15 +145,17 @@ public class OfficialGattServiceConverterTests
     [ TestMethod ]
     public void ConvertToString_ForValueIsNotANumber_String ( )
     {
-        CreateSut ( ).ConvertToString (
-                                       NotANumber ,
-                                       _writerRow ,
-                                       _memberMapData )
+        CreateSut ( ).ConvertToString ( NotANumber ,
+                                        _writerRow ,
+                                        _memberMapData )
                      .Should ( )
                      .Be ( NotANumber ) ;
     }
 
-    private OfficialGattServiceConverter CreateSut ( ) => new ( ) ;
+    private OfficialGattServiceConverter CreateSut ( )
+    {
+        return new OfficialGattServiceConverter ( ) ;
+    }
 
     public class TestClass
     {

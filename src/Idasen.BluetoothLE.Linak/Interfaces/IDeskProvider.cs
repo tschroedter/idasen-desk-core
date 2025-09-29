@@ -33,10 +33,9 @@ public interface IDeskProvider
     /// <returns>
     ///     Returns itself.
     /// </returns>
-    IDeskProvider Initialize (
-        string deviceName ,
-        ulong  deviceAddress ,
-        uint   deviceTimeout ) ;
+    IDeskProvider Initialize ( string deviceName ,
+                               ulong  deviceAddress ,
+                               uint   deviceTimeout ) ;
 
     /// <summary>
     ///     Start the desk detection process.

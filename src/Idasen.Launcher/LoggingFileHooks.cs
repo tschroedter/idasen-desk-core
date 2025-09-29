@@ -34,9 +34,8 @@ public sealed class LoggingFileHooks : FileLifecycleHooks
         FullPath             = path ;
         LoggingFile.FullPath = path ;
 
-        return base.OnFileOpened (
-                                  path ,
-                                  underlyingStream ,
-                                  encoding ) ;
+        return base.OnFileOpened ( path ,
+                                   underlyingStream ,
+                                   encoding ) ;
     }
 }

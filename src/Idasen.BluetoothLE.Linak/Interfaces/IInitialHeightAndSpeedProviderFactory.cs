@@ -10,7 +10,6 @@ public interface IInitialHeightAndSpeedProviderFactory
     /// </summary>
     /// <param name="executor">Executor to issue initial read commands.</param>
     /// <param name="heightAndSpeed">Source that exposes the height and speed raw values and notifications.</param>
-    IInitialHeightProvider Create (
-        IDeskCommandExecutor executor ,
-        IDeskHeightAndSpeed  heightAndSpeed ) ;
+    IInitialHeightProvider Create ( IDeskCommandExecutor executor ,
+                                    IDeskHeightAndSpeed  heightAndSpeed ) ;
 }

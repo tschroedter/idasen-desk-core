@@ -11,14 +11,12 @@ public class GattCharacteristicValueChangedDetails
     /// <param name="uuid">The UUID of the characteristic.</param>
     /// <param name="value">The raw value of the characteristic.</param>
     /// <param name="timestamp">The time at which the value was changed.</param>
-    public GattCharacteristicValueChangedDetails (
-        Guid                 uuid ,
-        IEnumerable < byte > value ,
-        DateTimeOffset       timestamp )
+    public GattCharacteristicValueChangedDetails ( Guid                 uuid ,
+                                                   IEnumerable < byte > value ,
+                                                   DateTimeOffset       timestamp )
     {
-        Guard.ArgumentNotNull (
-                               value ,
-                               nameof ( value ) ) ;
+        Guard.ArgumentNotNull ( value ,
+                                nameof ( value ) ) ;
 
         Uuid      = uuid ;
         Value     = value ;

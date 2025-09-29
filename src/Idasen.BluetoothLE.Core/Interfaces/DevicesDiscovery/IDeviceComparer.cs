@@ -18,9 +18,8 @@ public interface IDeviceComparer
     ///     'true' if the devices are equivalent, otherwise 'false'.
     /// </returns>
     [ UsedImplicitly ]
-    bool IsEquivalentTo (
-        IDevice ? deviceA ,
-        IDevice ? deviceB ) ;
+    bool IsEquivalentTo ( IDevice ? deviceA ,
+                          IDevice ? deviceB ) ;
 
     /// <summary>
     ///     Checks if the given devices have the same property values.
@@ -35,7 +34,6 @@ public interface IDeviceComparer
     ///     'true' if the devices have the same property values, otherwise 'false'.
     /// </returns>
     [ UsedImplicitly ]
-    bool Equals (
-        IDevice ? deviceA ,
-        IDevice ? deviceB ) ;
+    bool Equals ( IDevice ? deviceA ,
+                  IDevice ? deviceB ) ;
 }
