@@ -72,7 +72,9 @@ public class DeskMoverConcurrencyTests
                               _executor ,
                               _heightAndSpeed ,
                               _calculator ,
+#pragma warning disable CA2000
                               finishedStream as ISubject < uint > ?? new Subject < uint > ( ) ,
+#pragma warning restore CA2000
                               _heightMonitor
                              ) ;
     }
@@ -80,7 +82,8 @@ public class DeskMoverConcurrencyTests
     [ TestMethod ]
     public async Task TimerOverlap_DoesNotInvokeUpConcurrently ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
+
         sut.TargetHeight = 2000u ;
 
         // Arrange Up to block until we release it
@@ -110,17 +113,15 @@ public class DeskMoverConcurrencyTests
         // Release the blocked Up and finish
         tcs.TrySetResult ( true ) ;
         await t1 ;
-
-        sut.Dispose ( ) ;
     }
 
     [ TestMethod ]
     public async Task Stop_InvokedOnceAndFinishedEmittedOnce_WhenTargetReached ( )
     {
-        var finishedEvents   = new List < uint > ( ) ;
-        var externalFinished = new Subject < uint > ( ) ;
+        var finishedEvents = new List < uint > ( ) ;
+        using var externalFinished = new Subject < uint > ( ) ;
 
-        var sut = CreateSut ( externalFinished ) ;
+        using var sut = CreateSut ( externalFinished ) ;
         externalFinished.Subscribe ( h => finishedEvents.Add ( h ) ) ;
 
         sut.TargetHeight = 2000u ;
@@ -140,17 +141,15 @@ public class DeskMoverConcurrencyTests
 
         await _executor.Received ( 1 ).Stop ( ) ;
         finishedEvents.Count.Should ( ).Be ( 1 ) ;
-
-        sut.Dispose ( ) ;
     }
 
     [ TestMethod ]
     public async Task Stop_CalledTwice_SecondCallIsNoopAndNoDuplicateFinished ( )
     {
-        var finishedEvents   = new List < uint > ( ) ;
-        var externalFinished = new Subject < uint > ( ) ;
+        var finishedEvents = new List < uint > ( ) ;
+        using var externalFinished = new Subject < uint > ( ) ; // CA2000 fix: ensure disposal
 
-        var sut = CreateSut ( externalFinished ) ;
+        using var sut = CreateSut ( externalFinished ) ;
         externalFinished.Subscribe ( h => finishedEvents.Add ( h ) ) ;
 
         sut.TargetHeight = 2000u ;
@@ -169,14 +168,12 @@ public class DeskMoverConcurrencyTests
 
         await _executor.Received ( 1 ).Stop ( ) ;
         finishedEvents.Count.Should ( ).Be ( 1 ) ;
-
-        sut.Dispose ( ) ;
     }
 
     [ TestMethod ]
     public void Sampling_TakesLastItemPerInterval ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
         sut.TargetHeight = 1500u ;
         _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
 
@@ -189,6 +186,7 @@ public class DeskMoverConcurrencyTests
                                          DateTimeOffset.Now ,
                                          1100u ,
                                          50 ) ;
+
         var d2 = new HeightSpeedDetails (
                                          DateTimeOffset.Now.AddMilliseconds ( 10 ) ,
                                          1200u ,
@@ -203,8 +201,6 @@ public class DeskMoverConcurrencyTests
 
         sut.Height.Should ( ).Be ( d2.Height ) ;
         sut.Speed.Should ( ).Be ( d2.Speed ) ;
-
-        sut.Dispose ( ) ;
     }
 
     [ TestMethod ]

@@ -1,4 +1,4 @@
-﻿using System.Reactive.Linq ;
+using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
@@ -243,7 +243,9 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestMethod ]
     public void OnHeightSpeedChanged_ForInvoked_SetsHeight ( )
     {
-        var sut = CreateSut ( ).Initialize ( ) ;
+        using var sut = CreateSut ( ) ;
+
+        sut.Initialize ( ) ;
 
         _subjectRawHeightAndSpeed.OnNext ( _rawDetailsDummy ) ;
 
@@ -259,7 +261,9 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        using var sut = CreateSut();
+
+        sut.Initialize();
 
         sut.HeightChanged
            .ObserveOn ( _scheduler )
@@ -279,7 +283,9 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        using var sut = CreateSut();
+
+        sut.Initialize();
 
         sut.SpeedChanged
            .ObserveOn ( _scheduler )
@@ -299,7 +305,9 @@ public class DeskHeightAndSpeedTests : IDisposable
     {
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        using var sut = CreateSut();
+
+        sut.Initialize();
 
         sut.HeightAndSpeedChanged
            .ObserveOn ( _scheduler )
@@ -325,7 +333,9 @@ public class DeskHeightAndSpeedTests : IDisposable
 
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        using var sut = CreateSut();
+
+        sut.Initialize();
 
         sut.HeightChanged
            .ObserveOn ( _scheduler )
@@ -351,7 +361,9 @@ public class DeskHeightAndSpeedTests : IDisposable
 
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        using var sut = CreateSut();
+
+        sut.Initialize();
 
         sut.SpeedChanged
            .ObserveOn ( _scheduler )
@@ -377,7 +389,9 @@ public class DeskHeightAndSpeedTests : IDisposable
 
         var wasNotified = false ;
 
-        var sut = CreateSut ( ).Initialize ( ) ;
+        using var sut = CreateSut();
+
+        sut.Initialize();
 
         sut.HeightAndSpeedChanged
            .ObserveOn ( _scheduler )
