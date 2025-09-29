@@ -11,6 +11,10 @@ on:
         options:
           - Release
           - Debug
+      publish:
+        description: "Publish to NuGet (true/false) - only honored on tag runs"
+        required: false
+        default: "false"
   push:
     branches: [ main ]
     tags: [ 'v*' ]
@@ -22,7 +26,7 @@ permissions:
 
 jobs:
   build:
-    name: Build and Test (idasen-desk-core)
+    name: Build, Test, Pack
     runs-on: windows-latest
     defaults:
       run:
@@ -67,14 +71,18 @@ jobs:
       - name: Pack NuGet packages (${{ env.BUILD_CONFIGURATION }})
         run: |
           New-Item -ItemType Directory -Path $env:PACKAGE_OUTPUT -Force | Out-Null
-          # Removed --no-build to avoid NETSDK1085 during packing
-          dotnet pack src/Idasen.Launcher/Idasen.Launcher.csproj --configuration $env:BUILD_CONFIGURATION --output $env:PACKAGE_OUTPUT
+          # Produce symbols (.snupkg) and deterministic source linkable package
+          dotnet pack src/Idasen.Launcher/Idasen.Launcher.csproj `
+            --configuration $env:BUILD_CONFIGURATION `
+            --output $env:PACKAGE_OUTPUT `
+            -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg `
+            -p:ContinuousIntegrationBuild=true
           Get-ChildItem $env:PACKAGE_OUTPUT
 
       - name: Determine package version
         id: determine_version
         run: |
-          $pkg = Get-ChildItem "$env:PACKAGE_OUTPUT/idasen.desk.core.*.nupkg" | Select-Object -First 1
+          $pkg = Get-ChildItem "$env:PACKAGE_OUTPUT/idasen.desk.core.*.nupkg" | Where-Object { $_.Name -notlike "*.snupkg" } | Select-Object -First 1
           if (-not $pkg) { Write-Error "No package found"; exit 1 }
           if ($pkg.BaseName -match '^idasen\.desk\.core\.(?<ver>.+)$') {
             $version = $Matches['ver']
@@ -87,22 +95,43 @@ jobs:
       - name: Upload NuGet packages artifact
         uses: actions/upload-artifact@v4
         with:
-            name: nuget-packages-${{ steps.determine_version.outputs.version }}-win-x64
-            path: ${{ env.PACKAGE_OUTPUT }}\idasen.desk.core.*.nupkg
-            if-no-files-found: error
-            retention-days: 14
+          name: nuget-packages-${{ steps.determine_version.outputs.version }}-win-x64
+          path: |
+            ${{ env.PACKAGE_OUTPUT }}\idasen.desk.core.*.nupkg
+            ${{ env.PACKAGE_OUTPUT }}\idasen.desk.core.*.snupkg
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Create and push git tag (optional)
         if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/heads/')
         run: |
           $run  = $env:GITHUB_RUN_NUMBER
-            $tag  = "v0.1.$run"
-            git fetch --tags --quiet
-            if (git rev-parse -q --verify "refs/tags/$tag") {
-              Write-Host "Tag $tag already exists, skipping."
-            } else {
-              git config user.name "github-actions"
-              git config user.email "github-actions@github.com"
-              git tag -a $tag -m "Automated build $tag"
-              git push origin $tag
-            }
+          $tag  = "v0.1.$run"
+          git fetch --tags --quiet
+          if (git rev-parse -q --verify "refs/tags/$tag") {
+            Write-Host "Tag $tag already exists, skipping."
+          } else {
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git tag -a $tag -m "Automated build $tag"
+            git push origin $tag
+          }
+
+      - name: Publish to NuGet.org
+        if: startsWith(github.ref, 'refs/tags/v') && (github.event_name != 'workflow_dispatch' || inputs.publish == 'true')
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          if (-not $env:NUGET_API_KEY) {
+            Write-Error "NUGET_API_KEY secret not set. Add it in the repository settings."
+            exit 1
+          }
+          Write-Host "Pushing packages for ref $env:GITHUB_REF"
+          dotnet nuget push "$env:PACKAGE_OUTPUT\idasen.desk.core.*.nupkg" `
+            --api-key $env:NUGET_API_KEY `
+            --source https://api.nuget.org/v3/index.json `
+            --skip-duplicate
+          # Push symbols explicitly (some older clients need explicit push)
+          Get-ChildItem "$env:PACKAGE_OUTPUT\idasen.desk.core.*.snupkg" | ForEach-Object {
+            dotnet nuget push $_.FullName --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
