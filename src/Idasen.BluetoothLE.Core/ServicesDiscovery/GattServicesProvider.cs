@@ -1,4 +1,4 @@
-﻿using System.Reactive.Subjects ;
+using System.Reactive.Subjects ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
@@ -96,6 +96,7 @@ public class GattServicesProvider
     public void Dispose ( )
     {
         _services.Dispose ( ) ;
+        GC.SuppressFinalize(this);
     }
 
     private async Task GetCharacteristicsAsync ( IGattDeviceServicesResultWrapper gatt )

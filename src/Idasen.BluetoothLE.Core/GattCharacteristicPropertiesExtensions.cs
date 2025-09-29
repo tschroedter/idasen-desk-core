@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
 namespace Idasen.BluetoothLE.Core ;
@@ -18,12 +18,9 @@ public static class GattCharacteristicPropertiesExtensions
     /// </returns>
     public static string ToCsv ( this GattCharacteristicProperties properties )
     {
-        var list = new List < GattCharacteristicProperties > ( ) ;
-
-        foreach ( GattCharacteristicProperties property in
-                 Enum.GetValues ( typeof ( GattCharacteristicProperties ) ) )
-            if ( ( properties & property ) == property )
-                list.Add ( property ) ;
+        var list = Enum.GetValues < GattCharacteristicProperties > ( )
+                       .Where ( property => ( properties & property ) == property )
+                       .ToList ( ) ;
 
         return string.Join ( ", " ,
                              list ) ;

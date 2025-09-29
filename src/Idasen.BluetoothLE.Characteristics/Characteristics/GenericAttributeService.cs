@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
@@ -11,20 +11,20 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 /// <summary>
 ///     Implements the Generic Attribute service and exposes raw values.
 /// </summary>
-public class GenericAttribute
+public class GenericAttributeService
     : CharacteristicBase ,
-      IGenericAttribute
+      IGenericAttributeService
 {
     /// <summary>
     ///     Factory delegate used by DI to create instances per device.
     /// </summary>
-    public delegate IGenericAttribute Factory ( IDevice device ) ;
+    public delegate IGenericAttributeService Factory ( IDevice device ) ;
 
     internal const string CharacteristicServiceChanged = "Service Changed" ;
 
     private readonly IAllGattCharacteristicsProvider _allGattCharacteristicsProvider ;
 
-    public GenericAttribute ( ILogger                              logger ,
+    public GenericAttributeService ( ILogger                              logger ,
                               IScheduler                           scheduler ,
                               IDevice                              device ,
                               IGattCharacteristicsProviderFactory  providerFactory ,
@@ -66,6 +66,6 @@ public class GenericAttribute
                                                           out var uuid ) )
             DescriptionToUuid [ CharacteristicServiceChanged ] = uuid ;
 
-        return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
+        return this as T ?? throw new InvalidCastException ( $"Can't cast {this} to {typeof ( T )}" ) ;
     }
 }

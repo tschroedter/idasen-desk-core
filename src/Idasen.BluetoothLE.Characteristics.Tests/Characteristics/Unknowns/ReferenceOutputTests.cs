@@ -136,7 +136,7 @@ public class ReferenceOutputTests
               .NotThrow < Exception > ( ) ;
     }
 
-    private ReferenceOutput CreateSut ( )
+    private static ReferenceOutput CreateSut ( )
     {
         return new ReferenceOutput ( ) ;
     }

@@ -15,12 +15,12 @@ public class DeskCharacteristicsTests
     [ AutoDataTestMethod ]
     public async Task Refresh_ForInvoked_CallsCharacteristicRefresh ( DeskCharacteristics sut ,
                                                                       IGenericAccess      genericAccess ,
-                                                                      IGenericAttribute   genericAttribute )
+                                                                      IGenericAttributeService   genericAttributeService )
     {
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
                                   genericAccess ) ;
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAttribute ,
-                                  genericAttribute ) ;
+                                  genericAttributeService ) ;
 
         await sut.Refresh ( ) ;
 
@@ -29,7 +29,7 @@ public class DeskCharacteristicsTests
         await genericAccess.Received ( )
                            .Refresh ( ) ;
 
-        await genericAttribute.Received ( )
+        await genericAttributeService.Received ( )
                               .Refresh ( ) ;
     }
 
@@ -82,12 +82,12 @@ public class DeskCharacteristicsTests
     [ AutoDataTestMethod ]
     public void ToString_ForInvoked_Instance ( DeskCharacteristics sut ,
                                                IGenericAccess      genericAccess ,
-                                               IGenericAttribute   genericAttribute )
+                                               IGenericAttributeService   genericAttributeService )
     {
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
                                   genericAccess ) ;
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAttribute ,
-                                  genericAttribute ) ;
+                                  genericAttributeService ) ;
 
         using var scope = new AssertionScope ( ) ;
 
@@ -97,6 +97,6 @@ public class DeskCharacteristicsTests
 
         sut.ToString ( )
            .Should ( )
-           .Contain ( "GenericAttribute" ) ;
+           .Contain ( "GenericAttributeService" ) ;
     }
 }

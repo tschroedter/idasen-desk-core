@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 /// <summary>
 ///     Wraps and makes use of the <see cref="Windows.Devices.Bluetooth.Advertisement.BluetoothLEAdvertisementWatcher" />
@@ -30,10 +30,10 @@ public interface IWatcher
     /// <summary>
     ///     Starts listening.
     /// </summary>
-    void Start ( ) ;
+    void StartListening ( ) ;
 
     /// <summary>
     ///     Stops listening.
     /// </summary>
-    void Stop ( ) ;
+    void StopListening ( ) ;
 }

@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
@@ -112,6 +112,8 @@ public class DeskHeightAndSpeed
         _referenceOutput.Dispose ( ) ;
         _subscriber?.Dispose ( ) ;
         _subscriber = null ;
+
+        GC.SuppressFinalize ( this ) ;
     }
 
     private void OnHeightSpeedChanged ( RawValueChangedDetails details )

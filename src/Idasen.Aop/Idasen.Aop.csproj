@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -6,6 +6,14 @@
 	    <Nullable>enable</Nullable>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <EnableNETAnalyzers>true</EnableNETAnalyzers>
+      <AnalysisLevel>latest-recommended</AnalysisLevel>
+      <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+      <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+      <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     </PropertyGroup>
 
     <ItemGroup>

@@ -90,6 +90,7 @@ public class DeviceMonitorWithExpiry
     {
         StopTimer ( ) ;
         _deviceMonitor.Dispose ( ) ;
+        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc />
@@ -108,16 +109,16 @@ public class DeviceMonitorWithExpiry
     public IObservable < IDevice > DeviceNameUpdated => _deviceMonitor.DeviceNameUpdated ;
 
     /// <inheritdoc />
-    public void Start ( )
+    public void StartListening ( )
     {
-        _deviceMonitor.Start ( ) ;
+        _deviceMonitor.StartListening ( ) ;
         StartTimerIfNeeded ( ) ;
     }
 
     /// <inheritdoc />
-    public void Stop ( )
+    public void StopListening ( )
     {
-        _deviceMonitor.Stop ( ) ;
+        _deviceMonitor.StopListening ( ) ;
         StopTimer ( ) ;
     }
 
@@ -129,7 +130,7 @@ public class DeviceMonitorWithExpiry
 
     private void OnCompleted ( )
     {
-        Stop ( ) ;
+        StopListening ( ) ;
     }
 
     private void OnError ( Exception ex )
@@ -139,7 +140,7 @@ public class DeviceMonitorWithExpiry
                         nameof ( DeviceMonitorWithExpiry ) ,
                         nameof ( OnError ) ) ;
 
-        Stop ( ) ;
+        StopListening ( ) ;
     }
 
     private void CleanUp ( long l )

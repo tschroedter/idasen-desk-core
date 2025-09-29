@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
@@ -27,15 +27,16 @@ public class DeviceFactoryTests
         _rawSignalStrengthInDBm = - 50 ;
     }
 
-    private IDevice TestFactory ( IDateTimeOffset broadcastTime ,
-                                  ulong           address ,
-                                  string ?        name ,
-                                  short           rawSignalStrengthInDBm )
+    private Device TestFactory ( IDateTimeOffset broadcastTime ,
+                                 ulong           address ,
+                                 string ?        name ,
+                                 short           rawSignalStrengthInDBm )
     {
-        return new Device ( broadcastTime ,
-                            address ,
-                            name ,
-                            rawSignalStrengthInDBm ) ;
+        return new Device (
+                           broadcastTime ,
+                           address ,
+                           name ,
+                           rawSignalStrengthInDBm ) ;
     }
 
     [ TestMethod ]

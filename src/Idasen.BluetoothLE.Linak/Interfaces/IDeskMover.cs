@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Controls desk movement and exposes state and completion notifications.
@@ -44,7 +44,7 @@ public interface IDeskMover
     /// <summary>
     ///     Requests stopping movement.
     /// </summary>
-    Task < bool > Stop ( ) ;
+    Task < bool > StopMovement ( ) ;
 
     /// <summary>
     ///     Starts a movement cycle using the current target height.

@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
@@ -18,44 +18,42 @@ public abstract class CharacteristicBaseTests < T >
 {
     public const string ToStringResult = "Some Text" ;
 
-    protected readonly Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > WrappersReadOnly
-        =
-        new( ) ;
+    protected Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > WrappersReadOnly { get; private set; } = new( ) ;
 
-    protected IGattCharacteristicProvider                          CharacteristicProvider  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper1  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper10 = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper2  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper3  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper4  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper5  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper6  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper7  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper8  = null! ;
-    protected IGattCharacteristicWrapper                           CharacteristicWrapper9  = null! ;
-    protected IDescriptionToUuid                                   DescriptionToUuid       = null! ;
-    protected IDevice                                              Device                  = null! ;
-    protected ILogger                                              Logger                  = null! ;
-    protected Dictionary < string , GattCharacteristicProperties > Properties              = null! ;
-    protected IGattCharacteristicsProviderFactory                  ProviderFactory         = null! ;
+    protected IGattCharacteristicProvider                          CharacteristicProvider { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper1 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper10 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper2 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper3 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper4 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper5 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper6 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper7 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper8 { get; private set; } = null! ;
+    protected IGattCharacteristicWrapper                           CharacteristicWrapper9 { get; private set; } = null! ;
+    protected IDescriptionToUuid                                   DescriptionToUuid { get; private set; } = null! ;
+    protected IDevice                                              Device { get; private set; } = null! ;
+    protected ILogger                                              Logger { get; private set; } = null! ;
+    protected Dictionary < string , GattCharacteristicProperties > Properties { get; private set; } = null! ;
+    protected IGattCharacteristicsProviderFactory                  ProviderFactory { get; private set; } = null! ;
 
-    protected byte [ ]                                           RawValue1         = null! ;
-    protected byte [ ]                                           RawValue10        = null! ;
-    protected byte [ ]                                           RawValue2         = null! ;
-    protected byte [ ]                                           RawValue3         = null! ;
-    protected byte [ ]                                           RawValue4         = null! ;
-    protected byte [ ]                                           RawValue5         = null! ;
-    protected byte [ ]                                           RawValue6         = null! ;
-    protected byte [ ]                                           RawValue7         = null! ;
-    protected byte [ ]                                           RawValue8         = null! ;
-    protected byte [ ]                                           RawValue9         = null! ;
-    protected IRawValueReader                                    RawValueReader    = null! ;
-    protected IRawValueWriter                                    RawValueWriter    = null! ;
-    protected IGattCharacteristicsResultWrapper                  ResultWrapper     = null! ;
-    protected IScheduler                                         Scheduler         = null! ;
-    protected IGattDeviceServiceWrapper                          ServiceWrapper    = null! ;
-    protected ICharacteristicBaseToStringConverter               ToStringConverter = null! ;
-    protected Dictionary < string , IGattCharacteristicWrapper > Wrappers          = null! ;
+    protected byte [ ]                                           RawValue1 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue10 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue2 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue3 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue4 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue5 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue6 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue7 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue8 { get; private set; } = null! ;
+    protected byte [ ]                                           RawValue9 { get; private set; } = null! ;
+    protected IRawValueReader                                    RawValueReader { get; private set; } = null! ;
+    protected IRawValueWriter                                    RawValueWriter { get; private set; } = null! ;
+    protected IGattCharacteristicsResultWrapper                  ResultWrapper { get; private set; } = null! ;
+    protected IScheduler                                         Scheduler { get; private set; } = null! ;
+    protected IGattDeviceServiceWrapper                          ServiceWrapper { get; private set; } = null! ;
+    protected ICharacteristicBaseToStringConverter               ToStringConverter { get; private set; } = null! ;
+    protected Dictionary < string , IGattCharacteristicWrapper > Wrappers { get; private set; } = null! ;
 
     [ TestInitialize ]
     public virtual void Initialize ( )

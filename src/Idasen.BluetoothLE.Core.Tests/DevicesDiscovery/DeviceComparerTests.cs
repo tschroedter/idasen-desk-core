@@ -203,7 +203,7 @@ public class DeviceComparerTests
                      .BeFalse ( ) ;
     }
 
-    private DeviceComparer CreateSut ( )
+    private static DeviceComparer CreateSut ( )
     {
         return new DeviceComparer ( ) ;
     }

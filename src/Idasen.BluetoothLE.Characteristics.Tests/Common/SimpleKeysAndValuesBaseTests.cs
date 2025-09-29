@@ -1,30 +1,30 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
 [ AutoDataTestClass ]
-public class SimpleDictionaryBaseTests
+public class SimpleKeysAndValuesBaseTests
 {
     [ AutoDataTestMethod ]
-    public void Indexer_ForNewKeyAndValue_AddsKeyAndValue ( TestSimpleDictionaryBase sut ,
+    public void Indexer_ForNewKeyAndValue_AddsKeyAndValue ( TestSimpleKeysAndValuesBase sut ,
                                                             string                   key ,
-                                                            Guid                     guid )
+                                                            Guid                     id )
     {
-        sut [ key ] = guid ;
+        sut [ key ] = id ;
 
         sut [ key ]
            .Should ( )
-           .Be ( guid ) ;
+           .Be ( id ) ;
     }
 
     [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_RemovesAllKeys ( TestSimpleDictionaryBase sut ,
+    public void Clear_ForInvoked_RemovesAllKeys ( TestSimpleKeysAndValuesBase sut ,
                                                   string                   key ,
-                                                  Guid                     guid )
+                                                  Guid                     id )
     {
-        sut [ key ] = guid ;
+        sut [ key ] = id ;
 
         sut.Clear ( ) ;
 
@@ -34,11 +34,11 @@ public class SimpleDictionaryBaseTests
     }
 
     [ AutoDataTestMethod ]
-    public void Count_ForInvoked_ReturnsCount ( TestSimpleDictionaryBase sut ,
+    public void Count_ForInvoked_ReturnsCount ( TestSimpleKeysAndValuesBase sut ,
                                                 string                   key ,
-                                                Guid                     guid )
+                                                Guid                     id )
     {
-        sut [ key ] = guid ;
+        sut [ key ] = id ;
 
         sut.Count
            .Should ( )
@@ -46,7 +46,7 @@ public class SimpleDictionaryBaseTests
     }
 
     [ AutoDataTestMethod ]
-    public void Keys_ForInvoked_ReturnsKeys ( TestSimpleDictionaryBase sut ,
+    public void Keys_ForInvoked_ReturnsKeys ( TestSimpleKeysAndValuesBase sut ,
                                               string                   key1 ,
                                               Guid                     guid1 ,
                                               string                   key2 ,
@@ -62,12 +62,12 @@ public class SimpleDictionaryBaseTests
     }
 
     [ AutoDataTestMethod ]
-    public void ReadOnlyDictionary_ForInvoked_ReturnsClone ( TestSimpleDictionaryBase sut ,
+    public void ReadOnlyDictionary_ForInvoked_ReturnsClone ( TestSimpleKeysAndValuesBase sut ,
                                                              string                   key ,
-                                                             Guid                     guid ,
+                                                             Guid                     id ,
                                                              Guid                     newGuid )
     {
-        sut [ key ] = guid ;
+        sut [ key ] = id ;
 
         var actual = sut.ReadOnlyDictionary ;
 
@@ -84,6 +84,6 @@ public class SimpleDictionaryBaseTests
         // check cloned dictionary
         actual [ key ]
            .Should ( )
-           .Be ( guid ) ;
+           .Be ( id ) ;
     }
 }

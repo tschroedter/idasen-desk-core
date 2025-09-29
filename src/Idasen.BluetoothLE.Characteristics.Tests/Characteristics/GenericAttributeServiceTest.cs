@@ -6,8 +6,8 @@ using NSubstitute ;
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
 [ TestClass ]
-public class GenericAttributeTest
-    : CharacteristicBaseTests < GenericAttribute >
+public class GenericAttributeServiceTest
+    : CharacteristicBaseTests < GenericAttributeService >
 {
     [ TestMethod ]
     public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
@@ -32,7 +32,7 @@ public class GenericAttributeTest
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize < GenericAttribute > ( )
+        await sut.Initialize < GenericAttributeService > ( )
                  .Refresh ( ) ;
 
         sut.RawServiceChanged
@@ -40,9 +40,9 @@ public class GenericAttributeTest
            .BeEquivalentTo ( RawValue1 ) ;
     }
 
-    protected override GenericAttribute CreateSut ( )
+    protected override GenericAttributeService CreateSut ( )
     {
-        return new GenericAttribute ( Logger ,
+        return new GenericAttributeService ( Logger ,
                                       Scheduler ,
                                       Device ,
                                       ProviderFactory ,
@@ -55,7 +55,7 @@ public class GenericAttributeTest
 
     protected override void PopulateWrappers ( )
     {
-        Wrappers.Add ( GenericAttribute.CharacteristicServiceChanged ,
+        Wrappers.Add ( GenericAttributeService.CharacteristicServiceChanged ,
                        CharacteristicWrapper1 ) ;
     }
 }

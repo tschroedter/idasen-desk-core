@@ -4,7 +4,7 @@ using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
 [ TestClass ]
-public class GenericAttributeTests
+public class GenericAttributeServiceTests
 {
     [ TestMethod ]
     public void RawServiceChanged_ForInvoked_Empty ( )
@@ -16,8 +16,8 @@ public class GenericAttributeTests
            .BeEmpty ( ) ;
     }
 
-    private GenericAttribute CreateSut ( )
+    private static GenericAttributeService CreateSut ( )
     {
-        return new GenericAttribute ( ) ;
+        return new GenericAttributeService ( ) ;
     }
 }

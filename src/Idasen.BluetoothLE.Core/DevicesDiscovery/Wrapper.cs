@@ -62,7 +62,7 @@ public sealed class Wrapper
     public Status Status => _statusMapper.Map ( _watcher.Status ) ;
 
     /// <inheritdoc />
-    public void Start ( )
+    public void StartListening ( )
     {
         Subscribe ( ) ;
 
@@ -70,7 +70,7 @@ public sealed class Wrapper
     }
 
     /// <inheritdoc />
-    public void Stop ( )
+    public void StopListening ( )
     {
         _watcher.Stop ( ) ;
 

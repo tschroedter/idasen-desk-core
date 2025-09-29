@@ -1,4 +1,4 @@
-﻿using System.Reactive ;
+using System.Reactive ;
 using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
@@ -59,7 +59,7 @@ public class DeviceMonitorTests
         _subjects.Enqueue ( _subjectUpdated ) ;
     }
 
-    private Recorded < Notification < IDevice > > [ ] OnMultipleNext ( IEnumerable < IDevice > devices )
+    private static Recorded < Notification < IDevice > > [ ] OnMultipleNext ( IEnumerable < IDevice > devices )
     {
         var list = new List < Recorded < Notification < IDevice > > > ( ) ;
 
@@ -72,8 +72,8 @@ public class DeviceMonitorTests
         return list.ToArray ( ) ;
     }
 
-    private Recorded < Notification < IDevice > > OnNext ( long    time ,
-                                                           IDevice device )
+    private static Recorded < Notification < IDevice > > OnNext ( long    time ,
+                                                                  IDevice device )
     {
         return new Recorded < Notification < IDevice > > ( time ,
                                                            Notification.CreateOnNext ( device ) ) ;
@@ -136,20 +136,20 @@ public class DeviceMonitorTests
     public void Start_ForInvoked_CallsStart ( )
     {
         using var sut = CreateSut ( ) ;
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _watcher.Received ( )
-                .Start ( ) ;
+                .StartListening ( ) ;
     }
 
     [ TestMethod ]
     public void Stop_ForInvoked_CallsStop ( )
     {
         using var sut = CreateSut ( ) ;
-        sut.Stop ( ) ;
+        sut.StopListening ( ) ;
 
         _watcher.Received ( )
-                .Stop ( ) ;
+                .StopListening ( ) ;
     }
 
     [ TestMethod ]
@@ -159,7 +159,7 @@ public class DeviceMonitorTests
 
         using var sut = CreateSut ( ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _scheduler.Start ( ) ;
 
@@ -180,7 +180,7 @@ public class DeviceMonitorTests
         using var observer = sut.DeviceDiscovered
                                 .Subscribe ( x => discovered = x ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _scheduler.Start ( ) ;
 
@@ -195,7 +195,7 @@ public class DeviceMonitorTests
 
         using var sut = CreateSut ( ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _scheduler.Start ( ) ;
 
@@ -221,7 +221,7 @@ public class DeviceMonitorTests
         using var observer = sut.DeviceUpdated
                                 .Subscribe ( x => updated = x ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _scheduler.Start ( ) ;
 
@@ -236,7 +236,7 @@ public class DeviceMonitorTests
 
         using var sut = CreateSut ( ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _scheduler.Start ( ) ;
 
@@ -262,7 +262,7 @@ public class DeviceMonitorTests
         using var observer = sut.DeviceUpdated
                                 .Subscribe ( x => updated = x ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _scheduler.Start ( ) ;
 
@@ -330,7 +330,7 @@ public class DeviceMonitorTests
         using var observer = sut.DeviceNameUpdated
                                 .Subscribe ( x => updated = x ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _scheduler.Start ( ) ;
 
@@ -350,7 +350,7 @@ public class DeviceMonitorTests
         using var observer = sut.DeviceUpdated
                                 .Subscribe ( x => updated = x ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _scheduler.Start ( ) ;
 

@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using System.Runtime.CompilerServices ;
 using System.Runtime.InteropServices.WindowsRuntime ;
 using Autofac.Extras.DynamicProxy ;
@@ -28,17 +28,15 @@ public abstract class CharacteristicBase
 
     private readonly ICharacteristicBaseToStringConverter _toStringConverter ;
 
-    protected readonly IDevice                             Device ;
-    protected readonly ILogger                             Logger ;
-    protected readonly IGattCharacteristicsProviderFactory ProviderFactory ;
-    protected readonly IRawValueReader                     RawValueReader ;
+    protected IDevice Device { get; private set; }
+    protected ILogger Logger { get; private set; }
+    protected IGattCharacteristicsProviderFactory ProviderFactory { get; private set; }
+    protected IRawValueReader RawValueReader { get; private set; }
+    protected IRawValueWriter RawValueWriter { get; private set; }
+    protected IScheduler Scheduler { get; private set; }
 
     internal readonly Dictionary < string , IEnumerable < byte > >
         RawValues = new( ) ;
-
-    protected readonly IRawValueWriter RawValueWriter ;
-
-    protected readonly IScheduler Scheduler ;
 
     private bool _disposed ;
 
@@ -180,6 +178,8 @@ public abstract class CharacteristicBase
     public void Dispose ( )
     {
         Dispose ( true ) ;
+
+        GC.SuppressFinalize ( this );
     }
 
     protected abstract T WithMapping < T > ( )

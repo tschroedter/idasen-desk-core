@@ -1,4 +1,4 @@
-﻿using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
@@ -24,6 +24,8 @@ public class UnknownBase
     public void Dispose ( )
     {
         Dispose ( true ) ;
+
+        GC.SuppressFinalize ( this );
     }
 
     protected virtual void Dispose ( bool disposing )

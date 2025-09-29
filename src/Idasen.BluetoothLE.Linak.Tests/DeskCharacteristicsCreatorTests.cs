@@ -32,7 +32,7 @@ public class DeskCharacteristicsCreatorTests
                                                                             IDeskCharacteristics       characteristics ,
                                                                             IDevice                    device ,
                                                                             [ Freeze ]
-                                                                            IGenericAttribute characteristic )
+                                                                            IGenericAttributeService characteristic )
     {
         characteristics.WithCharacteristics ( Arg.Any < DeskCharacteristicKey > ( ) ,
                                               Arg.Any < ICharacteristicBase > ( ) )

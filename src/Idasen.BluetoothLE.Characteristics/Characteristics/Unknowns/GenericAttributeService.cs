@@ -2,9 +2,9 @@
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
-public class GenericAttribute
+public class GenericAttributeService
     : UnknownBase ,
-      IGenericAttribute
+      IGenericAttributeService
 {
     public IEnumerable < byte > RawServiceChanged { get ; } = RawArrayEmpty ;
 }

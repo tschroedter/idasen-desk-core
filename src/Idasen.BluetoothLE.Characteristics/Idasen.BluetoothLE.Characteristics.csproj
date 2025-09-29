@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <AssemblyName>Idasen.BluetoothLE.Characteristics</AssemblyName>
@@ -41,6 +41,14 @@
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <EnableNETAnalyzers>true</EnableNETAnalyzers>
+      <AnalysisLevel>latest-recommended</AnalysisLevel>
+      <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+      <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+      <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     </PropertyGroup>
 
 </Project>

@@ -9,12 +9,12 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 
 [ AutoDataTestClass ]
-public class GattCharacteristicValueChangedObservablesTests
+public class GattCharacteristicValueChangedObservablesTests : IDisposable
 {
     private GattCharacteristicValueChangedDetails              _details   = null! ;
     private ILogger                                            _logger    = null! ;
     private IScheduler                                         _scheduler = null! ;
-    private ISubject < GattCharacteristicValueChangedDetails > _subject   = null! ;
+    private Subject < GattCharacteristicValueChangedDetails >  _subject   = null! ;
 
     [ TestInitialize ]
     public void Initialize ( )
@@ -50,5 +50,12 @@ public class GattCharacteristicValueChangedObservablesTests
 
         uuid.Should ( )
             .Be ( _details.Uuid ) ;
+    }
+
+    public void Dispose()
+    {
+        _subject?.Dispose();
+
+        GC.SuppressFinalize(this);
     }
 }

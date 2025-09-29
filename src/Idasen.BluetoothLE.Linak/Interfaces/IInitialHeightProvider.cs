@@ -31,7 +31,7 @@ public interface IInitialHeightProvider
     void Initialize ( ) ;
 
     /// <summary>
-    ///     Start the process of checking and getting the current height
+    ///     StartListening the process of checking and getting the current height
     ///     of the desk.
     /// </summary>
     /// <returns>

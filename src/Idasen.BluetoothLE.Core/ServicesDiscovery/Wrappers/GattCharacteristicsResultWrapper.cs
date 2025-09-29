@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+using System.Diagnostics.CodeAnalysis ;
 using System.Text ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
@@ -105,6 +105,8 @@ public class GattCharacteristicsResultWrapper
                 c.Dispose ( ) ;
 
         Characteristics = [] ;
+
+        GC.SuppressFinalize(this);
     }
 
     public override string ToString ( )

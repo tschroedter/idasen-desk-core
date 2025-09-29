@@ -1,4 +1,4 @@
-﻿using System.Globalization ;
+using System.Globalization ;
 using Autofac.Extras.DynamicProxy ;
 using CsvHelper ;
 using CsvHelper.Configuration ;
@@ -12,11 +12,11 @@ public class OfficialGattServiceConverter
     : DefaultTypeConverter
 {
     public override object ConvertFromString ( string ?      text ,
-                                               IReaderRow    readerRow ,
+                                               IReaderRow    row ,
                                                MemberMapData memberMapData )
     {
-        Guard.ArgumentNotNull ( readerRow ,
-                                nameof ( readerRow ) ) ;
+        Guard.ArgumentNotNull ( row ,
+                                nameof ( row ) ) ;
         Guard.ArgumentNotNull ( memberMapData ,
                                 nameof ( memberMapData ) ) ;
 
@@ -37,11 +37,11 @@ public class OfficialGattServiceConverter
     }
 
     public override string ConvertToString ( object ?      value ,
-                                             IWriterRow    writerRow ,
+                                             IWriterRow    row ,
                                              MemberMapData memberMapData )
     {
-        Guard.ArgumentNotNull ( writerRow ,
-                                nameof ( writerRow ) ) ;
+        Guard.ArgumentNotNull ( row ,
+                                nameof ( row ) ) ;
         Guard.ArgumentNotNull ( memberMapData ,
                                 nameof ( memberMapData ) ) ;
 

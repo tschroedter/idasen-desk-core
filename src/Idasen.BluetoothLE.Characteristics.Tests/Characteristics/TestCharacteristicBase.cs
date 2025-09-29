@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
@@ -43,6 +43,6 @@ public class TestCharacteristicBase ( ILogger                              logge
     {
         DescriptionToUuid [ RawValueKey ] = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
 
-        return this as T ?? throw new Exception ( $"Can't cast {this} to {typeof ( T )}" ) ;
+        return this as T ?? throw new InvalidCastException ( $"Can't cast {this} to {typeof ( T )}" ) ;
     }
 }

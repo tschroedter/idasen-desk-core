@@ -18,7 +18,7 @@ public interface IDeskCharacteristics
     /// <summary>
     ///     Gets the Generic Attribute characteristic.
     /// </summary>
-    IGenericAttribute GenericAttribute { get ; }
+    IGenericAttributeService GenericAttributeService { get ; }
 
     /// <summary>
     ///     Gets the Reference Input characteristic.
@@ -48,7 +48,7 @@ public interface IDeskCharacteristics
     ///     The dictionary is populated during <see cref="Initialize" /> and via
     ///     <see cref="WithCharacteristics(DeskCharacteristicKey, ICharacteristicBase)" />.
     ///     For strongly-typed access, prefer the dedicated properties:
-    ///     <see cref="GenericAccess" />, <see cref="GenericAttribute" />,
+    ///     <see cref="GenericAccess" />, <see cref="GenericAttributeService" />,
     ///     <see cref="ReferenceInput" />, <see cref="ReferenceOutput" />,
     ///     <see cref="Dpg" />, and <see cref="Control" />.
     /// </remarks>

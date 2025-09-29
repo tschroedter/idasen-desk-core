@@ -1,12 +1,12 @@
-﻿using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Linak.Control ;
 
 namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
 
 [ TestClass ]
-public class DeskMoverConstructorNullTests
+public class DeskMoverConstructorNullTests(int numberOfConstructorsPassed = 1, int numberOfConstructorsFailed = 0)
     : BaseConstructorNullTester < DeskMover >
 {
-    public override int NumberOfConstructorsPassed { get ; } = 1 ;
-    public override int NumberOfConstructorsFailed { get ; } = 0 ;
+    public override int NumberOfConstructorsPassed { get ; } = numberOfConstructorsPassed ;
+    public override int NumberOfConstructorsFailed { get ; } = numberOfConstructorsFailed ;
 }

@@ -68,7 +68,7 @@ public class DeskProviderTests
            .StartDetecting ( ) ;
 
         detector.Received ( )
-                .Start ( ) ;
+                .StartListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -84,7 +84,7 @@ public class DeskProviderTests
            .StopDetecting ( ) ;
 
         detector.Received ( )
-                .Stop ( ) ;
+                .StopListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -144,7 +144,7 @@ public class DeskProviderTests
                  .TryGetDesk ( source.Token ) ;
 
         detector.Received ( )
-                .Start ( ) ;
+                .StartListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -199,7 +199,7 @@ public class DeskProviderTests
         sut.OnDeskDetected ( desk ) ;
 
         detector.Received ( )
-                .Stop ( ) ;
+                .StopListening ( ) ;
     }
 
     [ AutoDataTestMethod ]

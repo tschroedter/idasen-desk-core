@@ -21,7 +21,7 @@ public class DeskMoveEngineTests
         // Default: succeed immediately for all commands unless overridden in a test
         _executor.Up ( ).Returns ( true ) ;
         _executor.Down ( ).Returns ( true ) ;
-        _executor.Stop ( ).Returns ( true ) ;
+        _executor.StopMovement ( ).Returns ( true ) ;
     }
 
     private DeskMoveEngine CreateSut ( DeskMoverSettings ? settings = null )
@@ -159,7 +159,7 @@ public class DeskMoveEngineTests
         var ok = await sut.StopAsync ( ) ;
 
         ok.Should ( ).BeTrue ( ) ;
-        _ = _executor.Received ( 1 ).Stop ( ) ;
+        _ = _executor.Received ( 1 ).StopMovement ( ) ;
         sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
         sut.IsMoving.Should ( ).BeFalse ( ) ;
     }
@@ -181,7 +181,7 @@ public class DeskMoveEngineTests
     public void Move_CommandFaulted_ResetsDirectionToNone ( )
     {
         var sut = CreateSut ( ) ;
-        _executor.Up ( ).Returns ( Task.FromException < bool > ( new Exception ( "boom" ) ) ) ;
+        _executor.Up ( ).Returns ( Task.FromException < bool > ( new InvalidOperationException ( "boom" ) ) ) ;
 
         sut.Move ( Direction.Up ,
                    false ) ;
@@ -198,13 +198,13 @@ public class DeskMoveEngineTests
                    false ) ;
 
         var tcs = new TaskCompletionSource < bool > ( ) ;
-        _executor.Stop ( ).Returns ( _ => tcs.Task ) ;
+        _executor.StopMovement ( ).Returns ( _ => tcs.Task ) ;
 
         var stop1 = sut.StopAsync ( ) ;
         var stop2 = sut.StopAsync ( ) ;
 
         stop2.Should ( ).BeSameAs ( stop1 ) ;
-        _ = _executor.Received ( 1 ).Stop ( ) ;
+        _ = _executor.Received ( 1 ).StopMovement ( ) ;
 
         tcs.SetResult ( true ) ;
         await stop1 ;
@@ -219,7 +219,7 @@ public class DeskMoveEngineTests
         sut.Move ( Direction.Up ,
                    false ) ;
 
-        _executor.Stop ( ).Returns ( false ) ;
+        _executor.StopMovement ( ).Returns ( false ) ;
 
         var ok = await sut.StopAsync ( ) ;
 

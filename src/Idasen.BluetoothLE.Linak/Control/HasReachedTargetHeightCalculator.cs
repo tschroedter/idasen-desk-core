@@ -76,7 +76,7 @@ public class HasReachedTargetHeightCalculator
                                      _              => true
                                  } ;
 
-        _logger.Debug ( "ReachedCalc Target={TargetHeight} Stop={StoppingHeight} Move={MoveIntoDirection} Start={StartMovingIntoDirection} Delta={Delta} UntilStop={MovementUntilStop} Reached={HasReachedTargetHeight}" ,
+        _logger.Debug ( "ReachedCalc Target={TargetHeight} StopListening={StoppingHeight} Move={MoveIntoDirection} StartListening={StartMovingIntoDirection} Delta={Delta} UntilStop={MovementUntilStop} Reached={HasReachedTargetHeight}" ,
                         TargetHeight ,
                         StoppingHeight ,
                         MoveIntoDirection ,

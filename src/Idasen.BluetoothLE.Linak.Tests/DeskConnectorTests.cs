@@ -13,7 +13,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class DeskConnectorTests
+public class DeskConnectorTests : IDisposable
 {
     private IDeskCommandExecutorFactory _commandExecutorFactory = null! ;
     private IControl                    _control                = null! ;
@@ -47,6 +47,8 @@ public class DeskConnectorTests
     private IScheduler        _scheduler        = null! ;
     private Subject < int >   _speedChanged     = null! ;
     private Subject < int >   _speedSubject     = null! ;
+
+    private bool _disposed;
 
     private DeskConnector CreateSut ( )
     {
@@ -172,7 +174,7 @@ public class DeskConnectorTests
         using var sut = CreateSut ( ) ;
 
         _mover.Down ( ).Returns ( Task.FromResult ( true ) ) ;
-        _mover.Stop ( ).Returns ( Task.FromResult ( true ) ) ;
+        _mover.StopMovement ( ).Returns ( Task.FromResult ( true ) ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
@@ -181,7 +183,7 @@ public class DeskConnectorTests
         await _mover.Received ( ).Down ( ) ;
 
         ( await sut.MoveStopAsync ( ) ).Should ( ).BeTrue ( ) ;
-        await _mover.Received ( ).Stop ( ) ;
+        await _mover.Received ( ).StopMovement ( ) ;
     }
 
     [ TestMethod ]
@@ -296,5 +298,25 @@ public class DeskConnectorTests
 
         finishedCompleted.Should ( ).BeTrue ( ) ;
         deviceNameCompleted.Should ( ).BeTrue ( ) ;
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+        _disposed = true;
+
+        _gattRefreshed?.Dispose();
+        _genericAccessDeviceNameChanged?.Dispose();
+        _heightAndSpeedChanged?.Dispose();
+        _heightChanged?.Dispose();
+        _heightSpeedSubject?.Dispose();
+        _heightSubject?.Dispose();
+        _moverFinished?.Dispose();
+        _refreshedSubject?.Dispose();
+        _speedChanged?.Dispose();
+        _speedSubject?.Dispose();
+
+        GC.SuppressFinalize ( this  );
     }
 }

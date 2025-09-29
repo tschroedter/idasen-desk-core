@@ -71,7 +71,7 @@ public class InitialHeightProviderTests : IDisposable
         _executor.Down ( )
                  .Returns ( true ) ;
 
-        _executor.Stop ( )
+        _executor.StopMovement ( )
                  .Returns ( true ) ;
     }
 
@@ -349,7 +349,7 @@ public class InitialHeightProviderTests : IDisposable
                        .Up ( ) ;
 
         await _executor.Received ( )
-                       .Stop ( ) ;
+                       .StopMovement ( ) ;
     }
 
     [ TestMethod ]

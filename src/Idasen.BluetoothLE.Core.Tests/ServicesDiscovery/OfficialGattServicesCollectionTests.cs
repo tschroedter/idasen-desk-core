@@ -1,17 +1,17 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
 [ TestClass ]
-public class OfficialGattServicesTests
+public class OfficialGattServicesCollectionTests
 {
     private readonly Guid _knownGuid = Guid.Parse ( "00001800-0000-1000-8000-00805f9b34fb" ) ;
 
     [ TestMethod ]
     public void Constructor_ForInvoke_SetsResourceName ( )
     {
-        var expected = "Idasen.BluetoothLE.Core.ServicesDiscovery.OfficialGattServices.txt" ;
+        var expected = "Idasen.BluetoothLE.Core.ServicesDiscovery.OfficialGattServicesCollection.txt" ;
 
         CreateSut ( ).ResourceName
                      .Should ( )
@@ -96,7 +96,7 @@ public class OfficialGattServicesTests
              .Be ( expected ) ;
     }
 
-    private IReadOnlyCollection < ushort > CreateUuidCollection ( )
+    private static IReadOnlyCollection < ushort > CreateUuidCollection ( )
     {
         return
         [
@@ -145,8 +145,8 @@ public class OfficialGattServicesTests
         ] ;
     }
 
-    private static OfficialGattServices CreateSut ( )
+    private static OfficialGattServicesCollection CreateSut ( )
     {
-        return new OfficialGattServices ( ) ;
+        return new OfficialGattServicesCollection ( ) ;
     }
 }

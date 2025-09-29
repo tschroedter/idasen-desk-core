@@ -59,7 +59,7 @@ public class DeskLockerTests : IDisposable
         _scheduler.Start ( ) ;
 
         _executor.DidNotReceive ( )
-                 .Stop ( ) ;
+                 .StopMovement ( ) ;
     }
 
     [ TestMethod ]
@@ -75,7 +75,7 @@ public class DeskLockerTests : IDisposable
         _scheduler.Start ( ) ;
 
         _executor.DidNotReceive ( )
-                 .Stop ( ) ;
+                 .StopMovement ( ) ;
     }
 
     [ TestMethod ]
@@ -91,7 +91,7 @@ public class DeskLockerTests : IDisposable
         _scheduler.Start ( ) ;
 
         _executor.DidNotReceive ( )
-                 .Stop ( ) ;
+                 .StopMovement ( ) ;
     }
 
     [ TestMethod ]
@@ -109,7 +109,7 @@ public class DeskLockerTests : IDisposable
         _scheduler.Start ( ) ;
 
         _executor.Received ( )
-                 .Stop ( ) ;
+                 .StopMovement ( ) ;
     }
 
     private DeskLocker CreateSut ( )

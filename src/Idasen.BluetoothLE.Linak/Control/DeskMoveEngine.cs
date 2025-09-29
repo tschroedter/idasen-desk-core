@@ -84,7 +84,7 @@ internal class DeskMoveEngine : IDeskMoveEngine
             return ;
         }
 
-        // Start moving in desired direction from idle
+        // StartListening moving in desired direction from idle
         _logger.Debug ( "Issuing initial move {Dir}" ,
                         desired ) ;
         _lastKeepAlive = DateTime.UtcNow ;
@@ -98,14 +98,14 @@ internal class DeskMoveEngine : IDeskMoveEngine
     {
         if ( _pendingStopTask is { IsCompleted: false } )
         {
-            _logger.Debug ( "Stop already pending (coalesced)" ) ;
+            _logger.Debug ( "StopListening already pending (coalesced)" ) ;
             return _pendingStopTask ;
         }
 
         _logger.Debug ( "Engine stopping (currentDir={Dir})" ,
                         CurrentDirection ) ;
 
-        var task = _executor.Stop ( ) ;
+        var task = _executor.StopMovement ( ) ;
 
         if ( task.IsCompleted )
         {
@@ -113,12 +113,12 @@ internal class DeskMoveEngine : IDeskMoveEngine
 
             if ( ok )
             {
-                _logger.Debug ( "Stop completed synchronously" ) ;
+                _logger.Debug ( "StopListening completed synchronously" ) ;
                 CurrentDirection = Direction.None ;
             }
             else
             {
-                _logger.Debug ( "Stop failed synchronously" ) ;
+                _logger.Debug ( "StopListening failed synchronously" ) ;
             }
 
             return task ;
@@ -130,18 +130,18 @@ internal class DeskMoveEngine : IDeskMoveEngine
                                 {
                                     if ( t.IsFaulted )
                                         _logger.Error ( t.Exception ,
-                                                        "Stop command faulted" ) ;
+                                                        "StopListening command faulted" ) ;
 
                                     var ok = t is { Status: TaskStatus.RanToCompletion , Result: true } ;
 
                                     if ( ok )
                                     {
-                                        _logger.Debug ( "Stop completed (async)" ) ;
+                                        _logger.Debug ( "StopListening completed (async)" ) ;
                                         CurrentDirection = Direction.None ;
                                     }
                                     else
                                     {
-                                        _logger.Debug ( "Stop failed (async)" ) ;
+                                        _logger.Debug ( "StopListening failed (async)" ) ;
                                     }
 
                                     Interlocked.Exchange ( ref _pendingStopTask ,

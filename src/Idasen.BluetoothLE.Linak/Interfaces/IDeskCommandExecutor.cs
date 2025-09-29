@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Executes raw movement commands against the desk.
@@ -18,5 +18,5 @@ public interface IDeskCommandExecutor
     /// <summary>
     ///     Sends the command to stop moving.
     /// </summary>
-    Task < bool > Stop ( ) ;
+    Task < bool > StopMovement ( ) ;
 }

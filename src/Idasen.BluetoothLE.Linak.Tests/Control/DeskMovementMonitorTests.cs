@@ -1,4 +1,4 @@
-﻿using System.Reactive.Subjects ;
+using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
@@ -111,7 +111,7 @@ public class DeskMovementMonitorTests : IDisposable
         var action = ( ) => _scheduler.Start ( ) ;
 
         action.Should ( )
-              .Throw < ApplicationException > ( )
+              .Throw < InvalidOperationException > ( )
               .WithMessage ( DeskMovementMonitor.HeightDidNotChange ) ;
     }
 
@@ -126,8 +126,8 @@ public class DeskMovementMonitorTests : IDisposable
 
         var action = ( ) => _scheduler.Start ( ) ;
 
-        action.Should ( )
-              .Throw < ApplicationException > ( )
-              .WithMessage ( DeskMovementMonitor.SpeedWasZero ) ;
+        action.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage(DeskMovementMonitor.SpeedWasZero);
     }
 }

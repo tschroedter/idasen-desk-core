@@ -133,6 +133,8 @@ public class DeskConnector
 
         _finishedSubject.OnCompleted ( ) ;
         _deviceNameChanged.OnCompleted ( ) ;
+
+        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc />
@@ -192,7 +194,7 @@ public class DeskConnector
         if ( ! TryGetDeskMover ( out var deskMover ) )
             return false ;
 
-        return await deskMover!.Stop ( ).ConfigureAwait ( false ) ;
+        return await deskMover!.StopMovement ( ).ConfigureAwait ( false ) ;
     }
 
     /// <inheritdoc />

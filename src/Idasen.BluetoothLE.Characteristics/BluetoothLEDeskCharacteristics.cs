@@ -37,7 +37,7 @@ public sealed class BluetoothLEDeskCharacteristics : Module
         RegisterWithInterceptors < IRawValueReader , RawValueReader > ( builder ) ;
         RegisterWithInterceptors < IRawValueWriter , RawValueWriter > ( builder ) ;
         RegisterWithInterceptors < IGenericAccess , GenericAccess > ( builder ) ;
-        RegisterWithInterceptors < IGenericAttribute , GenericAttribute > ( builder ) ;
+        RegisterWithInterceptors < IGenericAttributeService , GenericAttributeService > ( builder ) ;
         RegisterWithInterceptors < IReferenceInput , ReferenceInput > ( builder ) ;
         RegisterWithInterceptors < IReferenceOutput , ReferenceOutput > ( builder ) ;
         RegisterWithInterceptors < IDpg , Dpg > ( builder ) ;

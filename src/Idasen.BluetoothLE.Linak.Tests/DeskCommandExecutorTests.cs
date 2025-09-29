@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Linak.Control ;
@@ -207,7 +207,7 @@ public class DeskCommandExecutorTests
 
                                return false ;
                            } ) ;
-        await sut.Stop ( ) ;
+        await sut.StopMovement ( ) ;
 
         await control.DidNotReceive ( )
                      .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
@@ -231,7 +231,7 @@ public class DeskCommandExecutorTests
 
                                return true ;
                            } ) ;
-        var actual = await sut.Stop ( ) ;
+        var actual = await sut.StopMovement ( ) ;
 
         actual.Should ( )
               .BeTrue ( ) ;
@@ -256,7 +256,7 @@ public class DeskCommandExecutorTests
 
                                return true ;
                            } ) ;
-        await sut.Stop ( ) ;
+        await sut.StopMovement ( ) ;
 
         await control.Received ( )
                      .TryWriteRawControl2 ( bytes ) ;

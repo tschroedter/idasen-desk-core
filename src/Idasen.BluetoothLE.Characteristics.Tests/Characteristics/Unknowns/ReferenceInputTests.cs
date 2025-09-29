@@ -16,7 +16,7 @@ public class ReferenceInputTests
            .BeEmpty ( ) ;
     }
 
-    private ReferenceInput CreateSut ( )
+    private static ReferenceInput CreateSut ( )
     {
         return new ReferenceInput ( ) ;
     }

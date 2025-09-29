@@ -1,4 +1,4 @@
-﻿using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
@@ -24,10 +24,10 @@ public interface IWrapper
     /// <summary>
     ///     Starts listening.
     /// </summary>
-    void Start ( ) ;
+    void StartListening ( ) ;
 
     /// <summary>
     ///     Stops listening.
     /// </summary>
-    void Stop ( ) ;
+    void StopListening ( ) ;
 }

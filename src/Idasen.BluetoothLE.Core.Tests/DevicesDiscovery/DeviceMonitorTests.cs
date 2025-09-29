@@ -1,4 +1,4 @@
-﻿using System.Reactive ;
+using System.Reactive ;
 using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
@@ -17,7 +17,6 @@ public class DeviceMonitorTests
     private IDevice                        _device             = null! ;
     private IDevice                        _deviceNewName      = null! ;
     private IDevice                        _deviceOtherNewName = null! ;
-    private IDevices                       _devices            = null! ;
     private Func < ISubject < IDevice > >  _factory            = null! ;
     private ILogger                        _logger             = null! ;
     private TestScheduler                  _scheduler          = null! ;
@@ -27,7 +26,9 @@ public class DeviceMonitorTests
     private ISubject < IDevice >           _subjectUpdated     = null! ;
     private IWatcher                       _watcher            = null! ;
 
-    [ TestInitialize ]
+    private Devices ? _devices ;
+
+    [TestInitialize ]
     public void Initialize ( )
     {
         _scheduler = new TestScheduler ( ) ;
@@ -150,20 +151,20 @@ public class DeviceMonitorTests
     public void Start_ForInvoked_CallsStart ( DeviceMonitor       sut ,
                                               [ Freeze ] IWatcher watcher )
     {
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         watcher.Received ( )
-               .Start ( ) ;
+               .StartListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
     public void Stop_ForInvoked_CallsStop ( DeviceMonitor       sut ,
                                             [ Freeze ] IWatcher watcher )
     {
-        sut.Stop ( ) ;
+        sut.StopListening ( ) ;
 
         watcher.Received ( )
-               .Stop ( ) ;
+               .StopListening ( ) ;
     }
 
     [ TestMethod ]
@@ -175,9 +176,9 @@ public class DeviceMonitorTests
 
         _scheduler.Start ( ) ;
 
-        _devices.ContainsDevice ( _device )
-                .Should ( )
-                .BeTrue ( ) ;
+        _devices!.ContainsDevice ( _device )
+                 .Should ( )
+                 .BeTrue ( ) ;
     }
 
     [ TestMethod ]
@@ -207,10 +208,10 @@ public class DeviceMonitorTests
 
         _scheduler.Start ( ) ;
 
-        _devices.TryGetDevice ( _device.Address ,
-                                out var device )
-                .Should ( )
-                .BeTrue ( ) ;
+        _devices!.TryGetDevice ( _device.Address ,
+                                 out var device )
+                 .Should ( )
+                 .BeTrue ( ) ;
 
         device?.Name
                .Should ( )
@@ -244,10 +245,10 @@ public class DeviceMonitorTests
 
         _scheduler.Start ( ) ;
 
-        _devices.TryGetDevice ( _device.Address ,
-                                out var device )
-                .Should ( )
-                .BeTrue ( ) ;
+        _devices!.TryGetDevice ( _device.Address ,
+                                 out var device )
+                 .Should ( )
+                 .BeTrue ( ) ;
 
         device?.Name
                .Should ( )
@@ -257,7 +258,7 @@ public class DeviceMonitorTests
     private DeviceMonitor CreateSutSubscribed ( )
     {
         var sut = CreateSut ( ) ;
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         return sut ;
     }
@@ -404,7 +405,7 @@ public class DeviceMonitorTests
         var deviceMonitor = new DeviceMonitor ( _logger ,
                                                 _scheduler ,
                                                 _factory ,
-                                                _devices ,
+                                                _devices! ,
                                                 _watcher ) ;
 
         return deviceMonitor ;

@@ -240,7 +240,7 @@ public class DeskMover
     }
 
     /// <inheritdoc />
-    public async Task < bool > Stop ( )
+    public async Task < bool > StopMovement ( )
     {
         _logger.Debug ( "Stopping... (height={Height} speed={Speed} target={Target})" ,
                         Height ,
@@ -388,7 +388,7 @@ public class DeskMover
                                                    StartMovingIntoDirection ,
                                                    _engine.CurrentDirection ) ;
 
-                _logger.Debug ( "StopEval result stop={Stop} desired={Desired} engineDir={EngineDir}" ,
+                _logger.Debug ( "StopEval result stop={StopListening} desired={Desired} engineDir={EngineDir}" ,
                                 result.ShouldStop ,
                                 result.Desired ,
                                 _engine.CurrentDirection ) ;
@@ -428,17 +428,17 @@ public class DeskMover
     {
         if ( _pendingStopTask is { IsCompleted: false } )
         {
-            _logger.Debug ( "Stop already pending -> coalesced" ) ;
+            _logger.Debug ( "StopListening already pending -> coalesced" ) ;
             return ;
         }
 
-        _pendingStopTask = Stop ( ) ;
+        _pendingStopTask = StopMovement ( ) ;
 
         _ = _pendingStopTask.ContinueWith ( t =>
                                             {
                                                 if ( t.IsFaulted )
                                                     _logger.Error ( t.Exception ,
-                                                                    "Stop command faulted (continuation)" ) ;
+                                                                    "StopListening command faulted (continuation)" ) ;
 
                                                 Interlocked.Exchange ( ref _pendingStopTask ,
                                                                        null ) ;

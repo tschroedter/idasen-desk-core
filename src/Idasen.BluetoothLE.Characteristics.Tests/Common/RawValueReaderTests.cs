@@ -1,4 +1,4 @@
-﻿using System.Collections ;
+using System.Collections ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Windows.Storage.Streams ;
 using FluentAssertions ;
@@ -219,7 +219,7 @@ public class RawValueReaderTests
            .Be ( protocolError ) ;
     }
 
-    private void WithTryReadValueResult ( IBufferReader reader ,
+    private static void WithTryReadValueResult ( IBufferReader reader ,
                                           IEnumerable   bytes )
     {
         reader.TryReadValue ( Arg.Any < IBuffer > ( ) ,

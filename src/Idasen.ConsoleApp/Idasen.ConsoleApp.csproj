@@ -1,10 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <EnableNETAnalyzers>true</EnableNETAnalyzers>
+      <AnalysisLevel>latest-recommended</AnalysisLevel>
+      <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+      <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+      <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     </PropertyGroup>
 
     <ItemGroup>

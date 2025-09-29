@@ -2,5 +2,5 @@
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
-public sealed class TestSimpleDictionaryBase
-    : SimpleDictionaryBase < string , Guid > ;
+public sealed class TestSimpleKeysAndValuesBase
+    : SimpleKeysAndValuesBase < string , Guid > ;

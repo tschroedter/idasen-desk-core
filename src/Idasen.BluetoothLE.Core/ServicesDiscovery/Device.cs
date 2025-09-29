@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
@@ -79,5 +79,6 @@ public class Device
     {
         _wrapper.Dispose ( ) ;
         _subscriber.Dispose ( ) ;
+        GC.SuppressFinalize(this);
     }
 }

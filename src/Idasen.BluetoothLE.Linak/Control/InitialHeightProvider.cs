@@ -91,6 +91,8 @@ public class InitialHeightProvider
         }
 
         _disposalHeightAndSpeed?.Dispose ( ) ;
+
+        GC.SuppressFinalize ( this ) ;
     }
 
     /// <inheritdoc />
@@ -142,7 +144,7 @@ public class InitialHeightProvider
 
             cancellationToken.ThrowIfCancellationRequested ( ) ;
 
-            var stopped = await _executor.Stop ( ).ConfigureAwait ( false ) ;
+            var stopped = await _executor.StopMovement( ).ConfigureAwait ( false ) ;
 
             if ( movedUp && stopped )
                 return ;
@@ -160,7 +162,7 @@ public class InitialHeightProvider
     {
         try
         {
-            await _executor.Stop ( ).ConfigureAwait ( false ) ;
+            await _executor.StopMovement ( ).ConfigureAwait ( false ) ;
         }
         catch ( Exception ex )
         {

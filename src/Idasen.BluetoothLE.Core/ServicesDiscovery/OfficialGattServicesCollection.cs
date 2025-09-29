@@ -1,4 +1,4 @@
-﻿using System.Collections ;
+using System.Collections ;
 using System.Diagnostics.CodeAnalysis ;
 using System.Globalization ;
 using System.Reflection ;
@@ -12,14 +12,14 @@ namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-public class OfficialGattServices
-    : IOfficialGattServices
+public class OfficialGattServicesCollection
+    : IOfficialGattServicesCollection
 {
-    private const string FileName = "OfficialGattServices.txt" ;
+    private const string FileName = "OfficialGattServicesCollection.txt" ;
 
     private readonly Dictionary < ushort , OfficialGattService > _dictionary = new( ) ;
 
-    public OfficialGattServices ( )
+    public OfficialGattServicesCollection ( )
     {
         ResourceName = GetType ( ).Namespace + "." + FileName ;
 
@@ -48,12 +48,12 @@ public class OfficialGattServices
     public int Count => _dictionary.Count ;
 
     /// <inheritdoc />
-    public bool TryFindByUuid ( Guid                      guid ,
+    public bool TryFindByUuid ( Guid                      uuid ,
                                 out OfficialGattService ? gattService )
     {
         gattService = null ;
 
-        var n = guid.ToString ( "N" ) ;
+        var n = uuid.ToString ( "N" ) ;
 
         if ( n.Length < 8 )
             return false ;
@@ -77,10 +77,10 @@ public class OfficialGattServices
         foreach ( var record in records ) _dictionary [ record.AssignedNumber ] = record ;
     }
 
-    private static IEnumerable < OfficialGattService > ReadCsvFile ( string resourceName )
+    private static OfficialGattService[] ReadCsvFile ( string resourceName )
     {
-        var stream = Assembly.GetExecutingAssembly ( )
-                             .GetManifestResourceStream ( resourceName ) ;
+        var stream = typeof(OfficialGattServicesCollection).Assembly
+            .GetManifestResourceStream ( resourceName ) ;
 
         if ( stream == null )
             throw new ResourceNotFoundException ( resourceName ,

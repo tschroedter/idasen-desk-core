@@ -1,4 +1,4 @@
-﻿// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable UnusedMemberInSuper.Global
 
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
@@ -14,13 +14,13 @@ namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 ///     Bluetooth® specification.
 ///     (see https://www.bluetooth.com/specifications/gatt/services/)
 /// </summary>
-public interface IOfficialGattServices
+public interface IOfficialGattServicesCollection
     : IReadOnlyCollection < OfficialGattService >
 {
     /// <summary>
     ///     Try to find a known Gatt service by Uuid.
     /// </summary>
-    /// <param name="guid">
+    /// <param name="uuid">
     ///     The UUID.
     /// </param>
     /// <param name="gattService">
@@ -29,6 +29,6 @@ public interface IOfficialGattServices
     /// <returns>
     ///     'true' if a matching Gatt service exists, otherwise 'false'.
     /// </returns>
-    bool TryFindByUuid ( Guid                      guid ,
+    bool TryFindByUuid ( Guid                      uuid ,
                          out OfficialGattService ? gattService ) ;
 }

@@ -53,8 +53,8 @@ public class DeskCharacteristics
     public IGenericAccess GenericAccess => _available.As < IGenericAccess > ( DeskCharacteristicKey.GenericAccess ) ;
 
     /// <inheritdoc />
-    public IGenericAttribute GenericAttribute =>
-        _available.As < IGenericAttribute > ( DeskCharacteristicKey.GenericAttribute ) ;
+    public IGenericAttributeService GenericAttributeService =>
+        _available.As < IGenericAttributeService > ( DeskCharacteristicKey.GenericAttribute ) ;
 
     /// <inheritdoc />
     public IReferenceInput ReferenceInput =>
@@ -99,7 +99,7 @@ public class DeskCharacteristics
         var builder = new StringBuilder ( ) ;
 
         builder.AppendLine ( GenericAccess.ToString ( ) ) ;
-        builder.AppendLine ( GenericAttribute.ToString ( ) ) ;
+        builder.AppendLine ( GenericAttributeService.ToString ( ) ) ;
         builder.AppendLine ( ReferenceInput.ToString ( ) ) ;
         builder.AppendLine ( ReferenceOutput.ToString ( ) ) ;
         builder.AppendLine ( Dpg.ToString ( ) ) ;

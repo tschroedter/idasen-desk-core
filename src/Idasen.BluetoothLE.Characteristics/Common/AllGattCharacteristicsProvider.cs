@@ -1,4 +1,4 @@
-﻿using System.Globalization ;
+using System.Globalization ;
 using System.Reflection ;
 using Autofac.Extras.DynamicProxy ;
 using CsvHelper ;
@@ -54,7 +54,7 @@ public sealed class AllGattCharacteristicsProvider
         foreach ( var (uuid , description) in _uuidToDescription ) _descriptionToUuid [ description ] = uuid ;
     }
 
-    private IEnumerable < CsvGattCharacteristic > ReadCsvFile ( )
+    private CsvGattCharacteristic[] ReadCsvFile ( )
     {
         var stream = Assembly.GetExecutingAssembly ( )
                              .GetManifestResourceStream ( OfficialGattCharacteristics ) ;

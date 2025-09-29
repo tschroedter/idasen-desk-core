@@ -142,20 +142,20 @@ public class DeviceMonitorWithExpiryTests
     public void Start_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
                                                       [ Freeze ] IDeviceMonitor monitor )
     {
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         monitor.Received ( )
-               .Start ( ) ;
+               .StartListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
     public void Stop_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
                                                      [ Freeze ] IDeviceMonitor monitor )
     {
-        sut.Stop ( ) ;
+        sut.StopListening ( ) ;
 
         monitor.Received ( )
-               .Stop ( ) ;
+               .StopListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -398,7 +398,7 @@ public class DeviceMonitorWithExpiryTests
         scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
 
         deviceMonitor.Received ( )
-                     .Stop ( ) ;
+                     .StopListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -411,7 +411,7 @@ public class DeviceMonitorWithExpiryTests
     {
         factory.Create ( Arg.Any < TimeSpan > ( ) ,
                          Arg.Any < IScheduler > ( ) )
-               .Returns ( Observable.Throw < long > ( new Exception ( ) ) ) ;
+               .Returns ( Observable.Throw < long > ( new InvalidOperationException ( ) ) ) ;
 
         using var sut = new DeviceMonitorWithExpiry ( logger ,
                                                       dateTimeOffset ,
@@ -423,6 +423,6 @@ public class DeviceMonitorWithExpiryTests
         scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
 
         deviceMonitor.Received ( )
-                     .Stop ( ) ;
+                     .StopListening ( ) ;
     }
 }

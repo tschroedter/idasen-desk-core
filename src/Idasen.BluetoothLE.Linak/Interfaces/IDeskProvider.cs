@@ -38,7 +38,7 @@ public interface IDeskProvider
                                uint   deviceTimeout ) ;
 
     /// <summary>
-    ///     Start the desk detection process.
+    ///     StartListening the desk detection process.
     /// </summary>
     /// <returns>
     ///     Returns itself.

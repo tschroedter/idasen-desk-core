@@ -54,8 +54,8 @@ public class DeskMoverTests : IDisposable
         _providerFactory = Substitute.For < IInitialHeightAndSpeedProviderFactory > ( ) ;
         _monitorFactory  = Substitute.For < IDeskMovementMonitorFactory > ( ) ;
         _executor        = Substitute.For < IDeskCommandExecutor > ( ) ;
-        // Ensure Stop() has a valid default return to avoid awaiting null
-        _executor.Stop ( ).Returns ( true ) ;
+        // Ensure StopListening() has a valid default return to avoid awaiting null
+        _executor.StopMovement ( ).Returns ( true ) ;
         _heightAndSpeed        = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _calculator            = Substitute.For < IStoppingHeightCalculator > ( ) ;
         _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
@@ -299,7 +299,7 @@ public class DeskMoverTests : IDisposable
 
         using var sut = CreateSutInitialized ( ) ;
 
-        await sut.Stop ( ) ; // make sure timer is null
+        await sut.StopMovement ( ) ; // make sure timer is null
 
         await sut.OnTimerElapsed ( 1 ) ;
 
@@ -334,7 +334,7 @@ public class DeskMoverTests : IDisposable
         using var scope = new AssertionScope ( ) ;
 
         await _executor.Received ( )
-                       .Stop ( ) ;
+                       .StopMovement ( ) ;
     }
 
     [ TestMethod ]
@@ -356,7 +356,7 @@ public class DeskMoverTests : IDisposable
                        .Down ( ) ;
 
         await _executor.DidNotReceive ( )
-                       .Stop ( ) ;
+                       .StopMovement ( ) ;
     }
 
     [ TestMethod ]
@@ -369,7 +369,7 @@ public class DeskMoverTests : IDisposable
         sut.Finished.ObserveOn ( _scheduler )
            .Subscribe ( _ => wasNotified = true ) ;
 
-        await sut.Stop ( ) ;
+        await sut.StopMovement ( ) ;
 
         // Process the ObserveOn scheduled Finished notification
         _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 1 ).Ticks ) ;
@@ -505,8 +505,8 @@ public class DeskMoverTests : IDisposable
         // Act
         await sut.OnTimerElapsed ( 1 ) ;
 
-        // Assert: Stop was issued due to predictive crossing, and no Up/Down command after that
-        await _executor.Received ( 1 ).Stop ( ) ;
+        // Assert: StopListening was issued due to predictive crossing, and no Up/Down command after that
+        await _executor.Received ( 1 ).StopMovement ( ) ;
         await _executor.DidNotReceive ( ).Up ( ) ;
         await _executor.DidNotReceive ( ).Down ( ) ;
     }
@@ -536,8 +536,8 @@ public class DeskMoverTests : IDisposable
         // Act
         await sut.OnTimerElapsed ( 1 ) ;
 
-        // Assert: Stop was issued due to predictive crossing, and no Up/Down command after that
-        await _executor.Received ( 1 ).Stop ( ) ;
+        // Assert: StopListening was issued due to predictive crossing, and no Up/Down command after that
+        await _executor.Received ( 1 ).StopMovement ( ) ;
         await _executor.DidNotReceive ( ).Up ( ) ;
         await _executor.DidNotReceive ( ).Down ( ) ;
     }

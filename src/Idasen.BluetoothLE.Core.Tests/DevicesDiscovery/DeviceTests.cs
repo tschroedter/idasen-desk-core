@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces ;
@@ -28,7 +28,7 @@ public class DeviceTests
     public void Constructor_ForDeviceIsNull_Throws ( )
     {
         // ReSharper disable once ObjectCreationAsStatement
-        var action = ( ) => { new Device ( null! ) ; } ;
+        var action = ( ) => { _ = new Device ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )

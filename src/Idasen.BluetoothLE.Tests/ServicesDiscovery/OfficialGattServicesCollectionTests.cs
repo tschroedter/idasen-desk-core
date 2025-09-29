@@ -1,10 +1,10 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
 
 [ TestClass ]
-public class OfficialGattServicesTests
+public class OfficialGattServicesCollectionTests
 {
     private readonly Guid _knownGuid = Guid.Parse ( "00001800-0000-1000-8000-00805f9b34fb" ) ;
 
@@ -75,7 +75,7 @@ public class OfficialGattServicesTests
         }
     }
 
-    private IReadOnlyCollection < ushort > CreateUuidCollection ( )
+    private static IReadOnlyCollection < ushort > CreateUuidCollection ( )
     {
         return
         [
@@ -124,8 +124,8 @@ public class OfficialGattServicesTests
         ] ;
     }
 
-    private static OfficialGattServices CreateSut ( )
+    private static OfficialGattServicesCollection CreateSut ( )
     {
-        return new OfficialGattServices ( ) ;
+        return new OfficialGattServicesCollection ( ) ;
     }
 }

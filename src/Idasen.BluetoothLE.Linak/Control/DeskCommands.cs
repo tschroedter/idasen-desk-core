@@ -21,7 +21,7 @@ public enum DeskCommands
     MoveDown = 2 ,
 
     /// <summary>
-    ///     Stop movement command.
+    ///     StopListening movement command.
     /// </summary>
     MoveStop = 3
 }

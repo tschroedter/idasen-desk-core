@@ -1,4 +1,4 @@
-﻿using Windows.Devices.Bluetooth.Advertisement ;
+using Windows.Devices.Bluetooth.Advertisement ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
@@ -38,7 +38,7 @@ public class StatusMapperTests
               .WithMessage ( "Unknown status: '*" ) ;
     }
 
-    private StatusMapper CreateSut ( )
+    private static StatusMapper CreateSut ( )
     {
         var sut = new StatusMapper ( ) ;
 

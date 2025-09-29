@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis ;
+using System.Diagnostics.CodeAnalysis ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
@@ -33,6 +33,8 @@ public class GattDeviceServicesResultWrapper
     public void Dispose ( )
     {
         foreach ( var s in Services ) s.Dispose ( ) ;
+
+        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc />

@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
@@ -66,6 +66,8 @@ public class DeskDetector
         _discovered?.Dispose ( ) ;
         _updated?.Dispose ( ) ;
         _monitor.Dispose ( ) ;
+
+        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc />
@@ -115,18 +117,18 @@ public class DeskDetector
     }
 
     /// <inheritdoc />
-    public void Start ( )
+    public void StartListening ( )
     {
         _desk?.Dispose ( ) ;
         _desk = null ;
 
-        _monitor.Start ( ) ;
+        _monitor.StartListening ( ) ;
     }
 
     /// <inheritdoc />
-    public void Stop ( )
+    public void StopListening ( )
     {
-        _monitor.Stop ( ) ;
+        _monitor.StopListening ( ) ;
     }
 
     private async Task OnDeskDiscovered ( IDevice device )

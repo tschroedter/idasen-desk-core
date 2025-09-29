@@ -97,7 +97,7 @@ public class GenericAccessTests
               .Throw < NotInitializeException > ( ) ;
     }
 
-    private GenericAccess CreateSut ( )
+    private static GenericAccess CreateSut ( )
     {
         return new GenericAccess ( ) ;
     }

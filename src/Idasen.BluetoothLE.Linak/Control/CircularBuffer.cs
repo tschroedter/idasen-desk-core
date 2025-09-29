@@ -131,11 +131,11 @@ public class CircularBuffer < T > : IEnumerable < T >
         get
         {
             if ( IsEmpty )
-                throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer is empty" ) ;
+                throw new InvalidOperationException( $"Cannot access index {index}. Buffer is empty" ) ;
 
             if ( index < 0 ||
                  index >= _size )
-                throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer size is {_size}" ) ;
+                throw new InvalidOperationException( $"Cannot access index {index}. Buffer size is {_size}" ) ;
 
             var actualIndex = InternalIndex ( index ) ;
 
@@ -144,11 +144,11 @@ public class CircularBuffer < T > : IEnumerable < T >
         set
         {
             if ( IsEmpty )
-                throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer is empty" ) ;
+                throw new InvalidOperationException ( $"Cannot access index {index}. Buffer is empty" ) ;
 
             if ( index < 0 ||
                  index >= _size )
-                throw new IndexOutOfRangeException ( $"Cannot access index {index}. Buffer size is {_size}" ) ;
+                throw new InvalidOperationException( $"Cannot access index {index}. Buffer size is {_size}" ) ;
 
             var actualIndex = InternalIndex ( index ) ;
             _buffer [ actualIndex ] = value ;

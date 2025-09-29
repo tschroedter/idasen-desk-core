@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
         <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
-	    <Nullable>enable</Nullable>
+    	<Nullable>enable</Nullable>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="ServicesDiscovery\OfficialGattServices.txt" />
+        <EmbeddedResource Include="ServicesDiscovery\OfficialGattServicesCollection.txt" LogicalName="Idasen.BluetoothLE.Core.ServicesDiscovery.OfficialGattServicesCollection.txt" />
     </ItemGroup>
 
     <ItemGroup>
@@ -50,6 +50,14 @@
         <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <EnableNETAnalyzers>true</EnableNETAnalyzers>
+      <AnalysisLevel>latest-recommended</AnalysisLevel>
+      <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+      <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+      <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     </PropertyGroup>
 
 </Project>

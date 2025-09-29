@@ -1,5 +1,6 @@
-﻿using System.Globalization ;
+using System.Globalization ;
 using System.Runtime.CompilerServices ;
+using System.Text ;
 using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core ;
@@ -12,26 +13,36 @@ public static class Guard
     private const string ValueCannotBeNullOrEmpty = "Value cannot be null or empty" ;
     private const string ValueCannotBeWhitespace  = "Value cannot be null, empty or whitespace" ;
 
+    private static readonly CompositeFormat ValueCannotBeNullOrEmptyFormat =
+        CompositeFormat.Parse ( ValueCannotBeNullOrEmpty ) ;
+
+    private static readonly CompositeFormat ValueCannotBeWhitespaceFormat =
+        CompositeFormat.Parse ( ValueCannotBeWhitespace ) ;
+
     /// <summary>
     ///     Ensures the parameter is a non-null, non-empty, non-whitespace string.
     /// </summary>
     [ UsedImplicitly ]
     [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-    public static void ArgumentNotEmptyOrWhitespace ( object parameter ,
-                                                      string parameterName )
+    public static void ArgumentNotEmptyOrWhitespace (
+        object parameter ,
+        string parameterName )
     {
-        ArgumentNotNullOrEmpty ( parameter ,
-                                 parameterName ) ;
+        ArgumentNotNullOrEmpty (
+                                parameter ,
+                                parameterName ) ;
 
         if ( ! ( parameter is string text ) ||
              ! string.IsNullOrWhiteSpace ( text ) )
             return ;
 
-        var message = string.Format ( CultureInfo.InvariantCulture ,
-                                      ValueCannotBeWhitespace ) ;
+        var message = string.Format (
+                                     CultureInfo.InvariantCulture ,
+                                     ValueCannotBeWhitespaceFormat ) ;
 
-        throw new ArgumentException ( message ,
-                                      parameterName ) ;
+        throw new ArgumentException (
+                                     message ,
+                                     parameterName ) ;
     }
 
     /// <summary>
@@ -39,8 +50,9 @@ public static class Guard
     /// </summary>
     [ UsedImplicitly ]
     [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-    public static void ArgumentNotNull ( object parameter ,
-                                         string parameterName )
+    public static void ArgumentNotNull (
+        object parameter ,
+        string parameterName )
     {
         if ( parameter == null )
             throw new ArgumentNullException ( parameterName ) ;
@@ -51,20 +63,24 @@ public static class Guard
     /// </summary>
     [ UsedImplicitly ]
     [ MethodImpl ( MethodImplOptions.AggressiveInlining ) ]
-    public static void ArgumentNotNullOrEmpty ( object parameter ,
-                                                string parameterName )
+    public static void ArgumentNotNullOrEmpty (
+        object parameter ,
+        string parameterName )
     {
-        ArgumentNotNull ( parameter ,
-                          parameterName ) ;
+        ArgumentNotNull (
+                         parameter ,
+                         parameterName ) ;
 
         if ( ! ( parameter is string text ) ||
              text.Length != 0 )
             return ;
 
-        var message = string.Format ( CultureInfo.InvariantCulture ,
-                                      ValueCannotBeNullOrEmpty ) ;
+        var message = string.Format (
+                                     CultureInfo.InvariantCulture ,
+                                     ValueCannotBeNullOrEmptyFormat ) ;
 
-        throw new ArgumentException ( message ,
-                                      parameterName ) ;
+        throw new ArgumentException (
+                                     message ,
+                                     parameterName ) ;
     }
 }

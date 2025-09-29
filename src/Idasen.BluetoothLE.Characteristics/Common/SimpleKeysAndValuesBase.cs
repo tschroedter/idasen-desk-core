@@ -3,8 +3,8 @@ using Idasen.BluetoothLE.Core ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-public class SimpleDictionaryBase < TKey , TValue >
-    : ISimpleDictionary < TKey , TValue >
+public class SimpleKeysAndValuesBase < TKey , TValue >
+    : ISimpleKeysAndValues < TKey , TValue >
     where TKey : notnull
 {
     private readonly Dictionary < TKey , TValue > _dictionary = new( ) ;

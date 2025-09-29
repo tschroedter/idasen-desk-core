@@ -9,7 +9,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class DeskMoverConcurrencyTests
+public class DeskMoverConcurrencyTests : IDisposable
 {
     private IStoppingHeightCalculator             _calculator         = null! ;
     private IDeskCommandExecutor                  _executor           = null! ;
@@ -23,6 +23,14 @@ public class DeskMoverConcurrencyTests
     private IDeskMovementMonitor                  _movementMonitor    = null! ;
     private IInitialHeightAndSpeedProviderFactory _providerFactory    = null! ;
     private TestScheduler                         _scheduler          = null! ;
+
+    public void Dispose()
+    {
+        _finishedSubject?.Dispose();
+        _heightSpeedSubject?.Dispose();
+
+        GC.SuppressFinalize ( this );
+    }
 
     [ TestInitialize ]
     public void Setup ( )
@@ -41,7 +49,7 @@ public class DeskMoverConcurrencyTests
         _monitorFactory.Create ( Arg.Any < IDeskHeightAndSpeed > ( ) ).Returns ( _movementMonitor ) ;
 
         _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
-        _executor.Stop ( ).Returns ( Task.FromResult ( true ) ) ;
+        _executor.StopMovement( ).Returns ( Task.FromResult ( true ) ) ;
 
         _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _heightAndSpeed.Height.Returns ( 1000u ) ;
@@ -133,10 +141,10 @@ public class DeskMoverConcurrencyTests
         _finishedSubject.OnNext ( 1000u ) ;
         _scheduler.AdvanceBy ( 1 ) ; // process OnFinished
 
-        // Simulate timer tick which will call Stop due to target reached
+        // Simulate timer tick which will call StopListening due to target reached
         await sut.OnTimerElapsed ( 0 ) ;
 
-        await _executor.Received ( 1 ).Stop ( ) ;
+        await _executor.Received ( 1 ).StopMovement ( ) ;
         finishedEvents.Count.Should ( ).Be ( 1 ) ;
     }
 
@@ -159,11 +167,11 @@ public class DeskMoverConcurrencyTests
         _scheduler.AdvanceBy ( 1 ) ;
 
         // First explicit stop
-        await sut.Stop ( ) ;
+        await sut.StopMovement ( ) ;
         // Second stop should be a noop
-        await sut.Stop ( ) ;
+        await sut.StopMovement ( ) ;
 
-        await _executor.Received ( 1 ).Stop ( ) ;
+        await _executor.Received ( 1 ).StopMovement ( ) ;
         finishedEvents.Count.Should ( ).Be ( 1 ) ;
     }
 
@@ -234,20 +242,20 @@ public class DeskMoverConcurrencyTests
         _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
 
         var tcs = new TaskCompletionSource < bool > ( ) ;
-        _executor.Stop ( ).Returns ( _ => tcs.Task ) ;
+        _executor.StopMovement ( ).Returns ( _ => tcs.Task ) ;
 
         sut.Initialize ( ) ;
         sut.Start ( ) ;
         _finishedSubject.OnNext ( 1000u ) ;
         _scheduler.AdvanceBy ( 1 ) ;
 
-        // First evaluation triggers Stop (pending)
+        // First evaluation triggers StopListening (pending)
         await sut.OnTimerElapsed ( 0 ) ;
-        await _executor.Received ( 1 ).Stop ( ) ;
+        await _executor.Received ( 1 ).StopMovement ( ) ;
 
-        // While Stop is still pending, further evaluations should not send another Stop
+        // While StopListening is still pending, further evaluations should not send another StopListening
         await sut.OnTimerElapsed ( 1 ) ;
-        await _executor.Received ( 1 ).Stop ( ) ;
+        await _executor.Received ( 1 ).StopMovement ( ) ;
 
         tcs.TrySetResult ( true ) ;
         sut.Dispose ( ) ;

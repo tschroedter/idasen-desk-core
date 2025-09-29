@@ -85,7 +85,7 @@ public interface IDesk
     Task < bool > MoveDownAsync ( ) ;
 
     /// <summary>
-    ///     Stop moving the desk.
+    ///     StopListening moving the desk.
     /// </summary>
     /// <returns>'true' if successful otherwise 'false'.</returns>
     Task < bool > MoveStopAsync ( ) ;

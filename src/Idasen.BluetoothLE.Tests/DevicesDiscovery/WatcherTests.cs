@@ -51,10 +51,10 @@ public class WatcherTests
         wrapper.Status
                .Returns ( Status.Started ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         wrapper.DidNotReceive ( )
-               .Start ( ) ;
+               .StartListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -64,10 +64,10 @@ public class WatcherTests
         wrapper.Status
                .Returns ( Status.Created ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         wrapper.Received ( )
-               .Start ( ) ;
+               .StartListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -78,7 +78,7 @@ public class WatcherTests
         wrapper.Status
                .Returns ( Status.Created ) ;
 
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         subject.OnNext ( Arg.Any < DateTime > ( ) ) ;
     }
@@ -90,10 +90,10 @@ public class WatcherTests
         wrapper.Status
                .Returns ( Status.Started ) ;
 
-        sut.Stop ( ) ;
+        sut.StopListening ( ) ;
 
         wrapper.Received ( )
-               .Stop ( ) ;
+               .StopListening ( ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -103,10 +103,10 @@ public class WatcherTests
         wrapper.Status
                .Returns ( Status.Created ) ;
 
-        sut.Stop ( ) ;
+        sut.StopListening ( ) ;
 
         wrapper.DidNotReceive ( )
-               .Stop ( ) ;
+               .StopListening ( ) ;
     }
 
     [ AutoDataTestMethod ]

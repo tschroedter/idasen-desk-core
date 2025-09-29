@@ -1,4 +1,4 @@
-﻿using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using JetBrains.Annotations ;
 
@@ -17,27 +17,26 @@ public static class DeskCharacteristicDictionaryExtensions
         new( )
         {
             { DeskCharacteristicKey.GenericAccess , new GenericAccess ( ) } ,
-            { DeskCharacteristicKey.GenericAttribute , new GenericAttribute ( ) } ,
+            { DeskCharacteristicKey.GenericAttribute , new GenericAttributeService ( ) } ,
             { DeskCharacteristicKey.ReferenceInput , new ReferenceInput ( ) } ,
             { DeskCharacteristicKey.ReferenceOutput , new ReferenceOutput ( ) } ,
             { DeskCharacteristicKey.Dpg , new Dpg ( ) } ,
             { DeskCharacteristicKey.Control , new Characteristics.Characteristics.Unknowns.Control ( ) }
         } ;
 
-    private static readonly IReadOnlyDictionary < DeskCharacteristicKey , Func < ICharacteristicBase > >
+    private static readonly Dictionary < DeskCharacteristicKey , Func < ICharacteristicBase > >
         UnknownFactories =
-            new Dictionary < DeskCharacteristicKey , Func < ICharacteristicBase > >
-            {
-                { DeskCharacteristicKey.GenericAccess , static ( ) => new GenericAccess ( ) } ,
-                { DeskCharacteristicKey.GenericAttribute , static ( ) => new GenericAttribute ( ) } ,
-                { DeskCharacteristicKey.ReferenceInput , static ( ) => new ReferenceInput ( ) } ,
-                { DeskCharacteristicKey.ReferenceOutput , static ( ) => new ReferenceOutput ( ) } ,
-                { DeskCharacteristicKey.Dpg , static ( ) => new Dpg ( ) } ,
-                {
-                    DeskCharacteristicKey.Control , static ( ) =>
-                                                        new Characteristics.Characteristics.Unknowns.Control ( )
-                }
-            } ;
+            new() {
+                      { DeskCharacteristicKey.GenericAccess , static ( ) => new GenericAccess ( ) } ,
+                      { DeskCharacteristicKey.GenericAttribute , static ( ) => new GenericAttributeService ( ) } ,
+                      { DeskCharacteristicKey.ReferenceInput , static ( ) => new ReferenceInput ( ) } ,
+                      { DeskCharacteristicKey.ReferenceOutput , static ( ) => new ReferenceOutput ( ) } ,
+                      { DeskCharacteristicKey.Dpg , static ( ) => new Dpg ( ) } ,
+                      {
+                          DeskCharacteristicKey.Control , static ( ) =>
+                                                              new Characteristics.Characteristics.Unknowns.Control ( )
+                      }
+                  } ;
 
     /// <summary>
     ///     Attempts to retrieve a typed characteristic from the dictionary. Falls back to an unknown instance if not present.

@@ -1,4 +1,4 @@
-﻿using CsvHelper ;
+using CsvHelper ;
 using CsvHelper.Configuration ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
@@ -54,7 +54,7 @@ public class OfficialGattServiceConverterTests
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( "readerRow" ) ;
+              .WithParameter ( "row" ) ;
     }
 
     [ TestMethod ]
@@ -114,7 +114,7 @@ public class OfficialGattServiceConverterTests
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( "writerRow" ) ;
+              .WithParameter ( "row" ) ;
     }
 
     [ TestMethod ]
@@ -152,13 +152,13 @@ public class OfficialGattServiceConverterTests
                      .Be ( NotANumber ) ;
     }
 
-    private OfficialGattServiceConverter CreateSut ( )
+    private static OfficialGattServiceConverter CreateSut ( )
     {
         return new OfficialGattServiceConverter ( ) ;
     }
 
     public class TestClass
     {
-        public int One = 0 ;
+        public int One { get; set; }
     }
 }

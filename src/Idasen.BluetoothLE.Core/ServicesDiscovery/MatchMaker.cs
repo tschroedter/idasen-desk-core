@@ -15,13 +15,13 @@ public class MatchMaker
     private readonly ILogger        _logger ;
 
     public MatchMaker ( ILogger               logger ,
-                        IOfficialGattServices bluetoothGattServices ,
+                        IOfficialGattServicesCollection bluetoothGattServicesCollection ,
                         IDeviceFactory        deviceFactory )
     {
         Guard.ArgumentNotNull ( logger ,
                                 nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( bluetoothGattServices ,
-                                nameof ( bluetoothGattServices ) ) ;
+        Guard.ArgumentNotNull ( bluetoothGattServicesCollection ,
+                                nameof ( bluetoothGattServicesCollection ) ) ;
         Guard.ArgumentNotNull ( deviceFactory ,
                                 nameof ( deviceFactory ) ) ;
 

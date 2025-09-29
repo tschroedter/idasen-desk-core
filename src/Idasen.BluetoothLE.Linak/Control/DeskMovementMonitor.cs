@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
@@ -47,6 +47,8 @@ public class DeskMovementMonitor
     {
         _disposalHeightAndSpeed?.Dispose ( ) ;
         _disposalHeightAndSpeed = null ;
+
+        GC.SuppressFinalize ( this );
     }
 
     /// <summary>
@@ -85,13 +87,13 @@ public class DeskMovementMonitor
         var allSameHeight = History.All ( x => x.Height == height ) ;
 
         if ( allSameHeight )
-            throw new ApplicationException ( HeightDidNotChange ) ;
+            throw new InvalidOperationException ( HeightDidNotChange ) ;
 
         _logger.Debug ( "Good, height changed" ) ;
 
-        if ( History.Count ( ) >= MinimumNumberOfItems &&
+        if ( History.Count >= MinimumNumberOfItems &&
              History.All ( x => x.Speed == 0 ) )
-            throw new ApplicationException ( SpeedWasZero ) ;
+            throw new InvalidOperationException( SpeedWasZero ) ;
 
         _logger.Debug ( "Good, speed changed" ) ;
     }

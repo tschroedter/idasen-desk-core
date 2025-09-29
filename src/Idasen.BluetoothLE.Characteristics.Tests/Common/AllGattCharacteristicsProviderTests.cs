@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
@@ -104,7 +104,7 @@ public class AllGattCharacteristicsProviderTests
                            AllGattCharacteristicsProvider.Filename ) ;
     }
 
-    private AllGattCharacteristicsProvider CreateSut ( )
+    private static AllGattCharacteristicsProvider CreateSut ( )
     {
         return new AllGattCharacteristicsProvider ( ) ;
     }

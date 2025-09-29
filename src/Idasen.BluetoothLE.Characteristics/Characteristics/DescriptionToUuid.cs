@@ -7,5 +7,5 @@ namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
 public class DescriptionToUuid
-    : SimpleDictionaryBase < string , Guid > ,
+    : SimpleKeysAndValuesBase < string , Guid > ,
       IDescriptionToUuid ;

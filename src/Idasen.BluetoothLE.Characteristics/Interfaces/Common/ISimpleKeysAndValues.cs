@@ -1,4 +1,4 @@
-﻿// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable UnusedMemberInSuper.Global
 
 // ReSharper disable InvalidXmlDocComment
 
@@ -14,7 +14,7 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 /// <typeparam name="TValue">
 ///     The type of the values in the dictionary.
 /// </typeparam>
-public interface ISimpleDictionary < TKey , TValue >
+public interface ISimpleKeysAndValues < TKey , TValue >
 {
     /// <summary>
     ///     Gets a cloned version of the dictionary.

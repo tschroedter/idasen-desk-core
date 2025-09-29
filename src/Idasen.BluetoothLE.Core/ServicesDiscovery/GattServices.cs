@@ -78,6 +78,8 @@ public class GattServices
     public void Dispose ( )
     {
         DisposeEntries ( ) ;
+
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>

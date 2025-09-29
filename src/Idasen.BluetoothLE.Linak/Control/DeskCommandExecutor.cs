@@ -1,4 +1,4 @@
-﻿using Autofac.Extras.DynamicProxy ;
+using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
@@ -52,7 +52,7 @@ public class DeskCommandExecutor
     }
 
     /// <inheritdoc />
-    public Task < bool > Stop ( )
+    public Task < bool > StopMovement( )
     {
         return Execute ( DeskCommands.MoveStop ) ;
     }

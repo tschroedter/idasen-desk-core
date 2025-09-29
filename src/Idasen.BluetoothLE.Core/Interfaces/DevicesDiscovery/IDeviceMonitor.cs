@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 /// <summary>
 ///     Monitors discovered devices.
@@ -34,12 +34,12 @@ public interface IDeviceMonitor
     /// <summary>
     ///     Starts listening.
     /// </summary>
-    void Start ( ) ;
+    void StartListening ( ) ;
 
     /// <summary>
     ///     Stops listening.
     /// </summary>
-    void Stop ( ) ;
+    void StopListening ( ) ;
 
     /// <summary>
     ///     Remove a device from the list of discovered devices.

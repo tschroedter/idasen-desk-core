@@ -1,4 +1,4 @@
-﻿using System.Reactive.Subjects ;
+using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
@@ -38,28 +38,30 @@ public class Watcher
     public IObservable < IDevice > Received => _wrapper.Received ;
 
     /// <inheritdoc />
-    public void Start ( )
+    public void StartListening ( )
     {
         if ( IsListening )
             return ;
 
-        _wrapper.Start ( ) ;
+        _wrapper.StartListening ( ) ;
 
         _startedWatching.OnNext ( DateTime.Now ) ;
     }
 
     /// <inheritdoc />
-    public void Stop ( )
+    public void StopListening ( )
     {
         if ( ! IsListening )
             return ;
 
-        _wrapper.Stop ( ) ;
+        _wrapper.StopListening ( ) ;
     }
 
     /// <inheritdoc />
     public void Dispose ( )
     {
         _wrapper.Dispose ( ) ;
+
+        GC.SuppressFinalize(this);
     }
 }

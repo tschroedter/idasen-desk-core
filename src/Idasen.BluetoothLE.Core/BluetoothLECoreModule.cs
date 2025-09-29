@@ -111,8 +111,8 @@ public sealed class BluetoothLECoreModule
                .As < IMatchMaker > ( )
                .EnableInterfaceInterceptors ( ) ;
 
-        builder.RegisterType < OfficialGattServices > ( )
-               .As < IOfficialGattServices > ( )
+        builder.RegisterType < OfficialGattServicesCollection > ( )
+               .As < IOfficialGattServicesCollection > ( )
                .EnableInterfaceInterceptors ( ) ;
 
         builder.RegisterType < GattServices > ( )

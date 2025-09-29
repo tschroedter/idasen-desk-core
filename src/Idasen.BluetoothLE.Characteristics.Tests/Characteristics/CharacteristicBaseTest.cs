@@ -13,8 +13,11 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 public class CharacteristicBaseTest
     : CharacteristicBaseTests < TestCharacteristicBase >
 {
-    protected readonly Guid GattCharacteristicUuid = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
-    protected readonly Guid GattServiceUuid        = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
+    private static readonly Guid GattCharacteristicUuid = Guid.Parse("22222222-2222-2222-2222-222222222222");
+    private static readonly Guid GattServiceUuid = Guid.Parse("11111111-1111-1111-1111-111111111111");
+
+    protected static Guid GetGattCharacteristicUuid() => GattCharacteristicUuid;
+    protected static Guid GetGattServiceUuid() => GattServiceUuid;
 
     [ TestMethod ]
     public void GattServiceUuid_ForInvoked_Uuid ( )

@@ -5,7 +5,7 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.ConstructorNu
 
 [ TestClass ]
 public class GenericAttributeConstructorNullTests
-    : BaseConstructorNullTester < GenericAttribute >
+    : BaseConstructorNullTester < GenericAttributeService >
 {
     public override int NumberOfConstructorsPassed { get ; } = 1 ;
 }

@@ -74,17 +74,17 @@ public class DeviceMonitor
     public IObservable < IDevice > DeviceNameUpdated => _deviceNameUpdated ;
 
     /// <inheritdoc />
-    public void Start ( )
+    public void StartListening ( )
     {
         Subscribe ( ) ;
 
-        _watcher.Start ( ) ;
+        _watcher.StartListening ( ) ;
     }
 
     /// <inheritdoc />
-    public void Stop ( )
+    public void StopListening ( )
     {
-        _watcher.Stop ( ) ;
+        _watcher.StopListening ( ) ;
 
         Unsubscribe ( ) ;
     }
@@ -107,6 +107,8 @@ public class DeviceMonitor
 
         _watcher.Dispose ( ) ;
         _devices.Clear ( ) ;
+
+        GC.SuppressFinalize ( this ) ;
     }
 
     private void Subscribe ( )

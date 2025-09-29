@@ -115,14 +115,14 @@ public class DeskDetectorTests : IDisposable
                          DeviceTimeout ) ;
 
         // connect to desk
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _discovered.OnNext ( _device ) ;
 
         _scheduler.Start ( ) ;
 
         // connect to desk again, so that the old one is disposed
-        sut.Start ( ) ;
+        sut.StartListening ( ) ;
 
         _desk.Received ( )
              .Dispose ( ) ;

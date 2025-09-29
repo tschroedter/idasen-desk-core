@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
@@ -113,12 +113,12 @@ public class DeskLocker
         if ( _deskMover.IsAllowedToMove )
             return ;
 
-        _logger.Information ( "Manual move detected. Calling Stop. Details={Details}" ,
+        _logger.Information ( "Manual move detected. Calling StopListening. Details={Details}" ,
                               details ) ;
 
         try
         {
-            await _executor.Stop ( ).ConfigureAwait ( false ) ;
+            await _executor.StopMovement ( ).ConfigureAwait ( false ) ;
         }
         catch ( Exception ex )
         {

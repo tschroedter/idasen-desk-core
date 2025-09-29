@@ -54,7 +54,7 @@ public class DeskProvider
 
         try
         {
-            _detector.Start ( ) ;
+            _detector.StartListening ( ) ;
 
             await _taskRunner.Run ( ( ) => DoTryGetDesk ( token ) ,
                                     token )
@@ -79,7 +79,7 @@ public class DeskProvider
         }
         finally
         {
-            _detector.Stop ( ) ;
+            _detector.StopListening ( ) ;
             DeskDetectedEvent.Reset ( ) ;
         }
     }
@@ -111,18 +111,18 @@ public class DeskProvider
     /// <inheritdoc />
     public IDeskProvider StartDetecting ( )
     {
-        _logger.Information ( "Start trying to detect desk" ) ;
+        _logger.Information ( "StartListening trying to detect desk" ) ;
 
         try
         {
-            _detector.Start ( ) ;
+            _detector.StartListening ( ) ;
         }
         catch ( Exception e )
         {
             _logger.Error ( e ,
-                            "Failed Start Detecting" ) ;
+                            "Failed StartListening Detecting" ) ;
 
-            _errorManager.PublishForMessage ( "Failed Start Detecting" ) ;
+            _errorManager.PublishForMessage ( "Failed StartListening Detecting" ) ;
         }
 
         return this ;
@@ -131,18 +131,18 @@ public class DeskProvider
     /// <inheritdoc />
     public IDeskProvider StopDetecting ( )
     {
-        _logger.Information ( "Stop trying to detect desk" ) ;
+        _logger.Information ( "StopListening trying to detect desk" ) ;
 
         try
         {
-            _detector.Stop ( ) ;
+            _detector.StopListening ( ) ;
         }
         catch ( Exception e )
         {
             _logger.Error ( e ,
-                            "Failed Stop Detecting" ) ;
+                            "Failed StopListening Detecting" ) ;
 
-            _errorManager.PublishForMessage ( "Failed Stop Detecting" ) ;
+            _errorManager.PublishForMessage ( "Failed StopListening Detecting" ) ;
         }
 
         return this ;
@@ -214,13 +214,13 @@ public class DeskProvider
 
         try
         {
-            _detector.Stop ( ) ;
+            _detector.StopListening ( ) ;
         }
         catch ( Exception e )
         {
             _logger.Error ( e ,
                             "Failed stopping detector after detection" ) ;
-            _errorManager.PublishForMessage ( "Failed Stop Detecting" ) ;
+            _errorManager.PublishForMessage ( "Failed StopListening Detecting" ) ;
         }
 
         try

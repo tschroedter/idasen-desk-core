@@ -37,7 +37,7 @@ public class ControlTests
               .BeFalse ( ) ;
     }
 
-    private Control CreateSut ( )
+    private static Control CreateSut ( )
     {
         return new Control ( ) ;
     }

@@ -16,7 +16,7 @@ public class DpgTests
            .BeEmpty ( ) ;
     }
 
-    private Dpg CreateSut ( )
+    private static Dpg CreateSut ( )
     {
         return new Dpg ( ) ;
     }

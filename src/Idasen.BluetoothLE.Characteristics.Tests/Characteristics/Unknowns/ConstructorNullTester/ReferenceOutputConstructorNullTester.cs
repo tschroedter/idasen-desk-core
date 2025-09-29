@@ -1,11 +1,11 @@
-﻿using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 using Idasen.BluetoothLE.Common.Tests ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns.ConstructorNullTester ;
 
 [ TestClass ]
-public class ReferenceOutputConstructorNullTester
+public class ReferenceOutputConstructorNullTester ( int numberOfConstructorsPassed = 0 )
     : BaseConstructorNullTester < ReferenceOutput >
 {
-    public override int NumberOfConstructorsPassed { get ; } = 0 ;
+    public override int NumberOfConstructorsPassed { get ; } = numberOfConstructorsPassed ;
 }

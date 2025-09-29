@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Linak.Control ;
 
@@ -43,9 +43,10 @@ public class CircularBufferTests
     [ TestMethod ]
     public void CircularBuffer_Constructor_ExceptionWhenSourceIsLargerThanCapacity ( )
     {
-        // ReSharper disable once ObjectCreationAsStatement
-        Action action = ( ) => new CircularBuffer < int > ( 3 ,
-                                                            [0 , 1 , 2 , 3] ) ;
+        // ReSharper disable once NotAccessedVariable
+        CircularBuffer<int> circularBuffer;
+
+        Action action = ( ) => circularBuffer = new CircularBuffer < int > ( 3 , [0 , 1 , 2 , 3] ) ;
 
         action.Should ( )
               .Throw < ArgumentException > ( )

@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable ;
+using System.Collections.Immutable ;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Idasen.BluetoothLE.Characteristics.Common ;
@@ -7,8 +7,7 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
-public class Device
-    : IDevice
+public class Device ( bool isPaired = false) : IDevice
 {
     internal const ulong UnknownBluetoothAddress = 0u ;
 
@@ -19,6 +18,7 @@ public class Device
 
     public void Dispose ( )
     {
+        GC.SuppressFinalize(this);
     }
 
     public IObservable < BluetoothConnectionStatus > ConnectionStatusChanged =>
@@ -27,7 +27,7 @@ public class Device
     public GattCommunicationStatus   GattCommunicationStatus { get ; } = GattCommunicationStatus.Unreachable ;
     public string                    Name                    { get ; } = UnknownName ;
     public string                    Id                      { get ; } = UnknownId ;
-    public bool                      IsPaired                { get ; } = false ;
+    public bool                      IsPaired                { get ; } = isPaired ;
     public BluetoothConnectionStatus ConnectionStatus        { get ; } = BluetoothConnectionStatus.Disconnected ;
 
     public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper >

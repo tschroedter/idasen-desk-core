@@ -5,7 +5,7 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 /// <summary>
 ///     Generic Attribute service contract.
 /// </summary>
-public interface IGenericAttribute
+public interface IGenericAttributeService
     : ICharacteristicBase
 {
     /// <summary>

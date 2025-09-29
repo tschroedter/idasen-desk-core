@@ -112,7 +112,7 @@ public class DeviceTests
               .NotThrow < Exception > ( ) ;
     }
 
-    private Device CreateSut ( )
+    private static Device CreateSut ( )
     {
         return new Device ( ) ;
     }

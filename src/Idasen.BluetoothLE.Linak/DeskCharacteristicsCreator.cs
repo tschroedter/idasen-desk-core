@@ -42,7 +42,7 @@ public class DeskCharacteristicsCreator
         characteristics.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
                                               _baseFactory.Create < IGenericAccess > ( device ) )
                        .WithCharacteristics ( DeskCharacteristicKey.GenericAttribute ,
-                                              _baseFactory.Create < IGenericAttribute > ( device ) )
+                                              _baseFactory.Create < IGenericAttributeService > ( device ) )
                        .WithCharacteristics ( DeskCharacteristicKey.ReferenceInput ,
                                               _baseFactory.Create < IReferenceInput > ( device ) )
                        .WithCharacteristics ( DeskCharacteristicKey.ReferenceOutput ,
