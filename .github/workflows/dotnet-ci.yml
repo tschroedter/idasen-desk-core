@@ -102,9 +102,9 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Publish to NuGet.org
+      - name: Publish to NuGet.org (trigger 'deploy...' tag)
         id: publish_to_nuget
-        if: startsWith(github.ref, 'refs/tags/v') && (github.event_name != 'workflow_dispatch' || inputs.publish == 'true')
+        if: startsWith(github.ref, 'refs/tags/deploy') && (github.event_name != 'workflow_dispatch' || inputs.publish == 'true')
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
