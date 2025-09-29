@@ -353,6 +353,8 @@ public class DeskMover
 
     private async Task TryEvaluateMoveAsync ( bool fromTimer = false )
     {
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
         if ( _cycleDisposables == null ||
              ! IsAllowedToMove )
             return ;
@@ -421,6 +423,17 @@ public class DeskMover
         finally
         {
             _moveSemaphore.Release ( ) ;
+
+            // NEW: If a pending evaluation was requested during the last run, trigger it immediately
+            if (_pendingEvaluation)
+            {
+                // Fire and forget, don't await to avoid deadlock
+                _ = TryEvaluateMoveAsync();
+            }
+
+            stopwatch.Stop();
+
+            _logger.Debug("TryEvaluateMoveAsync executed in {ElapsedMilliseconds} ms", stopwatch.ElapsedMilliseconds);
         }
     }
 
