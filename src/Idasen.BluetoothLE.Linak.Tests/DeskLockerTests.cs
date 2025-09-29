@@ -1,4 +1,4 @@
-﻿using System.Reactive.Subjects ;
+using System.Reactive.Subjects ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
@@ -101,7 +101,9 @@ public class DeskLockerTests : IDisposable
         _deskMover.IsAllowedToMove
                   .Returns ( false ) ;
 
-        _ = CreateSutInitialized ( ).Lock ( ) ;
+        using var sut = CreateSutInitialized ( ) ;
+
+        sut.Lock ( ) ;
 
         _subjectHeightAndSpeed.OnNext ( _details ) ;
 
@@ -121,5 +123,7 @@ public class DeskLockerTests : IDisposable
                                _heightAndSpeed ) ;
     }
 
+#pragma warning disable CA2000
     private IDeskLocker CreateSutInitialized ( ) => CreateSut ( ).Initialize ( ) ;
+#pragma warning restore CA2000
 }

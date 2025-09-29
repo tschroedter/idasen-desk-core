@@ -1,4 +1,4 @@
-﻿using System.Reactive.Subjects ;
+using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
@@ -97,10 +97,12 @@ public class DeskDetectorTests : IDisposable
     [ TestMethod ]
     public void Initialize_Invoked_SetsTimeout ( )
     {
-        CreateSut ( ).Initialize (
-                                  DeviceName ,
-                                  DeviceAddress ,
-                                  DeviceTimeout ) ;
+        using var sut = CreateSut ( ) ;
+
+        sut.Initialize (
+                        DeviceName ,
+                        DeviceAddress ,
+                        DeviceTimeout ) ;
 
         _monitor.TimeOut
                 .Should ( )
@@ -110,10 +112,12 @@ public class DeskDetectorTests : IDisposable
     [ TestMethod ]
     public void Start_ConnectedToAnotherDesk_DisposesOldDesk ( )
     {
-        var sut = CreateSut ( ).Initialize (
-                                            DeviceName ,
-                                            DeviceAddress ,
-                                            DeviceTimeout ) ;
+        using var sut = CreateSut ( ) ;
+
+        sut.Initialize (
+                        DeviceName ,
+                        DeviceAddress ,
+                        DeviceTimeout ) ;
 
         // connect to desk
         sut.Start ( ) ;

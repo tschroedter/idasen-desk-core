@@ -128,31 +128,39 @@ public class DeskConnectorTests
         var method = typeof ( DeskConnector ).GetMethod (
                                                          "OnGattServicesRefreshed" ,
                                                          BindingFlags.NonPublic | BindingFlags.Instance ) ;
+
         method.Should ( ).NotBeNull ( ) ;
+
         var task = ( Task ) method.Invoke (
                                            sut ,
                                            [status] )! ;
+
         await task.ConfigureAwait ( false ) ;
     }
 
     [ TestMethod ]
     public async Task MoveUp_BeforeRefresh_ReturnsFalseAndLogs ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         var result = await sut.MoveUpAsync ( ) ;
 
         result.Should ( ).BeFalse ( ) ;
         _logger.Received ( ).Error (
+#pragma warning disable CA2254
+#pragma warning disable Serilog004
                                     Arg.Is < string > ( s => s.Contains (
                                                                          "refreshed" ,
                                                                          StringComparison.OrdinalIgnoreCase ) ) ) ;
+#pragma warning restore Serilog004
+#pragma warning restore CA2254
     }
 
     [ TestMethod ]
     public async Task MoveUp_AfterRefresh_CallsMoverUp ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
+
         _mover.Up ( ).Returns ( Task.FromResult ( true ) ) ;
 
         await InvokeOnGattServicesRefreshedAsync (
@@ -168,7 +176,8 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task MoveDown_Stop_AfterRefresh_CallMover ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
+
         _mover.Down ( ).Returns ( Task.FromResult ( true ) ) ;
         _mover.Stop ( ).Returns ( Task.FromResult ( true ) ) ;
 
@@ -186,7 +195,7 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task MoveLockUnlock_BeforeAndAfterRefresh ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ( await sut.MoveLockAsync ( ) ).Should ( ).BeFalse ( ) ;
         ( await sut.MoveUnlockAsync ( ) ).Should ( ).BeFalse ( ) ;
@@ -205,11 +214,13 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task MoveTo_Zero_ThrowsAfterRefresh ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
+
         await InvokeOnGattServicesRefreshedAsync (
                                                   sut ,
                                                   GattCommunicationStatus.Success ) ;
 
+        // ReSharper disable once AccessToDisposedClosure
         var act        = ( ) => Task.Run ( ( ) => sut.MoveTo ( 0 ) ) ;
         var assertions = await act.Should ( ).ThrowAsync < ArgumentException > ( ) ;
         assertions.WithParameter ( "targetHeight" ) ;
@@ -218,7 +229,7 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task Streams_Forwarded_From_HeightSpeed_And_Mover_Finished ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         uint ?               receivedHeight   = null ;
         int ?                receivedSpeed    = null ;
@@ -240,6 +251,7 @@ public class DeskConnectorTests
                                               DateTimeOffset.Now ,
                                               100u ,
                                               5 ) ;
+
         _heightAndSpeedChanged.OnNext ( details ) ;
         _moverFinished.OnNext ( 123u ) ;
 
@@ -254,7 +266,7 @@ public class DeskConnectorTests
     [ TestMethod ]
     public async Task DeviceNameChanged_Forwarded ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         IEnumerable < byte > ? received = null ;
         using var              sub      = sut.DeviceNameChanged.Subscribe ( v => received = v ) ;
@@ -286,6 +298,7 @@ public class DeskConnectorTests
         using var f = sut.FinishedChanged.Subscribe (
                                                      _ => { } ,
                                                      ( ) => finishedCompleted = true ) ;
+
         using var d = sut.DeviceNameChanged.Subscribe (
                                                        _ => { } ,
                                                        ( ) => deviceNameCompleted = true ) ;
