@@ -1,7 +1,7 @@
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
-using JetBrains.Annotations;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using JetBrains.Annotations ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces;
+namespace Idasen.BluetoothLE.Core.Interfaces ;
 
 /// <summary>
 ///     Pairs with a BLE device based on its address.
@@ -13,6 +13,6 @@ public interface IMatchMaker
     /// </summary>
     /// <param name="address">The BLE device address.</param>
     /// <returns>A task that completes with the paired <see cref="IDevice" />.</returns>
-    [UsedImplicitly]
-    Task<IDevice> PairToDeviceAsync(ulong address);
+    [ UsedImplicitly ]
+    Task < IDevice > PairToDeviceAsync ( ulong address ) ;
 }

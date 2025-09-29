@@ -1,42 +1,44 @@
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common;
-using Idasen.BluetoothLE.Core;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Idasen.BluetoothLE.Core ;
 
-namespace Idasen.BluetoothLE.Characteristics.Common;
+namespace Idasen.BluetoothLE.Characteristics.Common ;
 
-public class SimpleKeysAndValuesBase<TKey, TValue>
-    : ISimpleKeysAndValues<TKey, TValue>
+public class SimpleKeysAndValuesBase < TKey , TValue >
+    : ISimpleKeysAndValues < TKey , TValue >
     where TKey : notnull
 {
-    private readonly Dictionary<TKey, TValue> _dictionary = new();
+    private readonly Dictionary < TKey , TValue > _dictionary = new( ) ;
 
-    private readonly object _padlock = new();
+    private readonly object _padlock = new( ) ;
 
     /// <inheritdoc />
-    public TValue this[TKey key]
+    public TValue this [ TKey key ]
     {
         get
         {
-            lock (_padlock) {
-                return _dictionary[key];
+            lock ( _padlock )
+            {
+                return _dictionary [ key ] ;
             }
         }
         set
         {
-            Guard.ArgumentNotNull(
-                value!,
-                nameof(value));
+            Guard.ArgumentNotNull ( value! ,
+                                    nameof ( value ) ) ;
 
-            lock (_padlock) {
-                _dictionary[key] = value;
+            lock ( _padlock )
+            {
+                _dictionary [ key ] = value ;
             }
         }
     }
 
     /// <inheritdoc />
-    public void Clear()
+    public void Clear ( )
     {
-        lock (_padlock) {
-            _dictionary.Clear();
+        lock ( _padlock )
+        {
+            _dictionary.Clear ( ) ;
         }
     }
 
@@ -45,34 +47,37 @@ public class SimpleKeysAndValuesBase<TKey, TValue>
     {
         get
         {
-            lock (_padlock) {
-                return _dictionary.Count;
+            lock ( _padlock )
+            {
+                return _dictionary.Count ;
             }
         }
     }
 
     /// <inheritdoc />
-    public IEnumerable<string> Keys
+    public IEnumerable < string > Keys
     {
         get
         {
-            lock (_padlock) {
+            lock ( _padlock )
+            {
                 // Avoid invalid casts; only include keys that are truly strings
                 return _dictionary.Keys
-                    .OfType<string>()
-                    .ToArray();
+                                  .OfType < string > ( )
+                                  .ToArray ( ) ;
             }
         }
     }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary<TKey, TValue> ReadOnlyDictionary
+    public IReadOnlyDictionary < TKey , TValue > ReadOnlyDictionary
     {
         get
         {
-            lock (_padlock) {
+            lock ( _padlock )
+            {
                 // Create a shallow copy snapshot to avoid exposing internal state
-                return new Dictionary<TKey, TValue>(_dictionary);
+                return new Dictionary < TKey , TValue > ( _dictionary ) ;
             }
         }
     }

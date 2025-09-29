@@ -1,130 +1,129 @@
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using Autofac.Extras.DynamicProxy;
-using Idasen.Aop.Aspects;
-using Idasen.BluetoothLE.Linak.Interfaces;
-using Serilog;
+using System.Reactive.Concurrency ;
+using System.Reactive.Linq ;
+using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
+using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak.Control;
+namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
-[Intercept(typeof(LogAspect))]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeskLocker
     : IDeskLocker
 {
-    public delegate IDeskLocker Factory(
-        IDeskMover deskMover,
-        IDeskCommandExecutor executor,
-        IDeskHeightAndSpeed heightAndSpeed);
+    public delegate IDeskLocker Factory ( IDeskMover           deskMover ,
+                                          IDeskCommandExecutor executor ,
+                                          IDeskHeightAndSpeed  heightAndSpeed ) ;
 
-    private readonly IDeskMover _deskMover;
-    private readonly IDeskCommandExecutor _executor;
-    private readonly IDeskHeightAndSpeed _heightAndSpeed;
+    private readonly IDeskMover           _deskMover ;
+    private readonly IDeskCommandExecutor _executor ;
+    private readonly IDeskHeightAndSpeed  _heightAndSpeed ;
 
-    private readonly ILogger _logger;
-    private readonly IScheduler _scheduler;
+    private readonly ILogger    _logger ;
+    private readonly IScheduler _scheduler ;
 
-    private IDisposable? _disposalHeightAndSpeed;
+    private IDisposable ? _disposalHeightAndSpeed ;
 
-    private bool _disposed;
+    private bool _disposed ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskLocker" /> class.
     /// </summary>
-    public DeskLocker(
-        ILogger logger,
-        IScheduler scheduler,
-        IDeskMover deskMover,
-        IDeskCommandExecutor executor,
-        IDeskHeightAndSpeed heightAndSpeed)
+    public DeskLocker ( ILogger              logger ,
+                        IScheduler           scheduler ,
+                        IDeskMover           deskMover ,
+                        IDeskCommandExecutor executor ,
+                        IDeskHeightAndSpeed  heightAndSpeed )
     {
-        ArgumentNullException.ThrowIfNull(logger);
-        ArgumentNullException.ThrowIfNull(scheduler);
-        ArgumentNullException.ThrowIfNull(deskMover);
-        ArgumentNullException.ThrowIfNull(executor);
-        ArgumentNullException.ThrowIfNull(heightAndSpeed);
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( deskMover ) ;
+        ArgumentNullException.ThrowIfNull ( executor ) ;
+        ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
 
-        _logger = logger;
-        _scheduler = scheduler;
-        _deskMover = deskMover;
-        _executor = executor;
-        _heightAndSpeed = heightAndSpeed;
+        _logger         = logger ;
+        _scheduler      = scheduler ;
+        _deskMover      = deskMover ;
+        _executor       = executor ;
+        _heightAndSpeed = heightAndSpeed ;
     }
 
     /// <inheritdoc />
-    public IDeskLocker Initialize()
+    public IDeskLocker Initialize ( )
     {
-        _disposalHeightAndSpeed?.Dispose();
+        _disposalHeightAndSpeed?.Dispose ( ) ;
 
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
-            .ObserveOn(_scheduler)
-            .SubscribeAsync(OnHeightAndSpeedChanged);
+                                                 .ObserveOn ( _scheduler )
+                                                 .SubscribeAsync ( OnHeightAndSpeedChanged ) ;
 
-        return this;
+        return this ;
     }
 
     /// <inheritdoc />
-    public IDeskLocker Lock()
+    public IDeskLocker Lock ( )
     {
-        _logger.Information("Desk locked");
+        _logger.Information ( "Desk locked" ) ;
 
-        IsLocked = true;
+        IsLocked = true ;
 
-        return this;
+        return this ;
     }
 
     /// <inheritdoc />
-    public bool IsLocked { get; private set; }
+    public bool IsLocked { get ; private set ; }
 
     /// <inheritdoc />
-    public IDeskLocker Unlock()
+    public IDeskLocker Unlock ( )
     {
-        _logger.Information("Desk unlocked");
+        _logger.Information ( "Desk unlocked" ) ;
 
-        IsLocked = false;
+        IsLocked = false ;
 
-        return this;
+        return this ;
     }
 
     /// <inheritdoc />
-    public void Dispose()
+    public void Dispose ( )
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        Dispose ( true ) ;
+        GC.SuppressFinalize ( this ) ;
     }
 
-    protected virtual void Dispose(bool disposing)
+    protected virtual void Dispose ( bool disposing )
     {
-        if (_disposed)
-            return;
+        if ( _disposed )
+            return ;
 
-        if (disposing) {
-            _disposalHeightAndSpeed?.Dispose();
-            _disposalHeightAndSpeed = null;
+        if ( disposing )
+        {
+            _disposalHeightAndSpeed?.Dispose ( ) ;
+            _disposalHeightAndSpeed = null ;
         }
 
-        _disposed = true;
+        _disposed = true ;
     }
 
-    private async Task OnHeightAndSpeedChanged(HeightSpeedDetails details)
+    private async Task OnHeightAndSpeedChanged ( HeightSpeedDetails details )
     {
-        if (!IsLocked)
-            return;
+        if ( ! IsLocked )
+            return ;
 
-        if (_deskMover.IsAllowedToMove)
-            return;
+        if ( _deskMover.IsAllowedToMove )
+            return ;
 
-        _logger.Information(
-            "Manual move detected. Calling StopListening. Details={Details}",
-            details);
+        _logger.Information ( "Manual move detected. Calling StopListening. Details={Details}" ,
+                              details ) ;
 
-        try {
-            await _executor.StopMovement().ConfigureAwait(false);
+        try
+        {
+            await _executor.StopMovement ( ).ConfigureAwait ( false ) ;
         }
-        catch (Exception ex) {
-            _logger.Error(
-                ex,
-                "Error while stopping after manual move detection");
+        catch ( Exception ex )
+        {
+            _logger.Error ( ex ,
+                            "Error while stopping after manual move detection" ) ;
         }
     }
 }

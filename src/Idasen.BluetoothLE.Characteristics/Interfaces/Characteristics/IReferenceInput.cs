@@ -1,6 +1,6 @@
 // ReSharper disable UnusedMemberInSuper.Global
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 /// <summary>
 ///     Reference Input service contract.
@@ -11,5 +11,5 @@ public interface IReferenceInput
     /// <summary>
     ///     Raw bytes of Ctrl1 characteristic.
     /// </summary>
-    IEnumerable<byte> Ctrl1 { get; }
+    IEnumerable < byte > Ctrl1 { get ; }
 }

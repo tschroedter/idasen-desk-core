@@ -1,61 +1,59 @@
-using FluentAssertions;
-using Idasen.BluetoothLE.Characteristics.Characteristics;
-using NSubstitute;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
+using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
-[TestClass]
+[ TestClass ]
 public class ReferenceInputTest
-    : CharacteristicBaseTests<ReferenceInput>
+    : CharacteristicBaseTests < ReferenceInput >
 {
-    [TestMethod]
-    public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceInput>();
+        sut.Initialize < ReferenceInput > ( ) ;
 
         sut.Ctrl1
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawDpg_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceInput>()
-            .Refresh();
+        await sut.Initialize < ReferenceInput > ( )
+                 .Refresh ( ) ;
 
         sut.Ctrl1
-            .Should()
-            .BeEquivalentTo(RawValue1);
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
     }
 
-    protected override ReferenceInput CreateSut()
+    protected override ReferenceInput CreateSut ( )
     {
-        return new ReferenceInput(
-            Logger,
-            Scheduler,
-            Device,
-            ProviderFactory,
-            RawValueReader,
-            RawValueWriter,
-            ToStringConverter,
-            DescriptionToUuid);
+        return new ReferenceInput ( Logger ,
+                                    Scheduler ,
+                                    Device ,
+                                    ProviderFactory ,
+                                    RawValueReader ,
+                                    RawValueWriter ,
+                                    ToStringConverter ,
+                                    DescriptionToUuid ) ;
     }
 
-    protected override void PopulateWrappers()
+    protected override void PopulateWrappers ( )
     {
-        Wrappers.Add(
-            ReferenceInput.Ctrl1Key,
-            CharacteristicWrapper1);
+        Wrappers.Add ( ReferenceInput.Ctrl1Key ,
+                       CharacteristicWrapper1 ) ;
     }
 }

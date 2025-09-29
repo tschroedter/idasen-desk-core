@@ -1,6 +1,6 @@
-using Idasen.BluetoothLE.Characteristics.Characteristics;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 /// <summary>
 ///     Converts a <see cref="CharacteristicBase" /> instance to a string
@@ -11,5 +11,5 @@ public interface ICharacteristicBaseToStringConverter
     /// <summary>
     ///     Convert a <see cref="CharacteristicBase" /> instance to a string.
     /// </summary>
-    string ToString(CharacteristicBase characteristic);
+    string ToString ( CharacteristicBase characteristic ) ;
 }

@@ -1,55 +1,58 @@
-using FluentAssertions;
-using Idasen.BluetoothLE.Common.Tests;
-using Idasen.BluetoothLE.Linak.Control;
-using Idasen.BluetoothLE.Linak.Interfaces;
-using NSubstitute;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Linak.Control ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
+using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Linak.Tests;
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[TestClass]
+[ TestClass ]
 public class DeskMoverFactoryTests
 {
-    private IDeskCommandExecutor _executor = null!;
-    private DeskMover.Factory _factory = null!;
-    private IDeskHeightAndSpeed _heightAndSpeed = null!;
+    private IDeskCommandExecutor _executor       = null! ;
+    private DeskMover.Factory    _factory        = null! ;
+    private IDeskHeightAndSpeed  _heightAndSpeed = null! ;
 
-    [TestInitialize]
-    public void Initialize()
+    [ TestInitialize ]
+    public void Initialize ( )
     {
-        _factory = TestFactory;
+        _factory = TestFactory ;
 
-        _executor = Substitute.For<IDeskCommandExecutor>();
-        _heightAndSpeed = Substitute.For<IDeskHeightAndSpeed>();
+        _executor       = Substitute.For < IDeskCommandExecutor > ( ) ;
+        _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
     }
 
-    private IDeskMover TestFactory(
-        IDeskCommandExecutor executor,
-        IDeskHeightAndSpeed heightAndSpeed) =>
-        Substitute.For<IDeskMover>();
-
-    [TestMethod]
-    public void Create_ForExecutorNull_Throws()
+    private IDeskMover TestFactory ( IDeskCommandExecutor executor ,
+                                     IDeskHeightAndSpeed  heightAndSpeed )
     {
-        var action = () => {
-            CreateSut().Create(
-                null!,
-                _heightAndSpeed);
-        };
-
-        action.Should()
-            .Throw<ArgumentNullException>()
-            .WithParameter("executor");
+        return Substitute.For < IDeskMover > ( ) ;
     }
 
-    [TestMethod]
-    public void CreateForInvoked_ReturnsInstance()
+    [ TestMethod ]
+    public void Create_ForExecutorNull_Throws ( )
     {
-        CreateSut().Create(
-                _executor,
-                _heightAndSpeed)
-            .Should()
-            .NotBeNull();
+        var action = ( ) =>
+                     {
+                         CreateSut ( ).Create ( null! ,
+                                                _heightAndSpeed ) ;
+                     } ;
+
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( "executor" ) ;
     }
 
-    private DeskMoverFactory CreateSut() => new(_factory);
+    [ TestMethod ]
+    public void CreateForInvoked_ReturnsInstance ( )
+    {
+        CreateSut ( ).Create ( _executor ,
+                               _heightAndSpeed )
+                     .Should ( )
+                     .NotBeNull ( ) ;
+    }
+
+    private DeskMoverFactory CreateSut ( )
+    {
+        return new DeskMoverFactory ( _factory ) ;
+    }
 }

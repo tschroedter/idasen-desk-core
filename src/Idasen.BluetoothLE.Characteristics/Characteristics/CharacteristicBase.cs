@@ -1,95 +1,86 @@
-using System.Reactive.Concurrency;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Autofac.Extras.DynamicProxy;
-using Idasen.Aop.Aspects;
-using Idasen.BluetoothLE.Characteristics.Common;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Common;
-using Idasen.BluetoothLE.Core;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
-using Serilog;
+using System.Reactive.Concurrency ;
+using System.Runtime.CompilerServices ;
+using System.Runtime.InteropServices.WindowsRuntime ;
+using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Characteristics.Common ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+using Idasen.BluetoothLE.Core ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Serilog ;
 
-[assembly: InternalsVisibleTo("Idasen.BluetoothLE.Characteristics.Tests")]
+[ assembly : InternalsVisibleTo ( "Idasen.BluetoothLE.Characteristics.Tests" ) ]
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics;
+namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
 
 /// <summary>
 ///     Abstract base for Bluetooth LE characteristic classes. Centralizes service discovery, characteristic mapping, raw
 ///     value read/write, caching, and logging. Designed for DI and AOP with LogAspect.
 /// </summary>
-[Intercept(typeof(LogAspect))]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public abstract class CharacteristicBase
     : ICharacteristicBase
 {
-    internal static readonly IEnumerable<byte> RawArrayEmpty = Enumerable.Empty<byte>()
-        .ToArray();
+    internal static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+                                                                            .ToArray ( ) ;
 
-    private readonly ICharacteristicBaseToStringConverter _toStringConverter;
+    private readonly ICharacteristicBaseToStringConverter _toStringConverter ;
 
-    internal readonly Dictionary<string, IEnumerable<byte>>
-        RawValues = new();
+    internal readonly Dictionary < string , IEnumerable < byte > >
+        RawValues = new( ) ;
 
-    private bool _disposed;
+    private bool _disposed ;
 
-    internal IGattCharacteristicProvider? Characteristics;
+    internal IGattCharacteristicProvider ? Characteristics ;
 
-    protected CharacteristicBase(
-        ILogger logger,
-        IScheduler scheduler,
-        IDevice device,
-        IGattCharacteristicsProviderFactory providerFactory,
-        IRawValueReader rawValueReader,
-        IRawValueWriter rawValueWriter,
-        ICharacteristicBaseToStringConverter toStringConverter,
-        IDescriptionToUuid descriptionToUuid)
+    protected CharacteristicBase ( ILogger                              logger ,
+                                   IScheduler                           scheduler ,
+                                   IDevice                              device ,
+                                   IGattCharacteristicsProviderFactory  providerFactory ,
+                                   IRawValueReader                      rawValueReader ,
+                                   IRawValueWriter                      rawValueWriter ,
+                                   ICharacteristicBaseToStringConverter toStringConverter ,
+                                   IDescriptionToUuid                   descriptionToUuid )
     {
-        Guard.ArgumentNotNull(
-            logger,
-            nameof(logger));
-        Guard.ArgumentNotNull(
-            scheduler,
-            nameof(scheduler));
-        Guard.ArgumentNotNull(
-            device,
-            nameof(device));
-        Guard.ArgumentNotNull(
-            providerFactory,
-            nameof(providerFactory));
-        Guard.ArgumentNotNull(
-            rawValueReader,
-            nameof(rawValueReader));
-        Guard.ArgumentNotNull(
-            rawValueWriter,
-            nameof(rawValueWriter));
-        Guard.ArgumentNotNull(
-            toStringConverter,
-            nameof(toStringConverter));
-        Guard.ArgumentNotNull(
-            descriptionToUuid,
-            nameof(descriptionToUuid));
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( device ,
+                                nameof ( device ) ) ;
+        Guard.ArgumentNotNull ( providerFactory ,
+                                nameof ( providerFactory ) ) ;
+        Guard.ArgumentNotNull ( rawValueReader ,
+                                nameof ( rawValueReader ) ) ;
+        Guard.ArgumentNotNull ( rawValueWriter ,
+                                nameof ( rawValueWriter ) ) ;
+        Guard.ArgumentNotNull ( toStringConverter ,
+                                nameof ( toStringConverter ) ) ;
+        Guard.ArgumentNotNull ( descriptionToUuid ,
+                                nameof ( descriptionToUuid ) ) ;
 
-        Device = device;
-        Logger = logger;
-        Scheduler = scheduler;
-        ProviderFactory = providerFactory;
-        RawValueReader = rawValueReader;
-        RawValueWriter = rawValueWriter;
-        _toStringConverter = toStringConverter;
-        DescriptionToUuid = descriptionToUuid;
+        Device             = device ;
+        Logger             = logger ;
+        Scheduler          = scheduler ;
+        ProviderFactory    = providerFactory ;
+        RawValueReader     = rawValueReader ;
+        RawValueWriter     = rawValueWriter ;
+        _toStringConverter = toStringConverter ;
+        DescriptionToUuid  = descriptionToUuid ;
     }
 
-    protected IDevice Device { get; }
-    protected ILogger Logger { get; }
-    protected IGattCharacteristicsProviderFactory ProviderFactory { get; }
-    protected IRawValueReader RawValueReader { get; }
-    protected IRawValueWriter RawValueWriter { get; }
-    protected IScheduler Scheduler { get; private set; }
+    protected IDevice                             Device          { get ; }
+    protected ILogger                             Logger          { get ; }
+    protected IGattCharacteristicsProviderFactory ProviderFactory { get ; }
+    protected IRawValueReader                     RawValueReader  { get ; }
+    protected IRawValueWriter                     RawValueWriter  { get ; }
+    protected IScheduler                          Scheduler       { get ; private set ; }
 
-    public abstract Guid GattServiceUuid { get; }
+    public abstract Guid GattServiceUuid { get ; }
 
-    internal IDescriptionToUuid DescriptionToUuid { get; }
+    internal IDescriptionToUuid DescriptionToUuid { get ; }
 
     /// <summary>
     ///     Initializes this characteristic by locating the GATT service, creating the characteristic provider,
@@ -100,179 +91,169 @@ public abstract class CharacteristicBase
     /// <returns>This instance cast to <typeparamref name="T" />.</returns>
     /// <exception cref="ArgumentException">Thrown if the GATT service with <see cref="GattServiceUuid" /> cannot be found.</exception>
     /// <exception cref="InvalidCastException">Thrown if this instance cannot be cast to <typeparamref name="T" />.</exception>
-    public virtual T Initialize<T>()
+    public virtual T Initialize < T > ( )
         where T : class
     {
-        Guard.ArgumentNotNull(
-            GattServiceUuid,
-            nameof(GattServiceUuid));
+        Guard.ArgumentNotNull ( GattServiceUuid ,
+                                nameof ( GattServiceUuid ) ) ;
 
-        var (service, characteristicsResultWrapper) = Device.GattServices
-            .FirstOrDefault(x => x.Key.Uuid ==
-                                 GattServiceUuid);
+        var (service , characteristicsResultWrapper) = Device.GattServices
+                                                             .FirstOrDefault ( x => x.Key.Uuid ==
+                                                                                   GattServiceUuid ) ;
 
-        if (service == null) {
-            foreach (var service1 in Device.GattServices) {
-                Logger.Information(
-                    "Service: DeviceId = {DeviceId}, Uuid = {Uuid}",
-                    service1.Key.DeviceId,
-                    service1.Key.Uuid);
+        if ( service == null )
+        {
+            foreach ( var service1 in Device.GattServices )
+            {
+                Logger.Information ( "Service: DeviceId = {DeviceId}, Uuid = {Uuid}" ,
+                                     service1.Key.DeviceId ,
+                                     service1.Key.Uuid ) ;
 
-                foreach (var characteristic in service1.Value.Characteristics) {
-                    Logger.Information(
-                        "Characteristic: {ServiceUuid} {Uuid} {UserDescription}",
-                        characteristic.ServiceUuid,
-                        characteristic.Uuid,
-                        characteristic.UserDescription);
-                }
+                foreach ( var characteristic in service1.Value.Characteristics )
+                    Logger.Information ( "Characteristic: {ServiceUuid} {Uuid} {UserDescription}" ,
+                                         characteristic.ServiceUuid ,
+                                         characteristic.Uuid ,
+                                         characteristic.UserDescription ) ;
             }
 
-            throw new ArgumentException(
-                "Failed, can't find GattDeviceService for " +
-                $"UUID {GattServiceUuid}",
-                nameof(GattServiceUuid));
+            throw new ArgumentException ( "Failed, can't find GattDeviceService for " +
+                                          $"UUID {GattServiceUuid}" ,
+                                          nameof ( GattServiceUuid ) ) ;
         }
 
-        Logger.Information(
-            "Found GattDeviceService with UUID {Uuid}",
-            GattServiceUuid);
+        Logger.Information ( "Found GattDeviceService with UUID {Uuid}" ,
+                             GattServiceUuid ) ;
 
-        Characteristics = ProviderFactory.Create(characteristicsResultWrapper);
+        Characteristics = ProviderFactory.Create ( characteristicsResultWrapper ) ;
 
-        WithMapping<T>();
+        WithMapping < T > ( ) ;
 
-        return this as T ?? throw new InvalidCastException($"Can't cast {GetType()} to {typeof(T)}");
+        return this as T ?? throw new InvalidCastException ( $"Can't cast {GetType ( )} to {typeof ( T )}" ) ;
     }
 
     /// <summary>
     ///     Refreshes all known characteristics by reading their raw values and updating the local cache.
     /// </summary>
-    public virtual async Task Refresh()
+    public virtual async Task Refresh ( )
     {
-        if (Characteristics == null) {
-            Logger.Error(
-                "{Property} is null",
-                nameof(Characteristics));
+        if ( Characteristics == null )
+        {
+            Logger.Error ( "{Property} is null" ,
+                           nameof ( Characteristics ) ) ;
 
-            return;
+            return ;
         }
 
-        Characteristics.Refresh(DescriptionToUuid.ReadOnlyDictionary);
+        Characteristics.Refresh ( DescriptionToUuid.ReadOnlyDictionary ) ;
 
-        var keys = Characteristics.Characteristics.Keys.ToArray();
+        var keys = Characteristics.Characteristics.Keys.ToArray ( ) ;
 
-        foreach (var key in keys) {
-            if (!Characteristics.Characteristics.TryGetValue(
-                    key,
-                    out var characteristic)) {
-                Logger.Warning(
-                    "Failed to get value for key {Key}",
-                    key);
+        foreach ( var key in keys )
+        {
+            if ( ! Characteristics.Characteristics.TryGetValue ( key ,
+                                                                 out var characteristic ) )
+            {
+                Logger.Warning ( "Failed to get value for key {Key}" ,
+                                 key ) ;
 
-                continue;
+                continue ;
             }
 
-            Logger.Debug(
-                "Reading raw value for {Key} and characteristic {Uuid}",
-                key,
-                characteristic.Uuid);
+            Logger.Debug ( "Reading raw value for {Key} and characteristic {Uuid}" ,
+                           key ,
+                           characteristic.Uuid ) ;
 
-            (bool success, byte[] value) result =
-                await RawValueReader.TryReadValueAsync(characteristic);
+            (bool success , byte [ ] value) result =
+                await RawValueReader.TryReadValueAsync ( characteristic ) ;
 
-            RawValues[key] = result.success
-                ? result.value
-                : RawArrayEmpty;
+            RawValues [ key ] = result.success
+                                    ? result.value
+                                    : RawArrayEmpty ;
         }
     }
 
     /// <summary>
     ///     Disposes this instance. Multiple calls are safe.
     /// </summary>
-    public void Dispose()
+    public void Dispose ( )
     {
-        Dispose(true);
+        Dispose ( true ) ;
 
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize ( this ) ;
     }
 
-    protected abstract T WithMapping<T>()
-        where T : class;
+    protected abstract T WithMapping < T > ( )
+        where T : class ;
 
-    protected async Task<bool> TryWriteValueAsync(
-        string key,
-        IEnumerable<byte> bytes)
+    protected async Task < bool > TryWriteValueAsync ( string               key ,
+                                                       IEnumerable < byte > bytes )
     {
-        try {
-            return await DoTryWriteValueAsync(
-                key,
-                bytes);
+        try
+        {
+            return await DoTryWriteValueAsync ( key ,
+                                                bytes ) ;
         }
-        catch (Exception e) {
-            const string message = "Failed to write value async!";
+        catch ( Exception e )
+        {
+            const string message = "Failed to write value async!" ;
 
-            if (e.IsBluetoothDisabledException()) {
-                e.LogBluetoothStatusException(
-                    Logger,
-                    message);
-            }
-            else {
-                Logger.Error(
-                    e,
-                    message);
-            }
+            if ( e.IsBluetoothDisabledException ( ) )
+                e.LogBluetoothStatusException ( Logger ,
+                                                message ) ;
+            else
+                Logger.Error ( e ,
+                               message ) ;
 
-            return false;
+            return false ;
         }
     }
 
-    private async Task<bool> DoTryWriteValueAsync(
-        string key,
-        IEnumerable<byte> bytes)
+    private async Task < bool > DoTryWriteValueAsync ( string               key ,
+                                                       IEnumerable < byte > bytes )
     {
-        if (Characteristics == null) {
-            Logger.Error(
-                "{Property} is null",
-                nameof(Characteristics));
+        if ( Characteristics == null )
+        {
+            Logger.Error ( "{Property} is null" ,
+                           nameof ( Characteristics ) ) ;
 
-            return false;
+            return false ;
         }
 
-        if (!Characteristics.Characteristics.TryGetValue(
-                key,
-                out var characteristic)) {
+        if ( ! Characteristics.Characteristics.TryGetValue ( key ,
+                                                             out var characteristic ) )
+        {
             // Keep single-argument overload for unit test expectations
-            Logger.Error(
-                "Unknown characteristic with key '{Key}'",
-                key);
+            Logger.Error ( "Unknown characteristic with key '{Key}'" ,
+                           key ) ;
 
-            return false;
+            return false ;
         }
 
-        return await RawValueWriter.TryWriteValueAsync(
-            characteristic,
-            bytes.ToArray()
-                .AsBuffer());
+        return await RawValueWriter.TryWriteValueAsync ( characteristic ,
+                                                         bytes.ToArray ( )
+                                                              .AsBuffer ( ) ) ;
     }
 
-    protected IEnumerable<byte> GetValueOrEmpty(string key)
+    protected IEnumerable < byte > GetValueOrEmpty ( string key )
     {
-        return RawValues.GetValueOrDefault(
-            key,
-            RawArrayEmpty);
+        return RawValues.GetValueOrDefault ( key ,
+                                             RawArrayEmpty ) ;
     }
 
     /// <summary>
     ///     Returns a logging-friendly string for this characteristic.
     /// </summary>
     /// <returns>A string representation for diagnostics/logging.</returns>
-    public override string ToString() => _toStringConverter.ToString(this);
-
-    protected virtual void Dispose(bool disposing)
+    public override string ToString ( )
     {
-        if (_disposed)
-            return;
+        return _toStringConverter.ToString ( this ) ;
+    }
 
-        _disposed = true;
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        _disposed = true ;
     }
 }

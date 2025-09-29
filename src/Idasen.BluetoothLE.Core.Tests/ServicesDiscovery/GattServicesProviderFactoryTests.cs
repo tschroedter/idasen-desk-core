@@ -1,31 +1,30 @@
-using FluentAssertions;
-using Idasen.BluetoothLE.Common.Tests;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
-using Idasen.BluetoothLE.Core.ServicesDiscovery;
-using Selkie.AutoMocking;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using Selkie.AutoMocking ;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery;
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
-[AutoDataTestClass]
+[ AutoDataTestClass ]
 public class GattServicesProviderFactoryTests
 {
-    [AutoDataTestMethod]
-    public void Create_ForWrapperNull_Throws(GattServicesProviderFactory sut)
+    [ AutoDataTestMethod ]
+    public void Create_ForWrapperNull_Throws ( GattServicesProviderFactory sut )
     {
-        Action action = () => sut.Create(null!);
+        Action action = ( ) => sut.Create ( null! ) ;
 
-        action.Should()
-            .Throw<ArgumentNullException>()
-            .WithParameter("wrapper");
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( "wrapper" ) ;
     }
 
-    [AutoDataTestMethod]
-    public void Create_ForWrapper_Instance(
-        GattServicesProviderFactory sut,
-        IBluetoothLeDeviceWrapper wrapper)
+    [ AutoDataTestMethod ]
+    public void Create_ForWrapper_Instance ( GattServicesProviderFactory sut ,
+                                             IBluetoothLeDeviceWrapper   wrapper )
     {
-        sut.Create(wrapper)
-            .Should()
-            .NotBeNull();
+        sut.Create ( wrapper )
+           .Should ( )
+           .NotBeNull ( ) ;
     }
 }

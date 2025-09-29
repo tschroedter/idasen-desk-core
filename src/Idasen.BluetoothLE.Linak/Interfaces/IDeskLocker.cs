@@ -1,6 +1,6 @@
 // ReSharper disable UnusedMemberInSuper.Global
 
-namespace Idasen.BluetoothLE.Linak.Interfaces;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Manages a logical movement lock. When locked, manual motion is detected and stopped automatically.
@@ -11,23 +11,23 @@ public interface IDeskLocker
     /// <summary>
     ///     Indicates whether the desk is currently locked against manual movement.
     /// </summary>
-    bool IsLocked { get; }
+    bool IsLocked { get ; }
 
     /// <summary>
     ///     Enables the lock and starts monitoring for manual motion to issue a stop.
     /// </summary>
     /// <returns>The current instance.</returns>
-    IDeskLocker Lock();
+    IDeskLocker Lock ( ) ;
 
     /// <summary>
     ///     Disables the lock.
     /// </summary>
     /// <returns>The current instance.</returns>
-    IDeskLocker Unlock();
+    IDeskLocker Unlock ( ) ;
 
     /// <summary>
     ///     Initializes the locker and required subscriptions.
     /// </summary>
     /// <returns>The current instance.</returns>
-    IDeskLocker Initialize();
+    IDeskLocker Initialize ( ) ;
 }

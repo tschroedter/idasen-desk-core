@@ -1,252 +1,246 @@
-using System.Reactive.Subjects;
-using FluentAssertions;
-using Idasen.BluetoothLE.Characteristics.Characteristics;
-using Idasen.BluetoothLE.Characteristics.Common;
-using NSubstitute;
+using System.Reactive.Subjects ;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
+using Idasen.BluetoothLE.Characteristics.Common ;
+using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
-[TestClass]
+[ TestClass ]
 public class GenericAccessTest
-    : CharacteristicBaseTests<GenericAccess>
+    : CharacteristicBaseTests < GenericAccess >
 {
-    private ISubject<IEnumerable<byte>> _subjectAppearanceChanged = null!;
-    private ISubject<IEnumerable<byte>> _subjectDeviceNameChanged = null!;
-    private Func<ISubject<IEnumerable<byte>>> _subjectFactory = null!;
-    private ISubject<IEnumerable<byte>> _subjectParametersChanged = null!;
-    private ISubject<IEnumerable<byte>> _subjectResolutionChanged = null!;
+    private ISubject < IEnumerable < byte > >          _subjectAppearanceChanged = null! ;
+    private ISubject < IEnumerable < byte > >          _subjectDeviceNameChanged = null! ;
+    private Func < ISubject < IEnumerable < byte > > > _subjectFactory           = null! ;
+    private ISubject < IEnumerable < byte > >          _subjectParametersChanged = null! ;
+    private ISubject < IEnumerable < byte > >          _subjectResolutionChanged = null! ;
 
-    [TestMethod]
-    public void RawResolution_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawResolution_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<GenericAccess>();
+        sut.Initialize < GenericAccess > ( ) ;
 
         sut.RawResolution
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawResolution_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawResolution_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<GenericAccess>()
-            .Refresh();
+        await sut.Initialize < GenericAccess > ( )
+                 .Refresh ( ) ;
 
         sut.RawResolution
-            .Should()
-            .BeEquivalentTo(RawValue4);
+           .Should ( )
+           .BeEquivalentTo ( RawValue4 ) ;
     }
 
-    [TestMethod]
-    public void RawParameters_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawParameters_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<GenericAccess>();
+        sut.Initialize < GenericAccess > ( ) ;
 
         sut.RawParameters
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawParameters_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawParameters_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<GenericAccess>()
-            .Refresh();
+        await sut.Initialize < GenericAccess > ( )
+                 .Refresh ( ) ;
 
         sut.RawParameters
-            .Should()
-            .BeEquivalentTo(RawValue3);
+           .Should ( )
+           .BeEquivalentTo ( RawValue3 ) ;
     }
 
-    [TestMethod]
-    public void RawAppearance_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawAppearance_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<GenericAccess>();
+        sut.Initialize < GenericAccess > ( ) ;
 
         sut.RawAppearance
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawAppearance_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawAppearance_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<GenericAccess>()
-            .Refresh();
+        await sut.Initialize < GenericAccess > ( )
+                 .Refresh ( ) ;
 
         sut.RawAppearance
-            .Should()
-            .BeEquivalentTo(RawValue2);
+           .Should ( )
+           .BeEquivalentTo ( RawValue2 ) ;
     }
 
-    [TestMethod]
-    public void RawDeviceName_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawDeviceName_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<GenericAccess>();
+        sut.Initialize < GenericAccess > ( ) ;
 
         sut.RawDeviceName
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawDeviceName_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawDeviceName_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<GenericAccess>()
-            .Refresh();
+        await sut.Initialize < GenericAccess > ( )
+                 .Refresh ( ) ;
 
         sut.RawDeviceName
-            .Should()
-            .BeEquivalentTo(RawValue1);
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
     }
 
-    [TestMethod]
-    public async Task Refresh_ForInvoked_AppearanceChanged()
+    [ TestMethod ]
+    public async Task Refresh_ForInvoked_AppearanceChanged ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<GenericAccess>()
-            .Refresh();
+        await sut.Initialize < GenericAccess > ( )
+                 .Refresh ( ) ;
 
-        _subjectAppearanceChanged.Received()
-            .OnNext(RawValue1);
+        _subjectAppearanceChanged.Received ( )
+                                 .OnNext ( RawValue1 ) ;
     }
 
-    [TestMethod]
-    public async Task Refresh_ForInvoked_ParametersChanged()
+    [ TestMethod ]
+    public async Task Refresh_ForInvoked_ParametersChanged ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<GenericAccess>()
-            .Refresh();
+        await sut.Initialize < GenericAccess > ( )
+                 .Refresh ( ) ;
 
-        _subjectParametersChanged.Received()
-            .OnNext(RawValue4);
+        _subjectParametersChanged.Received ( )
+                                 .OnNext ( RawValue4 ) ;
     }
 
-    [TestMethod]
-    public async Task Refresh_ForInvoked_ResolutionChanged()
+    [ TestMethod ]
+    public async Task Refresh_ForInvoked_ResolutionChanged ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<GenericAccess>()
-            .Refresh();
+        await sut.Initialize < GenericAccess > ( )
+                 .Refresh ( ) ;
 
-        _subjectResolutionChanged.Received()
-            .OnNext(RawValue3);
+        _subjectResolutionChanged.Received ( )
+                                 .OnNext ( RawValue3 ) ;
     }
 
-    [TestMethod]
-    public async Task Refresh_ForInvoked_DeviceNameChanged()
+    [ TestMethod ]
+    public async Task Refresh_ForInvoked_DeviceNameChanged ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<GenericAccess>()
-            .Refresh();
+        await sut.Initialize < GenericAccess > ( )
+                 .Refresh ( ) ;
 
-        _subjectDeviceNameChanged.Received()
-            .OnNext(RawValue2);
+        _subjectDeviceNameChanged.Received ( )
+                                 .OnNext ( RawValue2 ) ;
     }
 
-    protected override void AfterInitialize()
+    protected override void AfterInitialize ( )
     {
-        base.AfterInitialize();
+        base.AfterInitialize ( ) ;
 
-        _subjectAppearanceChanged = Substitute.For<ISubject<IEnumerable<byte>>>();
-        _subjectParametersChanged = Substitute.For<ISubject<IEnumerable<byte>>>();
-        _subjectResolutionChanged = Substitute.For<ISubject<IEnumerable<byte>>>();
-        _subjectDeviceNameChanged = Substitute.For<ISubject<IEnumerable<byte>>>();
+        _subjectAppearanceChanged = Substitute.For < ISubject < IEnumerable < byte > > > ( ) ;
+        _subjectParametersChanged = Substitute.For < ISubject < IEnumerable < byte > > > ( ) ;
+        _subjectResolutionChanged = Substitute.For < ISubject < IEnumerable < byte > > > ( ) ;
+        _subjectDeviceNameChanged = Substitute.For < ISubject < IEnumerable < byte > > > ( ) ;
 
-        _subjectFactory = Substitute.For<Func<ISubject<IEnumerable<byte>>>>();
+        _subjectFactory = Substitute.For < Func < ISubject < IEnumerable < byte > > > > ( ) ;
 
-        _subjectFactory.Invoke()
-            .Returns(
-                _subjectAppearanceChanged,
-                _subjectParametersChanged,
-                _subjectResolutionChanged,
-                _subjectDeviceNameChanged);
+        _subjectFactory.Invoke ( )
+                       .Returns ( _subjectAppearanceChanged ,
+                                  _subjectParametersChanged ,
+                                  _subjectResolutionChanged ,
+                                  _subjectDeviceNameChanged ) ;
     }
 
-    protected override GenericAccess CreateSut()
+    protected override GenericAccess CreateSut ( )
     {
-        return new GenericAccess(
-            Logger,
-            Scheduler,
-            Device,
-            ProviderFactory,
-            RawValueReader,
-            RawValueWriter,
-            ToStringConverter,
-            DescriptionToUuid,
-            _subjectFactory,
-            new AllGattCharacteristicsProvider());
+        return new GenericAccess ( Logger ,
+                                   Scheduler ,
+                                   Device ,
+                                   ProviderFactory ,
+                                   RawValueReader ,
+                                   RawValueWriter ,
+                                   ToStringConverter ,
+                                   DescriptionToUuid ,
+                                   _subjectFactory ,
+                                   new AllGattCharacteristicsProvider ( ) ) ;
     }
 
-    protected override void PopulateWrappers()
+    protected override void PopulateWrappers ( )
     {
-        Wrappers.Add(
-            GenericAccess.CharacteristicDeviceName,
-            CharacteristicWrapper1);
-        Wrappers.Add(
-            GenericAccess.CharacteristicAppearance,
-            CharacteristicWrapper2);
-        Wrappers.Add(
-            GenericAccess.CharacteristicParameters,
-            CharacteristicWrapper3);
-        Wrappers.Add(
-            GenericAccess.CharacteristicResolution,
-            CharacteristicWrapper4);
+        Wrappers.Add ( GenericAccess.CharacteristicDeviceName ,
+                       CharacteristicWrapper1 ) ;
+        Wrappers.Add ( GenericAccess.CharacteristicAppearance ,
+                       CharacteristicWrapper2 ) ;
+        Wrappers.Add ( GenericAccess.CharacteristicParameters ,
+                       CharacteristicWrapper3 ) ;
+        Wrappers.Add ( GenericAccess.CharacteristicResolution ,
+                       CharacteristicWrapper4 ) ;
     }
 }

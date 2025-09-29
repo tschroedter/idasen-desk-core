@@ -1,9 +1,9 @@
-using FluentAssertions;
-using FluentAssertions.Primitives;
-using FluentAssertions.Specialized;
-using JetBrains.Annotations;
+using FluentAssertions ;
+using FluentAssertions.Primitives ;
+using FluentAssertions.Specialized ;
+using JetBrains.Annotations ;
 
-namespace Idasen.BluetoothLE.Common.Tests;
+namespace Idasen.BluetoothLE.Common.Tests ;
 
 public static class ExceptionAssertionsExtensions
 {
@@ -13,16 +13,16 @@ public static class ExceptionAssertionsExtensions
     /// <param name="assertions">The assertions.</param>
     /// <param name="parameter">The expected parameter name.</param>
     /// <returns></returns>
-    [UsedImplicitly]
-    public static async Task<AndConstraint<StringAssertions>> WithParameter(
-        this Task<ExceptionAssertions<ArgumentNullException>> assertions,
-        string parameter)
+    [ UsedImplicitly ]
+    public static async Task < AndConstraint < StringAssertions > > WithParameter (
+        this Task < ExceptionAssertions < ArgumentNullException > > assertions ,
+        string                                                      parameter )
     {
-        ArgumentNullException.ThrowIfNull(assertions);
-        ArgumentNullException.ThrowIfNull(parameter);
+        ArgumentNullException.ThrowIfNull ( assertions ) ;
+        ArgumentNullException.ThrowIfNull ( parameter ) ;
 
-        var a = await assertions.ConfigureAwait(false);
-        return a.And.ParamName.Should().Be(parameter);
+        var a = await assertions.ConfigureAwait ( false ) ;
+        return a.And.ParamName.Should ( ).Be ( parameter ) ;
     }
 
     /// <summary>
@@ -31,18 +31,18 @@ public static class ExceptionAssertionsExtensions
     /// <param name="assertions">The assertions.</param>
     /// <param name="parameter">The expected parameter name.</param>
     /// <returns></returns>
-    [UsedImplicitly]
-    public static AndConstraint<StringAssertions> WithParameter(
-        this ExceptionAssertions<ArgumentNullException> assertions,
-        string parameter)
+    [ UsedImplicitly ]
+    public static AndConstraint < StringAssertions > WithParameter (
+        this ExceptionAssertions < ArgumentNullException > assertions ,
+        string                                             parameter )
     {
-        ArgumentNullException.ThrowIfNull(assertions);
-        ArgumentNullException.ThrowIfNull(parameter);
+        ArgumentNullException.ThrowIfNull ( assertions ) ;
+        ArgumentNullException.ThrowIfNull ( parameter ) ;
 
         return assertions.And
-            .ParamName
-            .Should()
-            .Be(parameter);
+                         .ParamName
+                         .Should ( )
+                         .Be ( parameter ) ;
     }
 
     /// <summary>
@@ -51,17 +51,17 @@ public static class ExceptionAssertionsExtensions
     /// <param name="assertions">The assertions.</param>
     /// <param name="parameter">The expected parameter name.</param>
     /// <returns></returns>
-    [UsedImplicitly]
-    public static AndConstraint<StringAssertions> WithParameter(
-        this ExceptionAssertions<ArgumentException> assertions,
-        string parameter)
+    [ UsedImplicitly ]
+    public static AndConstraint < StringAssertions > WithParameter (
+        this ExceptionAssertions < ArgumentException > assertions ,
+        string                                         parameter )
     {
-        ArgumentNullException.ThrowIfNull(assertions);
-        ArgumentNullException.ThrowIfNull(parameter);
+        ArgumentNullException.ThrowIfNull ( assertions ) ;
+        ArgumentNullException.ThrowIfNull ( parameter ) ;
 
         return assertions.And
-            .ParamName
-            .Should()
-            .Be(parameter);
+                         .ParamName
+                         .Should ( )
+                         .Be ( parameter ) ;
     }
 }

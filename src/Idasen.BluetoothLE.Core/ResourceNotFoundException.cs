@@ -1,20 +1,18 @@
-using Selkie.DefCon.One.Common;
+using Selkie.DefCon.One.Common ;
 
-namespace Idasen.BluetoothLE.Core;
+namespace Idasen.BluetoothLE.Core ;
 
 public class ResourceNotFoundException : Exception
 {
-    public ResourceNotFoundException(
-        string resourceName,
-        [GuardIgnore] string? message)
-        : base(message)
+    public ResourceNotFoundException ( string                   resourceName ,
+                                       [ GuardIgnore ] string ? message )
+        : base ( message )
     {
-        Guard.ArgumentNotNull(
-            resourceName,
-            nameof(resourceName));
+        Guard.ArgumentNotNull ( resourceName ,
+                                nameof ( resourceName ) ) ;
 
-        ResourceName = resourceName;
+        ResourceName = resourceName ;
     }
 
-    public string ResourceName { get; }
+    public string ResourceName { get ; }
 }

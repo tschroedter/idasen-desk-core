@@ -1,471 +1,456 @@
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using FluentAssertions;
-using Idasen.BluetoothLE.Characteristics.Characteristics;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
+using System.Reactive.Concurrency ;
+using System.Reactive.Linq ;
+using System.Reactive.Subjects ;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics ;
+using Microsoft.Reactive.Testing ;
+using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
-[TestClass]
+[ TestClass ]
 public class ReferenceOutputTest
-    : CharacteristicBaseTests<ReferenceOutput>
+    : CharacteristicBaseTests < ReferenceOutput >
 {
-    private ISubject<RawValueChangedDetails> _subjectHeightSpeed = null!;
+    private ISubject < RawValueChangedDetails > _subjectHeightSpeed = null! ;
 
-    [TestMethod]
-    public void RawHeightSpeed_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawHeightSpeed_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawHeightSpeed
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawHeightSpeed_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawHeightSpeed_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawHeightSpeed
-            .Should()
-            .BeEquivalentTo(RawValue1);
+           .Should ( )
+           .BeEquivalentTo ( RawValue1 ) ;
     }
 
-    [TestMethod]
-    public void RawTwo_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawTwo_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawTwo
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawTwo_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawTwo_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawTwo
-            .Should()
-            .BeEquivalentTo(RawValue2);
+           .Should ( )
+           .BeEquivalentTo ( RawValue2 ) ;
     }
 
-    [TestMethod]
-    public void RawThree_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawThree_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawThree
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawThree_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawThree_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawThree
-            .Should()
-            .BeEquivalentTo(RawValue3);
+           .Should ( )
+           .BeEquivalentTo ( RawValue3 ) ;
     }
 
-    [TestMethod]
-    public void RawFour_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawFour_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawFour
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawFour_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawFour_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawFour
-            .Should()
-            .BeEquivalentTo(RawValue4);
+           .Should ( )
+           .BeEquivalentTo ( RawValue4 ) ;
     }
 
-    [TestMethod]
-    public void RawFive_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawFive_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawFive
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawFive_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawFive_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawFive
-            .Should()
-            .BeEquivalentTo(RawValue5);
+           .Should ( )
+           .BeEquivalentTo ( RawValue5 ) ;
     }
 
-    [TestMethod]
-    public void RawSix_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawSix_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawSix
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawSix_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawSix_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawSix
-            .Should()
-            .BeEquivalentTo(RawValue6);
+           .Should ( )
+           .BeEquivalentTo ( RawValue6 ) ;
     }
 
-    [TestMethod]
-    public void RawSeven_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawSeven_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawSeven
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawSeven_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawSeven_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawSeven
-            .Should()
-            .BeEquivalentTo(RawValue7);
+           .Should ( )
+           .BeEquivalentTo ( RawValue7 ) ;
     }
 
-    [TestMethod]
-    public void RawEight_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawEight_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawEight
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawEight_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawEight_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawEight
-            .Should()
-            .BeEquivalentTo(RawValue8);
+           .Should ( )
+           .BeEquivalentTo ( RawValue8 ) ;
     }
 
-    [TestMethod]
-    public void RawMask_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawMask_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawMask
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawMask_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawMask_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawMask
-            .Should()
-            .BeEquivalentTo(RawValue9);
+           .Should ( )
+           .BeEquivalentTo ( RawValue9 ) ;
     }
 
-    [TestMethod]
-    public void RawDetectMask_ForNotRefreshedAndInvoked_EmptyBytes()
+    [ TestMethod ]
+    public void RawDetectMask_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
         sut.RawDetectMask
-            .Should()
-            .BeEquivalentTo(CharacteristicBase.RawArrayEmpty);
+           .Should ( )
+           .BeEquivalentTo ( CharacteristicBase.RawArrayEmpty ) ;
     }
 
-    [TestMethod]
-    public async Task RawDetectMask_ForRefreshedAndInvoked_Bytes()
+    [ TestMethod ]
+    public async Task RawDetectMask_ForRefreshedAndInvoked_Bytes ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
         sut.RawDetectMask
-            .Should()
-            .BeEquivalentTo(RawValue10);
+           .Should ( )
+           .BeEquivalentTo ( RawValue10 ) ;
     }
 
-    [TestMethod]
-    public async Task Refresh_ForCharacteristicsHeightSpeedNotFound_DoesNotNotify()
+    [ TestMethod ]
+    public async Task Refresh_ForCharacteristicsHeightSpeedNotFound_DoesNotNotify ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
-        Wrappers.Remove(ReferenceOutput.HeightSpeed);
+        Wrappers.Remove ( ReferenceOutput.HeightSpeed ) ;
 
-        await sut.Refresh();
+        await sut.Refresh ( ) ;
 
-        _subjectHeightSpeed.DidNotReceive()
-            .OnNext(Arg.Any<RawValueChangedDetails>());
+        _subjectHeightSpeed.DidNotReceive ( )
+                           .OnNext ( Arg.Any < RawValueChangedDetails > ( ) ) ;
     }
 
-    [TestMethod]
-    public async Task Refresh_ForCharacteristicsHeightSpeedFound_Notifies()
+    [ TestMethod ]
+    public async Task Refresh_ForCharacteristicsHeightSpeedFound_Notifies ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        await sut.Initialize<ReferenceOutput>()
-            .Refresh();
+        await sut.Initialize < ReferenceOutput > ( )
+                 .Refresh ( ) ;
 
-        _subjectHeightSpeed.Received()
-            .OnNext(
-                Arg.Is<RawValueChangedDetails>(x => x.Description ==
-                                                    ReferenceOutput.HeightSpeed));
+        _subjectHeightSpeed.Received ( )
+                           .OnNext ( Arg.Is < RawValueChangedDetails > ( x => x.Description ==
+                                                                              ReferenceOutput.HeightSpeed ) ) ;
     }
 
-    [TestMethod]
-    public async Task Refresh_ForInvoked_NotifiesHeightAndSpeed()
+    [ TestMethod ]
+    public async Task Refresh_ForInvoked_NotifiesHeightAndSpeed ( )
     {
-        var scheduler = new TestScheduler();
-        using var subject = new Subject<RawValueChangedDetails>();
+        var       scheduler = new TestScheduler ( ) ;
+        using var subject   = new Subject < RawValueChangedDetails > ( ) ;
 
-        using var sut = CreateSut(
-            scheduler,
-            subject);
+        using var sut = CreateSut ( scheduler ,
+                                    subject ) ;
 
-        RawValueChangedDetails heightAndSpeed = null!;
+        RawValueChangedDetails heightAndSpeed = null! ;
 
         subject
-            .ObserveOn(scheduler)
-            .Subscribe(x => { heightAndSpeed = x; });
+           .ObserveOn ( scheduler )
+           .Subscribe ( x => { heightAndSpeed = x ; } ) ;
 
         ServiceWrapper.Uuid
-            .Returns(sut.GattServiceUuid);
+                      .Returns ( sut.GattServiceUuid ) ;
 
-        sut.Initialize<ReferenceOutput>();
+        sut.Initialize < ReferenceOutput > ( ) ;
 
-        await sut.Refresh();
+        await sut.Refresh ( ) ;
 
-        scheduler.Start();
+        scheduler.Start ( ) ;
 
         heightAndSpeed.Value
-            .Should()
-            .BeEquivalentTo(RawValue1);
+                      .Should ( )
+                      .BeEquivalentTo ( RawValue1 ) ;
     }
 
-    private ReferenceOutput CreateSut(
-        IScheduler scheduler,
-        ISubject<RawValueChangedDetails> subject)
+    private ReferenceOutput CreateSut ( IScheduler                          scheduler ,
+                                        ISubject < RawValueChangedDetails > subject )
     {
-        return new ReferenceOutput(
-            Logger,
-            scheduler,
-            Device,
-            ProviderFactory,
-            RawValueReader,
-            RawValueWriter,
-            ToStringConverter,
-            DescriptionToUuid,
-            subject);
+        return new ReferenceOutput ( Logger ,
+                                     scheduler ,
+                                     Device ,
+                                     ProviderFactory ,
+                                     RawValueReader ,
+                                     RawValueWriter ,
+                                     ToStringConverter ,
+                                     DescriptionToUuid ,
+                                     subject ) ;
     }
 
-    protected override ReferenceOutput CreateSut()
+    protected override ReferenceOutput CreateSut ( )
     {
-        return new ReferenceOutput(
-            Logger,
-            Scheduler,
-            Device,
-            ProviderFactory,
-            RawValueReader,
-            RawValueWriter,
-            ToStringConverter,
-            DescriptionToUuid,
-            _subjectHeightSpeed);
+        return new ReferenceOutput ( Logger ,
+                                     Scheduler ,
+                                     Device ,
+                                     ProviderFactory ,
+                                     RawValueReader ,
+                                     RawValueWriter ,
+                                     ToStringConverter ,
+                                     DescriptionToUuid ,
+                                     _subjectHeightSpeed ) ;
     }
 
-    protected override void AfterInitialize()
+    protected override void AfterInitialize ( )
     {
-        base.AfterInitialize();
+        base.AfterInitialize ( ) ;
 
-        _subjectHeightSpeed = Substitute.For<ISubject<RawValueChangedDetails>>();
+        _subjectHeightSpeed = Substitute.For < ISubject < RawValueChangedDetails > > ( ) ;
     }
 
-    protected override void PopulateWrappers()
+    protected override void PopulateWrappers ( )
     {
-        Wrappers.Add(
-            ReferenceOutput.HeightSpeed,
-            CharacteristicWrapper1);
+        Wrappers.Add ( ReferenceOutput.HeightSpeed ,
+                       CharacteristicWrapper1 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.Two,
-            CharacteristicWrapper2);
+        Wrappers.Add ( ReferenceOutput.Two ,
+                       CharacteristicWrapper2 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.Three,
-            CharacteristicWrapper3);
+        Wrappers.Add ( ReferenceOutput.Three ,
+                       CharacteristicWrapper3 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.Four,
-            CharacteristicWrapper4);
+        Wrappers.Add ( ReferenceOutput.Four ,
+                       CharacteristicWrapper4 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.Five,
-            CharacteristicWrapper5);
+        Wrappers.Add ( ReferenceOutput.Five ,
+                       CharacteristicWrapper5 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.Six,
-            CharacteristicWrapper6);
+        Wrappers.Add ( ReferenceOutput.Six ,
+                       CharacteristicWrapper6 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.Seven,
-            CharacteristicWrapper7);
+        Wrappers.Add ( ReferenceOutput.Seven ,
+                       CharacteristicWrapper7 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.Eight,
-            CharacteristicWrapper8);
+        Wrappers.Add ( ReferenceOutput.Eight ,
+                       CharacteristicWrapper8 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.Mask,
-            CharacteristicWrapper9);
+        Wrappers.Add ( ReferenceOutput.Mask ,
+                       CharacteristicWrapper9 ) ;
 
-        Wrappers.Add(
-            ReferenceOutput.DetectMask,
-            CharacteristicWrapper10);
+        Wrappers.Add ( ReferenceOutput.DetectMask ,
+                       CharacteristicWrapper10 ) ;
     }
 }

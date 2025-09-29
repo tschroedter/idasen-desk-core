@@ -1,10 +1,10 @@
-using System.Diagnostics;
-using Idasen.BluetoothLE.Linak.Interfaces;
+using System.Diagnostics ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
 
-namespace Idasen.BluetoothLE.Linak;
+namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
-[DebuggerDisplay("{ToString(),nq}")]
+[ DebuggerDisplay ( "{ToString(),nq}" ) ]
 public sealed class ErrorDetails // todo testing
     : IErrorDetails
 {
@@ -14,35 +14,34 @@ public sealed class ErrorDetails // todo testing
     /// <param name="message">The human-readable message.</param>
     /// <param name="caller">The originating member name or component.</param>
     /// <param name="exception">Optional exception to include.</param>
-    public ErrorDetails(
-        string message,
-        string caller,
-        Exception? exception = null)
+    public ErrorDetails ( string      message ,
+                          string      caller ,
+                          Exception ? exception = null )
     {
-        ArgumentNullException.ThrowIfNull(message);
-        ArgumentNullException.ThrowIfNull(caller);
+        ArgumentNullException.ThrowIfNull ( message ) ;
+        ArgumentNullException.ThrowIfNull ( caller ) ;
 
-        Message = message;
-        Exception = exception;
-        Caller = caller;
+        Message   = message ;
+        Exception = exception ;
+        Caller    = caller ;
     }
 
     /// <inheritdoc />
-    public string Message { get; }
+    public string Message { get ; }
 
     /// <inheritdoc />
-    public Exception? Exception { get; }
+    public Exception ? Exception { get ; }
 
     /// <inheritdoc />
-    public string Caller { get; }
+    public string Caller { get ; }
 
     /// <summary>
     ///     Returns a readable representation of this error.
     /// </summary>
-    public override string ToString()
+    public override string ToString ( )
     {
         return Exception == null
-            ? $"[{Caller}] {Message}"
-            : $"[{Caller}] {Message} ({Exception.Message})";
+                   ? $"[{Caller}] {Message}"
+                   : $"[{Caller}] {Message} ({Exception.Message})" ;
     }
 }

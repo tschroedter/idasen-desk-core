@@ -1,35 +1,33 @@
-using System.Diagnostics.CodeAnalysis;
-using Autofac.Extras.DynamicProxy;
-using Idasen.Aop.Aspects;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers;
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
 /// <inheritdoc />
-[ExcludeFromCodeCoverage]
-[Intercept(typeof(LogAspect))]
+[ ExcludeFromCodeCoverage ]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class GattDeviceServicesResultWrapperFactory
     : IGattDeviceServicesResultWrapperFactory
 {
-    private readonly GattDeviceServicesResultWrapper.Factory _servicesFactory;
+    private readonly GattDeviceServicesResultWrapper.Factory _servicesFactory ;
 
-    public GattDeviceServicesResultWrapperFactory(GattDeviceServicesResultWrapper.Factory servicesFactory)
+    public GattDeviceServicesResultWrapperFactory ( GattDeviceServicesResultWrapper.Factory servicesFactory )
     {
-        Guard.ArgumentNotNull(
-            servicesFactory,
-            nameof(servicesFactory));
+        Guard.ArgumentNotNull ( servicesFactory ,
+                                nameof ( servicesFactory ) ) ;
 
-        _servicesFactory = servicesFactory;
+        _servicesFactory = servicesFactory ;
     }
 
     /// <inheritdoc />
-    public IGattDeviceServicesResultWrapper Create(GattDeviceServicesResult result)
+    public IGattDeviceServicesResultWrapper Create ( GattDeviceServicesResult result )
     {
-        Guard.ArgumentNotNull(
-            result,
-            nameof(result));
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
-        return _servicesFactory.Invoke(result);
+        return _servicesFactory.Invoke ( result ) ;
     }
 }

@@ -1,192 +1,196 @@
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Autofac.Extras.DynamicProxy;
-using Idasen.Aop.Aspects;
-using Idasen.BluetoothLE.Characteristics.Common;
-using Idasen.BluetoothLE.Linak.Interfaces;
-using Serilog;
+using System.Reactive.Concurrency ;
+using System.Reactive.Linq ;
+using System.Reactive.Subjects ;
+using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Characteristics.Common ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
+using Serilog ;
 
-namespace Idasen.BluetoothLE.Linak.Control;
+namespace Idasen.BluetoothLE.Linak.Control ;
 
 /// <inheritdoc />
-[Intercept(typeof(LogAspect))]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class InitialHeightProvider
     : IInitialHeightProvider
 {
-    public delegate IInitialHeightProvider Factory(
-        IDeskCommandExecutor executor,
-        IDeskHeightAndSpeed heightAndSpeed);
+    public delegate IInitialHeightProvider Factory ( IDeskCommandExecutor executor ,
+                                                     IDeskHeightAndSpeed  heightAndSpeed ) ;
 
-    private readonly IDeskCommandExecutor _executor;
-    private readonly IDeskHeightAndSpeed _heightAndSpeed;
+    private readonly IDeskCommandExecutor _executor ;
+    private readonly IDeskHeightAndSpeed  _heightAndSpeed ;
 
-    private readonly ILogger _logger;
-    private readonly IScheduler _scheduler;
-    private readonly ISubject<uint> _subjectFinished;
-    private CancellationTokenSource? _cts;
+    private readonly ILogger                   _logger ;
+    private readonly IScheduler                _scheduler ;
+    private readonly ISubject < uint >         _subjectFinished ;
+    private          CancellationTokenSource ? _cts ;
 
     // ReSharper disable once InconsistentNaming - only used for testing
-    internal IDisposable? _disposalHeightAndSpeed;
+    internal IDisposable ? _disposalHeightAndSpeed ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="InitialHeightProvider" /> class.
     /// </summary>
-    public InitialHeightProvider(
-        ILogger logger,
-        IScheduler scheduler,
-        IDeskHeightAndSpeed heightAndSpeed,
-        IDeskCommandExecutor executor,
-        ISubject<uint> subjectFinished)
+    public InitialHeightProvider ( ILogger              logger ,
+                                   IScheduler           scheduler ,
+                                   IDeskHeightAndSpeed  heightAndSpeed ,
+                                   IDeskCommandExecutor executor ,
+                                   ISubject < uint >    subjectFinished )
     {
-        ArgumentNullException.ThrowIfNull(logger);
-        ArgumentNullException.ThrowIfNull(scheduler);
-        ArgumentNullException.ThrowIfNull(heightAndSpeed);
-        ArgumentNullException.ThrowIfNull(executor);
-        ArgumentNullException.ThrowIfNull(subjectFinished);
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
+        ArgumentNullException.ThrowIfNull ( executor ) ;
+        ArgumentNullException.ThrowIfNull ( subjectFinished ) ;
 
-        _logger = logger;
-        _scheduler = scheduler;
-        _heightAndSpeed = heightAndSpeed;
-        _executor = executor;
-        _subjectFinished = subjectFinished;
+        _logger          = logger ;
+        _scheduler       = scheduler ;
+        _heightAndSpeed  = heightAndSpeed ;
+        _executor        = executor ;
+        _subjectFinished = subjectFinished ;
     }
 
     /// <inheritdoc />
-    public void Initialize()
+    public void Initialize ( )
     {
-        _disposalHeightAndSpeed?.Dispose();
+        _disposalHeightAndSpeed?.Dispose ( ) ;
 
         _disposalHeightAndSpeed = _heightAndSpeed.HeightAndSpeedChanged
-            .ObserveOn(_scheduler)
-            .Subscribe(
-                OnHeightAndSpeedChanged,
-                ex => _logger.Error(
-                    ex,
-                    "Error while observing height/speed changes"));
+                                                 .ObserveOn ( _scheduler )
+                                                 .Subscribe ( OnHeightAndSpeedChanged ,
+                                                              ex => _logger.Error ( ex ,
+                                                                       "Error while observing height/speed changes" ) ) ;
 
-        Height = _heightAndSpeed.Height;
+        Height = _heightAndSpeed.Height ;
     }
 
     /// <inheritdoc />
-    public Task Start() => Start(CancellationToken.None);
-
-    /// <inheritdoc />
-    public IObservable<uint> Finished => _subjectFinished;
-
-    /// <inheritdoc />
-    public void Dispose()
+    public Task Start ( )
     {
-        try {
-            _cts?.Cancel();
+        return Start ( CancellationToken.None ) ;
+    }
+
+    /// <inheritdoc />
+    public IObservable < uint > Finished => _subjectFinished ;
+
+    /// <inheritdoc />
+    public void Dispose ( )
+    {
+        try
+        {
+            _cts?.Cancel ( ) ;
         }
-        catch {
+        catch
+        {
             // ignore
         }
-        finally {
-            _cts?.Dispose();
-            _cts = null;
+        finally
+        {
+            _cts?.Dispose ( ) ;
+            _cts = null ;
         }
 
-        _disposalHeightAndSpeed?.Dispose();
+        _disposalHeightAndSpeed?.Dispose ( ) ;
 
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize ( this ) ;
     }
 
     /// <inheritdoc />
-    public uint Height { get; private set; }
+    public uint Height { get ; private set ; }
 
     /// <inheritdoc />
-    public bool HasReceivedHeightAndSpeed { get; private set; }
+    public bool HasReceivedHeightAndSpeed { get ; private set ; }
 
     /// <summary>
     ///     Starts the process with cancellation support.
     /// </summary>
-    public Task Start(CancellationToken cancellationToken)
+    public Task Start ( CancellationToken cancellationToken )
     {
         // Cancel previous run if any
-        _cts?.Cancel();
-        _cts?.Dispose();
-        _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        return StartInternalAsync(_cts.Token);
+        _cts?.Cancel ( ) ;
+        _cts?.Dispose ( ) ;
+        _cts = CancellationTokenSource.CreateLinkedTokenSource ( cancellationToken ) ;
+        return StartInternalAsync ( _cts.Token ) ;
     }
 
-    private async Task StartInternalAsync(CancellationToken cancellationToken)
+    private async Task StartInternalAsync ( CancellationToken cancellationToken )
     {
-        if (_disposalHeightAndSpeed == null)
-            throw new NotInitializeException("Initialize needs to be called first");
+        if ( _disposalHeightAndSpeed == null )
+            throw new NotInitializeException ( "Initialize needs to be called first" ) ;
 
-        cancellationToken.ThrowIfCancellationRequested();
+        cancellationToken.ThrowIfCancellationRequested ( ) ;
 
-        if (_heightAndSpeed.Height > 0) {
-            _logger.Information(
-                "Current height is {Height}",
-                _heightAndSpeed.Height);
+        if ( _heightAndSpeed.Height > 0 )
+        {
+            _logger.Information ( "Current height is {Height}" ,
+                                  _heightAndSpeed.Height ) ;
 
-            HasReceivedHeightAndSpeed = true;
+            HasReceivedHeightAndSpeed = true ;
 
-            _subjectFinished.OnNext(_heightAndSpeed.Height);
+            _subjectFinished.OnNext ( _heightAndSpeed.Height ) ;
 
-            return;
+            return ;
         }
 
-        _logger.Information("Trying to determine current height by moving the desk");
+        _logger.Information ( "Trying to determine current height by moving the desk" ) ;
 
-        HasReceivedHeightAndSpeed = false;
+        HasReceivedHeightAndSpeed = false ;
 
-        try {
-            cancellationToken.ThrowIfCancellationRequested();
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested ( ) ;
 
-            var movedUp = await _executor.Up().ConfigureAwait(false);
+            var movedUp = await _executor.Up ( ).ConfigureAwait ( false ) ;
 
-            cancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested ( ) ;
 
-            var stopped = await _executor.StopMovement().ConfigureAwait(false);
+            var stopped = await _executor.StopMovement ( ).ConfigureAwait ( false ) ;
 
-            if (movedUp && stopped)
-                return;
+            if ( movedUp && stopped )
+                return ;
 
-            _logger.Error("Failed to move desk up and down");
+            _logger.Error ( "Failed to move desk up and down" ) ;
         }
-        catch (OperationCanceledException) {
-            await SafeStopAsync().ConfigureAwait(false);
-            throw;
-        }
-    }
-
-    private async Task SafeStopAsync()
-    {
-        try {
-            await _executor.StopMovement().ConfigureAwait(false);
-        }
-        catch (Exception ex) {
-            _logger.Warning(
-                ex,
-                "Attempt to stop after cancellation failed");
+        catch ( OperationCanceledException )
+        {
+            await SafeStopAsync ( ).ConfigureAwait ( false ) ;
+            throw ;
         }
     }
 
-    private void OnHeightAndSpeedChanged(HeightSpeedDetails details)
+    private async Task SafeStopAsync ( )
     {
-        Height = details.Height;
+        try
+        {
+            await _executor.StopMovement ( ).ConfigureAwait ( false ) ;
+        }
+        catch ( Exception ex )
+        {
+            _logger.Warning ( ex ,
+                              "Attempt to stop after cancellation failed" ) ;
+        }
+    }
 
-        if (HasReceivedHeightAndSpeed)
-            return;
+    private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
+    {
+        Height = details.Height ;
 
-        if (details.Height == 0) {
-            _logger.Information(
-                "Received invalid height {Height} and speed {Speed} ...",
-                details.Height,
-                details.Speed);
+        if ( HasReceivedHeightAndSpeed )
+            return ;
 
-            return;
+        if ( details.Height == 0 )
+        {
+            _logger.Information ( "Received invalid height {Height} and speed {Speed} ..." ,
+                                  details.Height ,
+                                  details.Speed ) ;
+
+            return ;
         }
 
-        _subjectFinished.OnNext(Height);
-        HasReceivedHeightAndSpeed = true;
+        _subjectFinished.OnNext ( Height ) ;
+        HasReceivedHeightAndSpeed = true ;
 
-        _logger.Information(
-            "Received valid height {Height}",
-            details.Height);
+        _logger.Information ( "Received valid height {Height}" ,
+                              details.Height ) ;
     }
 }

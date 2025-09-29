@@ -1,4 +1,4 @@
-namespace Idasen.BluetoothLE.Linak.Interfaces;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Detects LINAK desks by name or address and publishes discovered instances.
@@ -9,7 +9,7 @@ public interface IDeskDetector
     /// <summary>
     ///     Notifies when a desk was detected.
     /// </summary>
-    IObservable<IDesk> DeskDetected { get; }
+    IObservable < IDesk > DeskDetected { get ; }
 
     /// <summary>
     ///     Initializes the instance with the given parameters.
@@ -24,18 +24,17 @@ public interface IDeskDetector
     ///     The timeout used for monitored devices after a device expires
     ///     and is removed from the cache.
     /// </param>
-    IDeskDetector Initialize(
-        string deviceName,
-        ulong deviceAddress,
-        uint deviceTimeout);
+    IDeskDetector Initialize ( string deviceName ,
+                               ulong  deviceAddress ,
+                               uint   deviceTimeout ) ;
 
     /// <summary>
     ///     StartListening listening the detection of a desk by device name or device address.
     /// </summary>
-    void StartListening();
+    void StartListening ( ) ;
 
     /// <summary>
     ///     StopListening listening the detection of a desk.
     /// </summary>
-    void StopListening();
+    void StopListening ( ) ;
 }

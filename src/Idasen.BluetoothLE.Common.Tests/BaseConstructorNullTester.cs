@@ -1,105 +1,108 @@
-using Autofac;
-using AutofacSerilogIntegration;
-using FluentAssertions;
-using FluentAssertions.Execution;
-using Selkie.DefCon.One;
-using Selkie.DefCon.One.Common;
-using Selkie.DefCon.One.Interfaces;
-using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
+using Autofac ;
+using AutofacSerilogIntegration ;
+using FluentAssertions ;
+using FluentAssertions.Execution ;
+using Selkie.DefCon.One ;
+using Selkie.DefCon.One.Common ;
+using Selkie.DefCon.One.Interfaces ;
+using Serilog ;
+using Serilog.Events ;
+using Serilog.Sinks.SystemConsole.Themes ;
 
-namespace Idasen.BluetoothLE.Common.Tests;
+namespace Idasen.BluetoothLE.Common.Tests ;
 
-public abstract class BaseConstructorNullTester<T>
+public abstract class BaseConstructorNullTester < T >
     where T : class
 {
-    private IContainer? _container;
+    private IContainer ? _container ;
 
-    protected BaseConstructorNullTester(
-        int numberOfConstructorsPassed = 1,
-        int numberOfConstructorsFailed = 0)
+    protected BaseConstructorNullTester ( int numberOfConstructorsPassed = 1 ,
+                                          int numberOfConstructorsFailed = 0 )
     {
-        NumberOfConstructorsPassed = numberOfConstructorsPassed;
-        NumberOfConstructorsFailed = numberOfConstructorsFailed;
+        NumberOfConstructorsPassed = numberOfConstructorsPassed ;
+        NumberOfConstructorsFailed = numberOfConstructorsFailed ;
     }
 
-    public virtual int NumberOfConstructorsPassed { get; } = 1;
-    public virtual int NumberOfConstructorsFailed { get; }
+    public virtual int NumberOfConstructorsPassed { get ; } = 1 ;
+    public virtual int NumberOfConstructorsFailed { get ; }
 
     protected IContainer Container =>
         _container ??
         throw new
-            InvalidOperationException("Container not initialized. Ensure Initialize() ran before accessing the container.");
+            InvalidOperationException ( "Container not initialized. Ensure Initialize() ran before accessing the container." ) ;
 
-    [TestCleanup]
-    public virtual void Cleanup()
+    [ TestCleanup ]
+    public virtual void Cleanup ( )
     {
-        _container?.Dispose();
-        _container = null;
+        _container?.Dispose ( ) ;
+        _container = null ;
     }
 
-    [TestInitialize]
-    public virtual void Initialize()
+    [ TestInitialize ]
+    public virtual void Initialize ( )
     {
-        ConfigureLogger();
-        _container = BuildContainer();
+        ConfigureLogger ( ) ;
+        _container = BuildContainer ( ) ;
     }
 
-    protected virtual void ConfigureLogger()
+    protected virtual void ConfigureLogger ( )
     {
-        const string template = "[{Timestamp:HH:mm:ss.ffff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+        const string template = "[{Timestamp:HH:mm:ss.ffff} {Level:u3}] {Message:lj}{NewLine}{Exception}" ;
 
-        Log.Logger = new LoggerConfiguration()
-            .Enrich.WithCaller()
-            .MinimumLevel.Information()
-            .WriteTo.Console(
-                LogEventLevel.Information,
-                template,
-                theme: AnsiConsoleTheme.Code)
-            .CreateLogger();
+        Log.Logger = new LoggerConfiguration ( )
+                    .Enrich.WithCaller ( )
+                    .MinimumLevel.Information ( )
+                    .WriteTo.Console ( LogEventLevel.Information ,
+                                       template ,
+                                       theme : AnsiConsoleTheme.Code )
+                    .CreateLogger ( ) ;
     }
 
-    protected virtual ContainerBuilder CreateContainerBuilder() => new();
-
-    protected virtual void RegisterModules(ContainerBuilder builder)
+    protected virtual ContainerBuilder CreateContainerBuilder ( )
     {
-        builder.RegisterLogger();
-        builder.RegisterModule<DefConOneModule>();
+        return new ContainerBuilder ( ) ;
     }
 
-    protected virtual IContainer BuildContainer()
+    protected virtual void RegisterModules ( ContainerBuilder builder )
     {
-        var builder = CreateContainerBuilder();
-        RegisterModules(builder);
-        return builder.Build();
+        builder.RegisterLogger ( ) ;
+        builder.RegisterModule < DefConOneModule > ( ) ;
     }
 
-    [TestMethod]
-    public virtual void Constructor_ForAnyParameterNullThrows_AllPassing()
+    protected virtual IContainer BuildContainer ( )
     {
-        var tester = CreateTester();
+        var builder = CreateContainerBuilder ( ) ;
+        RegisterModules ( builder ) ;
+        return builder.Build ( ) ;
+    }
 
-        tester.Test<T>();
+    [ TestMethod ]
+    public virtual void Constructor_ForAnyParameterNullThrows_AllPassing ( )
+    {
+        var tester = CreateTester ( ) ;
 
-        using (new AssertionScope()) {
+        tester.Test < T > ( ) ;
+
+        using ( new AssertionScope ( ) )
+        {
             tester.HasPassed
-                .Should()
-                .BeTrue("Has Passed");
+                  .Should ( )
+                  .BeTrue ( "Has Passed" ) ;
 
             tester.ConstructorsToTest
-                .Should()
-                .Be(
-                    NumberOfConstructorsPassed,
-                    "ConstructorsToTest");
+                  .Should ( )
+                  .Be ( NumberOfConstructorsPassed ,
+                        "ConstructorsToTest" ) ;
 
             tester.ConstructorsFailed
-                .Should()
-                .Be(
-                    NumberOfConstructorsFailed,
-                    "ConstructorsFailed");
+                  .Should ( )
+                  .Be ( NumberOfConstructorsFailed ,
+                        "ConstructorsFailed" ) ;
         }
     }
 
-    protected virtual INotNullTester CreateTester() => Container.Resolve<INotNullTester>();
+    protected virtual INotNullTester CreateTester ( )
+    {
+        return Container.Resolve < INotNullTester > ( ) ;
+    }
 }

@@ -1,7 +1,7 @@
-using Serilog;
-using Serilog.Configuration;
+using Serilog ;
+using Serilog.Configuration ;
 
-namespace Idasen.Launcher;
+namespace Idasen.Launcher ;
 
 /// <summary>
 ///     Extension methods for configuring Serilog caller enrichment.
@@ -13,10 +13,10 @@ public static class LoggerCallerEnrichmentConfiguration
     /// </summary>
     /// <param name="enrichmentConfiguration">The enrichment configuration builder.</param>
     /// <returns>The updated <see cref="LoggerConfiguration" />.</returns>
-    public static LoggerConfiguration WithCaller(this LoggerEnrichmentConfiguration enrichmentConfiguration)
+    public static LoggerConfiguration WithCaller ( this LoggerEnrichmentConfiguration enrichmentConfiguration )
     {
-        ArgumentNullException.ThrowIfNull(enrichmentConfiguration);
+        ArgumentNullException.ThrowIfNull ( enrichmentConfiguration ) ;
 
-        return enrichmentConfiguration.With<CallerEnricher>();
+        return enrichmentConfiguration.With < CallerEnricher > ( ) ;
     }
 }

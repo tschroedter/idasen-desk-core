@@ -1,6 +1,6 @@
-using JetBrains.Annotations;
+using JetBrains.Annotations ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 
 public interface IDeviceComparer
 {
@@ -17,10 +17,9 @@ public interface IDeviceComparer
     /// <returns>
     ///     'true' if the devices are equivalent, otherwise 'false'.
     /// </returns>
-    [UsedImplicitly]
-    bool IsEquivalentTo(
-        IDevice? deviceA,
-        IDevice? deviceB);
+    [ UsedImplicitly ]
+    bool IsEquivalentTo ( IDevice ? deviceA ,
+                          IDevice ? deviceB ) ;
 
     /// <summary>
     ///     Checks if the given devices have the same property values.
@@ -34,8 +33,7 @@ public interface IDeviceComparer
     /// <returns>
     ///     'true' if the devices have the same property values, otherwise 'false'.
     /// </returns>
-    [UsedImplicitly]
-    bool Equals(
-        IDevice? deviceA,
-        IDevice? deviceB);
+    [ UsedImplicitly ]
+    bool Equals ( IDevice ? deviceA ,
+                  IDevice ? deviceB ) ;
 }

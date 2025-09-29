@@ -1,11 +1,11 @@
-using Idasen.BluetoothLE.Common.Tests;
-using Idasen.BluetoothLE.Core.DevicesDiscovery;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters;
+namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters ;
 
-[TestClass]
+[ TestClass ]
 public class DeviceConstructorTests
-    : BaseConstructorNullTester<Device>
+    : BaseConstructorNullTester < Device >
 {
-    public override int NumberOfConstructorsPassed { get; } = 2;
+    public override int NumberOfConstructorsPassed { get ; } = 2 ;
 }

@@ -1,20 +1,23 @@
-using FluentAssertions;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
-[TestClass]
+[ TestClass ]
 public class DpgTests
 {
-    [TestMethod]
-    public void RawDpg_ForInvoked_Empty()
+    [ TestMethod ]
+    public void RawDpg_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.RawDpg
-            .Should()
-            .BeEmpty();
+           .Should ( )
+           .BeEmpty ( ) ;
     }
 
-    private static Dpg CreateSut() => new();
+    private static Dpg CreateSut ( )
+    {
+        return new Dpg ( ) ;
+    }
 }

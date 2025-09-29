@@ -1,115 +1,119 @@
-using FluentAssertions;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns;
-using Idasen.BluetoothLE.Characteristics.Common;
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using Windows.Devices.Bluetooth ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using Idasen.BluetoothLE.Characteristics.Common ;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
 
-[TestClass]
+[ TestClass ]
 public class DeviceTests
 {
-    [TestMethod]
-    public void ConnectionStatusChanged_ForInvoked_Throws()
+    [ TestMethod ]
+    public void ConnectionStatusChanged_ForInvoked_Throws ( )
     {
-        Action action = () => CreateSut().ConnectionStatusChanged
-            .Subscribe();
+        Action action = ( ) => CreateSut ( ).ConnectionStatusChanged
+                                            .Subscribe ( ) ;
 
-        action.Should()
-            .Throw<NotInitializeException>();
+        action.Should ( )
+              .Throw < NotInitializeException > ( ) ;
     }
 
-    [TestMethod]
-    public void GattServicesRefreshed_ForInvoked_Throws()
+    [ TestMethod ]
+    public void GattServicesRefreshed_ForInvoked_Throws ( )
     {
-        var action = () => {
-            using var sut = CreateSut();
+        var action = ( ) =>
+                     {
+                         using var sut = CreateSut ( ) ;
 
-            sut.GattServicesRefreshed
-                .Subscribe();
-        };
+                         sut.GattServicesRefreshed
+                            .Subscribe ( ) ;
+                     } ;
 
-        action.Should()
-            .Throw<NotInitializeException>();
+        action.Should ( )
+              .Throw < NotInitializeException > ( ) ;
     }
 
-    [TestMethod]
-    public void GattCommunicationStatus_ForInvoked_Unreachable()
+    [ TestMethod ]
+    public void GattCommunicationStatus_ForInvoked_Unreachable ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.GattCommunicationStatus
-            .Should()
-            .Be(GattCommunicationStatus.Unreachable);
+           .Should ( )
+           .Be ( GattCommunicationStatus.Unreachable ) ;
     }
 
-    [TestMethod]
-    public void Name_ForInvoked_UnknownName()
+    [ TestMethod ]
+    public void Name_ForInvoked_UnknownName ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.Name
-            .Should()
-            .Be(Device.UnknownName);
+           .Should ( )
+           .Be ( Device.UnknownName ) ;
     }
 
-    [TestMethod]
-    public void Id_ForInvoked_UnknownId()
+    [ TestMethod ]
+    public void Id_ForInvoked_UnknownId ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.Id
-            .Should()
-            .Be(Device.UnknownId);
+           .Should ( )
+           .Be ( Device.UnknownId ) ;
     }
 
-    [TestMethod]
-    public void Constructor_ForInvoked_False()
+    [ TestMethod ]
+    public void Constructor_ForInvoked_False ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.IsPaired
-            .Should()
-            .BeFalse();
+           .Should ( )
+           .BeFalse ( ) ;
     }
 
-    [TestMethod]
-    public void GattServices_ForInvoked_Empty()
+    [ TestMethod ]
+    public void GattServices_ForInvoked_Empty ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.GattServices
-            .Should()
-            .BeEmpty();
+           .Should ( )
+           .BeEmpty ( ) ;
     }
 
-    [TestMethod]
-    public void ConnectionStatus_ForInvoked_Disconnected()
+    [ TestMethod ]
+    public void ConnectionStatus_ForInvoked_Disconnected ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
         sut.ConnectionStatus
-            .Should()
-            .Be(BluetoothConnectionStatus.Disconnected);
+           .Should ( )
+           .Be ( BluetoothConnectionStatus.Disconnected ) ;
     }
 
-    [TestMethod]
-    public void Connect_ForInvoked_DoesNothing()
+    [ TestMethod ]
+    public void Connect_ForInvoked_DoesNothing ( )
     {
-        var action = () => CreateSut().Connect();
+        var action = ( ) => CreateSut ( ).Connect ( ) ;
 
-        action.Should()
-            .NotThrow<Exception>();
+        action.Should ( )
+              .NotThrow < Exception > ( ) ;
     }
 
-    [TestMethod]
-    public void Dispose_ForInvoked_DoesNothing()
+    [ TestMethod ]
+    public void Dispose_ForInvoked_DoesNothing ( )
     {
-        var action = () => CreateSut().Dispose();
+        var action = ( ) => CreateSut ( ).Dispose ( ) ;
 
-        action.Should()
-            .NotThrow<Exception>();
+        action.Should ( )
+              .NotThrow < Exception > ( ) ;
     }
 
-    private static Device CreateSut() => new();
+    private static Device CreateSut ( )
+    {
+        return new Device ( ) ;
+    }
 }

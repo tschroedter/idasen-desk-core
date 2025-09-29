@@ -1,45 +1,51 @@
-using FluentAssertions;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
-using Idasen.BluetoothLE.Common.Tests;
-using Idasen.BluetoothLE.Linak.Control;
-using Idasen.BluetoothLE.Linak.Interfaces;
-using NSubstitute;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Idasen.BluetoothLE.Common.Tests ;
+using Idasen.BluetoothLE.Linak.Control ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
+using NSubstitute ;
 
-namespace Idasen.BluetoothLE.Linak.Tests;
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[TestClass]
+[ TestClass ]
 public class DeskCommandExecutorFactoryTests
 {
-    private IControl _control = null!;
-    private DeskCommandExecutor.Factory _factory = null!;
+    private IControl                    _control = null! ;
+    private DeskCommandExecutor.Factory _factory = null! ;
 
-    [TestInitialize]
-    public void Initialize()
+    [ TestInitialize ]
+    public void Initialize ( )
     {
-        _factory = TestFactory;
+        _factory = TestFactory ;
 
-        _control = Substitute.For<IControl>();
+        _control = Substitute.For < IControl > ( ) ;
     }
 
-    private IDeskCommandExecutor TestFactory(IControl executor) => Substitute.For<IDeskCommandExecutor>();
-
-    [TestMethod]
-    public void Create_ForControlNull_Throws()
+    private IDeskCommandExecutor TestFactory ( IControl executor )
     {
-        var action = () => { CreateSut().Create(null!); };
-
-        action.Should()
-            .Throw<ArgumentNullException>()
-            .WithParameter("control");
+        return Substitute.For < IDeskCommandExecutor > ( ) ;
     }
 
-    [TestMethod]
-    public void CreateForInvoked_ReturnsInstance()
+    [ TestMethod ]
+    public void Create_ForControlNull_Throws ( )
     {
-        CreateSut().Create(_control)
-            .Should()
-            .NotBeNull();
+        var action = ( ) => { CreateSut ( ).Create ( null! ) ; } ;
+
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( "control" ) ;
     }
 
-    private DeskCommandExecutorFactory CreateSut() => new(_factory);
+    [ TestMethod ]
+    public void CreateForInvoked_ReturnsInstance ( )
+    {
+        CreateSut ( ).Create ( _control )
+                     .Should ( )
+                     .NotBeNull ( ) ;
+    }
+
+    private DeskCommandExecutorFactory CreateSut ( )
+    {
+        return new DeskCommandExecutorFactory ( _factory ) ;
+    }
 }

@@ -1,108 +1,99 @@
-using FluentAssertions;
-using Idasen.BluetoothLE.Linak.Interfaces;
-using NSubstitute;
-using Selkie.AutoMocking;
+using FluentAssertions ;
+using Idasen.BluetoothLE.Linak.Interfaces ;
+using NSubstitute ;
+using Selkie.AutoMocking ;
 
-namespace Idasen.BluetoothLE.Linak.Tests;
+namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[AutoDataTestClass]
+[ AutoDataTestClass ]
 public class DeskTests
 {
-    [AutoDataTestMethod]
-    public void Connect_ForInvoked_CallsDeskConnector(
-        Desk sut,
-        [Freeze] IDeskConnector connector)
+    [ AutoDataTestMethod ]
+    public void Connect_ForInvoked_CallsDeskConnector ( Desk                      sut ,
+                                                        [ Freeze ] IDeskConnector connector )
     {
-        sut.Connect();
+        sut.Connect ( ) ;
 
-        connector.Received()
-            .Connect();
+        connector.Received ( )
+                 .Connect ( ) ;
     }
 
-    [AutoDataTestMethod]
-    public void MoveTo_ForTargetHeight_CallsConnector(
-        Desk sut,
-        [Freeze] IDeskConnector connector)
+    [ AutoDataTestMethod ]
+    public void MoveTo_ForTargetHeight_CallsConnector ( Desk                      sut ,
+                                                        [ Freeze ] IDeskConnector connector )
     {
-        const uint targetHeight = 100u;
+        const uint targetHeight = 100u ;
 
-        sut.MoveTo(targetHeight);
+        sut.MoveTo ( targetHeight ) ;
 
-        connector.Received()
-            .MoveTo(targetHeight);
+        connector.Received ( )
+                 .MoveTo ( targetHeight ) ;
     }
 
-    [AutoDataTestMethod]
-    public async Task MoveUpAsync_ForInvoked_CallsConnector(
-        Desk sut,
-        [Freeze] IDeskConnector connector)
+    [ AutoDataTestMethod ]
+    public async Task MoveUpAsync_ForInvoked_CallsConnector ( Desk                      sut ,
+                                                              [ Freeze ] IDeskConnector connector )
     {
-        await sut.MoveUpAsync();
+        await sut.MoveUpAsync ( ) ;
 
-        await connector.Received()
-            .MoveUpAsync();
+        await connector.Received ( )
+                       .MoveUpAsync ( ) ;
     }
 
-    [AutoDataTestMethod]
-    public async Task MoveDownAsync_ForInvoked_CallsConnector(
-        Desk sut,
-        [Freeze] IDeskConnector connector)
+    [ AutoDataTestMethod ]
+    public async Task MoveDownAsync_ForInvoked_CallsConnector ( Desk                      sut ,
+                                                                [ Freeze ] IDeskConnector connector )
     {
-        await sut.MoveDownAsync();
+        await sut.MoveDownAsync ( ) ;
 
-        await connector.Received()
-            .MoveDownAsync();
+        await connector.Received ( )
+                       .MoveDownAsync ( ) ;
     }
 
-    [AutoDataTestMethod]
-    public async Task MoveStopAsync_ForInvoked_CallsConnector(
-        Desk sut,
-        [Freeze] IDeskConnector connector)
+    [ AutoDataTestMethod ]
+    public async Task MoveStopAsync_ForInvoked_CallsConnector ( Desk                      sut ,
+                                                                [ Freeze ] IDeskConnector connector )
     {
-        await sut.MoveStopAsync();
+        await sut.MoveStopAsync ( ) ;
 
-        await connector.Received()
-            .MoveStopAsync();
+        await connector.Received ( )
+                       .MoveStopAsync ( ) ;
     }
 
-    [AutoDataTestMethod]
-    public void Dispose_ForInvoked_CallsDeskConnector(
-        Desk sut,
-        [Freeze] IDeskConnector connector)
+    [ AutoDataTestMethod ]
+    public void Dispose_ForInvoked_CallsDeskConnector ( Desk                      sut ,
+                                                        [ Freeze ] IDeskConnector connector )
     {
-        sut.Dispose();
+        sut.Dispose ( ) ;
 
-        connector.Received()
-            .Dispose();
+        connector.Received ( )
+                 .Dispose ( ) ;
     }
 
-    [AutoDataTestMethod]
-    public void DeviceName_ForInvoked_DeviceName(
-        Desk sut,
-        [Freeze] string deviceName)
+    [ AutoDataTestMethod ]
+    public void DeviceName_ForInvoked_DeviceName ( Desk              sut ,
+                                                   [ Freeze ] string deviceName )
     {
         sut.DeviceName
-            .Should()
-            .Be(deviceName);
+           .Should ( )
+           .Be ( deviceName ) ;
     }
 
-    [AutoDataTestMethod]
-    public void BluetoothAddress_ForInvoked_BluetoothAddress(
-        Desk sut,
-        [Freeze] ulong bluetoothAddress)
+    [ AutoDataTestMethod ]
+    public void BluetoothAddress_ForInvoked_BluetoothAddress ( Desk             sut ,
+                                                               [ Freeze ] ulong bluetoothAddress )
     {
         sut.BluetoothAddress
-            .Should()
-            .Be(bluetoothAddress);
+           .Should ( )
+           .Be ( bluetoothAddress ) ;
     }
 
-    [AutoDataTestMethod]
-    public void BluetoothAddressType_ForInvoked_BluetoothAddressType(
-        Desk sut,
-        [Freeze] string bluetoothAddressType)
+    [ AutoDataTestMethod ]
+    public void BluetoothAddressType_ForInvoked_BluetoothAddressType ( Desk              sut ,
+                                                                       [ Freeze ] string bluetoothAddressType )
     {
         sut.BluetoothAddressType
-            .Should()
-            .Be(bluetoothAddressType);
+           .Should ( )
+           .Be ( bluetoothAddressType ) ;
     }
 }

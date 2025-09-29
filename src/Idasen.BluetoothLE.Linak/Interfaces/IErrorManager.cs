@@ -1,9 +1,9 @@
 // ReSharper disable UnusedMember.Global
 
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
+using System.Runtime.CompilerServices ;
+using JetBrains.Annotations ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces;
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
 ///     Publishes error notifications to interested subscribers and helpers to create standard error messages.
@@ -13,8 +13,8 @@ public interface IErrorManager : IDisposable
     /// <summary>
     ///     Notify when an error happened.
     /// </summary>
-    [UsedImplicitly]
-    IObservable<IErrorDetails> ErrorChanged { get; }
+    [ UsedImplicitly ]
+    IObservable < IErrorDetails > ErrorChanged { get ; }
 
     /// <summary>
     ///     Publish an error so the UI can show it.
@@ -22,8 +22,8 @@ public interface IErrorManager : IDisposable
     /// <param name="details">
     ///     The details about the error.
     /// </param>
-    [UsedImplicitly]
-    void Publish(IErrorDetails details);
+    [ UsedImplicitly ]
+    void Publish ( IErrorDetails details ) ;
 
     /// <summary>
     ///     Publish an error so the UI can show it.
@@ -34,7 +34,6 @@ public interface IErrorManager : IDisposable
     /// <param name="caller">
     ///     The caller information.
     /// </param>
-    void PublishForMessage(
-        string message,
-        [CallerMemberName] string caller = "");
+    void PublishForMessage ( string                      message ,
+                             [ CallerMemberName ] string caller = "" ) ;
 }

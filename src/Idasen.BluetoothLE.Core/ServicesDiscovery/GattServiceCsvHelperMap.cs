@@ -1,15 +1,15 @@
-using CsvHelper.Configuration;
+using CsvHelper.Configuration ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery;
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
 public sealed class GattServiceCsvHelperMap
-    : ClassMap<OfficialGattService>
+    : ClassMap < OfficialGattService >
 {
-    public GattServiceCsvHelperMap()
+    public GattServiceCsvHelperMap ( )
     {
-        Map(m => m.Name);
-        Map(m => m.UniformTypeIdentifier);
-        Map(m => m.AssignedNumber).TypeConverter<OfficialGattServiceConverter>();
-        Map(m => m.ProfileSpecification);
+        Map ( m => m.Name ) ;
+        Map ( m => m.UniformTypeIdentifier ) ;
+        Map ( m => m.AssignedNumber ).TypeConverter < OfficialGattServiceConverter > ( ) ;
+        Map ( m => m.ProfileSpecification ) ;
     }
 }

@@ -1,6 +1,6 @@
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Factory to create <see cref="IGattCharacteristicsResultWrapper" /> instances.
@@ -17,5 +17,5 @@ public interface IGattCharacteristicsResultWrapperFactory
     /// <returns>
     ///     The wrapper.
     /// </returns>
-    IGattCharacteristicsResultWrapper Create(GattCharacteristicsResult result);
+    IGattCharacteristicsResultWrapper Create ( GattCharacteristicsResult result ) ;
 }

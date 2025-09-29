@@ -1,33 +1,38 @@
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns;
+namespace Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
 public class UnknownBase
     : ICharacteristicBase
 {
-    protected static readonly IEnumerable<byte> RawArrayEmpty = Enumerable.Empty<byte>()
-        .ToArray();
+    protected static readonly IEnumerable < byte > RawArrayEmpty = Enumerable.Empty < byte > ( )
+                                                                             .ToArray ( ) ;
 
-    private bool _disposed;
+    private bool _disposed ;
 
-    public T? Initialize<T>()
-        where T : class =>
-        this as T;
-
-    public Task Refresh() => Task.FromResult(false);
-
-    public void Dispose()
+    public T ? Initialize < T > ( )
+        where T : class
     {
-        Dispose(true);
-
-        GC.SuppressFinalize(this);
+        return this as T ;
     }
 
-    protected virtual void Dispose(bool disposing)
+    public Task Refresh ( )
     {
-        if (_disposed)
-            return;
+        return Task.FromResult ( false ) ;
+    }
 
-        _disposed = true;
+    public void Dispose ( )
+    {
+        Dispose ( true ) ;
+
+        GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        _disposed = true ;
     }
 }

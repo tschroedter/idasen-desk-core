@@ -1,29 +1,28 @@
-using System.Diagnostics.CodeAnalysis;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using System.Diagnostics.CodeAnalysis ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers;
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
-[ExcludeFromCodeCoverage]
+[ ExcludeFromCodeCoverage ]
 public class GattWriteResultWrapper
     : IGattWriteResultWrapper
 {
-    public delegate IGattWriteResultWrapper Factory(GattWriteResult result);
+    public delegate IGattWriteResultWrapper Factory ( GattWriteResult result ) ;
 
-    public static readonly IGattWriteResultWrapper NotSupported = new GattWriteResultWrapperNotSupported();
+    public static readonly IGattWriteResultWrapper NotSupported = new GattWriteResultWrapperNotSupported ( ) ;
 
-    private readonly GattWriteResult _result;
+    private readonly GattWriteResult _result ;
 
-    public GattWriteResultWrapper(GattWriteResult result)
+    public GattWriteResultWrapper ( GattWriteResult result )
     {
-        Guard.ArgumentNotNull(
-            result,
-            nameof(result));
+        Guard.ArgumentNotNull ( result ,
+                                nameof ( result ) ) ;
 
-        _result = result;
+        _result = result ;
     }
 
-    public GattCommunicationStatus Status => _result.Status;
+    public GattCommunicationStatus Status => _result.Status ;
 
-    public byte? ProtocolError => _result.ProtocolError;
+    public byte ? ProtocolError => _result.ProtocolError ;
 }

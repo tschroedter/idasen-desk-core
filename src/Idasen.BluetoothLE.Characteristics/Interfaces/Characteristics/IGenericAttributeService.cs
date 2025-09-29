@@ -1,6 +1,6 @@
 // ReSharper disable UnusedMemberInSuper.Global
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 /// <summary>
 ///     Generic Attribute service contract.
@@ -11,5 +11,5 @@ public interface IGenericAttributeService
     /// <summary>
     ///     Raw bytes of the Service Changed characteristic.
     /// </summary>
-    IEnumerable<byte> RawServiceChanged { get; }
+    IEnumerable < byte > RawServiceChanged { get ; }
 }

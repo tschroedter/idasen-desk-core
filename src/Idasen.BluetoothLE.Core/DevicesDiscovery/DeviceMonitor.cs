@@ -1,197 +1,196 @@
 // [assembly: InternalsVisibleTo("Idasen.BluetoothLE.Tests")]
 
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Autofac.Extras.DynamicProxy;
-using Idasen.Aop.Aspects;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
-using Serilog;
+using System.Reactive.Concurrency ;
+using System.Reactive.Linq ;
+using System.Reactive.Subjects ;
+using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop.Aspects ;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using Serilog ;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery;
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
 /// <inheritdoc cref="IDeviceMonitor" />
-[Intercept(typeof(LogAspect))]
+[ Intercept ( typeof ( LogAspect ) ) ]
 public class DeviceMonitor
     : IDeviceMonitor
 {
-    private readonly ISubject<IDevice> _deviceDiscovered;
-    private readonly ISubject<IDevice> _deviceNameUpdated;
-    private readonly IDevices _devices;
-    private readonly ISubject<IDevice> _deviceUpdated;
-    private readonly ILogger _logger;
-    private readonly IScheduler _scheduler;
-    private readonly IWatcher _watcher;
+    private readonly ISubject < IDevice > _deviceDiscovered ;
+    private readonly ISubject < IDevice > _deviceNameUpdated ;
+    private readonly IDevices             _devices ;
+    private readonly ISubject < IDevice > _deviceUpdated ;
+    private readonly ILogger              _logger ;
+    private readonly IScheduler           _scheduler ;
+    private readonly IWatcher             _watcher ;
 
-    private IDisposable? _disposableStarted;
-    private IDisposable? _disposableStopped;
-    private IDisposable? _disposableUpdated;
+    private IDisposable ? _disposableStarted ;
+    private IDisposable ? _disposableStopped ;
+    private IDisposable ? _disposableUpdated ;
 
-    public DeviceMonitor(
-        ILogger logger,
-        IScheduler scheduler,
-        Func<ISubject<IDevice>> factory,
-        IDevices devices,
-        IWatcher watcher)
+    public DeviceMonitor ( ILogger                       logger ,
+                           IScheduler                    scheduler ,
+                           Func < ISubject < IDevice > > factory ,
+                           IDevices                      devices ,
+                           IWatcher                      watcher )
     {
-        Guard.ArgumentNotNull(
-            logger,
-            nameof(logger));
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
 
-        Guard.ArgumentNotNull(
-            factory,
-            nameof(factory));
+        Guard.ArgumentNotNull ( factory ,
+                                nameof ( factory ) ) ;
 
-        Guard.ArgumentNotNull(
-            devices,
-            nameof(devices));
+        Guard.ArgumentNotNull ( devices ,
+                                nameof ( devices ) ) ;
 
-        Guard.ArgumentNotNull(
-            watcher,
-            nameof(watcher));
+        Guard.ArgumentNotNull ( watcher ,
+                                nameof ( watcher ) ) ;
 
-        Guard.ArgumentNotNull(
-            scheduler,
-            nameof(scheduler));
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
 
-        _logger = logger;
-        _scheduler = scheduler;
-        _devices = devices;
-        _watcher = watcher;
+        _logger    = logger ;
+        _scheduler = scheduler ;
+        _devices   = devices ;
+        _watcher   = watcher ;
 
-        _deviceUpdated = factory.Invoke();
-        _deviceDiscovered = factory.Invoke();
-        _deviceNameUpdated = factory.Invoke();
+        _deviceUpdated     = factory.Invoke ( ) ;
+        _deviceDiscovered  = factory.Invoke ( ) ;
+        _deviceNameUpdated = factory.Invoke ( ) ;
     }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IDevice> DiscoveredDevices => _devices.DiscoveredDevices;
+    public IReadOnlyCollection < IDevice > DiscoveredDevices => _devices.DiscoveredDevices ;
 
     /// <inheritdoc />
-    public bool IsListening => _watcher.IsListening;
+    public bool IsListening => _watcher.IsListening ;
 
     /// <inheritdoc />
-    public IObservable<IDevice> DeviceUpdated => _deviceUpdated;
+    public IObservable < IDevice > DeviceUpdated => _deviceUpdated ;
 
     /// <inheritdoc />
-    public IObservable<IDevice> DeviceDiscovered => _deviceDiscovered;
+    public IObservable < IDevice > DeviceDiscovered => _deviceDiscovered ;
 
     /// <inheritdoc />
-    public IObservable<IDevice> DeviceNameUpdated => _deviceNameUpdated;
+    public IObservable < IDevice > DeviceNameUpdated => _deviceNameUpdated ;
 
     /// <inheritdoc />
-    public void StartListening()
+    public void StartListening ( )
     {
-        Subscribe();
+        Subscribe ( ) ;
 
-        _watcher.StartListening();
+        _watcher.StartListening ( ) ;
     }
 
     /// <inheritdoc />
-    public void StopListening()
+    public void StopListening ( )
     {
-        _watcher.StopListening();
+        _watcher.StopListening ( ) ;
 
-        Unsubscribe();
+        Unsubscribe ( ) ;
     }
 
     /// <inheritdoc />
-    public void RemoveDevice(IDevice device) => _devices.RemoveDevice(device);
+    public void RemoveDevice ( IDevice device )
+    {
+        _devices.RemoveDevice ( device ) ;
+    }
 
     /// <inheritdoc />
-    public void Dispose()
+    public void Dispose ( )
     {
-        Unsubscribe();
+        Unsubscribe ( ) ;
 
         // complete subjects to avoid observers waiting forever
-        _deviceDiscovered.OnCompleted();
-        _deviceUpdated.OnCompleted();
-        _deviceNameUpdated.OnCompleted();
+        _deviceDiscovered.OnCompleted ( ) ;
+        _deviceUpdated.OnCompleted ( ) ;
+        _deviceNameUpdated.OnCompleted ( ) ;
 
-        _watcher.Dispose();
-        _devices.Clear();
+        _watcher.Dispose ( ) ;
+        _devices.Clear ( ) ;
 
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize ( this ) ;
     }
 
-    private void Subscribe()
+    private void Subscribe ( )
     {
-        Unsubscribe();
+        Unsubscribe ( ) ;
 
         _disposableStarted = _watcher.Started
-            .SubscribeOn(_scheduler)
-            .Subscribe(OnStarted);
+                                     .SubscribeOn ( _scheduler )
+                                     .Subscribe ( OnStarted ) ;
 
         _disposableStopped = _watcher.Stopped
-            .SubscribeOn(_scheduler)
-            .Subscribe(OnStopped);
+                                     .SubscribeOn ( _scheduler )
+                                     .Subscribe ( OnStopped ) ;
 
         _disposableUpdated = _watcher.Received
-            .SubscribeOn(_scheduler)
-            .Subscribe(OnDeviceUpdated);
+                                     .SubscribeOn ( _scheduler )
+                                     .Subscribe ( OnDeviceUpdated ) ;
     }
 
-    private void Unsubscribe()
+    private void Unsubscribe ( )
     {
-        _disposableStarted?.Dispose();
-        _disposableStopped?.Dispose();
-        _disposableUpdated?.Dispose();
+        _disposableStarted?.Dispose ( ) ;
+        _disposableStopped?.Dispose ( ) ;
+        _disposableUpdated?.Dispose ( ) ;
     }
 
-    private void OnDeviceUpdated(IDevice device)
+    private void OnDeviceUpdated ( IDevice device )
     {
-        if (!_devices.TryGetDevice(
-                device.Address,
-                out var storedDevice)) {
-            _logger.Information(
-                "[{DeviceMacAddress}] Discovered Device",
-                device.MacAddress);
+        if ( ! _devices.TryGetDevice ( device.Address ,
+                                       out var storedDevice ) )
+        {
+            _logger.Information ( "[{DeviceMacAddress}] Discovered Device" ,
+                                  device.MacAddress ) ;
 
-            _devices.AddOrUpdateDevice(device);
+            _devices.AddOrUpdateDevice ( device ) ;
 
-            _deviceDiscovered.OnNext(device);
+            _deviceDiscovered.OnNext ( device ) ;
         }
-        else {
-            _logger.Information(
-                "[{DeviceMacAddress}] Updated Device (Name = {DeviceName}, {SignalStrengthInDBm}DBm, Address = {DeviceAddress})",
-                device.MacAddress,
-                device.Name,
-                device.RawSignalStrengthInDBm,
-                device.Address);
+        else
+        {
+            _logger.Information ( "[{DeviceMacAddress}] Updated Device (Name = {DeviceName}, {SignalStrengthInDBm}DBm, Address = {DeviceAddress})" ,
+                                  device.MacAddress ,
+                                  device.Name ,
+                                  device.RawSignalStrengthInDBm ,
+                                  device.Address ) ;
 
-            var hasNameChanged = HasDeviceNameChanged(
-                device,
-                storedDevice!);
+            var hasNameChanged = HasDeviceNameChanged ( device ,
+                                                        storedDevice! ) ;
 
-            _devices.AddOrUpdateDevice(device);
+            _devices.AddOrUpdateDevice ( device ) ;
 
-            _deviceUpdated.OnNext(device);
+            _deviceUpdated.OnNext ( device ) ;
 
-            if (!hasNameChanged)
-                return;
+            if ( ! hasNameChanged )
+                return ;
 
-            _logger.Information(
-                "[{DeviceMacAddress}] Device Name Changed",
-                device.MacAddress);
+            _logger.Information ( "[{DeviceMacAddress}] Device Name Changed" ,
+                                  device.MacAddress ) ;
 
-            _deviceNameUpdated.OnNext(device);
+            _deviceNameUpdated.OnNext ( device ) ;
         }
     }
 
-    private void OnStopped(DateTime dateTime) => _logger.Information("Watcher Stopped listening");
-
-    private void OnStarted(DateTime dateTime) => _logger.Information("Watcher Started listening");
-
-    private static bool HasDeviceNameChanged(
-        IDevice device,
-        IDevice storedDevice)
+    private void OnStopped ( DateTime dateTime )
     {
-        if (!string.IsNullOrEmpty(storedDevice.Name))
-            return storedDevice.Name != device.Name;
+        _logger.Information ( "Watcher Stopped listening" ) ;
+    }
 
-        if (!string.IsNullOrEmpty(device.Name))
-            return true;
+    private void OnStarted ( DateTime dateTime )
+    {
+        _logger.Information ( "Watcher Started listening" ) ;
+    }
 
-        return storedDevice.Name != device.Name;
+    private static bool HasDeviceNameChanged ( IDevice device ,
+                                               IDevice storedDevice )
+    {
+        if ( ! string.IsNullOrEmpty ( storedDevice.Name ) )
+            return storedDevice.Name != device.Name ;
+
+        if ( ! string.IsNullOrEmpty ( device.Name ) )
+            return true ;
+
+        return storedDevice.Name != device.Name ;
     }
 }

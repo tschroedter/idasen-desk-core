@@ -1,6 +1,6 @@
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 /// <summary>
 ///     Factory for creating <see cref="IGattServicesProvider" /> instances.
@@ -10,5 +10,5 @@ public interface IGattServicesProviderFactory
     /// <summary>
     ///     Creates a provider for the specified Bluetooth LE device wrapper.
     /// </summary>
-    IGattServicesProvider Create(IBluetoothLeDeviceWrapper wrapper);
+    IGattServicesProvider Create ( IBluetoothLeDeviceWrapper wrapper ) ;
 }

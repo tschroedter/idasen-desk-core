@@ -1,10 +1,10 @@
-using Idasen.BluetoothLE.Common.Tests;
+using Idasen.BluetoothLE.Common.Tests ;
 
-namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters;
+namespace Idasen.BluetoothLE.Linak.Tests.Control.ConstructorNullTesters ;
 
-[TestClass]
+[ TestClass ]
 public class DeskMovementMonitorConstructorNullTests
-    : BaseConstructorNullTester<Desk>
+    : BaseConstructorNullTester < Desk >
 {
-    public override int NumberOfConstructorsPassed { get; } = 1;
+    public override int NumberOfConstructorsPassed { get ; } = 1 ;
 }

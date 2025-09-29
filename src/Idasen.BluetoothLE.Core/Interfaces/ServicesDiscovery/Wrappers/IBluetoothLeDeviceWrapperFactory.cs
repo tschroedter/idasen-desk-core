@@ -1,6 +1,6 @@
-using Windows.Devices.Bluetooth;
+using Windows.Devices.Bluetooth ;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
+namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
 /// <summary>
 ///     Factory to create <see cref="IBluetoothLeDeviceWrapper" /> instances.
@@ -17,5 +17,5 @@ public interface IBluetoothLeDeviceWrapperFactory
     /// <returns>
     ///     The wrapper.
     /// </returns>
-    IBluetoothLeDeviceWrapper Create(BluetoothLEDevice device);
+    IBluetoothLeDeviceWrapper Create ( BluetoothLEDevice device ) ;
 }

@@ -1,6 +1,6 @@
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 
 /// <summary>
 ///     Creates characteristic instances with a supplied device.
@@ -13,6 +13,6 @@ public interface ICharacteristicBaseFactory
     /// <typeparam name="T">The type to resolve.</typeparam>
     /// <param name="device">The device to inject.</param>
     /// <returns>An instance of <typeparamref name="T" />.</returns>
-    T Create<T>(IDevice device)
-        where T : notnull;
+    T Create < T > ( IDevice device )
+        where T : notnull ;
 }
