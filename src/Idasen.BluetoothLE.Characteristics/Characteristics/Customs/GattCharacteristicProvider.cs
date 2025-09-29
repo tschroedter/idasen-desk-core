@@ -1,4 +1,4 @@
-﻿using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
@@ -42,6 +42,7 @@ public class GattCharacteristicProvider
         Guard.ArgumentNotNull (
                                logger ,
                                nameof ( logger ) ) ;
+
         Guard.ArgumentNotNull (
                                gattCharacteristics ,
                                nameof ( gattCharacteristics ) ) ;
@@ -80,16 +81,17 @@ public class GattCharacteristicProvider
 
             if ( characteristic != null ) {
                 _logger.Information (
-                                     $"Found characteristic {characteristic.Uuid} " +
-                                     $"for description '{keyValuePair.Key}'" ) ;
+                                     "Found characteristic {Uuid} for description '{Key}'" ,
+                                     characteristic.Uuid ,
+                                     keyValuePair.Key ) ;
 
                 _characteristics [ keyValuePair.Key ] = characteristic ;
                 _properties [ keyValuePair.Key ]      = characteristic.CharacteristicProperties ;
             }
             else {
-                _logger.Information (
-                                     "Did not find characteristic " +
-                                     $"for description '{keyValuePair.Key}' and Uuid '{keyValuePair.Value}'" ) ;
+                _logger.Information ( "Did not find characteristic for description '{Key}' and Uuid '{Value}'",
+                                      keyValuePair.Key,
+                                      keyValuePair.Value ) ;
 
                 _unavailable.Add ( keyValuePair.Key ) ;
             }

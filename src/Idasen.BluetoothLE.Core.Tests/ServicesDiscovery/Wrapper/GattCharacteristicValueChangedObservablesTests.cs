@@ -1,4 +1,4 @@
-﻿using System.Reactive.Concurrency ;
+using System.Reactive.Concurrency ;
 using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
@@ -41,10 +41,11 @@ public class GattCharacteristicValueChangedObservablesTests
     {
         var uuid = Guid.Empty ;
 
-        var sut = new GattCharacteristicValueChangedObservables (
-                                                                 _logger ,
-                                                                 _scheduler ,
-                                                                 _subject ) ;
+        using var sut = new GattCharacteristicValueChangedObservables (
+                                                                       _logger ,
+                                                                       _scheduler ,
+                                                                       _subject ) ;
+
         using var disposable = sut.ValueChanged
                                   .Subscribe ( x => { uuid = x.Uuid ; } ) ;
 
