@@ -358,8 +358,10 @@ public class DeskMoverTests : IDisposable
 
         await _executor.DidNotReceive ( )
                        .Up ( ) ;
+
         await _executor.DidNotReceive ( )
                        .Down ( ) ;
+
         await _executor.DidNotReceive ( )
                        .Stop ( ) ;
     }
@@ -498,7 +500,8 @@ public class DeskMoverTests : IDisposable
         _calculator.MovementUntilStop.Returns ( 120 ) ; // enough to cross from 1000 to >= 1120
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
+
         sut.TargetHeight = 1080u ; // below predicted stopping height
 
         sut.Initialize ( ) ;
@@ -528,7 +531,8 @@ public class DeskMoverTests : IDisposable
         _calculator.MovementUntilStop.Returns ( - 150 ) ; // magnitude 150
         _calculator.HasReachedTargetHeight.Returns ( false ) ;
 
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
+
         sut.TargetHeight = 1100u ; // predicted stop 1050 <= target
 
         sut.Initialize ( ) ;
