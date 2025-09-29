@@ -125,8 +125,8 @@ jobs:
       - name: Create and push git tag (after successful NuGet publish)
         if: steps.publish_to_nuget.outcome == 'success'
         run: |
-          $run  = $env:GITHUB_RUN_NUMBER
-          $tag  = "v0.1.$run"
+          $version = "${{ steps.determine_version.outputs.version }}"
+          $tag = "v$version-beta"
           git fetch --tags --quiet
           if (git rev-parse -q --verify "refs/tags/$tag") {
             Write-Host "Tag $tag already exists, skipping."
