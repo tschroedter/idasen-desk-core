@@ -267,13 +267,13 @@ public class DeviceMonitorWithExpiryTests
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
 
-        var sut = new DeviceMonitorWithExpiry (
-                                               logger ,
-                                               dateTimeOffset ,
-                                               deviceMonitor ,
-                                               deviceExpired ,
-                                               factory ,
-                                               scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry (
+                                                     logger ,
+                                                     dateTimeOffset ,
+                                                     deviceMonitor ,
+                                                     deviceExpired ,
+                                                     factory ,
+                                                     scheduler ) ;
 
         dateTimeOffset.Ticks
                       .Returns ( sut.TimeOut.Ticks ) ;
@@ -303,13 +303,13 @@ public class DeviceMonitorWithExpiryTests
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
 
-        var sut = new DeviceMonitorWithExpiry (
-                                               logger ,
-                                               dateTimeOffset ,
-                                               deviceMonitor ,
-                                               deviceExpired ,
-                                               factory ,
-                                               scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry (
+                                                     logger ,
+                                                     dateTimeOffset ,
+                                                     deviceMonitor ,
+                                                     deviceExpired ,
+                                                     factory ,
+                                                     scheduler ) ;
 
         dateTimeOffset.Ticks
                       .Returns ( sut.TimeOut.Ticks ) ;
@@ -339,13 +339,13 @@ public class DeviceMonitorWithExpiryTests
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
 
-        var sut = new DeviceMonitorWithExpiry (
-                                               logger ,
-                                               dateTimeOffset ,
-                                               deviceMonitor ,
-                                               deviceExpired ,
-                                               factory ,
-                                               scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry (
+                                                     logger ,
+                                                     dateTimeOffset ,
+                                                     deviceMonitor ,
+                                                     deviceExpired ,
+                                                     factory ,
+                                                     scheduler ) ;
 
         dateTimeOffset.Ticks
                       .Returns ( sut.TimeOut.Ticks ) ;
@@ -372,13 +372,13 @@ public class DeviceMonitorWithExpiryTests
         TestScheduler          scheduler ,
         IDevice                device )
     {
-        var sut = new DeviceMonitorWithExpiry (
-                                               logger ,
-                                               dateTimeOffset ,
-                                               deviceMonitor ,
-                                               deviceExpired ,
-                                               factory ,
-                                               scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry (
+                                                     logger ,
+                                                     dateTimeOffset ,
+                                                     deviceMonitor ,
+                                                     deviceExpired ,
+                                                     factory ,
+                                                     scheduler ) ;
 
         IDevice expiredDevice = null! ;
 
@@ -407,13 +407,13 @@ public class DeviceMonitorWithExpiryTests
                         Arg.Any < IScheduler > ( ) )
                .Returns ( Observable.Empty < long > ( ) ) ;
 
-        var sut = new DeviceMonitorWithExpiry (
-                                               logger ,
-                                               dateTimeOffset ,
-                                               deviceMonitor ,
-                                               deviceExpired ,
-                                               factory ,
-                                               scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry (
+                                                     logger ,
+                                                     dateTimeOffset ,
+                                                     deviceMonitor ,
+                                                     deviceExpired ,
+                                                     factory ,
+                                                     scheduler ) ;
 
         scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
 
@@ -435,13 +435,13 @@ public class DeviceMonitorWithExpiryTests
                         Arg.Any < IScheduler > ( ) )
                .Returns ( Observable.Throw < long > ( new Exception ( ) ) ) ;
 
-        var sut = new DeviceMonitorWithExpiry (
-                                               logger ,
-                                               dateTimeOffset ,
-                                               deviceMonitor ,
-                                               deviceExpired ,
-                                               factory ,
-                                               scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry (
+                                                     logger ,
+                                                     dateTimeOffset ,
+                                                     deviceMonitor ,
+                                                     deviceExpired ,
+                                                     factory ,
+                                                     scheduler ) ;
 
         scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
 
