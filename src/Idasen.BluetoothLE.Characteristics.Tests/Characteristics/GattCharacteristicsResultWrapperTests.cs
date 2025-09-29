@@ -10,6 +10,7 @@ public class GattCharacteristicsResultWrapperTests
         // This test requires a real instance or an adapter to mock. Marking inconclusive for now.
         Assert.Inconclusive (
                              "Cannot mock sealed WinRT type GattCharacteristicsResult. Provide an adapter or helper to create a real instance for testing." ) ;
+
         return Task.CompletedTask ;
     }
 }

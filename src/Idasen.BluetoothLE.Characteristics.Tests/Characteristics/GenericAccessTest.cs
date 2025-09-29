@@ -1,4 +1,4 @@
-﻿using System.Reactive.Subjects ;
+using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Common ;
@@ -19,7 +19,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public void RawResolution_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -34,7 +34,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task RawResolution_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -50,7 +50,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public void RawParameters_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -65,7 +65,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task RawParameters_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -81,7 +81,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public void RawAppearance_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -96,7 +96,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task RawAppearance_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -112,7 +112,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public void RawDeviceName_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -127,7 +127,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task RawDeviceName_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -143,7 +143,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task Refresh_ForInvoked_AppearanceChanged ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -158,7 +158,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task Refresh_ForInvoked_ParametersChanged ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -173,7 +173,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task Refresh_ForInvoked_ResolutionChanged ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -188,7 +188,7 @@ public class GenericAccessTest
     [ TestMethod ]
     public async Task Refresh_ForInvoked_DeviceNameChanged ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
