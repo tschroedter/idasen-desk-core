@@ -2,7 +2,7 @@
 
 // ReSharper disable InvalidXmlDocComment
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common;
 
 /// <summary>
 ///     Represents a collection of keys and values.
@@ -14,12 +14,12 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 /// <typeparam name="TValue">
 ///     The type of the values in the dictionary.
 /// </typeparam>
-public interface ISimpleKeysAndValues < TKey , TValue >
+public interface ISimpleKeysAndValues<TKey, TValue>
 {
     /// <summary>
     ///     Gets a cloned version of the dictionary.
     /// </summary>
-    IReadOnlyDictionary < TKey , TValue > ReadOnlyDictionary { get ; }
+    IReadOnlyDictionary<TKey, TValue> ReadOnlyDictionary { get; }
 
     /// <summary>
     ///     Gets or sets the value associated with the specified key.
@@ -32,21 +32,21 @@ public interface ISimpleKeysAndValues < TKey , TValue >
     ///     key is not found, a get operation throws a KeyNotFoundException,
     ///     and a set operation creates a new element with the specified key.
     /// </returns>
-    TValue this [ TKey key ] { get ; set ; }
+    TValue this[TKey key] { get; set; }
 
     /// <summary>
     ///     Gets the number of key/value pairs contained in the
     ///     Dictionary<TKey, TValue>.
     /// </summary>
-    int Count { get ; }
+    int Count { get; }
 
     /// <summary>
     ///     Gets a collection containing the keys in the Dictionary<TKey, TValue>.
     /// </summary>
-    IEnumerable < string > Keys { get ; }
+    IEnumerable<string> Keys { get; }
 
     /// <summary>
     ///     Removes all keys and values from the Dictionary<TKey, TValue>.
     /// </summary>
-    void Clear ( ) ;
+    void Clear();
 }

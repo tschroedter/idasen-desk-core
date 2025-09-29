@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Characteristics.Common ;
+namespace Idasen.BluetoothLE.Characteristics.Common;
 
 /// <summary>
 ///     DTO representing an official GATT characteristic record from the CSV resource.
@@ -8,10 +8,10 @@ public sealed class CsvGattCharacteristic
     /// <summary>
     ///     The characteristic UUID as a string.
     /// </summary>
-    public string Uuid { get ; set ; } = string.Empty ;
+    public string Uuid { get; set; } = string.Empty;
 
     /// <summary>
     ///     The official characteristic name.
     /// </summary>
-    public string Name { get ; set ; } = string.Empty ;
+    public string Name { get; set; } = string.Empty;
 }

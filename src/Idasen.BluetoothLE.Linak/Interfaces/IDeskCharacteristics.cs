@@ -1,9 +1,9 @@
-﻿// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable UnusedMemberInSuper.Global
 
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces ;
+namespace Idasen.BluetoothLE.Linak.Interfaces;
 
 /// <summary>
 ///     Aggregates LINAK desk characteristics and provides typed accessors.
@@ -13,32 +13,32 @@ public interface IDeskCharacteristics
     /// <summary>
     ///     Gets the Generic Access characteristic.
     /// </summary>
-    IGenericAccess GenericAccess { get ; }
+    IGenericAccess GenericAccess { get; }
 
     /// <summary>
     ///     Gets the Generic Attribute characteristic.
     /// </summary>
-    IGenericAttributeService GenericAttributeService { get ; }
+    IGenericAttributeService GenericAttributeService { get; }
 
     /// <summary>
     ///     Gets the Reference Input characteristic.
     /// </summary>
-    IReferenceInput ReferenceInput { get ; }
+    IReferenceInput ReferenceInput { get; }
 
     /// <summary>
     ///     Gets the Reference Output characteristic.
     /// </summary>
-    IReferenceOutput ReferenceOutput { get ; }
+    IReferenceOutput ReferenceOutput { get; }
 
     /// <summary>
     ///     Gets the DPG (Data Processing Group) characteristic.
     /// </summary>
-    IDpg Dpg { get ; }
+    IDpg Dpg { get; }
 
     /// <summary>
     ///     Gets the Control characteristic.
     /// </summary>
-    IControl Control { get ; }
+    IControl Control { get; }
 
     /// <summary>
     ///     Gets the read-only collection of all discovered LINAK desk characteristics,
@@ -52,20 +52,20 @@ public interface IDeskCharacteristics
     ///     <see cref="ReferenceInput" />, <see cref="ReferenceOutput" />,
     ///     <see cref="Dpg" />, and <see cref="Control" />.
     /// </remarks>
-    IReadOnlyDictionary < DeskCharacteristicKey , ICharacteristicBase > Characteristics { get ; }
+    IReadOnlyDictionary<DeskCharacteristicKey, ICharacteristicBase> Characteristics { get; }
 
     /// <summary>
     ///     Initializes the characteristics by discovering them on the specified device.
     /// </summary>
     /// <param name="device">The device to initialize characteristics for.</param>
     /// <returns>The current instance of <see cref="IDeskCharacteristics" />.</returns>
-    IDeskCharacteristics Initialize ( IDevice device ) ;
+    IDeskCharacteristics Initialize(IDevice device);
 
     /// <summary>
     ///     Refreshes all characteristics by reading their values.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task Refresh ( ) ;
+    Task Refresh();
 
     /// <summary>
     ///     Adds a characteristic with the specified key.
@@ -75,6 +75,7 @@ public interface IDeskCharacteristics
     /// <returns>
     ///     The current instance of <see cref="IDeskCharacteristics" />.
     /// </returns>
-    IDeskCharacteristics WithCharacteristics ( DeskCharacteristicKey key ,
-                                               ICharacteristicBase   characteristic ) ;
+    IDeskCharacteristics WithCharacteristics(
+        DeskCharacteristicKey key,
+        ICharacteristicBase characteristic);
 }

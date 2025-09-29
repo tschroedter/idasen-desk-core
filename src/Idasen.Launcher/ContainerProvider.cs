@@ -1,21 +1,21 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using Autofac ;
-using Autofac.Core ;
-using AutofacSerilogIntegration ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Linak ;
-using Microsoft.Extensions.Configuration ;
-using Serilog ;
-using Serilog.Configuration ;
+using System.Diagnostics.CodeAnalysis;
+using Autofac;
+using Autofac.Core;
+using AutofacSerilogIntegration;
+using Idasen.BluetoothLE.Core;
+using Idasen.BluetoothLE.Linak;
+using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Configuration;
 
-namespace Idasen.Launcher ;
+namespace Idasen.Launcher;
 
 /// <summary>
 ///     Provides factory methods to create and configure an Autofac <see cref="IContainer" />, wiring up Serilog and the
 ///     BluetoothLE modules. Overloads allow configuring Serilog from app name/log file, <see cref="ILoggerSettings" />, or
 ///     <see cref="IConfiguration" />.
 /// </summary>
-[ ExcludeFromCodeCoverage ]
+[ExcludeFromCodeCoverage]
 public static class ContainerProvider
 {
     /// <summary>
@@ -26,19 +26,23 @@ public static class ContainerProvider
     /// <param name="appLogFileName">Log file name (e.g., <c>app.log</c>).</param>
     /// <param name="otherModules">Optional additional Autofac modules to register.</param>
     /// <returns>A built <see cref="IContainer" /> ready for use.</returns>
-    public static IContainer Create ( string                    appName ,
-                                      string                    appLogFileName ,
-                                      IEnumerable < IModule > ? otherModules = null )
+    public static IContainer Create(
+        string appName,
+        string appLogFileName,
+        IEnumerable<IModule>? otherModules = null)
     {
-        Guard.ArgumentNotEmptyOrWhitespace ( appName ,
-                                             nameof ( appName ) ) ;
-        Guard.ArgumentNotEmptyOrWhitespace ( appLogFileName ,
-                                             nameof ( appLogFileName ) ) ;
+        Guard.ArgumentNotEmptyOrWhitespace(
+            appName,
+            nameof(appName));
+        Guard.ArgumentNotEmptyOrWhitespace(
+            appLogFileName,
+            nameof(appLogFileName));
 
-        Log.Logger = LoggerProvider.CreateLogger ( appName ,
-                                                   appLogFileName ) ;
+        Log.Logger = LoggerProvider.CreateLogger(
+            appName,
+            appLogFileName);
 
-        return Register ( otherModules ) ;
+        return Register(otherModules);
     }
 
     /// <summary>
@@ -47,17 +51,18 @@ public static class ContainerProvider
     /// <param name="settings">Serilog settings source.</param>
     /// <param name="otherModules">Optional additional Autofac modules to register.</param>
     /// <returns>A built <see cref="IContainer" /> ready for use.</returns>
-    public static IContainer Create ( ILoggerSettings           settings ,
-                                      IEnumerable < IModule > ? otherModules = null )
+    public static IContainer Create(
+        ILoggerSettings settings,
+        IEnumerable<IModule>? otherModules = null)
     {
-        ArgumentNullException.ThrowIfNull ( settings ) ;
+        ArgumentNullException.ThrowIfNull(settings);
 
-        Log.Logger = new LoggerConfiguration ( ).ReadFrom
-                                                .Settings ( settings )
-                                                .Enrich.WithCaller ( )
-                                                .CreateLogger ( ) ;
+        Log.Logger = new LoggerConfiguration().ReadFrom
+            .Settings(settings)
+            .Enrich.WithCaller()
+            .CreateLogger();
 
-        return Register ( otherModules ) ;
+        return Register(otherModules);
     }
 
     /// <summary>
@@ -67,40 +72,46 @@ public static class ContainerProvider
     /// <param name="configuration">Configuration root containing Serilog settings.</param>
     /// <param name="otherModules">Optional additional Autofac modules to register.</param>
     /// <returns>A built <see cref="IContainer" /> ready for use.</returns>
-    public static IContainer Create ( IConfiguration            configuration ,
-                                      IEnumerable < IModule > ? otherModules = null )
+    public static IContainer Create(
+        IConfiguration configuration,
+        IEnumerable<IModule>? otherModules = null)
     {
-        ArgumentNullException.ThrowIfNull ( configuration ) ;
+        ArgumentNullException.ThrowIfNull(configuration);
 
-        var loggerConfiguration = new LoggerConfiguration ( ).ReadFrom
-                                                             .Configuration ( configuration )
-                                                             .Enrich.WithCaller ( ) ;
+        var loggerConfiguration = new LoggerConfiguration().ReadFrom
+            .Configuration(configuration)
+            .Enrich.WithCaller();
 
-        Log.Logger = loggerConfiguration.CreateLogger ( ) ;
+        Log.Logger = loggerConfiguration.CreateLogger();
 
-        return Register ( otherModules ,
-                          configuration ) ;
+        return Register(
+            otherModules,
+            configuration);
     }
 
-    private static IContainer Register ( IEnumerable < IModule > ? otherModules ,
-                                         IConfiguration ?          configuration = null )
+    private static IContainer Register(
+        IEnumerable<IModule>? otherModules,
+        IConfiguration? configuration = null)
     {
-        var builder = new ContainerBuilder ( ) ;
+        var builder = new ContainerBuilder();
 
-        builder.RegisterLogger ( ) ;
+        builder.RegisterLogger();
 
-        if ( configuration != null )
-            builder.RegisterInstance ( configuration )
-                   .As < IConfiguration > ( )
-                   .SingleInstance ( ) ;
+        if (configuration != null) {
+            builder.RegisterInstance(configuration)
+                .As<IConfiguration>()
+                .SingleInstance();
+        }
 
-        builder.RegisterModule < BluetoothLECoreModule > ( ) ;
-        builder.RegisterModule < BluetoothLELinakModule > ( ) ;
+        builder.RegisterModule<BluetoothLECoreModule>();
+        builder.RegisterModule<BluetoothLELinakModule>();
 
-        if ( otherModules != null )
-            foreach ( var otherModule in otherModules )
-                builder.RegisterModule ( otherModule ) ;
+        if (otherModules != null) {
+            foreach (var otherModule in otherModules) {
+                builder.RegisterModule(otherModule);
+            }
+        }
 
-        return builder.Build ( ) ;
+        return builder.Build();
     }
 }

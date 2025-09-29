@@ -1,8 +1,8 @@
-﻿using FluentAssertions ;
-using FluentAssertions.Primitives ;
-using FluentAssertions.Specialized ;
+using FluentAssertions;
+using FluentAssertions.Primitives;
+using FluentAssertions.Specialized;
 
-namespace Idasen.BluetoothLE.Tests ;
+namespace Idasen.BluetoothLE.Tests;
 
 public static class ExceptionAssertionsExtensions
 {
@@ -12,13 +12,13 @@ public static class ExceptionAssertionsExtensions
     /// <param name="assertions">The assertions.</param>
     /// <param name="parameter">The expected parameter name.</param>
     /// <returns></returns>
-    public static AndConstraint < StringAssertions > WithParameter (
-        this ExceptionAssertions < ArgumentNullException > assertions ,
-        string                                             parameter )
+    public static AndConstraint<StringAssertions> WithParameter(
+        this ExceptionAssertions<ArgumentNullException> assertions,
+        string parameter)
     {
         return assertions.And
-                         .ParamName
-                         .Should ( )
-                         .Be ( parameter ) ;
+            .ParamName
+            .Should()
+            .Be(parameter);
     }
 }

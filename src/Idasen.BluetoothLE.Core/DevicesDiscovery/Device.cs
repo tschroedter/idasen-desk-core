@@ -1,81 +1,85 @@
-﻿using System.Diagnostics ;
-using System.Globalization ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Selkie.DefCon.One.Common ;
+using System.Diagnostics;
+using System.Globalization;
+using Autofac.Extras.DynamicProxy;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Core.Interfaces;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
+using Selkie.DefCon.One.Common;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery;
 
 /// <inheritdoc />
-[ DebuggerDisplay ( "{Name} {MacAddress}" ) ]
-[ Intercept ( typeof ( LogAspect ) ) ]
+[DebuggerDisplay("{Name} {MacAddress}")]
+[Intercept(typeof(LogAspect))]
 public class Device
     : IDevice
 {
-    public delegate IDevice Factory ( IDateTimeOffset broadcastTime ,
-                                      ulong           address ,
-                                      string ?        name ,
-                                      short           rawSignalStrengthInDBm ) ;
+    public delegate IDevice Factory(
+        IDateTimeOffset broadcastTime,
+        ulong address,
+        string? name,
+        short rawSignalStrengthInDBm);
 
-    public Device ( IDevice device )
+    public Device(IDevice device)
     {
-        Guard.ArgumentNotNull ( device ,
-                                nameof ( device ) ) ;
+        Guard.ArgumentNotNull(
+            device,
+            nameof(device));
 
-        BroadcastTime          = device.BroadcastTime ;
-        Address                = device.Address ;
-        MacAddress             = device.MacAddress ;
-        Name                   = device.Name ;
-        RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
+        BroadcastTime = device.BroadcastTime;
+        Address = device.Address;
+        MacAddress = device.MacAddress;
+        Name = device.Name;
+        RawSignalStrengthInDBm = device.RawSignalStrengthInDBm;
     }
 
-    public Device ( IDateTimeOffset          broadcastTime ,
-                    ulong                    address ,
-                    [ GuardIgnore ] string ? name ,
-                    short                    rawSignalStrengthInDBm )
+    public Device(
+        IDateTimeOffset broadcastTime,
+        ulong address,
+        [GuardIgnore] string? name,
+        short rawSignalStrengthInDBm)
     {
-        Guard.ArgumentNotNull ( broadcastTime ,
-                                nameof ( broadcastTime ) ) ;
+        Guard.ArgumentNotNull(
+            broadcastTime,
+            nameof(broadcastTime));
 
-        BroadcastTime          = broadcastTime ;
-        Address                = address ;
-        MacAddress             = address.ToMacAddress ( ) ;
-        Name                   = name ;
-        RawSignalStrengthInDBm = rawSignalStrengthInDBm ;
+        BroadcastTime = broadcastTime;
+        Address = address;
+        MacAddress = address.ToMacAddress();
+        Name = name;
+        RawSignalStrengthInDBm = rawSignalStrengthInDBm;
     }
 
     /// <inheritdoc />
-    public IDateTimeOffset BroadcastTime { get ; set ; }
+    public IDateTimeOffset BroadcastTime { get; set; }
 
     /// <inheritdoc />
-    public ulong Address { get ; }
+    public ulong Address { get; }
 
     /// <inheritdoc />
-    public string MacAddress { get ; }
+    public string MacAddress { get; }
 
     /// <inheritdoc />
-    public string ? Name { get ; set ; }
+    public string? Name { get; set; }
 
     /// <inheritdoc />
-    public short RawSignalStrengthInDBm { get ; set ; }
+    public short RawSignalStrengthInDBm { get; set; }
 
     /// <inheritdoc />
-    public string Details => ToString ( ) ;
+    public string Details => ToString();
 
     /// <inheritdoc />
-    public override string ToString ( )
+    public override string ToString()
     {
-        var name = string.IsNullOrWhiteSpace ( Name )
-                       ? "[No Name]"
-                       : Name ;
+        var name = string.IsNullOrWhiteSpace(Name)
+            ? "[No Name]"
+            : Name;
 
         return
-            $"Name = {name}, "                                                                   +
-            $"MacAddress = {MacAddress}, "                                                       +
-            $"Address = {Address}, "                                                             +
-            $"BroadcastTime = {BroadcastTime.ToString ( "O" , CultureInfo.InvariantCulture )}, " +
-            $"RawSignalStrengthInDBm = {RawSignalStrengthInDBm}dB" ;
+            $"Name = {name}, " +
+            $"MacAddress = {MacAddress}, " +
+            $"Address = {Address}, " +
+            $"BroadcastTime = {BroadcastTime.ToString("O", CultureInfo.InvariantCulture)}, " +
+            $"RawSignalStrengthInDBm = {RawSignalStrengthInDBm}dB";
     }
 }

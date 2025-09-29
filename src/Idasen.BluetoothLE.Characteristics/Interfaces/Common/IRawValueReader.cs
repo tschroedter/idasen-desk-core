@@ -1,6 +1,6 @@
-﻿using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common;
 
 /// <summary>
 ///     Reads raw byte values from a GATT characteristic.
@@ -14,5 +14,5 @@ public interface IRawValueReader
     /// <returns>
     ///     A tuple where the first item indicates success, and the second item contains the value bytes when successful.
     /// </returns>
-    Task < (bool , byte [ ]) > TryReadValueAsync ( IGattCharacteristicWrapper characteristic ) ;
+    Task<(bool, byte[])> TryReadValueAsync(IGattCharacteristicWrapper characteristic);
 }

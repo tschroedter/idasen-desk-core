@@ -1,6 +1,6 @@
-﻿using JetBrains.Annotations ;
+using JetBrains.Annotations;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
 
 /// <summary>
 ///     The collection contains the discovered devices.
@@ -10,14 +10,14 @@ public interface IDevices
     /// <summary>
     ///     Collection of discovered devices.
     /// </summary>
-    IReadOnlyCollection < IDevice > DiscoveredDevices { get ; }
+    IReadOnlyCollection<IDevice> DiscoveredDevices { get; }
 
     /// <summary>
     ///     Add or Update a device in the collection.
     /// </summary>
     /// <param name="device"></param>
     /// <returns>The added or updated device.</returns>
-    void AddOrUpdateDevice ( IDevice device ) ;
+    void AddOrUpdateDevice(IDevice device);
 
     /// <summary>
     ///     Determines if the collection contains a specific device.
@@ -26,8 +26,8 @@ public interface IDevices
     /// <returns>
     ///     'true' if the device was found, otherwise 'false'.
     /// </returns>
-    [ UsedImplicitly ]
-    bool ContainsDevice ( IDevice device ) ;
+    [UsedImplicitly]
+    bool ContainsDevice(IDevice device);
 
     /// <summary>
     ///     Gets the value associated with the specified key.
@@ -38,8 +38,9 @@ public interface IDevices
     ///     address is found; otherwise, the default null. This parameter is passed uninitialized.
     /// </param>
     /// <returns>true if the dictionary contains an element with the specified key; otherwise, false.</returns>
-    bool TryGetDevice ( ulong         address ,
-                        out IDevice ? device ) ;
+    bool TryGetDevice(
+        ulong address,
+        out IDevice? device);
 
     /// <summary>
     ///     Remove the given device from the collection.
@@ -47,10 +48,10 @@ public interface IDevices
     /// <param name="device">
     ///     The device to be removed.
     /// </param>
-    void RemoveDevice ( IDevice device ) ;
+    void RemoveDevice(IDevice device);
 
     /// <summary>
     ///     Clear the collection.
     /// </summary>
-    void Clear ( ) ;
+    void Clear();
 }

@@ -1,8 +1,8 @@
-﻿using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Idasen.BluetoothLE.Common.Tests;
+using Idasen.BluetoothLE.Core.DevicesDiscovery;
 
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters ;
+namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters;
 
-[ TestClass ]
+[TestClass]
 public class WrapperConstructorTests
-    : BaseConstructorNullTester < Wrapper > ;
+    : BaseConstructorNullTester<Wrapper>;

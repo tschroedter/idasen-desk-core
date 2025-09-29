@@ -1,23 +1,20 @@
-using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using FluentAssertions;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns;
 
-[ TestClass ]
+[TestClass]
 public class GenericAttributeServiceTests
 {
-    [ TestMethod ]
-    public void RawServiceChanged_ForInvoked_Empty ( )
+    [TestMethod]
+    public void RawServiceChanged_ForInvoked_Empty()
     {
-        using var sut = CreateSut ( ) ;
+        using var sut = CreateSut();
 
         sut.RawServiceChanged
-           .Should ( )
-           .BeEmpty ( ) ;
+            .Should()
+            .BeEmpty();
     }
 
-    private static GenericAttributeService CreateSut ( )
-    {
-        return new GenericAttributeService ( ) ;
-    }
+    private static GenericAttributeService CreateSut() => new();
 }

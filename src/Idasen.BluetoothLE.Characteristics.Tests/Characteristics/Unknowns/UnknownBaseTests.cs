@@ -1,31 +1,28 @@
-using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using FluentAssertions;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns;
 
-[ TestClass ]
+[TestClass]
 public class UnknownBaseTests
 {
-    [ TestMethod ]
-    public void Initialize_ForInvoked_DoesNothing ( )
+    [TestMethod]
+    public void Initialize_ForInvoked_DoesNothing()
     {
-        Action action = ( ) => CreateSut ( ).Initialize < object > ( ) ;
+        Action action = () => CreateSut().Initialize<object>();
 
-        action.Should ( )
-              .NotThrow < Exception > ( ) ;
+        action.Should()
+            .NotThrow<Exception>();
     }
 
-    [ TestMethod ]
-    public void Refresh_ForInvoked_DoesNothing ( )
+    [TestMethod]
+    public void Refresh_ForInvoked_DoesNothing()
     {
-        Action action = ( ) => CreateSut ( ).Refresh ( ) ;
+        Action action = () => CreateSut().Refresh();
 
-        action.Should ( )
-              .NotThrow < Exception > ( ) ;
+        action.Should()
+            .NotThrow<Exception>();
     }
 
-    private static UnknownBase CreateSut ( )
-    {
-        return new UnknownBase ( ) ;
-    }
+    private static UnknownBase CreateSut() => new();
 }

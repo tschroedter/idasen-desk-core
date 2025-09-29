@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+namespace Idasen.BluetoothLE.Linak.Interfaces;
 
 /// <summary>
 ///     Runs actions on a background thread with cancellation support.
@@ -10,6 +10,7 @@ public interface ITaskRunner
     /// </summary>
     /// <param name="action">The action to run.</param>
     /// <param name="token">Cancellation token to stop execution.</param>
-    Task Run ( Action            action ,
-               CancellationToken token ) ;
+    Task Run(
+        Action action,
+        CancellationToken token);
 }

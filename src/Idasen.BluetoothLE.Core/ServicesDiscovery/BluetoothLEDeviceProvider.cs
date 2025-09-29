@@ -1,16 +1,14 @@
-using Windows.Devices.Bluetooth ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Autofac.Extras.DynamicProxy;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
+using Windows.Devices.Bluetooth;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
+[Intercept(typeof(LogAspect))]
 // ReSharper disable once InconsistentNaming
 public class BluetoothLEDeviceProvider : IBluetoothLEDeviceProvider
 {
-    public async Task < BluetoothLEDevice ? > FromBluetoothAddressAsync ( ulong address )
-    {
-        return await BluetoothLEDevice.FromBluetoothAddressAsync ( address ) ;
-    }
+    public async Task<BluetoothLEDevice?> FromBluetoothAddressAsync(ulong address) =>
+        await BluetoothLEDevice.FromBluetoothAddressAsync(address);
 }

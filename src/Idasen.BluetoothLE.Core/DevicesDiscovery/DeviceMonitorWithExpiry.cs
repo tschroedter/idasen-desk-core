@@ -1,185 +1,189 @@
-using System.Reactive.Concurrency ;
-using System.Reactive.Linq ;
-using System.Reactive.Subjects ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Serilog ;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Autofac.Extras.DynamicProxy;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Core.Interfaces;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
+using Serilog;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
+[Intercept(typeof(LogAspect))]
 public class DeviceMonitorWithExpiry
     : IDeviceMonitorWithExpiry
 {
-    internal const int SixtySeconds = 60 ;
+    internal const int SixtySeconds = 60;
 
-    private readonly IDateTimeOffset _dateTimeOffset ;
+    private readonly IDateTimeOffset _dateTimeOffset;
 
-    private readonly ISubject < IDevice >    _deviceExpired ;
-    private readonly IDeviceMonitor          _deviceMonitor ;
-    private readonly IObservableTimerFactory _factory ;
-    private readonly ILogger                 _logger ;
-    private readonly IScheduler              _scheduler ;
-    private          TimeSpan                _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
+    private readonly ISubject<IDevice> _deviceExpired;
+    private readonly IDeviceMonitor _deviceMonitor;
+    private readonly IObservableTimerFactory _factory;
+    private readonly ILogger _logger;
+    private readonly IScheduler _scheduler;
+    private TimeSpan _timeOut = TimeSpan.FromSeconds(SixtySeconds);
 
-    private IDisposable ? _timer ;
+    private IDisposable? _timer;
 
-    public DeviceMonitorWithExpiry ( ILogger                 logger ,
-                                     IDateTimeOffset         dateTimeOffset ,
-                                     IDeviceMonitor          deviceMonitor ,
-                                     ISubject < IDevice >    deviceExpired ,
-                                     IObservableTimerFactory factory ,
-                                     IScheduler              scheduler )
+    public DeviceMonitorWithExpiry(
+        ILogger logger,
+        IDateTimeOffset dateTimeOffset,
+        IDeviceMonitor deviceMonitor,
+        ISubject<IDevice> deviceExpired,
+        IObservableTimerFactory factory,
+        IScheduler scheduler)
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull(
+            logger,
+            nameof(logger));
 
-        Guard.ArgumentNotNull ( dateTimeOffset ,
-                                nameof ( dateTimeOffset ) ) ;
+        Guard.ArgumentNotNull(
+            dateTimeOffset,
+            nameof(dateTimeOffset));
 
-        Guard.ArgumentNotNull ( deviceMonitor ,
-                                nameof ( deviceMonitor ) ) ;
+        Guard.ArgumentNotNull(
+            deviceMonitor,
+            nameof(deviceMonitor));
 
-        Guard.ArgumentNotNull ( deviceExpired ,
-                                nameof ( deviceExpired ) ) ;
+        Guard.ArgumentNotNull(
+            deviceExpired,
+            nameof(deviceExpired));
 
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        Guard.ArgumentNotNull(
+            factory,
+            nameof(factory));
 
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull(
+            scheduler,
+            nameof(scheduler));
 
-        _logger         = logger ;
-        _dateTimeOffset = dateTimeOffset ;
-        _deviceMonitor  = deviceMonitor ;
-        _deviceExpired  = deviceExpired ;
-        _factory        = factory ;
-        _scheduler      = scheduler ;
+        _logger = logger;
+        _dateTimeOffset = dateTimeOffset;
+        _deviceMonitor = deviceMonitor;
+        _deviceExpired = deviceExpired;
+        _factory = factory;
+        _scheduler = scheduler;
 
         // Keep backward compatibility with existing tests: start timer immediately
-        StartTimerIfNeeded ( ) ;
+        StartTimerIfNeeded();
     }
 
     /// <inheritdoc />
     public TimeSpan TimeOut
     {
-        get => _timeOut ;
+        get => _timeOut;
         set
         {
-            if ( value.TotalSeconds < 0 )
-                throw new ArgumentException ( "Value must be >= 0" ) ;
+            if (value.TotalSeconds < 0)
+                throw new ArgumentException("Value must be >= 0");
 
-            _timeOut = value ;
+            _timeOut = value;
 
-            _logger.Information ( "TimeOut = {Timeout}" ,
-                                  value ) ;
+            _logger.Information(
+                "TimeOut = {Timeout}",
+                value);
 
             // restart timer if running to apply new timeout
-            if ( _timer != null )
-                RestartTimer ( ) ;
+            if (_timer != null)
+                RestartTimer();
         }
     }
 
     /// <inheritdoc />
-    public IObservable < IDevice > DeviceExpired => _deviceExpired ;
+    public IObservable<IDevice> DeviceExpired => _deviceExpired;
 
     /// <inheritdoc />
-    public void Dispose ( )
+    public void Dispose()
     {
-        StopTimer ( ) ;
-        _deviceMonitor.Dispose ( ) ;
+        StopTimer();
+        _deviceMonitor.Dispose();
         GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc />
-    public IReadOnlyCollection < IDevice > DiscoveredDevices => _deviceMonitor.DiscoveredDevices ;
+    public IReadOnlyCollection<IDevice> DiscoveredDevices => _deviceMonitor.DiscoveredDevices;
 
     /// <inheritdoc />
-    public bool IsListening => _deviceMonitor.IsListening ;
+    public bool IsListening => _deviceMonitor.IsListening;
 
     /// <inheritdoc />
-    public IObservable < IDevice > DeviceUpdated => _deviceMonitor.DeviceUpdated ;
+    public IObservable<IDevice> DeviceUpdated => _deviceMonitor.DeviceUpdated;
 
     /// <inheritdoc />
-    public IObservable < IDevice > DeviceDiscovered => _deviceMonitor.DeviceDiscovered ;
+    public IObservable<IDevice> DeviceDiscovered => _deviceMonitor.DeviceDiscovered;
 
     /// <inheritdoc />
-    public IObservable < IDevice > DeviceNameUpdated => _deviceMonitor.DeviceNameUpdated ;
+    public IObservable<IDevice> DeviceNameUpdated => _deviceMonitor.DeviceNameUpdated;
 
     /// <inheritdoc />
-    public void StartListening ( )
+    public void StartListening()
     {
-        _deviceMonitor.StartListening ( ) ;
-        StartTimerIfNeeded ( ) ;
+        _deviceMonitor.StartListening();
+        StartTimerIfNeeded();
     }
 
     /// <inheritdoc />
-    public void StopListening ( )
+    public void StopListening()
     {
-        _deviceMonitor.StopListening ( ) ;
-        StopTimer ( ) ;
+        _deviceMonitor.StopListening();
+        StopTimer();
     }
 
     /// <inheritdoc />
-    public void RemoveDevice ( IDevice device )
+    public void RemoveDevice(IDevice device) => _deviceMonitor.RemoveDevice(device);
+
+    private void OnCompleted() => StopListening();
+
+    private void OnError(Exception ex)
     {
-        _deviceMonitor.RemoveDevice ( device ) ;
+        _logger.Error(
+            ex,
+            "Unhandled exception in {Class}.{Method}",
+            nameof(DeviceMonitorWithExpiry),
+            nameof(OnError));
+
+        StopListening();
     }
 
-    private void OnCompleted ( )
+    private void CleanUp(long l)
     {
-        StopListening ( ) ;
-    }
+        foreach (var device in DiscoveredDevices) {
+            var delta = _dateTimeOffset.Now.Ticks - device.BroadcastTime.Ticks;
 
-    private void OnError ( Exception ex )
-    {
-        _logger.Error ( ex ,
-                        "Unhandled exception in {Class}.{Method}" ,
-                        nameof ( DeviceMonitorWithExpiry ) ,
-                        nameof ( OnError ) ) ;
+            if (!(delta >= TimeOut.Ticks))
+                continue;
 
-        StopListening ( ) ;
-    }
+            RemoveDevice(device);
 
-    private void CleanUp ( long l )
-    {
-        foreach ( var device in DiscoveredDevices )
-        {
-            var delta = _dateTimeOffset.Now.Ticks - device.BroadcastTime.Ticks ;
-
-            if ( ! ( delta >= TimeOut.Ticks ) )
-                continue ;
-
-            RemoveDevice ( device ) ;
-
-            _deviceExpired.OnNext ( device ) ;
+            _deviceExpired.OnNext(device);
         }
     }
 
-    private void StartTimerIfNeeded ( )
+    private void StartTimerIfNeeded()
     {
-        if ( _timer != null )
-            return ;
+        if (_timer != null)
+            return;
 
-        _timer = _factory.Create ( TimeOut ,
-                                   _scheduler )
-                         .SubscribeOn ( _scheduler )
-                         .Subscribe ( CleanUp ,
-                                      OnError ,
-                                      OnCompleted ) ;
+        _timer = _factory.Create(
+                TimeOut,
+                _scheduler)
+            .SubscribeOn(_scheduler)
+            .Subscribe(
+                CleanUp,
+                OnError,
+                OnCompleted);
     }
 
-    private void StopTimer ( )
+    private void StopTimer()
     {
-        _timer?.Dispose ( ) ;
-        _timer = null ;
+        _timer?.Dispose();
+        _timer = null;
     }
 
-    private void RestartTimer ( )
+    private void RestartTimer()
     {
-        StopTimer ( ) ;
-        StartTimerIfNeeded ( ) ;
+        StopTimer();
+        StartTimerIfNeeded();
     }
 }

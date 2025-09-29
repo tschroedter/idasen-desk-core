@@ -1,11 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis ;
-using System.Reactive ;
-using System.Reactive.Linq ;
-using JetBrains.Annotations ;
+using System.Diagnostics.CodeAnalysis;
+using System.Reactive;
+using System.Reactive.Linq;
+using JetBrains.Annotations;
 
-namespace Idasen.BluetoothLE.Linak ;
+namespace Idasen.BluetoothLE.Linak;
 
-[ ExcludeFromCodeCoverage ]
+[ExcludeFromCodeCoverage]
 public static class RxExtensions
 {
     /// <summary>
@@ -15,25 +15,27 @@ public static class RxExtensions
     /// <param name="source">The source observable sequence.</param>
     /// <param name="asyncAction">An asynchronous action to run for each element.</param>
     /// <param name="handler">Optional error handler for the subscription.</param>
-    [ UsedImplicitly ]
-    public static IDisposable SubscribeAsync < T > ( this IObservable < T > source ,
-                                                     Func < Task >          asyncAction ,
-                                                     Action < Exception > ? handler = null )
+    [UsedImplicitly]
+    public static IDisposable SubscribeAsync<T>(
+        this IObservable<T> source,
+        Func<Task> asyncAction,
+        Action<Exception>? handler = null)
     {
-        ArgumentNullException.ThrowIfNull ( source ) ;
-        ArgumentNullException.ThrowIfNull ( asyncAction ) ;
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(asyncAction);
 
-        var query = source.SelectMany ( _ => Observable.FromAsync ( async ( ) =>
-                                                                    {
-                                                                        await asyncAction ( ).ConfigureAwait ( false ) ;
-                                                                        return Unit.Default ;
-                                                                    } ) ) ;
+        var query = source.SelectMany(_ => Observable.FromAsync(async () => {
+            await asyncAction().ConfigureAwait(false);
+            return Unit.Default;
+        }));
 
         return handler == null
-                   ? query.Subscribe ( _ => { } ,
-                                       _ => { } )
-                   : query.Subscribe ( _ => { } ,
-                                       handler ) ;
+            ? query.Subscribe(
+                _ => { },
+                _ => { })
+            : query.Subscribe(
+                _ => { },
+                handler);
     }
 
     /// <summary>
@@ -43,25 +45,27 @@ public static class RxExtensions
     /// <param name="source">The source observable sequence.</param>
     /// <param name="asyncAction">An asynchronous action to run for each element.</param>
     /// <param name="handler">Optional error handler for the subscription.</param>
-    [ UsedImplicitly ]
-    public static IDisposable SubscribeAsync < T > ( this IObservable < T > source ,
-                                                     Func < T , Task >      asyncAction ,
-                                                     Action < Exception > ? handler = null )
+    [UsedImplicitly]
+    public static IDisposable SubscribeAsync<T>(
+        this IObservable<T> source,
+        Func<T, Task> asyncAction,
+        Action<Exception>? handler = null)
     {
-        ArgumentNullException.ThrowIfNull ( source ) ;
-        ArgumentNullException.ThrowIfNull ( asyncAction ) ;
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(asyncAction);
 
-        var query = source.SelectMany ( t => Observable.FromAsync ( async ( ) =>
-                                                                    {
-                                                                        await asyncAction ( t )
-                                                                           .ConfigureAwait ( false ) ;
-                                                                        return Unit.Default ;
-                                                                    } ) ) ;
+        var query = source.SelectMany(t => Observable.FromAsync(async () => {
+            await asyncAction(t)
+                .ConfigureAwait(false);
+            return Unit.Default;
+        }));
 
         return handler == null
-                   ? query.Subscribe ( _ => { } ,
-                                       _ => { } )
-                   : query.Subscribe ( _ => { } ,
-                                       handler ) ;
+            ? query.Subscribe(
+                _ => { },
+                _ => { })
+            : query.Subscribe(
+                _ => { },
+                handler);
     }
 }

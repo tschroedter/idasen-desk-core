@@ -1,35 +1,41 @@
-using Windows.Devices.Bluetooth.Advertisement ;
-using FluentAssertions ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using FluentAssertions;
+using Idasen.BluetoothLE.Core.DevicesDiscovery;
+using Windows.Devices.Bluetooth.Advertisement;
 
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Tests.DevicesDiscovery;
 
-[ TestClass ]
+[TestClass]
 public class StatusMapperTests
 {
-    [ TestMethod ]
-    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Started ,
-                Status.Started ) ]
-    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Aborted ,
-                Status.Aborted ) ]
-    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Created ,
-                Status.Created ) ]
-    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Stopped ,
-                Status.Stopped ) ]
-    [ DataRow ( BluetoothLEAdvertisementWatcherStatus.Stopping ,
-                Status.Stopping ) ]
-    public void Map_ForStatus_ReturnsWatcherStatus ( BluetoothLEAdvertisementWatcherStatus bluetoothStatus ,
-                                                     Status                                status )
+    [TestMethod]
+    [DataRow(
+        BluetoothLEAdvertisementWatcherStatus.Started,
+        Status.Started)]
+    [DataRow(
+        BluetoothLEAdvertisementWatcherStatus.Aborted,
+        Status.Aborted)]
+    [DataRow(
+        BluetoothLEAdvertisementWatcherStatus.Created,
+        Status.Created)]
+    [DataRow(
+        BluetoothLEAdvertisementWatcherStatus.Stopped,
+        Status.Stopped)]
+    [DataRow(
+        BluetoothLEAdvertisementWatcherStatus.Stopping,
+        Status.Stopping)]
+    public void Map_ForStatus_ReturnsWatcherStatus(
+        BluetoothLEAdvertisementWatcherStatus bluetoothStatus,
+        Status status)
     {
-        CreateSut ( ).Map ( bluetoothStatus )
-                     .Should ( )
-                     .Be ( status ) ;
+        CreateSut().Map(bluetoothStatus)
+            .Should()
+            .Be(status);
     }
 
-    private static StatusMapper CreateSut ( )
+    private static StatusMapper CreateSut()
     {
-        var sut = new StatusMapper ( ) ;
+        var sut = new StatusMapper();
 
-        return sut ;
+        return sut;
     }
 }

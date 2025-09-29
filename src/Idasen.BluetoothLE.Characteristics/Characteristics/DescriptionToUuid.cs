@@ -1,11 +1,11 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Common ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+using Autofac.Extras.DynamicProxy;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Characteristics.Common;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics ;
+namespace Idasen.BluetoothLE.Characteristics.Characteristics;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
+[Intercept(typeof(LogAspect))]
 public class DescriptionToUuid
-    : SimpleKeysAndValuesBase < string , Guid > ,
-      IDescriptionToUuid ;
+    : SimpleKeysAndValuesBase<string, Guid>,
+        IDescriptionToUuid;

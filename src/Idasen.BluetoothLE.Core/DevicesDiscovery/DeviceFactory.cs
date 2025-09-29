@@ -1,16 +1,16 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using Autofac.Extras.DynamicProxy;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Core.Interfaces;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
 
-namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.DevicesDiscovery;
 
 /// <inheritdoc />
-[ Intercept ( typeof ( LogAspect ) ) ]
+[Intercept(typeof(LogAspect))]
 public class DeviceFactory
     : IDeviceFactory
 {
-    private readonly Device.Factory _factory ;
+    private readonly Device.Factory _factory;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeviceFactory" /> class.
@@ -18,26 +18,30 @@ public class DeviceFactory
     /// <param name="factory">
     ///     The factory delegate used to create devices.
     /// </param>
-    public DeviceFactory ( Device.Factory factory )
+    public DeviceFactory(Device.Factory factory)
     {
-        Guard.ArgumentNotNull ( factory ,
-                                nameof ( factory ) ) ;
+        Guard.ArgumentNotNull(
+            factory,
+            nameof(factory));
 
-        _factory = factory ;
+        _factory = factory;
     }
 
     /// <inheritdoc />
-    public IDevice Create ( IDateTimeOffset broadcastTime ,
-                            ulong           address ,
-                            string ?        name ,
-                            short           rawSignalStrengthInDBm )
+    public IDevice Create(
+        IDateTimeOffset broadcastTime,
+        ulong address,
+        string? name,
+        short rawSignalStrengthInDBm)
     {
-        Guard.ArgumentNotNull ( broadcastTime ,
-                                nameof ( broadcastTime ) ) ;
+        Guard.ArgumentNotNull(
+            broadcastTime,
+            nameof(broadcastTime));
 
-        return _factory.Invoke ( broadcastTime ,
-                                 address ,
-                                 name ,
-                                 rawSignalStrengthInDBm ) ;
+        return _factory.Invoke(
+            broadcastTime,
+            address,
+            name,
+            rawSignalStrengthInDBm);
     }
 }

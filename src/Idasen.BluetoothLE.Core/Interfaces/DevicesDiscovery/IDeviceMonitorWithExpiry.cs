@@ -1,6 +1,6 @@
-﻿using JetBrains.Annotations ;
+using JetBrains.Annotations;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
 
 /// <summary>
 ///     Extends device monitoring with expiry notifications and a timeout window.
@@ -11,12 +11,12 @@ public interface IDeviceMonitorWithExpiry
     /// <summary>
     ///     Notification for expired devices.
     /// </summary>
-    [ UsedImplicitly ]
-    IObservable < IDevice > DeviceExpired { get ; }
+    [UsedImplicitly]
+    IObservable<IDevice> DeviceExpired { get; }
 
     /// <summary>
     ///     Timespan after a device is expired and removed from the
     ///     collection of discovered devices.
     /// </summary>
-    TimeSpan TimeOut { get ; set ; }
+    TimeSpan TimeOut { get; set; }
 }

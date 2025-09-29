@@ -1,23 +1,20 @@
-using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using FluentAssertions;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns;
 
-[ TestClass ]
+[TestClass]
 public class ReferenceInputTests
 {
-    [ TestMethod ]
-    public void Ctrl1_ForInvoked_Empty ( )
+    [TestMethod]
+    public void Ctrl1_ForInvoked_Empty()
     {
-        using var sut = CreateSut ( ) ;
+        using var sut = CreateSut();
 
         sut.Ctrl1
-           .Should ( )
-           .BeEmpty ( ) ;
+            .Should()
+            .BeEmpty();
     }
 
-    private static ReferenceInput CreateSut ( )
-    {
-        return new ReferenceInput ( ) ;
-    }
+    private static ReferenceInput CreateSut() => new();
 }

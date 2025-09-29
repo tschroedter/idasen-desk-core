@@ -1,44 +1,41 @@
-using FluentAssertions ;
-using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
+using FluentAssertions;
+using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns;
 
-namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
+namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns;
 
-[ TestClass ]
+[TestClass]
 public class ControlTests
 {
-    [ TestMethod ]
-    public void RawControl2_ForInvoked_Empty ( )
+    [TestMethod]
+    public void RawControl2_ForInvoked_Empty()
     {
-        using var sut = CreateSut ( ) ;
+        using var sut = CreateSut();
 
         sut.RawControl2
-           .Should ( )
-           .BeEmpty ( ) ;
+            .Should()
+            .BeEmpty();
     }
 
-    [ TestMethod ]
-    public void RawControl3_ForInvoked_Empty ( )
+    [TestMethod]
+    public void RawControl3_ForInvoked_Empty()
     {
-        using var sut = CreateSut ( ) ;
+        using var sut = CreateSut();
 
         sut.RawControl3
-           .Should ( )
-           .BeEmpty ( ) ;
+            .Should()
+            .BeEmpty();
     }
 
-    [ TestMethod ]
-    public async Task TryWriteRawControl2_ForInvoked_ReturnsFalse ( )
+    [TestMethod]
+    public async Task TryWriteRawControl2_ForInvoked_ReturnsFalse()
     {
-        using var sut = CreateSut ( ) ;
+        using var sut = CreateSut();
 
-        var result = await sut.TryWriteRawControl2 ( [] ) ;
+        var result = await sut.TryWriteRawControl2([]);
 
-        result.Should ( )
-              .BeFalse ( ) ;
+        result.Should()
+            .BeFalse();
     }
 
-    private static Control CreateSut ( )
-    {
-        return new Control ( ) ;
-    }
+    private static Control CreateSut() => new();
 }

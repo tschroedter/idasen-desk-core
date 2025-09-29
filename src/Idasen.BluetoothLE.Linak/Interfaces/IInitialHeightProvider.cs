@@ -1,6 +1,6 @@
-﻿// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable UnusedMemberInSuper.Global
 
-namespace Idasen.BluetoothLE.Linak.Interfaces ;
+namespace Idasen.BluetoothLE.Linak.Interfaces;
 
 /// <summary>
 ///     The desk doesn't always provide the current height, so we have to
@@ -13,22 +13,22 @@ public interface IInitialHeightProvider
     ///     Notifies listeners when the provider was able to determine the
     ///     height of the desk.
     /// </summary>
-    IObservable < uint > Finished { get ; }
+    IObservable<uint> Finished { get; }
 
     /// <summary>
     ///     The current height of the desk.
     /// </summary>
-    uint Height { get ; }
+    uint Height { get; }
 
     /// <summary>
     ///     Indicates if the current desk height is available or not.
     /// </summary>
-    bool HasReceivedHeightAndSpeed { get ; }
+    bool HasReceivedHeightAndSpeed { get; }
 
     /// <summary>
     ///     Initializes the provider and subscribes to the necessary sources.
     /// </summary>
-    void Initialize ( ) ;
+    void Initialize();
 
     /// <summary>
     ///     StartListening the process of checking and getting the current height
@@ -37,5 +37,5 @@ public interface IInitialHeightProvider
     /// <returns>
     ///     A Task.
     /// </returns>
-    Task Start ( ) ;
+    Task Start();
 }

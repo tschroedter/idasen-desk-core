@@ -1,8 +1,8 @@
-﻿// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable UnusedMemberInSuper.Global
 
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery;
 
-namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
+namespace Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics;
 
 /// <summary>
 ///     DPG (desk panel) service contract.
@@ -13,10 +13,10 @@ public interface IDpg
     /// <summary>
     ///     Factory for creating instances per device.
     /// </summary>
-    delegate IDpg Factory ( IDevice device ) ;
+    delegate IDpg Factory(IDevice device);
 
     /// <summary>
     ///     Raw bytes of the DPG characteristic.
     /// </summary>
-    IEnumerable < byte > RawDpg { get ; }
+    IEnumerable<byte> RawDpg { get; }
 }

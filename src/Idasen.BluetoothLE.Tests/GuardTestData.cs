@@ -1,32 +1,32 @@
-﻿#nullable disable
+#nullable disable
 
-namespace Idasen.BluetoothLE.Tests ;
+namespace Idasen.BluetoothLE.Tests;
 
 public static class GuardTestData
 {
-    public const string Empty      = "" ;
-    public const string Whitespace = " " ;
+    public const string Empty = "";
+    public const string Whitespace = " ";
 
-    private const int Integer = 1 ;
+    private const int Integer = 1;
 
-    private static readonly object Instance = new( ) ;
+    private static readonly object Instance = new();
 
-    public static IEnumerable < object [ ] > InstanceAndInteger ( )
+    public static IEnumerable<object[]> InstanceAndInteger()
     {
-        yield return [Instance] ;
-        yield return [Integer] ;
+        yield return [Instance];
+        yield return [Integer];
     }
 
-    public static IEnumerable < object [ ] > NullEmptyOrWhitespace ( )
+    public static IEnumerable<object[]> NullEmptyOrWhitespace()
     {
-        yield return [null , typeof ( ArgumentNullException )] ;
-        yield return [Empty , typeof ( ArgumentException )] ;
-        yield return [Whitespace , typeof ( ArgumentException )] ;
+        yield return [null, typeof(ArgumentNullException)];
+        yield return [Empty, typeof(ArgumentException)];
+        yield return [Whitespace, typeof(ArgumentException)];
     }
 
-    public static IEnumerable < object [ ] > NullOrEmpty ( )
+    public static IEnumerable<object[]> NullOrEmpty()
     {
-        yield return [null , typeof ( ArgumentNullException )] ;
-        yield return [Empty , typeof ( ArgumentException )] ;
+        yield return [null, typeof(ArgumentNullException)];
+        yield return [Empty, typeof(ArgumentException)];
     }
 }

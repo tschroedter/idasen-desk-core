@@ -1,9 +1,9 @@
-﻿using Windows.Devices.Bluetooth.Advertisement ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
+using Idasen.BluetoothLE.Core.DevicesDiscovery;
+using Windows.Devices.Bluetooth.Advertisement;
 
-namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
 
 public interface IStatusMapper
 {
-    Status Map ( BluetoothLEAdvertisementWatcherStatus status ) ;
+    Status Map(BluetoothLEAdvertisementWatcherStatus status);
 }

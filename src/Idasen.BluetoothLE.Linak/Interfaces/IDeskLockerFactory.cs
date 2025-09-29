@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+namespace Idasen.BluetoothLE.Linak.Interfaces;
 
 /// <summary>
 ///     Creates <see cref="IDeskLocker" /> instances for lock/unlock operations.
@@ -8,7 +8,8 @@ public interface IDeskLockerFactory
     /// <summary>
     ///     Creates a locker using the given mover, executor, and height/speed source.
     /// </summary>
-    IDeskLocker Create ( IDeskMover           deskMover ,
-                         IDeskCommandExecutor executor ,
-                         IDeskHeightAndSpeed  heightAndSpeed ) ;
+    IDeskLocker Create(
+        IDeskMover deskMover,
+        IDeskCommandExecutor executor,
+        IDeskHeightAndSpeed heightAndSpeed);
 }

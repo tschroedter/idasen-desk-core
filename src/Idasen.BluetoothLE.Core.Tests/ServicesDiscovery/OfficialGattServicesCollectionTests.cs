@@ -1,102 +1,101 @@
-using FluentAssertions ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using FluentAssertions;
+using Idasen.BluetoothLE.Core.ServicesDiscovery;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery;
 
-[ TestClass ]
+[TestClass]
 public class OfficialGattServicesCollectionTests
 {
-    private readonly Guid _knownGuid = Guid.Parse ( "00001800-0000-1000-8000-00805f9b34fb" ) ;
+    private readonly Guid _knownGuid = Guid.Parse("00001800-0000-1000-8000-00805f9b34fb");
 
-    [ TestMethod ]
-    public void Constructor_ForInvoke_SetsResourceName ( )
+    [TestMethod]
+    public void Constructor_ForInvoke_SetsResourceName()
     {
-        var expected = "Idasen.BluetoothLE.Core.ServicesDiscovery.OfficialGattServicesCollection.txt" ;
+        var expected = "Idasen.BluetoothLE.Core.ServicesDiscovery.OfficialGattServicesCollection.txt";
 
-        CreateSut ( ).ResourceName
-                     .Should ( )
-                     .Be ( expected ) ;
+        CreateSut().ResourceName
+                     .Should()
+                     .Be(expected);
     }
 
-    [ TestMethod ]
-    public void Count_ForInvoke_ReturnsCorrectNumber ( )
+    [TestMethod]
+    public void Count_ForInvoke_ReturnsCorrectNumber()
     {
-        var expected = CreateUuidCollection ( ).Count ;
+        var expected = CreateUuidCollection().Count;
 
-        CreateSut ( ).Count
-                     .Should ( )
-                     .Be ( expected ) ;
+        CreateSut().Count
+                     .Should()
+                     .Be(expected);
     }
 
-    [ TestMethod ]
-    public void TryFindByUuid_ForUnknownUuid_ReturnsFalse ( )
+    [TestMethod]
+    public void TryFindByUuid_ForUnknownUuid_ReturnsFalse()
     {
-        CreateSut ( ).TryFindByUuid ( Guid.Empty ,
-                                      out _ )
-                     .Should ( )
-                     .BeFalse ( ) ;
+        CreateSut().TryFindByUuid(Guid.Empty,
+                                      out _)
+                     .Should()
+                     .BeFalse();
     }
 
-    [ TestMethod ]
-    public void TryFindByUuid_ForUnknownUuid_ReturnsNull ( )
+    [TestMethod]
+    public void TryFindByUuid_ForUnknownUuid_ReturnsNull()
     {
-        CreateSut ( ).TryFindByUuid ( Guid.Empty ,
-                                      out var gattService ) ;
+        CreateSut().TryFindByUuid(Guid.Empty,
+                                      out var gattService);
 
-        gattService.Should ( )
-                   .BeNull ( ) ;
+        gattService.Should()
+                   .BeNull();
     }
 
-    [ TestMethod ]
-    public void TryFindByUuid_ForKnownUuid_ReturnsTrue ( )
+    [TestMethod]
+    public void TryFindByUuid_ForKnownUuid_ReturnsTrue()
     {
-        CreateSut ( ).TryFindByUuid ( _knownGuid ,
-                                      out _ )
-                     .Should ( )
-                     .BeTrue ( ) ;
+        CreateSut().TryFindByUuid(_knownGuid,
+                                      out _)
+                     .Should()
+                     .BeTrue();
     }
 
-    [ TestMethod ]
-    public void TryFindByUuid_ForKnownUuid_ReturnsGattService ( )
+    [TestMethod]
+    public void TryFindByUuid_ForKnownUuid_ReturnsGattService()
     {
-        CreateSut ( ).TryFindByUuid ( _knownGuid ,
-                                      out var gattService ) ;
+        CreateSut().TryFindByUuid(_knownGuid,
+                                      out var gattService);
 
-        gattService.Should ( )
-                   .NotBeNull ( ) ;
+        gattService.Should()
+                   .NotBeNull();
     }
 
-    [ TestMethod ]
-    public void TryFindByUuid_ForAllKnownUUIDs_ReturnsGattService ( )
+    [TestMethod]
+    public void TryFindByUuid_ForAllKnownUUIDs_ReturnsGattService()
     {
-        var sut = CreateSut ( ) ;
+        var sut = CreateSut();
 
-        foreach ( var assignedNumber in CreateUuidCollection ( ) )
-        {
-            var knownGuid = Guid.Parse ( "0000"                          +
-                                         assignedNumber.ToString ( "X" ) +
-                                         "-0000-1000-8000-00805f9b34fb" ) ;
+        foreach (var assignedNumber in CreateUuidCollection()) {
+            var knownGuid = Guid.Parse("0000" +
+                                         assignedNumber.ToString("X") +
+                                         "-0000-1000-8000-00805f9b34fb");
 
-            sut.TryFindByUuid ( knownGuid ,
-                                out var gattService ) ;
+            sut.TryFindByUuid(knownGuid,
+                                out var gattService);
 
-            gattService.Should ( )
-                       .NotBeNull ( ) ;
+            gattService.Should()
+                       .NotBeNull();
         }
     }
 
-    [ TestMethod ]
-    public void GetEnumerator_ForInvoke_ReturnsCollection ( )
+    [TestMethod]
+    public void GetEnumerator_ForInvoke_ReturnsCollection()
     {
-        var expected = CreateUuidCollection ( ).Count ;
+        var expected = CreateUuidCollection().Count;
 
-        var count = CreateSut ( ).Count ;
+        var count = CreateSut().Count;
 
-        count.Should ( )
-             .Be ( expected ) ;
+        count.Should()
+             .Be(expected);
     }
 
-    private static IReadOnlyCollection < ushort > CreateUuidCollection ( )
+    private static IReadOnlyCollection<ushort> CreateUuidCollection()
     {
         return
         [
@@ -142,11 +141,11 @@ public class OfficialGattServicesCollectionTests
             0x1804 ,
             0x181C ,
             0x181D
-        ] ;
+        ];
     }
 
-    private static OfficialGattServicesCollection CreateSut ( )
+    private static OfficialGattServicesCollection CreateSut()
     {
-        return new OfficialGattServicesCollection ( ) ;
+        return new OfficialGattServicesCollection();
     }
 }

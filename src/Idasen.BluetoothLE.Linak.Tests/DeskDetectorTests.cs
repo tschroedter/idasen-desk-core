@@ -1,153 +1,158 @@
-using System.Reactive.Subjects ;
-using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using JetBrains.Annotations ;
-using Microsoft.Reactive.Testing ;
-using NSubstitute ;
-using Serilog ;
+using System.Reactive.Subjects;
+using FluentAssertions;
+using Idasen.BluetoothLE.Common.Tests;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
+using Idasen.BluetoothLE.Linak.Interfaces;
+using JetBrains.Annotations;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using Serilog;
 
-namespace Idasen.BluetoothLE.Linak.Tests ;
+namespace Idasen.BluetoothLE.Linak.Tests;
 
-[ TestClass ]
+[TestClass]
 public class DeskDetectorTests : IDisposable
 {
-    private const string              DeviceName    = nameof ( DeviceName ) ;
-    private const uint                DeviceAddress = 123 ;
-    private const uint                DeviceTimeout = 456 ;
-    private       IDesk               _desk         = null! ;
-    private       ISubject < IDesk >  _deskDetected = null! ;
-    private       Subject < IDevice > _deskFound    = null! ;
-    private       IDesk               _deskOther    = null! ;
-    private       IDevice             _device       = null! ;
-    private       Subject < IDevice > _discovered   = null! ;
-    private       IDeskFactory        _factory      = null! ;
+    private const string DeviceName = nameof(DeviceName);
+    private const uint DeviceAddress = 123;
+    private const uint DeviceTimeout = 456;
+    private IDesk _desk = null!;
+    private ISubject<IDesk> _deskDetected = null!;
+    private Subject<IDevice> _deskFound = null!;
+    private IDesk _deskOther = null!;
+    private IDevice _device = null!;
+    private Subject<IDevice> _discovered = null!;
+    private IDeskFactory _factory = null!;
 
-    private ILogger                  _logger  = null! ;
-    private IDeviceMonitorWithExpiry _monitor = null! ;
+    private ILogger _logger = null!;
+    private IDeviceMonitorWithExpiry _monitor = null!;
 
-    [ UsedImplicitly ] private Subject < IDevice > _nameChanged = null! ;
+    [UsedImplicitly] private Subject<IDevice> _nameChanged = null!;
 
-    private TestScheduler       _scheduler = null! ;
-    private Subject < IDevice > _updated   = null! ;
+    private TestScheduler _scheduler = null!;
+    private Subject<IDevice> _updated = null!;
 
-    public void Dispose ( )
+    public void Dispose()
     {
-        ( _deskDetected as IDisposable )?.Dispose ( ) ;
-        _updated.OnCompleted ( ) ;
-        _discovered.OnCompleted ( ) ;
-        _nameChanged.OnCompleted ( ) ;
-        _deskFound.OnCompleted ( ) ;
+        (_deskDetected as IDisposable)?.Dispose();
+        _updated.OnCompleted();
+        _discovered.OnCompleted();
+        _nameChanged.OnCompleted();
+        _deskFound.OnCompleted();
 
-        _updated.Dispose ( ) ;
-        _discovered.Dispose ( ) ;
-        _nameChanged.Dispose ( ) ;
-        _deskFound.Dispose ( ) ;
-        GC.SuppressFinalize ( this ) ;
+        _updated.Dispose();
+        _discovered.Dispose();
+        _nameChanged.Dispose();
+        _deskFound.Dispose();
+        GC.SuppressFinalize(this);
     }
 
-    [ TestInitialize ]
-    public void Initialize ( )
+    [TestInitialize]
+    public void Initialize()
     {
-        _logger       = Substitute.For < ILogger > ( ) ;
-        _scheduler    = new TestScheduler ( ) ;
-        _monitor      = Substitute.For < IDeviceMonitorWithExpiry > ( ) ;
-        _factory      = Substitute.For < IDeskFactory > ( ) ;
-        _deskDetected = new Subject < IDesk > ( ) ;
+        _logger = Substitute.For<ILogger>();
+        _scheduler = new TestScheduler();
+        _monitor = Substitute.For<IDeviceMonitorWithExpiry>();
+        _factory = Substitute.For<IDeskFactory>();
+        _deskDetected = new Subject<IDesk>();
 
-        _updated = new Subject < IDevice > ( ) ;
-        _monitor.DeviceUpdated.Returns ( _updated ) ;
+        _updated = new Subject<IDevice>();
+        _monitor.DeviceUpdated.Returns(_updated);
 
-        _discovered = new Subject < IDevice > ( ) ;
-        _monitor.DeviceDiscovered.Returns ( _discovered ) ;
+        _discovered = new Subject<IDevice>();
+        _monitor.DeviceDiscovered.Returns(_discovered);
 
-        _nameChanged = new Subject < IDevice > ( ) ;
-        _monitor.DeviceNameUpdated.Returns ( _discovered ) ;
+        _nameChanged = new Subject<IDevice>();
+        _monitor.DeviceNameUpdated.Returns(_discovered);
 
-        _deskFound = new Subject < IDevice > ( ) ;
-        _monitor.DeviceUpdated.Returns ( _deskFound ) ;
+        _deskFound = new Subject<IDevice>();
+        _monitor.DeviceUpdated.Returns(_deskFound);
 
-        _device = Substitute.For < IDevice > ( ) ;
-        _device.Name.Returns ( DeviceName ) ;
-        _device.Address.Returns ( DeviceAddress ) ;
+        _device = Substitute.For<IDevice>();
+        _device.Name.Returns(DeviceName);
+        _device.Address.Returns(DeviceAddress);
 
-        _desk      = Substitute.For < IDesk > ( ) ;
-        _deskOther = Substitute.For < IDesk > ( ) ;
-        _factory.CreateAsync ( _device.Address )
-                .Returns ( _desk ,
-                           _deskOther ) ;
+        _desk = Substitute.For<IDesk>();
+        _deskOther = Substitute.For<IDesk>();
+        _factory.CreateAsync(_device.Address)
+            .Returns(
+                _desk,
+                _deskOther);
     }
 
-    [ TestMethod ]
-    public void Initialize_ForDeviceNameIsNull_Throws ( )
+    [TestMethod]
+    public void Initialize_ForDeviceNameIsNull_Throws()
     {
-        Action action = ( ) => CreateSut ( ).Initialize ( null! ,
-                                                          DeviceAddress ,
-                                                          DeviceTimeout ) ;
+        Action action = () => CreateSut().Initialize(
+            null!,
+            DeviceAddress,
+            DeviceTimeout);
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( "deviceName" ) ;
+        action.Should()
+            .Throw<ArgumentNullException>()
+            .WithParameter("deviceName");
     }
 
-    [ TestMethod ]
-    public void Initialize_Invoked_SetsTimeout ( )
+    [TestMethod]
+    public void Initialize_Invoked_SetsTimeout()
     {
-        using var sut = CreateSut ( ) ;
+        using var sut = CreateSut();
 
-        sut.Initialize ( DeviceName ,
-                         DeviceAddress ,
-                         DeviceTimeout ) ;
+        sut.Initialize(
+            DeviceName,
+            DeviceAddress,
+            DeviceTimeout);
 
         _monitor.TimeOut
-                .Should ( )
-                .Be ( TimeSpan.FromSeconds ( DeviceTimeout ) ) ;
+            .Should()
+            .Be(TimeSpan.FromSeconds(DeviceTimeout));
     }
 
-    [ TestMethod ]
-    public void Start_ConnectedToAnotherDesk_DisposesOldDesk ( )
+    [TestMethod]
+    public void Start_ConnectedToAnotherDesk_DisposesOldDesk()
     {
-        using var sut = CreateSut ( ) ;
+        using var sut = CreateSut();
 
-        sut.Initialize ( DeviceName ,
-                         DeviceAddress ,
-                         DeviceTimeout ) ;
+        sut.Initialize(
+            DeviceName,
+            DeviceAddress,
+            DeviceTimeout);
 
         // connect to desk
-        sut.StartListening ( ) ;
+        sut.StartListening();
 
-        _discovered.OnNext ( _device ) ;
+        _discovered.OnNext(_device);
 
-        _scheduler.Start ( ) ;
+        _scheduler.Start();
 
         // connect to desk again, so that the old one is disposed
-        sut.StartListening ( ) ;
+        sut.StartListening();
 
-        _desk.Received ( )
-             .Dispose ( ) ;
+        _desk.Received()
+            .Dispose();
     }
 
-    [ TestMethod ]
-    public void Dispose_Invoked_DisposesMonitor ( )
+    [TestMethod]
+    public void Dispose_Invoked_DisposesMonitor()
     {
-        var sut = CreateSut ( ) ;
+        var sut = CreateSut();
 
-        sut.Dispose ( ) ;
+        sut.Dispose();
 
-        _monitor.Received ( )
-                .Dispose ( ) ;
+        _monitor.Received()
+            .Dispose();
     }
 
     // todo figure out how to test disposing of IDisposables of Subjects
     // todo improve code coverage
 
-    private DeskDetector CreateSut ( )
+    private DeskDetector CreateSut()
     {
-        return new DeskDetector ( _logger ,
-                                  _scheduler ,
-                                  _monitor ,
-                                  _factory ,
-                                  _deskDetected ) ;
+        return new DeskDetector(
+            _logger,
+            _scheduler,
+            _monitor,
+            _factory,
+            _deskDetected);
     }
 }

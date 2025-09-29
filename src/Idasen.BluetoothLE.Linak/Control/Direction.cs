@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Linak.Control ;
+namespace Idasen.BluetoothLE.Linak.Control;
 
 /// <summary>
 ///     Movement direction used for desk motion.
@@ -8,12 +8,12 @@ public enum Direction
     /// <summary>
     ///     No movement.
     /// </summary>
-    None ,
+    None,
 
     /// <summary>
     ///     Moving up.
     /// </summary>
-    Up ,
+    Up,
 
     /// <summary>
     ///     Moving down.

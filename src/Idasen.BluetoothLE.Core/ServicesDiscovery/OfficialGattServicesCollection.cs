@@ -1,104 +1,104 @@
-using System.Collections ;
-using System.Diagnostics.CodeAnalysis ;
-using System.Globalization ;
-using System.Reflection ;
-using Autofac.Extras.DynamicProxy ;
-using CsvHelper ;
-using CsvHelper.Configuration ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Reflection;
+using Autofac.Extras.DynamicProxy;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery;
 
 /// <inheritdoc />
-[ Intercept ( typeof ( LogAspect ) ) ]
+[Intercept(typeof(LogAspect))]
 public class OfficialGattServicesCollection
     : IOfficialGattServicesCollection
 {
-    private const string FileName = "OfficialGattServicesCollection.txt" ;
+    private const string FileName = "OfficialGattServicesCollection.txt";
 
-    private readonly Dictionary < ushort , OfficialGattService > _dictionary = new( ) ;
+    private readonly Dictionary<ushort, OfficialGattService> _dictionary = new();
 
-    public OfficialGattServicesCollection ( )
+    public OfficialGattServicesCollection()
     {
-        ResourceName = GetType ( ).Namespace + "." + FileName ;
+        ResourceName = GetType().Namespace + "." + FileName;
 
-        Populate ( ReadCsvFile ( ResourceName ) ) ;
+        Populate(ReadCsvFile(ResourceName));
     }
 
     /// <summary>
     ///     Gets the manifest resource name of the embedded CSV file.
     /// </summary>
-    public string ResourceName { get ; }
+    public string ResourceName { get; }
 
     /// <inheritdoc />
-    public IEnumerator < OfficialGattService > GetEnumerator ( )
+    public IEnumerator<OfficialGattService> GetEnumerator()
     {
-        return _dictionary.Values.GetEnumerator ( ) ;
+        return _dictionary.Values.GetEnumerator();
     }
 
     /// <inheritdoc />
-    [ ExcludeFromCodeCoverage ]
-    IEnumerator IEnumerable.GetEnumerator ( )
+    [ExcludeFromCodeCoverage]
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        return GetEnumerator ( ) ;
+        return GetEnumerator();
     }
 
     /// <inheritdoc />
-    public int Count => _dictionary.Count ;
+    public int Count => _dictionary.Count;
 
     /// <inheritdoc />
-    public bool TryFindByUuid ( Guid                      uuid ,
-                                out OfficialGattService ? gattService )
+    public bool TryFindByUuid(Guid uuid,
+                                out OfficialGattService? gattService)
     {
-        gattService = null ;
+        gattService = null;
 
-        var n = uuid.ToString ( "N" ) ;
+        var n = uuid.ToString("N");
 
-        if ( n.Length < 8 )
-            return false ;
+        if (n.Length < 8)
+            return false;
 
-        var number = n.Substring ( 4 ,
-                                   4 ) ;
+        var number = n.Substring(4,
+                                   4);
 
         // Avoid exception-based control flow; validate parse
-        if ( ! ushort.TryParse ( number ,
-                                 NumberStyles.HexNumber ,
-                                 CultureInfo.InvariantCulture ,
-                                 out var assignedNumber ) )
-            return false ;
+        if (!ushort.TryParse(number,
+                                 NumberStyles.HexNumber,
+                                 CultureInfo.InvariantCulture,
+                                 out var assignedNumber))
+            return false;
 
-        return _dictionary.TryGetValue ( assignedNumber ,
-                                         out gattService ) ;
+        return _dictionary.TryGetValue(assignedNumber,
+                                         out gattService);
     }
 
-    private void Populate ( IEnumerable < OfficialGattService > records )
+    private void Populate(IEnumerable<OfficialGattService> records)
     {
-        foreach ( var record in records ) _dictionary [ record.AssignedNumber ] = record ;
+        foreach (var record in records) _dictionary[record.AssignedNumber] = record;
     }
 
-    private static OfficialGattService[] ReadCsvFile ( string resourceName )
+    private static OfficialGattService[] ReadCsvFile(string resourceName)
     {
         var stream = typeof(OfficialGattServicesCollection).Assembly
-            .GetManifestResourceStream ( resourceName ) ;
+            .GetManifestResourceStream(resourceName);
 
-        if ( stream == null )
-            throw new ResourceNotFoundException ( resourceName ,
-                                                  $"Can't find resource {resourceName}" ) ;
+        if (stream == null)
+            throw new ResourceNotFoundException(resourceName,
+                                                  $"Can't find resource {resourceName}");
 
-        using var reader = new StreamReader ( stream ) ;
+        using var reader = new StreamReader(stream);
 
         var config =
-            new CsvConfiguration ( CultureInfo.InvariantCulture ) { Delimiter = "," , HasHeaderRecord = true } ;
+            new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ",", HasHeaderRecord = true };
 
-        using var csv = new CsvReader ( reader ,
-                                        config ) ;
+        using var csv = new CsvReader(reader,
+                                        config);
 
-        csv.Context.RegisterClassMap < GattServiceCsvHelperMap > ( ) ;
+        csv.Context.RegisterClassMap<GattServiceCsvHelperMap>();
 
-        var readCsvFile = csv.GetRecords < OfficialGattService > ( )
-                             .ToArray ( ) ;
+        var readCsvFile = csv.GetRecords<OfficialGattService>()
+                             .ToArray();
 
-        return readCsvFile ;
+        return readCsvFile;
     }
 }

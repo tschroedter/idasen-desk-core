@@ -1,425 +1,449 @@
-using System.Reactive.Concurrency ;
-using System.Reactive.Linq ;
-using System.Reactive.Subjects ;
-using FluentAssertions ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Microsoft.Reactive.Testing ;
-using NSubstitute ;
-using Selkie.AutoMocking ;
-using Serilog ;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using FluentAssertions;
+using Idasen.BluetoothLE.Core;
+using Idasen.BluetoothLE.Core.DevicesDiscovery;
+using Idasen.BluetoothLE.Core.Interfaces;
+using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using Selkie.AutoMocking;
+using Serilog;
 
-namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Tests.DevicesDiscovery;
 
-[ AutoDataTestClass ]
+[AutoDataTestClass]
 public class DeviceMonitorWithExpiryTests
 {
-    [ AutoDataTestMethod ]
-    public void Constructor_ForLoggerNull_Throws ( Lazy < DeviceMonitorWithExpiry > sut ,
-                                                   [ BeNull ] ILogger               logger )
+    [AutoDataTestMethod]
+    public void Constructor_ForLoggerNull_Throws(
+        Lazy<DeviceMonitorWithExpiry> sut,
+        [BeNull] ILogger logger)
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var action = () => {
+            var test = sut.Value;
+        };
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( logger ) ) ;
+        action.Should()
+            .Throw<ArgumentNullException>()
+            .WithParameter(nameof(logger));
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForDateTimeOffsetNull_Throws ( Lazy < DeviceMonitorWithExpiry > sut ,
-                                                           [ BeNull ] IDateTimeOffset       dateTimeOffset )
+    [AutoDataTestMethod]
+    public void Constructor_ForDateTimeOffsetNull_Throws(
+        Lazy<DeviceMonitorWithExpiry> sut,
+        [BeNull] IDateTimeOffset dateTimeOffset)
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var action = () => {
+            var test = sut.Value;
+        };
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( dateTimeOffset ) ) ;
+        action.Should()
+            .Throw<ArgumentNullException>()
+            .WithParameter(nameof(dateTimeOffset));
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForDateTimeOffsetNull_Throws ( Lazy < DeviceMonitorWithExpiry > sut ,
-                                                           [ BeNull ] IDeviceMonitor        deviceMonitor )
+    [AutoDataTestMethod]
+    public void Constructor_ForDateTimeOffsetNull_Throws(
+        Lazy<DeviceMonitorWithExpiry> sut,
+        [BeNull] IDeviceMonitor deviceMonitor)
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var action = () => {
+            var test = sut.Value;
+        };
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( deviceMonitor ) ) ;
+        action.Should()
+            .Throw<ArgumentNullException>()
+            .WithParameter(nameof(deviceMonitor));
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForFactoryNull_Throws ( Lazy < DeviceMonitorWithExpiry >   sut ,
-                                                    [ BeNull ] IObservableTimerFactory factory )
+    [AutoDataTestMethod]
+    public void Constructor_ForFactoryNull_Throws(
+        Lazy<DeviceMonitorWithExpiry> sut,
+        [BeNull] IObservableTimerFactory factory)
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var action = () => {
+            var test = sut.Value;
+        };
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( factory ) ) ;
+        action.Should()
+            .Throw<ArgumentNullException>()
+            .WithParameter(nameof(factory));
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForSchedulerIsNull_Throws ( Lazy < DeviceMonitorWithExpiry > sut ,
-                                                        [ BeNull ] IScheduler            scheduler )
+    [AutoDataTestMethod]
+    public void Constructor_ForSchedulerIsNull_Throws(
+        Lazy<DeviceMonitorWithExpiry> sut,
+        [BeNull] IScheduler scheduler)
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var action = () => {
+            var test = sut.Value;
+        };
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( scheduler ) ) ;
+        action.Should()
+            .Throw<ArgumentNullException>()
+            .WithParameter(nameof(scheduler));
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForDeviceExpiredNull_Throws ( Lazy < DeviceMonitorWithExpiry > sut ,
-                                                          [ BeNull ] ISubject < IDevice >  deviceExpired )
+    [AutoDataTestMethod]
+    public void Constructor_ForDeviceExpiredNull_Throws(
+        Lazy<DeviceMonitorWithExpiry> sut,
+        [BeNull] ISubject<IDevice> deviceExpired)
     {
         // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var action = () => {
+            var test = sut.Value;
+        };
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( deviceExpired ) ) ;
+        action.Should()
+            .Throw<ArgumentNullException>()
+            .WithParameter(nameof(deviceExpired));
     }
 
-    [ AutoDataTestMethod ]
-    public void TimeOut_ForValueGreaterZero_SetsTimeOut ( DeviceMonitorWithExpiry sut )
+    [AutoDataTestMethod]
+    public void TimeOut_ForValueGreaterZero_SetsTimeOut(DeviceMonitorWithExpiry sut)
     {
-        var expected = TimeSpan.FromHours ( 1.23 ) ;
+        var expected = TimeSpan.FromHours(1.23);
 
-        sut.TimeOut = expected ;
+        sut.TimeOut = expected;
 
         sut.TimeOut
-           .Should ( )
-           .Be ( expected ) ;
+            .Should()
+            .Be(expected);
     }
 
-    [ AutoDataTestMethod ]
-    public void TimeOut_ForValueLessThanZero_SetsTimeOut ( DeviceMonitorWithExpiry sut )
+    [AutoDataTestMethod]
+    public void TimeOut_ForValueLessThanZero_SetsTimeOut(DeviceMonitorWithExpiry sut)
     {
-        Action action = ( ) => sut.TimeOut = TimeSpan.FromHours ( - 0.1 ) ;
+        Action action = () => sut.TimeOut = TimeSpan.FromHours(-0.1);
 
-        action.Should ( )
-              .Throw < ArgumentException > ( ) ;
+        action.Should()
+            .Throw<ArgumentException>();
     }
 
-    [ AutoDataTestMethod ]
-    public void RemoveDevice_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
-                                                             [ Freeze ] IDeviceMonitor monitor ,
-                                                             IDevice                   device )
+    [AutoDataTestMethod]
+    public void RemoveDevice_ForInvoked_CallsDeviceMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor,
+        IDevice device)
     {
-        sut.RemoveDevice ( device ) ;
+        sut.RemoveDevice(device);
 
-        monitor.Received ( )
-               .RemoveDevice ( device ) ;
+        monitor.Received()
+            .RemoveDevice(device);
     }
 
-    [ AutoDataTestMethod ]
-    public void Start_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
-                                                      [ Freeze ] IDeviceMonitor monitor )
+    [AutoDataTestMethod]
+    public void Start_ForInvoked_CallsDeviceMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor)
     {
-        sut.StartListening ( ) ;
+        sut.StartListening();
 
-        monitor.Received ( )
-               .StartListening ( ) ;
+        monitor.Received()
+            .StartListening();
     }
 
-    [ AutoDataTestMethod ]
-    public void Stop_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
-                                                     [ Freeze ] IDeviceMonitor monitor )
+    [AutoDataTestMethod]
+    public void Stop_ForInvoked_CallsDeviceMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor)
     {
-        sut.StopListening ( ) ;
+        sut.StopListening();
 
-        monitor.Received ( )
-               .StopListening ( ) ;
+        monitor.Received()
+            .StopListening();
     }
 
-    [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesMonitor ( DeviceMonitorWithExpiry   sut ,
-                                                     [ Freeze ] IDeviceMonitor monitor )
+    [AutoDataTestMethod]
+    public void Dispose_ForInvoked_DisposesMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor)
     {
-        sut.Dispose ( ) ;
+        sut.Dispose();
 
-        monitor.Received ( )
-               .Dispose ( ) ;
+        monitor.Received()
+            .Dispose();
     }
 
-    [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesTimer ( DeviceMonitorWithExpiry sut ,
-                                                   [ Freeze ] IDisposable  timer )
+    [AutoDataTestMethod]
+    public void Dispose_ForInvoked_DisposesTimer(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDisposable timer)
     {
-        sut.Dispose ( ) ;
+        sut.Dispose();
 
-        timer.Received ( )
-             .Dispose ( ) ;
+        timer.Received()
+            .Dispose();
     }
 
-    [ AutoDataTestMethod ]
-    public void DiscoveredDevices_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry         sut ,
-                                                                  [ Freeze ] IDeviceMonitor       monitor ,
-                                                                  IReadOnlyCollection < IDevice > collection )
+    [AutoDataTestMethod]
+    public void DiscoveredDevices_ForInvoked_CallsDeviceMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor,
+        IReadOnlyCollection<IDevice> collection)
     {
         monitor.DiscoveredDevices
-               .Returns ( collection ) ;
+            .Returns(collection);
 
         sut.DiscoveredDevices
-           .Should ( )
-           .BeEquivalentTo ( collection ) ;
+            .Should()
+            .BeEquivalentTo(collection);
     }
 
-    [ AutoDataTestMethod ]
-    public void IsListening_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
-                                                            [ Freeze ] IDeviceMonitor monitor )
+    [AutoDataTestMethod]
+    public void IsListening_ForInvoked_CallsDeviceMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor)
     {
         monitor.IsListening
-               .Returns ( true ) ;
+            .Returns(true);
 
         sut.IsListening
-           .Should ( )
-           .BeTrue ( ) ;
+            .Should()
+            .BeTrue();
     }
 
-    [ AutoDataTestMethod ]
-    public void DeviceUpdated_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
-                                                              [ Freeze ] IDeviceMonitor monitor ,
-                                                              IObservable < IDevice >   observable )
+    [AutoDataTestMethod]
+    public void DeviceUpdated_ForInvoked_CallsDeviceMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor,
+        IObservable<IDevice> observable)
     {
         monitor.DeviceUpdated
-               .Returns ( observable ) ;
+            .Returns(observable);
 
         sut.DeviceUpdated
-           .Should ( )
-           .Be ( observable ) ;
+            .Should()
+            .Be(observable);
     }
 
-    [ AutoDataTestMethod ]
-    public void DeviceDiscovered_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
-                                                                 [ Freeze ] IDeviceMonitor monitor ,
-                                                                 IObservable < IDevice >   observable )
+    [AutoDataTestMethod]
+    public void DeviceDiscovered_ForInvoked_CallsDeviceMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor,
+        IObservable<IDevice> observable)
     {
         monitor.DeviceDiscovered
-               .Returns ( observable ) ;
+            .Returns(observable);
 
         sut.DeviceDiscovered
-           .Should ( )
-           .Be ( observable ) ;
+            .Should()
+            .Be(observable);
     }
 
-    [ AutoDataTestMethod ]
-    public void DeviceNameUpdated_ForInvoked_CallsDeviceMonitor ( DeviceMonitorWithExpiry   sut ,
-                                                                  [ Freeze ] IDeviceMonitor monitor ,
-                                                                  IObservable < IDevice >   observable )
+    [AutoDataTestMethod]
+    public void DeviceNameUpdated_ForInvoked_CallsDeviceMonitor(
+        DeviceMonitorWithExpiry sut,
+        [Freeze] IDeviceMonitor monitor,
+        IObservable<IDevice> observable)
     {
         monitor.DeviceNameUpdated
-               .Returns ( observable ) ;
+            .Returns(observable);
 
         sut.DeviceNameUpdated
-           .Should ( )
-           .Be ( observable ) ;
+            .Should()
+            .Be(observable);
     }
 
-    [ AutoDataTestMethod ]
-    public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotRemoveDeviceFromCollection ( ILogger logger ,
-        IDateTimeOffset                                                                             dateTimeOffset ,
-        IDeviceMonitor                                                                              deviceMonitor ,
-        ISubject < IDevice >                                                                        deviceExpired ,
-        ObservableTimerFactory                                                                      factory ,
-        TestScheduler                                                                               scheduler ,
-        IDevice                                                                                     device )
+    [AutoDataTestMethod]
+    public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotRemoveDeviceFromCollection(
+        ILogger logger,
+        IDateTimeOffset dateTimeOffset,
+        IDeviceMonitor deviceMonitor,
+        ISubject<IDevice> deviceExpired,
+        ObservableTimerFactory factory,
+        TestScheduler scheduler,
+        IDevice device)
     {
         deviceMonitor.DiscoveredDevices
-                     .Returns ( [device] ) ;
+            .Returns([device]);
 
-        using var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                      dateTimeOffset ,
-                                                      deviceMonitor ,
-                                                      deviceExpired ,
-                                                      factory ,
-                                                      scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry(
+            logger,
+            dateTimeOffset,
+            deviceMonitor,
+            deviceExpired,
+            factory,
+            scheduler);
 
         dateTimeOffset.Ticks
-                      .Returns ( sut.TimeOut.Ticks ) ;
+            .Returns(sut.TimeOut.Ticks);
         dateTimeOffset.Now
-                      .Returns ( dateTimeOffset ) ;
+            .Returns(dateTimeOffset);
 
         device.BroadcastTime
-              .Ticks
-              .Returns ( sut.TimeOut.Ticks / 2 ) ;
+            .Ticks
+            .Returns(sut.TimeOut.Ticks / 2);
 
-        scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
+        scheduler.AdvanceBy(sut.TimeOut.Ticks);
 
-        deviceMonitor.DidNotReceive ( )
-                     .RemoveDevice ( device ) ;
+        deviceMonitor.DidNotReceive()
+            .RemoveDevice(device);
     }
 
-    [ AutoDataTestMethod ]
-    public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotNotifyDeviceExpired ( ILogger logger ,
-        IDateTimeOffset                                                                      dateTimeOffset ,
-        IDeviceMonitor                                                                       deviceMonitor ,
-        ISubject < IDevice >                                                                 deviceExpired ,
-        ObservableTimerFactory                                                               factory ,
-        TestScheduler                                                                        scheduler ,
-        IDevice                                                                              device )
+    [AutoDataTestMethod]
+    public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotNotifyDeviceExpired(
+        ILogger logger,
+        IDateTimeOffset dateTimeOffset,
+        IDeviceMonitor deviceMonitor,
+        ISubject<IDevice> deviceExpired,
+        ObservableTimerFactory factory,
+        TestScheduler scheduler,
+        IDevice device)
     {
         deviceMonitor.DiscoveredDevices
-                     .Returns ( [device] ) ;
+            .Returns([device]);
 
-        using var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                      dateTimeOffset ,
-                                                      deviceMonitor ,
-                                                      deviceExpired ,
-                                                      factory ,
-                                                      scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry(
+            logger,
+            dateTimeOffset,
+            deviceMonitor,
+            deviceExpired,
+            factory,
+            scheduler);
 
         dateTimeOffset.Ticks
-                      .Returns ( sut.TimeOut.Ticks ) ;
+            .Returns(sut.TimeOut.Ticks);
         dateTimeOffset.Now
-                      .Returns ( dateTimeOffset ) ;
+            .Returns(dateTimeOffset);
 
         device.BroadcastTime
-              .Ticks
-              .Returns ( sut.TimeOut.Ticks / 2 ) ;
+            .Ticks
+            .Returns(sut.TimeOut.Ticks / 2);
 
-        scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
+        scheduler.AdvanceBy(sut.TimeOut.Ticks);
 
-        deviceExpired.DidNotReceive ( )
-                     .Publish ( device ) ;
+        deviceExpired.DidNotReceive()
+            .Publish(device);
     }
 
-    [ AutoDataTestMethod ]
-    public void CleanUp_ForOneExpiredDeviceInCollection_RemovesDeviceFromCollection ( ILogger logger ,
-        IDateTimeOffset                                                                       dateTimeOffset ,
-        IDeviceMonitor                                                                        deviceMonitor ,
-        ISubject < IDevice >                                                                  deviceExpired ,
-        ObservableTimerFactory                                                                factory ,
-        TestScheduler                                                                         scheduler ,
-        IDevice                                                                               device )
+    [AutoDataTestMethod]
+    public void CleanUp_ForOneExpiredDeviceInCollection_RemovesDeviceFromCollection(
+        ILogger logger,
+        IDateTimeOffset dateTimeOffset,
+        IDeviceMonitor deviceMonitor,
+        ISubject<IDevice> deviceExpired,
+        ObservableTimerFactory factory,
+        TestScheduler scheduler,
+        IDevice device)
     {
         deviceMonitor.DiscoveredDevices
-                     .Returns ( [device] ) ;
+            .Returns([device]);
 
-        using var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                      dateTimeOffset ,
-                                                      deviceMonitor ,
-                                                      deviceExpired ,
-                                                      factory ,
-                                                      scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry(
+            logger,
+            dateTimeOffset,
+            deviceMonitor,
+            deviceExpired,
+            factory,
+            scheduler);
 
         dateTimeOffset.Ticks
-                      .Returns ( sut.TimeOut.Ticks ) ;
+            .Returns(sut.TimeOut.Ticks);
         dateTimeOffset.Now
-                      .Returns ( dateTimeOffset ) ;
+            .Returns(dateTimeOffset);
 
         device.BroadcastTime
-              .Ticks
-              .Returns ( 0 ) ;
+            .Ticks
+            .Returns(0);
 
-        scheduler.AdvanceBy ( sut.TimeOut.Ticks + 1 ) ;
+        scheduler.AdvanceBy(sut.TimeOut.Ticks + 1);
 
-        deviceMonitor.Received ( )
-                     .RemoveDevice ( device ) ;
+        deviceMonitor.Received()
+            .RemoveDevice(device);
     }
 
-    [ AutoDataTestMethod ]
-    public void CleanUp_ForOneExpiredDeviceInCollection_NotifiesDeviceExpired ( ILogger logger ,
-        IDateTimeOffset                                                                 dateTimeOffset ,
-        IDeviceMonitor                                                                  deviceMonitor ,
-        Subject < IDevice >                                                             deviceExpired ,
-        ObservableTimerFactory                                                          factory ,
-        TestScheduler                                                                   scheduler ,
-        IDevice                                                                         device )
+    [AutoDataTestMethod]
+    public void CleanUp_ForOneExpiredDeviceInCollection_NotifiesDeviceExpired(
+        ILogger logger,
+        IDateTimeOffset dateTimeOffset,
+        IDeviceMonitor deviceMonitor,
+        Subject<IDevice> deviceExpired,
+        ObservableTimerFactory factory,
+        TestScheduler scheduler,
+        IDevice device)
     {
-        using var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                      dateTimeOffset ,
-                                                      deviceMonitor ,
-                                                      deviceExpired ,
-                                                      factory ,
-                                                      scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry(
+            logger,
+            dateTimeOffset,
+            deviceMonitor,
+            deviceExpired,
+            factory,
+            scheduler);
 
-        IDevice expiredDevice = null! ;
+        IDevice expiredDevice = null!;
 
         using var disposable = sut.DeviceExpired
-                                  .Subscribe ( expired => expiredDevice = expired ) ;
+            .Subscribe(expired => expiredDevice = expired);
 
-        deviceExpired.OnNext ( device ) ;
+        deviceExpired.OnNext(device);
 
-        scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
+        scheduler.AdvanceBy(sut.TimeOut.Ticks);
 
-        expiredDevice.Should ( )
-                     .Be ( device ) ;
+        expiredDevice.Should()
+            .Be(device);
     }
 
-    [ AutoDataTestMethod ]
-    public void OnCompleted_ForInvoked_CallsStop ( ILogger                 logger ,
-                                                   IDateTimeOffset         dateTimeOffset ,
-                                                   IDeviceMonitor          deviceMonitor ,
-                                                   ISubject < IDevice >    deviceExpired ,
-                                                   IObservableTimerFactory factory ,
-                                                   TestScheduler           scheduler )
+    [AutoDataTestMethod]
+    public void OnCompleted_ForInvoked_CallsStop(
+        ILogger logger,
+        IDateTimeOffset dateTimeOffset,
+        IDeviceMonitor deviceMonitor,
+        ISubject<IDevice> deviceExpired,
+        IObservableTimerFactory factory,
+        TestScheduler scheduler)
     {
-        factory.Create ( Arg.Any < TimeSpan > ( ) ,
-                         Arg.Any < IScheduler > ( ) )
-               .Returns ( Observable.Empty < long > ( ) ) ;
+        factory.Create(
+                Arg.Any<TimeSpan>(),
+                Arg.Any<IScheduler>())
+            .Returns(Observable.Empty<long>());
 
-        using var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                      dateTimeOffset ,
-                                                      deviceMonitor ,
-                                                      deviceExpired ,
-                                                      factory ,
-                                                      scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry(
+            logger,
+            dateTimeOffset,
+            deviceMonitor,
+            deviceExpired,
+            factory,
+            scheduler);
 
-        scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
+        scheduler.AdvanceBy(sut.TimeOut.Ticks);
 
-        deviceMonitor.Received ( )
-                     .StopListening ( ) ;
+        deviceMonitor.Received()
+            .StopListening();
     }
 
-    [ AutoDataTestMethod ]
-    public void OnError_ForInvoked_CallsStop ( ILogger                 logger ,
-                                               IDateTimeOffset         dateTimeOffset ,
-                                               IDeviceMonitor          deviceMonitor ,
-                                               ISubject < IDevice >    deviceExpired ,
-                                               IObservableTimerFactory factory ,
-                                               TestScheduler           scheduler )
+    [AutoDataTestMethod]
+    public void OnError_ForInvoked_CallsStop(
+        ILogger logger,
+        IDateTimeOffset dateTimeOffset,
+        IDeviceMonitor deviceMonitor,
+        ISubject<IDevice> deviceExpired,
+        IObservableTimerFactory factory,
+        TestScheduler scheduler)
     {
-        factory.Create ( Arg.Any < TimeSpan > ( ) ,
-                         Arg.Any < IScheduler > ( ) )
-               .Returns ( Observable.Throw < long > ( new InvalidOperationException ( ) ) ) ;
+        factory.Create(
+                Arg.Any<TimeSpan>(),
+                Arg.Any<IScheduler>())
+            .Returns(Observable.Throw<long>(new InvalidOperationException()));
 
-        using var sut = new DeviceMonitorWithExpiry ( logger ,
-                                                      dateTimeOffset ,
-                                                      deviceMonitor ,
-                                                      deviceExpired ,
-                                                      factory ,
-                                                      scheduler ) ;
+        using var sut = new DeviceMonitorWithExpiry(
+            logger,
+            dateTimeOffset,
+            deviceMonitor,
+            deviceExpired,
+            factory,
+            scheduler);
 
-        scheduler.AdvanceBy ( sut.TimeOut.Ticks ) ;
+        scheduler.AdvanceBy(sut.TimeOut.Ticks);
 
-        deviceMonitor.Received ( )
-                     .StopListening ( ) ;
+        deviceMonitor.Received()
+            .StopListening();
     }
 }

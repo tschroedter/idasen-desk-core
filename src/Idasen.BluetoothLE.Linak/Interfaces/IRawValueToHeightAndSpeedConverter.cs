@@ -1,4 +1,4 @@
-﻿namespace Idasen.BluetoothLE.Linak.Interfaces ;
+namespace Idasen.BluetoothLE.Linak.Interfaces;
 
 /// <summary>
 ///     Converts raw byte sequences from the desk into typed height and speed values.
@@ -20,7 +20,8 @@ public interface IRawValueToHeightAndSpeedConverter
     /// <returns>
     ///     true if the bytes could be converted successfully; otherwise, false.
     /// </returns>
-    bool TryConvert ( IEnumerable < byte > bytes ,
-                      out uint             height ,
-                      out int              speed ) ;
+    bool TryConvert(
+        IEnumerable<byte> bytes,
+        out uint height,
+        out int speed);
 }

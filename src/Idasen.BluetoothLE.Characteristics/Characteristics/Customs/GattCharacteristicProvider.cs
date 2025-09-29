@@ -1,17 +1,17 @@
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
-using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
-using Idasen.BluetoothLE.Core ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Serilog ;
+using Autofac.Extras.DynamicProxy;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs;
+using Idasen.BluetoothLE.Core;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers;
+using Serilog;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 
-namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
+namespace Idasen.BluetoothLE.Characteristics.Characteristics.Customs;
 
 /// <summary>
 ///     Provides discovered GATT characteristics mapped by friendly keys.
 /// </summary>
-[ Intercept ( typeof ( LogAspect ) ) ]
+[Intercept(typeof(LogAspect))]
 public class GattCharacteristicProvider
     : IGattCharacteristicProvider
 {
@@ -19,77 +19,81 @@ public class GattCharacteristicProvider
     ///     Factory delegate for creating <see cref="GattCharacteristicProvider" /> instances.
     /// </summary>
     public delegate IGattCharacteristicProvider
-        Factory ( IGattCharacteristicsResultWrapper gattCharacteristics ) ;
+        Factory(IGattCharacteristicsResultWrapper gattCharacteristics);
 
-    private readonly Dictionary < string , IGattCharacteristicWrapper > _characteristics = new( ) ;
+    private readonly Dictionary<string, IGattCharacteristicWrapper> _characteristics = new();
 
-    private readonly IGattCharacteristicsResultWrapper _gattCharacteristics ;
-    private readonly ILogger                           _logger ;
+    private readonly IGattCharacteristicsResultWrapper _gattCharacteristics;
+    private readonly ILogger _logger;
 
-    private readonly Dictionary < string , GattCharacteristicProperties > _properties = new( ) ;
+    private readonly Dictionary<string, GattCharacteristicProperties> _properties = new();
 
-    private readonly List < string > _unavailable = [] ;
+    private readonly List<string> _unavailable = [];
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="GattCharacteristicProvider" /> class.
     /// </summary>
     /// <param name="logger">Logger used for discovery diagnostics.</param>
     /// <param name="gattCharacteristics">Discovered characteristics wrapper.</param>
-    public GattCharacteristicProvider ( ILogger                           logger ,
-                                        IGattCharacteristicsResultWrapper gattCharacteristics )
+    public GattCharacteristicProvider(
+        ILogger logger,
+        IGattCharacteristicsResultWrapper gattCharacteristics)
     {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull(
+            logger,
+            nameof(logger));
 
-        Guard.ArgumentNotNull ( gattCharacteristics ,
-                                nameof ( gattCharacteristics ) ) ;
+        Guard.ArgumentNotNull(
+            gattCharacteristics,
+            nameof(gattCharacteristics));
 
-        _logger              = logger ;
-        _gattCharacteristics = gattCharacteristics ;
+        _logger = logger;
+        _gattCharacteristics = gattCharacteristics;
     }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary < string , IGattCharacteristicWrapper > Characteristics => _characteristics ;
+    public IReadOnlyDictionary<string, IGattCharacteristicWrapper> Characteristics => _characteristics;
 
     /// <inheritdoc />
-    public IReadOnlyCollection < string > UnavailableCharacteristics => _unavailable ;
+    public IReadOnlyCollection<string> UnavailableCharacteristics => _unavailable;
 
     /// <inheritdoc />
-    public IReadOnlyDictionary < string , GattCharacteristicProperties > Properties => _properties ;
+    public IReadOnlyDictionary<string, GattCharacteristicProperties> Properties => _properties;
 
     /// <inheritdoc />
-    public virtual void Refresh ( IReadOnlyDictionary < string , Guid > customCharacteristic )
+    public virtual void Refresh(IReadOnlyDictionary<string, Guid> customCharacteristic)
     {
-        Guard.ArgumentNotNull ( customCharacteristic ,
-                                nameof ( customCharacteristic ) ) ;
+        Guard.ArgumentNotNull(
+            customCharacteristic,
+            nameof(customCharacteristic));
 
-        _logger.Information ( "{GattCharacteristicsResultWrapper}" ,
-                              _gattCharacteristics ) ;
+        _logger.Information(
+            "{GattCharacteristicsResultWrapper}",
+            _gattCharacteristics);
 
-        _characteristics.Clear ( ) ;
-        _unavailable.Clear ( ) ;
+        _characteristics.Clear();
+        _unavailable.Clear();
 
-        foreach ( var keyValuePair in customCharacteristic )
-        {
+        foreach (var keyValuePair in customCharacteristic) {
             var characteristic = _gattCharacteristics.Characteristics
-                                                     .FirstOrDefault ( x => x.Uuid == keyValuePair.Value ) ;
+                .FirstOrDefault(x => x.Uuid == keyValuePair.Value);
 
-            if ( characteristic != null )
-            {
-                _logger.Information ( "Found characteristic {Uuid} for description '{Key}'" ,
-                                      characteristic.Uuid ,
-                                      keyValuePair.Key ) ;
+            if (characteristic != null) {
+                _logger.Information(
+                    "Found characteristic {Uuid} for description '{Key}'",
+                    characteristic.Uuid,
+                    keyValuePair.Key);
 
-                _characteristics [ keyValuePair.Key ] = characteristic ;
-                _properties [ keyValuePair.Key ]      = characteristic.CharacteristicProperties ;
+                _characteristics[keyValuePair.Key] = characteristic;
+                _properties[keyValuePair.Key] = characteristic.CharacteristicProperties;
             }
-            else
-            {
-                _logger.Information ( "Did not find characteristic for description '{Key}' and Uuid '{Value}'" ,
-                                      keyValuePair.Key ,
-                                      keyValuePair.Value ) ;
+            else {
+                _logger.Information(
+                    "Did not find characteristic for description '{Key}' and Uuid '{Value}'",
+                    keyValuePair.Key,
+                    keyValuePair.Value);
 
-                _unavailable.Add ( keyValuePair.Key ) ;
+                _unavailable.Add(keyValuePair.Key);
             }
         }
     }

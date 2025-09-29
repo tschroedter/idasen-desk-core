@@ -1,164 +1,167 @@
-﻿using Autofac.Extras.DynamicProxy ;
-using Idasen.Aop.Aspects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Serilog ;
+using Autofac.Extras.DynamicProxy;
+using Idasen.Aop.Aspects;
+using Idasen.BluetoothLE.Linak.Interfaces;
+using Serilog;
 
-namespace Idasen.BluetoothLE.Linak.Control ;
+namespace Idasen.BluetoothLE.Linak.Control;
 
 /// <inheritdoc />
-[ Intercept ( typeof ( LogAspect ) ) ]
+[Intercept(typeof(LogAspect))]
 public class StoppingHeightCalculator
     : IStoppingHeightCalculator
 {
-    private const int DefaultMaxSpeedToStopMovement = 14 ;   // per notification, 16 notifications in 60 secs
-    private const int DefaultMaxSpeed               = 6200 ; // rpm/10
+    private const int DefaultMaxSpeedToStopMovement = 14; // per notification, 16 notifications in 60 secs
+    private const int DefaultMaxSpeed = 6200; // rpm/10
 
-    private readonly IHasReachedTargetHeightCalculator _calculator ;
+    private readonly IHasReachedTargetHeightCalculator _calculator;
 
-    private readonly ILogger _logger ;
+    private readonly ILogger _logger;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="StoppingHeightCalculator" /> class.
     /// </summary>
-    public StoppingHeightCalculator ( ILogger                           logger ,
-                                      IHasReachedTargetHeightCalculator calculator )
+    public StoppingHeightCalculator(
+        ILogger logger,
+        IHasReachedTargetHeightCalculator calculator)
     {
-        ArgumentNullException.ThrowIfNull ( logger ) ;
-        ArgumentNullException.ThrowIfNull ( calculator ) ;
+        ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(calculator);
 
-        _logger     = logger ;
-        _calculator = calculator ;
+        _logger = logger;
+        _calculator = calculator;
     }
 
     /// <inheritdoc />
-    public uint MaxSpeedToStopMovement { get ; set ; } = DefaultMaxSpeedToStopMovement ;
+    public uint MaxSpeedToStopMovement { get; set; } = DefaultMaxSpeedToStopMovement;
 
     /// <inheritdoc />
-    public int MaxSpeed { get ; set ; } = DefaultMaxSpeed ;
+    public int MaxSpeed { get; set; } = DefaultMaxSpeed;
 
     /// <inheritdoc />
-    public int Speed { get ; set ; }
+    public int Speed { get; set; }
 
     /// <inheritdoc />
-    public float FudgeFactor { get ; set ; } = 2.0f ;
+    public float FudgeFactor { get; set; } = 2.0f;
 
     /// <inheritdoc />
-    public uint TargetHeight { get ; set ; }
+    public uint TargetHeight { get; set; }
 
     /// <inheritdoc />
-    public uint Height { get ; set ; }
+    public uint Height { get; set; }
 
     /// <inheritdoc />
-    public uint Delta { get ; private set ; }
+    public uint Delta { get; private set; }
 
     /// <inheritdoc />
-    public uint StoppingHeight { get ; private set ; }
+    public uint StoppingHeight { get; private set; }
 
     /// <inheritdoc />
-    public int MovementUntilStop { get ; set ; }
+    public int MovementUntilStop { get; set; }
 
     /// <inheritdoc />
-    public bool HasReachedTargetHeight { get ; private set ; }
+    public bool HasReachedTargetHeight { get; private set; }
 
     /// <inheritdoc />
-    public Direction MoveIntoDirection { get ; set ; } = Direction.None ;
+    public Direction MoveIntoDirection { get; set; } = Direction.None;
 
     /// <inheritdoc />
-    public Direction StartMovingIntoDirection { get ; set ; }
+    public Direction StartMovingIntoDirection { get; set; }
 
     /// <inheritdoc />
-    public IStoppingHeightCalculator Calculate ( )
+    public IStoppingHeightCalculator Calculate()
     {
-        MoveIntoDirection = CalculateMoveIntoDirection ( ) ;
+        MoveIntoDirection = CalculateMoveIntoDirection();
 
-        _logger.Information ( "Height={Height}, Speed={Speed}, StartMove={StartMovingIntoDirection}, Move={MoveIntoDirection}" ,
-                              Height ,
-                              Speed ,
-                              StartMovingIntoDirection ,
-                              MoveIntoDirection ) ;
+        _logger.Information(
+            "Height={Height}, Speed={Speed}, StartMove={StartMovingIntoDirection}, Move={MoveIntoDirection}",
+            Height,
+            Speed,
+            StartMovingIntoDirection,
+            MoveIntoDirection);
 
-        if ( Speed == 0 )
-            CalculateForSpeedZero ( ) ;
+        if (Speed == 0)
+            CalculateForSpeedZero();
         else
-            CalculateForSpeed ( ) ;
+            CalculateForSpeed();
 
-        return this ;
+        return this;
     }
 
-    private Direction CalculateMoveIntoDirection ( )
+    private Direction CalculateMoveIntoDirection()
     {
-        var diff      = Height - ( long )TargetHeight ;
-        var threshold = ( double )MaxSpeedToStopMovement * FudgeFactor ;
+        var diff = Height - (long)TargetHeight;
+        var threshold = (double)MaxSpeedToStopMovement * FudgeFactor;
 
-        if ( Math.Abs ( diff ) <= threshold )
-            return Direction.None ;
+        if (Math.Abs(diff) <= threshold)
+            return Direction.None;
 
         return Height > TargetHeight
-                   ? Direction.Down
-                   : Direction.Up ;
+            ? Direction.Down
+            : Direction.Up;
     }
 
-    private void CalculateForSpeed ( )
+    private void CalculateForSpeed()
     {
         // Preserve sign semantics from original implementation
-        MovementUntilStop = ( int )( ( float )Speed /
-                                     MaxSpeed               *
-                                     MaxSpeedToStopMovement *
-                                     FudgeFactor ) ;
+        MovementUntilStop = (int)((float)Speed /
+                                  MaxSpeed *
+                                  MaxSpeedToStopMovement *
+                                  FudgeFactor);
 
         // Original behavior: add MovementUntilStop (signed) to current height
-        var stopping = Height + MovementUntilStop ;
+        var stopping = Height + MovementUntilStop;
 
-        if ( stopping < 0 )
-            stopping = 0 ;
+        if (stopping < 0)
+            stopping = 0;
 
-        if ( stopping > uint.MaxValue )
-            stopping = uint.MaxValue ;
+        if (stopping > uint.MaxValue)
+            stopping = uint.MaxValue;
 
-        StoppingHeight = ( uint )stopping ;
+        StoppingHeight = (uint)stopping;
 
-        var (hasReachedTargetHeight , delta) = CalculateHasReachedTargetHeight ( ) ;
+        var (hasReachedTargetHeight, delta) = CalculateHasReachedTargetHeight();
 
-        Delta                  = delta ;
-        HasReachedTargetHeight = hasReachedTargetHeight ;
+        Delta = delta;
+        HasReachedTargetHeight = hasReachedTargetHeight;
 
-        LogStatus ( ) ;
+        LogStatus();
     }
 
-    private void LogStatus ( )
+    private void LogStatus()
     {
-        _logger.Information ( "Height={Height}, Speed={Speed}, TargetHeight={TargetHeight}, StoppingHeight={StoppingHeight}, MovementUntilStop={MovementUntilStop}, Delta={Delta}" ,
-                              Height ,
-                              Speed ,
-                              TargetHeight ,
-                              StoppingHeight ,
-                              MovementUntilStop ,
-                              Delta ) ;
+        _logger.Information(
+            "Height={Height}, Speed={Speed}, TargetHeight={TargetHeight}, StoppingHeight={StoppingHeight}, MovementUntilStop={MovementUntilStop}, Delta={Delta}",
+            Height,
+            Speed,
+            TargetHeight,
+            StoppingHeight,
+            MovementUntilStop,
+            Delta);
     }
 
-    private void CalculateForSpeedZero ( )
+    private void CalculateForSpeedZero()
     {
-        MovementUntilStop = 0 ;
+        MovementUntilStop = 0;
 
-        StoppingHeight = Height ;
+        StoppingHeight = Height;
 
-        var (hasReachedTargetHeight , delta) = CalculateHasReachedTargetHeight ( ) ;
+        var (hasReachedTargetHeight, delta) = CalculateHasReachedTargetHeight();
 
-        Delta                  = delta ;
-        HasReachedTargetHeight = hasReachedTargetHeight ;
+        Delta = delta;
+        HasReachedTargetHeight = hasReachedTargetHeight;
 
-        LogStatus ( ) ;
+        LogStatus();
     }
 
-    private (bool hasReachedTargetHeight , uint delta) CalculateHasReachedTargetHeight ( )
+    private (bool hasReachedTargetHeight, uint delta) CalculateHasReachedTargetHeight()
     {
-        _calculator.TargetHeight             = TargetHeight ;
-        _calculator.StoppingHeight           = StoppingHeight ;
-        _calculator.MovementUntilStop        = MovementUntilStop ;
-        _calculator.MoveIntoDirection        = MoveIntoDirection ;
-        _calculator.StartMovingIntoDirection = StartMovingIntoDirection ;
-        _calculator.Calculate ( ) ;
+        _calculator.TargetHeight = TargetHeight;
+        _calculator.StoppingHeight = StoppingHeight;
+        _calculator.MovementUntilStop = MovementUntilStop;
+        _calculator.MoveIntoDirection = MoveIntoDirection;
+        _calculator.StartMovingIntoDirection = StartMovingIntoDirection;
+        _calculator.Calculate();
 
-        return ( _calculator.HasReachedTargetHeight , _calculator.Delta ) ;
+        return (_calculator.HasReachedTargetHeight, _calculator.Delta);
     }
 }
