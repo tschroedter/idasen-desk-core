@@ -18,7 +18,7 @@ public class GattCharacteristicValueChangedObservablesTests : IDisposable
 
     public void Dispose ( )
     {
-        _subject?.Dispose ( ) ;
+        _subject.Dispose ( ) ;
 
         GC.SuppressFinalize ( this ) ;
     }

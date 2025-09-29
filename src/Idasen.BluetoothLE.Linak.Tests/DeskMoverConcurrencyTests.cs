@@ -26,8 +26,8 @@ public class DeskMoverConcurrencyTests : IDisposable
 
     public void Dispose ( )
     {
-        _finishedSubject?.Dispose ( ) ;
-        _heightSpeedSubject?.Dispose ( ) ;
+        _finishedSubject.Dispose() ;
+        _heightSpeedSubject.Dispose() ;
 
         GC.SuppressFinalize ( this ) ;
     }

@@ -173,7 +173,7 @@ internal class DeskStopper : IDeskStopper
                      height                           < targetHeight )
                 {
                     var predictedStop = height + compensatedMovementForPrediction ;
-                    _logger.Debug ( "Predictive Up predictedStop={Pred} target={Target}" ,
+                    _logger.Debug ("Predictive Up predictedStop={PredictedStop} target={Target}",
                                     predictedStop ,
                                     targetHeight ) ;
 
@@ -195,7 +195,7 @@ internal class DeskStopper : IDeskStopper
                                     : compensatedMovementForPrediction ;
                     var predictedStop = height - delta ;
 
-                    _logger.Debug ( "Predictive Down predictedStop={Pred} target={Target}" ,
+                    _logger.Debug ("Predictive Down predictedStop={PredictedStop} target={Target}",
                                     predictedStop ,
                                     targetHeight ) ;
 

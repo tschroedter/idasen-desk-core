@@ -4,6 +4,7 @@ using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using JetBrains.Annotations ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 
@@ -16,11 +17,13 @@ public class CharacteristicBaseTest
     private static readonly Guid GattCharacteristicUuid = Guid.Parse ( "22222222-2222-2222-2222-222222222222" ) ;
     private static readonly Guid GattServiceUuid        = Guid.Parse ( "11111111-1111-1111-1111-111111111111" ) ;
 
+    [ UsedImplicitly ]
     protected static Guid GetGattCharacteristicUuid ( )
     {
         return GattCharacteristicUuid ;
     }
 
+    [ UsedImplicitly ]
     protected static Guid GetGattServiceUuid ( )
     {
         return GattServiceUuid ;

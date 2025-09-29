@@ -56,16 +56,16 @@ public class DeskConnectorTests : IDisposable
             return ;
         _disposed = true ;
 
-        _gattRefreshed?.Dispose ( ) ;
-        _genericAccessDeviceNameChanged?.Dispose ( ) ;
-        _heightAndSpeedChanged?.Dispose ( ) ;
-        _heightChanged?.Dispose ( ) ;
-        _heightSpeedSubject?.Dispose ( ) ;
-        _heightSubject?.Dispose ( ) ;
-        _moverFinished?.Dispose ( ) ;
-        _refreshedSubject?.Dispose ( ) ;
-        _speedChanged?.Dispose ( ) ;
-        _speedSubject?.Dispose ( ) ;
+        _gattRefreshed.Dispose ( ) ;
+        _genericAccessDeviceNameChanged.Dispose() ;
+        _heightAndSpeedChanged.Dispose() ;
+        _heightChanged.Dispose() ;
+        _heightSpeedSubject.Dispose() ;
+        _heightSubject.Dispose() ;
+        _moverFinished.Dispose() ;
+        _refreshedSubject.Dispose() ;
+        _speedChanged.Dispose() ;
+        _speedSubject.Dispose() ;
 
         GC.SuppressFinalize ( this ) ;
     }

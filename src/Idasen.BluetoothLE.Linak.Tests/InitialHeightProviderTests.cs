@@ -266,7 +266,8 @@ public class InitialHeightProviderTests : IDisposable
     {
         using var sut = CreateSut ( ) ;
 
-        var action = async ( ) => await sut.Start ( ) ;
+        // ReSharper disable once AccessToDisposedClosure
+        var action = async ( ) => await sut.Start ( CancellationToken.None ) ;
 
         await action.Should ( )
                     .ThrowAsync < NotInitializeException > ( ) ;

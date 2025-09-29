@@ -24,7 +24,7 @@ internal sealed class Program
         var       token       = tokenSource.Token ;
 
         var builder = new ConfigurationBuilder ( ).SetBasePath ( Directory.GetCurrentDirectory ( ) )
-                                                  .AddJsonFile ( "Appsettings.json" ) ;
+                                                  .AddJsonFile ( "appsettings.json" ) ;
 
         IContainer ? container = null ;
 
