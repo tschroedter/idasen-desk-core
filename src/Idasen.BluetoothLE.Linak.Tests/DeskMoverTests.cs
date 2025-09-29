@@ -73,8 +73,10 @@ public class DeskMoverTests : IDisposable
 
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( _subjectHeightAndSpeed ) ;
+
         _heightAndSpeed.Height
                        .Returns ( DefaultHeight ) ;
+
         _heightAndSpeed.Speed
                        .Returns ( DefaultSpeed ) ;
 
@@ -164,17 +166,21 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public void StartAfterRefreshed_ForInvoked_SetsHeight ( )
     {
-        CreateSutWithIsAllowedToMoveIsTrue ( ).Height
-                                              .Should ( )
-                                              .Be ( DefaultHeight ) ;
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue ( ) ;
+
+        sut.Height
+           .Should ( )
+           .Be ( DefaultHeight ) ;
     }
 
     [ TestMethod ]
     public void StartAfterRefreshed_ForInvoked_SetsSpeed ( )
     {
-        CreateSutWithIsAllowedToMoveIsTrue ( ).Speed
-                                              .Should ( )
-                                              .Be ( DefaultSpeed ) ;
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue();
+
+        sut.Speed
+           .Should ( )
+           .Be ( DefaultSpeed ) ;
     }
 
     [ TestMethod ]
@@ -189,6 +195,7 @@ public class DeskMoverTests : IDisposable
                    .Be (
                         DefaultHeight ,
                         "Height" ) ;
+
         _calculator.Speed
                    .Should ( )
                    .Be (
@@ -214,17 +221,21 @@ public class DeskMoverTests : IDisposable
     [ TestMethod ]
     public void StartAfterRefreshed_ForInvoked_SetsIsAllowedToMoveToTrue ( )
     {
-        CreateSutWithIsAllowedToMoveIsTrue ( ).IsAllowedToMove
-                                              .Should ( )
-                                              .BeTrue ( ) ;
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue();
+
+        sut.IsAllowedToMove
+           .Should ( )
+           .BeTrue ( ) ;
     }
 
     [ TestMethod ]
     public void StartAfterRefreshed_ForIsAllowedToMoveIsTrueAndSuccess_SetsStartMovingIntoDirection ( )
     {
-        CreateSutWithIsAllowedToMoveIsTrue ( ).StartMovingIntoDirection
-                                              .Should ( )
-                                              .Be ( _calculator.MoveIntoDirection ) ;
+        using var sut = CreateSutWithIsAllowedToMoveIsTrue();
+
+        sut.StartMovingIntoDirection
+           .Should ( )
+           .Be ( _calculator.MoveIntoDirection ) ;
     }
 
     [ TestMethod ]

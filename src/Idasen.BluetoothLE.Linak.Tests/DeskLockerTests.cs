@@ -51,7 +51,7 @@ public class DeskLockerTests : IDisposable
         _deskMover.IsAllowedToMove
                   .Returns ( true ) ;
 
-        var sut = CreateSutInitialized ( ) ;
+        using var sut = CreateSutInitialized ( ) ;
 
         sut.Lock ( ) ;
 
@@ -69,7 +69,7 @@ public class DeskLockerTests : IDisposable
         _deskMover.IsAllowedToMove
                   .Returns ( true ) ;
 
-        _ = CreateSutInitialized ( ).Unlock ( ) ;
+        using var sut = CreateSutInitialized ( ).Unlock ( ) ;
 
         _subjectHeightAndSpeed.OnNext ( _details ) ;
 
@@ -85,7 +85,7 @@ public class DeskLockerTests : IDisposable
         _deskMover.IsAllowedToMove
                   .Returns ( true ) ;
 
-        _ = CreateSutInitialized ( ).Lock ( ) ;
+        using var sut = CreateSutInitialized().Lock();
 
         _subjectHeightAndSpeed.OnNext ( _details ) ;
 

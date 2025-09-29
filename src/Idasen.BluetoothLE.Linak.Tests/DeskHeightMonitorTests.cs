@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
 using NSubstitute ;
 using Serilog ;

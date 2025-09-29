@@ -1,4 +1,4 @@
-﻿using Windows.Storage.Streams ;
+using Windows.Storage.Streams ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Common.Tests ;
@@ -19,9 +19,11 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public void GattServiceUuid_ForInvoked_Uuid ( )
     {
-        CreateSut ( ).GattServiceUuid
-                     .Should ( )
-                     .Be ( GattServiceUuid ) ;
+        using var sut = CreateSut ( );
+
+        sut.GattServiceUuid
+           .Should ( )
+           .Be ( GattServiceUuid ) ;
     }
 
     [ AutoDataTestMethod ]
@@ -45,7 +47,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public void Initialize_ForKnownGattServiceUuid_AddsKeyToDescriptionToUuid ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -59,7 +61,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public void RawDpg_ForNotRefreshedAndInvoked_EmptyBytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -74,7 +76,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task RawDpg_ForRefreshedAndInvoked_Bytes ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -90,7 +92,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task Refresh_ForSuccessfulRead_UpdatesRawValuesAsync ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -109,7 +111,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task Refresh_ForFailedRead_UpdatesRawValuesAsync ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -128,7 +130,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task TryWriteRawValue_ForKnownCharacteristics_WritesRawValuesAsync ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -147,7 +149,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task TryWriteRawValue_ForKnownCharacteristics_ReturnsTrue ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -169,7 +171,7 @@ public class CharacteristicBaseTest
     [ TestMethod ]
     public async Task TryWriteRawValue_ForKnownCharacteristicsAndFailedToWrite_ReturnsFalse ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -193,7 +195,7 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -212,7 +214,7 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -222,12 +224,11 @@ public class CharacteristicBaseTest
 
         await sut.TryWriteRawValue ( RawValue1 ) ;
 
-        // Accept Serilog's generic Error<T>(string, T) overload
+        const string messageTemplate = "Unknown characteristic with key '{Key}'" ;
+
         Logger.Received ( )
               .Error (
-                      Arg.Is < string > ( s => s.Contains (
-                                                           "Unknown characteristic" ,
-                                                           StringComparison.OrdinalIgnoreCase ) ) ,
+                      messageTemplate ,
                       Arg.Any < string > ( ) ) ;
     }
 
@@ -241,7 +242,7 @@ public class CharacteristicBaseTest
                       TestCharacteristicBase.RawValueKey ,
                       null! ) ;
 
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -265,7 +266,7 @@ public class CharacteristicBaseTest
                       TestCharacteristicBase.RawValueKey ,
                       null! ) ;
 
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -276,13 +277,13 @@ public class CharacteristicBaseTest
         await sut.TryWriteRawValue ( RawValue1 ) ;
 
         Logger.ReceivedWithAnyArgs ( )
-              .Error ( Arg.Any < string > ( ) ) ;
+              .Error ( "Ignored test error {Key}" , Arg.Any < string > ( ) ) ;
     }
 
     [ TestMethod ]
     public async Task ToString_ForInvoke_Instance ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
