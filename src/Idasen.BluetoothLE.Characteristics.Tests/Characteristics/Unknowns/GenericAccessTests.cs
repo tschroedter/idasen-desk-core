@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 
@@ -10,41 +10,51 @@ public class GenericAccessTests
     [ TestMethod ]
     public void GattServiceUuid_ForInvoked_Empty ( )
     {
-        CreateSut ( ).GattServiceUuid
-                     .Should ( )
-                     .Be ( Guid.Empty ) ;
+        using var sut = CreateSut();
+
+        sut.GattServiceUuid
+           .Should ( )
+           .Be ( Guid.Empty ) ;
     }
 
     [ TestMethod ]
     public void RawResolution_ForInvoked_Empty ( )
     {
-        CreateSut ( ).RawResolution
-                     .Should ( )
-                     .BeEmpty ( ) ;
+        using var sut = CreateSut();
+
+        sut.RawResolution
+           .Should ( )
+           .BeEmpty ( ) ;
     }
 
     [ TestMethod ]
     public void RawParameters_ForInvoked_Empty ( )
     {
-        CreateSut ( ).RawParameters
-                     .Should ( )
-                     .BeEmpty ( ) ;
+        using var sut = CreateSut();
+
+        sut.RawParameters
+           .Should ( )
+           .BeEmpty ( ) ;
     }
 
     [ TestMethod ]
     public void RawAppearance_ForInvoked_Empty ( )
     {
-        CreateSut ( ).RawAppearance
-                     .Should ( )
-                     .BeEmpty ( ) ;
+        using var sut = CreateSut();
+
+        sut.RawAppearance
+           .Should ( )
+           .BeEmpty ( ) ;
     }
 
     [ TestMethod ]
     public void RawDeviceName_ForInvoked_Empty ( )
     {
-        CreateSut ( ).RawDeviceName
-                     .Should ( )
-                     .BeEmpty ( ) ;
+        using var sut = CreateSut();
+
+        sut.RawDeviceName
+           .Should ( )
+           .BeEmpty ( ) ;
     }
 
     [ TestMethod ]

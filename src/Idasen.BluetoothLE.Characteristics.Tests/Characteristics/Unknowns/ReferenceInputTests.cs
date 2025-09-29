@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
@@ -9,9 +9,11 @@ public class ReferenceInputTests
     [ TestMethod ]
     public void Ctrl1_ForInvoked_Empty ( )
     {
-        CreateSut ( ).Ctrl1
-                     .Should ( )
-                     .BeEmpty ( ) ;
+        using var sut = CreateSut ( );
+
+        sut.Ctrl1
+           .Should ( )
+           .BeEmpty ( ) ;
     }
 
     private ReferenceInput CreateSut ( ) => new ( ) ;

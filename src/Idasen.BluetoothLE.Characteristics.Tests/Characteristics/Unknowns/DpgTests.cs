@@ -1,4 +1,4 @@
-﻿using FluentAssertions ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Unknowns ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns ;
@@ -9,9 +9,11 @@ public class DpgTests
     [ TestMethod ]
     public void RawDpg_ForInvoked_Empty ( )
     {
-        CreateSut ( ).RawDpg
-                     .Should ( )
-                     .BeEmpty ( ) ;
+        using var sut = CreateSut();
+
+        sut.RawDpg
+           .Should ( )
+           .BeEmpty ( ) ;
     }
 
     private Dpg CreateSut ( ) => new ( ) ;
