@@ -81,6 +81,10 @@ public class BluetoothLELinakModule
                .As < IDeskMoveEngine > ( )
                .EnableInterfaceInterceptors ( ) ;
 
+        builder.RegisterType < DeskMoveEngineV2 > ( )
+               .As < IDeskMoveEngineV2 > ( )
+               .EnableInterfaceInterceptors ( ) ;
+
         builder.Register ( ctx =>
                            {
                                var logger        = ctx.Resolve < ILogger > ( ) ;
