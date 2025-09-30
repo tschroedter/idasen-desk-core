@@ -37,7 +37,6 @@ public class DeskMover
     private          CompositeDisposable ?                 _cycleDisposables ;
 
     private          IDisposable ? _disposableProvider ;
-    private volatile bool          _finishedEmitted ;
     private          IDisposable ? _guardTargetHeightReached ;
 
     private IInitialHeightProvider ? _initialProvider ;
@@ -168,9 +167,8 @@ public class DeskMover
                                               .ObserveOn ( _scheduler )
                                               .Subscribe ( targetHeight =>
                                                            {
-                                                               _logger
-                                                                  .Information ( "Reached target height={TargetHeight}" ,
-                                                                                    targetHeight ) ;
+                                                               _logger.Information ( "Reached target height={TargetHeight}" ,
+                                                                                     targetHeight ) ;
                                                                _engine.StopMoveAsync ( ) ;
                                                                StopMovement ( ) ;
                                                            } ) ;
@@ -248,11 +246,7 @@ public class DeskMover
         _logger.Debug ( "Emitting finished (height={Height})" ,
                         Height ) ;
 
-        if ( ! _finishedEmitted )
-        {
-            _finishedEmitted = true ;
-            _subjectFinished.OnNext ( Height ) ;
-        }
+        _subjectFinished.OnNext ( Height ) ;
 
         return Task.FromResult ( true ) ;
     }
