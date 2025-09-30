@@ -8,8 +8,8 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 public class DeskMoveGuard
     : IDeskMoveGuard
 {
-    private readonly IDeskHeightAndSpeed       _heightAndSpeed ;
     private readonly IStoppingHeightCalculator _calculator ;
+    private readonly IDeskHeightAndSpeed       _heightAndSpeed ;
     private readonly ILogger                   _logger ;
     private readonly Subject < uint >          _targetHeightReached = new( ) ;
     private          Direction                 _direction ;
@@ -23,11 +23,11 @@ public class DeskMoveGuard
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
-        ArgumentNullException.ThrowIfNull (calculator) ;
+        ArgumentNullException.ThrowIfNull ( calculator ) ;
 
         _logger         = logger ;
-        _heightAndSpeed = heightAndSpeed;
-        _calculator     = calculator;
+        _heightAndSpeed = heightAndSpeed ;
+        _calculator     = calculator ;
     }
 
     public IObservable < uint > TargetHeightReached => _targetHeightReached.AsObservable ( ) ;
@@ -66,32 +66,32 @@ public class DeskMoveGuard
         if ( ! _isGuarding )
             return ;
 
-        _calculator.Height                   = details.Height;
-        _calculator.Speed                    = details.Speed;
-        _calculator.TargetHeight             = _targetHeight;
-        _calculator.StartMovingIntoDirection = _direction;
+        _calculator.Height                   = details.Height ;
+        _calculator.Speed                    = details.Speed ;
+        _calculator.TargetHeight             = _targetHeight ;
+        _calculator.StartMovingIntoDirection = _direction ;
         _calculator.Calculate ( ) ;
 
-        var currentHeight = details.Height;
-        var estimatedStoppingHeight = _calculator.StoppingHeight;
+        var currentHeight           = details.Height ;
+        var estimatedStoppingHeight = _calculator.StoppingHeight ;
 
-        if ( _direction  == Direction.Up &&
+        if ( _direction                 == Direction.Up &&
              _calculator.StoppingHeight >= _targetHeight )
         {
             _logger.Information ( "DeskMoveGuard: Stop - current height {Current} (~{Stopping}) >= target {Target}" ,
-                                  currentHeight,
+                                  currentHeight ,
                                   estimatedStoppingHeight ,
                                   _targetHeight ) ;
             _targetHeightReached.OnNext ( estimatedStoppingHeight ) ;
             StopGuarding ( ) ;
         }
-        else if ( _direction    == Direction.Down &&
+        else if ( _direction              == Direction.Down &&
                   estimatedStoppingHeight <= _targetHeight )
         {
-            _logger.Information ("DeskMoveGuard: Stop - current height {Current} (~{Stopping}) >= target {Target}",
-                                 currentHeight,
-                                 estimatedStoppingHeight,
-                                 _targetHeight) ;
+            _logger.Information ( "DeskMoveGuard: Stop - current height {Current} (~{Stopping}) >= target {Target}" ,
+                                  currentHeight ,
+                                  estimatedStoppingHeight ,
+                                  _targetHeight ) ;
             _targetHeightReached.OnNext ( estimatedStoppingHeight ) ;
             StopGuarding ( ) ;
         }

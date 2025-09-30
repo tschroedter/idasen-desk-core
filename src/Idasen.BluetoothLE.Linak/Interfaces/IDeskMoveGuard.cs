@@ -1,24 +1,23 @@
-using Idasen.BluetoothLE.Linak.Control;
+using Idasen.BluetoothLE.Linak.Control ;
 
-namespace Idasen.BluetoothLE.Linak.Interfaces
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+/// <summary>
+///     Interface for DeskMoveGuard, which guards desk movement based on height and direction.
+/// </summary>
+public interface IDeskMoveGuard : IDisposable
 {
+    IObservable < uint > TargetHeightReached { get ; }
+
     /// <summary>
-    /// Interface for DeskMoveGuard, which guards desk movement based on height and direction.
+    ///     Starts guarding the movement in the specified direction until the target height is reached.
     /// </summary>
-    public interface IDeskMoveGuard : IDisposable
-    {
-        /// <summary>
-        /// Starts guarding the movement in the specified direction until the target height is reached.
-        /// </summary>
-        void StartGuarding ( Direction         direction ,
-                             uint              targetHeight ,
-                             CancellationToken none );
+    void StartGuarding ( Direction         direction ,
+                         uint              targetHeight ,
+                         CancellationToken none ) ;
 
-        /// <summary>
-        /// Stops guarding the movement.
-        /// </summary>
-        void StopGuarding();
-
-        IObservable < uint > TargetHeightReached { get ; }
-    }
+    /// <summary>
+    ///     Stops guarding the movement.
+    /// </summary>
+    void StopGuarding ( ) ;
 }

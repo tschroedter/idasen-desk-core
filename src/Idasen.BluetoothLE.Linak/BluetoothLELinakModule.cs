@@ -137,7 +137,7 @@ public class BluetoothLELinakModule
                .SingleInstance ( )
                .EnableInterfaceInterceptors ( ) ;
 
-        builder.RegisterType<DeskMoveGuard>()
-               .As<IDeskMoveGuard>();
+        builder.RegisterType < DeskMoveGuard > ( )
+               .As < IDeskMoveGuard > ( ) ;
     }
 }

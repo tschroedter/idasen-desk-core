@@ -6,53 +6,53 @@ using NSubstitute ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[TestClass]
+[ TestClass ]
 public class DeskMoverFactoryTests
 {
-    private IDeskCommandExecutor _executor       = null!;
-    private DeskMover.Factory  _factory        = null!;
-    private IDeskHeightAndSpeed  _heightAndSpeed = null!;
+    private IDeskCommandExecutor _executor       = null! ;
+    private DeskMover.Factory    _factory        = null! ;
+    private IDeskHeightAndSpeed  _heightAndSpeed = null! ;
 
-    [TestInitialize]
-    public void Initialize()
+    [ TestInitialize ]
+    public void Initialize ( )
     {
-        _factory = TestFactory;
+        _factory = TestFactory ;
 
-        _executor       = Substitute.For<IDeskCommandExecutor>();
-        _heightAndSpeed = Substitute.For<IDeskHeightAndSpeed>();
+        _executor       = Substitute.For < IDeskCommandExecutor > ( ) ;
+        _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
     }
 
-    private IDeskMover TestFactory(IDeskCommandExecutor executor,
-                                   IDeskHeightAndSpeed  heightAndSpeed)
+    private IDeskMover TestFactory ( IDeskCommandExecutor executor ,
+                                     IDeskHeightAndSpeed  heightAndSpeed )
     {
-        return Substitute.For<IDeskMover>();
+        return Substitute.For < IDeskMover > ( ) ;
     }
 
-    [TestMethod]
-    public void Create_ForExecutorNull_Throws()
+    [ TestMethod ]
+    public void Create_ForExecutorNull_Throws ( )
     {
-        var action = () =>
+        var action = ( ) =>
                      {
-                         CreateSut().Create(null!,
-                                            _heightAndSpeed);
-                     };
+                         CreateSut ( ).Create ( null! ,
+                                                _heightAndSpeed ) ;
+                     } ;
 
-        action.Should()
-              .Throw<ArgumentNullException>()
-              .WithParameter("executor");
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( "executor" ) ;
     }
 
-    [TestMethod]
-    public void CreateForInvoked_ReturnsInstance()
+    [ TestMethod ]
+    public void CreateForInvoked_ReturnsInstance ( )
     {
-        CreateSut().Create(_executor,
-                           _heightAndSpeed)
-                   .Should()
-                   .NotBeNull();
+        CreateSut ( ).Create ( _executor ,
+                               _heightAndSpeed )
+                     .Should ( )
+                     .NotBeNull ( ) ;
     }
 
-    private DeskMoverFactory CreateSut()
+    private DeskMoverFactory CreateSut ( )
     {
-        return new DeskMoverFactory(_factory);
+        return new DeskMoverFactory ( _factory ) ;
     }
 }

@@ -22,7 +22,7 @@ public class DeskMover
 
     private readonly IStoppingHeightCalculator _calculator ;
 
-    private readonly IDeskMoveEngine    _engine ;
+    private readonly IDeskMoveEngine      _engine ;
     private readonly IDeskCommandExecutor _executor ;
     private readonly IDeskMoveGuard       _guard ;
     private readonly IDeskHeightAndSpeed  _heightAndSpeed ;
@@ -66,7 +66,7 @@ public class DeskMover
                  calculator ,
                  subjectFinished ,
                  new DeskMoveEngine ( logger ,
-                                        executor ) ,
+                                      executor ) ,
                  // todo fix ca2000
 #pragma warning disable CA2000
                  new DeskMoveGuard ( logger ,
@@ -85,7 +85,7 @@ public class DeskMover
                          IDeskHeightAndSpeed                   heightAndSpeed ,
                          IStoppingHeightCalculator             calculator ,
                          ISubject < uint >                     subjectFinished ,
-                         IDeskMoveEngine                     engine ,
+                         IDeskMoveEngine                       engine ,
                          IDeskMoveGuard                        guard )
     {
         Guard.ArgumentNotNull ( logger ,

@@ -15,7 +15,7 @@ public class DeskMoveEngineTests
     private DeskMoveEngine CreateSut ( )
     {
         return new DeskMoveEngine ( _logger ,
-                                      _executor ) ;
+                                    _executor ) ;
     }
 
     [ TestInitialize ]
@@ -36,7 +36,7 @@ public class DeskMoveEngineTests
         var act = async ( ) =>
                   {
                       sut = new DeskMoveEngine ( null! ,
-                                                   _executor ) ;
+                                                 _executor ) ;
                       _ = sut.ToString ( ) ;
                       await Task.Yield ( ) ;
                   } ;
@@ -52,7 +52,7 @@ public class DeskMoveEngineTests
         var act = async ( ) =>
                   {
                       sut = new DeskMoveEngine ( _logger ,
-                                                   null! ) ;
+                                                 null! ) ;
                       _ = sut.ToString ( ) ;
                       await Task.Yield ( ) ;
                   } ;
@@ -84,7 +84,7 @@ public class DeskMoveEngineTests
     [ TestMethod ]
     public async Task StartMove_None_DoesNothing ( )
     {
-        var       sut = CreateSut ( ) ;
+        var sut = CreateSut ( ) ;
 
         using var cts = new CancellationTokenSource ( 50 ) ;
 
@@ -122,7 +122,7 @@ public class DeskMoveEngineTests
         await sut.StartMoveAsync ( Direction.Down ,
                                    cts.Token ) ;
 
-        await _executor.Received( ).Down ( ) ; // At least once
+        await _executor.Received ( ).Down ( ) ; // At least once
     }
 
     [ TestMethod ]

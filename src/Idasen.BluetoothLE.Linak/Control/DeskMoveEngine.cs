@@ -13,7 +13,7 @@ internal class DeskMoveEngine
     private readonly ILogger              _logger ;
 
     public DeskMoveEngine ( ILogger              logger ,
-                              IDeskCommandExecutor executor )
+                            IDeskCommandExecutor executor )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
         ArgumentNullException.ThrowIfNull ( executor ) ;
