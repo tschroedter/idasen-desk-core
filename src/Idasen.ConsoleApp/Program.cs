@@ -1,4 +1,5 @@
 using Autofac ;
+using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Idasen.Launcher ;
 using JetBrains.Annotations ;
@@ -49,6 +50,10 @@ internal sealed class Program
             ReadLine ( ) ;
 
             desk?.Dispose ( ) ;
+        }
+        catch ( Exception ex )
+        {
+            WriteLine ( ex ) ;
         }
         finally
         {
