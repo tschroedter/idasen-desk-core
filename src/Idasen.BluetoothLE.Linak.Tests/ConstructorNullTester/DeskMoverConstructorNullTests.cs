@@ -4,7 +4,7 @@ using Idasen.BluetoothLE.Linak.Control ;
 namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
 
 [ TestClass ]
-public class DeskMoverV2ConstructorNullTests ( int numberOfConstructorsPassed = 1 ,
+public class DeskMoverConstructorNullTests ( int numberOfConstructorsPassed = 1 ,
                                                int numberOfConstructorsFailed = 0 )
     : BaseConstructorNullTester < DeskMover >
 {

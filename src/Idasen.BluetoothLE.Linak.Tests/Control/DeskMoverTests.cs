@@ -14,21 +14,18 @@ public class DeskMoverTests : IDisposable
     private readonly Subject < uint >                      _finishedSubject              = new( ) ;
     private readonly Subject < HeightSpeedDetails >        _heightAndSpeedChangedSubject = new( ) ;
     private          IStoppingHeightCalculator             _calculator                   = null! ;
-    private          IDeskMoveEngine                     _engine                       = null! ;
+    private          IDeskMoveEngine                       _engine                       = null! ;
     private          IDeskCommandExecutor                  _executor                     = null! ;
     private          IDeskMoveGuard                        _guard                        = null! ;
     private          IDeskHeightAndSpeed                   _heightAndSpeed               = null! ;
     private          ILogger                               _logger                       = null! ;
     private          IDeskMovementMonitorFactory           _monitorFactory               = null! ;
-    private          DeskMover                             _mover                        = null! ;
     private          IInitialHeightAndSpeedProviderFactory _providerFactory              = null! ;
     private          IScheduler                            _scheduler                    = null! ;
     private          ISubject < uint >                     _subjectFinished              = null! ;
 
     public void Dispose ( )
     {
-        _mover.Dispose ( ) ;
-
         ( _subjectFinished as IDisposable )?.Dispose ( ) ;
         _finishedSubject.Dispose ( ) ;
         _heightAndSpeedChangedSubject.Dispose ( ) ;
@@ -49,17 +46,20 @@ public class DeskMoverTests : IDisposable
         _subjectFinished = _finishedSubject ;
         _engine          = Substitute.For < IDeskMoveEngine > ( ) ;
         _guard           = Substitute.For < IDeskMoveGuard > ( ) ;
+    }
 
-        _mover = new DeskMover ( _logger ,
-                                 _scheduler ,
-                                 _providerFactory ,
-                                 _monitorFactory ,
-                                 _executor ,
-                                 _heightAndSpeed ,
-                                 _calculator ,
-                                 _subjectFinished ,
-                                 _engine ,
-                                 _guard ) ;
+    private DeskMover CreateSut ( )
+    {
+        return new DeskMover ( _logger ,
+                               _scheduler ,
+                               _providerFactory ,
+                               _monitorFactory ,
+                               _executor ,
+                               _heightAndSpeed ,
+                               _calculator ,
+                               _subjectFinished ,
+                               _engine ,
+                               _guard ) ;
     }
 
     [ TestCleanup ]
@@ -81,8 +81,10 @@ public class DeskMoverTests : IDisposable
         _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
         _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
 
+        using var sut = CreateSut ( ) ;
+
         // Act
-        _mover.Initialize ( ) ;
+        sut.Initialize ( ) ;
 
         // Assert
         monitor.Received ( 1 ).Initialize ( ) ;
@@ -99,10 +101,12 @@ public class DeskMoverTests : IDisposable
         initialProvider.Finished.Returns ( _finishedSubject ) ;
         _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
         _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
-        _mover.Initialize ( ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
 
         // Act
-        _mover.Start ( ) ;
+        sut.Start ( ) ;
 
         // Assert
         initialProvider.Received ( 1 ).Start ( ) ;
@@ -112,12 +116,14 @@ public class DeskMoverTests : IDisposable
     public async Task Up_WhenAllowedToMove_CallsExecutorUp ( )
     {
         // Arrange
-        _mover.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( _mover ,
-                                                                         true ) ;
+        using var sut = CreateSut ( ) ;
+
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut ,
+                                                                      true ) ;
         _executor.Up ( ).Returns ( Task.FromResult ( true ) ) ;
 
         // Act
-        var result = await _mover.Up ( ) ;
+        var result = await sut.Up ( ) ;
 
         // Assert
         result.Should ( ).BeTrue ( ) ;
@@ -128,11 +134,12 @@ public class DeskMoverTests : IDisposable
     public async Task Up_WhenNotAllowedToMove_ReturnsFalse ( )
     {
         // Arrange
-        _mover.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( _mover ,
-                                                                         false ) ;
+        using var sut = CreateSut ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut ,
+                                                                      false ) ;
 
         // Act
-        var result = await _mover.Up ( ) ;
+        var result = await sut.Up ( ) ;
 
         // Assert
         result.Should ( ).BeFalse ( ) ;
@@ -143,12 +150,13 @@ public class DeskMoverTests : IDisposable
     public async Task Down_WhenAllowedToMove_CallsExecutorDown ( )
     {
         // Arrange
-        _mover.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( _mover ,
-                                                                         true ) ;
+        using var sut = CreateSut ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut ,
+                                                                      true ) ;
         _executor.Down ( ).Returns ( Task.FromResult ( true ) ) ;
 
         // Act
-        var result = await _mover.Down ( ) ;
+        var result = await sut.Down ( ) ;
 
         // Assert
         result.Should ( ).BeTrue ( ) ;
@@ -159,11 +167,12 @@ public class DeskMoverTests : IDisposable
     public async Task Down_WhenNotAllowedToMove_ReturnsFalse ( )
     {
         // Arrange
-        _mover.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( _mover ,
-                                                                         false ) ;
+        using var sut = CreateSut ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut ,
+                                                                      false ) ;
 
         // Act
-        var result = await _mover.Down ( ) ;
+        var result = await sut.Down ( ) ;
 
         // Assert
         result.Should ( ).BeFalse ( ) ;
@@ -174,15 +183,67 @@ public class DeskMoverTests : IDisposable
     public async Task StopMovement_StopsEngineAndEmitsFinished ( )
     {
         // Arrange
-        _mover.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( _mover ,
-                                                                         true ) ;
+        using var sut = CreateSut ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut ,
+                                                                      true ) ;
         _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
 
         // Act
-        var result = await _mover.StopMovement ( ) ;
+        var result = await sut.StopMovement ( ) ;
 
         // Assert
         result.Should ( ).BeTrue ( ) ;
+        await _engine.Received ( 1 ).StopMoveAsync ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StopMovement_CallsGuardStopGuarding ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor ,
+                                  _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        using var sut = CreateSut ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut ,
+                                                                      true ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
+
+        sut.Start ( ) ;
+
+        // Act
+        await sut.StopMovement ( ) ;
+
+        // Assert
+        _guard.Received ( 1 ).StopGuarding ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StopMovement_WhenAlreadyStopped_DoesNotCallGuardOrEngineAgain ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor ,
+                                  _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut ,
+                                                                      true ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
+
+        // Act
+        await sut.StopMovement ( ) ;
+        await sut.StopMovement ( ) ;
+
+        // Assert
+        _guard.Received ( 1 ).StopGuarding ( ) ;
         await _engine.Received ( 1 ).StopMoveAsync ( ) ;
     }
 
@@ -198,10 +259,14 @@ public class DeskMoverTests : IDisposable
         initialProvider.Finished.Returns ( _finishedSubject ) ;
         _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
         _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
-        _mover.Initialize ( ) ;
 
         // Act
-        var act = ( ) => _mover.Dispose ( ) ;
+        var act = ( ) =>
+                  {
+                      var sut = CreateSut ( ) ;
+                      sut.Initialize ( ) ;
+                      sut.Dispose ( ) ;
+                  } ;
 
         // Assert
         act.Should ( ).NotThrow ( ) ;

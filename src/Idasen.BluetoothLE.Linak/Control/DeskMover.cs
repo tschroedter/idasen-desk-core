@@ -244,6 +244,7 @@ public class DeskMover
         _cycleDisposables?.Dispose ( ) ;
         _cycleDisposables = null ;
 
+        _guard.StopGuarding ( ) ;
         _engine.StopMoveAsync ( ) ;
 
         _logger.Debug ( "Emitting finished (height={Height})" ,

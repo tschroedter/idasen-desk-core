@@ -27,8 +27,14 @@ internal class DeskMoveEngine
     /// </summary>
     public TimeSpan DelayInterval { get ; set ; } = TimeSpan.FromMilliseconds ( 100 ) ;
 
+    /// <summary>
+    ///     Indicates the current movement direction, or None if not moving.
+    /// </summary>
     public Direction CurrentDirection { get ; private set ; } = Direction.None ;
 
+    /// <summary>
+    ///     Indicates whether the desk is currently moving.
+    /// </summary>
     public bool IsMoving => CurrentDirection != Direction.None ;
 
     /// <summary>
