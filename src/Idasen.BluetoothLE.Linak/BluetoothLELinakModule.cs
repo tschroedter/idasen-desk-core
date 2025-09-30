@@ -155,6 +155,9 @@ public class BluetoothLELinakModule
                .SingleInstance ( )
                .EnableInterfaceInterceptors ( ) ;
 
+        builder.RegisterType<DeskMoveGuard>()
+               .As<IDeskMoveGuard>();
+
         // Bind DeskMoverSettings from configuration (if available), fallback to defaults
         builder.Register ( ctx =>
                            {
