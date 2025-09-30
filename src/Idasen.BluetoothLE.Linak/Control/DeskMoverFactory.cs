@@ -6,16 +6,16 @@ namespace Idasen.BluetoothLE.Linak.Control;
 
 /// <inheritdoc />
 [Intercept(typeof(LogAspect))]
-public class DeskMoverV2Factory
-    : IDeskMoverV2Factory
+public class DeskMoverFactory
+    : IDeskMoverFactory
 {
-    private readonly DeskMoverV2.Factory _factory;
+    private readonly DeskMover.Factory _factory;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DeskMoverV2Factory" /> class.
+    ///     Initializes a new instance of the <see cref="DeskMoverFactory" /> class.
     /// </summary>
-    /// <param name="factory">The IoC factory delegate for <see cref="DeskMoverV2" />.</param>
-    public DeskMoverV2Factory(DeskMoverV2.Factory factory)
+    /// <param name="factory">The IoC factory delegate for <see cref="DeskMover" />.</param>
+    public DeskMoverFactory(DeskMover.Factory factory)
     {
         ArgumentNullException.ThrowIfNull(factory);
 

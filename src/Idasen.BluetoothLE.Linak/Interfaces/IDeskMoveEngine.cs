@@ -1,31 +1,36 @@
-using Idasen.BluetoothLE.Linak.Control ;
+using Idasen.BluetoothLE.Linak.Control;
 
 namespace Idasen.BluetoothLE.Linak.Interfaces ;
 
 /// <summary>
-///     Issues movement commands and tracks the currently commanded direction.
+///     Interface for DeskMoveEngine, issues repeated move commands until stopped.
 /// </summary>
 public interface IDeskMoveEngine
 {
     /// <summary>
-    ///     The last direction commanded. None means not moving.
+    ///     Gets or sets the interval between repeated move commands.
+    /// </summary>
+    TimeSpan DelayInterval { get ; set ; }
+
+    /// <summary>
+    ///     Gets the current movement direction of the desk.
     /// </summary>
     Direction CurrentDirection { get ; }
 
     /// <summary>
-    ///     True if a direction is currently commanded.
+    ///     Indicates whether the desk is currently moving.
     /// </summary>
     bool IsMoving { get ; }
 
     /// <summary>
-    ///     Request to move (or keep moving) in the desired direction. No-op when switching
-    ///     from an already commanded opposite direction; the manager should stop first.
+    ///     Starts moving in the desired direction, issuing commands every DelayInterval until the cancellation token is
+    ///     triggered.
     /// </summary>
-    void Move ( Direction desired ,
-                bool      fromTimer ) ;
+    Task StartMoveAsync ( Direction         desired ,
+                          CancellationToken cancellationToken ) ;
 
     /// <summary>
-    ///     Issues a stop command (idempotent). Resets current direction on success.
+    ///     Stops issuing move commands.
     /// </summary>
-    Task < bool > StopAsync ( ) ;
+    Task StopMoveAsync ( ) ;
 }

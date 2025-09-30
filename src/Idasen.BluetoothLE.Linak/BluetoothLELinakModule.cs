@@ -67,16 +67,16 @@ public class BluetoothLELinakModule
                .As < IDeskCommandsProvider > ( )
                .EnableInterfaceInterceptors ( ) ;
 
-        builder.RegisterType < DeskMoverV2 > ( )
+        builder.RegisterType < DeskMover > ( )
                .As < IDeskMover > ( )
                .EnableInterfaceInterceptors ( ) ;
 
-        builder.RegisterType < DeskMoverV2Factory > ( )
-               .As < IDeskMoverV2Factory > ( )
+        builder.RegisterType < DeskMoverFactory > ( )
+               .As < IDeskMoverFactory > ( )
                .EnableInterfaceInterceptors ( ) ;
 
-        builder.RegisterType < DeskMoveEngineV2 > ( )
-               .As < IDeskMoveEngineV2 > ( )
+        builder.RegisterType < DeskMoveEngine > ( )
+               .As < IDeskMoveEngine > ( )
                .EnableInterfaceInterceptors ( ) ;
 
         builder.Register ( ctx =>

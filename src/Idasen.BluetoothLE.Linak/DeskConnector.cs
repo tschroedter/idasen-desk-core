@@ -24,7 +24,7 @@ public class DeskConnector
     private readonly Subject < uint >                  _finishedSubject = new( ) ;
     private readonly IDeskHeightAndSpeedFactory        _heightAndSpeedFactory ;
     private readonly ILogger                           _logger ;
-    private readonly IDeskMoverV2Factory               _moverFactory ;
+    private readonly IDeskMoverFactory               _moverFactory ;
     private readonly IDisposable ?                     _refreshedSubscription ;
     private readonly IScheduler                        _scheduler ;
     private readonly ISubject < uint >                 _subjectHeight ;
@@ -58,7 +58,7 @@ public class DeskConnector
                            IDeskCharacteristics                       deskCharacteristics ,
                            IDeskHeightAndSpeedFactory                 heightAndSpeedFactory ,
                            IDeskCommandExecutorFactory                commandExecutorFactory ,
-                           IDeskMoverV2Factory                        moverFactory ,
+                           IDeskMoverFactory                        moverFactory ,
                            IDeskLockerFactory                         deskLockerFactory ,
                            IErrorManager                              errorManager )
     {

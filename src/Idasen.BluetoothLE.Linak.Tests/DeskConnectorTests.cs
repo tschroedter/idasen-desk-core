@@ -42,7 +42,7 @@ public class DeskConnectorTests : IDisposable
     private ILogger                        _logger                = null! ;
     private IDeskMover                     _mover                 = null! ;
 
-    private IDeskMoverV2Factory _moverFactory     = null! ;
+    private IDeskMoverFactory _moverFactory     = null! ;
     private Subject < uint >  _moverFinished    = null! ;
     private IReferenceOutput  _referenceOutput  = null! ;
     private Subject < bool >  _refreshedSubject = null! ;
@@ -111,7 +111,7 @@ public class DeskConnectorTests : IDisposable
         _executor               = Substitute.For < IDeskCommandExecutor > ( ) ;
         _commandExecutorFactory.Create ( _control ).Returns ( _executor ) ;
 
-        _moverFactory  = Substitute.For < IDeskMoverV2Factory > ( ) ;
+        _moverFactory  = Substitute.For < IDeskMoverFactory > ( ) ;
         _mover         = Substitute.For < IDeskMover > ( ) ;
         _moverFinished = new Subject < uint > ( ) ;
         _mover.Finished.Returns ( _moverFinished ) ;

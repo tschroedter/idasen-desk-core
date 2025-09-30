@@ -7,14 +7,14 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 
 [ TestClass ]
-public class DeskMoveEngineV2Tests
+public class DeskMoveEngineTests
 {
     private IDeskCommandExecutor _executor = null! ;
     private ILogger              _logger   = null! ;
 
-    private DeskMoveEngineV2 CreateSut ( )
+    private DeskMoveEngine CreateSut ( )
     {
-        return new DeskMoveEngineV2 ( _logger ,
+        return new DeskMoveEngine ( _logger ,
                                       _executor ) ;
     }
 
@@ -31,11 +31,11 @@ public class DeskMoveEngineV2Tests
     [ TestMethod ]
     public async Task Constructor_NullLogger_Throws ( )
     {
-        DeskMoveEngineV2 sut ;
+        DeskMoveEngine sut ;
 
         var act = async ( ) =>
                   {
-                      sut = new DeskMoveEngineV2 ( null! ,
+                      sut = new DeskMoveEngine ( null! ,
                                                    _executor ) ;
                       _ = sut.ToString ( ) ;
                       await Task.Yield ( ) ;
@@ -47,11 +47,11 @@ public class DeskMoveEngineV2Tests
     [ TestMethod ]
     public async Task Constructor_NullExecutor_Throws ( )
     {
-        DeskMoveEngineV2 sut ;
+        DeskMoveEngine sut ;
 
         var act = async ( ) =>
                   {
-                      sut = new DeskMoveEngineV2 ( _logger ,
+                      sut = new DeskMoveEngine ( _logger ,
                                                    null! ) ;
                       _ = sut.ToString ( ) ;
                       await Task.Yield ( ) ;

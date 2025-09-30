@@ -7,10 +7,10 @@ using NSubstitute ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [TestClass]
-public class DeskMoverV2FactoryTests
+public class DeskMoverFactoryTests
 {
     private IDeskCommandExecutor _executor       = null!;
-    private DeskMoverV2.Factory  _factory        = null!;
+    private DeskMover.Factory  _factory        = null!;
     private IDeskHeightAndSpeed  _heightAndSpeed = null!;
 
     [TestInitialize]
@@ -51,8 +51,8 @@ public class DeskMoverV2FactoryTests
                    .NotBeNull();
     }
 
-    private DeskMoverV2Factory CreateSut()
+    private DeskMoverFactory CreateSut()
     {
-        return new DeskMoverV2Factory(_factory);
+        return new DeskMoverFactory(_factory);
     }
 }

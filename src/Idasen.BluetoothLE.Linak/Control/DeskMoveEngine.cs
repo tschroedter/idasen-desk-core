@@ -6,12 +6,13 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 /// <summary>
 ///     Issues repeated move commands every DelayInterval until stopped.
 /// </summary>
-internal class DeskMoveEngineV2 : IDeskMoveEngineV2
+internal class DeskMoveEngine
+    : IDeskMoveEngine
 {
     private readonly IDeskCommandExecutor _executor ;
     private readonly ILogger              _logger ;
 
-    public DeskMoveEngineV2 ( ILogger              logger ,
+    public DeskMoveEngine ( ILogger              logger ,
                               IDeskCommandExecutor executor )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
@@ -81,8 +82,9 @@ internal class DeskMoveEngineV2 : IDeskMoveEngineV2
         }
         finally
         {
-            _logger.Debug ( "Stopped repeated move commands: {Dir}" ,
+            _logger.Debug ( "Stopped repeated move commands: {Desired}" ,
                             desired ) ;
+
             CurrentDirection = Direction.None ;
         }
     }

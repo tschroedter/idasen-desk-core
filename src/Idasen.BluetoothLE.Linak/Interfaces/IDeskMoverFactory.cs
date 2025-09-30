@@ -3,7 +3,7 @@ namespace Idasen.BluetoothLE.Linak.Interfaces ;
 /// <summary>
 ///     Factory for creating configured <see cref="IDeskMover" /> instances.
 /// </summary>
-public interface IDeskMoverV2Factory
+public interface IDeskMoverFactory
 {
     /// <summary>
     ///     Creates a new <see cref="IDeskMover" /> using the given command executor and height/speed source.

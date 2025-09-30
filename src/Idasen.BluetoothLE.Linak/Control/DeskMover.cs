@@ -14,7 +14,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Control ;
 
 [ Intercept ( typeof ( LogAspect ) ) ]
-public class DeskMoverV2
+public class DeskMover
     : IDeskMover
 {
     public delegate IDeskMover Factory ( IDeskCommandExecutor executor ,
@@ -22,7 +22,7 @@ public class DeskMoverV2
 
     private readonly IStoppingHeightCalculator _calculator ;
 
-    private readonly IDeskMoveEngineV2    _engine ;
+    private readonly IDeskMoveEngine    _engine ;
     private readonly IDeskCommandExecutor _executor ;
     private readonly IDeskMoveGuard       _guard ;
     private readonly IDeskHeightAndSpeed  _heightAndSpeed ;
@@ -49,7 +49,7 @@ public class DeskMoverV2
 
     private bool _started ;
 
-    public DeskMoverV2 ( ILogger                               logger ,
+    public DeskMover ( ILogger                               logger ,
                        IScheduler                            scheduler ,
                        IInitialHeightAndSpeedProviderFactory providerFactory ,
                        IDeskMovementMonitorFactory           monitorFactory ,
@@ -65,7 +65,7 @@ public class DeskMoverV2
                  heightAndSpeed ,
                  calculator ,
                  subjectFinished ,
-                 new DeskMoveEngineV2 ( logger ,
+                 new DeskMoveEngine ( logger ,
                                         executor ) ,
                  // todo fix ca2000
 #pragma warning disable CA2000
@@ -77,7 +77,7 @@ public class DeskMoverV2
     {
     }
 
-    internal DeskMoverV2 ( ILogger                               logger ,
+    internal DeskMover ( ILogger                               logger ,
                          IScheduler                            scheduler ,
                          IInitialHeightAndSpeedProviderFactory providerFactory ,
                          IDeskMovementMonitorFactory           monitorFactory ,
@@ -85,7 +85,7 @@ public class DeskMoverV2
                          IDeskHeightAndSpeed                   heightAndSpeed ,
                          IStoppingHeightCalculator             calculator ,
                          ISubject < uint >                     subjectFinished ,
-                         IDeskMoveEngineV2                     engine ,
+                         IDeskMoveEngine                     engine ,
                          IDeskMoveGuard                        guard )
     {
         Guard.ArgumentNotNull ( logger ,

@@ -9,18 +9,18 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 
 [ TestClass ]
-public class DeskMoverV2Tests : IDisposable
+public class DeskMoverTests : IDisposable
 {
     private readonly Subject < uint >                      _finishedSubject              = new( ) ;
     private readonly Subject < HeightSpeedDetails >        _heightAndSpeedChangedSubject = new( ) ;
     private          IStoppingHeightCalculator             _calculator                   = null! ;
-    private          IDeskMoveEngineV2                     _engine                       = null! ;
+    private          IDeskMoveEngine                     _engine                       = null! ;
     private          IDeskCommandExecutor                  _executor                     = null! ;
     private          IDeskMoveGuard                        _guard                        = null! ;
     private          IDeskHeightAndSpeed                   _heightAndSpeed               = null! ;
     private          ILogger                               _logger                       = null! ;
     private          IDeskMovementMonitorFactory           _monitorFactory               = null! ;
-    private          DeskMoverV2                             _mover                        = null! ;
+    private          DeskMover                             _mover                        = null! ;
     private          IInitialHeightAndSpeedProviderFactory _providerFactory              = null! ;
     private          IScheduler                            _scheduler                    = null! ;
     private          ISubject < uint >                     _subjectFinished              = null! ;
@@ -47,10 +47,10 @@ public class DeskMoverV2Tests : IDisposable
         _heightAndSpeed  = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _calculator      = Substitute.For < IStoppingHeightCalculator > ( ) ;
         _subjectFinished = _finishedSubject ;
-        _engine          = Substitute.For < IDeskMoveEngineV2 > ( ) ;
+        _engine          = Substitute.For < IDeskMoveEngine > ( ) ;
         _guard           = Substitute.For < IDeskMoveGuard > ( ) ;
 
-        _mover = new DeskMoverV2 ( _logger ,
+        _mover = new DeskMover ( _logger ,
                                  _scheduler ,
                                  _providerFactory ,
                                  _monitorFactory ,
