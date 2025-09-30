@@ -47,8 +47,6 @@ public class DeskMover
 
     private IDisposable ? _rawHeightAndSpeedSubscription ;
 
-    private bool _started ;
-
     public DeskMover ( ILogger                               logger ,
                        IScheduler                            scheduler ,
                        IInitialHeightAndSpeedProviderFactory providerFactory ,
@@ -283,9 +281,6 @@ public class DeskMover
     private async Task StartAfterReceivingCurrentHeight ( uint height ,
                                                           int  speed )
     {
-        if ( _started )
-            return ;
-
         _logger.Debug ( "Initial height received -> start control loop (height={Height} target={Target})" ,
                         _heightAndSpeed.Height ,
                         TargetHeight ) ;
@@ -304,10 +299,8 @@ public class DeskMover
         _calculator.Calculate ( ) ;
         StartMovingIntoDirection = _calculator.MoveIntoDirection ;
 
-        _logger.Debug ( "Calculated initial direction={Dir}" ,
+        _logger.Debug ( "Calculated initial direction={Direction}" ,
                         StartMovingIntoDirection ) ;
-
-        _started = true ;
 
         // Now allow movement
         _guard.StartGuarding ( _calculator.MoveIntoDirection ,
@@ -320,8 +313,8 @@ public class DeskMover
 
     private async Task OnFinished ( uint height )
     {
-        Height = height ;
-        Speed  = 0 ;
+        Height   = height ;
+        Speed    = 0 ;
 
         await StartAfterReceivingCurrentHeight ( height ,
                                                  0 ) ;
