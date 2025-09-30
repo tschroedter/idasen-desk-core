@@ -126,7 +126,7 @@ jobs:
         if: steps.publish_to_nuget.outcome == 'success'
         run: |
           $version = "${{ steps.determine_version.outputs.version }}"
-          $tag = "v$version-beta"
+          $tag = "v$version"
           git fetch --tags --quiet
           if (git rev-parse -q --verify "refs/tags/$tag") {
             Write-Host "Tag $tag already exists, skipping."
