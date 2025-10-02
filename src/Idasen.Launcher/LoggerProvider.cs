@@ -46,18 +46,23 @@ public static class LoggerProvider
                 Environment.GetEnvironmentVariable ( "ASPNETCORE_ENVIRONMENT" ) ??
                 "Production" ;
 
+            environmentName = environmentName.Replace ( "\"" ,
+                                                        "" ) ;
+
+            var fileName = $"appsettings.{environmentName}.json" ;
+
             var configuration = new ConfigurationBuilder ( )
                                .SetBasePath ( baseDir )
                                .AddJsonFile ( "appsettings.json" ,
                                               true ,
                                               false )
-                               .AddJsonFile ( $"appsettings.{environmentName}.json" ,
+                               .AddJsonFile ( fileName ,
                                               true ,
                                               false )
                                .Build ( ) ;
 
             if (!File.Exists(Path.Combine(baseDir, "appsettings.json")) &&
-                !File.Exists(Path.Combine(baseDir, $"appsettings.{environmentName}.json")))
+                !File.Exists(Path.Combine(baseDir, fileName)))
             {
                 _logger = CreateDefaultConfiguration ( ) ;
             }
@@ -70,8 +75,8 @@ public static class LoggerProvider
 
                 Log.Logger = _logger ;
 
-                _logger.Information ( "Created logger from configuration file appsettings.{EnvironmentName}.json",
-                                      environmentName) ;
+                _logger.Information ("Created logger from configuration file '{FileName}'",
+                                      fileName) ;
             }
 
             return _logger ;
