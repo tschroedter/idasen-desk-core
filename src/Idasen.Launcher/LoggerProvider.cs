@@ -56,6 +56,12 @@ public static class LoggerProvider
                                               false )
                                .Build ( ) ;
 
+            if (!File.Exists(Path.Combine(baseDir, "appsettings.json")) &&
+                !File.Exists(Path.Combine(baseDir, $"appsettings.{environmentName}.json")))
+            {
+                return CreateDefaultConfiguration ( ) ;
+            }
+
             _logger = new LoggerConfiguration ( )
                      .ReadFrom.Configuration ( configuration )
                      .CreateLogger ( ) ;
@@ -206,5 +212,37 @@ public static class LoggerProvider
     {
         return Path.GetDirectoryName ( Assembly.GetEntryAssembly ( )?.Location ?? AppContext.BaseDirectory ) ??
                AppContext.BaseDirectory ;
+    }
+
+    private static Logger CreateDefaultConfiguration()
+    {
+        // Default configuration based on provided JSON
+        _logger = new LoggerConfiguration()
+                 .MinimumLevel.Debug()
+                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                 .MinimumLevel.Override("System", LogEventLevel.Information)
+                 .Enrich.FromLogContext()
+                 .Enrich.WithProperty("MachineName", Environment.MachineName)
+                 .Enrich.WithProperty("ProcessId", Environment.ProcessId)
+                 .Enrich.WithProperty("ThreadId", Environment.CurrentManagedThreadId)
+                 .WriteTo.Console(
+                                  outputTemplate: "{Timestamp:HH:mm:ss} [{Level}] (pid:{ProcessId} tid:{ThreadId} caller:{SourceContext}) {Message}{NewLine}{Exception}"
+                                 )
+                 .WriteTo.File(
+                               path: Path.Combine(
+                                                  Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                                  "Idasen.SystemTray", "logs", "Idasen.SystemTray.log"
+                                                 ),
+                               outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] (pid:{ProcessId} tid:{ThreadId} caller:{SourceContext}) {Message}{NewLine}{Exception}",
+                               rollOnFileSizeLimit: true,
+                               fileSizeLimitBytes: 10485760,
+                               retainedFileCountLimit: 1,
+                               rollingInterval: RollingInterval.Infinite,
+                               hooks: new LoggingFileHooks()
+                              )
+                 .CreateLogger();
+
+        Log.Logger = _logger;
+        return _logger;
     }
 }
