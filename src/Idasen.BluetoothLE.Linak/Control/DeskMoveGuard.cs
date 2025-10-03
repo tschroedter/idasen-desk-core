@@ -35,6 +35,7 @@ public class DeskMoveGuard
     public void Dispose ( )
     {
         StopGuarding ( ) ;
+
         _targetHeightReached.OnCompleted ( ) ;
         _targetHeightReached.Dispose ( ) ;
 
@@ -78,35 +79,39 @@ public class DeskMoveGuard
         if ( _direction                 == Direction.Up &&
              _calculator.StoppingHeight >= _targetHeight )
         {
-            _logger.Information ( "DeskMoveGuard: Stop - current height {Current} (~{Stopping}) >= target {Target}" ,
-                                  currentHeight ,
-                                  estimatedStoppingHeight ,
-                                  _targetHeight ) ;
+            _logger.Debug ( "Stop - current height {Current} (~{Stopping}) >= target {Target}" ,
+                            currentHeight ,
+                            estimatedStoppingHeight ,
+                            _targetHeight ) ;
+
             _targetHeightReached.OnNext ( estimatedStoppingHeight ) ;
+
             StopGuarding ( ) ;
         }
         else if ( _direction              == Direction.Down &&
                   estimatedStoppingHeight <= _targetHeight )
         {
-            _logger.Information ( "DeskMoveGuard: Stop - current height {Current} (~{Stopping}) >= target {Target}" ,
-                                  currentHeight ,
-                                  estimatedStoppingHeight ,
-                                  _targetHeight ) ;
+            _logger.Debug ( "Stop - current height {Current} (~{Stopping}) >= target {Target}" ,
+                            currentHeight ,
+                            estimatedStoppingHeight ,
+                            _targetHeight ) ;
+
             _targetHeightReached.OnNext ( estimatedStoppingHeight ) ;
+
             StopGuarding ( ) ;
         }
 
         if ( _direction == Direction.Up )
-            _logger.Information ( "DeskMoveGuard: Allow movement {Direction} - current height {Current} (~{Stopping}) >= target {Target}" ,
-                                  _direction ,
-                                  currentHeight ,
-                                  estimatedStoppingHeight ,
-                                  _targetHeight ) ;
+            _logger.Debug ( "Allow movement {Direction} - current height {Current} (~{Stopping}) >= target {Target}" ,
+                            _direction ,
+                            currentHeight ,
+                            estimatedStoppingHeight ,
+                            _targetHeight ) ;
 
         else if ( _direction == Direction.Down )
-            _logger.Information ( "DeskMoveGuard: Allow movement {Direction} - current height {Current} > target {Target}" ,
-                                  _direction ,
-                                  estimatedStoppingHeight ,
-                                  _targetHeight ) ;
+            _logger.Debug ( "Allow movement {Direction} - current height {Current} > target {Target}" ,
+                            _direction ,
+                            estimatedStoppingHeight ,
+                            _targetHeight ) ;
     }
 }

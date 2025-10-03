@@ -45,13 +45,13 @@ public class GattCharacteristicValueChangedObservables
         var properties  = characteristic.CharacteristicProperties ;
         var serviceUuid = characteristic.Service?.Uuid ?? Guid.Empty ;
 
-        _logger.Information ( "Service UUID = {ServiceUuid} Characteristic UUID = {CharacteristicUuid} Notify = {Notify} Indicate = {Indicate} Write = {Write} WriteWithoutResponse = {WriteWithoutResponse}" ,
-                              serviceUuid ,
-                              characteristic.Uuid ,
-                              properties.HasFlag ( GattCharacteristicProperties.Notify ) ,
-                              properties.HasFlag ( GattCharacteristicProperties.Indicate ) ,
-                              properties.HasFlag ( GattCharacteristicProperties.Write ) ,
-                              properties.HasFlag ( GattCharacteristicProperties.WriteWithoutResponse ) ) ;
+        _logger.Debug ( "Service UUID = {ServiceUuid} Characteristic UUID = {CharacteristicUuid} Notify = {Notify} Indicate = {Indicate} Write = {Write} WriteWithoutResponse = {WriteWithoutResponse}" ,
+                        serviceUuid ,
+                        characteristic.Uuid ,
+                        properties.HasFlag ( GattCharacteristicProperties.Notify ) ,
+                        properties.HasFlag ( GattCharacteristicProperties.Indicate ) ,
+                        properties.HasFlag ( GattCharacteristicProperties.Write ) ,
+                        properties.HasFlag ( GattCharacteristicProperties.WriteWithoutResponse ) ) ;
 
         if ( properties.HasFlag ( GattCharacteristicProperties.Notify ) ||
              properties.HasFlag ( GattCharacteristicProperties.Indicate ) ) /*&&
@@ -69,23 +69,21 @@ public class GattCharacteristicValueChangedObservables
 
                 if ( status == GattCommunicationStatus.Success )
                 {
-                    _logger.Information ( "Notify/Indicate Service UUID = {ServiceUuid} Characteristic UUID = {CharacteristicUuid} - Subscribing to ValueChanged" ,
-                                          serviceUuid ,
-                                          characteristic.Uuid ) ;
+                    _logger.Debug ( "Notify/Indicate Service UUID = {ServiceUuid} Characteristic UUID = {CharacteristicUuid} - Subscribing to ValueChanged" ,
+                                    serviceUuid ,
+                                    characteristic.Uuid ) ;
 
                     // dispose any prior subscription to avoid duplicate handlers/leaks
                     DisposeSubscription ( ) ;
 
-                    _observable = Observable
-                                 .FromEventPattern
-                                  < TypedEventHandler < GattCharacteristic , GattValueChangedEventArgs > ,
-                                      GattCharacteristic ,
-                                      GattValueChangedEventArgs > ( h => characteristic.ValueChanged += h ,
-                                                                    h => characteristic.ValueChanged -= h )
-                                 .SubscribeOn ( _scheduler )
-                                 .Subscribe ( e => OnValueChanged ( e.Sender! ,
-                                                                    e.EventArgs ,
-                                                                    _subject ) ) ;
+                    _observable = Observable.FromEventPattern < TypedEventHandler < GattCharacteristic , GattValueChangedEventArgs > ,
+                                                 GattCharacteristic ,
+                                                 GattValueChangedEventArgs > ( h => characteristic.ValueChanged += h ,
+                                                                               h => characteristic.ValueChanged -= h )
+                                            .SubscribeOn ( _scheduler )
+                                            .Subscribe ( e => OnValueChanged ( e.Sender! ,
+                                                                               e.EventArgs ,
+                                                                               _subject ) ) ;
                 }
                 else
                 {
@@ -98,9 +96,9 @@ public class GattCharacteristicValueChangedObservables
                     await characteristic.ReadClientCharacteristicConfigurationDescriptorAsync ( ) ;
 
                 if ( result.Status == GattCommunicationStatus.Success )
-                    _logger.Information ( "{Status} {Descriptor}" ,
-                                          result.Status ,
-                                          result.ClientCharacteristicConfigurationDescriptor ) ;
+                    _logger.Debug ( "{Status} {Descriptor}" ,
+                                    result.Status ,
+                                    result.ClientCharacteristicConfigurationDescriptor ) ;
             }
             catch ( Exception e )
             {

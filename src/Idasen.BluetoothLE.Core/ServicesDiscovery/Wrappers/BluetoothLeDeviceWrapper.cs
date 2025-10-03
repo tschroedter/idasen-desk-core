@@ -136,15 +136,15 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         {
             if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
             {
-                _logger.Information ( "[{DeviceId}] Already connected" ,
-                                      DeviceId ) ;
+                _logger.Debug ( "[{DeviceId}] Already connected" ,
+                                DeviceId ) ;
                 return ;
             }
 
             if ( ! IsPaired )
             {
-                _logger.Information ( "[{DeviceId}] Not paired" ,
-                                      DeviceId ) ;
+                _logger.Debug ( "[{DeviceId}] Not paired" ,
+                                DeviceId ) ;
                 return ;
             }
 
@@ -195,9 +195,9 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         {
             if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
             {
-                _logger.Information ( "[{DeviceId}] BluetoothConnectionStatus = {BluetoothConnectionStatus}" ,
-                                      DeviceId ,
-                                      BluetoothConnectionStatus.Connected ) ;
+                _logger.Debug ( "[{DeviceId}] BluetoothConnectionStatus = {BluetoothConnectionStatus}" ,
+                                DeviceId ,
+                                BluetoothConnectionStatus.Connected ) ;
 
                 await GetOrCreateProvider ( ).Refresh ( ) ;
             }

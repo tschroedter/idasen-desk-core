@@ -105,15 +105,15 @@ public abstract class CharacteristicBase
         {
             foreach ( var service1 in Device.GattServices )
             {
-                Logger.Information ( "Service: DeviceId = {DeviceId}, Uuid = {Uuid}" ,
-                                     service1.Key.DeviceId ,
-                                     service1.Key.Uuid ) ;
+                Logger.Debug ( "Service: DeviceId = {DeviceId}, Uuid = {Uuid}" ,
+                               service1.Key.DeviceId ,
+                               service1.Key.Uuid ) ;
 
                 foreach ( var characteristic in service1.Value.Characteristics )
-                    Logger.Information ( "Characteristic: {ServiceUuid} {Uuid} {UserDescription}" ,
-                                         characteristic.ServiceUuid ,
-                                         characteristic.Uuid ,
-                                         characteristic.UserDescription ) ;
+                    Logger.Debug ( "Characteristic: {ServiceUuid} {Uuid} {UserDescription}" ,
+                                   characteristic.ServiceUuid ,
+                                   characteristic.Uuid ,
+                                   characteristic.UserDescription ) ;
             }
 
             throw new ArgumentException ( "Failed, can't find GattDeviceService for " +
@@ -121,9 +121,9 @@ public abstract class CharacteristicBase
                                           nameof ( GattServiceUuid ) ) ;
         }
 
-        Logger.Information ( "Found GattDeviceService with UUID {Uuid}" ,
+        Logger.Debug ( "Found GattDeviceService with UUID {Uuid}" ,
                              GattServiceUuid ) ;
-
+        ;
         Characteristics = ProviderFactory.Create ( characteristicsResultWrapper ) ;
 
         WithMapping < T > ( ) ;

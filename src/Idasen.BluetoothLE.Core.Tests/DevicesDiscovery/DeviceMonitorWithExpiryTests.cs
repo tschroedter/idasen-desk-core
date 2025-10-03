@@ -117,8 +117,8 @@ public class DeviceMonitorWithExpiryTests
         Assert.AreEqual ( newTimeout ,
                           sut.TimeOut ) ;
 
-        _logger.Received ( ).Information ( "TimeOut = {Timeout}" ,
-                                           newTimeout ) ;
+        _logger.Received ( ).Debug ( "TimeOut = {Timeout}" ,
+                                     newTimeout ) ;
     }
 
     [ TestMethod ]

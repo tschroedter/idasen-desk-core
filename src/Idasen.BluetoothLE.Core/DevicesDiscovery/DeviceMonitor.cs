@@ -140,8 +140,8 @@ public class DeviceMonitor
         if ( ! _devices.TryGetDevice ( device.Address ,
                                        out var storedDevice ) )
         {
-            _logger.Information ( "[{DeviceMacAddress}] Discovered Device" ,
-                                  device.MacAddress ) ;
+            _logger.Debug ( "[{DeviceMacAddress}] Discovered Device" ,
+                            device.MacAddress ) ;
 
             _devices.AddOrUpdateDevice ( device ) ;
 
@@ -149,11 +149,11 @@ public class DeviceMonitor
         }
         else
         {
-            _logger.Information ( "[{DeviceMacAddress}] Updated Device (Name = {DeviceName}, {SignalStrengthInDBm}DBm, Address = {DeviceAddress})" ,
-                                  device.MacAddress ,
-                                  device.Name ,
-                                  device.RawSignalStrengthInDBm ,
-                                  device.Address ) ;
+            _logger.Debug ( "[{DeviceMacAddress}] Updated Device (Name = {DeviceName}, {SignalStrengthInDBm}DBm, Address = {DeviceAddress})" ,
+                            device.MacAddress ,
+                            device.Name ,
+                            device.RawSignalStrengthInDBm ,
+                            device.Address ) ;
 
             var hasNameChanged = HasDeviceNameChanged ( device ,
                                                         storedDevice! ) ;
@@ -165,8 +165,8 @@ public class DeviceMonitor
             if ( ! hasNameChanged )
                 return ;
 
-            _logger.Information ( "[{DeviceMacAddress}] Device Name Changed" ,
-                                  device.MacAddress ) ;
+            _logger.Debug ( "[{DeviceMacAddress}] Device Name Changed" ,
+                            device.MacAddress ) ;
 
             _deviceNameUpdated.OnNext ( device ) ;
         }
@@ -174,12 +174,12 @@ public class DeviceMonitor
 
     private void OnStopped ( DateTime dateTime )
     {
-        _logger.Information ( "Watcher Stopped listening" ) ;
+        _logger.Debug ( "Watcher Stopped listening" ) ;
     }
 
     private void OnStarted ( DateTime dateTime )
     {
-        _logger.Information ( "Watcher Started listening" ) ;
+        _logger.Debug ( "Watcher Started listening" ) ;
     }
 
     private static bool HasDeviceNameChanged ( IDevice device ,

@@ -63,8 +63,8 @@ public class GattCharacteristicProvider
         Guard.ArgumentNotNull ( customCharacteristic ,
                                 nameof ( customCharacteristic ) ) ;
 
-        _logger.Information ( "{GattCharacteristicsResultWrapper}" ,
-                              _gattCharacteristics ) ;
+        _logger.Debug ( "{GattCharacteristicsResultWrapper}" ,
+                        _gattCharacteristics ) ;
 
         _characteristics.Clear ( ) ;
         _unavailable.Clear ( ) ;
@@ -76,18 +76,18 @@ public class GattCharacteristicProvider
 
             if ( characteristic != null )
             {
-                _logger.Information ( "Found characteristic {Uuid} for description '{Key}'" ,
-                                      characteristic.Uuid ,
-                                      keyValuePair.Key ) ;
+                _logger.Debug ( "Found characteristic {Uuid} for description '{Key}'" ,
+                                characteristic.Uuid ,
+                                keyValuePair.Key ) ;
 
                 _characteristics [ keyValuePair.Key ] = characteristic ;
                 _properties [ keyValuePair.Key ]      = characteristic.CharacteristicProperties ;
             }
             else
             {
-                _logger.Information ( "Did not find characteristic for description '{Key}' and Uuid '{Value}'" ,
-                                      keyValuePair.Key ,
-                                      keyValuePair.Value ) ;
+                _logger.Debug ( "Did not find characteristic for description '{Key}' and Uuid '{Value}'" ,
+                                keyValuePair.Key ,
+                                keyValuePair.Value ) ;
 
                 _unavailable.Add ( keyValuePair.Key ) ;
             }

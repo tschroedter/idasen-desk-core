@@ -63,8 +63,8 @@ public class Devices
         {
             _discoveredDevices.Remove ( device.Address ) ;
 
-            _logger.Information ( "[{Mac}] Device removed" ,
-                                  device.MacAddress ) ;
+            _logger.Debug ( "[{Mac}] Device removed" ,
+                            device.MacAddress ) ;
         }
     }
 
@@ -110,8 +110,8 @@ public class Devices
 
         _discoveredDevices [ device.Address ] = newDevice ;
 
-        _logger.Information ( "[{Mac}] Device added" ,
-                              device.MacAddress ) ;
+        _logger.Debug ( "[{Mac}] Device added" ,
+                        device.MacAddress ) ;
     }
 
     private void UpdateDevice ( IDevice device ,
@@ -124,7 +124,7 @@ public class Devices
         storedDevice.RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
         storedDevice.BroadcastTime          = device.BroadcastTime ;
 
-        _logger.Information ( "[{Mac}] Device updated" ,
-                              device.MacAddress ) ;
+        _logger.Debug ( "[{Mac}] Device updated" ,
+                        device.MacAddress ) ;
     }
 }

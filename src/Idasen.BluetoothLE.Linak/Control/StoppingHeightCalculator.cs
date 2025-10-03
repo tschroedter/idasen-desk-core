@@ -71,11 +71,11 @@ public class StoppingHeightCalculator
     {
         MoveIntoDirection = CalculateMoveIntoDirection ( ) ;
 
-        _logger.Information ( "Height={Height}, Speed={Speed}, StartMove={StartMovingIntoDirection}, Move={MoveIntoDirection}" ,
-                              Height ,
-                              Speed ,
-                              StartMovingIntoDirection ,
-                              MoveIntoDirection ) ;
+        _logger.Debug ( "Height={Height}, Speed={Speed}, StartMove={StartMovingIntoDirection}, Move={MoveIntoDirection}" ,
+                        Height ,
+                        Speed ,
+                        StartMovingIntoDirection ,
+                        MoveIntoDirection ) ;
 
         if ( Speed == 0 )
             CalculateForSpeedZero ( ) ;
@@ -127,13 +127,13 @@ public class StoppingHeightCalculator
 
     private void LogStatus ( )
     {
-        _logger.Information ( "Height={Height}, Speed={Speed}, TargetHeight={TargetHeight}, StoppingHeight={StoppingHeight}, MovementUntilStop={MovementUntilStop}, Delta={Delta}" ,
-                              Height ,
-                              Speed ,
-                              TargetHeight ,
-                              StoppingHeight ,
-                              MovementUntilStop ,
-                              Delta ) ;
+        _logger.Debug ( "Height={Height}, Speed={Speed}, TargetHeight={TargetHeight}, StoppingHeight={StoppingHeight}, MovementUntilStop={MovementUntilStop}, Delta={Delta}" ,
+                        Height ,
+                        Speed ,
+                        TargetHeight ,
+                        StoppingHeight ,
+                        MovementUntilStop ,
+                        Delta ) ;
     }
 
     private void CalculateForSpeedZero ( )

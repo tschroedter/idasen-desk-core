@@ -73,8 +73,8 @@ public class DeviceMonitorWithExpiry
 
             _timeOut = value ;
 
-            _logger.Information ( "TimeOut = {Timeout}" ,
-                                  value ) ;
+            _logger.Debug ( "TimeOut = {Timeout}" ,
+                            value ) ;
 
             // restart timer if running to apply new timeout
             if ( _timer != null )

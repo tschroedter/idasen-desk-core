@@ -66,9 +66,9 @@ public sealed class RawValueReader
         if ( SupportsRead ( characteristic ) )
             return await ReadValue ( characteristic ) ;
 
-        _logger.Information ( "GattCharacteristic {CharacteristicUuid} doesn't support {UnsupportedOperation}" ,
-                              characteristic.Uuid ,
-                              "Read" ) ;
+        _logger.Debug ( "GattCharacteristic {CharacteristicUuid} doesn't support {UnsupportedOperation}" ,
+                        characteristic.Uuid ,
+                        "Read" ) ;
 
         return ( false , ArrayEmpty ) ;
     }

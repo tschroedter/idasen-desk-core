@@ -49,8 +49,8 @@ public class GattCharacteristicWrapper
     /// <inheritdoc />
     public async Task < IGattCharacteristicWrapper > Initialize ( )
     {
-        _logger.Information ( "Initializing GattCharacteristic with UUID {Uuid}" ,
-                              _characteristic.Uuid ) ;
+        _logger.Debug ( "Initializing GattCharacteristic with UUID {Uuid}" ,
+                        _characteristic.Uuid ) ;
 
         await _observables.Initialise ( _characteristic ) ;
 

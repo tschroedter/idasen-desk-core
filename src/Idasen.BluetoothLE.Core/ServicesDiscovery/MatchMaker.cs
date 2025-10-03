@@ -49,12 +49,12 @@ public class MatchMaker
             throw new ArgumentNullException ( message ) ;
         }
 
-        _logger.Information ( "[{MacAddress}] DeviceId after FromBluetoothAddressAsync: {DeviceId}" ,
-                              macAddress ,
-                              device.Id ) ;
-        _logger.Information ( "[{MacAddress}] ConnectionStatus after FromBluetoothAddressAsync: {BluetoothConnectionStatus}" ,
-                              macAddress ,
-                              device.ConnectionStatus ) ;
+        _logger.Debug ( "[{MacAddress}] DeviceId after FromBluetoothAddressAsync: {DeviceId}" ,
+                        macAddress ,
+                        device.Id ) ;
+        _logger.Debug ( "[{MacAddress}] ConnectionStatus after FromBluetoothAddressAsync: {BluetoothConnectionStatus}" ,
+                        macAddress ,
+                        device.ConnectionStatus ) ;
 
         return device ;
     }
