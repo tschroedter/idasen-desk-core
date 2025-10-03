@@ -22,8 +22,7 @@ public class GuardTests
 
     [ TestMethod ]
     [ DynamicData ( nameof ( GuardTestData.NullEmptyOrWhitespace ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
+                    typeof ( GuardTestData ) ) ]
     public void ArgumentNotEmptyOrWhitespace_ForInvalidValues_Throws ( string value ,
                                                                        Type   type )
     {
@@ -35,8 +34,7 @@ public class GuardTests
 
     [ TestMethod ]
     [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
+                    typeof ( GuardTestData ) ) ]
     public void ArgumentNotEmptyOrWhitespace_ForValues_DoesNotThrows ( object value )
     {
         var action = new Action ( ( ) => Guard.ArgumentNotEmptyOrWhitespace ( value ,
@@ -48,8 +46,7 @@ public class GuardTests
 
     [ TestMethod ]
     [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
+                    typeof ( GuardTestData ) ) ]
     public void ArgumentNotNull_ForValueNotNull_DoesNotThrows ( object value )
     {
         var action = new Action ( ( ) => Guard.ArgumentNotNull ( value ,
@@ -74,8 +71,7 @@ public class GuardTests
 
     [ TestMethod ]
     [ DynamicData ( nameof ( GuardTestData.InstanceAndInteger ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
+                    typeof ( GuardTestData ) ) ]
     public void ArgumentNotNullOrEmpty_ForValues_DoesNotThrows ( object value )
     {
         var action = new Action ( ( ) => Guard.ArgumentNotNullOrEmpty ( value ,
@@ -87,8 +83,7 @@ public class GuardTests
 
     [ TestMethod ]
     [ DynamicData ( nameof ( GuardTestData.NullOrEmpty ) ,
-                    typeof ( GuardTestData ) ,
-                    DynamicDataSourceType.Method ) ]
+                    typeof ( GuardTestData ) ) ]
     public void ArgumentNotNullOrEmpty_ForValues_Throws ( string value ,
                                                           Type   type )
     {
