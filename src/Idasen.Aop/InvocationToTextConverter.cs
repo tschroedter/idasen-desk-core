@@ -161,8 +161,11 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
                                                                    StringComparison.OrdinalIgnoreCase ) ) ;
     }
 
-    private static int ? TryGetGenericDictionaryCount ( object value )
+    private static int ? TryGetGenericDictionaryCount ( object ? value )
     {
+        if (value == null)
+            return null;
+
         var t = value.GetType ( ) ;
 
         foreach ( var i in t.GetInterfaces ( ) )
@@ -175,6 +178,10 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
             if ( def != typeof ( IDictionary < , > ) &&
                  def != typeof ( IReadOnlyDictionary < , > ) )
                 continue ;
+
+            // Validate the type before accessing properties
+            if (!typeof(IEnumerable).IsAssignableFrom(i))
+                continue;
 
             // Prefer the Count property on the interface, else try on the concrete type
             var prop = i.GetProperty ( "Count" ) ?? t.GetProperty ( "Count" ) ;
