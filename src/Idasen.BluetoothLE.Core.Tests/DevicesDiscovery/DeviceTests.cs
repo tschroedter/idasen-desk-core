@@ -97,7 +97,7 @@ public class DeviceTests
            .Should ( )
            .Be ( "Name = Name, "                                       +
                  "MacAddress = ***-FF:23, " +
-                 "Address = 197530862419747, "                         +
+                 "Address = ***19747, " +
                  "BroadcastTime = 2007-10-02T13:02:03.0000000-07:30, " +
                  "RawSignalStrengthInDBm = -50dB" ) ;
     }

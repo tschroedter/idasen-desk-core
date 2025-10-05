@@ -75,7 +75,7 @@ public class Device
         return
             $"Name = {name}, "                                                                   +
             $"MacAddress = {MacAddress.MaskMacAddress ( )}, "                                    +
-            $"Address = {Address}, "                                                             +
+            $"Address = {Address.MaskAddress ( )}, "                                             +
             $"BroadcastTime = {BroadcastTime.ToString ( "O" , CultureInfo.InvariantCulture )}, " +
             $"RawSignalStrengthInDBm = {RawSignalStrengthInDBm}dB" ;
     }
