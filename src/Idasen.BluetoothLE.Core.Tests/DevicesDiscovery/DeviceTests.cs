@@ -96,7 +96,7 @@ public class DeviceTests
         sut.ToString ( )
            .Should ( )
            .Be ( "Name = Name, "                                       +
-                 "MacAddress = B3:A7:3C:E2:FF:23, "                    +
+                 "MacAddress = ***-FF:23, " +
                  "Address = 197530862419747, "                         +
                  "BroadcastTime = 2007-10-02T13:02:03.0000000-07:30, " +
                  "RawSignalStrengthInDBm = -50dB" ) ;

@@ -3,6 +3,7 @@ using System.Reactive.Disposables ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
@@ -160,7 +161,7 @@ public class DeskDetector
         try
         {
             _logger.Information ( "Desk discovered: MAC={MaskedMac}, Name={Name}" ,
-                                  MaskMacAddress ( device.MacAddress ) ,
+                                  device.MacAddress.MaskMacAddress ( ) ,
                                   device.Name ) ;
 
             var desk = await _factory.CreateAsync ( device.Address )
@@ -182,7 +183,7 @@ public class DeskDetector
         {
             _logger.Error ( e ,
                             "Failed to connect to desk: MAC={MaskedMac}, Name={Name}" ,
-                            MaskMacAddress ( device.MacAddress ) ,
+                            device.MacAddress.MaskMacAddress ( ) ,
                             device.Name ) ;
 
             lock ( _sync )
@@ -195,21 +196,21 @@ public class DeskDetector
     private void OnDeviceUpdated ( IDevice device )
     {
         _logger.Information ( "[{Mac}] Device Updated: {Details}" ,
-                              device.MacAddress ,
+                              device.MacAddress.MaskMacAddress ( ) ,
                               device.Details ) ;
     }
 
     private void OnDeviceDiscovered ( IDevice device )
     {
         _logger.Information ( "[{Mac}] Device Discovered: {Details}" ,
-                              device.MacAddress ,
+                              device.MacAddress.MaskMacAddress ( ) ,
                               device.Details ) ;
     }
 
     private void OnDeviceNameChanged ( IDevice device )
     {
         _logger.Information ( "[{Mac}] Device Name Changed: {Details}" ,
-                              device.MacAddress ,
+                              device.MacAddress.MaskMacAddress ( ) ,
                               device.Details ) ;
     }
 
@@ -226,14 +227,5 @@ public class DeskDetector
         }
 
         _logger.Warning ( "Desk is null" ) ;
-    }
-
-    private static string MaskMacAddress ( string macAddress )
-    {
-        if ( string.IsNullOrWhiteSpace ( macAddress ) ||
-             macAddress.Length < 5 )
-            return macAddress ;
-
-        return $"***-{macAddress [ ^5.. ]}" ;
     }
 }

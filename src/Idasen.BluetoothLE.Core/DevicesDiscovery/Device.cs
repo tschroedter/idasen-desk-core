@@ -1,6 +1,7 @@
 using System.Diagnostics ;
 using System.Globalization ;
 using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
@@ -73,7 +74,7 @@ public class Device
 
         return
             $"Name = {name}, "                                                                   +
-            $"MacAddress = {MacAddress}, "                                                       +
+            $"MacAddress = {MacAddress.MaskMacAddress ( )}, "                                    +
             $"Address = {Address}, "                                                             +
             $"BroadcastTime = {BroadcastTime.ToString ( "O" , CultureInfo.InvariantCulture )}, " +
             $"RawSignalStrengthInDBm = {RawSignalStrengthInDBm}dB" ;
