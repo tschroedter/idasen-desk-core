@@ -1,4 +1,5 @@
 using System.Reactive.Concurrency ;
+using System.Reactive.Disposables ;
 using System.Reactive.Linq ;
 using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
@@ -16,6 +17,8 @@ public class DeskDetector
 {
     private readonly ISubject < IDesk > _deskDetected ;
 
+    private readonly CompositeDisposable _disposables = new( ) ;
+
     private readonly IDeskFactory _factory ;
 
     private readonly ILogger                  _logger ;
@@ -24,14 +27,7 @@ public class DeskDetector
 
     private readonly object _sync = new( ) ;
 
-    // todo use list of disposables
-    private IDesk ?       _desk ;
-    private IDisposable ? _deskFound ;
-    private IDisposable ? _discovered ;
-
-    private IDisposable ? _nameChanged ;
-    private IDisposable ? _refreshedChanged ;
-    private IDisposable ? _updated ;
+    private IDesk ? _desk ;
 
     public DeskDetector ( ILogger                  logger ,
                           IScheduler               scheduler ,
@@ -39,11 +35,16 @@ public class DeskDetector
                           IDeskFactory             factory ,
                           ISubject < IDesk >       deskDetected )
     {
-        ArgumentNullException.ThrowIfNull(logger,       nameof(logger));
-        ArgumentNullException.ThrowIfNull(scheduler,    nameof(scheduler));
-        ArgumentNullException.ThrowIfNull(monitor,      nameof(monitor));
-        ArgumentNullException.ThrowIfNull(factory,      nameof(factory));
-        ArgumentNullException.ThrowIfNull(deskDetected, nameof(deskDetected));
+        ArgumentNullException.ThrowIfNull ( logger ,
+                                            nameof ( logger ) ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ,
+                                            nameof ( scheduler ) ) ;
+        ArgumentNullException.ThrowIfNull ( monitor ,
+                                            nameof ( monitor ) ) ;
+        ArgumentNullException.ThrowIfNull ( factory ,
+                                            nameof ( factory ) ) ;
+        ArgumentNullException.ThrowIfNull ( deskDetected ,
+                                            nameof ( deskDetected ) ) ;
 
         _logger       = logger ;
         _scheduler    = scheduler ;
@@ -62,16 +63,13 @@ public class DeskDetector
     {
         try
         {
-            _refreshedChanged?.Dispose ( ) ;
-            _deskFound?.Dispose ( ) ;
-            _nameChanged?.Dispose ( ) ;
-            _discovered?.Dispose ( ) ;
-            _updated?.Dispose ( ) ;
+            _disposables.Dispose ( ) ;
             _monitor.Dispose ( ) ;
         }
         catch ( Exception ex )
         {
-            _logger.Error ( ex , "Error occurred while disposing resources in DeskDetector." ) ;
+            _logger.Error ( ex ,
+                            "Error occurred while disposing resources in DeskDetector." ) ;
         }
         finally
         {
@@ -89,48 +87,47 @@ public class DeskDetector
     {
         ArgumentException.ThrowIfNullOrWhiteSpace ( deviceName ) ;
 
-        if (deviceAddress == 0)
-        {
-            throw new ArgumentException("Device address must be a valid non-zero value.", nameof(deviceAddress));
-        }
+        if ( deviceAddress == 0 )
+            throw new ArgumentException ( "Device address must be a valid non-zero value." ,
+                                          nameof ( deviceAddress ) ) ;
 
-        if (deviceTimeout is 0 or > 3600) // Example: Limit timeout to 1 hour
-        {
-            throw new ArgumentOutOfRangeException(nameof(deviceTimeout), "Device timeout must be between 1 and 3600 seconds.");
-        }
+        if ( deviceTimeout is 0 or > 3600 ) // Example: Limit timeout to 1 hour
+            throw new ArgumentOutOfRangeException ( nameof ( deviceTimeout ) ,
+                                                    "Device timeout must be between 1 and 3600 seconds." ) ;
 
         _monitor.TimeOut = TimeSpan.FromSeconds ( deviceTimeout ) ;
 
-        _updated = _monitor.DeviceUpdated
-                           .ObserveOn ( _scheduler )
-                           .Subscribe ( OnDeviceUpdated ,
-                                        ex => _logger.Error ( ex ,
-                                                              "Error handling DeviceUpdated" ) ) ;
+        _disposables.Add ( _monitor.DeviceUpdated
+                                   .ObserveOn ( _scheduler )
+                                   .Subscribe ( OnDeviceUpdated ,
+                                                ex => _logger.Error ( ex ,
+                                                                      "Error handling DeviceUpdated" ) ) ) ;
 
-        _discovered = _monitor.DeviceDiscovered
-                              .ObserveOn ( _scheduler )
-                              .Subscribe ( OnDeviceDiscovered ,
-                                           ex => _logger.Error ( ex ,
-                                                                 "Error handling DeviceDiscovered" ) ) ;
+        _disposables.Add ( _monitor.DeviceDiscovered
+                                   .ObserveOn ( _scheduler )
+                                   .Subscribe ( OnDeviceDiscovered ,
+                                                ex => _logger.Error ( ex ,
+                                                                      "Error handling DeviceDiscovered" ) ) ) ;
 
-        _nameChanged = _monitor.DeviceNameUpdated
-                               .ObserveOn ( _scheduler )
-                               .Subscribe ( OnDeviceNameChanged ,
-                                            ex => _logger.Error ( ex ,
-                                                                  "Error handling DeviceNameUpdated" ) ) ;
+        _disposables.Add ( _monitor.DeviceNameUpdated
+                                   .ObserveOn ( _scheduler )
+                                   .Subscribe ( OnDeviceNameChanged ,
+                                                ex => _logger.Error ( ex ,
+                                                                      "Error handling DeviceNameUpdated" ) ) ) ;
 
         // todo find by address if possible
 
-        _deskFound = _monitor.DeviceNameUpdated
-                             .ObserveOn ( _scheduler )
-                             .Where ( device =>
-                                          ( device.Name != null &&
-                                            device.Name.StartsWith ( deviceName ,
-                                                                     StringComparison.InvariantCultureIgnoreCase ) ) ||
-                                          device.Address == deviceAddress )
-                             .SubscribeAsync ( OnDeskDiscovered ,
-                                               ex => _logger.Error ( ex ,
-                                                                     "Error handling OnDeskDiscovered" ) ) ;
+        _disposables.Add ( _monitor.DeviceNameUpdated
+                                   .ObserveOn ( _scheduler )
+                                   .Where ( device =>
+                                                ( device.Name != null &&
+                                                  device.Name.StartsWith ( deviceName ,
+                                                                           StringComparison
+                                                                              .InvariantCultureIgnoreCase ) ) ||
+                                                device.Address == deviceAddress )
+                                   .SubscribeAsync ( OnDeskDiscovered ,
+                                                     ex => _logger.Error ( ex ,
+                                                                           "Error handling OnDeskDiscovered" ) ) ) ;
 
         return this ;
     }
@@ -166,13 +163,18 @@ public class DeskDetector
                                   MaskMacAddress ( device.MacAddress ) ,
                                   device.Name ) ;
 
-            _desk = await _factory.CreateAsync ( device.Address )
-                                  .ConfigureAwait ( false ) ;
+            var desk = await _factory.CreateAsync ( device.Address )
+                                     .ConfigureAwait ( false ) ;
 
-            _refreshedChanged = _desk.RefreshedChanged
-                                     .Subscribe ( OnRefreshedChanged ,
-                                                  ex => _logger.Error ( ex ,
-                                                                        "Error handling RefreshedChanged" ) ) ;
+            lock ( _sync )
+            {
+                _desk = desk ;
+            }
+
+            _desk.RefreshedChanged
+                 .Subscribe ( OnRefreshedChanged ,
+                              ex => _logger.Error ( ex ,
+                                                    "Error handling RefreshedChanged" ) ) ;
 
             _desk.Connect ( ) ;
         }
@@ -183,7 +185,10 @@ public class DeskDetector
                             MaskMacAddress ( device.MacAddress ) ,
                             device.Name ) ;
 
-            IsConnecting = false ;
+            lock ( _sync )
+            {
+                IsConnecting = false ;
+            }
         }
     }
 
@@ -210,22 +215,25 @@ public class DeskDetector
 
     private void OnRefreshedChanged ( bool status )
     {
-        lock (_sync) {
-            if (_desk != null) {
-                _deskDetected.OnNext(_desk);
+        lock ( _sync )
+        {
+            if ( _desk != null )
+            {
+                _deskDetected.OnNext ( _desk ) ;
 
-                return;
+                return ;
             }
         }
 
-        _logger.Warning("Desk is null");
+        _logger.Warning ( "Desk is null" ) ;
     }
 
     private static string MaskMacAddress ( string macAddress )
     {
-        if ( string.IsNullOrWhiteSpace ( macAddress ) || macAddress.Length < 5 )
+        if ( string.IsNullOrWhiteSpace ( macAddress ) ||
+             macAddress.Length < 5 )
             return macAddress ;
 
-        return $"***-{macAddress[^5..]}" ;
+        return $"***-{macAddress [ ^5.. ]}" ;
     }
 }
