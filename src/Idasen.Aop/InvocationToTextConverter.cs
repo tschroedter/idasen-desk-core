@@ -125,21 +125,40 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
         // Arrays -> length in brackets, e.g., [100]
         if ( value is Array array )
+        {
+            if ( array.Length > 1000 ) // Safeguard for large arrays
+                return "[Array too large to process]" ;
+
             return $"[{array.Length}]" ;
+        }
 
         // Non-generic IDictionary -> number of keys in brackets
         if ( value is IDictionary dict )
+        {
+            if ( dict.Count > 1000 ) // Safeguard for large dictionaries
+                return "[Dictionary too large to process]" ;
+
             return $"[{dict.Count}]" ;
+        }
 
         // Generic IDictionary<,> or IReadOnlyDictionary<,> -> use Count
         var genericDictCount = TryGetGenericDictionaryCount ( value ) ;
 
         if ( genericDictCount.HasValue )
-            return $"[{genericDictCount.Value}]" ;
+        {
+            if ( genericDictCount.Value > 1000 ) // Safeguard for large generic dictionaries
+                return "[Generic Dictionary too large to process]" ;
 
-        // Other IEnumerable -> just say enumerable
-        if ( value is IEnumerable and not string )
-            return "enumerable" ;
+            return $"[{genericDictCount.Value}]" ;
+        }
+
+        // Other IEnumerable -> log count of items if possible
+        if ( value is IEnumerable enumerable &&
+             value is not string )
+        {
+            var count = enumerable.Cast < object > ( ).Take ( 1000 ).Count ( ) ; // Limit to 1000 items for performance
+            return $"enumerable[{count}]" ;
+        }
 
         // Fallback: plain ToString
         return value.ToString ( ) ?? value.GetType ( ).Name ;
@@ -157,14 +176,20 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
                                     "address" ,
                                     "mac"
                                 } ;
+
+        // Allow configuration to exclude certain parameters
+        if ( value.StartsWith ( "exclude:" ,
+                                StringComparison.OrdinalIgnoreCase ) )
+            return false ;
+
         return sensitiveKeywords.Any ( keyword => value.Contains ( keyword ,
                                                                    StringComparison.OrdinalIgnoreCase ) ) ;
     }
 
     private static int ? TryGetGenericDictionaryCount ( object ? value )
     {
-        if (value == null)
-            return null;
+        if ( value == null )
+            return null ;
 
         var t = value.GetType ( ) ;
 
@@ -180,8 +205,8 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
                 continue ;
 
             // Validate the type before accessing properties
-            if (!typeof(IEnumerable).IsAssignableFrom(i))
-                continue;
+            if ( ! typeof ( IEnumerable ).IsAssignableFrom ( i ) )
+                continue ;
 
             // Prefer the Count property on the interface, else try on the concrete type
             var prop = i.GetProperty ( "Count" ) ?? t.GetProperty ( "Count" ) ;
