@@ -39,11 +39,11 @@ public class DeskDetector
                           IDeskFactory             factory ,
                           ISubject < IDesk >       deskDetected )
     {
-        ArgumentNullException.ThrowIfNull ( logger ) ;
-        ArgumentNullException.ThrowIfNull ( scheduler ) ;
-        ArgumentNullException.ThrowIfNull ( monitor ) ;
-        ArgumentNullException.ThrowIfNull ( factory ) ;
-        ArgumentNullException.ThrowIfNull ( deskDetected ) ;
+        ArgumentNullException.ThrowIfNull(logger,       nameof(logger));
+        ArgumentNullException.ThrowIfNull(scheduler,    nameof(scheduler));
+        ArgumentNullException.ThrowIfNull(monitor,      nameof(monitor));
+        ArgumentNullException.ThrowIfNull(factory,      nameof(factory));
+        ArgumentNullException.ThrowIfNull(deskDetected, nameof(deskDetected));
 
         _logger       = logger ;
         _scheduler    = scheduler ;
