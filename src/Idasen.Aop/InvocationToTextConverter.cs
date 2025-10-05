@@ -118,6 +118,11 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
         if ( value is null )
             return "null" ;
 
+        // Mask sensitive data based on type or name
+        if ( value is string strValue &&
+             IsSensitiveData ( strValue ) )
+            return "[REDACTED]" ;
+
         // Arrays -> length in brackets, e.g., [100]
         if ( value is Array array )
             return $"[{array.Length}]" ;
@@ -138,6 +143,22 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
         // Fallback: plain ToString
         return value.ToString ( ) ?? value.GetType ( ).Name ;
+    }
+
+    private static bool IsSensitiveData ( string value )
+    {
+        // Example: Check for sensitive keywords
+        var sensitiveKeywords = new [ ]
+                                {
+                                    "password" ,
+                                    "token" ,
+                                    "secret" ,
+                                    "key" ,
+                                    "address" ,
+                                    "mac"
+                                } ;
+        return sensitiveKeywords.Any ( keyword => value.Contains ( keyword ,
+                                                                   StringComparison.OrdinalIgnoreCase ) ) ;
     }
 
     private static int ? TryGetGenericDictionaryCount ( object value )
