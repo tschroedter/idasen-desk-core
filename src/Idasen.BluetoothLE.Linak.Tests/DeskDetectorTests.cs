@@ -139,6 +139,42 @@ public class DeskDetectorTests : IDisposable
                 .Dispose ( ) ;
     }
 
+    [ TestMethod ]
+    public void Initialize_ForDeviceAddressIsZero_Throws ( )
+    {
+        Action action = ( ) => CreateSut ( ).Initialize ( DeviceName ,
+                                                          0 ,
+                                                          DeviceTimeout ) ;
+
+        action.Should ( )
+              .Throw < ArgumentException > ( )
+              .WithMessage ( "Device address must be a valid non-zero value.*" ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_ForDeviceTimeoutIsZero_Throws ( )
+    {
+        Action action = ( ) => CreateSut ( ).Initialize ( DeviceName ,
+                                                          DeviceAddress ,
+                                                          0 ) ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "Device timeout must be between 1 and 3600 seconds.*" ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_ForDeviceTimeoutExceedsLimit_Throws ( )
+    {
+        Action action = ( ) => CreateSut ( ).Initialize ( DeviceName ,
+                                                          DeviceAddress ,
+                                                          3601 ) ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "Device timeout must be between 1 and 3600 seconds.*" ) ;
+    }
+
     // todo figure out how to test disposing of IDisposables of Subjects
     // todo improve code coverage
 

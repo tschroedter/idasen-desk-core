@@ -80,6 +80,16 @@ public class DeskDetector
     {
         ArgumentException.ThrowIfNullOrWhiteSpace ( deviceName ) ;
 
+        if (deviceAddress == 0)
+        {
+            throw new ArgumentException("Device address must be a valid non-zero value.", nameof(deviceAddress));
+        }
+
+        if (deviceTimeout is 0 or > 3600) // Example: Limit timeout to 1 hour
+        {
+            throw new ArgumentOutOfRangeException(nameof(deviceTimeout), "Device timeout must be between 1 and 3600 seconds.");
+        }
+
         _monitor.TimeOut = TimeSpan.FromSeconds ( deviceTimeout ) ;
 
         _updated = _monitor.DeviceUpdated
