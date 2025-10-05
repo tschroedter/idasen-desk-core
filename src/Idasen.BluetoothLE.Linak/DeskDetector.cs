@@ -162,8 +162,8 @@ public class DeskDetector
 
         try
         {
-            _logger.Information ( "[{Mac}] Desk '{Name}' discovered" ,
-                                  device.MacAddress ,
+            _logger.Information ( "Desk discovered: MAC={MaskedMac}, Name={Name}" ,
+                                  MaskMacAddress ( device.MacAddress ) ,
                                   device.Name ) ;
 
             _desk = await _factory.CreateAsync ( device.Address )
@@ -179,8 +179,8 @@ public class DeskDetector
         catch ( Exception e )
         {
             _logger.Error ( e ,
-                            "[{Mac}] Failed to connect to desk '{Name}'" ,
-                            device.MacAddress ,
+                            "Failed to connect to desk: MAC={MaskedMac}, Name={Name}" ,
+                            MaskMacAddress ( device.MacAddress ) ,
                             device.Name ) ;
 
             IsConnecting = false ;
@@ -219,5 +219,13 @@ public class DeskDetector
         }
 
         _logger.Warning("Desk is null");
+    }
+
+    private static string MaskMacAddress ( string macAddress )
+    {
+        if ( string.IsNullOrWhiteSpace ( macAddress ) || macAddress.Length < 5 )
+            return macAddress ;
+
+        return $"***-{macAddress[^5..]}" ;
     }
 }
