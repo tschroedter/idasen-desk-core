@@ -201,9 +201,14 @@ public class DeskDetector
 
     private void OnRefreshedChanged ( bool status )
     {
-        if ( _desk != null )
-            _deskDetected.OnNext ( _desk ) ;
-        else
-            _logger.Warning ( "Desk is null" ) ;
+        lock (_sync) {
+            if (_desk != null) {
+                _deskDetected.OnNext(_desk);
+
+                return;
+            }
+        }
+
+        _logger.Warning("Desk is null");
     }
 }
