@@ -128,9 +128,9 @@
       },
       "System.Reactive": {
         "type": "Direct",
-        "requested": "[6.0.2, )",
-        "resolved": "6.0.2",
-        "contentHash": "jEK6E66wojW/dPPnLyOHuAQwa7WKvXwPd5vXcMNNi1igvFyzHQVRNlpmnBb3I1URBsK5PGJcJYRykERZJr0l4g=="
+        "requested": "[6.1.0, )",
+        "resolved": "6.1.0",
+        "contentHash": "M5cCC1ZMkZr9jbSQGTHnVkb5TDN67qWCV7AP8TAHdGkvDlu0puT5NzemESNn9+HkYIDpWpocP68/i+/ame2/2w=="
       },
       "System.ValueTuple": {
         "type": "Direct",
@@ -262,7 +262,7 @@
           "JetBrains.Annotations": "[2025.2.2, )",
           "Selkie.DefCon.One.Common": "[0.0.23, )",
           "Serilog": "[4.3.0, )",
-          "System.Reactive": "[6.0.2, )",
+          "System.Reactive": "[6.1.0, )",
           "System.ValueTuple": "[4.6.1, )"
         }
       },
@@ -275,7 +275,7 @@
           "Idasen.BluetoothLE.Core": "[1.0.0, )",
           "Microsoft.Extensions.Configuration": "[9.0.9, )",
           "Serilog": "[4.3.0, )",
-          "System.Reactive": "[6.0.2, )"
+          "System.Reactive": "[6.1.0, )"
         }
       }
     }

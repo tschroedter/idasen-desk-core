@@ -30,11 +30,11 @@
       },
       "Microsoft.Reactive.Testing": {
         "type": "Direct",
-        "requested": "[6.0.2, )",
-        "resolved": "6.0.2",
-        "contentHash": "pFXZEsUoLH2Sh/yUZwtpK73QUvpTPwup2rTd4F5sjQfUlBr3iofGv+IqLty+zBdAdRgcBgKD5yn90IEGVAUs2g==",
+        "requested": "[6.1.0, )",
+        "resolved": "6.1.0",
+        "contentHash": "1KLmcpM299ZSA8ZjCbXApM/TVeaJJGZZz8nEJ8SWszf/JYcPqhzeg5s2rhCBIWuSoBaga3lny4EATs4fi/ME5A==",
         "dependencies": {
-          "System.Reactive": "6.0.2"
+          "System.Reactive": "6.1.0"
         }
       },
       "MSTest.TestAdapter": {
@@ -766,8 +766,8 @@
       },
       "System.Reactive": {
         "type": "Transitive",
-        "resolved": "6.0.2",
-        "contentHash": "jEK6E66wojW/dPPnLyOHuAQwa7WKvXwPd5vXcMNNi1igvFyzHQVRNlpmnBb3I1URBsK5PGJcJYRykERZJr0l4g=="
+        "resolved": "6.1.0",
+        "contentHash": "M5cCC1ZMkZr9jbSQGTHnVkb5TDN67qWCV7AP8TAHdGkvDlu0puT5NzemESNn9+HkYIDpWpocP68/i+/ame2/2w=="
       },
       "System.Reflection": {
         "type": "Transitive",
@@ -1208,7 +1208,7 @@
           "JetBrains.Annotations": "[2025.2.2, )",
           "Selkie.DefCon.One.Common": "[0.0.23, )",
           "Serilog": "[4.3.0, )",
-          "System.Reactive": "[6.0.2, )",
+          "System.Reactive": "[6.1.0, )",
           "System.ValueTuple": "[4.6.1, )"
         }
       }
