@@ -60,14 +60,23 @@ public class DeskDetector
     /// <inheritdoc />
     public void Dispose ( )
     {
-        _refreshedChanged?.Dispose ( ) ;
-        _deskFound?.Dispose ( ) ;
-        _nameChanged?.Dispose ( ) ;
-        _discovered?.Dispose ( ) ;
-        _updated?.Dispose ( ) ;
-        _monitor.Dispose ( ) ;
-
-        GC.SuppressFinalize ( this ) ;
+        try
+        {
+            _refreshedChanged?.Dispose ( ) ;
+            _deskFound?.Dispose ( ) ;
+            _nameChanged?.Dispose ( ) ;
+            _discovered?.Dispose ( ) ;
+            _updated?.Dispose ( ) ;
+            _monitor.Dispose ( ) ;
+        }
+        catch ( Exception ex )
+        {
+            _logger.Error ( ex , "Error occurred while disposing resources in DeskDetector." ) ;
+        }
+        finally
+        {
+            GC.SuppressFinalize ( this ) ;
+        }
     }
 
     /// <inheritdoc />
