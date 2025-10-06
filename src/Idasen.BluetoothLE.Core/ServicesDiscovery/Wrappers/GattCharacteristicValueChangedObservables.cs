@@ -100,6 +100,11 @@ public class GattCharacteristicValueChangedObservables
                                     result.Status ,
                                     result.ClientCharacteristicConfigurationDescriptor ) ;
             }
+            catch (UnauthorizedAccessException e)
+            {
+                _logger.Warning ( "Access denied - Bluetooth is probably disabled ({Message})" ,
+                                  e.Message ) ;
+            }
             catch ( Exception e )
             {
                 _logger.Error ( e ,
