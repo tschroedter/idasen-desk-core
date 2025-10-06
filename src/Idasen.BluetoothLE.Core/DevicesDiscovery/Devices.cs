@@ -1,4 +1,5 @@
 using Autofac.Extras.DynamicProxy ;
+using Idasen.Aop ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Serilog ;
@@ -125,6 +126,6 @@ public class Devices
         storedDevice.BroadcastTime          = device.BroadcastTime ;
 
         _logger.Debug ( "[{Mac}] Device updated" ,
-                        device.MacAddress ) ;
+                        device.MacAddress.MaskMacAddress ( ) ) ;
     }
 }

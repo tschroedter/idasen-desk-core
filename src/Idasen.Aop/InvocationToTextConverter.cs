@@ -120,7 +120,7 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
         // Mask sensitive data based on type or name
         if ( value is string strValue &&
-             IsSensitiveData ( strValue ) )
+             strValue.IsSensitiveData( ) )
             return "[REDACTED]" ;
 
         // Arrays -> length in brackets, e.g., [100]
@@ -162,28 +162,6 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
         // Fallback: plain ToString
         return value.ToString ( ) ?? value.GetType ( ).Name ;
-    }
-
-    private static bool IsSensitiveData ( string value )
-    {
-        // Example: Check for sensitive keywords
-        var sensitiveKeywords = new [ ]
-                                {
-                                    "password" ,
-                                    "token" ,
-                                    "secret" ,
-                                    "key" ,
-                                    "address" ,
-                                    "mac"
-                                } ;
-
-        // Allow configuration to exclude certain parameters
-        if ( value.StartsWith ( "exclude:" ,
-                                StringComparison.OrdinalIgnoreCase ) )
-            return false ;
-
-        return sensitiveKeywords.Any ( keyword => value.Contains ( keyword ,
-                                                                   StringComparison.OrdinalIgnoreCase ) ) ;
     }
 
     private static int ? TryGetGenericDictionaryCount ( object ? value )

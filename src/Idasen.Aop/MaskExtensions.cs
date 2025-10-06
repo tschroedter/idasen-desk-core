@@ -22,4 +22,29 @@ public static class MaskExtensions
 
         return $"***{text [ ^5.. ]}" ;
     }
+
+    public static bool IsSensitiveData(this string value)
+    {
+        // Example: Check for sensitive keywords
+        var sensitiveKeywords = new[]
+                                {
+                                    "password" ,
+                                    "token" ,
+                                    "secret" ,
+                                    "key" ,
+                                    "address" ,
+                                    "mac" ,
+                                    "deviceAddress"
+                                };
+
+        // Allow configuration to exclude certain parameters
+        if (value.StartsWith("exclude:",
+                             StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        var isSensitiveData = sensitiveKeywords.Any ( keyword => value.Contains ( keyword ,
+                                                                                  StringComparison.OrdinalIgnoreCase ) ) ;
+
+        return isSensitiveData ;
+    }
 }
