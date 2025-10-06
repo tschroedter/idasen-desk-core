@@ -10,7 +10,6 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 public class StoppingHeightCalculator
     : IStoppingHeightCalculator
 {
-    private const int DefaultMaxSpeedToStopMovement = 14 ;   // per notification, 16 notifications in 60 secs
     private const int DefaultMaxSpeed               = 6200 ; // rpm/10
 
     private readonly IHasReachedTargetHeightCalculator _calculator ;
@@ -31,7 +30,7 @@ public class StoppingHeightCalculator
     }
 
     /// <inheritdoc />
-    public uint MaxSpeedToStopMovement { get ; set ; } = DefaultMaxSpeedToStopMovement ;
+    public uint MaxSpeedToStopMovement { get ; set ; } = StoppingHeightCalculatorSettings.MaxSpeedToStopMovement;
 
     /// <inheritdoc />
     public int MaxSpeed { get ; set ; } = DefaultMaxSpeed ;
@@ -40,7 +39,7 @@ public class StoppingHeightCalculator
     public int Speed { get ; set ; }
 
     /// <inheritdoc />
-    public float FudgeFactor { get ; set ; } = 2.0f ;
+    public float FudgeFactor { get ; set ; } = StoppingHeightCalculatorSettings.FudgeFactor ;
 
     /// <inheritdoc />
     public uint TargetHeight { get ; set ; }
