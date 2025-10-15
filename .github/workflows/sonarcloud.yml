@@ -53,10 +53,7 @@ jobs:
 
       - name: Install SonarCloud scanner
         run: |
-          if (!(Test-Path ".\.sonar\scanner")) {
-            New-Item -ItemType Directory -Path .\.sonar\scanner -Force | Out-Null
-          }
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+          dotnet tool install --global dotnet-sonarscanner
 
       - name: Install coverage tool
         run: dotnet tool install --global dotnet-coverage
@@ -72,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin `
+          dotnet-sonarscanner begin `
             /k:"tschroedter_idasen-desk-core" `
             /o:"tschroedter" `
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
@@ -83,4 +80,4 @@ jobs:
           
           dotnet-coverage collect "dotnet test src/idasen-desk-core.sln --configuration Release --no-build --verbosity normal" -f xml -o coverage.xml
           
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
