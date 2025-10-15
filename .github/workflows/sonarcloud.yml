@@ -53,7 +53,10 @@ jobs:
 
       - name: Install SonarCloud scanner
         run: |
-          dotnet tool install --global dotnet-sonarscanner
+          if (!(Test-Path ".\.sonar\scanner")) {
+            New-Item -ItemType Directory -Path .\.sonar\scanner -Force | Out-Null
+          }
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
       - name: Install coverage tool
         run: dotnet tool install --global dotnet-coverage
@@ -68,16 +71,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
         run: |
-          dotnet-sonarscanner begin `
-            /k:"tschroedter_idasen-desk-core" `
-            /o:"tschroedter" `
-            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
-            /d:sonar.host.url="https://sonarcloud.io" `
-            /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          
-          dotnet build src/idasen-desk-core.sln --configuration Release --no-restore
-          
-          dotnet-coverage collect "dotnet test src/idasen-desk-core.sln --configuration Release --no-build --verbosity normal" -f xml -o coverage.xml
-          
-          dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"tschroedter_idasen-desk-core" /o:"$Env:SONAR_ORGANIZATION" /d:sonar.token="$Env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./TestResults/**/*.opencover.xml"
+          dotnet build idasen-desk-core.sln --configuration Release --no-restore
+          dotnet test idasen-desk-core.sln --configuration Release --no-build --verbosity detailed --collect:"XPlat Code Coverage;Format=opencover" --results-directory ./TestResults/ /p:Exclude="[*.Tests]*" /p:ExcludeByAttribute=Obsolete /p:ExcludeByAttribute=ObsoleteAttribute /p:ExcludeByAttribute=GeneratedCodeAttribute /p:ExcludeByAttribute=CompilerGeneratedAttribute /p:ExcludeByAttribute=ExcludeFromCodeCoverage /p:ExcludeByAttribute=ExcludeFromCodeCoverageAttribute
+
+          echo "Listing contents of TestResults directory:"
+          Get-ChildItem -Path ./TestResults/ -Recurse | Format-List
+          echo "End of TestResults directory contents."
+          echo "Contents of coverage.opencover.xml:"
+          Get-Content -Path ./TestResults/**/*.opencover.xml
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$Env:SONAR_TOKEN"
