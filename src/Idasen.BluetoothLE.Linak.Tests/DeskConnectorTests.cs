@@ -13,7 +13,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class DeskConnectorTests : IDisposable
+public sealed class DeskConnectorTests : IDisposable
 {
     private IDeskCommandExecutorFactory _commandExecutorFactory = null! ;
     private IControl                    _control                = null! ;
@@ -66,8 +66,6 @@ public class DeskConnectorTests : IDisposable
         _refreshedSubject.Dispose ( ) ;
         _speedChanged.Dispose ( ) ;
         _speedSubject.Dispose ( ) ;
-
-        GC.SuppressFinalize ( this ) ;
     }
 
     private DeskConnector CreateSut ( )
@@ -126,13 +124,14 @@ public class DeskConnectorTests : IDisposable
 
         _errorManager = Substitute.For < IErrorManager > ( ) ;
 
+        var subjects = new DeskConnectorSubjects ( ( ) => new Subject < IEnumerable < byte > > ( ) ,
+                                                   _heightSubject ,
+                                                   _speedSubject ,
+                                                   _refreshedSubject ,
+                                                   _heightSpeedSubject ) ;
         return new DeskConnector ( _logger ,
                                    _scheduler ,
-                                   ( ) => new Subject < IEnumerable < byte > > ( ) ,
-                                   _heightSubject ,
-                                   _speedSubject ,
-                                   _refreshedSubject ,
-                                   _heightSpeedSubject ,
+                                   subjects ,
                                    _device ,
                                    _deskCharacteristics ,
                                    _heightAndSpeedFactory ,

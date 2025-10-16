@@ -109,6 +109,10 @@ public class BluetoothLELinakModule
                .As < IDeskConnector > ( )
                .EnableInterfaceInterceptors ( ) ;
 
+        builder.RegisterType < DeskConnectorSubjects > ( )
+               .As < IDeskConnectorSubjects > ( )
+               .EnableInterfaceInterceptors ( ) ;
+
         builder.RegisterType < DeskDetector > ( )
                .As < IDeskDetector > ( )
                .EnableInterfaceInterceptors ( ) ;
