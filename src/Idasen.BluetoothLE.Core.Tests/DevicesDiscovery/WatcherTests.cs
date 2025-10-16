@@ -80,7 +80,8 @@ public class WatcherTests
 
         sut.StartListening ( ) ;
 
-        subject.OnNext ( Arg.Any < DateTime > ( ) ) ;
+        subject.Received ( 1 )
+               .OnNext ( Arg.Any < DateTime > ( ) ) ; // Assertion added to verify the method call
     }
 
     [ AutoDataTestMethod ]
