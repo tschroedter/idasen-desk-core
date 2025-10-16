@@ -129,15 +129,19 @@ public sealed class DeskConnectorTests : IDisposable
                                                    _speedSubject ,
                                                    _refreshedSubject ,
                                                    _heightSpeedSubject ) ;
+
+        var factories = Substitute.For<IDeskConnectorFactories>();
+        factories.HeightAndSpeedFactory.Returns(_heightAndSpeedFactory);
+        factories.CommandExecutorFactory.Returns(_commandExecutorFactory);
+        factories.MoverFactory.Returns(_moverFactory);
+        factories.LockerFactory.Returns(_deskLockerFactory);
+
         return new DeskConnector ( _logger ,
                                    _scheduler ,
                                    subjects ,
                                    _device ,
                                    _deskCharacteristics ,
-                                   _heightAndSpeedFactory ,
-                                   _commandExecutorFactory ,
-                                   _moverFactory ,
-                                   _deskLockerFactory ,
+                                   factories ,
                                    _errorManager ) ;
     }
 

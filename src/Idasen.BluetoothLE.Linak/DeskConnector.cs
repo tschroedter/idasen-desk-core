@@ -46,10 +46,7 @@ public class DeskConnector
                            IDeskConnectorSubjects                     subjects ,
                            IDevice                                    device ,
                            IDeskCharacteristics                       deskCharacteristics ,
-                           IDeskHeightAndSpeedFactory                 heightAndSpeedFactory ,
-                           IDeskCommandExecutorFactory                commandExecutorFactory ,
-                           IDeskMoverFactory                          moverFactory ,
-                           IDeskLockerFactory                         deskLockerFactory ,
+                           IDeskConnectorFactories                    factories ,
                            IErrorManager                              errorManager )
     {
         ArgumentNullException.ThrowIfNull ( logger ) ;
@@ -57,20 +54,17 @@ public class DeskConnector
         ArgumentNullException.ThrowIfNull ( subjects ) ;
         ArgumentNullException.ThrowIfNull ( device ) ;
         ArgumentNullException.ThrowIfNull ( deskCharacteristics ) ;
-        ArgumentNullException.ThrowIfNull ( heightAndSpeedFactory ) ;
-        ArgumentNullException.ThrowIfNull ( commandExecutorFactory ) ;
-        ArgumentNullException.ThrowIfNull ( moverFactory ) ;
-        ArgumentNullException.ThrowIfNull ( deskLockerFactory ) ;
+        ArgumentNullException.ThrowIfNull ( factories ) ;
         ArgumentNullException.ThrowIfNull ( errorManager ) ;
 
         _logger                 = logger ;
         _scheduler              = scheduler ;
         _device                 = device ;
         _deskCharacteristics    = deskCharacteristics ;
-        _heightAndSpeedFactory  = heightAndSpeedFactory ;
-        _commandExecutorFactory = commandExecutorFactory ;
-        _moverFactory           = moverFactory ;
-        _deskLockerFactory      = deskLockerFactory ;
+        _heightAndSpeedFactory  = factories.HeightAndSpeedFactory ;
+        _commandExecutorFactory = factories.CommandExecutorFactory ;
+        _moverFactory           = factories.MoverFactory ;
+        _deskLockerFactory      = factories.LockerFactory ;
         _errorManager           = errorManager ;
         _subjects               = subjects ;
 
