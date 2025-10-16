@@ -5,7 +5,7 @@ namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ DebuggerDisplay ( "{ToString(),nq}" ) ]
-public sealed class ErrorDetails // todo testing
+public sealed class ErrorDetails
     : IErrorDetails
 {
     /// <summary>

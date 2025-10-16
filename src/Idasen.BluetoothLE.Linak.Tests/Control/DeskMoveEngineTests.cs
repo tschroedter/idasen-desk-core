@@ -158,7 +158,9 @@ public class DeskMoveEngineTests
 
         // After cancellation, direction should be None
         await sut.StopMoveAsync ( ) ;
-        // _currentDirection is private, so we can't assert directly, but no exception should occur
+
+        // Assert that the direction is reset to None
+        sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
     }
 
     [ TestMethod ]
@@ -167,5 +169,8 @@ public class DeskMoveEngineTests
         var sut = CreateSut ( ) ;
 
         await sut.StopMoveAsync ( ) ; // Should not throw
+
+        // Assert that the direction is reset to None
+        sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
     }
 }

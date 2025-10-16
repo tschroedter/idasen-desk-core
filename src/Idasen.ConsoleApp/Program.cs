@@ -8,7 +8,7 @@ using static System.Console ;
 
 namespace Idasen.ConsoleApp ;
 
-internal sealed class Program
+internal static class Program
 {
     private const string DefaultDeviceName              = "Desk" ;
     private const ulong  DefaultDeviceAddress           = 250635178951455u ;
