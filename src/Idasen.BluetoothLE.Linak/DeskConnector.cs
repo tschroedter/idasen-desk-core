@@ -7,6 +7,7 @@ using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
+using Serilog.Events ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
@@ -258,10 +259,13 @@ public class DeskConnector
         {
             const string message = "Failed to refresh Gatt services" ;
 
-            _logger.Error ( e ,
-                            message ) ;
+            if ( _logger.IsEnabled ( LogEventLevel.Debug ) )
+                _logger.Debug ( e ,
+                                message ) ;
+            else
+                _logger.Warning ( message ) ;
 
-            _errorManager.PublishForMessage ( message ) ;
+            _errorManager.PublishForMessage(message);
 
             _subjects.RefreshedChanged
                      .OnNext ( false ) ;
