@@ -37,5 +37,5 @@ public interface IInitialHeightProvider
     /// <returns>
     ///     A Task.
     /// </returns>
-    Task Start ( ) ;
+    Task Start (CancellationToken cancellationToken = default ) ;
 }

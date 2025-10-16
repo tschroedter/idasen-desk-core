@@ -13,7 +13,8 @@ public static class DeskCharacteristicDictionaryExtensions
     ///     A map of default unknown characteristic instances used when a specific characteristic is missing.
     ///     Kept for backward compatibility; prefer the internal factories in this class.
     /// </summary>
-    [ UsedImplicitly ] public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
+    [ UsedImplicitly ]
+    public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
         new( )
         {
             { DeskCharacteristicKey.GenericAccess , new GenericAccess ( ) } ,

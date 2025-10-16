@@ -36,16 +36,11 @@ public class DeskDetector
                           IDeskFactory             factory ,
                           ISubject < IDesk >       deskDetected )
     {
-        ArgumentNullException.ThrowIfNull ( logger ,
-                                            nameof ( logger ) ) ;
-        ArgumentNullException.ThrowIfNull ( scheduler ,
-                                            nameof ( scheduler ) ) ;
-        ArgumentNullException.ThrowIfNull ( monitor ,
-                                            nameof ( monitor ) ) ;
-        ArgumentNullException.ThrowIfNull ( factory ,
-                                            nameof ( factory ) ) ;
-        ArgumentNullException.ThrowIfNull ( deskDetected ,
-                                            nameof ( deskDetected ) ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( monitor ) ;
+        ArgumentNullException.ThrowIfNull ( factory ) ;
+        ArgumentNullException.ThrowIfNull ( deskDetected ) ;
 
         _logger       = logger ;
         _scheduler    = scheduler ;
@@ -62,19 +57,25 @@ public class DeskDetector
     /// <inheritdoc />
     public void Dispose ( )
     {
-        try
+        Dispose ( true ) ;
+
+        GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( disposing )
         {
-            _disposables.Dispose ( ) ;
-            _monitor.Dispose ( ) ;
-        }
-        catch ( Exception ex )
-        {
-            _logger.Error ( ex ,
-                            "Error occurred while disposing resources in DeskDetector." ) ;
-        }
-        finally
-        {
-            GC.SuppressFinalize ( this ) ;
+            try
+            {
+                _disposables.Dispose ( ) ;
+                _monitor.Dispose ( ) ;
+            }
+            catch ( Exception ex )
+            {
+                _logger.Error ( ex ,
+                                "Error occurred while disposing resources in DeskDetector." ) ;
+            }
         }
     }
 
@@ -115,8 +116,6 @@ public class DeskDetector
                                    .Subscribe ( OnDeviceNameChanged ,
                                                 ex => _logger.Error ( ex ,
                                                                       "Error handling DeviceNameUpdated" ) ) ) ;
-
-        // todo find by address if possible
 
         _disposables.Add ( _monitor.DeviceNameUpdated
                                    .ObserveOn ( _scheduler )

@@ -99,9 +99,7 @@ public class HasReachedTargetHeightCalculator
             case Direction.None :
                 return true ;
             default :
-                throw new ArgumentOutOfRangeException ( nameof ( MoveIntoDirection ) ,
-                                                        MoveIntoDirection ,
-                                                        "Unknown direction" ) ;
+                throw new InvalidOperationException ( $"Unknown direction: {MoveIntoDirection}" ) ;
         }
     }
 

@@ -65,9 +65,13 @@ public class InitialHeightProvider
     }
 
     /// <inheritdoc />
-    public Task Start ( )
+    public Task Start ( CancellationToken cancellationToken = default )
     {
-        return Start ( CancellationToken.None ) ;
+        // Cancel previous run if any
+        _cts?.Cancel ( ) ;
+        _cts?.Dispose ( ) ;
+        _cts = CancellationTokenSource.CreateLinkedTokenSource ( cancellationToken ) ;
+        return StartInternalAsync ( _cts.Token ) ;
     }
 
     /// <inheritdoc />
@@ -76,23 +80,35 @@ public class InitialHeightProvider
     /// <inheritdoc />
     public void Dispose ( )
     {
-        try
-        {
-            _cts?.Cancel ( ) ;
-        }
-        catch
-        {
-            // ignore
-        }
-        finally
-        {
-            _cts?.Dispose ( ) ;
-            _cts = null ;
-        }
-
-        _disposalHeightAndSpeed?.Dispose ( ) ;
+        Dispose ( true ) ;
 
         GC.SuppressFinalize ( this ) ;
+    }
+
+    /// <summary>
+    ///     Dispose resources.
+    /// </summary>
+    /// <param name="disposing">true if disposing managed resources; otherwise, false.</param>
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( disposing )
+        {
+            try
+            {
+                _cts?.Cancel ( ) ;
+            }
+            catch
+            {
+                // ignore
+            }
+            finally
+            {
+                _cts?.Dispose ( ) ;
+                _cts = null ;
+            }
+
+            _disposalHeightAndSpeed?.Dispose ( ) ;
+        }
     }
 
     /// <inheritdoc />
@@ -100,18 +116,6 @@ public class InitialHeightProvider
 
     /// <inheritdoc />
     public bool HasReceivedHeightAndSpeed { get ; private set ; }
-
-    /// <summary>
-    ///     Starts the process with cancellation support.
-    /// </summary>
-    public Task Start ( CancellationToken cancellationToken )
-    {
-        // Cancel previous run if any
-        _cts?.Cancel ( ) ;
-        _cts?.Dispose ( ) ;
-        _cts = CancellationTokenSource.CreateLinkedTokenSource ( cancellationToken ) ;
-        return StartInternalAsync ( _cts.Token ) ;
-    }
 
     private async Task StartInternalAsync ( CancellationToken cancellationToken )
     {

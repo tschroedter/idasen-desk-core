@@ -81,4 +81,15 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
             }
         }
     }
+
+    public IEnumerable<string> GetKeys()
+    {
+        lock (_padlock)
+        {
+            // Avoid invalid casts; only include keys that are truly strings
+            return _dictionary.Keys
+                              .OfType<string>()
+                              .ToArray();
+        }
+    }
 }

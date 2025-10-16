@@ -26,8 +26,7 @@ public class DeskMovementMonitor
 
     private IDisposable ? _disposalHeightAndSpeed ;
 
-    internal CircularBuffer < HeightSpeedDetails > History = // todo interface and test
-        new(5) ;
+    internal CircularBuffer < HeightSpeedDetails > History = new(5) ;
 
     public DeskMovementMonitor ( ILogger             logger ,
                                  IScheduler          scheduler ,
@@ -42,13 +41,29 @@ public class DeskMovementMonitor
         _heightAndSpeed = heightAndSpeed ;
     }
 
-    /// <inheritdoc />
-    public void Dispose ( )
+    protected virtual void Dispose(bool disposing)
     {
-        _disposalHeightAndSpeed?.Dispose ( ) ;
-        _disposalHeightAndSpeed = null ;
+        if (disposing)
+        {
+            _disposalHeightAndSpeed?.Dispose();
+            _disposalHeightAndSpeed = null;
+        }
+    }
 
-        GC.SuppressFinalize ( this ) ;
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose(true);
+
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Finalizer to ensure unmanaged resources are released.
+    /// </summary>
+    ~DeskMovementMonitor()
+    {
+        Dispose(false);
     }
 
     /// <summary>

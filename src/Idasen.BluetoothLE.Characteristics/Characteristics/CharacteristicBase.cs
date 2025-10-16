@@ -116,14 +116,13 @@ public abstract class CharacteristicBase
                                    characteristic.UserDescription ) ;
             }
 
-            throw new ArgumentException ( "Failed, can't find GattDeviceService for " +
-                                          $"UUID {GattServiceUuid}" ,
-                                          nameof ( GattServiceUuid ) ) ;
+            throw new InvalidOperationException ( "Failed, can't find GattDeviceService for " +
+                                                  $"UUID {GattServiceUuid}" ) ;
         }
 
         Logger.Debug ( "Found GattDeviceService with UUID {Uuid}" ,
                              GattServiceUuid ) ;
-        ;
+
         Characteristics = ProviderFactory.Create ( characteristicsResultWrapper ) ;
 
         WithMapping < T > ( ) ;

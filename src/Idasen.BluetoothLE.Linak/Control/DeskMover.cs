@@ -64,7 +64,7 @@ public class DeskMover
                  subjectFinished ,
                  new DeskMoveEngine ( logger ,
                                       executor ) ,
-                 // todo fix ca2000
+                 // To Do: fix ca2000 
 #pragma warning disable CA2000
                  new DeskMoveGuard ( logger ,
                                      heightAndSpeed ,
@@ -251,16 +251,28 @@ public class DeskMover
         return Task.FromResult ( true ) ;
     }
 
-    /// <inheritdoc />
-    public void Dispose ( )
+    protected virtual void Dispose(bool disposing)
     {
-        _monitor?.Dispose ( ) ;
-        _disposableProvider?.Dispose ( ) ;
-        _rawHeightAndSpeedSubscription?.Dispose ( ) ;
-        _cycleDisposables?.Dispose ( ) ;
-        _guardTargetHeightReached?.Dispose ( ) ;
+        if (disposing)
+        {
+            _monitor?.Dispose();
+            _disposableProvider?.Dispose();
+            _rawHeightAndSpeedSubscription?.Dispose();
+            _cycleDisposables?.Dispose();
+            _guardTargetHeightReached?.Dispose();
+        }
+    }
 
-        GC.SuppressFinalize ( this ) ;
+    public void Dispose()
+    {
+        Dispose(true);
+
+        GC.SuppressFinalize(this);
+    }
+
+    ~DeskMover()
+    {
+        Dispose(false);
     }
 
     /// <inheritdoc />

@@ -32,14 +32,27 @@ public class DeskMoveGuard
 
     public IObservable < uint > TargetHeightReached => _targetHeightReached.AsObservable ( ) ;
 
-    public void Dispose ( )
+    protected virtual void Dispose(bool disposing)
     {
-        StopGuarding ( ) ;
+        if (disposing)
+        {
+            StopGuarding();
 
-        _targetHeightReached.OnCompleted ( ) ;
-        _targetHeightReached.Dispose ( ) ;
+            _targetHeightReached.OnCompleted();
+            _targetHeightReached.Dispose();
+        }
+    }
 
-        GC.SuppressFinalize ( this ) ;
+    public void Dispose()
+    {
+        Dispose(true);
+
+        GC.SuppressFinalize(this);
+    }
+
+    ~DeskMoveGuard()
+    {
+        Dispose(false);
     }
 
     public void StartGuarding ( Direction         direction ,
@@ -79,7 +92,7 @@ public class DeskMoveGuard
         if ( _direction                 == Direction.Up &&
              _calculator.StoppingHeight >= _targetHeight )
         {
-            _logger.Debug ( "Stop - current height {Current} (~{Stopping}) >= target {Target}" ,
+            _logger.Debug ( "Stop Up Movement- current height {Current} (~{Stopping}) >= target {Target}" ,
                             currentHeight ,
                             estimatedStoppingHeight ,
                             _targetHeight ) ;
@@ -91,7 +104,7 @@ public class DeskMoveGuard
         else if ( _direction              == Direction.Down &&
                   estimatedStoppingHeight <= _targetHeight )
         {
-            _logger.Debug ( "Stop - current height {Current} (~{Stopping}) >= target {Target}" ,
+            _logger.Debug ( "Stop Down Movement - current height {Current} (~{Stopping}) >= target {Target}" ,
                             currentHeight ,
                             estimatedStoppingHeight ,
                             _targetHeight ) ;

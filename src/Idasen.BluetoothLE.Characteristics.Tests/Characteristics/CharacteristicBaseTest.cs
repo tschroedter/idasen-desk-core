@@ -52,8 +52,7 @@ public class CharacteristicBaseTest
         Action action = ( ) => sut.Initialize < TestCharacteristicBase > ( ) ;
 
         action.Should ( )
-              .Throw < ArgumentException > ( )
-              .WithParameter ( "GattServiceUuid" ) ;
+              .Throw < InvalidOperationException > ( ) ;
     }
 
     [ TestMethod ]

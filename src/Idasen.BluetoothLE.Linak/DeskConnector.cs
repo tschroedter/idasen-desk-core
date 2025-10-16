@@ -33,13 +33,10 @@ public class DeskConnector
     private readonly ISubject < int >                  _subjectSpeed ;
     private          IDeskLocker ?                     _deskLocker ;
 
-    // todo use list of IDisposables
     private IDeskMover ?           _deskMover ;
     private IDisposable ?          _disposableHeight ;
     private IDisposable ?          _disposableHeightAndSpeed ;
     private IDisposable ?          _disposableSpeed ;
-    private IDeskCommandExecutor ? _executor ;
-
     private IDisposable ?         _finishedSubscription ;
     private IDeskHeightAndSpeed ? _heightAndSpeed ;
     private IDisposable ?         _subscriber ;
@@ -119,22 +116,38 @@ public class DeskConnector
     /// <inheritdoc />
     public void Dispose ( )
     {
-        _finishedSubscription?.Dispose ( ) ;
-        _refreshedSubscription?.Dispose ( ) ;
-        _deskLocker?.Dispose ( ) ;
-        _deskMover?.Dispose ( ) ;
-        _disposableHeightAndSpeed?.Dispose ( ) ;
-        _disposableSpeed?.Dispose ( ) ;
-        _disposableHeight?.Dispose ( ) ;
-        _heightAndSpeed?.Dispose ( ) ;
-        _subscriber?.Dispose ( ) ;
-        _subscriber = null ;
-        _device.Dispose ( ) ;
-
-        _finishedSubject.OnCompleted ( ) ;
-        _deviceNameChanged.OnCompleted ( ) ;
+        Dispose ( true ) ;
 
         GC.SuppressFinalize ( this ) ;
+    }
+
+    /// <summary>
+    /// Finalizer to ensure unmanaged resources are released.
+    /// </summary>
+    ~DeskConnector()
+    {
+        Dispose ( false ) ;
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _finishedSubscription?.Dispose();
+            _refreshedSubscription?.Dispose();
+            _deskLocker?.Dispose();
+            _deskMover?.Dispose();
+            _disposableHeightAndSpeed?.Dispose();
+            _disposableSpeed?.Dispose();
+            _disposableHeight?.Dispose();
+            _heightAndSpeed?.Dispose();
+            _subscriber?.Dispose();
+            _subscriber = null;
+            _device.Dispose();
+
+            _finishedSubject.OnCompleted();
+            _deviceNameChanged.OnCompleted();
+        }
     }
 
     /// <inheritdoc />
@@ -153,7 +166,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public async Task < bool > MoveUpAsync ( ) // todo this should be async
+    public async Task < bool > MoveUpAsync ( )
     {
         if ( ! TryGetDeskMover ( out var deskMover ) )
             return false ;
@@ -162,7 +175,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public async Task < bool > MoveDownAsync ( ) // todo check test for async
+    public async Task < bool > MoveDownAsync ( )
     {
         if ( ! TryGetDeskMover ( out var deskMover ) )
             return false ;
@@ -189,7 +202,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public async Task < bool > MoveStopAsync ( ) // todo check test for async
+    public async Task < bool > MoveStopAsync ( )
     {
         if ( ! TryGetDeskMover ( out var deskMover ) )
             return false ;
@@ -198,7 +211,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public Task < bool > MoveLockAsync ( ) // todo check test for async
+    public Task < bool > MoveLockAsync ( )
     {
         if ( ! TryGetDeskLocker ( out var deskLocker ) )
             return Task.FromResult ( false ) ;
@@ -209,7 +222,7 @@ public class DeskConnector
     }
 
     /// <inheritdoc />
-    public Task < bool > MoveUnlockAsync ( ) // todo check test for async
+    public Task < bool > MoveUnlockAsync ( )
     {
         if ( ! TryGetDeskLocker ( out var deskLocker ) )
             return Task.FromResult ( false ) ;
@@ -309,8 +322,8 @@ public class DeskConnector
                                                    .Subscribe ( details => _subjectHeightAndSpeed
                                                                    .OnNext ( details ) ) ;
 
-        _executor = _commandExecutorFactory.Create ( _deskCharacteristics.Control ) ;
-        _deskMover = _moverFactory.Create ( _executor ,
+        var executor = _commandExecutorFactory.Create ( _deskCharacteristics.Control ) ;
+        _deskMover = _moverFactory.Create ( executor ,
                                             _heightAndSpeed ) ??
                      throw new ArgumentException ( "Failed to create desk mover instance" ) ;
 
@@ -322,7 +335,7 @@ public class DeskConnector
                                           .Subscribe ( value => _finishedSubject.OnNext ( value ) ) ;
 
         _deskLocker = _deskLockerFactory.Create ( _deskMover ,
-                                                  _executor ,
+                                                  executor ,
                                                   _heightAndSpeed ) ;
 
         _deskLocker.Initialize ( ) ;
