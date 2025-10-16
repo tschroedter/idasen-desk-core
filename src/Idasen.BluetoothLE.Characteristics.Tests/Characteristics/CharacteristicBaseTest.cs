@@ -311,8 +311,7 @@ public class CharacteristicBaseTest
                                             Scheduler ,
                                             Device ,
                                             ProviderFactory ,
-                                            RawValueReader ,
-                                            RawValueWriter ,
+                                            RawValueHandler ,
                                             ToStringConverter ,
                                             DescriptionToUuid ) ;
     }

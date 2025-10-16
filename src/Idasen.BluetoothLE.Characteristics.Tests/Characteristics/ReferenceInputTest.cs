@@ -45,8 +45,7 @@ public class ReferenceInputTest
                                     Scheduler ,
                                     Device ,
                                     ProviderFactory ,
-                                    RawValueReader ,
-                                    RawValueWriter ,
+                                    RawValueHandler,
                                     ToStringConverter ,
                                     DescriptionToUuid ) ;
     }

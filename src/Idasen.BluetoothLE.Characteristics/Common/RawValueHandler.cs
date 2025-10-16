@@ -51,4 +51,8 @@ public sealed class RawValueHandler
         return _valueWriter.TryWriteWithoutResponseAsync ( characteristic ,
                                                            buffer ) ;
     }
+
+    public IRawValueReader RawValueReader => _valueReader ;
+
+    public IRawValueWriter RawValueWriter => _valueWriter ;
 }

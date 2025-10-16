@@ -24,8 +24,7 @@ public class GenericAccess
                            IScheduler                                 scheduler ,
                            IDevice                                    device ,
                            IGattCharacteristicsProviderFactory        providerFactory ,
-                           IRawValueReader                            rawValueReader ,
-                           IRawValueWriter                            rawValueWriter ,
+                           IRawValueHandler                           valueHandler,
                            ICharacteristicBaseToStringConverter       toStringConverter ,
                            IDescriptionToUuid                         descriptionToUuid ,
                            Func < ISubject < IEnumerable < byte > > > subjectFactory ,
@@ -34,8 +33,7 @@ public class GenericAccess
                  scheduler ,
                  device ,
                  providerFactory ,
-                 rawValueReader ,
-                 rawValueWriter ,
+                 valueHandler ,
                  toStringConverter ,
                  descriptionToUuid )
     {

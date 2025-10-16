@@ -6,5 +6,6 @@ namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common;
 /// </summary>
 public interface IRawValueHandler : IRawValueReader, IRawValueWriter
 {
-    // This interface inherits all members from IRawValueReader and IRawValueWriter.
+    IRawValueReader RawValueReader { get ; }
+    IRawValueWriter RawValueWriter { get ; }
 }

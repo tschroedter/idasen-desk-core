@@ -2,6 +2,7 @@ using System.Reactive.Concurrency ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
+using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs ;
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
@@ -55,6 +56,7 @@ public abstract class CharacteristicBaseTests < T >
     protected IGattDeviceServiceWrapper                          ServiceWrapper    { get ; private set ; } = null! ;
     protected ICharacteristicBaseToStringConverter               ToStringConverter { get ; private set ; } = null! ;
     protected Dictionary < string , IGattCharacteristicWrapper > Wrappers          { get ; private set ; } = null! ;
+    protected IRawValueHandler                                   RawValueHandler   { get ; private set ; } = null! ;
 
     [ TestInitialize ]
     public virtual void Initialize ( )
@@ -68,6 +70,8 @@ public abstract class CharacteristicBaseTests < T >
         RawValueWriter         = Substitute.For < IRawValueWriter > ( ) ;
         ToStringConverter      = Substitute.For < ICharacteristicBaseToStringConverter > ( ) ;
         DescriptionToUuid      = new DescriptionToUuid ( ) ;
+        RawValueHandler        = new RawValueHandler ( RawValueReader ,
+                                                       RawValueWriter ) ;
 
         ServiceWrapper = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
         ResultWrapper  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
