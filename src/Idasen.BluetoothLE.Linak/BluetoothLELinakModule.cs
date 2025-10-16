@@ -147,6 +147,13 @@ public class BluetoothLELinakModule
         builder.RegisterType<DeskConnectorFactories>()
                .As<IDeskConnectorFactories>()
                .EnableInterfaceInterceptors();
+
+        builder.RegisterType < DeskLocationHandlers > ( )
+               .As < IDeskLocationHandlers > ( )
+               .EnableInterfaceInterceptors ( ) ;
+
+        builder.RegisterType < DeskMovementHandlers > ( )
+               .As < IDeskMovementHandlers > ( )
                .EnableInterfaceInterceptors ( ) ;
     }
 }
