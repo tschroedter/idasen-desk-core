@@ -46,75 +46,57 @@ public class DeskMover
 
     private IDisposable ? _rawHeightAndSpeedSubscription ;
 
-    public DeskMover ( ILogger                               logger ,
-                       IScheduler                            scheduler ,
-                       IInitialHeightAndSpeedProviderFactory providerFactory ,
-                       IDeskMovementMonitorFactory           monitorFactory ,
-                       IDeskCommandExecutor                  executor ,
-                       IDeskHeightAndSpeed                   heightAndSpeed ,
-                       IStoppingHeightCalculator             calculator ,
-                       ISubject < uint >                     subjectFinished )
+    public DeskMover ( ILogger                     logger ,
+                       IScheduler                  scheduler ,
+                       ISubject < uint >           subjectFinished ,
+                       IDeskLocationHandlers       locationHandlers ,
+                       IDeskMovementMonitorFactory monitorFactory ,
+                       IDeskCommandExecutor        executor ,
+                       IStoppingHeightCalculator   calculator )
         : this ( logger ,
                  scheduler ,
-                 providerFactory ,
-                 monitorFactory ,
-                 executor ,
-                 heightAndSpeed ,
-                 calculator ,
                  subjectFinished ,
-                 new DeskMoveEngine ( logger ,
-                                      executor ) ,
-                 // To Do: fix ca2000 
+                 locationHandlers ,
+                 new DeskMovementHandlers ( monitorFactory ,
+                                            executor ,
+                                            calculator ,
+                                            new DeskMoveEngine ( logger ,
+                                                                 executor ) ,
 #pragma warning disable CA2000
-                 new DeskMoveGuard ( logger ,
-                                     heightAndSpeed ,
-                                     calculator )
+                                            new DeskMoveGuard ( logger ,
+                                                                locationHandlers.HeightAndSpeed ,
+                                                                calculator ) ) )
 #pragma warning restore CA2000
-               )
     {
     }
 
-    internal DeskMover ( ILogger                               logger ,
-                         IScheduler                            scheduler ,
-                         IInitialHeightAndSpeedProviderFactory providerFactory ,
-                         IDeskMovementMonitorFactory           monitorFactory ,
-                         IDeskCommandExecutor                  executor ,
-                         IDeskHeightAndSpeed                   heightAndSpeed ,
-                         IStoppingHeightCalculator             calculator ,
-                         ISubject < uint >                     subjectFinished ,
-                         IDeskMoveEngine                       engine ,
-                         IDeskMoveGuard                        guard )
+    internal DeskMover ( ILogger               logger ,
+                         IScheduler            scheduler ,
+                         ISubject < uint >     subjectFinished ,
+                         IDeskLocationHandlers locationHandlers ,
+                         IDeskMovementHandlers movementHandlers )
     {
         Guard.ArgumentNotNull ( logger ,
                                 nameof ( logger ) ) ;
         Guard.ArgumentNotNull ( scheduler ,
                                 nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( providerFactory ,
-                                nameof ( providerFactory ) ) ;
-        Guard.ArgumentNotNull ( monitorFactory ,
-                                nameof ( monitorFactory ) ) ;
-        Guard.ArgumentNotNull ( executor ,
-                                nameof ( executor ) ) ;
-        Guard.ArgumentNotNull ( heightAndSpeed ,
-                                nameof ( heightAndSpeed ) ) ;
-        Guard.ArgumentNotNull ( calculator ,
-                                nameof ( calculator ) ) ;
         Guard.ArgumentNotNull ( subjectFinished ,
                                 nameof ( subjectFinished ) ) ;
-        Guard.ArgumentNotNull ( engine ,
-                                nameof ( engine ) ) ;
+        Guard.ArgumentNotNull ( locationHandlers ,
+                                nameof ( locationHandlers ) ) ;
+        Guard.ArgumentNotNull ( movementHandlers ,
+                                nameof ( movementHandlers ) ) ;
 
         _logger          = logger ;
         _scheduler       = scheduler ;
-        _providerFactory = providerFactory ;
-        _monitorFactory  = monitorFactory ;
-        _executor        = executor ;
-        _heightAndSpeed  = heightAndSpeed ;
-        _calculator      = calculator ;
-        _subjectFinished = subjectFinished ;
-
-        _engine = engine ;
-        _guard  = guard ;
+        _subjectFinished = subjectFinished;
+        _providerFactory = locationHandlers.ProviderFactory ;
+        _heightAndSpeed  = locationHandlers.HeightAndSpeed;
+        _monitorFactory  = movementHandlers.MonitorFactory ;
+        _executor        = movementHandlers.CommandExecutor ;
+        _calculator      = movementHandlers.Calculator ;
+        _engine          = movementHandlers.MoveEngine ;
+        _guard           = movementHandlers.MoveGuard ;
     }
 
     /// <summary>

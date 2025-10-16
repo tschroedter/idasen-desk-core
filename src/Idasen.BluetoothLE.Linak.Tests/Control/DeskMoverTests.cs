@@ -9,7 +9,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 
 [ TestClass ]
-public class DeskMoverTests : IDisposable
+public sealed class DeskMoverTests : IDisposable
 {
     private readonly Subject < uint >                      _finishedSubject              = new( ) ;
     private readonly Subject < HeightSpeedDetails >        _heightAndSpeedChangedSubject = new( ) ;
@@ -23,14 +23,14 @@ public class DeskMoverTests : IDisposable
     private          IInitialHeightAndSpeedProviderFactory _providerFactory              = null! ;
     private          IScheduler                            _scheduler                    = null! ;
     private          ISubject < uint >                     _subjectFinished              = null! ;
+    private          DeskLocationHandlers                  _locationHandler              = null! ;
+    private          DeskMovementHandlers                  _movementHandler              = null! ;
 
     public void Dispose ( )
     {
         ( _subjectFinished as IDisposable )?.Dispose ( ) ;
         _finishedSubject.Dispose ( ) ;
         _heightAndSpeedChangedSubject.Dispose ( ) ;
-
-        GC.SuppressFinalize ( this ) ;
     }
 
     [ TestInitialize ]
@@ -46,20 +46,23 @@ public class DeskMoverTests : IDisposable
         _subjectFinished = _finishedSubject ;
         _engine          = Substitute.For < IDeskMoveEngine > ( ) ;
         _guard           = Substitute.For < IDeskMoveGuard > ( ) ;
+
+        _locationHandler = new DeskLocationHandlers ( _heightAndSpeed ,
+                                                      _providerFactory ) ;
+        _movementHandler = new DeskMovementHandlers ( _monitorFactory ,
+                                                      _executor ,
+                                                      _calculator ,
+                                                      _engine ,
+                                                      _guard ) ;
     }
 
     private DeskMover CreateSut ( )
     {
         return new DeskMover ( _logger ,
                                _scheduler ,
-                               _providerFactory ,
-                               _monitorFactory ,
-                               _executor ,
-                               _heightAndSpeed ,
-                               _calculator ,
                                _subjectFinished ,
-                               _engine ,
-                               _guard ) ;
+                               _locationHandler ,
+                               _movementHandler ) ;
     }
 
     [ TestCleanup ]
