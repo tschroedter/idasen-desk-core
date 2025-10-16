@@ -63,8 +63,7 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
             {
                 // Avoid invalid casts; only include keys that are truly strings
                 return _dictionary.Keys
-                                  .OfType < string > ( )
-                                  .ToArray ( ) ;
+                                  .OfType < string > ( ) ;
             }
         }
     }

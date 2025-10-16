@@ -14,8 +14,8 @@ public static class DeskCharacteristicDictionaryExtensions
     ///     Kept for backward compatibility; prefer the internal factories in this class.
     /// </summary>
     [ UsedImplicitly ]
-    public static readonly Dictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
-        new( )
+    public static readonly IReadOnlyDictionary < DeskCharacteristicKey , ICharacteristicBase > UnknownBases =
+        new Dictionary < DeskCharacteristicKey , ICharacteristicBase >
         {
             { DeskCharacteristicKey.GenericAccess , new GenericAccess ( ) } ,
             { DeskCharacteristicKey.GenericAttribute , new GenericAttributeService ( ) } ,
