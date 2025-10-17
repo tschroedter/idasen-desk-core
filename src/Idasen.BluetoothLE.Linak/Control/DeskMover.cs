@@ -46,35 +46,11 @@ public class DeskMover
 
     private IDisposable ? _rawHeightAndSpeedSubscription ;
 
-    public DeskMover ( ILogger                     logger ,
-                       IScheduler                  scheduler ,
-                       ISubject < uint >           subjectFinished ,
-                       IDeskLocationHandlers       locationHandlers ,
-                       IDeskMovementMonitorFactory monitorFactory ,
-                       IDeskCommandExecutor        executor ,
-                       IStoppingHeightCalculator   calculator )
-        : this ( logger ,
-                 scheduler ,
-                 subjectFinished ,
-                 locationHandlers ,
-                 new DeskMovementHandlers ( monitorFactory ,
-                                            executor ,
-                                            calculator ,
-                                            new DeskMoveEngine ( logger ,
-                                                                 executor ) ,
-#pragma warning disable CA2000
-                                            new DeskMoveGuard ( logger ,
-                                                                locationHandlers.HeightAndSpeed ,
-                                                                calculator ) ) )
-#pragma warning restore CA2000
-    {
-    }
-
-    internal DeskMover ( ILogger               logger ,
-                         IScheduler            scheduler ,
-                         ISubject < uint >     subjectFinished ,
-                         IDeskLocationHandlers locationHandlers ,
-                         IDeskMovementHandlers movementHandlers )
+    public DeskMover ( ILogger               logger ,
+                       IScheduler            scheduler ,
+                       ISubject < uint >     subjectFinished ,
+                       IDeskLocationHandlers locationHandlers ,
+                       IDeskMovementHandlers movementHandlers )
     {
         Guard.ArgumentNotNull ( logger ,
                                 nameof ( logger ) ) ;
@@ -89,9 +65,9 @@ public class DeskMover
 
         _logger          = logger ;
         _scheduler       = scheduler ;
-        _subjectFinished = subjectFinished;
+        _subjectFinished = subjectFinished ;
         _providerFactory = locationHandlers.ProviderFactory ;
-        _heightAndSpeed  = locationHandlers.HeightAndSpeed;
+        _heightAndSpeed  = locationHandlers.HeightAndSpeed ;
         _monitorFactory  = movementHandlers.MonitorFactory ;
         _executor        = movementHandlers.CommandExecutor ;
         _calculator      = movementHandlers.Calculator ;
