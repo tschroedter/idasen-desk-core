@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis ;
 using System.Reflection ;
 using Idasen.BluetoothLE.Core ;
 using JetBrains.Annotations ;
@@ -13,6 +14,7 @@ namespace Idasen.Launcher ;
 ///     Provides factory methods for creating and managing Serilog loggers for the application.
 ///     Supports a thread-safe singleton lifecycle when using the overload that accepts application metadata.
 /// </summary>
+[ ExcludeFromCodeCoverage ]
 public static class LoggerProvider
 {
     private const string LogTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.ffff} " +
@@ -61,22 +63,23 @@ public static class LoggerProvider
                                               false )
                                .Build ( ) ;
 
-            if (!File.Exists(Path.Combine(baseDir, "appsettings.json")) &&
-                !File.Exists(Path.Combine(baseDir, fileName)))
+            if ( ! File.Exists ( Path.Combine ( baseDir ,
+                                                "appsettings.json" ) ) &&
+                 ! File.Exists ( Path.Combine ( baseDir ,
+                                                fileName ) ) )
             {
                 _logger = CreateDefaultConfiguration ( ) ;
             }
             else
             {
-
                 _logger = new LoggerConfiguration ( )
                          .ReadFrom.Configuration ( configuration )
                          .CreateLogger ( ) ;
 
                 Log.Logger = _logger ;
 
-                _logger.Information ("Created logger from configuration file '{FileName}'",
-                                      fileName) ;
+                _logger.Information ( "Created logger from configuration file '{FileName}'" ,
+                                      fileName ) ;
             }
 
             return _logger ;
@@ -245,11 +248,11 @@ public static class LoggerProvider
                  .Console ( outputTemplate :
                             "{Timestamp:HH:mm:ss} [{Level}] (pid:{ProcessId} tid:{ThreadId} caller:{SourceContext}) {Message}{NewLine}{Exception}" )
                  .WriteTo
-                 .File ( path : Path.Combine ( Environment.GetFolderPath ( Environment.SpecialFolder
-                                                                                      .CommonApplicationData ) ,
-                                               "Idasen.SystemTray" ,
-                                               "logs" ,
-                                               "Idasen.SystemTray.log" ) ,
+                 .File ( Path.Combine ( Environment.GetFolderPath ( Environment.SpecialFolder
+                                                                               .CommonApplicationData ) ,
+                                        "Idasen.SystemTray" ,
+                                        "logs" ,
+                                        "Idasen.SystemTray.log" ) ,
                          outputTemplate :
                          "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] (pid:{ProcessId} tid:{ThreadId} caller:{SourceContext}) {Message}{NewLine}{Exception}" ,
                          rollOnFileSizeLimit : true ,

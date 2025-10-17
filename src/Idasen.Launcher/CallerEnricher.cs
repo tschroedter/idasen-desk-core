@@ -1,4 +1,5 @@
 using System.Diagnostics ;
+using System.Diagnostics.CodeAnalysis ;
 using Serilog ;
 using Serilog.Core ;
 using Serilog.Events ;
@@ -9,6 +10,7 @@ namespace Idasen.Launcher ;
 ///     Serilog enricher that populates the <c>Caller</c> property with the fully-qualified method
 ///     name of the user-code frame that initiated the log call (skipping Serilog infrastructure frames).
 /// </summary>
+[ ExcludeFromCodeCoverage ]
 public sealed class CallerEnricher : ILogEventEnricher
 {
     /// <summary>
