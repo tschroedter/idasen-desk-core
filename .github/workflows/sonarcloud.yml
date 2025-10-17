@@ -79,7 +79,29 @@ jobs:
 
           echo "Listing contents of TestResults directory:"
           Get-ChildItem -Path ./TestResults/ -Recurse | Format-List
-          echo "End of TestResults directory contents."
+
           echo "Contents of coverage.opencover.xml:"
           Get-Content -Path ./TestResults/**/*.opencover.xml
+
+          echo "End of TestResults directory contents."
+
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$Env:SONAR_TOKEN"
+
+      - name: Debug Test Results
+        run: |
+          echo "Debugging test results and coverage files..."
+          if (Test-Path ./TestResults) {
+            echo "TestResults directory exists. Listing files:"
+            Get-ChildItem -Path ./TestResults -Recurse | Format-List
+          } else {
+            echo "TestResults directory does not exist."
+          }
+
+          if (Test-Path ./TestResults/**/*.opencover.xml) {
+            echo "Coverage file exists. Displaying contents:"
+            Get-Content -Path ./TestResults/**/*.opencover.xml
+          } else {
+            echo "Coverage file does not exist."
+          }
+
+          echo "End of debug information."
