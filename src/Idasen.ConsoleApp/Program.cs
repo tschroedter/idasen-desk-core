@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis ;
 using Autofac ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Idasen.Launcher ;
@@ -8,6 +9,7 @@ using static System.Console ;
 
 namespace Idasen.ConsoleApp ;
 
+[ ExcludeFromCodeCoverage ]
 internal static class Program
 {
     private const string DefaultDeviceName              = "Desk" ;
