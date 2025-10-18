@@ -1,7 +1,6 @@
 using System.Reactive.Concurrency ;
 using System.Runtime.CompilerServices ;
 using System.Runtime.InteropServices.WindowsRuntime ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Characteristics.Common ;
@@ -154,20 +153,6 @@ public abstract class CharacteristicBase
                                  key ) ;
 
                 continue ;
-            }
-
-            // Skip read attempts for characteristics that are not readable (e.g., notify-only)
-            if ( Characteristics.Properties.TryGetValue ( key , out var props ) )
-            {
-                var supportsRead = ( props & GattCharacteristicProperties.Read ) == GattCharacteristicProperties.Read ;
-                if ( ! supportsRead )
-                {
-                    Logger.Debug ( "Skipping read for non-readable characteristic {Key} ({Uuid})" ,
-                                   key ,
-                                   characteristic.Uuid ) ;
-                    RawValues [ key ] = RawArrayEmpty ;
-                    continue ;
-                }
             }
 
             Logger.Debug ( "Reading raw value for {Key} and characteristic {Uuid}" ,
