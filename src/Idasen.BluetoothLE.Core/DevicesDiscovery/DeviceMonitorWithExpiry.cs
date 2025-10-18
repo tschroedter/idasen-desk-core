@@ -25,6 +25,7 @@ public class DeviceMonitorWithExpiry
     private          TimeSpan                _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
 
     private IDisposable ? _timer ;
+    private bool          _disposed ;
 
     public DeviceMonitorWithExpiry ( ILogger                 logger ,
                                      IDateTimeOffset         dateTimeOffset ,
@@ -88,9 +89,23 @@ public class DeviceMonitorWithExpiry
     /// <inheritdoc />
     public void Dispose ( )
     {
-        StopTimer ( ) ;
-        _deviceMonitor.Dispose ( ) ;
+        Dispose ( true ) ;
+
         GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            StopTimer ( ) ;
+            _deviceMonitor.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 
     /// <inheritdoc />
@@ -149,7 +164,7 @@ public class DeviceMonitorWithExpiry
         {
             var delta = _dateTimeOffset.Now.Ticks - device.BroadcastTime.Ticks ;
 
-            if ( ! ( delta >= TimeOut.Ticks ) )
+            if ( delta < TimeOut.Ticks )
                 continue ;
 
             RemoveDevice ( device ) ;

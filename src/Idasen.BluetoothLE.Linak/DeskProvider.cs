@@ -61,11 +61,9 @@ public class DeskProvider
                                     token )
                              .ConfigureAwait ( false ) ;
 
-            return token.IsCancellationRequested
+            return token.IsCancellationRequested || Desk == null
                        ? ( false , null )
-                       : Desk == null
-                           ? ( false , null )
-                           : ( true , Desk ) ;
+                       : ( true , Desk ) ;
         }
         catch ( Exception e )
         {
@@ -152,17 +150,25 @@ public class DeskProvider
     /// <inheritdoc />
     public void Dispose ( )
     {
-        if ( _disposed )
-            return ;
+        Dispose(true);
 
-        Desk?.Dispose ( ) ; // todo test
-        _deskDetected?.Dispose ( ) ;
-        _deskDetected = null ;
-        _detector.Dispose ( ) ;
+        GC.SuppressFinalize(this);
+    }
 
-        _disposed = true ;
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
 
-        GC.SuppressFinalize ( this ) ;
+        if (disposing)
+        {
+            Desk?.Dispose();
+            _deskDetected?.Dispose();
+            _deskDetected = null;
+            _detector.Dispose();
+        }
+
+        _disposed = true;
     }
 
     /// <summary>

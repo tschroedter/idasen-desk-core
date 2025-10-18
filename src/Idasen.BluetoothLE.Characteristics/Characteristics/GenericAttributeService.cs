@@ -28,8 +28,7 @@ public class GenericAttributeService
                                      IScheduler                           scheduler ,
                                      IDevice                              device ,
                                      IGattCharacteristicsProviderFactory  providerFactory ,
-                                     IRawValueReader                      rawValueReader ,
-                                     IRawValueWriter                      rawValueWriter ,
+                                     IRawValueHandler                     valueHandler,
                                      ICharacteristicBaseToStringConverter toStringConverter ,
                                      IDescriptionToUuid                   descriptionToUuid ,
                                      IAllGattCharacteristicsProvider      allGattCharacteristicsProvider )
@@ -37,8 +36,7 @@ public class GenericAttributeService
                  scheduler ,
                  device ,
                  providerFactory ,
-                 rawValueReader ,
-                 rawValueWriter ,
+                 valueHandler ,
                  toStringConverter ,
                  descriptionToUuid )
     {

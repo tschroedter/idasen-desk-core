@@ -105,12 +105,13 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
             return "out " ;
 
         // IsByRef is true for ref/out
-        return p.ParameterType.IsByRef
-                   ? "ref "
-                   : p.IsDefined ( typeof ( ParamArrayAttribute ) ,
-                                   false )
-                       ? "params "
-                       : string.Empty ;
+        if ( p.ParameterType.IsByRef )
+            return "ref " ;
+
+        if ( p.IsDefined ( typeof ( ParamArrayAttribute ) , false ) )
+            return "params " ;
+
+        return string.Empty ;
     }
 
     private static string ToValueString ( object ? value )

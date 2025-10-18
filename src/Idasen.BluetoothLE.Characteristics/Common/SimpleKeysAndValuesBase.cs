@@ -63,8 +63,7 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
             {
                 // Avoid invalid casts; only include keys that are truly strings
                 return _dictionary.Keys
-                                  .OfType < string > ( )
-                                  .ToArray ( ) ;
+                                  .OfType < string > ( ) ;
             }
         }
     }
@@ -79,6 +78,17 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
                 // Create a shallow copy snapshot to avoid exposing internal state
                 return new Dictionary < TKey , TValue > ( _dictionary ) ;
             }
+        }
+    }
+
+    public IEnumerable<string> GetKeys()
+    {
+        lock (_padlock)
+        {
+            // Avoid invalid casts; only include keys that are truly strings
+            return _dictionary.Keys
+                              .OfType<string>()
+                              .ToArray();
         }
     }
 }

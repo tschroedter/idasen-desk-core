@@ -13,7 +13,7 @@ using Serilog ;
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class DeskConnectorTests : IDisposable
+public sealed class DeskConnectorTests : IDisposable
 {
     private IDeskCommandExecutorFactory _commandExecutorFactory = null! ;
     private IControl                    _control                = null! ;
@@ -66,8 +66,6 @@ public class DeskConnectorTests : IDisposable
         _refreshedSubject.Dispose ( ) ;
         _speedChanged.Dispose ( ) ;
         _speedSubject.Dispose ( ) ;
-
-        GC.SuppressFinalize ( this ) ;
     }
 
     private DeskConnector CreateSut ( )
@@ -126,19 +124,24 @@ public class DeskConnectorTests : IDisposable
 
         _errorManager = Substitute.For < IErrorManager > ( ) ;
 
+        var subjects = new DeskConnectorSubjects ( ( ) => new Subject < IEnumerable < byte > > ( ) ,
+                                                   _heightSubject ,
+                                                   _speedSubject ,
+                                                   _refreshedSubject ,
+                                                   _heightSpeedSubject ) ;
+
+        var factories = Substitute.For<IDeskConnectorFactories>();
+        factories.HeightAndSpeedFactory.Returns(_heightAndSpeedFactory);
+        factories.CommandExecutorFactory.Returns(_commandExecutorFactory);
+        factories.MoverFactory.Returns(_moverFactory);
+        factories.LockerFactory.Returns(_deskLockerFactory);
+
         return new DeskConnector ( _logger ,
                                    _scheduler ,
-                                   ( ) => new Subject < IEnumerable < byte > > ( ) ,
-                                   _heightSubject ,
-                                   _speedSubject ,
-                                   _refreshedSubject ,
-                                   _heightSpeedSubject ,
+                                   subjects ,
                                    _device ,
                                    _deskCharacteristics ,
-                                   _heightAndSpeedFactory ,
-                                   _commandExecutorFactory ,
-                                   _moverFactory ,
-                                   _deskLockerFactory ,
+                                   factories ,
                                    _errorManager ) ;
     }
 
@@ -319,5 +322,243 @@ public class DeskConnectorTests : IDisposable
 
         finishedCompleted.Should ( ).BeTrue ( ) ;
         deviceNameCompleted.Should ( ).BeTrue ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task HeightChanged_Forwarded ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        uint? receivedHeight = null ;
+        using var subscription = sut.HeightChanged.Subscribe ( v => receivedHeight = v ) ;
+
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
+
+        _heightChanged.OnNext ( 150u ) ;
+
+        receivedHeight.Should ( ).Be ( 150u ) ;
+    }
+
+    [ TestMethod ]
+    public async Task SpeedChanged_Forwarded ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        int? receivedSpeed = null ;
+        using var subscription = sut.SpeedChanged.Subscribe ( v => receivedSpeed = v ) ;
+
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
+
+        _speedChanged.OnNext ( 10 ) ;
+
+        await Task.Delay(10); // Ensure the value is propagated
+
+        receivedSpeed.Should ( ).Be ( 10 ) ;
+    }
+
+    [ TestMethod ]
+    public async Task HeightAndSpeedChanged_Forwarded ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        HeightSpeedDetails ? receivedDetails = null ;
+        using var subscription = sut.HeightAndSpeedChanged.Subscribe ( v => receivedDetails = v ) ;
+
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
+
+        var details = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                               100u ,
+                                               5 ) ;
+        _heightAndSpeedChanged.OnNext ( details ) ;
+
+        await Task.Delay(10); // Ensure the value is propagated
+
+        receivedDetails.Should ( ).NotBeNull ( ) ;
+        receivedDetails!.Height.Should ( ).Be ( 100u ) ;
+        receivedDetails.Speed.Should ( ).Be ( 5 ) ;
+    }
+
+    [ TestMethod ]
+    public async Task FinishedChanged_Forwarded ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        uint? receivedFinished = null ;
+        using var subscription = sut.FinishedChanged.Subscribe ( v => receivedFinished = v ) ;
+
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
+
+        _moverFinished.OnNext ( 123u ) ;
+
+        await Task.Delay(10); // Ensure the value is propagated
+
+        receivedFinished.Should ( ).Be ( 123u ) ;
+    }
+
+    [ TestMethod ]
+    public async Task RefreshedChanged_Forwarded ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        bool? receivedRefreshed = null ;
+        using var subscription = sut.RefreshedChanged.Subscribe ( v => receivedRefreshed = v ) ;
+
+        _refreshedSubject.OnNext ( true ) ;
+
+        await Task.Delay(10); // Ensure the value is propagated
+
+        receivedRefreshed.Should ( ).BeTrue ( ) ;
+    }
+
+    [ TestMethod ]
+    public void Connect_CallsDeviceConnect()
+    {
+        using var sut = CreateSut();
+
+        sut.Connect();
+
+        _device.Received(1).Connect();
+    }
+
+    [ TestMethod ]
+    public async Task MoveUpAsync_CallsMoverUp()
+    {
+        using var sut = CreateSut();
+
+        _mover.Up().Returns(Task.FromResult(true));
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        var result = await sut.MoveUpAsync();
+
+        result.Should().BeTrue();
+        await _mover.Received(1).Up();
+    }
+
+    [ TestMethod ]
+    public async Task MoveDownAsync_CallsMoverDown()
+    {
+        using var sut = CreateSut();
+
+        _mover.Down().Returns(Task.FromResult(true));
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        var result = await sut.MoveDownAsync();
+
+        result.Should().BeTrue();
+        await _mover.Received(1).Down();
+    }
+
+    [ TestMethod ]
+    public async Task MoveTo_SetsTargetHeightAndStarts()
+    {
+        using var sut = CreateSut();
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        sut.MoveTo(100u);
+
+        _mover.Received(1).TargetHeight = 100u;
+        _mover.Received(1).Start();
+    }
+
+    [ TestMethod ]
+    public async Task MoveTo_ZeroHeight_ThrowsException()
+    {
+        using var sut = CreateSut();
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        Action act = () => sut.MoveTo(0u);
+
+        act.Should().Throw<ArgumentException>().WithMessage("TargetHeight can't be zero (Parameter 'targetHeight')");
+    }
+
+    [ TestMethod ]
+    public async Task MoveStopAsync_CallsMoverStopMovement()
+    {
+        using var sut = CreateSut();
+
+        _mover.StopMovement().Returns(Task.FromResult(true));
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        var result = await sut.MoveStopAsync();
+
+        result.Should().BeTrue();
+        await _mover.Received(1).StopMovement();
+    }
+
+    [TestMethod]
+    public async Task MoveLockAsync_CallsLockerLock()
+    {
+        using var sut = CreateSut();
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        var result = await sut.MoveLockAsync();
+
+        result.Should().BeTrue();
+        _deskLocker.Received(1).Lock();
+    }
+
+    [TestMethod]
+    public async Task MoveUnlockAsync_CallsLockerUnlock()
+    {
+        using var sut = CreateSut();
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        var result = await sut.MoveUnlockAsync();
+
+        result.Should().BeTrue();
+        _deskLocker.Received(1).Unlock();
+    }
+
+    [TestMethod]
+    public async Task OnGattServicesRefreshed_StatusNotSuccess_SetsRefreshedChangedToFalse()
+    {
+        using var sut = CreateSut();
+
+        bool? refreshedChanged = null;
+        using var subscription = sut.RefreshedChanged.Subscribe(v => refreshedChanged = v);
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Unreachable);
+
+        refreshedChanged.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public async Task OnGattServicesRefreshed_StatusSuccess_CallsDoRefresh()
+    {
+        using var sut = CreateSut();
+
+        bool? refreshedChanged = null;
+        using var subscription = sut.RefreshedChanged.Subscribe(v => refreshedChanged = v);
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        refreshedChanged.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task OnGattServicesRefreshed_ExceptionThrown_LogsErrorAndSetsRefreshedChangedToFalse()
+    {
+        using var sut = CreateSut();
+
+        _deskCharacteristics.Refresh().Returns(Task.FromException(new InvalidOperationException("Test exception")));
+
+        bool? refreshedChanged = null;
+        using var subscription = sut.RefreshedChanged.Subscribe(v => refreshedChanged = v);
+
+        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+
+        _logger.Received(1).Warning("Failed to refresh Gatt services");
+        refreshedChanged.Should().BeFalse();
     }
 }

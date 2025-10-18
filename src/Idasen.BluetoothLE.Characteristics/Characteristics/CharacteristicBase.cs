@@ -39,8 +39,7 @@ public abstract class CharacteristicBase
                                    IScheduler                           scheduler ,
                                    IDevice                              device ,
                                    IGattCharacteristicsProviderFactory  providerFactory ,
-                                   IRawValueReader                      rawValueReader ,
-                                   IRawValueWriter                      rawValueWriter ,
+                                   IRawValueHandler                     valueHandler ,
                                    ICharacteristicBaseToStringConverter toStringConverter ,
                                    IDescriptionToUuid                   descriptionToUuid )
     {
@@ -52,10 +51,8 @@ public abstract class CharacteristicBase
                                 nameof ( device ) ) ;
         Guard.ArgumentNotNull ( providerFactory ,
                                 nameof ( providerFactory ) ) ;
-        Guard.ArgumentNotNull ( rawValueReader ,
-                                nameof ( rawValueReader ) ) ;
-        Guard.ArgumentNotNull ( rawValueWriter ,
-                                nameof ( rawValueWriter ) ) ;
+        Guard.ArgumentNotNull ( valueHandler ,
+                                nameof ( valueHandler ) ) ;
         Guard.ArgumentNotNull ( toStringConverter ,
                                 nameof ( toStringConverter ) ) ;
         Guard.ArgumentNotNull ( descriptionToUuid ,
@@ -65,8 +62,8 @@ public abstract class CharacteristicBase
         Logger             = logger ;
         Scheduler          = scheduler ;
         ProviderFactory    = providerFactory ;
-        RawValueReader     = rawValueReader ;
-        RawValueWriter     = rawValueWriter ;
+        RawValueReader     = valueHandler.RawValueReader;
+        RawValueWriter     = valueHandler.RawValueWriter ;
         _toStringConverter = toStringConverter ;
         DescriptionToUuid  = descriptionToUuid ;
     }
@@ -116,14 +113,13 @@ public abstract class CharacteristicBase
                                    characteristic.UserDescription ) ;
             }
 
-            throw new ArgumentException ( "Failed, can't find GattDeviceService for " +
-                                          $"UUID {GattServiceUuid}" ,
-                                          nameof ( GattServiceUuid ) ) ;
+            throw new InvalidOperationException ( "Failed, can't find GattDeviceService for " +
+                                                  $"UUID {GattServiceUuid}" ) ;
         }
 
         Logger.Debug ( "Found GattDeviceService with UUID {Uuid}" ,
                              GattServiceUuid ) ;
-        ;
+
         Characteristics = ProviderFactory.Create ( characteristicsResultWrapper ) ;
 
         WithMapping < T > ( ) ;

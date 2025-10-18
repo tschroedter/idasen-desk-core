@@ -6,5 +6,8 @@ namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
 public class DeskCharacteristicsConstructorNullTests
     : BaseConstructorNullTester < DeskCharacteristics >
 {
-    public override int NumberOfConstructorsPassed { get ; } = 1 ;
+    public DeskCharacteristicsConstructorNullTests()
+        : base( 1 , 0 )
+    {
+    }
 }

@@ -83,8 +83,11 @@ internal class DeskMoveEngine
                                    cancellationToken ).ConfigureAwait ( false ) ;
             }
         }
-        catch ( TaskCanceledException )
+        catch ( TaskCanceledException ex)
         {
+             _logger.Debug ( ex,
+                             "Start move was canceled: {Desired}" ,
+                             desired ) ;
         }
         finally
         {

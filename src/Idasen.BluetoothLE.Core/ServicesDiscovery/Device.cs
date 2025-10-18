@@ -19,6 +19,8 @@ public class Device
     private readonly IDisposable               _subscriber ;
     private readonly IBluetoothLeDeviceWrapper _wrapper ;
 
+    private bool _disposed ;
+
     public Device ( IScheduler                scheduler ,
                     IBluetoothLeDeviceWrapper wrapper )
     {
@@ -77,8 +79,23 @@ public class Device
     /// <inheritdoc />
     public void Dispose ( )
     {
-        _wrapper.Dispose ( ) ;
-        _subscriber.Dispose ( ) ;
+        Dispose ( true ) ;
+
         GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            // Dispose managed resources
+            _subscriber.Dispose ( ) ;
+            _wrapper.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 }

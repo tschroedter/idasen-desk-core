@@ -61,8 +61,9 @@ public class GattServicesTests
 
         sut.Clear ( ) ;
 
-        sut [ service1 ] = result1 ;
-        sut [ service2 ] = result2 ;
+        sut.Count
+           .Should ( )
+           .Be ( 0 ) ; // Added assertion to verify the count is zero after Clear is invoked
     }
 
     [ AutoDataTestMethod ]

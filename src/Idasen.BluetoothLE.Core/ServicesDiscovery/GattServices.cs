@@ -15,6 +15,8 @@ public class GattServices
 
     private readonly object _padlock = new( ) ;
 
+    private bool _disposed ;
+
     /// <summary>
     ///     Gets the number of items in the dictionary.
     /// </summary>
@@ -77,9 +79,27 @@ public class GattServices
     /// </summary>
     public void Dispose ( )
     {
-        DisposeEntries ( ) ;
+        Dispose ( true ) ;
 
         GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            // free managed resources
+            DisposeEntries ( ) ;
+            lock ( _padlock )
+            {
+                _dictionary.Clear ( ) ;
+            }
+        }
+
+        _disposed = true ;
     }
 
     /// <summary>

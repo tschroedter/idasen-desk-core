@@ -3,7 +3,7 @@ namespace Idasen.BluetoothLE.Characteristics.Common ;
 /// <summary>
 ///     Common constants used across characteristics.
 /// </summary>
-public class Constants
+public static class Constants
 {
     /// <summary>
     ///     Message advising users to ensure Bluetooth is enabled.

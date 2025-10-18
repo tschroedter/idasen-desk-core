@@ -18,7 +18,24 @@ public class Device ( bool isPaired = false ) : IDevice
 
     public void Dispose ( )
     {
-        GC.SuppressFinalize ( this ) ;
+        Dispose(true);
+
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            // Free any managed resources here, if needed.
+        }
+
+        // Free any unmanaged resources here, if needed.
+    }
+
+    ~Device()
+    {
+        Dispose(false);
     }
 
     public IObservable < BluetoothConnectionStatus > ConnectionStatusChanged =>

@@ -52,8 +52,7 @@ public class CharacteristicBaseTest
         Action action = ( ) => sut.Initialize < TestCharacteristicBase > ( ) ;
 
         action.Should ( )
-              .Throw < ArgumentException > ( )
-              .WithParameter ( "GattServiceUuid" ) ;
+              .Throw < InvalidOperationException > ( ) ;
     }
 
     [ TestMethod ]
@@ -312,8 +311,7 @@ public class CharacteristicBaseTest
                                             Scheduler ,
                                             Device ,
                                             ProviderFactory ,
-                                            RawValueReader ,
-                                            RawValueWriter ,
+                                            RawValueHandler ,
                                             ToStringConverter ,
                                             DescriptionToUuid ) ;
     }

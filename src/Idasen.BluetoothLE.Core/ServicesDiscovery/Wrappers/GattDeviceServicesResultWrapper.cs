@@ -13,6 +13,8 @@ public class GattDeviceServicesResultWrapper
 
     private readonly GattDeviceServicesResult _service ;
 
+    private bool _disposed ;
+
     public GattDeviceServicesResultWrapper ( GattDeviceServiceWrapper.Factory serviceWrapperFactory ,
                                              GattDeviceServicesResult         service )
     {
@@ -30,11 +32,32 @@ public class GattDeviceServicesResultWrapper
                            .ToArray ( ) ;
     }
 
-    public void Dispose ( )
+    public void Dispose()
     {
-        foreach ( var s in Services ) s.Dispose ( ) ;
+        Dispose(true);
 
-        GC.SuppressFinalize ( this ) ;
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
+        {
+            foreach (var s in Services)
+            {
+                s.Dispose();
+            }
+        }
+
+        _disposed = true;
+    }
+
+    ~GattDeviceServicesResultWrapper()
+    {
+        Dispose(false);
     }
 
     /// <inheritdoc />

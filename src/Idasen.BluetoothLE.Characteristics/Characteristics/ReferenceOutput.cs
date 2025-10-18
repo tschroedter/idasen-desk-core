@@ -39,8 +39,7 @@ public class ReferenceOutput
                              IScheduler                           scheduler ,
                              IDevice                              device ,
                              IGattCharacteristicsProviderFactory  providerFactory ,
-                             IRawValueReader                      rawValueReader ,
-                             IRawValueWriter                      rawValueWriter ,
+                             IRawValueHandler                     valueHandler,
                              ICharacteristicBaseToStringConverter toStringConverter ,
                              IDescriptionToUuid                   descriptionToUuid ,
                              ISubject < RawValueChangedDetails >  subjectHeightSpeed )
@@ -48,8 +47,7 @@ public class ReferenceOutput
                  scheduler ,
                  device ,
                  providerFactory ,
-                 rawValueReader ,
-                 rawValueWriter ,
+                 valueHandler ,
                  toStringConverter ,
                  descriptionToUuid )
     {

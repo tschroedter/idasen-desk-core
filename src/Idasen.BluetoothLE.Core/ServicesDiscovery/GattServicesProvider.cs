@@ -21,6 +21,7 @@ public class GattServicesProvider
     private readonly ISubject < GattCommunicationStatus > _refreshed ;
     private readonly IGattServices                        _services ;
     private          IGattDeviceServicesResultWrapper ?   _gattResult ;
+    private          bool                                 _disposed ;
 
     public GattServicesProvider ( ILogger                              logger ,
                                   IGattServices                        services ,
@@ -95,8 +96,23 @@ public class GattServicesProvider
     /// <inheritdoc />
     public void Dispose ( )
     {
-        _services.Dispose ( ) ;
+        Dispose ( true ) ;
         GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            // Cleanup references and managed resources
+            _gattResult = null ;
+            _services.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 
     private async Task GetCharacteristicsAsync ( IGattDeviceServicesResultWrapper gatt )

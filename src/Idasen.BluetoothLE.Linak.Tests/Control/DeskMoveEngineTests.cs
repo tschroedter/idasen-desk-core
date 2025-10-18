@@ -158,7 +158,9 @@ public class DeskMoveEngineTests
 
         // After cancellation, direction should be None
         await sut.StopMoveAsync ( ) ;
-        // _currentDirection is private, so we can't assert directly, but no exception should occur
+
+        // Assert that the direction is reset to None
+        sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
     }
 
     [ TestMethod ]
@@ -167,5 +169,42 @@ public class DeskMoveEngineTests
         var sut = CreateSut ( ) ;
 
         await sut.StopMoveAsync ( ) ; // Should not throw
+
+        // Assert that the direction is reset to None
+        sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StopMoveAsync_CallsExecutorStopMovement ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        await sut.StopMoveAsync ( ) ;
+
+        // Verify that StopMovement is called exactly once
+        await _executor.Received ( 1 ).StopMovement ( ) ;
+
+        // Verify that the direction is reset to None
+        sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StartMoveAsync_CommandFails_LogsDebugMessage ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        // Simulate a failure in the Up command
+        _executor.Up ( ).Returns ( Task.FromResult ( false ) ) ;
+
+        sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
+
+        using var cts = new CancellationTokenSource ( 50 ) ;
+
+        await sut.StartMoveAsync ( Direction.Up ,
+                                   cts.Token ) ;
+
+        // Verify that the debug message is logged when the command fails
+        _logger.Received ( ).Debug ( "StartMoveAsync command failed: {Desired}" ,
+                                     Direction.Up ) ;
     }
 }

@@ -70,8 +70,7 @@ public class CharacteristicBaseToStringConverterTests
                                             Scheduler ,
                                             Device ,
                                             ProviderFactory ,
-                                            RawValueReader ,
-                                            RawValueWriter ,
+                                            RawValueHandler ,
                                             new CharacteristicBaseToStringConverter ( ) ,
                                             DescriptionToUuid ) ;
     }

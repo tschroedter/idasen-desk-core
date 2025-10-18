@@ -13,6 +13,8 @@ public class Watcher
     private readonly ISubject < DateTime > _startedWatching ;
     private readonly IWrapper              _wrapper ;
 
+    private bool _disposed ;
+
     public Watcher ( IWrapper              wrapper ,
                      ISubject < DateTime > started )
     {
@@ -60,8 +62,21 @@ public class Watcher
     /// <inheritdoc />
     public void Dispose ( )
     {
-        _wrapper.Dispose ( ) ;
+        Dispose ( true ) ;
 
         GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            _wrapper.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 }

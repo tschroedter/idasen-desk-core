@@ -66,4 +66,15 @@
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md">
+          <Pack>true</Pack>
+          <PackagePath>README.md</PackagePath>
+        </None>
+    </ItemGroup>
+
 </Project>

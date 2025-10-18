@@ -9,7 +9,7 @@ namespace Idasen.BluetoothLE.Linak ;
 
 /// <inheritdoc />
 [ Intercept ( typeof ( LogAspect ) ) ]
-public class ErrorManager // todo testing, move to more general project
+public class ErrorManager
     : IErrorManager
 {
     private readonly ILogger                    _logger ;

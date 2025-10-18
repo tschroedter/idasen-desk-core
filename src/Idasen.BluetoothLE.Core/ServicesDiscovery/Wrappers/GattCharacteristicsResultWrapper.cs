@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis ;
 using System.Text ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
@@ -20,6 +20,7 @@ public class GattCharacteristicsResultWrapper
 
     private readonly ILogger                   _logger ;
     private readonly GattCharacteristicsResult _result ;
+    private          bool                      _disposed ;
 
     public GattCharacteristicsResultWrapper ( ILogger                           logger ,
                                               IGattCharacteristicWrapperFactory factory ,
@@ -78,9 +79,9 @@ public class GattCharacteristicsResultWrapper
                                       "Failed to initialize GATT characteristic wrapper {Uuid}" ,
                                       w.Uuid ) ;
                 }
-                catch
+                catch ( Exception e )
                 {
-                    _logger.Warning ( ex ,
+                    _logger.Warning ( e,
                                       "Failed to initialize a GATT characteristic wrapper" ) ;
                 }
 
@@ -97,16 +98,28 @@ public class GattCharacteristicsResultWrapper
         return this ;
     }
 
-    public void Dispose ( )
+    public void Dispose()
     {
-        // Dispose individual characteristic wrappers to release event subscriptions
-        if ( Characteristics is { Count: > 0 } )
-            foreach ( var c in Characteristics )
-                c.Dispose ( ) ;
+        Dispose(true);
 
-        Characteristics = [] ;
+        GC.SuppressFinalize(this);
+    }
 
-        GC.SuppressFinalize ( this ) ;
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing) {
+            // Dispose individual characteristic wrappers to release event subscriptions
+            if (Characteristics is { Count: > 0 })
+                foreach (var c in Characteristics)
+                    c.Dispose();
+
+            Characteristics = [];
+        }
+
+        _disposed = true;
     }
 
     public override string ToString ( )

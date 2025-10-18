@@ -2,6 +2,8 @@
 
 [![Build and Test](https://github.com/tschroedter/idasen-desk-core/actions/workflows/ci.yml/badge.svg)](https://github.com/tschroedter/idasen-desk-core/actions/workflows/ci.yml)
 [![Code Quality](https://github.com/tschroedter/idasen-desk-core/actions/workflows/code-quality.yml/badge.svg)](https://github.com/tschroedter/idasen-desk-core/actions/workflows/code-quality.yml)
+[![SonarCloud](https://github.com/tschroedter/idasen-desk-core/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/tschroedter/idasen-desk-core/actions/workflows/sonarcloud.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tschroedter_idasen-desk-core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=tschroedter_idasen-desk-core)
 [![NuGet](https://img.shields.io/nuget/v/Idasen.Desk.Core.svg)](https://www.nuget.org/packages/Idasen.Desk.Core/)
 
 This repository is about controlling Ikea's Idasen Desk using Windows 10 and BluetoothLE. Ikea only provides an Android and IOs app to control the desk. I thought it would be far more convenient to control the desk using a Windows 10 system tray application. This repository contains all the low level code to detect and control the desk. The code is build into a NuGet package and is currently used by:
@@ -48,6 +50,7 @@ This project uses comprehensive GitHub Actions workflows for automated building,
 - **🔍 Code Quality** (`code-quality.yml`) - Static analysis and security scanning
 - **📊 PR Validation** (`pr-validation.yml`) - Pull request validation and reporting
 - **🛡️ Dependency Updates** (`dependency-update.yml`) - Weekly security audits
+- **☁️ SonarCloud Analysis** (`sonarcloud.yml`) - Continuous code quality and security analysis
 
 For detailed information about the workflows, see [Workflows Documentation](.github/WORKFLOWS.md).
 

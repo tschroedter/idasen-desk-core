@@ -9,6 +9,6 @@ public static class ByteArrayExtensions
         Guard.ArgumentNotNull ( array ,
                                 nameof ( array ) ) ;
 
-        return BitConverter.ToString ( array.ToArray ( ) ) ; //.Replace("-", "");
+        return BitConverter.ToString ( array.ToArray ( ) ) ;
     }
 }

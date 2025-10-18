@@ -12,16 +12,14 @@ public class TestCharacteristicBase ( ILogger                              logge
                                       IScheduler                           scheduler ,
                                       IDevice                              device ,
                                       IGattCharacteristicsProviderFactory  providerFactory ,
-                                      IRawValueReader                      rawValueReader ,
-                                      IRawValueWriter                      rawValueWriter ,
+                                      IRawValueHandler                     valueHandler ,
                                       ICharacteristicBaseToStringConverter toStringConverter ,
                                       IDescriptionToUuid                   descriptionToUuid )
     : CharacteristicBase ( logger ,
                            scheduler ,
                            device ,
                            providerFactory ,
-                           rawValueReader ,
-                           rawValueWriter ,
+                           valueHandler ,
                            toStringConverter ,
                            descriptionToUuid )
 {

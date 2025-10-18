@@ -20,6 +20,7 @@ public class GattCharacteristicValueChangedObservables
     private readonly IScheduler                                         _scheduler ;
     private readonly ISubject < GattCharacteristicValueChangedDetails > _subject ;
     private          IDisposable ?                                      _observable ;
+    private          bool                                               _disposed ;
 
     public GattCharacteristicValueChangedObservables ( ILogger                                            logger ,
                                                        IScheduler                                         scheduler ,
@@ -102,8 +103,8 @@ public class GattCharacteristicValueChangedObservables
             }
             catch (UnauthorizedAccessException e)
             {
-                _logger.Warning ( "Access denied - Bluetooth is probably disabled ({Message})" ,
-                                  e.Message ) ;
+                _logger.Warning ( e ,
+                                  "Access denied - Bluetooth is probably disabled" ) ;
             }
             catch ( Exception e )
             {
@@ -116,8 +117,28 @@ public class GattCharacteristicValueChangedObservables
     [ ExcludeFromCodeCoverage ]
     public void Dispose ( )
     {
-        DisposeSubscription ( ) ;
+        Dispose ( true ) ;
         GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            try
+            {
+                DisposeSubscription ( ) ;
+            }
+            catch
+            {
+                // S6667: Dispose must not throw, even if called multiple times or if _observable is already disposed
+            }
+        }
+
+        _disposed = true ;
     }
 
     [ ExcludeFromCodeCoverage ]
@@ -144,7 +165,14 @@ public class GattCharacteristicValueChangedObservables
     [ ExcludeFromCodeCoverage ]
     private void DisposeSubscription ( )
     {
-        _observable?.Dispose ( ) ;
+        try
+        {
+            _observable?.Dispose ( ) ;
+        }
+        catch
+        {
+            // S6667: Dispose must not throw
+        }
         _observable = null ;
     }
 }

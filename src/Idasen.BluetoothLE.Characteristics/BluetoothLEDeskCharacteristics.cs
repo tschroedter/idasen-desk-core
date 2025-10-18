@@ -45,6 +45,7 @@ public sealed class BluetoothLEDeskCharacteristics : Module
         RegisterWithInterceptors < IBufferReader , BufferReader > ( builder ) ;
         RegisterWithInterceptors < IDescriptionToUuid , DescriptionToUuid > ( builder ) ;
         RegisterWithInterceptors < ICharacteristicBaseFactory , CharacteristicBaseFactory > ( builder ) ;
+        RegisterWithInterceptors < IRawValueHandler , RawValueHandler > ( builder ) ;
     }
 
     /// <summary>
