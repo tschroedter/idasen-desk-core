@@ -52,7 +52,7 @@ public class Device
     public void Connect ( )
     {
         if ( ConnectionStatus == BluetoothConnectionStatus.Connected )
-            return ;
+            return ; // to do log?
 
         _wrapper.Connect ( ) ;
     }

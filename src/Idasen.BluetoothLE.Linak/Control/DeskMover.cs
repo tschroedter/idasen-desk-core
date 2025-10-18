@@ -46,11 +46,32 @@ public class DeskMover
 
     private IDisposable ? _rawHeightAndSpeedSubscription ;
 
-    public DeskMover ( ILogger               logger ,
-                       IScheduler            scheduler ,
-                       ISubject < uint >     subjectFinished ,
-                       IDeskLocationHandlers locationHandlers ,
-                       IDeskMovementHandlers movementHandlers )
+    public DeskMover ( ILogger                               logger ,
+                       IScheduler                            scheduler ,
+                       IInitialHeightAndSpeedProviderFactory providerFactory ,
+                       IDeskMovementMonitorFactory           monitorFactory ,
+                       IDeskCommandExecutor                  executor ,
+                       IDeskHeightAndSpeed                   heightAndSpeed ,
+                       IStoppingHeightCalculator             calculator ,
+                       ISubject < uint >                     subjectFinished )
+        : this ( logger ,
+                 scheduler ,
+                 subjectFinished ,
+                 new DeskLocationHandlers ( heightAndSpeed ,
+                                            providerFactory ) ,
+                 new DeskMovementHandlers ( logger ,
+                                            heightAndSpeed ,
+                                            monitorFactory ,
+                                            executor ,
+                                            calculator ) )
+    {
+    }
+
+    internal DeskMover ( ILogger               logger ,
+                         IScheduler            scheduler ,
+                         ISubject < uint >     subjectFinished ,
+                         IDeskLocationHandlers locationHandlers ,
+                         IDeskMovementHandlers movementHandlers )
     {
         Guard.ArgumentNotNull ( logger ,
                                 nameof ( logger ) ) ;
@@ -124,18 +145,16 @@ public class DeskMover
                                                                          } ) ;
 
             var targetReached = _guard.TargetHeightReached ;
-            if ( targetReached != null )
-            {
-                _guardTargetHeightReached = targetReached
-                                                  .ObserveOn ( _scheduler )
-                                                  .Subscribe ( targetHeight =>
-                                                               {
-                                                                   _logger.Information ( "Reached target height={TargetHeight}" ,
-                                                                                         targetHeight ) ;
-                                                                   _engine.StopMoveAsync ( ) ;
-                                                                   StopMovement ( ) ;
-                                                               } ) ;
-            }
+
+            _guardTargetHeightReached = targetReached
+                                              .ObserveOn ( _scheduler )
+                                              .Subscribe ( targetHeight =>
+                                                           {
+                                                               _logger.Information ( "Reached target height={TargetHeight}" ,
+                                                                                     targetHeight ) ;
+                                                               _engine.StopMoveAsync ( ) ;
+                                                               StopMovement ( ) ;
+                                                           } ) ;
         }
     }
 

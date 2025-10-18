@@ -158,6 +158,21 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         }
     }
 
+    /// <inheritdoc />
+    public async Task RefreshGattAsync ( )
+    {
+        try
+        {
+            await GetOrCreateProvider ( ).Refresh ( ) ;
+        }
+        catch ( Exception ex )
+        {
+            _logger.Error ( ex ,
+                            "[{DeviceId}] Error while forcing GATT refresh" ,
+                            DeviceId ) ;
+        }
+    }
+
     protected virtual void Dispose ( bool disposing )
     {
         if ( _disposed )

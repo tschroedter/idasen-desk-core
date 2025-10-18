@@ -127,6 +127,7 @@ public sealed class BluetoothLECoreModule
                .As < IGattServicesProviderFactory > ( )
                .EnableInterfaceInterceptors ( ) ;
 
+        // Register Device so Autofac can auto-generate the typed delegate ServicesDiscovery.Device.Factory
         builder.RegisterType < ServicesDiscovery.Device > ( )
                .As < Interfaces.ServicesDiscovery.IDevice > ( )
                .EnableInterfaceInterceptors ( ) ;
@@ -135,6 +136,7 @@ public sealed class BluetoothLECoreModule
                .As < Interfaces.ServicesDiscovery.IDeviceFactory > ( )
                .EnableInterfaceInterceptors ( ) ;
 
+        // Register wrapper so Autofac can auto-generate BluetoothLeDeviceWrapper.Factory(BluetoothLEDevice)
         builder.RegisterType < BluetoothLeDeviceWrapper > ( )
                .As < IBluetoothLeDeviceWrapper > ( )
                .EnableInterfaceInterceptors ( ) ;

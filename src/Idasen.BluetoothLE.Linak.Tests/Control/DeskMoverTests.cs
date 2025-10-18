@@ -49,11 +49,12 @@ public sealed class DeskMoverTests : IDisposable
 
         _locationHandler = new DeskLocationHandlers ( _heightAndSpeed ,
                                                       _providerFactory ) ;
-        _movementHandler = new DeskMovementHandlers ( _monitorFactory ,
+        _movementHandler = new DeskMovementHandlers ( _logger ,
+                                                      _heightAndSpeed ,
+                                                      _monitorFactory ,
                                                       _executor ,
-                                                      _calculator ,
-                                                      _engine ,
-                                                      _guard ) ;
+                                                      _calculator ) ;
+
 
         _heightAndSpeed.HeightAndSpeedChanged
                        .Returns ( _heightAndSpeedChangedSubject ) ;

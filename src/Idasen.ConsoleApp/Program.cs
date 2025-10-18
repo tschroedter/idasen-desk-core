@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis ;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks ;
 using Autofac ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Idasen.Launcher ;
@@ -44,7 +46,9 @@ internal static class Program
             var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
 
             if ( isSuccess )
+            {
                 desk!.MoveTo ( 7200u ) ;
+            }
             else
                 logger.Error ( "Failed to detect desk" ) ;
 

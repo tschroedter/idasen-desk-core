@@ -8,6 +8,7 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Serilog ;
 using Serilog.Events ;
+using System.Collections.Concurrent ;
 
 namespace Idasen.BluetoothLE.Linak ;
 
@@ -29,6 +30,7 @@ public class DeskConnector
     private readonly IDisposable ?                     _refreshedSubscription ;
     private readonly IScheduler                        _scheduler ;
     private readonly IDeskConnectorSubjects            _subjects;
+    private readonly ConcurrentQueue < Func < IDeskMover , Task > > _pendingMoverActions = new ( ) ;
     private          IDeskLocker ?                     _deskLocker ;
 
     private          IDeskMover ?           _deskMover ;
@@ -149,19 +151,19 @@ public class DeskConnector
     /// <inheritdoc />
     public async Task < bool > MoveUpAsync ( )
     {
-        if ( ! TryGetDeskMover ( out var deskMover ) )
-            return false ;
+        if ( TryGetDeskMover ( out var deskMover ) )
+            return await deskMover!.Up ( ).ConfigureAwait ( false ) ;
 
-        return await deskMover!.Up ( ).ConfigureAwait ( false ) ;
+        return await EnqueueMoverAction ( m => m.Up ( ) ).ConfigureAwait ( false ) ;
     }
 
     /// <inheritdoc />
     public async Task < bool > MoveDownAsync ( )
     {
-        if ( ! TryGetDeskMover ( out var deskMover ) )
-            return false ;
+        if ( TryGetDeskMover ( out var deskMover ) )
+            return await deskMover!.Down ( ).ConfigureAwait ( false ) ;
 
-        return await deskMover!.Down ( ).ConfigureAwait ( false ) ;
+        return await EnqueueMoverAction ( m => m.Down ( ) ).ConfigureAwait ( false ) ;
     }
 
     /// <inheritdoc />
@@ -171,7 +173,17 @@ public class DeskConnector
     public void MoveTo ( uint targetHeight )
     {
         if ( ! TryGetDeskMover ( out var deskMover ) )
+        {
+            _logger.Debug ( "Mover not ready yet; queuing MoveTo({TargetHeight})" ,
+                            targetHeight ) ;
+            _pendingMoverActions.Enqueue ( m =>
+            {
+                m.TargetHeight = targetHeight ;
+                m.Start ( ) ;
+                return Task.CompletedTask ;
+            } ) ;
             return ;
+        }
 
         deskMover!.TargetHeight = targetHeight ;
 
@@ -185,10 +197,10 @@ public class DeskConnector
     /// <inheritdoc />
     public async Task < bool > MoveStopAsync ( )
     {
-        if ( ! TryGetDeskMover ( out var deskMover ) )
-            return false ;
+        if ( TryGetDeskMover ( out var deskMover ) )
+            return await deskMover!.StopMovement ( ).ConfigureAwait ( false ) ;
 
-        return await deskMover!.StopMovement ( ).ConfigureAwait ( false ) ;
+        return await EnqueueMoverAction ( m => m.StopMovement ( ) ).ConfigureAwait ( false ) ;
     }
 
     /// <inheritdoc />
@@ -217,7 +229,7 @@ public class DeskConnector
     {
         if ( _deskMover == null )
         {
-            _logger.Error ( "Desk needs to be refreshed first" ) ;
+            _logger.Debug ( "Desk mover not ready; actions will be queued until refresh completes" ) ;
 
             deskMover = null ;
 
@@ -263,7 +275,8 @@ public class DeskConnector
                 _logger.Debug ( e ,
                                 message ) ;
             else
-                _logger.Warning ( message ) ;
+                _logger.Warning ( e, 
+                                  message ) ;
 
             _errorManager.PublishForMessage(message);
 
@@ -328,6 +341,8 @@ public class DeskConnector
 
         _deskLocker.Initialize ( ) ;
 
+        await DrainPendingMoverActionsAsync ( ).ConfigureAwait ( false ) ;
+
         _subjects.RefreshedChanged
                  .OnNext ( true ) ;
     }
@@ -335,5 +350,49 @@ public class DeskConnector
     private void OnDeviceNameChanged ( IEnumerable < byte > value )
     {
         _deviceNameChanged.OnNext ( value ) ;
+    }
+
+    private Task < bool > EnqueueMoverAction ( Func < IDeskMover , Task < bool > > work )
+    {
+        var tcs = new TaskCompletionSource < bool > ( TaskCreationOptions.RunContinuationsAsynchronously ) ;
+
+        _pendingMoverActions.Enqueue ( async m =>
+                                       {
+                                           try
+                                           {
+                                               var result = await work ( m ).ConfigureAwait ( false ) ;
+                                               tcs.TrySetResult ( result ) ;
+                                           }
+                                           catch ( Exception ex )
+                                           {
+                                               _logger.Error ( ex ,
+                                                               "Queued mover action failed" ) ;
+                                               tcs.TrySetResult ( false ) ;
+                                           }
+                                       } ) ;
+
+        _logger.Debug ( "Queued mover action until refresh completes" ) ;
+
+        return tcs.Task ;
+    }
+
+    private async Task DrainPendingMoverActionsAsync ( )
+    {
+        var mover = _deskMover ;
+        if ( mover == null )
+            return ;
+
+        while ( _pendingMoverActions.TryDequeue ( out var action ) )
+        {
+            try
+            {
+                await action ( mover ).ConfigureAwait ( false ) ;
+            }
+            catch ( Exception ex )
+            {
+                _logger.Error ( ex ,
+                                "Error executing queued mover action" ) ;
+            }
+        }
     }
 }
