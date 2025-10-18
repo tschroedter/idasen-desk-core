@@ -104,32 +104,38 @@ public class DeskMover
             _initialProvider?.Dispose ( ) ;
             _initialProvider = _providerFactory.Create ( _executor ,
                                                          _heightAndSpeed ) ;
-            _initialProvider.Initialize ( ) ;
+            if ( _initialProvider != null )
+            {
+                _initialProvider.Initialize ( ) ;
 
-            _disposableProvider?.Dispose ( ) ;
-            _disposableProvider = _initialProvider.Finished
-                                                  .ObserveOn ( _scheduler )
-                                                  .SubscribeAsync ( OnFinished ) ;
+                _disposableProvider?.Dispose ( ) ;
+                _disposableProvider = _initialProvider.Finished
+                                                      .ObserveOn ( _scheduler )
+                                                      .SubscribeAsync ( OnFinished ) ;
+            }
 
             // Global raw subscription to reflect latest Height/Speed for observers/tests
             _rawHeightAndSpeedSubscription?.Dispose ( ) ;
             _rawHeightAndSpeedSubscription = _heightAndSpeed.HeightAndSpeedChanged
-                                                            .ObserveOn ( _scheduler )
                                                             .Subscribe ( d =>
                                                                          {
                                                                              Height = d.Height ;
                                                                              Speed  = d.Speed ;
                                                                          } ) ;
 
-            _guardTargetHeightReached = _guard.TargetHeightReached
-                                              .ObserveOn ( _scheduler )
-                                              .Subscribe ( targetHeight =>
-                                                           {
-                                                               _logger.Information ( "Reached target height={TargetHeight}" ,
-                                                                                     targetHeight ) ;
-                                                               _engine.StopMoveAsync ( ) ;
-                                                               StopMovement ( ) ;
-                                                           } ) ;
+            var targetReached = _guard.TargetHeightReached ;
+            if ( targetReached != null )
+            {
+                _guardTargetHeightReached = targetReached
+                                                  .ObserveOn ( _scheduler )
+                                                  .Subscribe ( targetHeight =>
+                                                               {
+                                                                   _logger.Information ( "Reached target height={TargetHeight}" ,
+                                                                                         targetHeight ) ;
+                                                                   _engine.StopMoveAsync ( ) ;
+                                                                   StopMovement ( ) ;
+                                                               } ) ;
+            }
         }
     }
 
@@ -277,9 +283,7 @@ public class DeskMover
 
     private async Task OnFinished ( uint height )
     {
-        Height   = height ;
-        Speed    = 0 ;
-
+        // Do not override Height/Speed here; rely on raw subscription to reflect latest values.
         await StartAfterReceivingCurrentHeight ( height ,
                                                  0 ) ;
     }
