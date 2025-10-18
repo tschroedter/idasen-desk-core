@@ -108,12 +108,21 @@ public class ReferenceOutput
 
         var rawValue = GetValueOrEmpty ( HeightSpeed ).ToArray ( ) ;
 
-        var details = new RawValueChangedDetails ( HeightSpeed ,
-                                                   rawValue ,
-                                                   DateTimeOffset.Now ,
-                                                   GattServiceUuid ) ;
+        // Only emit an initial event if we have a complete payload (4 bytes). Otherwise wait for Notify.
+        if ( rawValue.Length == 4 )
+        {
+            var details = new RawValueChangedDetails ( HeightSpeed ,
+                                                       rawValue ,
+                                                       DateTimeOffset.Now ,
+                                                       GattServiceUuid ) ;
 
-        _subjectHeightSpeed.OnNext ( details ) ;
+            _subjectHeightSpeed.OnNext ( details ) ;
+        }
+        else
+        {
+            Logger.Debug ( "Skipping initial HeightSpeed publish due to incomplete payload (Length={Length})" ,
+                           rawValue.Length ) ;
+        }
     }
 
     protected override void Dispose ( bool disposing )
