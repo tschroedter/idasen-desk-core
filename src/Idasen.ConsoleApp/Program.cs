@@ -1,6 +1,4 @@
 using System.Diagnostics.CodeAnalysis ;
-using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks ;
 using Autofac ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Idasen.Launcher ;

@@ -1,4 +1,3 @@
-using System.Data.Common;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Linak.Control ;
