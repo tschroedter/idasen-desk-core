@@ -1,0 +1,85 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Analysis
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: .
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis relevancy
+
+      - name: Setup .NET 8.x SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\NuGet\v3-cache
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Install SonarCloud scanner
+        run: |
+          if (!(Test-Path ".\.sonar\scanner")) {
+            New-Item -ItemType Directory -Path .\.sonar\scanner -Force | Out-Null
+          }
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
+      - name: Install coverage tool
+        run: dotnet tool install --global dotnet-coverage
+
+      - name: .NET info
+        run: dotnet --info
+
+      - name: Restore dependencies
+        run: dotnet restore src/idasen-desk-core.sln
+
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"tschroedter_idasen-desk-core" /o:"$Env:SONAR_ORGANIZATION" /d:sonar.token="$Env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./TestResults/**/*.opencover.xml" /d:sonar.cs.roslyn.ignoreIssues=true /d:sonar.issue.ignore.multicriteria=roslyn_ide0058_tests /d:sonar.issue.ignore.multicriteria.roslyn_ide0058_tests.resourceKey=**/*.Tests/**/* /d:sonar.issue.ignore.multicriteria.roslyn_ide0058_tests.ruleKey=csharpsquid:S1118,roslyn:IDE0058
+          dotnet build src/idasen-desk-core.sln --configuration Release --no-restore
+          dotnet test src/idasen-desk-core.sln --configuration Release --no-build --verbosity detailed --collect:"XPlat Code Coverage;Format=opencover" --results-directory ./TestResults/ /p:Exclude="[*.Tests]*" /p:ExcludeByAttribute=Obsolete /p:ExcludeByAttribute=ObsoleteAttribute /p:ExcludeByAttribute=GeneratedCodeAttribute /p:ExcludeByAttribute=CompilerGeneratedAttribute /p:ExcludeByAttribute=ExcludeFromCodeCoverage /p:ExcludeByAttribute=ExcludeFromCodeCoverageAttribute
+
+          echo "Listing contents of TestResults directory:"
+          Get-ChildItem -Path ./TestResults/ -Recurse | Format-List
+          echo "End of TestResults directory contents."
+          echo "Contents of coverage.opencover.xml:"
+          Get-Content -Path ./TestResults/**/*.opencover.xml
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$Env:SONAR_TOKEN"

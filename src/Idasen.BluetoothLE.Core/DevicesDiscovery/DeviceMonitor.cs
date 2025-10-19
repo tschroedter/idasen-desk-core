@@ -27,6 +27,8 @@ public class DeviceMonitor
     private IDisposable ? _disposableStopped ;
     private IDisposable ? _disposableUpdated ;
 
+    private bool _disposed ;
+
     public DeviceMonitor ( ILogger                       logger ,
                            IScheduler                    scheduler ,
                            Func < ISubject < IDevice > > factory ,
@@ -98,17 +100,44 @@ public class DeviceMonitor
     /// <inheritdoc />
     public void Dispose ( )
     {
-        Unsubscribe ( ) ;
-
-        // complete subjects to avoid observers waiting forever
-        _deviceDiscovered.OnCompleted ( ) ;
-        _deviceUpdated.OnCompleted ( ) ;
-        _deviceNameUpdated.OnCompleted ( ) ;
-
-        _watcher.Dispose ( ) ;
-        _devices.Clear ( ) ;
+        Dispose ( true ) ;
 
         GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            Unsubscribe ( ) ;
+
+            // complete subjects to avoid observers waiting forever
+            try
+            {
+                _deviceDiscovered.OnCompleted ( ) ;
+            }
+            catch { /* best-effort */ }
+
+            try
+            {
+                _deviceUpdated.OnCompleted ( ) ;
+            }
+            catch { /* best-effort */ }
+
+            try
+            {
+                _deviceNameUpdated.OnCompleted ( ) ;
+            }
+            catch { /* best-effort */ }
+
+            _watcher.Dispose ( ) ;
+            _devices.Clear ( ) ;
+        }
+
+        _disposed = true ;
     }
 
     private void Subscribe ( )
@@ -133,6 +162,9 @@ public class DeviceMonitor
         _disposableStarted?.Dispose ( ) ;
         _disposableStopped?.Dispose ( ) ;
         _disposableUpdated?.Dispose ( ) ;
+        _disposableStarted = null ;
+        _disposableStopped = null ;
+        _disposableUpdated = null ;
     }
 
     private void OnDeviceUpdated ( IDevice device )

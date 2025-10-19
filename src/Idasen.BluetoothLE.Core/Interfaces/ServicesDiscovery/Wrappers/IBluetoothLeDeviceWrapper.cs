@@ -68,4 +68,9 @@ public interface IBluetoothLeDeviceWrapper
     /// </summary>
     /// <returns></returns>
     Task < IGattDeviceServicesResultWrapper > GetGattServicesAsync ( ) ;
+
+    /// <summary>
+    ///     Force a GATT services refresh.
+    /// </summary>
+    Task RefreshGattAsync ( ) ;
 }

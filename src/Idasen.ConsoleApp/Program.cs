@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis ;
 using Autofac ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Idasen.Launcher ;
@@ -8,7 +9,8 @@ using static System.Console ;
 
 namespace Idasen.ConsoleApp ;
 
-internal sealed class Program
+[ ExcludeFromCodeCoverage ]
+internal static class Program
 {
     private const string DefaultDeviceName              = "Desk" ;
     private const ulong  DefaultDeviceAddress           = 250635178951455u ;
@@ -42,7 +44,9 @@ internal sealed class Program
             var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
 
             if ( isSuccess )
+            {
                 desk!.MoveTo ( 7200u ) ;
+            }
             else
                 logger.Error ( "Failed to detect desk" ) ;
 

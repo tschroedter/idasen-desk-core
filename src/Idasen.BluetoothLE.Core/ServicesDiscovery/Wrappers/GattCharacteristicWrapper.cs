@@ -22,6 +22,8 @@ public class GattCharacteristicWrapper
     private readonly IGattReadResultWrapperFactory              _readResultFactory ;
     private readonly IGattWriteResultWrapperFactory             _writeResultFactory ;
 
+    private bool _disposed ;
+
     public GattCharacteristicWrapper ( ILogger                                    logger ,
                                        GattCharacteristic                         characteristic ,
                                        IGattCharacteristicValueChangedObservables observables ,
@@ -98,7 +100,21 @@ public class GattCharacteristicWrapper
 
     public void Dispose ( )
     {
-        _observables.Dispose ( ) ;
+        Dispose ( true ) ;
+
         GC.SuppressFinalize ( this ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            _observables.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 }

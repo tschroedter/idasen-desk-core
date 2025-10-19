@@ -105,40 +105,44 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
             return "out " ;
 
         // IsByRef is true for ref/out
-        return p.ParameterType.IsByRef
-                   ? "ref "
-                   : p.IsDefined ( typeof ( ParamArrayAttribute ) ,
-                                   false )
-                       ? "params "
-                       : string.Empty ;
+        if ( p.ParameterType.IsByRef )
+        {
+            return "ref " ;
+        }
+
+        return p.IsDefined ( typeof ( ParamArrayAttribute ) , false )
+                   ? "params "
+                   : string.Empty ;
     }
 
     private static string ToValueString ( object ? value )
     {
         if ( value is null )
+        {
             return "null" ;
+        }
 
         // Mask sensitive data based on type or name
         if ( value is string strValue &&
-             strValue.IsSensitiveData( ) )
+             strValue.IsSensitiveData ( ) )
+        {
             return "[REDACTED]" ;
+        }
 
         // Arrays -> length in brackets, e.g., [100]
         if ( value is Array array )
         {
-            if ( array.Length > 1000 ) // Safeguard for large arrays
-                return "[Array too large to process]" ;
-
-            return $"[{array.Length}]" ;
+            return array.Length > 1000 // Safeguard for large arrays
+                       ? "[Array too large to process]"
+                       : $"[{array.Length}]" ;
         }
 
         // Non-generic IDictionary -> number of keys in brackets
         if ( value is IDictionary dict )
         {
-            if ( dict.Count > 1000 ) // Safeguard for large dictionaries
-                return "[Dictionary too large to process]" ;
-
-            return $"[{dict.Count}]" ;
+            return dict.Count > 1000 // Safeguard for large dictionaries
+                       ? "[Dictionary too large to process]"
+                       : $"[{dict.Count}]" ;
         }
 
         // Generic IDictionary<,> or IReadOnlyDictionary<,> -> use Count
@@ -146,28 +150,30 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
         if ( genericDictCount.HasValue )
         {
-            if ( genericDictCount.Value > 1000 ) // Safeguard for large generic dictionaries
-                return "[Generic Dictionary too large to process]" ;
-
-            return $"[{genericDictCount.Value}]" ;
+            return genericDictCount.Value > 1000 // Safeguard for large generic dictionaries
+                       ? "[Generic Dictionary too large to process]"
+                       : $"[{genericDictCount.Value}]" ;
         }
 
         // Other IEnumerable -> log count of items if possible
-        if ( value is IEnumerable enumerable &&
-             value is not string )
+        if ( value is not IEnumerable enumerable ||
+             value is string )
         {
-            var count = enumerable.Cast < object > ( ).Take ( 1000 ).Count ( ) ; // Limit to 1000 items for performance
-            return $"enumerable[{count}]" ;
+            return value.ToString ( ) ?? value.GetType ( ).Name ;
         }
 
+        var count = enumerable.Cast < object > ( ).Take ( 1000 ).Count ( ) ; // Limit to 1000 items for performance
+        return $"enumerable[{count}]" ;
+
         // Fallback: plain ToString
-        return value.ToString ( ) ?? value.GetType ( ).Name ;
     }
 
     private static int ? TryGetGenericDictionaryCount ( object ? value )
     {
         if ( value == null )
+        {
             return null ;
+        }
 
         var t = value.GetType ( ) ;
 

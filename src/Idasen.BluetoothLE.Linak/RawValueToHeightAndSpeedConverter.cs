@@ -83,7 +83,7 @@ public class RawValueToHeightAndSpeedConverter
             if ( i < 4 )
             {
                 // Only allocate for logging on failure
-                var hex = enumerable.ToArray ( ).ToHex ( ) ;
+                var hex = enumerable.ToHex ( ) ;
                 _logger.Warning ( "Failed to convert raw value {Hex} to height and speed. Payload too short ({Length})" ,
                                   hex ,
                                   i ) ;
@@ -104,7 +104,7 @@ public class RawValueToHeightAndSpeedConverter
             // Allocate only for logging
             var hex = bytes is byte [ ] a
                           ? a.ToHex ( )
-                          : enumerable.ToArray ( ).ToHex ( ) ;
+                          : enumerable.ToHex ( ) ;
             _logger.Warning ( e ,
                               "Failed to convert raw value {Hex} to height and speed" ,
                               hex ) ;

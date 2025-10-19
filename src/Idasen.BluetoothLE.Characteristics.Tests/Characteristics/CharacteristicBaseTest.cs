@@ -1,7 +1,6 @@
 using Windows.Storage.Streams ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using JetBrains.Annotations ;
@@ -52,8 +51,7 @@ public class CharacteristicBaseTest
         Action action = ( ) => sut.Initialize < TestCharacteristicBase > ( ) ;
 
         action.Should ( )
-              .Throw < ArgumentException > ( )
-              .WithParameter ( "GattServiceUuid" ) ;
+              .Throw < InvalidOperationException > ( ) ;
     }
 
     [ TestMethod ]
@@ -312,8 +310,7 @@ public class CharacteristicBaseTest
                                             Scheduler ,
                                             Device ,
                                             ProviderFactory ,
-                                            RawValueReader ,
-                                            RawValueWriter ,
+                                            RawValueHandler ,
                                             ToStringConverter ,
                                             DescriptionToUuid ) ;
     }

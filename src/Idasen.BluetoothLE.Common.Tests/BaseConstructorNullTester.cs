@@ -23,7 +23,7 @@ public abstract class BaseConstructorNullTester < T >
         NumberOfConstructorsFailed = numberOfConstructorsFailed ;
     }
 
-    public virtual int NumberOfConstructorsPassed { get ; } = 1 ;
+    public virtual int NumberOfConstructorsPassed { get ; }
     public virtual int NumberOfConstructorsFailed { get ; }
 
     protected IContainer Container =>

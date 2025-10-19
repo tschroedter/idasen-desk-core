@@ -95,8 +95,7 @@ public class ControlTest
                              Scheduler ,
                              Device ,
                              ProviderFactory ,
-                             RawValueReader ,
-                             RawValueWriter ,
+                             RawValueHandler ,
                              ToStringConverter ,
                              DescriptionToUuid ) ;
     }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis ;
 using Serilog ;
 using Serilog.Configuration ;
 
@@ -6,6 +7,7 @@ namespace Idasen.Launcher ;
 /// <summary>
 ///     Extension methods for configuring Serilog caller enrichment.
 /// </summary>
+[ ExcludeFromCodeCoverage ]
 public static class LoggerCallerEnrichmentConfiguration
 {
     /// <summary>

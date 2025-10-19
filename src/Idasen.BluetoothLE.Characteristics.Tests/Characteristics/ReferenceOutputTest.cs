@@ -394,8 +394,7 @@ public class ReferenceOutputTest
                                      scheduler ,
                                      Device ,
                                      ProviderFactory ,
-                                     RawValueReader ,
-                                     RawValueWriter ,
+                                     RawValueHandler,
                                      ToStringConverter ,
                                      DescriptionToUuid ,
                                      subject ) ;
@@ -407,8 +406,7 @@ public class ReferenceOutputTest
                                      Scheduler ,
                                      Device ,
                                      ProviderFactory ,
-                                     RawValueReader ,
-                                     RawValueWriter ,
+                                     RawValueHandler ,
                                      ToStringConverter ,
                                      DescriptionToUuid ,
                                      _subjectHeightSpeed ) ;
