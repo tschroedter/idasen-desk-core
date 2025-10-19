@@ -17,8 +17,8 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 public class DeskMover
     : IDeskMover
 {
-    public delegate IDeskMover Factory ( IDeskCommandExecutor executor ,
-                                         IDeskHeightAndSpeed  heightAndSpeed ) ;
+    public delegate IDeskMover Factory ( IDeskLocationHandlers locationHandlers ,
+                                         IDeskMovementHandlers movementHandlers ) ;
 
     private readonly IStoppingHeightCalculator _calculator ;
 
@@ -46,46 +46,7 @@ public class DeskMover
 
     private IDisposable ? _rawHeightAndSpeedSubscription ;
 
-    public DeskMover ( ILogger                               logger ,
-                       IScheduler                            scheduler ,
-                       IInitialHeightAndSpeedProviderFactory providerFactory ,
-                       IDeskMovementMonitorFactory           monitorFactory ,
-                       IDeskCommandExecutor                  executor ,
-                       IDeskHeightAndSpeed                   heightAndSpeed ,
-                       IStoppingHeightCalculator             calculator ,
-                       ISubject < uint >                     subjectFinished )
-        : this ( logger ,
-                 scheduler ,
-                 subjectFinished ,
-                 new DeskLocationHandlers ( heightAndSpeed ,
-                                            providerFactory ) ,
-                 new DeskMovementHandlers ( logger ,
-                                            heightAndSpeed ,
-                                            monitorFactory ,
-                                            executor ,
-                                            calculator ) )
-    {
-        Guard.ArgumentNotNull ( logger ,
-                                nameof ( logger ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( scheduler ,
-                                nameof ( scheduler ) ) ;
-        Guard.ArgumentNotNull ( providerFactory ,
-                                nameof ( providerFactory ) ) ;
-        Guard.ArgumentNotNull ( monitorFactory ,
-                                nameof ( monitorFactory ) ) ;
-        Guard.ArgumentNotNull ( executor ,
-                                nameof ( executor ) ) ;
-        Guard.ArgumentNotNull ( heightAndSpeed ,
-                                nameof ( heightAndSpeed ) ) ;
-        Guard.ArgumentNotNull ( calculator ,
-                                nameof ( calculator ) ) ;
-        Guard.ArgumentNotNull ( subjectFinished ,
-                                nameof ( subjectFinished ) ) ;
-    }
-
-    internal DeskMover ( ILogger               logger ,
+    public DeskMover ( ILogger               logger ,
                          IScheduler            scheduler ,
                          ISubject < uint >     subjectFinished ,
                          IDeskLocationHandlers locationHandlers ,
