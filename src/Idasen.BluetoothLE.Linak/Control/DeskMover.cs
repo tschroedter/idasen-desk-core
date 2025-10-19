@@ -65,6 +65,24 @@ public class DeskMover
                                             executor ,
                                             calculator ) )
     {
+        Guard.ArgumentNotNull ( logger ,
+                                nameof ( logger ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( scheduler ,
+                                nameof ( scheduler ) ) ;
+        Guard.ArgumentNotNull ( providerFactory ,
+                                nameof ( providerFactory ) ) ;
+        Guard.ArgumentNotNull ( monitorFactory ,
+                                nameof ( monitorFactory ) ) ;
+        Guard.ArgumentNotNull ( executor ,
+                                nameof ( executor ) ) ;
+        Guard.ArgumentNotNull ( heightAndSpeed ,
+                                nameof ( heightAndSpeed ) ) ;
+        Guard.ArgumentNotNull ( calculator ,
+                                nameof ( calculator ) ) ;
+        Guard.ArgumentNotNull ( subjectFinished ,
+                                nameof ( subjectFinished ) ) ;
     }
 
     internal DeskMover ( ILogger               logger ,
@@ -90,7 +108,7 @@ public class DeskMover
         _providerFactory = locationHandlers.ProviderFactory ;
         _heightAndSpeed  = locationHandlers.HeightAndSpeed ;
         _monitorFactory  = movementHandlers.MonitorFactory ;
-        _executor        = movementHandlers.CommandExecutor ;
+        _executor        = movementHandlers.Executor ;
         _calculator      = movementHandlers.Calculator ;
         _engine          = movementHandlers.MoveEngine ;
         _guard           = movementHandlers.MoveGuard ;
