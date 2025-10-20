@@ -130,11 +130,11 @@ public sealed class DeskConnectorTests : IDisposable
                                                    _refreshedSubject ,
                                                    _heightSpeedSubject ) ;
 
-        var factories = Substitute.For<IDeskConnectorFactories>();
-        factories.HeightAndSpeedFactory.Returns(_heightAndSpeedFactory);
-        factories.CommandExecutorFactory.Returns(_commandExecutorFactory);
-        factories.MoverFactory.Returns(_moverFactory);
-        factories.LockerFactory.Returns(_deskLockerFactory);
+        var factories = Substitute.For < IDeskConnectorFactories > ( ) ;
+        factories.HeightAndSpeedFactory.Returns ( _heightAndSpeedFactory ) ;
+        factories.CommandExecutorFactory.Returns ( _commandExecutorFactory ) ;
+        factories.MoverFactory.Returns ( _moverFactory ) ;
+        factories.LockerFactory.Returns ( _deskLockerFactory ) ;
 
         return new DeskConnector ( _logger ,
                                    _scheduler ,
@@ -329,8 +329,8 @@ public sealed class DeskConnectorTests : IDisposable
     {
         using var sut = CreateSut ( ) ;
 
-        uint? receivedHeight = null ;
-        using var subscription = sut.HeightChanged.Subscribe ( v => receivedHeight = v ) ;
+        uint ?    receivedHeight = null ;
+        using var subscription   = sut.HeightChanged.Subscribe ( v => receivedHeight = v ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
@@ -345,15 +345,15 @@ public sealed class DeskConnectorTests : IDisposable
     {
         using var sut = CreateSut ( ) ;
 
-        int? receivedSpeed = null ;
-        using var subscription = sut.SpeedChanged.Subscribe ( v => receivedSpeed = v ) ;
+        int ?     receivedSpeed = null ;
+        using var subscription  = sut.SpeedChanged.Subscribe ( v => receivedSpeed = v ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
         _speedChanged.OnNext ( 10 ) ;
 
-        await Task.Delay(10); // Ensure the value is propagated
+        await Task.Delay ( 10 ) ; // Ensure the value is propagated
 
         receivedSpeed.Should ( ).Be ( 10 ) ;
     }
@@ -364,7 +364,7 @@ public sealed class DeskConnectorTests : IDisposable
         using var sut = CreateSut ( ) ;
 
         HeightSpeedDetails ? receivedDetails = null ;
-        using var subscription = sut.HeightAndSpeedChanged.Subscribe ( v => receivedDetails = v ) ;
+        using var            subscription    = sut.HeightAndSpeedChanged.Subscribe ( v => receivedDetails = v ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
@@ -374,7 +374,7 @@ public sealed class DeskConnectorTests : IDisposable
                                                5 ) ;
         _heightAndSpeedChanged.OnNext ( details ) ;
 
-        await Task.Delay(10); // Ensure the value is propagated
+        await Task.Delay ( 10 ) ; // Ensure the value is propagated
 
         receivedDetails.Should ( ).NotBeNull ( ) ;
         receivedDetails!.Height.Should ( ).Be ( 100u ) ;
@@ -386,15 +386,15 @@ public sealed class DeskConnectorTests : IDisposable
     {
         using var sut = CreateSut ( ) ;
 
-        uint? receivedFinished = null ;
-        using var subscription = sut.FinishedChanged.Subscribe ( v => receivedFinished = v ) ;
+        uint ?    receivedFinished = null ;
+        using var subscription     = sut.FinishedChanged.Subscribe ( v => receivedFinished = v ) ;
 
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
         _moverFinished.OnNext ( 123u ) ;
 
-        await Task.Delay(10); // Ensure the value is propagated
+        await Task.Delay ( 10 ) ; // Ensure the value is propagated
 
         receivedFinished.Should ( ).Be ( 123u ) ;
     }
@@ -404,161 +404,261 @@ public sealed class DeskConnectorTests : IDisposable
     {
         using var sut = CreateSut ( ) ;
 
-        bool? receivedRefreshed = null ;
-        using var subscription = sut.RefreshedChanged.Subscribe ( v => receivedRefreshed = v ) ;
+        bool ?    receivedRefreshed = null ;
+        using var subscription      = sut.RefreshedChanged.Subscribe ( v => receivedRefreshed = v ) ;
 
         _refreshedSubject.OnNext ( true ) ;
 
-        await Task.Delay(10); // Ensure the value is propagated
+        await Task.Delay ( 10 ) ; // Ensure the value is propagated
 
         receivedRefreshed.Should ( ).BeTrue ( ) ;
     }
 
     [ TestMethod ]
-    public void Connect_CallsDeviceConnect()
+    public void Connect_CallsDeviceConnect ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        sut.Connect();
+        sut.Connect ( ) ;
 
-        _device.Received(1).Connect();
+        _device.Received ( 1 ).Connect ( ) ;
     }
 
     [ TestMethod ]
-    public async Task MoveUpAsync_CallsMoverUp()
+    public async Task MoveUpAsync_CallsMoverUp ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        _mover.Up().Returns(Task.FromResult(true));
+        _mover.Up ( ).Returns ( Task.FromResult ( true ) ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        var result = await sut.MoveUpAsync();
+        var result = await sut.MoveUpAsync ( ) ;
 
-        result.Should().BeTrue();
-        await _mover.Received(1).Up();
+        result.Should ( ).BeTrue ( ) ;
+        await _mover.Received ( 1 ).Up ( ) ;
     }
 
     [ TestMethod ]
-    public async Task MoveDownAsync_CallsMoverDown()
+    public async Task MoveDownAsync_CallsMoverDown ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        _mover.Down().Returns(Task.FromResult(true));
+        _mover.Down ( ).Returns ( Task.FromResult ( true ) ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        var result = await sut.MoveDownAsync();
+        var result = await sut.MoveDownAsync ( ) ;
 
-        result.Should().BeTrue();
-        await _mover.Received(1).Down();
+        result.Should ( ).BeTrue ( ) ;
+        await _mover.Received ( 1 ).Down ( ) ;
     }
 
     [ TestMethod ]
-    public async Task MoveTo_SetsTargetHeightAndStarts()
+    public async Task MoveTo_SetsTargetHeightAndStarts ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        sut.MoveTo(100u);
+        sut.MoveTo ( 100u ) ;
 
-        _mover.Received(1).TargetHeight = 100u;
-        _mover.Received(1).Start();
+        _mover.Received ( 1 ).TargetHeight = 100u ;
+        _mover.Received ( 1 ).Start ( ) ;
     }
 
     [ TestMethod ]
-    public async Task MoveTo_ZeroHeight_ThrowsException()
+    public async Task MoveTo_ZeroHeight_ThrowsException ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        Action act = () => sut.MoveTo(0u);
+        var act = ( ) => sut.MoveTo ( 0u ) ;
 
-        act.Should().Throw<ArgumentException>().WithMessage("TargetHeight can't be zero (Parameter 'targetHeight')");
+        act.Should ( ).Throw < ArgumentException > ( )
+           .WithMessage ( "TargetHeight can't be zero (Parameter 'targetHeight')" ) ;
     }
 
     [ TestMethod ]
-    public async Task MoveStopAsync_CallsMoverStopMovement()
+    public async Task MoveStopAsync_CallsMoverStopMovement ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        _mover.StopMovement().Returns(Task.FromResult(true));
+        _mover.StopMovement ( ).Returns ( Task.FromResult ( true ) ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        var result = await sut.MoveStopAsync();
+        var result = await sut.MoveStopAsync ( ) ;
 
-        result.Should().BeTrue();
-        await _mover.Received(1).StopMovement();
+        result.Should ( ).BeTrue ( ) ;
+        await _mover.Received ( 1 ).StopMovement ( ) ;
     }
 
-    [TestMethod]
-    public async Task MoveLockAsync_CallsLockerLock()
+    [ TestMethod ]
+    public async Task MoveLockAsync_CallsLockerLock ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        var result = await sut.MoveLockAsync();
+        var result = await sut.MoveLockAsync ( ) ;
 
-        result.Should().BeTrue();
-        _deskLocker.Received(1).Lock();
+        result.Should ( ).BeTrue ( ) ;
+        _deskLocker.Received ( 1 ).Lock ( ) ;
     }
 
-    [TestMethod]
-    public async Task MoveUnlockAsync_CallsLockerUnlock()
+    [ TestMethod ]
+    public async Task MoveUnlockAsync_CallsLockerUnlock ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        var result = await sut.MoveUnlockAsync();
+        var result = await sut.MoveUnlockAsync ( ) ;
 
-        result.Should().BeTrue();
-        _deskLocker.Received(1).Unlock();
+        result.Should ( ).BeTrue ( ) ;
+        _deskLocker.Received ( 1 ).Unlock ( ) ;
     }
 
-    [TestMethod]
-    public async Task OnGattServicesRefreshed_StatusNotSuccess_SetsRefreshedChangedToFalse()
+    [ TestMethod ]
+    public async Task OnGattServicesRefreshed_StatusNotSuccess_SetsRefreshedChangedToFalse ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        bool? refreshedChanged = null;
-        using var subscription = sut.RefreshedChanged.Subscribe(v => refreshedChanged = v);
+        bool ?    refreshedChanged = null ;
+        using var subscription     = sut.RefreshedChanged.Subscribe ( v => refreshedChanged = v ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Unreachable);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Unreachable ) ;
 
-        refreshedChanged.Should().BeFalse();
+        refreshedChanged.Should ( ).BeFalse ( ) ;
     }
 
-    [TestMethod]
-    public async Task OnGattServicesRefreshed_StatusSuccess_CallsDoRefresh()
+    [ TestMethod ]
+    public async Task OnGattServicesRefreshed_StatusSuccess_CallsDoRefresh ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        bool? refreshedChanged = null;
-        using var subscription = sut.RefreshedChanged.Subscribe(v => refreshedChanged = v);
+        bool ?    refreshedChanged = null ;
+        using var subscription     = sut.RefreshedChanged.Subscribe ( v => refreshedChanged = v ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        refreshedChanged.Should().BeTrue();
+        refreshedChanged.Should ( ).BeTrue ( ) ;
     }
 
-    [TestMethod]
-    public async Task OnGattServicesRefreshed_ExceptionThrown_LogsErrorAndSetsRefreshedChangedToFalse()
+    [ TestMethod ]
+    public async Task OnGattServicesRefreshed_ExceptionThrown_LogsErrorAndSetsRefreshedChangedToFalse ( )
     {
-        using var sut = CreateSut();
+        using var sut = CreateSut ( ) ;
 
-        _deskCharacteristics.Refresh().Returns(Task.FromException(new InvalidOperationException("Test exception")));
+        _deskCharacteristics.Refresh ( )
+                            .Returns ( Task.FromException ( new InvalidOperationException ( "Test exception" ) ) ) ;
 
-        bool? refreshedChanged = null;
-        using var subscription = sut.RefreshedChanged.Subscribe(v => refreshedChanged = v);
+        bool ?    refreshedChanged = null ;
+        using var subscription     = sut.RefreshedChanged.Subscribe ( v => refreshedChanged = v ) ;
 
-        await InvokeOnGattServicesRefreshedAsync(sut, GattCommunicationStatus.Success);
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
 
-        _logger.Received(1).Warning("Failed to refresh Gatt services");
-        refreshedChanged.Should().BeFalse();
+        _logger.Received ( 1 ).Warning ( "Failed to refresh Gatt services" ) ;
+        refreshedChanged.Should ( ).BeFalse ( ) ;
+    }
+
+    // New tests to improve coverage
+
+    [ TestMethod ]
+    public void Properties_Forwarded_From_Device ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        _device.BluetoothAddress.Returns ( 123UL ) ;
+        _device.BluetoothAddressType.Returns ( "Public" ) ;
+        _device.Name.Returns ( "MyDesk" ) ;
+
+        sut.BluetoothAddress.Should ( ).Be ( 123UL ) ;
+        sut.BluetoothAddressType.Should ( ).Be ( "Public" ) ;
+        sut.DeviceName.Should ( ).Be ( "MyDesk" ) ;
+    }
+
+    [ TestMethod ]
+    public void MoveTo_BeforeRefresh_DoesNothingAndLogs ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        sut.MoveTo ( 100u ) ;
+
+        _mover.DidNotReceive ( ).Start ( ) ;
+        _logger.Received ( ).Error (
+#pragma warning disable CA2254
+#pragma warning disable Serilog004
+                                    Arg.Is < string > ( s => s.Contains ( "refreshed" ,
+                                                                          StringComparison.OrdinalIgnoreCase ) )
+#pragma warning restore Serilog004
+#pragma warning restore CA2254
+                                   ) ;
+    }
+
+    [ TestMethod ]
+    public async Task MultipleRefresh_DisposesHeightAndSpeed_And_Reinitializes ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
+
+        // Before disposing sut, first refresh should have initialized once, second refresh disposes and re-initializes
+        _heightAndSpeed.Received ( 2 ).Initialize ( ) ;
+        _heightAndSpeed.Received ( 1 ).Dispose ( ) ;
+        _deskCharacteristics.Received ( 2 ).Initialize ( _device ) ;
+        await _deskCharacteristics.Received ( 2 ).Refresh ( ) ;
+
+        sut.Dispose ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task DeviceNameChanged_OnError_Logs ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
+
+        var ex = new InvalidOperationException ( "boom" ) ;
+        _genericAccessDeviceNameChanged.OnError ( ex ) ;
+
+        _logger.Received ( 1 ).Error ( ex ,
+                                       "Error handling DeviceNameChanged" ) ;
+    }
+
+    [ TestMethod ]
+    public async Task MoverFactory_ReturnsNull_PublishesError_And_SetsRefreshedFalse ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        // Force factory to return null to trigger exception path
+        _moverFactory.Create ( _executor ,
+                               _heightAndSpeed ).Returns ( ( IDeskMover )null! ) ;
+
+        bool ?    refreshed = null ;
+        using var sub       = sut.RefreshedChanged.Subscribe ( v => refreshed = v ) ;
+
+        await InvokeOnGattServicesRefreshedAsync ( sut ,
+                                                   GattCommunicationStatus.Success ) ;
+
+        refreshed.Should ( ).BeFalse ( ) ;
+        _errorManager.Received ( 1 ).PublishForMessage ( "Failed to refresh Gatt services" ,
+                                                         Arg.Any < string > ( ) ) ;
     }
 }
