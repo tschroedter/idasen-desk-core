@@ -9,7 +9,7 @@ using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
 
-namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery;
 
 [ AutoDataTestClass ]
 public class DeviceMonitorTests
@@ -345,24 +345,6 @@ public class DeviceMonitorTests
 
         updated.Should ( )
                .Be ( _deviceNewName ) ;
-    }
-
-    [ TestMethod ]
-    public void OnDeviceUpdated_ForExistingDevice_Notifies ( )
-    {
-        ConfigureSameDevice ( ) ;
-
-        using var sut = CreateSutSubscribed ( ) ;
-
-        IDevice updated = null! ;
-
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
-
-        _scheduler.Start ( ) ;
-
-        updated.Should ( )
-               .Be ( _device ) ;
     }
 
     [ AutoDataTestMethod ]

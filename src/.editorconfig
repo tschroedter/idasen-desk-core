@@ -171,4 +171,8 @@ build_property.Nullable = enable
 # Analyzer severities examples
 dotnet_diagnostic.CA2000.severity = warning
 
+# Disable MSTEST0001 (require assembly-level Parallelize) since tests set parallelization explicitly per project.
+# See: https://learn.microsoft.com/dotnet/core/testing/mstest-analyzers/mstest0001
+dotnet_diagnostic.MSTEST0001.severity = none
+
 # End of file
