@@ -6,7 +6,8 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper.ConstructorNul
 [ TestClass ]
 // ReSharper disable once InconsistentNaming
 public class GattCharacteristicWrapperFactoryConstructorNullTests
-    : BaseConstructorNullTester < GattCharacteristicWrapperFactory >
+    : BaseConstructorNullTester < GattCharacteristicWrapperFactory>
 {
-    public override int NumberOfConstructorsPassed { get ; } = 1 ;
+    public override int NumberOfConstructorsPassed => 1;
+    public override int NumberOfConstructorsFailed => 0;
 }

@@ -4,8 +4,9 @@ using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters ;
 
 [ TestClass ]
-public class OfficialGattServiceConstructorNullTests ( int numberOfConstructorsPassed = 0 )
-    : BaseConstructorNullTester < OfficialGattService >
+public class OfficialGattServiceConstructorNullTests ( )
+    : BaseConstructorNullTester < OfficialGattService>
 {
-    public override int NumberOfConstructorsPassed { get ; } = numberOfConstructorsPassed ;
+    public override int NumberOfConstructorsPassed => 0;
+    public override int NumberOfConstructorsFailed => 0;
 }

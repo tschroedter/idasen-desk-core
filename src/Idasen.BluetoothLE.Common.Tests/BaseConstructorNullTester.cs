@@ -11,20 +11,14 @@ using Serilog.Sinks.SystemConsole.Themes ;
 
 namespace Idasen.BluetoothLE.Common.Tests ;
 
+[ TestClass ]
 public abstract class BaseConstructorNullTester < T >
     where T : class
 {
     private IContainer ? _container ;
 
-    protected BaseConstructorNullTester ( int numberOfConstructorsPassed = 1 ,
-                                          int numberOfConstructorsFailed = 0 )
-    {
-        NumberOfConstructorsPassed = numberOfConstructorsPassed ;
-        NumberOfConstructorsFailed = numberOfConstructorsFailed ;
-    }
-
-    public virtual int NumberOfConstructorsPassed { get ; }
-    public virtual int NumberOfConstructorsFailed { get ; }
+    public abstract int NumberOfConstructorsPassed { get ; }
+    public abstract int NumberOfConstructorsFailed { get ; }
 
     protected IContainer Container =>
         _container ??

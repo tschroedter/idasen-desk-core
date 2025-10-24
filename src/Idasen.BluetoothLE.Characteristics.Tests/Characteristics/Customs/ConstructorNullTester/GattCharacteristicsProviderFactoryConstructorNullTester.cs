@@ -5,7 +5,8 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs.Const
 
 [ TestClass ]
 public class GattCharacteristicsProviderFactoryConstructorNullTester
-    : BaseConstructorNullTester < GattCharacteristicsProviderFactory >
+    : BaseConstructorNullTester < GattCharacteristicsProviderFactory>
 {
-    public override int NumberOfConstructorsPassed { get ; } = 1 ;
+    public override int NumberOfConstructorsPassed => 1;
+    public override int NumberOfConstructorsFailed => 0;
 }

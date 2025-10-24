@@ -4,8 +4,9 @@ using Idasen.BluetoothLE.Common.Tests ;
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Unknowns.ConstructorNullTester ;
 
 [ TestClass ]
-public class DeviceConstructorNullTester ( int numberOfConstructorsPassed = 0 )
-    : BaseConstructorNullTester < Device >
+public class DeviceConstructorNullTester (  )
+    : BaseConstructorNullTester < Device>
 {
-    public override int NumberOfConstructorsPassed { get ; } = numberOfConstructorsPassed ;
+    public override int NumberOfConstructorsPassed => 0;
+    public override int NumberOfConstructorsFailed => 0;
 }

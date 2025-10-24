@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis ;
 using FluentAssertions ;
 using FluentAssertions.Primitives ;
 using FluentAssertions.Specialized ;
@@ -5,6 +6,7 @@ using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Common.Tests ;
 
+[ ExcludeFromCodeCoverage ]
 public static class ExceptionAssertionsExtensions
 {
     /// <summary>

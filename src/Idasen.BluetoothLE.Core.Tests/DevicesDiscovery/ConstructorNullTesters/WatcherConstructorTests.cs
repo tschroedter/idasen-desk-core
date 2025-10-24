@@ -5,4 +5,8 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters 
 
 [ TestClass ]
 public class WatcherConstructorTests
-    : BaseConstructorNullTester < Watcher > ;
+    : BaseConstructorNullTester < Watcher >
+{
+    public override int NumberOfConstructorsPassed => 1;
+    public override int NumberOfConstructorsFailed => 0;
+}

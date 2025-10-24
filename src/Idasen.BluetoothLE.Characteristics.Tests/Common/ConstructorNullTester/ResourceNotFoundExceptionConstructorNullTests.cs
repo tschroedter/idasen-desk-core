@@ -5,7 +5,8 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common.ConstructorNullTester 
 
 [ TestClass ]
 public class ResourceNotFoundExceptionConstructorNullTests
-    : BaseConstructorNullTester < ResourceNotFoundException >
+    : BaseConstructorNullTester < ResourceNotFoundException>
 {
-    public override int NumberOfConstructorsPassed { get ; } = 1 ;
+    public override int NumberOfConstructorsPassed => 1;
+    public override int NumberOfConstructorsFailed => 0;
 }

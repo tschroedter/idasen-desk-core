@@ -5,4 +5,8 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.ConstructorNullTesters
 
 [ TestClass ]
 public class MatchMakerConstructorNullTests
-    : BaseConstructorNullTester < MatchMaker > ;
+    : BaseConstructorNullTester < MatchMaker>
+{
+    public override int NumberOfConstructorsPassed => 1;
+    public override int NumberOfConstructorsFailed => 0;
+}

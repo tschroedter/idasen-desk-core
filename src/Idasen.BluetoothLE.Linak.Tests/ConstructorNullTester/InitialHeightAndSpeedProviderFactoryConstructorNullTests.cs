@@ -5,6 +5,8 @@ namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
 
 [ TestClass ]
 public class InitialHeightAndSpeedProviderFactoryConstructorNullTests
-    : BaseConstructorNullTester < InitialHeightAndSpeedProviderFactory >
+    : BaseConstructorNullTester < InitialHeightAndSpeedProviderFactory>
 {
+    public override int NumberOfConstructorsPassed => 1;
+    public override int NumberOfConstructorsFailed => 0;
 }

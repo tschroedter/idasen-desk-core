@@ -23,31 +23,31 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[8.7.1, )",
-        "resolved": "8.7.1",
-        "contentHash": "6DZCiDwyRfsaEvgpNQgahedldMfllILm6rOqyaxW8mHlsdkCIXENb3EnXQcmWu0l0TnAnZ+B4XZqyXQF4YE9jA=="
+        "requested": "[8.8.0, )",
+        "resolved": "8.8.0",
+        "contentHash": "m0kwcqBwvVel03FuMa7Ozo/oTaxYbjeNlcOhQFkyQpwX/8wks6RNl/Jnn58DCZVs6c2oG1RsCZw7HfKSaxLm3w=="
       },
       "MSTest.TestFramework": {
         "type": "Direct",
-        "requested": "[3.11.0, )",
-        "resolved": "3.11.0",
-        "contentHash": "57sKvtMHk8LPA39sRZTSPFgECZf24fntfOEIH+GpTyVYCKasuGObgEg3XlzsKplu5Vdm65qUayl7ytUavFCKdA==",
+        "requested": "[4.0.1, )",
+        "resolved": "4.0.1",
+        "contentHash": "uXIBT47UAQcga6sfflqFvo1rkmHQESIhDvtusMWqhOef9nZhJF8UslfOZoIBV8q6uv9WOehSZ5fBBB4SNZWnBg==",
         "dependencies": {
-          "MSTest.Analyzers": "3.11.0"
+          "MSTest.Analyzers": "4.0.1"
         }
       },
       "Selkie.DefCon.One": {
         "type": "Direct",
-        "requested": "[0.0.23, )",
-        "resolved": "0.0.23",
-        "contentHash": "i2/8DReiprTdCsbzhiAU26lDmC6gFk4f/d91ZN5kuNanm8rXisSfFZwzaw4R4NZk1NzPcdcyq3EszMoRAt2thg==",
+        "requested": "[0.1.5, )",
+        "resolved": "0.1.5",
+        "contentHash": "Eq9Nj4CrOxY0AyQ3fZsij04GHO9qZK0XWoyPKl0FcjMYS7Fd9TJhLPq7OZUEv1ouY7ji56NH5QoYCl2fgEpxDA==",
         "dependencies": {
           "AutoFixture": "4.18.1",
           "AutoFixture.AutoNSubstitute": "4.18.1",
-          "Autofac": "8.3.0",
-          "JetBrains.Annotations": "2024.3.0",
+          "Autofac": "8.4.0",
+          "JetBrains.Annotations": "2025.2.2",
           "NSubstitute": "5.3.0",
-          "Selkie.DefCon.One.Common": "0.0.23",
+          "Selkie.DefCon.One.Common": "0.1.5",
           "Serilog": "4.3.0",
           "System.Net.Http": "4.3.4",
           "System.Text.RegularExpressions": "4.3.1"
@@ -104,8 +104,8 @@
       },
       "JetBrains.Annotations": {
         "type": "Transitive",
-        "resolved": "2024.3.0",
-        "contentHash": "ox5pkeLQXjvJdyAB4b2sBYAlqZGLh3PjSnP1bQNVx72ONuTJ9+34/+Rq91Fc0dG29XG9RgZur9+NcP4riihTug=="
+        "resolved": "2025.2.2",
+        "contentHash": "0X56ZRizuHdrnPpgXjWV7f2tQO1FlQg5O1967OGKnI/4ZRNOK642J8L7brM1nYvrxTTU5TP1yRyXLRLaXLPQ8A=="
       },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
@@ -129,8 +129,8 @@
       },
       "MSTest.Analyzers": {
         "type": "Transitive",
-        "resolved": "3.11.0",
-        "contentHash": "RJAcnF9izm2ln8qytMC0NqAzCIAgnEJONVl6y9omTRahOseCF7TL8kPYo6uSfHfU8acm0eX+H08clJqXcZWNxw=="
+        "resolved": "4.0.1",
+        "contentHash": "SFYBSnZ2O5n+JZ6dYGig0rV8maAYYSAk8SpYbAvCl8XqJ2H1+Z6Su9AI4llW+RMJtmDDRUZ3JgaGih/MMgQkOw=="
       },
       "NETStandard.Library": {
         "type": "Transitive",
@@ -300,8 +300,8 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Transitive",
-        "resolved": "0.0.23",
-        "contentHash": "ANZvCexh36eWAAbfX+dFKhMWnEd6NJdztyLDjacgWToH9bSZzLHx+FQ/1eNdVTl0WgQ/DDPIeT1m0RQoPVPEMg=="
+        "resolved": "0.1.5",
+        "contentHash": "jBtjArWa9ULjKElYnyGEHk+tOAZsrc/h2oFWU5duu4Db3wlWHRsZhSMam5zd07YkcPcM+Xsf+60N3EFpTsNcbw=="
       },
       "Serilog": {
         "type": "Transitive",
