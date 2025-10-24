@@ -46,7 +46,7 @@ public class GenericAttributeServiceTest
                                              Scheduler ,
                                              Device ,
                                              ProviderFactory ,
-                                             RawValueHandler,
+                                             RawValueHandler ,
                                              ToStringConverter ,
                                              DescriptionToUuid ,
                                              new AllGattCharacteristicsProvider ( ) ) ;

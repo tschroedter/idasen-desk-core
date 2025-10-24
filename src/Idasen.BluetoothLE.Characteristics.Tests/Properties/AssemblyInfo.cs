@@ -1,3 +1,3 @@
-using System.Runtime.Versioning;
+using System.Runtime.Versioning ;
 
-[assembly: SupportedOSPlatform("windows10.0.19041.0")]
+[ assembly : SupportedOSPlatform ( "windows10.0.19041.0" ) ]

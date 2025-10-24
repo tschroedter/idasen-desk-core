@@ -1,3 +1,4 @@
+using System.Globalization ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 
@@ -73,9 +74,9 @@ public class OfficialGattServicesCollectionTests
 
         foreach ( var assignedNumber in CreateUuidCollection ( ) )
         {
-            var knownGuid = Guid.Parse ( "0000"                          +
-                                         assignedNumber.ToString ( "X",
-                                                                   System.Globalization.CultureInfo.InvariantCulture ) +
+            var knownGuid = Guid.Parse ( "0000" +
+                                         assignedNumber.ToString ( "X" ,
+                                                                   CultureInfo.InvariantCulture ) +
                                          "-0000-1000-8000-00805f9b34fb" ) ;
 
             sut.TryFindByUuid ( knownGuid ,

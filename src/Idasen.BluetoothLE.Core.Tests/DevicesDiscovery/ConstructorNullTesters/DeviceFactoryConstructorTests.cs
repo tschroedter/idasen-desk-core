@@ -7,6 +7,6 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters 
 public class DeviceFactoryConstructorTests
     : BaseConstructorNullTester < DeviceFactory >
 {
-    public override int NumberOfConstructorsPassed => 1;
-    public override int NumberOfConstructorsFailed => 0;
+    public override int NumberOfConstructorsPassed => 1 ;
+    public override int NumberOfConstructorsFailed => 0 ;
 }

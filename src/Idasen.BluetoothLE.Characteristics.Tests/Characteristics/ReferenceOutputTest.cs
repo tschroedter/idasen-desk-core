@@ -394,7 +394,7 @@ public class ReferenceOutputTest
                                      scheduler ,
                                      Device ,
                                      ProviderFactory ,
-                                     RawValueHandler,
+                                     RawValueHandler ,
                                      ToStringConverter ,
                                      DescriptionToUuid ,
                                      subject ) ;

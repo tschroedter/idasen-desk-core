@@ -45,7 +45,7 @@ public class DpgTest
                          Scheduler ,
                          Device ,
                          ProviderFactory ,
-                         RawValueHandler,
+                         RawValueHandler ,
                          ToStringConverter ,
                          DescriptionToUuid ) ;
     }

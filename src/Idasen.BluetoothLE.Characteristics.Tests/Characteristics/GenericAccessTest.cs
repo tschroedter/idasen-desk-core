@@ -224,7 +224,7 @@ public class GenericAccessTest
                                    Scheduler ,
                                    Device ,
                                    ProviderFactory ,
-                                   RawValueHandler,
+                                   RawValueHandler ,
                                    ToStringConverter ,
                                    DescriptionToUuid ,
                                    _subjectFactory ,

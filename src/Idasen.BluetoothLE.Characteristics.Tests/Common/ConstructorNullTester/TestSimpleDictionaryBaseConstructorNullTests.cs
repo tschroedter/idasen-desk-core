@@ -4,9 +4,9 @@ using Idasen.BluetoothLE.Common.Tests ;
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common.ConstructorNullTester ;
 
 [ TestClass ]
-public class TestSimpleDictionaryBaseConstructorNullTests (  )
-    : BaseConstructorNullTester < RawValueWriter>
+public class TestSimpleDictionaryBaseConstructorNullTests
+    : BaseConstructorNullTester < RawValueWriter >
 {
-    public override int NumberOfConstructorsPassed => 0;
-    public override int NumberOfConstructorsFailed => 0;
+    public override int NumberOfConstructorsPassed => 0 ;
+    public override int NumberOfConstructorsFailed => 0 ;
 }

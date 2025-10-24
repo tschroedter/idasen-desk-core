@@ -1,3 +1,4 @@
+using System.Globalization ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
@@ -18,8 +19,8 @@ public class DeviceTests
     [ TestInitialize ]
     public void Initialize ( )
     {
-        var dateTimeOffset = DateTimeOffset.Parse ( "2007-10-02T13:02:03.0000000-07:30",
-                                                    System.Globalization.CultureInfo.InvariantCulture ) ;
+        var dateTimeOffset = DateTimeOffset.Parse ( "2007-10-02T13:02:03.0000000-07:30" ,
+                                                    CultureInfo.InvariantCulture ) ;
         _broadcastTime = new DateTimeOffsetWrapper ( dateTimeOffset ) ;
 
         _comparer = new DeviceComparer ( ) ;
@@ -97,8 +98,8 @@ public class DeviceTests
         sut.ToString ( )
            .Should ( )
            .Be ( "Name = Name, "                                       +
-                 "MacAddress = ***-FF:23, " +
-                 "Address = ***19747, " +
+                 "MacAddress = ***-FF:23, "                            +
+                 "Address = ***19747, "                                +
                  "BroadcastTime = 2007-10-02T13:02:03.0000000-07:30, " +
                  "RawSignalStrengthInDBm = -50dB" ) ;
     }

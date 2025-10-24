@@ -5,8 +5,8 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Factories.Con
 
 [ TestClass ]
 public class CharacteristicBaseFactoryConstructorNullTester
-    : BaseConstructorNullTester < CharacteristicBaseFactory>
+    : BaseConstructorNullTester < CharacteristicBaseFactory >
 {
-    public override int NumberOfConstructorsPassed => 1;
-    public override int NumberOfConstructorsFailed => 0;
+    public override int NumberOfConstructorsPassed => 1 ;
+    public override int NumberOfConstructorsFailed => 0 ;
 }

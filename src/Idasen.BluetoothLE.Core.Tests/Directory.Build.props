@@ -1,9 +1,9 @@
 <Project>
-  <ItemGroup>
-    <!-- Force consistent package versions for this project to avoid NU1605 downgrades -->
-    <PackageReference Update="MSTest.TestAdapter" Version="4.0.1" />
-    <PackageReference Update="MSTest.TestFramework" Version="4.0.1" />
-    <PackageReference Update="FluentAssertions" Version="8.8.0" />
-    <PackageReference Update="Selkie.DefCon.One" Version="0.1.5" />
-  </ItemGroup>
+    <ItemGroup>
+        <!-- Force consistent package versions for this project to avoid NU1605 downgrades -->
+        <PackageReference Update="MSTest.TestAdapter" Version="4.0.1" />
+        <PackageReference Update="MSTest.TestFramework" Version="4.0.1" />
+        <PackageReference Update="FluentAssertions" Version="8.8.0" />
+        <PackageReference Update="Selkie.DefCon.One" Version="0.1.5" />
+    </ItemGroup>
 </Project>
