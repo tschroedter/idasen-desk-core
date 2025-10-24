@@ -10,9 +10,9 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[8.7.1, )",
-        "resolved": "8.7.1",
-        "contentHash": "6DZCiDwyRfsaEvgpNQgahedldMfllILm6rOqyaxW8mHlsdkCIXENb3EnXQcmWu0l0TnAnZ+B4XZqyXQF4YE9jA=="
+        "requested": "[8.8.0, )",
+        "resolved": "8.8.0",
+        "contentHash": "m0kwcqBwvVel03FuMa7Ozo/oTaxYbjeNlcOhQFkyQpwX/8wks6RNl/Jnn58DCZVs6c2oG1RsCZw7HfKSaxLm3w=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
@@ -45,16 +45,16 @@
       },
       "Selkie.DefCon.One": {
         "type": "Direct",
-        "requested": "[0.0.23, )",
-        "resolved": "0.0.23",
-        "contentHash": "i2/8DReiprTdCsbzhiAU26lDmC6gFk4f/d91ZN5kuNanm8rXisSfFZwzaw4R4NZk1NzPcdcyq3EszMoRAt2thg==",
+        "requested": "[0.1.5, )",
+        "resolved": "0.1.5",
+        "contentHash": "Eq9Nj4CrOxY0AyQ3fZsij04GHO9qZK0XWoyPKl0FcjMYS7Fd9TJhLPq7OZUEv1ouY7ji56NH5QoYCl2fgEpxDA==",
         "dependencies": {
           "AutoFixture": "4.18.1",
           "AutoFixture.AutoNSubstitute": "4.18.1",
-          "Autofac": "8.3.0",
-          "JetBrains.Annotations": "2024.3.0",
+          "Autofac": "8.4.0",
+          "JetBrains.Annotations": "2025.2.2",
           "NSubstitute": "5.3.0",
-          "Selkie.DefCon.One.Common": "0.0.23",
+          "Selkie.DefCon.One.Common": "0.1.5",
           "Serilog": "4.3.0",
           "System.Net.Http": "4.3.4",
           "System.Text.RegularExpressions": "4.3.1"
@@ -431,8 +431,8 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Transitive",
-        "resolved": "0.0.23",
-        "contentHash": "ANZvCexh36eWAAbfX+dFKhMWnEd6NJdztyLDjacgWToH9bSZzLHx+FQ/1eNdVTl0WgQ/DDPIeT1m0RQoPVPEMg=="
+        "resolved": "0.1.5",
+        "contentHash": "jBtjArWa9ULjKElYnyGEHk+tOAZsrc/h2oFWU5duu4Db3wlWHRsZhSMam5zd07YkcPcM+Xsf+60N3EFpTsNcbw=="
       },
       "Serilog": {
         "type": "Transitive",
