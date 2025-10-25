@@ -20,8 +20,8 @@ public class GattServicesProvider
     private readonly ILogger                              _logger ;
     private readonly ISubject < GattCommunicationStatus > _refreshed ;
     private readonly IGattServices                        _services ;
-    private          IGattDeviceServicesResultWrapper ?   _gattResult ;
     private          bool                                 _disposed ;
+    private          IGattDeviceServicesResultWrapper ?   _gattResult ;
 
     public GattServicesProvider ( ILogger                              logger ,
                                   IGattServices                        services ,

@@ -1,6 +1,6 @@
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
-using JetBrains.Annotations;
+using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
@@ -82,15 +82,15 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
         }
     }
 
-    [UsedImplicitly]
-    public IEnumerable<string> GetKeys()
+    [ UsedImplicitly ]
+    public IEnumerable < string > GetKeys ( )
     {
-        lock (_padlock)
+        lock ( _padlock )
         {
             // Avoid invalid casts; only include keys that are truly strings
             return _dictionary.Keys
-                              .OfType<string>()
-                              .ToArray();
+                              .OfType < string > ( )
+                              .ToArray ( ) ;
         }
     }
 }

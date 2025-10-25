@@ -14,9 +14,9 @@ public class DeskMovementHandlers
                                   IDeskCommandExecutor        executor ,
                                   IStoppingHeightCalculator   calculator )
     {
-        MonitorFactory  = monitorFactory ;
-        Executor = executor ;
-        Calculator      = calculator ;
+        MonitorFactory = monitorFactory ;
+        Executor       = executor ;
+        Calculator     = calculator ;
         MoveEngine = new DeskMoveEngine ( logger ,
                                           executor ) ;
         MoveGuard = new DeskMoveGuard ( logger ,
@@ -30,16 +30,16 @@ public class DeskMovementHandlers
                                     IDeskMoveEngine             engine ,
                                     IDeskMoveGuard              guard )
     {
-        MonitorFactory  = monitorFactory ;
-        Executor = executor ;
-        Calculator      = calculator ;
-        MoveEngine      = engine ;
-        MoveGuard       = guard ;
+        MonitorFactory = monitorFactory ;
+        Executor       = executor ;
+        Calculator     = calculator ;
+        MoveEngine     = engine ;
+        MoveGuard      = guard ;
     }
 
-    public IDeskMovementMonitorFactory MonitorFactory  { get ; }
-    public IDeskCommandExecutor        Executor { get ; }
-    public IStoppingHeightCalculator   Calculator      { get ; }
-    public IDeskMoveEngine             MoveEngine      { get ; }
-    public IDeskMoveGuard              MoveGuard       { get ; }
+    public IDeskMovementMonitorFactory MonitorFactory { get ; }
+    public IDeskCommandExecutor        Executor       { get ; }
+    public IStoppingHeightCalculator   Calculator     { get ; }
+    public IDeskMoveEngine             MoveEngine     { get ; }
+    public IDeskMoveGuard              MoveGuard      { get ; }
 }

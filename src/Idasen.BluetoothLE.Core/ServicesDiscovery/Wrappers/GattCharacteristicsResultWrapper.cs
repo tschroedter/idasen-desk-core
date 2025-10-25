@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis ;
 using System.Text ;
+using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Serilog ;
-using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
 namespace Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 
@@ -65,31 +65,35 @@ public class GattCharacteristicsResultWrapper
 
         // Initialize all wrappers in parallel; continue on failure of any item
         IEnumerable < Task < IGattCharacteristicWrapper ? > > initTasks = wrappers.Select ( async w =>
-        {
-            try
-            {
-                await w.Initialize ( ) ;
-                return w ;
-            }
-            catch ( Exception ex )
-            {
-                try
-                {
-                    _logger.Warning ( ex ,
-                                      "Failed to initialize GATT characteristic wrapper {Uuid}" ,
-                                      w.Uuid ) ;
-                }
-                catch ( Exception e )
-                {
-                    _logger.Warning ( e,
-                                      "Failed to initialize a GATT characteristic wrapper" ) ;
-                }
+                                                                                            {
+                                                                                                try
+                                                                                                {
+                                                                                                    await w
+                                                                                                       .Initialize ( ) ;
+                                                                                                    return w ;
+                                                                                                }
+                                                                                                catch ( Exception ex )
+                                                                                                {
+                                                                                                    try
+                                                                                                    {
+                                                                                                        _logger
+                                                                                                           .Warning ( ex ,
+                                                                                                                      "Failed to initialize GATT characteristic wrapper {Uuid}" ,
+                                                                                                                      w.Uuid ) ;
+                                                                                                    }
+                                                                                                    catch
+                                                                                                        ( Exception e )
+                                                                                                    {
+                                                                                                        _logger
+                                                                                                           .Warning ( e ,
+                                                                                                                      "Failed to initialize a GATT characteristic wrapper" ) ;
+                                                                                                    }
 
-                // swallow to continue; problematic wrapper is excluded
-                w.Dispose ( ) ;
-                return null ;
-            }
-        } ) ;
+                                                                                                    // swallow to continue; problematic wrapper is excluded
+                                                                                                    w.Dispose ( ) ;
+                                                                                                    return null ;
+                                                                                                }
+                                                                                            } ) ;
 
         var initialized = await Task.WhenAll ( initTasks ) ;
 
@@ -98,28 +102,29 @@ public class GattCharacteristicsResultWrapper
         return this ;
     }
 
-    public void Dispose()
+    public void Dispose ( )
     {
-        Dispose(true);
+        Dispose ( true ) ;
 
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize ( this ) ;
     }
 
-    protected virtual void Dispose(bool disposing)
+    protected virtual void Dispose ( bool disposing )
     {
-        if (_disposed)
-            return;
+        if ( _disposed )
+            return ;
 
-        if (disposing) {
+        if ( disposing )
+        {
             // Dispose individual characteristic wrappers to release event subscriptions
-            if (Characteristics is { Count: > 0 })
-                foreach (var c in Characteristics)
-                    c.Dispose();
+            if ( Characteristics is { Count: > 0 } )
+                foreach ( var c in Characteristics )
+                    c.Dispose ( ) ;
 
-            Characteristics = [];
+            Characteristics = [] ;
         }
 
-        _disposed = true;
+        _disposed = true ;
     }
 
     public override string ToString ( )

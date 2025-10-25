@@ -41,29 +41,12 @@ public class DeskMovementMonitor
         _heightAndSpeed = heightAndSpeed ;
     }
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _disposalHeightAndSpeed?.Dispose();
-            _disposalHeightAndSpeed = null;
-        }
-    }
-
     /// <inheritdoc />
-    public void Dispose()
+    public void Dispose ( )
     {
-        Dispose(true);
+        Dispose ( true ) ;
 
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Finalizer to ensure unmanaged resources are released.
-    /// </summary>
-    ~DeskMovementMonitor()
-    {
-        Dispose(false);
+        GC.SuppressFinalize ( this ) ;
     }
 
     /// <summary>
@@ -84,7 +67,24 @@ public class DeskMovementMonitor
                                                  .ObserveOn ( _scheduler )
                                                  .Subscribe ( OnHeightAndSpeedChanged ,
                                                               ex => _logger.Error ( ex ,
-                                                                       "Error observing height/speed changes" ) ) ;
+                                                                                    "Error observing height/speed changes" ) ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( disposing )
+        {
+            _disposalHeightAndSpeed?.Dispose ( ) ;
+            _disposalHeightAndSpeed = null ;
+        }
+    }
+
+    /// <summary>
+    ///     Finalizer to ensure unmanaged resources are released.
+    /// </summary>
+    ~DeskMovementMonitor ( )
+    {
+        Dispose ( false ) ;
     }
 
     private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )

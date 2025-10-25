@@ -54,9 +54,9 @@ public class RawValueToHeightAndSpeedConverter
 
                 var span = arr.AsSpan ( ) ;
                 var rawHeight = BinaryPrimitives.ReadUInt16LittleEndian ( span.Slice ( 0 ,
-                                                                                   2 ) ) ;
+                                                                                       2 ) ) ;
                 var rawSpeed = BinaryPrimitives.ReadInt16LittleEndian ( span.Slice ( 2 ,
-                                                                                 2 ) ) ;
+                                                                                     2 ) ) ;
 
                 height = HeightBaseInMicroMeter + rawHeight ;
                 speed  = rawSpeed ;

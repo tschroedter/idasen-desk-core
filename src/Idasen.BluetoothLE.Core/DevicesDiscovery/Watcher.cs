@@ -72,10 +72,7 @@ public class Watcher
         if ( _disposed )
             return ;
 
-        if ( disposing )
-        {
-            _wrapper.Dispose ( ) ;
-        }
+        if ( disposing ) _wrapper.Dispose ( ) ;
 
         _disposed = true ;
     }

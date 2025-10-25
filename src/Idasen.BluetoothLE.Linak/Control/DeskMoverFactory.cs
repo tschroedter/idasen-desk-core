@@ -10,11 +10,11 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 public class DeskMoverFactory
     : IDeskMoverFactory
 {
-    private readonly ILogger                               _logger ;
-    private readonly DeskMover.Factory                     _factory ;
-    private readonly IInitialHeightAndSpeedProviderFactory _providerFactory ;
-    private readonly IDeskMovementMonitorFactory           _monitorFactory ;
     private readonly IStoppingHeightCalculator             _calculator ;
+    private readonly DeskMover.Factory                     _factory ;
+    private readonly ILogger                               _logger ;
+    private readonly IDeskMovementMonitorFactory           _monitorFactory ;
+    private readonly IInitialHeightAndSpeedProviderFactory _providerFactory ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeskMoverFactory" /> class.

@@ -22,10 +22,10 @@ public class DeviceMonitorWithExpiry
     private readonly IObservableTimerFactory _factory ;
     private readonly ILogger                 _logger ;
     private readonly IScheduler              _scheduler ;
+    private          bool                    _disposed ;
     private          TimeSpan                _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
 
     private IDisposable ? _timer ;
-    private bool          _disposed ;
 
     public DeviceMonitorWithExpiry ( ILogger                 logger ,
                                      IDateTimeOffset         dateTimeOffset ,
@@ -94,20 +94,6 @@ public class DeviceMonitorWithExpiry
         GC.SuppressFinalize ( this ) ;
     }
 
-    protected virtual void Dispose ( bool disposing )
-    {
-        if ( _disposed )
-            return ;
-
-        if ( disposing )
-        {
-            StopTimer ( ) ;
-            _deviceMonitor.Dispose ( ) ;
-        }
-
-        _disposed = true ;
-    }
-
     /// <inheritdoc />
     public IReadOnlyCollection < IDevice > DiscoveredDevices => _deviceMonitor.DiscoveredDevices ;
 
@@ -141,6 +127,20 @@ public class DeviceMonitorWithExpiry
     public void RemoveDevice ( IDevice device )
     {
         _deviceMonitor.RemoveDevice ( device ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            StopTimer ( ) ;
+            _deviceMonitor.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 
     private void OnCompleted ( )

@@ -62,7 +62,7 @@ public abstract class CharacteristicBase
         Logger             = logger ;
         Scheduler          = scheduler ;
         ProviderFactory    = providerFactory ;
-        RawValueReader     = valueHandler.RawValueReader;
+        RawValueReader     = valueHandler.RawValueReader ;
         RawValueWriter     = valueHandler.RawValueWriter ;
         _toStringConverter = toStringConverter ;
         DescriptionToUuid  = descriptionToUuid ;
@@ -96,7 +96,7 @@ public abstract class CharacteristicBase
 
         var (service , characteristicsResultWrapper) = Device.GattServices
                                                              .FirstOrDefault ( x => x.Key.Uuid ==
-                                                                                   GattServiceUuid ) ;
+                                                                                    GattServiceUuid ) ;
 
         if ( service == null )
         {
@@ -118,7 +118,7 @@ public abstract class CharacteristicBase
         }
 
         Logger.Debug ( "Found GattDeviceService with UUID {Uuid}" ,
-                             GattServiceUuid ) ;
+                       GattServiceUuid ) ;
 
         Characteristics = ProviderFactory.Create ( characteristicsResultWrapper ) ;
 

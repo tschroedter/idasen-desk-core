@@ -150,25 +150,9 @@ public class DeskProvider
     /// <inheritdoc />
     public void Dispose ( )
     {
-        Dispose(true);
+        Dispose ( true ) ;
 
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (_disposed)
-            return;
-
-        if (disposing)
-        {
-            Desk?.Dispose();
-            _deskDetected?.Dispose();
-            _deskDetected = null;
-            _detector.Dispose();
-        }
-
-        _disposed = true;
+        GC.SuppressFinalize ( this ) ;
     }
 
     /// <summary>
@@ -180,6 +164,22 @@ public class DeskProvider
         private set =>
             Volatile.Write ( ref _desk ,
                              value ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+        {
+            Desk?.Dispose ( ) ;
+            _deskDetected?.Dispose ( ) ;
+            _deskDetected = null ;
+            _detector.Dispose ( ) ;
+        }
+
+        _disposed = true ;
     }
 
     internal void DoTryGetDesk ( CancellationToken token )

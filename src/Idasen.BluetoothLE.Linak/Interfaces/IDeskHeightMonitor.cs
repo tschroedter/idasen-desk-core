@@ -10,13 +10,13 @@ public interface IDeskHeightMonitor
     /// <summary>
     ///     Indicates whether the height has been changing over the recent window.
     /// </summary>
-    [UsedImplicitly]
+    [ UsedImplicitly ]
     bool IsHeightChanging ( ) ;
 
     /// <summary>
     ///     Resets the internal state and sample window.
     /// </summary>
-    [UsedImplicitly]
+    [ UsedImplicitly ]
     void Reset ( ) ;
 
     /// <summary>

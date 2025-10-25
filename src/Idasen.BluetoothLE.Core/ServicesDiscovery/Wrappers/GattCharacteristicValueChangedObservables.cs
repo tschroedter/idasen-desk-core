@@ -19,8 +19,8 @@ public class GattCharacteristicValueChangedObservables
     private readonly ILogger                                            _logger ;
     private readonly IScheduler                                         _scheduler ;
     private readonly ISubject < GattCharacteristicValueChangedDetails > _subject ;
-    private          IDisposable ?                                      _observable ;
     private          bool                                               _disposed ;
+    private          IDisposable ?                                      _observable ;
 
     public GattCharacteristicValueChangedObservables ( ILogger                                            logger ,
                                                        IScheduler                                         scheduler ,
@@ -77,14 +77,16 @@ public class GattCharacteristicValueChangedObservables
                     // dispose any prior subscription to avoid duplicate handlers/leaks
                     DisposeSubscription ( ) ;
 
-                    _observable = Observable.FromEventPattern < TypedEventHandler < GattCharacteristic , GattValueChangedEventArgs > ,
-                                                 GattCharacteristic ,
-                                                 GattValueChangedEventArgs > ( h => characteristic.ValueChanged += h ,
-                                                                               h => characteristic.ValueChanged -= h )
-                                            .SubscribeOn ( _scheduler )
-                                            .Subscribe ( e => OnValueChanged ( e.Sender! ,
-                                                                               e.EventArgs ,
-                                                                               _subject ) ) ;
+                    _observable = Observable
+                                 .FromEventPattern <
+                                      TypedEventHandler < GattCharacteristic , GattValueChangedEventArgs > ,
+                                      GattCharacteristic ,
+                                      GattValueChangedEventArgs > ( h => characteristic.ValueChanged += h ,
+                                                                    h => characteristic.ValueChanged -= h )
+                                 .SubscribeOn ( _scheduler )
+                                 .Subscribe ( e => OnValueChanged ( e.Sender! ,
+                                                                    e.EventArgs ,
+                                                                    _subject ) ) ;
                 }
                 else
                 {
@@ -101,7 +103,7 @@ public class GattCharacteristicValueChangedObservables
                                     result.Status ,
                                     result.ClientCharacteristicConfigurationDescriptor ) ;
             }
-            catch (UnauthorizedAccessException e)
+            catch ( UnauthorizedAccessException e )
             {
                 _logger.Warning ( e ,
                                   "Access denied - Bluetooth is probably disabled" ) ;
@@ -127,7 +129,6 @@ public class GattCharacteristicValueChangedObservables
             return ;
 
         if ( disposing )
-        {
             try
             {
                 DisposeSubscription ( ) ;
@@ -136,7 +137,6 @@ public class GattCharacteristicValueChangedObservables
             {
                 // S6667: Dispose must not throw, even if called multiple times or if _observable is already disposed
             }
-        }
 
         _disposed = true ;
     }
@@ -173,6 +173,7 @@ public class GattCharacteristicValueChangedObservables
         {
             // S6667: Dispose must not throw
         }
+
         _observable = null ;
     }
 }

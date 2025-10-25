@@ -62,23 +62,6 @@ public class DeskDetector
         GC.SuppressFinalize ( this ) ;
     }
 
-    protected virtual void Dispose ( bool disposing )
-    {
-        if ( disposing )
-        {
-            try
-            {
-                _disposables.Dispose ( ) ;
-                _monitor.Dispose ( ) ;
-            }
-            catch ( Exception ex )
-            {
-                _logger.Error ( ex ,
-                                "Error occurred while disposing resources in DeskDetector." ) ;
-            }
-        }
-    }
-
     /// <inheritdoc />
     public IObservable < IDesk > DeskDetected => _deskDetected ;
 
@@ -145,6 +128,21 @@ public class DeskDetector
     public void StopListening ( )
     {
         _monitor.StopListening ( ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( disposing )
+            try
+            {
+                _disposables.Dispose ( ) ;
+                _monitor.Dispose ( ) ;
+            }
+            catch ( Exception ex )
+            {
+                _logger.Error ( ex ,
+                                "Error occurred while disposing resources in DeskDetector." ) ;
+            }
     }
 
     private async Task OnDeskDiscovered ( IDevice device )

@@ -44,9 +44,7 @@ internal static class Program
             var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
 
             if ( isSuccess )
-            {
                 desk!.MoveTo ( 7200u ) ;
-            }
             else
                 logger.Error ( "Failed to detect desk" ) ;
 

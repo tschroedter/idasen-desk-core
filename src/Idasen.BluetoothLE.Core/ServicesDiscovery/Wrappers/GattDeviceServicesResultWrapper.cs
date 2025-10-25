@@ -32,32 +32,11 @@ public class GattDeviceServicesResultWrapper
                            .ToArray ( ) ;
     }
 
-    public void Dispose()
+    public void Dispose ( )
     {
-        Dispose(true);
+        Dispose ( true ) ;
 
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (_disposed)
-            return;
-
-        if (disposing)
-        {
-            foreach (var s in Services)
-            {
-                s.Dispose();
-            }
-        }
-
-        _disposed = true;
-    }
-
-    ~GattDeviceServicesResultWrapper()
-    {
-        Dispose(false);
+        GC.SuppressFinalize ( this ) ;
     }
 
     /// <inheritdoc />
@@ -68,4 +47,21 @@ public class GattDeviceServicesResultWrapper
 
     /// <inheritdoc />
     public byte ? ProtocolError => _service.ProtocolError ;
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( _disposed )
+            return ;
+
+        if ( disposing )
+            foreach ( var s in Services )
+                s.Dispose ( ) ;
+
+        _disposed = true ;
+    }
+
+    ~GattDeviceServicesResultWrapper ( )
+    {
+        Dispose ( false ) ;
+    }
 }
