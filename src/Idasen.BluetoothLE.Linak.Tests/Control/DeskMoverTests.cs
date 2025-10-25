@@ -18,13 +18,13 @@ public sealed class DeskMoverTests : IDisposable
     private          IDeskCommandExecutor                  _executor                     = null! ;
     private          IDeskMoveGuard                        _guard                        = null! ;
     private          IDeskHeightAndSpeed                   _heightAndSpeed               = null! ;
+    private          DeskLocationHandlers                  _locationHandler              = null! ;
     private          ILogger                               _logger                       = null! ;
     private          IDeskMovementMonitorFactory           _monitorFactory               = null! ;
+    private          DeskMovementHandlers                  _movementHandler              = null! ;
     private          IInitialHeightAndSpeedProviderFactory _providerFactory              = null! ;
     private          IScheduler                            _scheduler                    = null! ;
     private          ISubject < uint >                     _subjectFinished              = null! ;
-    private          DeskLocationHandlers                  _locationHandler              = null! ;
-    private          DeskMovementHandlers                  _movementHandler              = null! ;
 
     public void Dispose ( )
     {
@@ -279,26 +279,26 @@ public sealed class DeskMoverTests : IDisposable
         act.Should ( ).NotThrow ( ) ;
     }
 
-    [TestMethod]
-    public void Height_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesHeight()
+    [ TestMethod ]
+    public void Height_ForIsAllowedToMoveIsTrueAndSuccessAndNotified_UpdatesHeight ( )
     {
         // Arrange
-        using var sut = CreateSut();
-        sut.Initialize(); // Ensure subscriptions are set up
-        sut.GetType().GetProperty("IsAllowedToMove")!.SetValue(sut,
-                                                               true);
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ; // Ensure subscriptions are set up
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut ,
+                                                                      true ) ;
 
-        var expectedHeight = 123u;
-        var speed          = 0;
-        _heightAndSpeed.Height.Returns(expectedHeight);
+        var expectedHeight = 123u ;
+        var speed          = 0 ;
+        _heightAndSpeed.Height.Returns ( expectedHeight ) ;
 
         // Act
-        _heightAndSpeedChangedSubject.OnNext(new HeightSpeedDetails(DateTimeOffset.Now,
-                                                                    expectedHeight,
-                                                                    speed));
+        _heightAndSpeedChangedSubject.OnNext ( new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                                        expectedHeight ,
+                                                                        speed ) ) ;
 
         // Assert
-        sut.Height.Should().Be(expectedHeight,
-                               because: "the height should be updated when notified");
+        sut.Height.Should ( ).Be ( expectedHeight ,
+                                   "the height should be updated when notified" ) ;
     }
 }

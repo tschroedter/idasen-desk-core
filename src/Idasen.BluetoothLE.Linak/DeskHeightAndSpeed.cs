@@ -109,18 +109,18 @@ public class DeskHeightAndSpeed
     /// <inheritdoc />
     public void Dispose ( )
     {
-        Dispose ( true );
+        Dispose ( true ) ;
 
-        GC.SuppressFinalize ( this );
+        GC.SuppressFinalize ( this ) ;
     }
 
     protected virtual void Dispose ( bool disposing )
     {
-        if (disposing)
+        if ( disposing )
         {
-            _referenceOutput.Dispose ( );
-            _subscriber?.Dispose ( );
-            _subscriber = null;
+            _referenceOutput.Dispose ( ) ;
+            _subscriber?.Dispose ( ) ;
+            _subscriber = null ;
         }
     }
 

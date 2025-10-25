@@ -59,7 +59,7 @@ public class InitialHeightProvider
                                                  .ObserveOn ( _scheduler )
                                                  .Subscribe ( OnHeightAndSpeedChanged ,
                                                               ex => _logger.Error ( ex ,
-                                                                       "Error while observing height/speed changes" ) ) ;
+                                                                                    "Error while observing height/speed changes" ) ) ;
 
         Height = _heightAndSpeed.Height ;
     }
@@ -84,6 +84,12 @@ public class InitialHeightProvider
 
         GC.SuppressFinalize ( this ) ;
     }
+
+    /// <inheritdoc />
+    public uint Height { get ; private set ; }
+
+    /// <inheritdoc />
+    public bool HasReceivedHeightAndSpeed { get ; private set ; }
 
     /// <summary>
     ///     Dispose resources.
@@ -110,12 +116,6 @@ public class InitialHeightProvider
             _disposalHeightAndSpeed?.Dispose ( ) ;
         }
     }
-
-    /// <inheritdoc />
-    public uint Height { get ; private set ; }
-
-    /// <inheritdoc />
-    public bool HasReceivedHeightAndSpeed { get ; private set ; }
 
     private async Task StartInternalAsync ( CancellationToken cancellationToken )
     {

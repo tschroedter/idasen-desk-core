@@ -3,7 +3,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 
 namespace Idasen.BluetoothLE.Linak.Control ;
 
-[ExcludeFromCodeCoverage]
+[ ExcludeFromCodeCoverage ]
 public class DeskLocationHandlers ( IDeskHeightAndSpeed                   heightAndSpeed ,
                                     IInitialHeightAndSpeedProviderFactory providerFactory )
     : IDeskLocationHandlers

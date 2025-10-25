@@ -5,4 +5,8 @@ namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery.ConstructorNullTesters 
 
 [ TestClass ]
 public class WrapperConstructorTests
-    : BaseConstructorNullTester < Wrapper > ;
+    : BaseConstructorNullTester < Wrapper >
+{
+    public override int NumberOfConstructorsPassed => 1 ;
+    public override int NumberOfConstructorsFailed => 0 ;
+}

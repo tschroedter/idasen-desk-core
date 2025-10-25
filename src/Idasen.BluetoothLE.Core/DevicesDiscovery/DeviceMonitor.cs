@@ -119,19 +119,28 @@ public class DeviceMonitor
             {
                 _deviceDiscovered.OnCompleted ( ) ;
             }
-            catch { /* best-effort */ }
+            catch
+            {
+                /* best-effort */
+            }
 
             try
             {
                 _deviceUpdated.OnCompleted ( ) ;
             }
-            catch { /* best-effort */ }
+            catch
+            {
+                /* best-effort */
+            }
 
             try
             {
                 _deviceNameUpdated.OnCompleted ( ) ;
             }
-            catch { /* best-effort */ }
+            catch
+            {
+                /* best-effort */
+            }
 
             _watcher.Dispose ( ) ;
             _devices.Clear ( ) ;

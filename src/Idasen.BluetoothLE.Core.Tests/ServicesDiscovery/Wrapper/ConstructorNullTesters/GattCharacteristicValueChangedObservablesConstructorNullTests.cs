@@ -7,5 +7,6 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper.ConstructorNul
 public class GattCharacteristicValueChangedObservablesConstructorNullTests
     : BaseConstructorNullTester < GattCharacteristicValueChangedObservables >
 {
-    public override int NumberOfConstructorsPassed { get ; } = 1 ;
+    public override int NumberOfConstructorsPassed => 1 ;
+    public override int NumberOfConstructorsFailed => 0 ;
 }

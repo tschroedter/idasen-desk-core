@@ -11,9 +11,6 @@ namespace Idasen.BluetoothLE.Characteristics.Common ;
 public sealed class RawValueHandler
     : IRawValueHandler
 {
-    private readonly IRawValueReader _valueReader ;
-    private readonly IRawValueWriter _valueWriter ;
-
     public RawValueHandler ( IRawValueReader valueReader ,
                              IRawValueWriter valueWriter )
     {
@@ -22,37 +19,37 @@ public sealed class RawValueHandler
         Guard.ArgumentNotNull ( valueWriter ,
                                 nameof ( valueWriter ) ) ;
 
-        _valueReader = valueReader ;
-        _valueWriter = valueWriter ;
+        RawValueReader = valueReader ;
+        RawValueWriter = valueWriter ;
     }
 
     public async Task < (bool , byte [ ]) > TryReadValueAsync ( IGattCharacteristicWrapper characteristic )
     {
-        return await _valueReader.TryReadValueAsync ( characteristic ) ;
+        return await RawValueReader.TryReadValueAsync ( characteristic ) ;
     }
 
     public async Task < bool > TryWriteValueAsync ( IGattCharacteristicWrapper characteristic ,
                                                     IBuffer                    buffer )
     {
-        return await _valueWriter.TryWriteValueAsync ( characteristic ,
-                                                       buffer ) ;
+        return await RawValueWriter.TryWriteValueAsync ( characteristic ,
+                                                         buffer ) ;
     }
 
     public Task < bool > TryWritableAuxiliariesValueAsync ( IGattCharacteristicWrapper characteristic ,
                                                             IBuffer                    buffer )
     {
-        return _valueWriter.TryWritableAuxiliariesValueAsync ( characteristic ,
-                                                               buffer ) ;
+        return RawValueWriter.TryWritableAuxiliariesValueAsync ( characteristic ,
+                                                                 buffer ) ;
     }
 
     public Task < IGattWriteResultWrapper > TryWriteWithoutResponseAsync ( IGattCharacteristicWrapper characteristic ,
                                                                            IBuffer                    buffer )
     {
-        return _valueWriter.TryWriteWithoutResponseAsync ( characteristic ,
-                                                           buffer ) ;
+        return RawValueWriter.TryWriteWithoutResponseAsync ( characteristic ,
+                                                             buffer ) ;
     }
 
-    public IRawValueReader RawValueReader => _valueReader ;
+    public IRawValueReader RawValueReader { get ; }
 
-    public IRawValueWriter RawValueWriter => _valueWriter ;
+    public IRawValueWriter RawValueWriter { get ; }
 }

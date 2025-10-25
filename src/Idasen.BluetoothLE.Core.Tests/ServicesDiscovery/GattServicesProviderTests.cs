@@ -86,7 +86,9 @@ public class GattServicesProviderTests
 
     [ AutoDataTestMethod ]
     public async Task Refresh_ForDisconnected_SetsGattCommunicationStatusUnreachable ( GattServicesProvider sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper                                                                device )
+                                                                                       [ Freeze ]
+                                                                                       IBluetoothLeDeviceWrapper
+                                                                                           device )
     {
         device.ConnectionStatus
               .Returns ( BluetoothConnectionStatus.Disconnected ) ;
@@ -100,8 +102,11 @@ public class GattServicesProviderTests
 
     [ AutoDataTestMethod ]
     public async Task GattCommunicationStatus_ForConnectedAndServicesAvailable_Success ( GattServicesProvider sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper                                                                  device ,
-        IGattDeviceServicesResultWrapper                                                                      result )
+                                                                                         [ Freeze ]
+                                                                                         IBluetoothLeDeviceWrapper
+                                                                                             device ,
+                                                                                         IGattDeviceServicesResultWrapper
+                                                                                             result )
     {
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -135,8 +140,10 @@ public class GattServicesProviderTests
 
     [ AutoDataTestMethod ]
     public async Task Refresh_ForConnected_SetsGattCommunicationStatusUnreachable ( GattServicesProvider sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper                                                             device ,
-        IGattDeviceServicesResultWrapper                                                                 result )
+                                                                                    [ Freeze ]
+                                                                                    IBluetoothLeDeviceWrapper device ,
+                                                                                    IGattDeviceServicesResultWrapper
+                                                                                        result )
     {
         result.Status
               .Returns ( GattCommunicationStatus.Unreachable ) ;
@@ -189,12 +196,17 @@ public class GattServicesProviderTests
 
     [ AutoDataTestMethod ]
     public async Task Refresh_ForConnectedAndCharacteristicsSuccess_AddsService ( GattServicesProvider sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper                                                           device ,
-        [ Freeze ] ISubject < GattCommunicationStatus >                                                refreshed ,
-        [ Freeze ] IGattServices                                                                       services ,
-        IGattDeviceServicesResultWrapper                                                               result ,
-        IGattDeviceServiceWrapper                                                                      service ,
-        IGattCharacteristicsResultWrapper                                                              characteristics )
+                                                                                  [ Freeze ]
+                                                                                  IBluetoothLeDeviceWrapper device ,
+                                                                                  [ Freeze ]
+                                                                                  ISubject < GattCommunicationStatus >
+                                                                                      refreshed ,
+                                                                                  [ Freeze ] IGattServices services ,
+                                                                                  IGattDeviceServicesResultWrapper
+                                                                                      result ,
+                                                                                  IGattDeviceServiceWrapper service ,
+                                                                                  IGattCharacteristicsResultWrapper
+                                                                                      characteristics )
     {
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;
@@ -223,11 +235,17 @@ public class GattServicesProviderTests
 
     [ AutoDataTestMethod ]
     public async Task Refresh_ForConnectedAndCharacteristicsUnreachable_DoesNotAddService ( GattServicesProvider sut ,
-        [ Freeze ] IBluetoothLeDeviceWrapper device ,
-        [ Freeze ] IGattServices services ,
-        IGattDeviceServicesResultWrapper result ,
-        IGattDeviceServiceWrapper service ,
-        IGattCharacteristicsResultWrapper characteristics )
+                                                                                            [ Freeze ]
+                                                                                            IBluetoothLeDeviceWrapper
+                                                                                                device ,
+                                                                                            [ Freeze ]
+                                                                                            IGattServices services ,
+                                                                                            IGattDeviceServicesResultWrapper
+                                                                                                result ,
+                                                                                            IGattDeviceServiceWrapper
+                                                                                                service ,
+                                                                                            IGattCharacteristicsResultWrapper
+                                                                                                characteristics )
     {
         result.Status
               .Returns ( GattCommunicationStatus.Success ) ;

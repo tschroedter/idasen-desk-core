@@ -84,6 +84,21 @@ public class GattServices
         GC.SuppressFinalize ( this ) ;
     }
 
+    /// <summary>
+    ///     Gets a read-only view of the dictionary.
+    /// </summary>
+    public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper >
+        ReadOnlyDictionary
+    {
+        get
+        {
+            lock ( _padlock )
+            {
+                return _dictionary ;
+            }
+        }
+    }
+
     protected virtual void Dispose ( bool disposing )
     {
         if ( _disposed )
@@ -100,21 +115,6 @@ public class GattServices
         }
 
         _disposed = true ;
-    }
-
-    /// <summary>
-    ///     Gets a read-only view of the dictionary.
-    /// </summary>
-    public IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper >
-        ReadOnlyDictionary
-    {
-        get
-        {
-            lock ( _padlock )
-            {
-                return _dictionary ;
-            }
-        }
     }
 
     private void DisposeEntries ( )

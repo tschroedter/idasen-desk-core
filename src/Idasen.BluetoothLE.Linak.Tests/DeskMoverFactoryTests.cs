@@ -10,13 +10,13 @@ namespace Idasen.BluetoothLE.Linak.Tests ;
 [ TestClass ]
 public class DeskMoverFactoryTests
 {
+    private IStoppingHeightCalculator             _calculator      = null! ;
     private IDeskCommandExecutor                  _executor        = null! ;
     private DeskMover.Factory                     _factory         = null! ;
     private IDeskHeightAndSpeed                   _heightAndSpeed  = null! ;
-    private ILogger                               _logger          = null!;
-    private IInitialHeightAndSpeedProviderFactory _providerFactory = null!;
-    private IDeskMovementMonitorFactory           _monitorFactory  = null!;
-    private IStoppingHeightCalculator             _calculator      = null!;
+    private ILogger                               _logger          = null! ;
+    private IDeskMovementMonitorFactory           _monitorFactory  = null! ;
+    private IInitialHeightAndSpeedProviderFactory _providerFactory = null! ;
 
     [ TestInitialize ]
     public void Initialize ( )
@@ -27,9 +27,9 @@ public class DeskMoverFactoryTests
         _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
 
         _logger          = Substitute.For < ILogger > ( ) ;
-        _providerFactory = Substitute.For<IInitialHeightAndSpeedProviderFactory>();
-        _monitorFactory = Substitute.For<IDeskMovementMonitorFactory>();
-        _calculator = Substitute.For<IStoppingHeightCalculator>();
+        _providerFactory = Substitute.For < IInitialHeightAndSpeedProviderFactory > ( ) ;
+        _monitorFactory  = Substitute.For < IDeskMovementMonitorFactory > ( ) ;
+        _calculator      = Substitute.For < IStoppingHeightCalculator > ( ) ;
     }
 
     private static IDeskMover TestFactory ( IDeskLocationHandlers locationHandlers ,

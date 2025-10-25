@@ -1,3 +1,4 @@
+using System.Runtime.Versioning ;
 using Windows.Storage.Streams ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
@@ -9,6 +10,7 @@ using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
+[ SupportedOSPlatform ( "windows10.0.19041.0" ) ]
 [ TestClass ]
 public class CharacteristicBaseTest
     : CharacteristicBaseTests < TestCharacteristicBase >

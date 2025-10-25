@@ -478,6 +478,7 @@ public sealed class DeskConnectorTests : IDisposable
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
+        // ReSharper disable once AccessToDisposedClosure
         var act = ( ) => sut.MoveTo ( 0u ) ;
 
         act.Should ( ).Throw < ArgumentException > ( )
@@ -609,7 +610,7 @@ public sealed class DeskConnectorTests : IDisposable
     }
 
     [ TestMethod ]
-    public async Task MultipleRefresh_DisposesHeightAndSpeed_And_Reinitializes ( )
+    public async Task MultipleRefresh_DisposesHeightAndSpeed_And_ReInitializes ( )
     {
         var sut = CreateSut ( ) ;
 

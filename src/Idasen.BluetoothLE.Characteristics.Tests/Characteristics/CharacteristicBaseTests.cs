@@ -70,8 +70,8 @@ public abstract class CharacteristicBaseTests < T >
         RawValueWriter         = Substitute.For < IRawValueWriter > ( ) ;
         ToStringConverter      = Substitute.For < ICharacteristicBaseToStringConverter > ( ) ;
         DescriptionToUuid      = new DescriptionToUuid ( ) ;
-        RawValueHandler        = new RawValueHandler ( RawValueReader ,
-                                                       RawValueWriter ) ;
+        RawValueHandler = new RawValueHandler ( RawValueReader ,
+                                                RawValueWriter ) ;
 
         ServiceWrapper = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
         ResultWrapper  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;

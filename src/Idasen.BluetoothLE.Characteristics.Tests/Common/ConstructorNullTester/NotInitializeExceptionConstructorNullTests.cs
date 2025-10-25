@@ -7,5 +7,6 @@ namespace Idasen.BluetoothLE.Characteristics.Tests.Common.ConstructorNullTester 
 public class NotInitializeExceptionConstructorNullTests
     : BaseConstructorNullTester < NotInitializeException >
 {
-    public override int NumberOfConstructorsPassed { get ; } = 1 ;
+    public override int NumberOfConstructorsPassed => 1 ;
+    public override int NumberOfConstructorsFailed => 0 ;
 }

@@ -130,6 +130,21 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
         GC.SuppressFinalize ( this ) ;
     }
 
+    /// <inheritdoc />
+    public async Task RefreshGattAsync ( )
+    {
+        try
+        {
+            await GetOrCreateProvider ( ).Refresh ( ) ;
+        }
+        catch ( Exception ex )
+        {
+            _logger.Error ( ex ,
+                            "[{DeviceId}] Error while forcing GATT refresh" ,
+                            DeviceId ) ;
+        }
+    }
+
     public async Task ConnectAsync ( )
     {
         try
@@ -155,21 +170,6 @@ public class BluetoothLeDeviceWrapper : IBluetoothLeDeviceWrapper
             _logger.Error ( e ,
                             "Failed to connect to device {BluetoothAddress}" ,
                             _device.BluetoothAddress ) ;
-        }
-    }
-
-    /// <inheritdoc />
-    public async Task RefreshGattAsync ( )
-    {
-        try
-        {
-            await GetOrCreateProvider ( ).Refresh ( ) ;
-        }
-        catch ( Exception ex )
-        {
-            _logger.Error ( ex ,
-                            "[{DeviceId}] Error while forcing GATT refresh" ,
-                            DeviceId ) ;
         }
     }
 

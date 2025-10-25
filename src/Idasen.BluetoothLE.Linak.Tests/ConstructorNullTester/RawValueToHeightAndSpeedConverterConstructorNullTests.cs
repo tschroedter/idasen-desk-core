@@ -6,4 +6,6 @@ namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
 public class RawValueToHeightAndSpeedConverterConstructorNullTests
     : BaseConstructorNullTester < RawValueToHeightAndSpeedConverter >
 {
+    public override int NumberOfConstructorsPassed => 1 ;
+    public override int NumberOfConstructorsFailed => 0 ;
 }

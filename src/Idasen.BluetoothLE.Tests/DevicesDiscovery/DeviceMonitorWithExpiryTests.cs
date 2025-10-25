@@ -244,12 +244,16 @@ public class DeviceMonitorWithExpiryTests
 
     [ AutoDataTestMethod ]
     public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotRemoveDeviceFromCollection ( ILogger logger ,
-        IDateTimeOffset                                                                             dateTimeOffset ,
-        IDeviceMonitor                                                                              deviceMonitor ,
-        ISubject < IDevice >                                                                        deviceExpired ,
-        ObservableTimerFactory                                                                      factory ,
-        TestScheduler                                                                               scheduler ,
-        IDevice                                                                                     device )
+                                                                                            IDateTimeOffset
+                                                                                                dateTimeOffset ,
+                                                                                            IDeviceMonitor
+                                                                                                deviceMonitor ,
+                                                                                            ISubject < IDevice >
+                                                                                                deviceExpired ,
+                                                                                            ObservableTimerFactory
+                                                                                                factory ,
+                                                                                            TestScheduler scheduler ,
+                                                                                            IDevice       device )
     {
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
@@ -277,13 +281,14 @@ public class DeviceMonitorWithExpiryTests
     }
 
     [ AutoDataTestMethod ]
-    public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotNotifyDeviceExpired ( ILogger logger ,
-        IDateTimeOffset                                                                      dateTimeOffset ,
-        IDeviceMonitor                                                                       deviceMonitor ,
-        ISubject < IDevice >                                                                 deviceExpired ,
-        ObservableTimerFactory                                                               factory ,
-        TestScheduler                                                                        scheduler ,
-        IDevice                                                                              device )
+    public void CleanUp_ForNotExpiredDeviceInCollection_DoesNotNotifyDeviceExpired ( ILogger         logger ,
+                                                                                     IDateTimeOffset dateTimeOffset ,
+                                                                                     IDeviceMonitor  deviceMonitor ,
+                                                                                     ISubject < IDevice >
+                                                                                         deviceExpired ,
+                                                                                     ObservableTimerFactory factory ,
+                                                                                     TestScheduler          scheduler ,
+                                                                                     IDevice                device )
     {
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
@@ -311,13 +316,14 @@ public class DeviceMonitorWithExpiryTests
     }
 
     [ AutoDataTestMethod ]
-    public void CleanUp_ForOneExpiredDeviceInCollection_RemovesDeviceFromCollection ( ILogger logger ,
-        IDateTimeOffset                                                                       dateTimeOffset ,
-        IDeviceMonitor                                                                        deviceMonitor ,
-        ISubject < IDevice >                                                                  deviceExpired ,
-        ObservableTimerFactory                                                                factory ,
-        TestScheduler                                                                         scheduler ,
-        IDevice                                                                               device )
+    public void CleanUp_ForOneExpiredDeviceInCollection_RemovesDeviceFromCollection ( ILogger         logger ,
+                                                                                      IDateTimeOffset dateTimeOffset ,
+                                                                                      IDeviceMonitor  deviceMonitor ,
+                                                                                      ISubject < IDevice >
+                                                                                          deviceExpired ,
+                                                                                      ObservableTimerFactory factory ,
+                                                                                      TestScheduler          scheduler ,
+                                                                                      IDevice                device )
     {
         deviceMonitor.DiscoveredDevices
                      .Returns ( [device] ) ;
@@ -345,13 +351,13 @@ public class DeviceMonitorWithExpiryTests
     }
 
     [ AutoDataTestMethod ]
-    public void CleanUp_ForOneExpiredDeviceInCollection_NotifiesDeviceExpired ( ILogger logger ,
-        IDateTimeOffset                                                                 dateTimeOffset ,
-        IDeviceMonitor                                                                  deviceMonitor ,
-        Subject < IDevice >                                                             deviceExpired ,
-        ObservableTimerFactory                                                          factory ,
-        TestScheduler                                                                   scheduler ,
-        IDevice                                                                         device )
+    public void CleanUp_ForOneExpiredDeviceInCollection_NotifiesDeviceExpired ( ILogger                logger ,
+                                                                                IDateTimeOffset        dateTimeOffset ,
+                                                                                IDeviceMonitor         deviceMonitor ,
+                                                                                Subject < IDevice >    deviceExpired ,
+                                                                                ObservableTimerFactory factory ,
+                                                                                TestScheduler          scheduler ,
+                                                                                IDevice                device )
     {
         using var sut = new DeviceMonitorWithExpiry ( logger ,
                                                       dateTimeOffset ,

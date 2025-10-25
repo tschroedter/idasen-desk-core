@@ -105,62 +105,47 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
             return "out " ;
 
         // IsByRef is true for ref/out
-        if ( p.ParameterType.IsByRef )
-        {
-            return "ref " ;
-        }
+        if ( p.ParameterType.IsByRef ) return "ref " ;
 
-        return p.IsDefined ( typeof ( ParamArrayAttribute ) , false )
+        return p.IsDefined ( typeof ( ParamArrayAttribute ) ,
+                             false )
                    ? "params "
                    : string.Empty ;
     }
 
     private static string ToValueString ( object ? value )
     {
-        if ( value is null )
-        {
-            return "null" ;
-        }
+        if ( value is null ) return "null" ;
 
         // Mask sensitive data based on type or name
         if ( value is string strValue &&
              strValue.IsSensitiveData ( ) )
-        {
             return "[REDACTED]" ;
-        }
 
         // Arrays -> length in brackets, e.g., [100]
         if ( value is Array array )
-        {
             return array.Length > 1000 // Safeguard for large arrays
                        ? "[Array too large to process]"
                        : $"[{array.Length}]" ;
-        }
 
         // Non-generic IDictionary -> number of keys in brackets
         if ( value is IDictionary dict )
-        {
             return dict.Count > 1000 // Safeguard for large dictionaries
                        ? "[Dictionary too large to process]"
                        : $"[{dict.Count}]" ;
-        }
 
         // Generic IDictionary<,> or IReadOnlyDictionary<,> -> use Count
         var genericDictCount = TryGetGenericDictionaryCount ( value ) ;
 
         if ( genericDictCount.HasValue )
-        {
             return genericDictCount.Value > 1000 // Safeguard for large generic dictionaries
                        ? "[Generic Dictionary too large to process]"
                        : $"[{genericDictCount.Value}]" ;
-        }
 
         // Other IEnumerable -> log count of items if possible
         if ( value is not IEnumerable enumerable ||
              value is string )
-        {
             return value.ToString ( ) ?? value.GetType ( ).Name ;
-        }
 
         var count = enumerable.Cast < object > ( ).Take ( 1000 ).Count ( ) ; // Limit to 1000 items for performance
         return $"enumerable[{count}]" ;
@@ -170,10 +155,7 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
 
     private static int ? TryGetGenericDictionaryCount ( object ? value )
     {
-        if ( value == null )
-        {
-            return null ;
-        }
+        if ( value == null ) return null ;
 
         var t = value.GetType ( ) ;
 

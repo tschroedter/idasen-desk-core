@@ -39,7 +39,7 @@ public class ReferenceOutput
                              IScheduler                           scheduler ,
                              IDevice                              device ,
                              IGattCharacteristicsProviderFactory  providerFactory ,
-                             IRawValueHandler                     valueHandler,
+                             IRawValueHandler                     valueHandler ,
                              ICharacteristicBaseToStringConverter toStringConverter ,
                              IDescriptionToUuid                   descriptionToUuid ,
                              ISubject < RawValueChangedDetails >  subjectHeightSpeed )

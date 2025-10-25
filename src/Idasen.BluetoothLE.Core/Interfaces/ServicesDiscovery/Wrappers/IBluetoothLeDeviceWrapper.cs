@@ -1,5 +1,6 @@
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
+using JetBrains.Annotations ;
 
 namespace Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 
@@ -72,5 +73,6 @@ public interface IBluetoothLeDeviceWrapper
     /// <summary>
     ///     Force a GATT services refresh.
     /// </summary>
+    [ UsedImplicitly ]
     Task RefreshGattAsync ( ) ;
 }

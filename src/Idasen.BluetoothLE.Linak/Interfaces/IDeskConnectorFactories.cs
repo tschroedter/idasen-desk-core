@@ -1,10 +1,9 @@
-namespace Idasen.BluetoothLE.Linak.Interfaces
+namespace Idasen.BluetoothLE.Linak.Interfaces ;
+
+public interface IDeskConnectorFactories
 {
-    public interface IDeskConnectorFactories
-    {
-        IDeskHeightAndSpeedFactory HeightAndSpeedFactory { get; }
-        IDeskCommandExecutorFactory CommandExecutorFactory { get; }
-        IDeskMoverFactory MoverFactory { get; }
-        IDeskLockerFactory LockerFactory { get; }
-    }
+    IDeskHeightAndSpeedFactory  HeightAndSpeedFactory  { get ; }
+    IDeskCommandExecutorFactory CommandExecutorFactory { get ; }
+    IDeskMoverFactory           MoverFactory           { get ; }
+    IDeskLockerFactory          LockerFactory          { get ; }
 }

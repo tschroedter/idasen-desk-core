@@ -36,8 +36,8 @@ public class DeskMover
     private readonly ISubject < uint >                     _subjectFinished ;
     private          CompositeDisposable ?                 _cycleDisposables ;
 
-    private          IDisposable ? _disposableProvider ;
-    private          IDisposable ? _guardTargetHeightReached ;
+    private IDisposable ? _disposableProvider ;
+    private IDisposable ? _guardTargetHeightReached ;
 
     private IInitialHeightProvider ? _initialProvider ;
 
@@ -47,10 +47,10 @@ public class DeskMover
     private IDisposable ? _rawHeightAndSpeedSubscription ;
 
     public DeskMover ( ILogger               logger ,
-                         IScheduler            scheduler ,
-                         ISubject < uint >     subjectFinished ,
-                         IDeskLocationHandlers locationHandlers ,
-                         IDeskMovementHandlers movementHandlers )
+                       IScheduler            scheduler ,
+                       ISubject < uint >     subjectFinished ,
+                       IDeskLocationHandlers locationHandlers ,
+                       IDeskMovementHandlers movementHandlers )
     {
         Guard.ArgumentNotNull ( logger ,
                                 nameof ( logger ) ) ;
@@ -126,14 +126,14 @@ public class DeskMover
             var targetReached = _guard.TargetHeightReached ;
 
             _guardTargetHeightReached = targetReached
-                                              .ObserveOn ( _scheduler )
-                                              .Subscribe ( targetHeight =>
-                                                           {
-                                                               _logger.Information ( "Reached target height={TargetHeight}" ,
-                                                                                     targetHeight ) ;
-                                                               _engine.StopMoveAsync ( ) ;
-                                                               StopMovement ( ) ;
-                                                           } ) ;
+                                       .ObserveOn ( _scheduler )
+                                       .Subscribe ( targetHeight =>
+                                                    {
+                                                        _logger.Information ( "Reached target height={TargetHeight}" ,
+                                                                              targetHeight ) ;
+                                                        _engine.StopMoveAsync ( ) ;
+                                                        StopMovement ( ) ;
+                                                    } ) ;
         }
     }
 
@@ -213,28 +213,11 @@ public class DeskMover
         return Task.FromResult ( true ) ;
     }
 
-    protected virtual void Dispose(bool disposing)
+    public void Dispose ( )
     {
-        if (disposing)
-        {
-            _monitor?.Dispose();
-            _disposableProvider?.Dispose();
-            _rawHeightAndSpeedSubscription?.Dispose();
-            _cycleDisposables?.Dispose();
-            _guardTargetHeightReached?.Dispose();
-        }
-    }
+        Dispose ( true ) ;
 
-    public void Dispose()
-    {
-        Dispose(true);
-
-        GC.SuppressFinalize(this);
-    }
-
-    ~DeskMover()
-    {
-        Dispose(false);
+        GC.SuppressFinalize ( this ) ;
     }
 
     /// <inheritdoc />
@@ -244,6 +227,23 @@ public class DeskMover
         private set =>
             Volatile.Write ( ref _isAllowedToMove ,
                              value ) ;
+    }
+
+    protected virtual void Dispose ( bool disposing )
+    {
+        if ( disposing )
+        {
+            _monitor?.Dispose ( ) ;
+            _disposableProvider?.Dispose ( ) ;
+            _rawHeightAndSpeedSubscription?.Dispose ( ) ;
+            _cycleDisposables?.Dispose ( ) ;
+            _guardTargetHeightReached?.Dispose ( ) ;
+        }
+    }
+
+    ~DeskMover ( )
+    {
+        Dispose ( false ) ;
     }
 
     private async Task StartAfterReceivingCurrentHeight ( uint height ,

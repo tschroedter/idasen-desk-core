@@ -6,8 +6,6 @@ namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
 public class DeskDetectorNullTests
     : BaseConstructorNullTester < Desk >
 {
-    public DeskDetectorNullTests()
-        : base( 1 , 0 ) // Pass default values for the base class constructor
-    {
-    }
+    public override int NumberOfConstructorsPassed => 1 ;
+    public override int NumberOfConstructorsFailed => 0 ;
 }

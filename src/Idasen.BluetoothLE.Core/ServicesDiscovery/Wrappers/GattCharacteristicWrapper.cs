@@ -110,10 +110,7 @@ public class GattCharacteristicWrapper
         if ( _disposed )
             return ;
 
-        if ( disposing )
-        {
-            _observables.Dispose ( ) ;
-        }
+        if ( disposing ) _observables.Dispose ( ) ;
 
         _disposed = true ;
     }

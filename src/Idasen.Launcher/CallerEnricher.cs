@@ -41,8 +41,8 @@ public sealed class CallerEnricher : ILogEventEnricher
 
             var method = stack.GetMethod ( ) ;
 
-            if ( method != null &&
-                 method.DeclaringType != null &&
+            if ( method                        != null &&
+                 method.DeclaringType          != null &&
                  method.DeclaringType.Assembly != typeof ( Log ).Assembly )
             {
                 var caller =
