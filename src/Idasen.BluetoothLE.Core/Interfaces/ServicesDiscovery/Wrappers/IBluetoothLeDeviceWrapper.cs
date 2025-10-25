@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Windows.Devices.Bluetooth ;
 using Windows.Devices.Bluetooth.GenericAttributeProfile ;
 
@@ -72,5 +73,6 @@ public interface IBluetoothLeDeviceWrapper
     /// <summary>
     ///     Force a GATT services refresh.
     /// </summary>
+    [UsedImplicitly]
     Task RefreshGattAsync ( ) ;
 }

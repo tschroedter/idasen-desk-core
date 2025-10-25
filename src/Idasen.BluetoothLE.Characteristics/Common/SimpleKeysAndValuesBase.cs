@@ -1,5 +1,6 @@
 using Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
 using Idasen.BluetoothLE.Core ;
+using JetBrains.Annotations;
 
 namespace Idasen.BluetoothLE.Characteristics.Common ;
 
@@ -81,6 +82,7 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
         }
     }
 
+    [UsedImplicitly]
     public IEnumerable<string> GetKeys()
     {
         lock (_padlock)

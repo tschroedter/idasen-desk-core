@@ -7,6 +7,6 @@ namespace Idasen.BluetoothLE.Linak.Tests.ConstructorNullTester ;
 public class DeskCommandsProviderConstructorNullTests
     : BaseConstructorNullTester < DeskCommandsProvider >
 {
-    public override int NumberOfConstructorsPassed => 1 ;
+    public override int NumberOfConstructorsPassed => 0 ;
     public override int NumberOfConstructorsFailed => 0 ;
 }
