@@ -45,25 +45,26 @@ This directory contains comprehensive documentation for the Idasen Desk Core lib
 
 ## 🔄 GitHub Wiki Setup
 
-These markdown files can be published to GitHub Wiki:
+These markdown files are automatically published to GitHub Wiki using a GitHub Action.
 
-### Option 1: Manual Copy
+### ✅ Automated Sync (Current Setup)
+The repository uses a GitHub Action (`.github/workflows/sync-wiki.yml`) that automatically syncs this directory to the GitHub Wiki whenever changes are pushed to the main branch. This ensures the wiki is always up-to-date with the latest documentation.
+
+**How it works:**
+1. Changes to files in the `wiki/` directory trigger the workflow
+2. The workflow pushes the updated content to the GitHub Wiki repository
+3. The wiki becomes available at `https://github.com/tschroedter/idasen-desk-core/wiki`
+
+**Manual trigger:** The workflow can also be triggered manually from the Actions tab if needed.
+
+### Alternative Options
+
+#### Option 1: Manual Copy
 1. Enable Wiki in repository settings
 2. Navigate to Wiki tab
 3. Create/edit pages with content from these files
 
-### Option 2: Automated Sync
-Use a GitHub Action to sync this directory to Wiki:
-```yaml
-- name: Upload to Wiki
-  uses: SwiftDocOrg/github-wiki-publish-action@v1
-  with:
-    path: wiki
-  env:
-    GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
-```
-
-### Option 3: Clone Wiki Repository
+#### Option 2: Clone Wiki Repository
 ```bash
 git clone https://github.com/tschroedter/idasen-desk-core.wiki.git
 cp wiki/*.md idasen-desk-core.wiki/
