@@ -10,6 +10,20 @@ This repository is about controlling Ikea's Idasen Desk using Windows 10 and Blu
 - [idasen-desk](https://github.com/tschroedter/idasen-desk)
 - [idasen-desk-rest-api](https://github.com/tschroedter/idasen-desk-rest-api)
 
+## 📚 Documentation
+
+**[📖 View the Complete Wiki Documentation](wiki/)**
+
+The wiki includes:
+- **[Getting Started Guide](wiki/Getting-Started.md)** - Installation and quick start
+- **[API Reference](wiki/API-Reference.md)** - Detailed API documentation
+- **[Architecture Guide](wiki/Architecture-and-Design.md)** - System design and patterns
+- **[Development Guide](wiki/Development-Guide.md)** - Development environment setup
+- **[Testing Guide](wiki/Testing-Guide.md)** - Testing strategies and practices
+- **[Contributing Guide](wiki/Contributing.md)** - How to contribute
+- **[Troubleshooting](wiki/Troubleshooting.md)** - Common issues and solutions
+- **[CI/CD Workflows](wiki/CI-CD-Workflows.md)** - Automated workflows documentation
+
 ## 🚀 Quick Start
 
 ### Prerequisites
