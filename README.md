@@ -12,17 +12,17 @@ This repository is about controlling Ikea's Idasen Desk using Windows 10 and Blu
 
 ## 📚 Documentation
 
-**[📖 View the Complete Wiki Documentation](wiki/)**
+**[📖 View the Complete Wiki Documentation](https://github.com/tschroedter/idasen-desk-core/wiki)**
 
 The wiki includes:
-- **[Getting Started Guide](wiki/Getting-Started.md)** - Installation and quick start
-- **[API Reference](wiki/API-Reference.md)** - Detailed API documentation
-- **[Architecture Guide](wiki/Architecture-and-Design.md)** - System design and patterns
-- **[Development Guide](wiki/Development-Guide.md)** - Development environment setup
-- **[Testing Guide](wiki/Testing-Guide.md)** - Testing strategies and practices
-- **[Contributing Guide](wiki/Contributing.md)** - How to contribute
-- **[Troubleshooting](wiki/Troubleshooting.md)** - Common issues and solutions
-- **[CI/CD Workflows](wiki/CI-CD-Workflows.md)** - Automated workflows documentation
+- **[Getting Started Guide](https://github.com/tschroedter/idasen-desk-core/wiki/Getting-Started)** - Installation and quick start
+- **[API Reference](https://github.com/tschroedter/idasen-desk-core/wiki/API-Reference)** - Detailed API documentation
+- **[Architecture Guide](https://github.com/tschroedter/idasen-desk-core/wiki/Architecture-and-Design)** - System design and patterns
+- **[Development Guide](https://github.com/tschroedter/idasen-desk-core/wiki/Development-Guide)** - Development environment setup
+- **[Testing Guide](https://github.com/tschroedter/idasen-desk-core/wiki/Testing-Guide)** - Testing strategies and practices
+- **[Contributing Guide](https://github.com/tschroedter/idasen-desk-core/wiki/Contributing)** - How to contribute
+- **[Troubleshooting](https://github.com/tschroedter/idasen-desk-core/wiki/Troubleshooting)** - Common issues and solutions
+- **[CI/CD Workflows](https://github.com/tschroedter/idasen-desk-core/wiki/CI-CD-Workflows)** - Automated workflows documentation
 
 ## 🚀 Quick Start
 
