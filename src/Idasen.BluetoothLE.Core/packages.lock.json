@@ -4,11 +4,11 @@
     "net8.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[8.4.0, )",
-        "resolved": "8.4.0",
-        "contentHash": "XMWHyO6fXTv8rwCfhm6+64mQS6CyL0rve/hWSODsUrVuEGtq1fjxSOlVTBqCRsW6L8K3OQDskJaPB1boVMI2eQ==",
+        "requested": "[9.0.0, )",
+        "resolved": "9.0.0",
+        "contentHash": "G8TpUMVIq1pEAMuAao8h5MKduY91SotjgK93wQb5LaxbJUVE0/XjCA6t2SOp+AkPC3GB/C2MAiF2D7krYjraFw==",
         "dependencies": {
-          "System.Diagnostics.DiagnosticSource": "8.0.1"
+          "System.Diagnostics.DiagnosticSource": "10.0.0"
         }
       },
       "Autofac.Extras.DynamicProxy": {
@@ -39,15 +39,15 @@
       },
       "JetBrains.Annotations": {
         "type": "Direct",
-        "requested": "[2025.2.2, )",
-        "resolved": "2025.2.2",
-        "contentHash": "0X56ZRizuHdrnPpgXjWV7f2tQO1FlQg5O1967OGKnI/4ZRNOK642J8L7brM1nYvrxTTU5TP1yRyXLRLaXLPQ8A=="
+        "requested": "[2025.2.4, )",
+        "resolved": "2025.2.4",
+        "contentHash": "TwbgxAkXxY+vNEhNVx/QXjJ4vqxmepOjsgRvvImQPbHkHMMb4W+ahL3laMsxXKtNT7iMy+E1B3xkqao2hf1n3A=="
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
-        "requested": "[0.1.5, )",
-        "resolved": "0.1.5",
-        "contentHash": "jBtjArWa9ULjKElYnyGEHk+tOAZsrc/h2oFWU5duu4Db3wlWHRsZhSMam5zd07YkcPcM+Xsf+60N3EFpTsNcbw=="
+        "requested": "[0.2.0, )",
+        "resolved": "0.2.0",
+        "contentHash": "aN+J1g6dJ8yLGO+CaI2GeB+DsVqBTdrQSJDrkd4mADhzqM1uc07w8RHsd+0fKm9l3SkgPqC3mGQr+oGANMYxfg=="
       },
       "Serilog": {
         "type": "Direct",
@@ -83,8 +83,8 @@
       },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
-        "resolved": "8.0.1",
-        "contentHash": "vaoWjvkG1aenR2XdjaVivlCV9fADfgyhW5bZtXT23qaEea0lWiUljdQuze4E31vKM7ZWJaSUsbYIKE3rnzfZUg=="
+        "resolved": "10.0.0",
+        "contentHash": "0KdBK+h7G13PuOSC2R/DalAoFMvdYMznvGRuICtkdcUMXgl/gYXsG6z4yUvTxHSMACorWgHCU1Faq0KUHU6yAQ=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
@@ -95,7 +95,7 @@
         "type": "Project",
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
-          "JetBrains.Annotations": "[2025.2.2, )",
+          "JetBrains.Annotations": "[2025.2.4, )",
           "Serilog": "[4.3.0, )"
         }
       }

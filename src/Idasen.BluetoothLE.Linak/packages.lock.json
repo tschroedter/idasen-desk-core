@@ -4,21 +4,21 @@
     "net8.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[8.4.0, )",
-        "resolved": "8.4.0",
-        "contentHash": "XMWHyO6fXTv8rwCfhm6+64mQS6CyL0rve/hWSODsUrVuEGtq1fjxSOlVTBqCRsW6L8K3OQDskJaPB1boVMI2eQ==",
+        "requested": "[9.0.0, )",
+        "resolved": "9.0.0",
+        "contentHash": "G8TpUMVIq1pEAMuAao8h5MKduY91SotjgK93wQb5LaxbJUVE0/XjCA6t2SOp+AkPC3GB/C2MAiF2D7krYjraFw==",
         "dependencies": {
-          "System.Diagnostics.DiagnosticSource": "8.0.1"
+          "System.Diagnostics.DiagnosticSource": "10.0.0"
         }
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Direct",
-        "requested": "[9.0.10, )",
-        "resolved": "9.0.10",
-        "contentHash": "UAm3SLGAMlJdowbN+/xnh2UGJkdJoXVm4MsdhZ60dAMS8jteoyCx5WfIab5DKv0TCYpdhVecLJVUjEO3abs9UQ==",
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "njoRekyMIK+smav8B6KL2YgIfUtlsRNuT7wvurpLW+m/hoRKVnoELk2YxnUnWRGScCd1rukLMxShwLqEOKowDg==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "9.0.10",
-          "Microsoft.Extensions.Primitives": "9.0.10"
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.1",
+          "Microsoft.Extensions.Primitives": "10.0.1"
         }
       },
       "Serilog": {
@@ -72,31 +72,31 @@
       },
       "JetBrains.Annotations": {
         "type": "Transitive",
-        "resolved": "2025.2.2",
-        "contentHash": "0X56ZRizuHdrnPpgXjWV7f2tQO1FlQg5O1967OGKnI/4ZRNOK642J8L7brM1nYvrxTTU5TP1yRyXLRLaXLPQ8A=="
+        "resolved": "2025.2.4",
+        "contentHash": "TwbgxAkXxY+vNEhNVx/QXjJ4vqxmepOjsgRvvImQPbHkHMMb4W+ahL3laMsxXKtNT7iMy+E1B3xkqao2hf1n3A=="
       },
       "Microsoft.Extensions.Configuration.Abstractions": {
         "type": "Transitive",
-        "resolved": "9.0.10",
-        "contentHash": "ad3JxmFj0uxuFa1CT6oxTCC1lQ0xeRuOvzBRFT/I/ofIXVOnNsH/v2GZkAJWhlpZqKUvSexQZzp3EEAB2CdtJg==",
+        "resolved": "10.0.1",
+        "contentHash": "kPlU11hql+L9RjrN2N9/0GcRcRcZrNFlLLjadasFWeBORT6pL6OE+RYRk90GGCyVGSxTK+e1/f3dsMj5zpFFiQ==",
         "dependencies": {
-          "Microsoft.Extensions.Primitives": "9.0.10"
+          "Microsoft.Extensions.Primitives": "10.0.1"
         }
       },
       "Microsoft.Extensions.Primitives": {
         "type": "Transitive",
-        "resolved": "9.0.10",
-        "contentHash": "3pl8D1O5ZwMpDkZAT2uXrhQ6NipkwEgDLMFuURiHTf72TvkoMP61QYH3Vk1yrzVHnHBdNZk3cQACz8Zc7YGNhQ=="
+        "resolved": "10.0.1",
+        "contentHash": "DO8XrJkp5x4PddDuc/CH37yDBCs9BYN6ijlKyR3vMb55BP1Vwh90vOX8bNfnKxr5B2qEI3D8bvbY1fFbDveDHQ=="
       },
       "Selkie.DefCon.One.Common": {
         "type": "Transitive",
-        "resolved": "0.1.5",
-        "contentHash": "jBtjArWa9ULjKElYnyGEHk+tOAZsrc/h2oFWU5duu4Db3wlWHRsZhSMam5zd07YkcPcM+Xsf+60N3EFpTsNcbw=="
+        "resolved": "0.2.0",
+        "contentHash": "aN+J1g6dJ8yLGO+CaI2GeB+DsVqBTdrQSJDrkd4mADhzqM1uc07w8RHsd+0fKm9l3SkgPqC3mGQr+oGANMYxfg=="
       },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
-        "resolved": "8.0.1",
-        "contentHash": "vaoWjvkG1aenR2XdjaVivlCV9fADfgyhW5bZtXT23qaEea0lWiUljdQuze4E31vKM7ZWJaSUsbYIKE3rnzfZUg=="
+        "resolved": "10.0.0",
+        "contentHash": "0KdBK+h7G13PuOSC2R/DalAoFMvdYMznvGRuICtkdcUMXgl/gYXsG6z4yUvTxHSMACorWgHCU1Faq0KUHU6yAQ=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
@@ -112,7 +112,7 @@
         "type": "Project",
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
-          "JetBrains.Annotations": "[2025.2.2, )",
+          "JetBrains.Annotations": "[2025.2.4, )",
           "Serilog": "[4.3.0, )"
         }
       },
@@ -128,13 +128,13 @@
       "idasen.bluetoothle.core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[8.4.0, )",
+          "Autofac": "[9.0.0, )",
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
           "AutofacSerilogIntegration": "[5.0.0, )",
           "CsvHelper": "[33.1.0, )",
           "Idasen.Aop": "[1.0.0, )",
-          "JetBrains.Annotations": "[2025.2.2, )",
-          "Selkie.DefCon.One.Common": "[0.1.5, )",
+          "JetBrains.Annotations": "[2025.2.4, )",
+          "Selkie.DefCon.One.Common": "[0.2.0, )",
           "Serilog": "[4.3.0, )",
           "System.Reactive": "[6.1.0, )",
           "System.ValueTuple": "[4.6.1, )"
