@@ -33,7 +33,9 @@ fix_old_wiki_urls() {
     # Convert https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/Page-Name.md
     # to https://github.com/tschroedter/idasen-desk-core/wiki/Page-Name
     # Pattern matches typical wiki page names (alphanumeric, hyphens, underscores, and hash for anchors)
-    find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([A-Za-z0-9_-]*\)\.md|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
+    # First: Handle URLs with .md extension
+    find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([A-Za-z0-9_#-]*\)\.md|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
+    # Second: Handle URLs without .md extension
     find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([A-Za-z0-9_#-]*\)|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
 }
 

@@ -39,8 +39,10 @@ function Fix-OldWikiUrls {
         # to https://github.com/tschroedter/idasen-desk-core/wiki/Page-Name
         # Pattern matches typical wiki page names (alphanumeric, hyphens, underscores, and hash for anchors)
         if ($content -match 'https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/') {
-            $content = $content -replace 'https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/([\w-]+)\.md', 'https://github.com/tschroedter/idasen-desk-core/wiki/$1'
-            $content = $content -replace 'https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/([\w-#]+)', 'https://github.com/tschroedter/idasen-desk-core/wiki/$1'
+            # First: Handle URLs with .md extension
+            $content = $content -replace 'https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/([A-Za-z0-9_#-]+)\.md', 'https://github.com/tschroedter/idasen-desk-core/wiki/$1'
+            # Second: Handle URLs without .md extension
+            $content = $content -replace 'https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/([A-Za-z0-9_#-]+)', 'https://github.com/tschroedter/idasen-desk-core/wiki/$1'
             $modified = $true
         }
         
