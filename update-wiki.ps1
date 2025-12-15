@@ -6,7 +6,8 @@ Write-Host ""
 Write-Host "This script will:"
 Write-Host "1. Clone the wiki repository"
 Write-Host "2. Apply the fix to remove .md extensions from internal links"
-Write-Host "3. Commit and push the changes to GitHub"
+Write-Host "3. Convert old-format githubusercontent.com/wiki URLs to new format"
+Write-Host "4. Commit and push the changes to GitHub"
 Write-Host ""
 
 $wikiDir = "idasen-desk-core.wiki"
@@ -25,6 +26,36 @@ if (Test-Path $wikiDir) {
 Push-Location $wikiDir
 
 Write-Host "Applying wiki link fixes..." -ForegroundColor Yellow
+
+# Function to fix old-format githubusercontent.com/wiki URLs
+function Fix-OldWikiUrls {
+    Write-Host "  Fixing old-format githubusercontent.com/wiki URLs..." -ForegroundColor Cyan
+    
+    Get-ChildItem -Path . -Filter "*.md" -File | ForEach-Object {
+        $content = Get-Content $_.FullName -Raw
+        $modified = $false
+        
+        # Convert https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/Page-Name.md
+        # to https://github.com/tschroedter/idasen-desk-core/wiki/Page-Name
+        # Pattern matches typical wiki page names (alphanumeric, hyphens, underscores, and hash for anchors)
+        # Process in sequence: first remove .md extensions, then convert remaining URLs
+        # The patterns are mutually exclusive to prevent double transformation
+        if ($content -match 'https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/') {
+            # First: Handle URLs with .md extension (must be done before the general pattern)
+            $content = $content -replace 'https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/([A-Za-z0-9_#-]+)\.md', 'https://github.com/tschroedter/idasen-desk-core/wiki/$1'
+            # Second: Handle remaining URLs without .md extension (won't match already-transformed URLs)
+            $content = $content -replace 'https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/([A-Za-z0-9_#-]+)', 'https://github.com/tschroedter/idasen-desk-core/wiki/$1'
+            $modified = $true
+        }
+        
+        if ($modified) {
+            Set-Content $_.FullName $content -NoNewline
+            Write-Host "    Fixed old URLs in: $($_.Name)" -ForegroundColor Green
+        }
+    }
+}
+
+Fix-OldWikiUrls
 
 # Function to fix wiki links in a file
 function Fix-WikiLinks {

@@ -2,15 +2,18 @@
 
 ## Problem Summary
 
-The GitHub wiki pages are showing raw markdown text instead of being properly rendered when accessed through links on the Home page.
+The GitHub wiki pages may show raw markdown text instead of being properly rendered when accessed through links on the Home page. Additionally, old-format wiki URLs need to be updated.
 
 ## Root Cause
 
-Internal wiki links were written with `.md` extensions (e.g., `[Getting Started](Getting-Started.md)`), which causes GitHub to display the raw file instead of rendering it as a wiki page.
+1. Internal wiki links were written with `.md` extensions (e.g., `[Getting Started](Getting-Started.md)`), which causes GitHub to display the raw file instead of rendering it as a wiki page.
+
+2. Old-format wiki URLs using `https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/` should be updated to the new format `https://github.com/tschroedter/idasen-desk-core/wiki/` for consistency.
 
 ## Solution
 
-Remove the `.md` extension from all internal wiki page links.
+1. Remove the `.md` extension from all internal wiki page links.
+2. Convert old-format githubusercontent.com/wiki URLs to the new github.com format.
 
 ## How to Apply the Fix
 
@@ -31,7 +34,8 @@ chmod +x update-wiki.sh
 
 **What it does:**
 - Clones the wiki repository
-- Automatically fixes all wiki links
+- Automatically fixes all wiki links (removes .md extensions)
+- Converts old-format githubusercontent.com/wiki URLs to new format
 - Commits and pushes changes
 
 **Time:** ~1 minute

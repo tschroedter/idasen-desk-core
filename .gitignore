@@ -355,3 +355,6 @@ MigrationBackup/
 coverage.xml
 *.coveragexml
 
+# Wiki repository clone
+idasen-desk-core.wiki/
+
