@@ -32,8 +32,9 @@ echo "Applying wiki link fixes..."
 fix_old_wiki_urls() {
     # Convert https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/Page-Name.md
     # to https://github.com/tschroedter/idasen-desk-core/wiki/Page-Name
-    find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([^)]*\)\.md|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
-    find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([^)]*\)|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
+    # Pattern matches typical wiki page names (alphanumeric, hyphens, underscores, and hash for anchors)
+    find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([A-Za-z0-9_-]*\)\.md|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
+    find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([A-Za-z0-9_#-]*\)|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
 }
 
 echo "Fixing old-format githubusercontent.com/wiki URLs..."
