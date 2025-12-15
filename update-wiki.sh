@@ -8,7 +8,8 @@ echo ""
 echo "This script will:"
 echo "1. Clone the wiki repository"
 echo "2. Apply the fix to remove .md extensions from internal links"
-echo "3. Push the changes to GitHub"
+echo "3. Convert old-format githubusercontent.com/wiki URLs to new format"
+echo "4. Push the changes to GitHub"
 echo ""
 
 # Clone the wiki repository
@@ -26,6 +27,17 @@ cd idasen-desk-core.wiki
 
 # Apply the patch
 echo "Applying wiki link fixes..."
+
+# Function to fix old-format githubusercontent.com/wiki URLs
+fix_old_wiki_urls() {
+    # Convert https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/Page-Name.md
+    # to https://github.com/tschroedter/idasen-desk-core/wiki/Page-Name
+    find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([^)]*\)\.md|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
+    find . -name "*.md" -type f -exec sed -i 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([^)]*\)|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' {} \;
+}
+
+echo "Fixing old-format githubusercontent.com/wiki URLs..."
+fix_old_wiki_urls
 
 # Fix Home.md
 sed -i 's/Getting-Started\.md)/Getting-Started)/g' Home.md

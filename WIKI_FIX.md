@@ -4,24 +4,30 @@
 
 When clicking on links from the GitHub wiki main page (Home), some wiki pages were being displayed as raw markdown text instead of being properly rendered.
 
+Additionally, old-format wiki URLs using `githubusercontent.com/wiki/` should be updated to the new format.
+
 ## Root Cause
 
-GitHub wikis expect internal links to be written **without** the `.md` file extension. When links include the `.md` extension (e.g., `[Getting Started](Getting-Started.md)`), GitHub treats them as links to raw files instead of wiki pages, causing the raw markdown to be displayed.
+1. GitHub wikis expect internal links to be written **without** the `.md` file extension. When links include the `.md` extension (e.g., `[Getting Started](Getting-Started.md)`), GitHub treats them as links to raw files instead of wiki pages, causing the raw markdown to be displayed.
+
+2. Old-format wiki URLs (`https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/Page-Name.md`) should use the new format (`https://github.com/tschroedter/idasen-desk-core/wiki/Page-Name`) for consistency and to avoid `.md` extensions.
 
 ## Solution
 
-All internal wiki page links have been updated to remove the `.md` extension:
+All internal wiki page links have been updated to remove the `.md` extension, and old-format URLs are converted to the new format:
 
 **Before:**
 ```markdown
 - **[Getting Started](Getting-Started.md)** - Quick start guide
 - **[Installation](Getting-Started.md#installation)** - How to install
+- Visit: https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/Getting-Started.md
 ```
 
 **After:**
 ```markdown
 - **[Getting Started](Getting-Started)** - Quick start guide
 - **[Installation](Getting-Started#installation)** - How to install
+- Visit: https://github.com/tschroedter/idasen-desk-core/wiki/Getting-Started
 ```
 
 ## Files Updated
@@ -41,7 +47,10 @@ The following wiki files were updated:
 
 - **Total files changed:** 9
 - **Total lines changed:** 50 insertions(+), 50 deletions(-)
-- **Change pattern:** Replaced all occurrences of `*.md)` with `)` for internal wiki links
+- **Change pattern:** 
+  1. Replaced all occurrences of `*.md)` with `)` for internal wiki links
+  2. Converted `https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/` URLs to `https://github.com/tschroedter/idasen-desk-core/wiki/`
+  3. Removed `.md` extensions from any githubusercontent.com/wiki URLs
 - **External links preserved:** Links to repository files (e.g., `https://github.com/.../SONARCLOUD_SETUP.md`) were **not** changed
 
 ## How to Apply

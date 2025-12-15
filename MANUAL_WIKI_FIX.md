@@ -18,6 +18,11 @@ For each wiki page listed below, find all occurrences of these patterns and repl
 | `(CI-CD-Workflows.md)` | `(CI-CD-Workflows)` |
 | `(Troubleshooting.md)` | `(Troubleshooting)` |
 | `(Home.md)` | `(Home)` |
+| `https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/` | `https://github.com/tschroedter/idasen-desk-core/wiki/` |
+
+**Additional Fix:**
+- Also remove `.md` extension from any `githubusercontent.com/wiki/` URLs (if present)
+- Example: `https://githubusercontent.com/wiki/tschroedter/idasen-desk-core/Getting-Started.md` → `https://github.com/tschroedter/idasen-desk-core/wiki/Getting-Started`
 
 **Important:** Do NOT change URLs that point to the GitHub repository (those starting with `https://github.com/`).
 
