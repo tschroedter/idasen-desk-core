@@ -46,20 +46,27 @@ The following wiki files were updated:
 
 ## How to Apply
 
-### Option 1: Use the Automated Script
+> **Note:** Since the wiki is a separate git repository, you'll need to have push access to apply these changes.
 
-Run the provided shell script:
+### Option 1: Use the Automated Script (Recommended)
+
+**For Bash/Linux/macOS:**
 ```bash
 chmod +x update-wiki.sh
 ./update-wiki.sh
 ```
 
-This script will:
-1. Clone the wiki repository (if not already present)
-2. Apply all the fixes using sed commands
-3. Commit and push the changes
+**For Windows PowerShell:**
+```powershell
+.\update-wiki.ps1
+```
 
-### Option 2: Manual Application
+These scripts will:
+1. Clone the wiki repository (if not already present)
+2. Apply all the fixes automatically
+3. Commit and push the changes to GitHub
+
+### Option 2: Manual Application Using Patch
 
 1. Clone the wiki repository:
    ```bash
