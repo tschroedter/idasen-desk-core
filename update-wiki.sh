@@ -36,7 +36,7 @@ fix_old_wiki_urls() {
     # Process in sequence: first remove .md extensions, then convert remaining URLs
     # The patterns are mutually exclusive to prevent double transformation
     find . -name "*.md" -type f -exec sed -i \
-        -e 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([A-Za-z0-9_#-]*\)\.md|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' \
+        -e 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([A-Za-z0-9_#-]\+\)\.md|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' \
         -e 's|https://githubusercontent\.com/wiki/tschroedter/idasen-desk-core/\([A-Za-z0-9_#-]\+\)|https://github.com/tschroedter/idasen-desk-core/wiki/\1|g' \
         {} \;
 }
