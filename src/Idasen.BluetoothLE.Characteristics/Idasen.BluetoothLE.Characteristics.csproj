@@ -4,7 +4,7 @@
         <AssemblyName>Idasen.BluetoothLE.Characteristics</AssemblyName>
         <RootNamespace>Idasen.BluetoothLE.Characteristics</RootNamespace>
         <DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
-        <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+        <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
 	    <Nullable>enable</Nullable>
     </PropertyGroup>
 
