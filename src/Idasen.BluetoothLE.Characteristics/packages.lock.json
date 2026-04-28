@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net8.0-windows10.0.19041": {
+    "net10.0-windows10.0.19041": {
       "Autofac.Extras.DynamicProxy": {
         "type": "Direct",
         "requested": "[7.1.0, )",
@@ -27,10 +27,7 @@
       "Autofac": {
         "type": "Transitive",
         "resolved": "9.0.0",
-        "contentHash": "G8TpUMVIq1pEAMuAao8h5MKduY91SotjgK93wQb5LaxbJUVE0/XjCA6t2SOp+AkPC3GB/C2MAiF2D7krYjraFw==",
-        "dependencies": {
-          "System.Diagnostics.DiagnosticSource": "10.0.0"
-        }
+        "contentHash": "G8TpUMVIq1pEAMuAao8h5MKduY91SotjgK93wQb5LaxbJUVE0/XjCA6t2SOp+AkPC3GB/C2MAiF2D7krYjraFw=="
       },
       "AutofacSerilogIntegration": {
         "type": "Transitive",
@@ -63,11 +60,6 @@
         "type": "Transitive",
         "resolved": "4.3.0",
         "contentHash": "+cDryFR0GRhsGOnZSKwaDzRRl4MupvJ42FhCE4zhQRVanX0Jpg6WuCBk59OVhVDPmab1bB+nRykAnykYELA9qQ=="
-      },
-      "System.Diagnostics.DiagnosticSource": {
-        "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "0KdBK+h7G13PuOSC2R/DalAoFMvdYMznvGRuICtkdcUMXgl/gYXsG6z4yUvTxHSMACorWgHCU1Faq0KUHU6yAQ=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
