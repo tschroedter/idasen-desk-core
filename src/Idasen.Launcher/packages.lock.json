@@ -77,9 +77,9 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
-        "requested": "[0.2.0, )",
-        "resolved": "0.2.0",
-        "contentHash": "aN+J1g6dJ8yLGO+CaI2GeB+DsVqBTdrQSJDrkd4mADhzqM1uc07w8RHsd+0fKm9l3SkgPqC3mGQr+oGANMYxfg=="
+        "requested": "[0.2.38, )",
+        "resolved": "0.2.38",
+        "contentHash": "0HCKvuXV7/u3N2CAGhbAITH6IwwotUcmMQHhadVgJO0QY5pAEctHPeY1P3dtvWqwnJtCHc4PywZVszdLwUSrng=="
       },
       "Serilog": {
         "type": "Direct",
@@ -208,7 +208,7 @@
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
           "JetBrains.Annotations": "[2025.2.4, )",
-          "Serilog": "[4.3.0, )"
+          "Serilog": "[4.3.1, )"
         }
       },
       "idasen.bluetoothle.characteristics": {
@@ -223,27 +223,27 @@
       "idasen.bluetoothle.core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[9.0.0, )",
+          "Autofac": "[9.1.0, )",
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
           "AutofacSerilogIntegration": "[5.0.0, )",
           "CsvHelper": "[33.1.0, )",
           "Idasen.Aop": "[1.0.0, )",
           "JetBrains.Annotations": "[2025.2.4, )",
-          "Selkie.DefCon.One.Common": "[0.2.0, )",
-          "Serilog": "[4.3.0, )",
+          "Selkie.DefCon.One.Common": "[0.2.38, )",
+          "Serilog": "[4.3.1, )",
           "System.Reactive": "[6.1.0, )",
-          "System.ValueTuple": "[4.6.1, )"
+          "System.ValueTuple": "[4.6.2, )"
         }
       },
       "idasen.bluetoothle.linak": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[9.0.0, )",
+          "Autofac": "[9.1.0, )",
           "Idasen.Aop": "[1.0.0, )",
           "Idasen.BluetoothLE.Characteristics": "[1.0.0, )",
           "Idasen.BluetoothLE.Core": "[1.0.0, )",
-          "Microsoft.Extensions.Configuration": "[10.0.2, )",
-          "Serilog": "[4.3.0, )",
+          "Microsoft.Extensions.Configuration": "[10.0.7, )",
+          "Serilog": "[4.3.1, )",
           "System.Reactive": "[6.1.0, )"
         }
       }
