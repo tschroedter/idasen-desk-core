@@ -21,11 +21,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="9.0.0" />
+        <PackageReference Include="Autofac" Version="9.1.0" />
         <PackageReference Include="AutofacSerilogIntegration" Version="5.0.0" />
-        <PackageReference Include="FluentAssertions" Version="8.8.0" />
-        <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
-        <PackageReference Include="Selkie.DefCon.One" Version="0.2.0" />
+        <PackageReference Include="FluentAssertions" Version="8.9.0" />
+        <PackageReference Include="MSTest.TestFramework" Version="4.2.1" />
+        <PackageReference Include="Selkie.DefCon.One" Version="0.2.38" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
     </ItemGroup>
 

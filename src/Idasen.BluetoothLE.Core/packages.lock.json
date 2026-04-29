@@ -4,9 +4,9 @@
     "net10.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[9.0.0, )",
-        "resolved": "9.0.0",
-        "contentHash": "G8TpUMVIq1pEAMuAao8h5MKduY91SotjgK93wQb5LaxbJUVE0/XjCA6t2SOp+AkPC3GB/C2MAiF2D7krYjraFw=="
+        "requested": "[9.1.0, )",
+        "resolved": "9.1.0",
+        "contentHash": "onT/BcnnfWcQNXiuC7R/0h8ALQzRdsAI20gpB7nfrudXpFMXdVZKz1umdtHXDwjc/bmWEsrCBAxck3+Arnk15g=="
       },
       "Autofac.Extras.DynamicProxy": {
         "type": "Direct",
@@ -42,15 +42,15 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
-        "requested": "[0.2.0, )",
-        "resolved": "0.2.0",
-        "contentHash": "aN+J1g6dJ8yLGO+CaI2GeB+DsVqBTdrQSJDrkd4mADhzqM1uc07w8RHsd+0fKm9l3SkgPqC3mGQr+oGANMYxfg=="
+        "requested": "[0.2.38, )",
+        "resolved": "0.2.38",
+        "contentHash": "0HCKvuXV7/u3N2CAGhbAITH6IwwotUcmMQHhadVgJO0QY5pAEctHPeY1P3dtvWqwnJtCHc4PywZVszdLwUSrng=="
       },
       "Serilog": {
         "type": "Direct",
-        "requested": "[4.3.0, )",
-        "resolved": "4.3.0",
-        "contentHash": "+cDryFR0GRhsGOnZSKwaDzRRl4MupvJ42FhCE4zhQRVanX0Jpg6WuCBk59OVhVDPmab1bB+nRykAnykYELA9qQ=="
+        "requested": "[4.3.1, )",
+        "resolved": "4.3.1",
+        "contentHash": "savYe7h5yRlkqBVOwP8cIRDOdqKiPmYCU4W87JH38sBmcKD5EBoXvQIw6bNEvZ/pTe1gsiye3VFCzBsoppGkXQ=="
       },
       "SerilogAnalyzer": {
         "type": "Direct",
@@ -66,9 +66,9 @@
       },
       "System.ValueTuple": {
         "type": "Direct",
-        "requested": "[4.6.1, )",
-        "resolved": "4.6.1",
-        "contentHash": "+RJT4qaekpZ7DDLhf+LTjq+E48jieKiY9ulJ+BoxKmZblIJfIJT8Ufcaa/clQqnYvWs8jugfGSMu8ylS0caG0w=="
+        "requested": "[4.6.2, )",
+        "resolved": "4.6.2",
+        "contentHash": "yQgmjfFximrNm9LIV3mL6T5MzjeC+epeE5rl4hXxAlYmxby7RM1dPSkIKXk9HNkl6G54h2JHOmLD46+Pey+IRg=="
       },
       "Castle.Core": {
         "type": "Transitive",
@@ -88,7 +88,7 @@
         "dependencies": {
           "Autofac.Extras.DynamicProxy": "[7.1.0, )",
           "JetBrains.Annotations": "[2025.2.4, )",
-          "Serilog": "[4.3.0, )"
+          "Serilog": "[4.3.1, )"
         }
       }
     }
