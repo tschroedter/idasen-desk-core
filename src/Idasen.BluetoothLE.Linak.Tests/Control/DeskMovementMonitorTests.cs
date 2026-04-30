@@ -130,4 +130,95 @@ public class DeskMovementMonitorTests : IDisposable
               .Throw < InvalidOperationException > ( )
               .WithMessage ( DeskMovementMonitor.SpeedWasZero ) ;
     }
+
+    [ TestMethod ]
+    public void InactivityTimer_WhenUpdatesReceivedWithinTimeout_DoesNotThrow ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        // Send an update immediately
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Advance time by 5 seconds
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
+
+        // Send another update
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Advance another 5 seconds (total 11 seconds, but only 5 since last update)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
+
+        // Should not have logged a warning
+        _logger.DidNotReceive ( )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimer_WhenRegularUpdatesReceived_NeverThrows ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        // Simulate regular updates every 1 second for 15 seconds
+        for ( var i = 0 ; i < 15 ; i++ )
+        {
+            _subjectHeightAndSpeed.OnNext ( new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                                     ( uint ) ( i + 1 ) ,
+                                                                     10 ) ) ;
+            _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        }
+
+        // Should not have logged any warnings
+        _logger.DidNotReceive ( )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimer_DisposedProperly_WhenMonitorDisposed ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        // Send an update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Dispose the monitor
+        sut.Dispose ( ) ;
+
+        // Advance time past the timeout
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 11 ).Ticks ) ;
+
+        // Should not throw or log (timer should be disposed)
+        _logger.DidNotReceive ( )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimer_ResetsAfterEachUpdate ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        // Send first update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Wait 9 seconds (just under timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 9 ).Ticks ) ;
+
+        // Send another update (resets the timer)
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Wait another 9 seconds (total 19 seconds, but only 9 since last update)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 9 ).Ticks ) ;
+
+        // Should not have thrown or logged
+        _logger.DidNotReceive ( )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+    }
 }
