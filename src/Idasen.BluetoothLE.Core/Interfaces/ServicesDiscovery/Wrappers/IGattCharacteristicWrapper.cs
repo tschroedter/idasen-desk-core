@@ -41,10 +41,13 @@ public interface IGattCharacteristicWrapper
     /// <param name="buffer">
     ///     The bytes to be written.
     /// </param>
+    /// <param name="timeoutMs">
+    ///     Timeout in milliseconds for the write operation. Defaults to 5000ms (5 seconds).
+    /// </param>
     /// <returns>
     ///     Result of the write process.
     /// </returns>
-    Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer ) ;
+    Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer , int timeoutMs = 5000 ) ;
 
     /// <summary>
     ///     Writes the given raw bytes async.
@@ -52,10 +55,13 @@ public interface IGattCharacteristicWrapper
     /// <param name="buffer">
     ///     The bytes to be written.
     /// </param>
+    /// <param name="timeoutMs">
+    ///     Timeout in milliseconds for the write operation. Defaults to 5000ms (5 seconds).
+    /// </param>
     /// <returns>
     ///     Result of the write process.
     /// </returns>
-    Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer ) ;
+    Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer , int timeoutMs = 5000 ) ;
 
     /// <summary>
     ///     Performs a Characteristic Value read from the value cache
