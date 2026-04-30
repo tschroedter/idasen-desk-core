@@ -77,7 +77,14 @@ public class DeskMovementMonitor
         _inactivityTimer?.Dispose ( ) ;
         _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 10 ) ,
                                                  _scheduler )
-                                     .Subscribe ( _ => CheckForInactivity ( ) ) ;
+                                     .Subscribe ( _ => CheckForInactivity ( ) ,
+                                                  ex =>
+                                                  {
+                                                      _logger.Error ( ex ,
+                                                                      "Inactivity detected - desk stopped responding" ) ;
+                                                      // Don't re-throw here as it would create unobserved task exception
+                                                      // The exception is already logged and the monitor will be disposed
+                                                  } ) ;
     }
 
     protected virtual void Dispose ( bool disposing )
