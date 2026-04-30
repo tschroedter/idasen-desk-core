@@ -75,17 +75,43 @@ public class GattCharacteristicWrapper
     public ushort AttributeHandle => _characteristic.AttributeHandle ;
 
     /// <inheritdoc />
-    public async Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer )
+    public async Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer , int timeoutMs = 5000 )
     {
-        var result = await _characteristic.WriteValueWithResultAsync ( buffer ) ;
+        var writeTask = _characteristic.WriteValueWithResultAsync ( buffer ).AsTask ( ) ;
+        var completedTask = await Task.WhenAny ( writeTask ,
+                                                  Task.Delay ( timeoutMs ) ) ;
 
-        return _writeResultFactory.Create ( result ) ;
+        if ( completedTask == writeTask )
+        {
+            var result = await writeTask ;
+            return _writeResultFactory.Create ( result ) ;
+        }
+
+        _logger.Warning ( "WriteValueWithResultAsync timed out after {TimeoutMs}ms for characteristic {Uuid}" ,
+                          timeoutMs ,
+                          _characteristic.Uuid ) ;
+
+        // Return a timeout result
+        return new GattWriteResultWrapperNotSupported ( status : GattCommunicationStatus.Unreachable ) ;
     }
 
     /// <inheritdoc />
-    public async Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer )
+    public async Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer , int timeoutMs = 5000 )
     {
-        return await _characteristic.WriteValueAsync ( buffer ) ;
+        var writeTask = _characteristic.WriteValueAsync ( buffer ).AsTask ( ) ;
+        var completedTask = await Task.WhenAny ( writeTask ,
+                                                  Task.Delay ( timeoutMs ) ) ;
+
+        if ( completedTask == writeTask )
+        {
+            return await writeTask ;
+        }
+
+        _logger.Warning ( "WriteValueAsync timed out after {TimeoutMs}ms for characteristic {Uuid}" ,
+                          timeoutMs ,
+                          _characteristic.Uuid ) ;
+
+        return GattCommunicationStatus.Unreachable ;
     }
 
     /// <inheritdoc />

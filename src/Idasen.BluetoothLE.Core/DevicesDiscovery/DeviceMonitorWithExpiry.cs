@@ -23,7 +23,6 @@ public class DeviceMonitorWithExpiry
     private readonly ILogger                 _logger ;
     private readonly IScheduler              _scheduler ;
     private          bool                    _disposed ;
-    private          TimeSpan                _timeOut = TimeSpan.FromSeconds ( SixtySeconds ) ;
 
     private IDisposable ? _timer ;
 
@@ -66,13 +65,13 @@ public class DeviceMonitorWithExpiry
     /// <inheritdoc />
     public TimeSpan TimeOut
     {
-        get => _timeOut ;
+        get ;
         set
         {
             if ( value.TotalSeconds < 0 )
                 throw new ArgumentException ( "Value must be >= 0" ) ;
 
-            _timeOut = value ;
+            field = value ;
 
             _logger.Debug ( "TimeOut = {Timeout}" ,
                             value ) ;
@@ -81,7 +80,7 @@ public class DeviceMonitorWithExpiry
             if ( _timer != null )
                 RestartTimer ( ) ;
         }
-    }
+    } = TimeSpan.FromSeconds ( SixtySeconds ) ;
 
     /// <inheritdoc />
     public IObservable < IDevice > DeviceExpired => _deviceExpired ;

@@ -21,7 +21,7 @@ public static class LoggerProvider
                                        "{Level:u3}] {Message} "                 +
                                        "(at {Caller}){NewLine}{Exception}" ;
 
-    private static readonly object   Sync = new( ) ;
+    private static readonly Lock     Sync = new( ) ;
     private static          Logger ? _logger ;
     private static          bool     _selfLogEnabled ;
 

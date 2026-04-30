@@ -30,7 +30,7 @@ public class DeskMover
     private readonly ILogger                     _logger ;
     private readonly IDeskMovementMonitorFactory _monitorFactory ;
 
-    private readonly object                                _padlock = new( ) ;
+    private readonly Lock                                  _padlock = new( ) ;
     private readonly IInitialHeightAndSpeedProviderFactory _providerFactory ;
     private readonly IScheduler                            _scheduler ;
     private readonly ISubject < uint >                     _subjectFinished ;
@@ -41,7 +41,6 @@ public class DeskMover
 
     private IInitialHeightProvider ? _initialProvider ;
 
-    private bool                   _isAllowedToMove ;
     private IDeskMovementMonitor ? _monitor ;
 
     private IDisposable ? _rawHeightAndSpeedSubscription ;
@@ -223,9 +222,9 @@ public class DeskMover
     /// <inheritdoc />
     public bool IsAllowedToMove
     {
-        get => Volatile.Read ( ref _isAllowedToMove ) ;
+        get => Volatile.Read ( ref field ) ;
         private set =>
-            Volatile.Write ( ref _isAllowedToMove ,
+            Volatile.Write ( ref field ,
                              value ) ;
     }
 

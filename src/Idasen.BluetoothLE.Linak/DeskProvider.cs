@@ -22,9 +22,6 @@ public class DeskProvider
 
     internal readonly AutoResetEvent DeskDetectedEvent = new(false) ;
 
-    // Backing field for Desk with volatile memory semantics
-    private IDesk ? _desk ;
-
     private IDisposable ? _deskDetected ;
     private bool          _disposed ;
 
@@ -160,9 +157,9 @@ public class DeskProvider
     /// </summary>
     public IDesk ? Desk
     {
-        get => Volatile.Read ( ref _desk ) ;
+        get => Volatile.Read ( ref field ) ;
         private set =>
-            Volatile.Write ( ref _desk ,
+            Volatile.Write ( ref field ,
                              value ) ;
     }
 
