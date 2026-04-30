@@ -16,15 +16,18 @@ public class DeskMovementMonitor
 
     internal const int MinimumNumberOfItems = 3 ;
 
-    internal const int    DefaultCapacity    = 5 ;
-    internal const string HeightDidNotChange = "Height didn't change when moving desk" ;
-    internal const string SpeedWasZero       = "Speed was zero when moving desk" ;
+    internal const int    DefaultCapacity       = 5 ;
+    internal const string HeightDidNotChange    = "Height didn't change when moving desk" ;
+    internal const string SpeedWasZero          = "Speed was zero when moving desk" ;
+    internal const string NoHeightUpdatesReceived = "No height updates received for timeout period" ;
 
     private readonly IDeskHeightAndSpeed _heightAndSpeed ;
     private readonly ILogger             _logger ;
     private readonly IScheduler          _scheduler ;
 
     private IDisposable ? _disposalHeightAndSpeed ;
+    private IDisposable ? _inactivityTimer ;
+    private DateTimeOffset _lastUpdateTime = DateTimeOffset.MinValue ;
 
     internal CircularBuffer < HeightSpeedDetails > History = new(5) ;
 
@@ -68,6 +71,13 @@ public class DeskMovementMonitor
                                                  .Subscribe ( OnHeightAndSpeedChanged ,
                                                               ex => _logger.Error ( ex ,
                                                                                     "Error observing height/speed changes" ) ) ;
+
+        // Start inactivity watchdog: check every 10 seconds if we've received updates
+        _lastUpdateTime = _scheduler.Now ;
+        _inactivityTimer?.Dispose ( ) ;
+        _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 10 ) ,
+                                                 _scheduler )
+                                     .Subscribe ( _ => CheckForInactivity ( ) ) ;
     }
 
     protected virtual void Dispose ( bool disposing )
@@ -76,6 +86,9 @@ public class DeskMovementMonitor
         {
             _disposalHeightAndSpeed?.Dispose ( ) ;
             _disposalHeightAndSpeed = null ;
+
+            _inactivityTimer?.Dispose ( ) ;
+            _inactivityTimer = null ;
         }
     }
 
@@ -89,6 +102,8 @@ public class DeskMovementMonitor
 
     private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
     {
+        _lastUpdateTime = _scheduler.Now ; // Update the last activity timestamp
+
         History.PushBack ( details ) ;
 
         _logger.Debug ( "History: {History}" ,
@@ -111,5 +126,17 @@ public class DeskMovementMonitor
             throw new InvalidOperationException ( SpeedWasZero ) ;
 
         _logger.Debug ( "Good, speed changed" ) ;
+    }
+
+    private void CheckForInactivity ( )
+    {
+        var elapsed = _scheduler.Now - _lastUpdateTime ;
+
+        if ( elapsed.TotalSeconds > 10 )
+        {
+            _logger.Warning ( "No height updates received for {Seconds} seconds" ,
+                              elapsed.TotalSeconds ) ;
+            throw new InvalidOperationException ( NoHeightUpdatesReceived ) ;
+        }
     }
 }
