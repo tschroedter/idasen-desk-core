@@ -9,6 +9,8 @@ namespace Idasen.BluetoothLE.Linak.Control ;
 internal class DeskMoveEngine
     : IDeskMoveEngine
 {
+    private const int MaxConsecutiveFailures = 3 ;
+
     private readonly IDeskCommandExecutor _executor ;
     private readonly ILogger              _logger ;
 
@@ -56,6 +58,8 @@ internal class DeskMoveEngine
         _logger.Debug ( "Starting repeated move commands: {Desired}" ,
                         desired ) ;
 
+        var consecutiveFailures = 0 ;
+
         try
         {
             while ( ! cancellationToken.IsCancellationRequested &&
@@ -69,14 +73,38 @@ internal class DeskMoveEngine
                     var ok = await moveTask.ConfigureAwait ( false ) ;
 
                     if ( ! ok )
-                        _logger.Debug ( "StartMoveAsync command failed: {Desired}" ,
-                                        desired ) ;
+                    {
+                        consecutiveFailures++ ;
+                        _logger.Debug ( "StartMoveAsync command failed: {Desired} (consecutive failures: {Count})" ,
+                                        desired ,
+                                        consecutiveFailures ) ;
+
+                        if ( consecutiveFailures >= MaxConsecutiveFailures )
+                        {
+                            _logger.Warning ( "Stopping move due to {Count} consecutive failures" ,
+                                              consecutiveFailures ) ;
+                            break ;
+                        }
+                    }
+                    else
+                    {
+                        consecutiveFailures = 0 ; // Reset on success
+                    }
                 }
                 catch ( Exception ex )
                 {
+                    consecutiveFailures++ ;
                     _logger.Error ( ex ,
-                                    "StartMoveAsync command threw exception: {Desired}" ,
-                                    desired ) ;
+                                    "StartMoveAsync command threw exception: {Desired} (consecutive failures: {Count})" ,
+                                    desired ,
+                                    consecutiveFailures ) ;
+
+                    if ( consecutiveFailures >= MaxConsecutiveFailures )
+                    {
+                        _logger.Warning ( "Stopping move due to {Count} consecutive failures" ,
+                                          consecutiveFailures ) ;
+                        break ;
+                    }
                 }
 
                 await Task.Delay ( DelayInterval ,

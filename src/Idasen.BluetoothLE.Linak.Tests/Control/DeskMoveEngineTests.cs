@@ -204,7 +204,34 @@ public class DeskMoveEngineTests
                                    cts.Token ) ;
 
         // Verify that the debug message is logged when the command fails
-        _logger.Received ( ).Debug ( "StartMoveAsync command failed: {Desired}" ,
-                                     Direction.Up ) ;
+        _logger.Received ( ).Debug ( "StartMoveAsync command failed: {Desired} (consecutive failures: {Count})" ,
+                                     Direction.Up ,
+                                     Arg.Any < int > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StartMoveAsync_ConsecutiveFailures_StopsAfterThreeFailures ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        // Simulate failures in the Up command
+        _executor.Up ( ).Returns ( Task.FromResult ( false ) ) ;
+
+        sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
+
+        using var cts = new CancellationTokenSource ( 500 ) ;
+
+        await sut.StartMoveAsync ( Direction.Up ,
+                                   cts.Token ) ;
+
+        // Verify that Up was called exactly 3 times before stopping
+        await _executor.Received ( 3 ).Up ( ) ;
+
+        // Verify that a warning was logged
+        _logger.Received ( ).Warning ( "Stopping move due to {Count} consecutive failures" ,
+                                       3 ) ;
+
+        // Verify that the direction is reset to None
+        sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
     }
 }
