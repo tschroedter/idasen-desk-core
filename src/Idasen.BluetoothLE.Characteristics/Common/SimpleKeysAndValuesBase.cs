@@ -10,7 +10,7 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
 {
     private readonly Dictionary < TKey , TValue > _dictionary = new( ) ;
 
-    private readonly object _padlock = new( ) ;
+    private readonly Lock _padlock = new( ) ;
 
     /// <inheritdoc />
     public TValue this [ TKey key ]

@@ -26,7 +26,7 @@ public class DeskDetector
     private readonly IDeviceMonitorWithExpiry _monitor ;
     private readonly IScheduler               _scheduler ;
 
-    private readonly object _sync = new( ) ;
+    private readonly Lock _sync = new( ) ;
 
     private IDesk ? _desk ;
 

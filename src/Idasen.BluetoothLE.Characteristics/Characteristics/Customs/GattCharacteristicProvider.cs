@@ -34,7 +34,7 @@ public class GattCharacteristicProvider
     ///     Initializes a new instance of the <see cref="GattCharacteristicProvider" /> class.
     /// </summary>
     /// <param name="logger">Logger used for discovery diagnostics.</param>
-    /// <param name="gattCharacteristics">Discovered characteristics wrapper.</param>
+    /// <param name="gattCharacteristics">Discovered characteristic's wrapper.</param>
     public GattCharacteristicProvider ( ILogger                           logger ,
                                         IGattCharacteristicsResultWrapper gattCharacteristics )
     {

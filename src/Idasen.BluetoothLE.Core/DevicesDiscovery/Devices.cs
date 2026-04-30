@@ -13,7 +13,7 @@ public class Devices
 {
     private readonly Dictionary < ulong , Device > _discoveredDevices = new( ) ;
     private readonly ILogger                       _logger ;
-    private readonly object                        _padLock = new( ) ;
+    private readonly Lock                          _padLock = new( ) ;
 
     public Devices ( ILogger logger )
     {

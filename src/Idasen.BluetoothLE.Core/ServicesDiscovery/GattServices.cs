@@ -13,7 +13,7 @@ public class GattServices
     private readonly Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > _dictionary =
         new( ) ;
 
-    private readonly object _padlock = new( ) ;
+    private readonly Lock _padlock = new( ) ;
 
     private bool _disposed ;
 
