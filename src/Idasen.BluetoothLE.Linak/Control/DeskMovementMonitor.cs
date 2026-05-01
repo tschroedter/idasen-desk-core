@@ -30,6 +30,7 @@ public class DeskMovementMonitor
     private IDisposable ? _disposalHeightAndSpeed ;
     private IDisposable ? _inactivityTimer ;
     private DateTimeOffset _lastUpdateTime = DateTimeOffset.MinValue ;
+    private bool           _inactivityDetected ;
 
     internal CircularBuffer < HeightSpeedDetails > History = new(5) ;
 
@@ -77,6 +78,9 @@ public class DeskMovementMonitor
                                                  .Subscribe ( OnHeightAndSpeedChanged ,
                                                               ex => _logger.Error ( ex ,
                                                                                     "Error observing height/speed changes" ) ) ;
+
+        // Reset inactivity detection flag
+        _inactivityDetected = false ;
 
         // Start inactivity watchdog: check every 5 seconds if we've received updates
         _lastUpdateTime = _scheduler.Now ;
@@ -153,6 +157,10 @@ public class DeskMovementMonitor
 
     private void CheckForInactivity ( )
     {
+        // If we've already detected inactivity, don't check again
+        if ( _inactivityDetected )
+            return ;
+
         var elapsed = _scheduler.Now - _lastUpdateTime ;
 
         _logger.Verbose ( "Inactivity check: {Elapsed} seconds since last update" ,
@@ -160,13 +168,17 @@ public class DeskMovementMonitor
 
         if ( elapsed.TotalSeconds > 3 )
         {
+            _inactivityDetected = true ;
+
             _logger.Warning ( "No height updates received for {Seconds} seconds" ,
                               elapsed.TotalSeconds ) ;
 
             // Publish event to trigger movement stop
             _subjectInactivityDetected.OnNext ( NoHeightUpdatesReceived ) ;
 
-            throw new InvalidOperationException ( NoHeightUpdatesReceived ) ;
+            // Dispose the timer to stop further checks
+            _inactivityTimer?.Dispose ( ) ;
+            _inactivityTimer = null ;
         }
     }
 }
