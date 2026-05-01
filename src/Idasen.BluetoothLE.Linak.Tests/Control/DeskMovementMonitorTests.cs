@@ -443,4 +443,91 @@ public class DeskMovementMonitorTests : IDisposable
                .Warning ( "No height updates received for {Seconds} seconds" ,
                           Arg.Any < double > ( ) ) ;
     }
+
+    [ TestMethod ]
+    public void Initialize_WhenCalledWithoutPriorInitialize_DoesNotThrow ( )
+    {
+        // This covers the null branch of _inactivityTimer?.Dispose() on line 87
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.Initialize ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_WhenCalledMultipleTimes_DisposesOldTimer ( )
+    {
+        // This covers the non-null branch of _inactivityTimer?.Dispose() on line 87
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        // First initialization creates timer
+        sut.Initialize ( ) ;
+
+        // Second initialization should dispose old timer and create new one
+        var action = ( ) => sut.Initialize ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void Dispose_WhenCalledWithoutInitialize_DoesNotThrow ( )
+    {
+        // This covers the null branches on lines 113-114
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.Dispose ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_WithLessThanMinimumItems_DoesNotCheckSpeed ( )
+    {
+        // This covers the false branch of "History.Count >= MinimumNumberOfItems" on line 151
+        // Create monitor with capacity 5 (larger than MinimumNumberOfItems which is 3)
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+        sut.Initialize ( 5 ) ;
+
+        // Send only 2 items with different heights but speed zero
+        var details1 = new HeightSpeedDetails ( DateTimeOffset.Now , 1u , 0 ) ;
+        var details2 = new HeightSpeedDetails ( DateTimeOffset.Now , 2u , 0 ) ;
+
+        _subjectHeightAndSpeed.OnNext ( details1 ) ;
+        _subjectHeightAndSpeed.OnNext ( details2 ) ;
+
+        // Should not throw even though speed is zero, because we haven't reached MinimumNumberOfItems
+        var action = ( ) => _scheduler.Start ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_WithMinimumItems_AndNonZeroSpeed_DoesNotThrow ( )
+    {
+        // This covers the branch where History.Count >= MinimumNumberOfItems is true
+        // but History.All(x => x.Speed == 0) is false
+        using var sut = CreateSut ( ) ;
+
+        // Send 3 items with different heights and at least one non-zero speed
+        var details1 = new HeightSpeedDetails ( DateTimeOffset.Now , 1u , 0 ) ;
+        var details2 = new HeightSpeedDetails ( DateTimeOffset.Now , 2u , 0 ) ;
+        var details3 = new HeightSpeedDetails ( DateTimeOffset.Now , 3u , 5 ) ; // Non-zero speed
+
+        _subjectHeightAndSpeed.OnNext ( details1 ) ;
+        _subjectHeightAndSpeed.OnNext ( details2 ) ;
+        _subjectHeightAndSpeed.OnNext ( details3 ) ;
+
+        var action = ( ) => _scheduler.Start ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
 }

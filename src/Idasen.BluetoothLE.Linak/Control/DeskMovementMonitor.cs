@@ -31,6 +31,7 @@ public class DeskMovementMonitor
     private IDisposable ? _inactivityTimer ;
     private DateTimeOffset _lastUpdateTime = DateTimeOffset.MinValue ;
     private bool           _inactivityDetected ;
+    private bool           _disposed ;
 
     internal CircularBuffer < HeightSpeedDetails > History = new(5) ;
 
@@ -102,6 +103,9 @@ public class DeskMovementMonitor
 
     protected virtual void Dispose ( bool disposing )
     {
+        if ( _disposed )
+            return ;
+
         if ( disposing )
         {
             _disposalHeightAndSpeed?.Dispose ( ) ;
@@ -113,6 +117,8 @@ public class DeskMovementMonitor
             _subjectInactivityDetected?.OnCompleted ( ) ;
             _subjectInactivityDetected?.Dispose ( ) ;
         }
+
+        _disposed = true ;
     }
 
     /// <summary>
