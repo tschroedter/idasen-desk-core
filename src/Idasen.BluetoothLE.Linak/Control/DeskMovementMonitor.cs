@@ -62,6 +62,8 @@ public class DeskMovementMonitor
 
     /// <summary>
     ///     Initializes monitoring with the specified history capacity.
+    ///     Sets up the history buffer and subscribes to height/speed changes.
+    ///     Call Start() to begin the inactivity watchdog for a movement cycle.
     /// </summary>
     /// <param name="capacity">The number of samples to retain in history.</param>
     public void Initialize ( int capacity = DefaultCapacity )
@@ -80,25 +82,53 @@ public class DeskMovementMonitor
                                                               ex => _logger.Error ( ex ,
                                                                                     "Error observing height/speed changes" ) ) ;
 
-        // Reset inactivity detection flag
+        _logger.Information ( "DeskMovementMonitor initialized with {Capacity} capacity" ,
+                              capacity ) ;
+    }
+
+    /// <summary>
+    ///     Starts the inactivity watchdog timer for a new movement cycle.
+    ///     Resets the inactivity detection flag and begins monitoring for desk responsiveness.
+    /// </summary>
+    public void Start ( )
+    {
+        // Reset inactivity detection flag for new movement cycle
         _inactivityDetected = false ;
 
-        // Start inactivity watchdog: check every 5 seconds if we've received updates
+        // Start inactivity watchdog: check every second if we've received updates
         _lastUpdateTime = _scheduler.Now ;
         _inactivityTimer?.Dispose ( ) ;
         _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 1 ) ,
                                                  _scheduler )
-                                     .Subscribe ( _ => CheckForInactivity ( ) ,
+                                     .Subscribe ( tick =>
+                                                  {
+                                                      _logger.Debug ( "Inactivity timer tick {Tick}" ,
+                                                                      tick ) ;
+                                                      CheckForInactivity ( ) ;
+                                                  } ,
                                                   ex =>
                                                   {
                                                       _logger.Error ( ex ,
-                                                                      "Inactivity detected - desk stopped responding" ) ;
+                                                                      "Inactivity timer error" ) ;
                                                       // Don't re-throw here as it would create unobserved task exception
                                                       // The exception is already logged and the monitor will be disposed
                                                   } ) ;
 
-        _logger.Information ( "DeskMovementMonitor initialized with {Capacity} capacity, inactivity watchdog started" ,
-                              capacity ) ;
+        _logger.Information ( "Inactivity watchdog started for new movement cycle" ) ;
+    }
+
+    /// <summary>
+    ///     Stops the inactivity watchdog timer.
+    ///     This should be called when a movement cycle completes or is cancelled to clean up the timer.
+    /// </summary>
+    public void StopWatchdog ( )
+    {
+        _logger.Debug ( "Stopping inactivity watchdog" ) ;
+
+        _inactivityTimer?.Dispose ( ) ;
+        _inactivityTimer = null ;
+
+        _logger.Information ( "Inactivity watchdog stopped" ) ;
     }
 
     protected virtual void Dispose ( bool disposing )
@@ -165,11 +195,14 @@ public class DeskMovementMonitor
     {
         // If we've already detected inactivity, don't check again
         if ( _inactivityDetected )
+        {
+            _logger.Debug ( "Inactivity already detected, skipping check" ) ;
             return ;
+        }
 
         var elapsed = _scheduler.Now - _lastUpdateTime ;
 
-        _logger.Verbose ( "Inactivity check: {Elapsed} seconds since last update" ,
+        _logger.Debug ( "Inactivity check: {Elapsed} seconds since last update" ,
                           elapsed.TotalSeconds ) ;
 
         if ( elapsed.TotalSeconds > 3 )

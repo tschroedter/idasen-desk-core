@@ -80,6 +80,7 @@ public class DeskMovementMonitorTests : IDisposable
                                             _heightAndSpeed ) ;
 
         sut.Initialize ( DefaultCapacity ) ;
+        sut.Start ( ) ; // Start the inactivity watchdog
 
         return sut ;
     }
@@ -380,7 +381,7 @@ public class DeskMovementMonitorTests : IDisposable
     }
 
     [ TestMethod ]
-    public void Initialize_ResetsInactivityDetection_ForNewCycle ( )
+    public void Start_ResetsInactivityDetection_ForNewCycle ( )
     {
         using var sut = CreateSut ( ) ;
 
@@ -395,8 +396,8 @@ public class DeskMovementMonitorTests : IDisposable
         // Should have emitted one event
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
 
-        // Re-initialize for a new movement cycle
-        sut.Initialize ( ) ;
+        // Start a new movement cycle (resets inactivity detection)
+        sut.Start ( ) ;
 
         // Second cycle: Send update and wait for timeout
         _subjectHeightAndSpeed.OnNext ( _details2 ) ;
@@ -529,5 +530,82 @@ public class DeskMovementMonitorTests : IDisposable
         var action = ( ) => _scheduler.Start ( ) ;
 
         action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void StopWatchdog_StopsInactivityTimer ( )
+    {
+        // Arrange
+        using var sut = CreateSut ( ) ;
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Act - stop the watchdog before timeout
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        sut.StopWatchdog ( ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
+
+        // Assert - no inactivity event should be emitted after stopping
+        receivedEvents.Should ( ).BeEmpty ( "watchdog was stopped before timeout" ) ;
+    }
+
+    [ TestMethod ]
+    public void StopWatchdog_CanBeCalledMultipleTimes ( )
+    {
+        // Arrange
+        using var sut = CreateSut ( ) ;
+
+        // Act
+        var act = ( ) =>
+        {
+            sut.StopWatchdog ( ) ;
+            sut.StopWatchdog ( ) ;
+            sut.StopWatchdog ( ) ;
+        } ;
+
+        // Assert
+        act.Should ( ).NotThrow ( "multiple calls to StopWatchdog should be safe" ) ;
+    }
+
+    [ TestMethod ]
+    public void StopWatchdog_ThenStart_RestartsWatchdog ( )
+    {
+        // Arrange
+        using var sut = CreateSut ( ) ;
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Act - start, stop, then start again
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        sut.StopWatchdog ( ) ;
+
+        // Start a new cycle
+        sut.Start ( ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Assert - should emit inactivity event after restart
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+        receivedEvents [ 0 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
+    }
+
+    [ TestMethod ]
+    public void StopWatchdog_WithoutStart_DoesNotThrow ( )
+    {
+        // Arrange
+        var sut = new DeskMovementMonitor ( _logger ,
+                                            _scheduler ,
+                                            _heightAndSpeed ) ;
+        sut.Initialize ( DefaultCapacity ) ;
+        // Note: not calling Start()
+
+        // Act
+        var act = ( ) => sut.StopWatchdog ( ) ;
+
+        // Assert
+        act.Should ( ).NotThrow ( "calling StopWatchdog without prior Start should be safe" ) ;
+
+        sut.Dispose ( ) ;
     }
 }
