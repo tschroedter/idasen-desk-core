@@ -198,6 +198,12 @@ public class DeskMover
                         Speed ,
                         TargetHeight ) ;
 
+        // Stop the inactivity watchdog FIRST to prevent race condition with timer
+        _monitor?.StopWatchdog ( ) ;
+
+        // Always stop the engine to ensure the move loop terminates
+        _engine.StopMoveAsync ( ) ;
+
         // If we are already stopped, avoid duplicate work and events
         if ( ! IsAllowedToMove &&
              _cycleDisposables == null )
@@ -206,9 +212,6 @@ public class DeskMover
             return Task.FromResult ( true ) ;
         }
 
-        // Stop the inactivity watchdog FIRST to prevent race condition with timer
-        _monitor?.StopWatchdog ( ) ;
-
         IsAllowedToMove               = false ;
         _calculator.MoveIntoDirection = Direction.None ;
 
@@ -216,7 +219,6 @@ public class DeskMover
         _cycleDisposables = null ;
 
         _guard.StopGuarding ( ) ;
-        _engine.StopMoveAsync ( ) ;
 
         _logger.Debug ( "Emitting finished (height={Height})" ,
                         Height ) ;

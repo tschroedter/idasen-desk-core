@@ -229,7 +229,7 @@ public sealed class DeskMoverTests : IDisposable
     }
 
     [ TestMethod ]
-    public async Task StopMovement_WhenAlreadyStopped_DoesNotCallGuardOrEngineAgain ( )
+    public async Task StopMovement_WhenAlreadyStopped_DoesNotCallGuardAgainButCallsEngine ( )
     {
         // Arrange
         var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
@@ -250,8 +250,8 @@ public sealed class DeskMoverTests : IDisposable
         await sut.StopMovement ( ) ;
 
         // Assert
-        _guard.Received ( 1 ).StopGuarding ( ) ;
-        await _engine.Received ( 1 ).StopMoveAsync ( ) ;
+        _guard.Received ( 1 ).StopGuarding ( ) ; // Guard should only be called once
+        await _engine.Received ( 2 ).StopMoveAsync ( ) ; // Engine should be called twice to ensure loop stops
     }
 
     [ TestMethod ]
@@ -701,17 +701,18 @@ public sealed class DeskMoverTests : IDisposable
     }
 
     [ TestMethod ]
-    public async Task StopMovement_CallsMonitorStopWatchdog ( )
+    public async Task StopMovement_CallsMonitorStopWatchdogFirst ( )
     {
         // Arrange
         var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
         using var inactivitySubject = new Subject < string > ( ) ;
+        using var targetReachedSubject = new Subject < uint > ( ) ;
         var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
         _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
         _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
         initialProvider!.Finished.Returns ( _finishedSubject ) ;
         _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
-        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        _guard.TargetHeightReached.Returns ( targetReachedSubject ) ;
         monitor.InactivityDetected.Returns ( inactivitySubject ) ;
 
         using var sut = CreateSut ( ) ;
@@ -721,16 +722,17 @@ public sealed class DeskMoverTests : IDisposable
         // Act
         await sut.StopMovement ( ) ;
 
-        // Assert
+        // Assert - StopWatchdog should be called early to prevent race conditions
         monitor.Received ( 1 ).StopWatchdog ( ) ;
     }
 
     [ TestMethod ]
-    public async Task StopMovement_StopsWatchdogBeforeEmittingFinished ( )
+    public async Task StopMovement_StopsWatchdogAndEngineBeforeEmittingFinished ( )
     {
         // Arrange
         var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
         using var inactivitySubject = new Subject < string > ( ) ;
+        using var targetReachedSubject = new Subject < uint > ( ) ;
         var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
         var callOrder       = new List < string > ( ) ;
 
@@ -738,11 +740,13 @@ public sealed class DeskMoverTests : IDisposable
         _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
         initialProvider!.Finished.Returns ( _finishedSubject ) ;
         _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
-        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        _guard.TargetHeightReached.Returns ( targetReachedSubject ) ;
         monitor.InactivityDetected.Returns ( inactivitySubject ) ;
 
         monitor.When ( m => m.StopWatchdog ( ) )
                .Do ( _ => callOrder.Add ( "MonitorStop" ) ) ;
+        _engine.When ( e => e.StopMoveAsync ( ) )
+               .Do ( _ => callOrder.Add ( "EngineStop" ) ) ;
         _subjectFinished.Subscribe ( _ => callOrder.Add ( "FinishedEmitted" ) ) ;
 
         using var sut = CreateSut ( ) ;
@@ -753,15 +757,17 @@ public sealed class DeskMoverTests : IDisposable
         await sut.StopMovement ( ) ;
 
         // Assert
-        callOrder.Should ( ).HaveCount ( 2 ) ;
+        callOrder.Should ( ).HaveCount ( 3 ) ;
         callOrder [ 0 ].Should ( ).Be ( "MonitorStop" ,
-                                      "monitor should stop before finished event" ) ;
-        callOrder [ 1 ].Should ( ).Be ( "FinishedEmitted" ,
-                                      "finished event should emit after monitor stops" ) ;
+                                      "monitor should stop first to prevent race condition" ) ;
+        callOrder [ 1 ].Should ( ).Be ( "EngineStop" ,
+                                      "engine should stop to terminate move loop" ) ;
+        callOrder [ 2 ].Should ( ).Be ( "FinishedEmitted" ,
+                                      "finished event should emit after cleanup" ) ;
     }
 
     [ TestMethod ]
-    public async Task StopMovement_WhenAlreadyStopped_DoesNotCallMonitorStopWatchdog ( )
+    public async Task StopMovement_WhenAlreadyStopped_StillCallsMonitorStopWatchdog ( )
     {
         // Arrange
         var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
@@ -783,8 +789,8 @@ public sealed class DeskMoverTests : IDisposable
         monitor.ClearReceivedCalls ( ) ; // Clear the first call
         await sut.StopMovement ( ) ;
 
-        // Assert - should not call StopWatchdog again when already stopped
-        monitor.DidNotReceive ( ).StopWatchdog ( ) ;
+        // Assert - StopWatchdog should still be called even when already stopped to ensure watchdog stops
+        monitor.Received ( 1 ).StopWatchdog ( ) ;
     }
 
     [ TestMethod ]
@@ -809,8 +815,8 @@ public sealed class DeskMoverTests : IDisposable
         // Act - emit inactivity event
         inactivitySubject.OnNext ( "No height updates received" ) ;
 
-        // Assert
-        monitor.Received ( 1 ).StopWatchdog ( ) ;
+        // Assert - StopWatchdog is called by StopMovement which is triggered by inactivity
+        monitor.Received ( ).StopWatchdog ( ) ;
     }
 
     [ TestMethod ]
@@ -912,13 +918,12 @@ public sealed class DeskMoverTests : IDisposable
         // Act
         inactivitySubject.OnNext ( reason ) ;
 
-        // Assert - monitor should stop before engine to prevent race condition
-        callOrder.Should ( ).HaveCount ( 3 ) ;
-        callOrder [ 0 ].Should ( ).Be ( "LogError" ,
-                                      "error logging should happen first" ) ;
-        callOrder [ 1 ].Should ( ).Be ( "MonitorStop" ,
-                                      "monitor should stop before engine" ) ;
-        callOrder [ 2 ].Should ( ).Be ( "EngineStop" ,
-                                      "engine should stop after monitor" ) ;
+        // Assert - monitor and engine should stop early to prevent race condition
+        callOrder.Should ( ).Contain ( "LogError" ) ;
+        callOrder.Should ( ).Contain ( "MonitorStop" ) ;
+        callOrder.Should ( ).Contain ( "EngineStop" ) ;
+        callOrder.IndexOf ( "LogError" ).Should ( ).Be ( 0 , "error logging should happen first" ) ;
+        callOrder.IndexOf ( "MonitorStop" ).Should ( ).BeLessThan ( callOrder.IndexOf ( "EngineStop" ) ,
+                                                                     "monitor should stop before engine" ) ;
     }
 }
