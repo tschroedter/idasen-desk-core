@@ -12,4 +12,9 @@ public interface IDeskMovementMonitor
     ///     Initializes the monitor with the specified ring buffer capacity.
     /// </summary>
     void Initialize ( int capacity = DeskMovementMonitor.DefaultCapacity ) ;
+
+    /// <summary>
+    ///     Observable that emits when the desk has stopped responding (no height updates).
+    /// </summary>
+    IObservable < string > InactivityDetected { get ; }
 }

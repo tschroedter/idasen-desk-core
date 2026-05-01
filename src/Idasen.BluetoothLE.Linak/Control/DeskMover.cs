@@ -38,6 +38,7 @@ public class DeskMover
 
     private IDisposable ? _disposableProvider ;
     private IDisposable ? _guardTargetHeightReached ;
+    private IDisposable ? _monitorInactivityDetected ;
 
     private IInitialHeightProvider ? _initialProvider ;
 
@@ -133,6 +134,18 @@ public class DeskMover
                                                         _engine.StopMoveAsync ( ) ;
                                                         StopMovement ( ) ;
                                                     } ) ;
+
+            // Subscribe to inactivity detection
+            _monitorInactivityDetected?.Dispose ( ) ;
+            _monitorInactivityDetected = _monitor.InactivityDetected
+                                                 .ObserveOn ( _scheduler )
+                                                 .Subscribe ( reason =>
+                                                              {
+                                                                  _logger.Error ( "Movement stopped due to inactivity: {Reason}" ,
+                                                                                  reason ) ;
+                                                                  _engine.StopMoveAsync ( ) ;
+                                                                  StopMovement ( ) ;
+                                                              } ) ;
         }
     }
 
@@ -237,6 +250,7 @@ public class DeskMover
             _rawHeightAndSpeedSubscription?.Dispose ( ) ;
             _cycleDisposables?.Dispose ( ) ;
             _guardTargetHeightReached?.Dispose ( ) ;
+            _monitorInactivityDetected?.Dispose ( ) ;
         }
     }
 

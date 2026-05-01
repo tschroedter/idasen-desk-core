@@ -1,5 +1,6 @@
 using System.Reactive.Concurrency ;
 using System.Reactive.Linq ;
+using System.Reactive.Subjects ;
 using Autofac.Extras.DynamicProxy ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
@@ -21,9 +22,10 @@ public class DeskMovementMonitor
     internal const string SpeedWasZero          = "Speed was zero when moving desk" ;
     internal const string NoHeightUpdatesReceived = "No height updates received for timeout period" ;
 
-    private readonly IDeskHeightAndSpeed _heightAndSpeed ;
-    private readonly ILogger             _logger ;
-    private readonly IScheduler          _scheduler ;
+    private readonly IDeskHeightAndSpeed       _heightAndSpeed ;
+    private readonly ILogger                   _logger ;
+    private readonly IScheduler                _scheduler ;
+    private readonly Subject < string >        _subjectInactivityDetected ;
 
     private IDisposable ? _disposalHeightAndSpeed ;
     private IDisposable ? _inactivityTimer ;
@@ -39,10 +41,14 @@ public class DeskMovementMonitor
         ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
         ArgumentNullException.ThrowIfNull ( logger ) ;
 
-        _logger         = logger ;
-        _scheduler      = scheduler ;
-        _heightAndSpeed = heightAndSpeed ;
+        _logger                    = logger ;
+        _scheduler                 = scheduler ;
+        _heightAndSpeed            = heightAndSpeed ;
+        _subjectInactivityDetected = new Subject < string > ( ) ;
     }
+
+    /// <inheritdoc />
+    public IObservable < string > InactivityDetected => _subjectInactivityDetected ;
 
     /// <inheritdoc />
     public void Dispose ( )
@@ -96,6 +102,8 @@ public class DeskMovementMonitor
 
             _inactivityTimer?.Dispose ( ) ;
             _inactivityTimer = null ;
+
+            _subjectInactivityDetected?.Dispose ( ) ;
         }
     }
 
@@ -143,6 +151,10 @@ public class DeskMovementMonitor
         {
             _logger.Warning ( "No height updates received for {Seconds} seconds" ,
                               elapsed.TotalSeconds ) ;
+
+            // Publish event to trigger movement stop
+            _subjectInactivityDetected.OnNext ( NoHeightUpdatesReceived ) ;
+
             throw new InvalidOperationException ( NoHeightUpdatesReceived ) ;
         }
     }
