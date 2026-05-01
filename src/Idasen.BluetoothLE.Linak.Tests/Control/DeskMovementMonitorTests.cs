@@ -85,6 +85,36 @@ public class DeskMovementMonitorTests : IDisposable
     }
 
     [ TestMethod ]
+    public void Initialize_WithZeroCapacity_ThrowsArgumentOutOfRangeException ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.Initialize ( 0 ) ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "*Capacity must be positive*" )
+              .And.ParamName.Should ( ).Be ( "capacity" ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_WithNegativeCapacity_ThrowsArgumentOutOfRangeException ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.Initialize ( -5 ) ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "*Capacity must be positive*" )
+              .And.ParamName.Should ( ).Be ( "capacity" ) ;
+    }
+
+    [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForThreeEventsWithDifferentHeightAndSpeed_DoesNotThrow ( )
     {
         using var sut = CreateSut ( ) ;
@@ -298,15 +328,7 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
         // Advance time by 4 seconds (exceeds 3 second timeout)
-        // Note: We need to catch the exception since CheckForInactivity throws
-        try
-        {
-            _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
-        }
-        catch ( InvalidOperationException )
-        {
-            // Expected exception
-        }
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
 
         // Should have emitted an inactivity event
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
@@ -323,19 +345,189 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
         // Advance time by 4 seconds (exceeds 3 second timeout)
-        // Note: We need to catch the exception since CheckForInactivity throws
-        try
-        {
-            _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
-        }
-        catch ( InvalidOperationException )
-        {
-            // Expected exception
-        }
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
 
         // Should have logged a warning
         _logger.Received ( 1 )
                .Warning ( "No height updates received for {Seconds} seconds" ,
                           Arg.Is < double > ( s => s > 3.0 ) ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_OnlyEmitsOnce_WhenTimeoutExceeded ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Advance time by 10 seconds (well beyond 3 second timeout)
+        // This should only emit one event, not multiple
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 10 ).Ticks ) ;
+
+        // Should have emitted exactly one inactivity event
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+        receivedEvents [ 0 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
+
+        // Should only have logged warning once
+        _logger.Received ( 1 )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_ResetsInactivityDetection_ForNewCycle ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // First cycle: Send update and wait for timeout
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Should have emitted one event
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+
+        // Re-initialize for a new movement cycle
+        sut.Initialize ( ) ;
+
+        // Second cycle: Send update and wait for timeout
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Should have emitted a second event (one per cycle)
+        receivedEvents.Should ( ).HaveCount ( 2 ) ;
+        receivedEvents [ 1 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_AfterDetection_SubsequentChecksDoNotLogAgain ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Advance time by 4 seconds to trigger inactivity
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Verify first detection
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+        _logger.Received ( 1 )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+
+        // Clear received calls to verify no additional calls
+        _logger.ClearReceivedCalls ( ) ;
+
+        // Continue advancing time (timer keeps ticking, but should early-return)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 10 ).Ticks ) ;
+
+        // Should still only have one event (no duplicates)
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+
+        // Should not have logged additional warnings (early return prevents it)
+        _logger.DidNotReceive ( )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_WhenCalledWithoutPriorInitialize_DoesNotThrow ( )
+    {
+        // This covers the null branch of _inactivityTimer?.Dispose() on line 87
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.Initialize ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_WhenCalledMultipleTimes_DisposesOldTimer ( )
+    {
+        // This covers the non-null branch of _inactivityTimer?.Dispose() on line 87
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        // First initialization creates timer
+        sut.Initialize ( ) ;
+
+        // Second initialization should dispose old timer and create new one
+        var action = ( ) => sut.Initialize ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void Dispose_WhenCalledWithoutInitialize_DoesNotThrow ( )
+    {
+        // This covers the null branches on lines 113-114
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.Dispose ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_WithLessThanMinimumItems_DoesNotCheckSpeed ( )
+    {
+        // This covers the false branch of "History.Count >= MinimumNumberOfItems" on line 151
+        // Create monitor with capacity 5 (larger than MinimumNumberOfItems which is 3)
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+        sut.Initialize ( 5 ) ;
+
+        // Send only 2 items with different heights but speed zero
+        var details1 = new HeightSpeedDetails ( DateTimeOffset.Now , 1u , 0 ) ;
+        var details2 = new HeightSpeedDetails ( DateTimeOffset.Now , 2u , 0 ) ;
+
+        _subjectHeightAndSpeed.OnNext ( details1 ) ;
+        _subjectHeightAndSpeed.OnNext ( details2 ) ;
+
+        // Should not throw even though speed is zero, because we haven't reached MinimumNumberOfItems
+        var action = ( ) => _scheduler.Start ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void OnHeightAndSpeedChanged_WithMinimumItems_AndNonZeroSpeed_DoesNotThrow ( )
+    {
+        // This covers the branch where History.Count >= MinimumNumberOfItems is true
+        // but History.All(x => x.Speed == 0) is false
+        using var sut = CreateSut ( ) ;
+
+        // Send 3 items with different heights and at least one non-zero speed
+        var details1 = new HeightSpeedDetails ( DateTimeOffset.Now , 1u , 0 ) ;
+        var details2 = new HeightSpeedDetails ( DateTimeOffset.Now , 2u , 0 ) ;
+        var details3 = new HeightSpeedDetails ( DateTimeOffset.Now , 3u , 5 ) ; // Non-zero speed
+
+        _subjectHeightAndSpeed.OnNext ( details1 ) ;
+        _subjectHeightAndSpeed.OnNext ( details2 ) ;
+        _subjectHeightAndSpeed.OnNext ( details3 ) ;
+
+        var action = ( ) => _scheduler.Start ( ) ;
+
+        action.Should ( ).NotThrow ( ) ;
     }
 }
