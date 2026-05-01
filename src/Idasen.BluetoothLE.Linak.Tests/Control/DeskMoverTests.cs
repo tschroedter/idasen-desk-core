@@ -655,7 +655,7 @@ public sealed class DeskMoverTests : IDisposable
     }
 
     [ TestMethod ]
-    public void TargetHeightReached_CallsStopWatchdogAfterLogging ( )
+    public void TargetHeightReached_CallsStopWatchdogBeforeEngineStop ( )
     {
         // Arrange
         var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
@@ -673,6 +673,8 @@ public sealed class DeskMoverTests : IDisposable
 
         monitor.When ( m => m.StopWatchdog ( ) )
                .Do ( _ => callOrder.Add ( "MonitorStop" ) ) ;
+        _engine.When ( e => e.StopMoveAsync ( ) )
+               .Do ( _ => callOrder.Add ( "EngineStop" ) ) ;
         _logger.When ( l => l.Information ( "Reached target height={TargetHeight}" , Arg.Any < uint > ( ) ) )
                .Do ( _ => callOrder.Add ( "LogInfo" ) ) ;
 
@@ -683,16 +685,18 @@ public sealed class DeskMoverTests : IDisposable
         // Act
         targetHeightSubject.OnNext ( 1000u ) ;
 
-        // Assert - logging happens first, then StopMovement calls StopWatchdog
-        callOrder.Should ( ).HaveCount ( 2 ) ;
+        // Assert - monitor should stop before engine to prevent race condition
+        callOrder.Should ( ).HaveCount ( 3 ) ;
         callOrder [ 0 ].Should ( ).Be ( "LogInfo" ,
                                       "logging should happen first" ) ;
         callOrder [ 1 ].Should ( ).Be ( "MonitorStop" ,
-                                      "monitor should stop after logging" ) ;
+                                      "monitor should stop before engine" ) ;
+        callOrder [ 2 ].Should ( ).Be ( "EngineStop" ,
+                                      "engine should stop after monitor" ) ;
     }
 
     [ TestMethod ]
-    public void InactivityDetected_CallsStopWatchdogAfterLoggingError ( )
+    public void InactivityDetected_CallsStopWatchdogBeforeEngineStop ( )
     {
         // Arrange
         var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
@@ -710,6 +714,8 @@ public sealed class DeskMoverTests : IDisposable
 
         monitor.When ( m => m.StopWatchdog ( ) )
                .Do ( _ => callOrder.Add ( "MonitorStop" ) ) ;
+        _engine.When ( e => e.StopMoveAsync ( ) )
+               .Do ( _ => callOrder.Add ( "EngineStop" ) ) ;
         _logger.When ( l => l.Error ( "Movement stopped due to inactivity: {Reason}" , Arg.Any < string > ( ) ) )
                .Do ( _ => callOrder.Add ( "LogError" ) ) ;
 
@@ -720,11 +726,13 @@ public sealed class DeskMoverTests : IDisposable
         // Act
         inactivitySubject.OnNext ( reason ) ;
 
-        // Assert - logging happens first, then StopMovement calls StopWatchdog
-        callOrder.Should ( ).HaveCount ( 2 ) ;
+        // Assert - monitor should stop before engine to prevent race condition
+        callOrder.Should ( ).HaveCount ( 3 ) ;
         callOrder [ 0 ].Should ( ).Be ( "LogError" ,
                                       "error logging should happen first" ) ;
         callOrder [ 1 ].Should ( ).Be ( "MonitorStop" ,
-                                      "monitor should stop after logging error" ) ;
+                                      "monitor should stop before engine" ) ;
+        callOrder [ 2 ].Should ( ).Be ( "EngineStop" ,
+                                      "engine should stop after monitor" ) ;
     }
 }

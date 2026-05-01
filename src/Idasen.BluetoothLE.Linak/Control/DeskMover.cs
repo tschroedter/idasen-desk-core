@@ -131,7 +131,6 @@ public class DeskMover
                                                     {
                                                         _logger.Information ( "Reached target height={TargetHeight}" ,
                                                                               targetHeight ) ;
-                                                        _engine.StopMoveAsync ( ) ;
                                                         StopMovement ( ) ;
                                                     } ) ;
 
@@ -143,7 +142,6 @@ public class DeskMover
                                                               {
                                                                   _logger.Error ( "Movement stopped due to inactivity: {Reason}" ,
                                                                                   reason ) ;
-                                                                  _engine.StopMoveAsync ( ) ;
                                                                   StopMovement ( ) ;
                                                               } ) ;
         }
@@ -208,6 +206,9 @@ public class DeskMover
             return Task.FromResult ( true ) ;
         }
 
+        // Stop the inactivity watchdog FIRST to prevent race condition with timer
+        _monitor?.StopWatchdog ( ) ;
+
         IsAllowedToMove               = false ;
         _calculator.MoveIntoDirection = Direction.None ;
 
@@ -216,9 +217,6 @@ public class DeskMover
 
         _guard.StopGuarding ( ) ;
         _engine.StopMoveAsync ( ) ;
-
-        // Stop the inactivity watchdog when movement cycle completes
-        _monitor?.StopWatchdog ( ) ;
 
         _logger.Debug ( "Emitting finished (height={Height})" ,
                         Height ) ;
