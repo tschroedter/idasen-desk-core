@@ -407,4 +407,40 @@ public class DeskMovementMonitorTests : IDisposable
         receivedEvents.Should ( ).HaveCount ( 2 ) ;
         receivedEvents [ 1 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
     }
+
+    [ TestMethod ]
+    public void InactivityDetected_AfterDetection_SubsequentChecksDoNotLogAgain ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Advance time by 4 seconds to trigger inactivity
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Verify first detection
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+        _logger.Received ( 1 )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+
+        // Clear received calls to verify no additional calls
+        _logger.ClearReceivedCalls ( ) ;
+
+        // Continue advancing time (timer keeps ticking, but should early-return)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 10 ).Ticks ) ;
+
+        // Should still only have one event (no duplicates)
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+
+        // Should not have logged additional warnings (early return prevents it)
+        _logger.DidNotReceive ( )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+    }
 }
