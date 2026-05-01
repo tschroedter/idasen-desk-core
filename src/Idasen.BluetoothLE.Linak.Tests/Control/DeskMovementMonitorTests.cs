@@ -140,7 +140,7 @@ public class DeskMovementMonitorTests : IDisposable
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Advance time by 2 seconds
+        // Advance time by 2 seconds (within 3 second timeout)
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Send another update
@@ -206,15 +206,15 @@ public class DeskMovementMonitorTests : IDisposable
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Wait 4 seconds (just under timeout)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        // Wait 2 seconds (within 3 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Send another update (resets the timer)
         _subjectHeightAndSpeed.OnNext ( _details2 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Wait another 4 seconds (total 9 seconds, but only 4 since last update)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        // Wait another 2 seconds (total 5 seconds, but only 2 since last update)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Should not have thrown or logged
         _logger.DidNotReceive ( )
@@ -283,5 +283,59 @@ public class DeskMovementMonitorTests : IDisposable
 
         // The observable should complete
         completed.Should ( ).BeTrue ( ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_WhenNoUpdatesFor3Seconds_EmitsEvent ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Advance time by 4 seconds (exceeds 3 second timeout)
+        // Note: We need to catch the exception since CheckForInactivity throws
+        try
+        {
+            _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        }
+        catch ( InvalidOperationException )
+        {
+            // Expected exception
+        }
+
+        // Should have emitted an inactivity event
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+        receivedEvents [ 0 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimer_WhenNoUpdatesFor3Seconds_LogsWarning ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Advance time by 4 seconds (exceeds 3 second timeout)
+        // Note: We need to catch the exception since CheckForInactivity throws
+        try
+        {
+            _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        }
+        catch ( InvalidOperationException )
+        {
+            // Expected exception
+        }
+
+        // Should have logged a warning
+        _logger.Received ( 1 )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Is < double > ( s => s > 3.0 ) ) ;
     }
 }

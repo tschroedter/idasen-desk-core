@@ -81,7 +81,7 @@ public class DeskMovementMonitor
         // Start inactivity watchdog: check every 5 seconds if we've received updates
         _lastUpdateTime = _scheduler.Now ;
         _inactivityTimer?.Dispose ( ) ;
-        _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 5 ) ,
+        _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 1 ) ,
                                                  _scheduler )
                                      .Subscribe ( _ => CheckForInactivity ( ) ,
                                                   ex =>
@@ -91,6 +91,9 @@ public class DeskMovementMonitor
                                                       // Don't re-throw here as it would create unobserved task exception
                                                       // The exception is already logged and the monitor will be disposed
                                                   } ) ;
+
+        _logger.Information ( "DeskMovementMonitor initialized with {Capacity} capacity, inactivity watchdog started" ,
+                              capacity ) ;
     }
 
     protected virtual void Dispose ( bool disposing )
@@ -120,6 +123,10 @@ public class DeskMovementMonitor
     {
         _lastUpdateTime = _scheduler.Now ; // Update the last activity timestamp
 
+        _logger.Debug ( "Received height/speed update: Height={Height}, Speed={Speed}" ,
+                        details.Height ,
+                        details.Speed ) ;
+
         History.PushBack ( details ) ;
 
         _logger.Debug ( "History: {History}" ,
@@ -148,7 +155,10 @@ public class DeskMovementMonitor
     {
         var elapsed = _scheduler.Now - _lastUpdateTime ;
 
-        if ( elapsed.TotalSeconds > 5 )
+        _logger.Verbose ( "Inactivity check: {Elapsed} seconds since last update" ,
+                          elapsed.TotalSeconds ) ;
+
+        if ( elapsed.TotalSeconds > 3 )
         {
             _logger.Warning ( "No height updates received for {Seconds} seconds" ,
                               elapsed.TotalSeconds ) ;
