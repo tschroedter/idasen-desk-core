@@ -72,10 +72,10 @@ public class DeskMovementMonitor
                                                               ex => _logger.Error ( ex ,
                                                                                     "Error observing height/speed changes" ) ) ;
 
-        // Start inactivity watchdog: check every 10 seconds if we've received updates
+        // Start inactivity watchdog: check every 5 seconds if we've received updates
         _lastUpdateTime = _scheduler.Now ;
         _inactivityTimer?.Dispose ( ) ;
-        _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 10 ) ,
+        _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 5 ) ,
                                                  _scheduler )
                                      .Subscribe ( _ => CheckForInactivity ( ) ,
                                                   ex =>
@@ -139,7 +139,7 @@ public class DeskMovementMonitor
     {
         var elapsed = _scheduler.Now - _lastUpdateTime ;
 
-        if ( elapsed.TotalSeconds > 10 )
+        if ( elapsed.TotalSeconds > 5 )
         {
             _logger.Warning ( "No height updates received for {Seconds} seconds" ,
                               elapsed.TotalSeconds ) ;
