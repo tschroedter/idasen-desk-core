@@ -301,4 +301,81 @@ public sealed class DeskMoverTests : IDisposable
         sut.Height.Should ( ).Be ( expectedHeight ,
                                    "the height should be updated when notified" ) ;
     }
+
+    [ TestMethod ]
+    public void Initialize_SubscribesToMonitorInactivityDetected ( )
+    {
+        // Arrange
+        var monitor              = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject    = new Subject < string > ( ) ;
+        var initialProvider      = Substitute.For < IInitialHeightProvider > ( ) ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        using var sut = CreateSut ( ) ;
+
+        // Act
+        sut.Initialize ( ) ;
+
+        // Assert - verify subscription was created
+        _ = monitor.Received ( 1 ).InactivityDetected ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_StopsMovementAndEngine ( )
+    {
+        // Arrange
+        var monitor              = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject    = new Subject < string > ( ) ;
+        var initialProvider      = Substitute.For < IInitialHeightProvider > ( ) ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut , true ) ;
+
+        // Act - emit inactivity event
+        inactivitySubject.OnNext ( "No height updates received" ) ;
+
+        // Assert
+        _engine.Received ( ).StopMoveAsync ( ) ;
+        sut.IsAllowedToMove.Should ( ).BeFalse ( "movement should be stopped after inactivity" ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_LogsError ( )
+    {
+        // Arrange
+        var monitor              = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject    = new Subject < string > ( ) ;
+        var initialProvider      = Substitute.For < IInitialHeightProvider > ( ) ;
+        var reason               = "No height updates received for timeout period" ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+
+        // Act - emit inactivity event
+        inactivitySubject.OnNext ( reason ) ;
+
+        // Assert
+        _logger.Received ( 1 ).Error ( "Movement stopped due to inactivity: {Reason}" , reason ) ;
+    }
 }

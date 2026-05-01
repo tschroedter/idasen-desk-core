@@ -103,6 +103,7 @@ public class DeskMovementMonitor
             _inactivityTimer?.Dispose ( ) ;
             _inactivityTimer = null ;
 
+            _subjectInactivityDetected?.OnCompleted ( ) ;
             _subjectInactivityDetected?.Dispose ( ) ;
         }
     }

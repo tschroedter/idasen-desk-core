@@ -221,4 +221,67 @@ public class DeskMovementMonitorTests : IDisposable
                .Warning ( "No height updates received for {Seconds} seconds" ,
                           Arg.Any < double > ( ) ) ;
     }
+
+    [ TestMethod ]
+    public void InactivityDetected_WhenRegularUpdates_DoesNotEmit ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send regular updates
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        _subjectHeightAndSpeed.OnNext ( _details3 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Should not have emitted any inactivity events
+        receivedEvents.Should ( ).BeEmpty ( ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_Observable_IsNotNull ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        // The InactivityDetected observable should be available
+        sut.InactivityDetected.Should ( ).NotBeNull ( ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_CanSubscribe_WithoutError ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        // Should be able to subscribe to the observable
+        var action = ( ) => sut.InactivityDetected.Subscribe ( _ => { } ) ;
+
+        action.Should ( ).NotThrow ( ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_WhenDisposed_CompletesObservable ( )
+    {
+        var sut = CreateSut ( ) ;
+
+        var completed = false ;
+        sut.InactivityDetected.Subscribe (
+            _ => { } ,
+            ( ) => completed = true ) ;
+
+        // Send an update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Dispose the monitor
+        sut.Dispose ( ) ;
+
+        // The observable should complete
+        completed.Should ( ).BeTrue ( ) ;
+    }
 }
