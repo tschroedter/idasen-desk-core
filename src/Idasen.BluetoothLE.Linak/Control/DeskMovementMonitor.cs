@@ -88,7 +88,12 @@ public class DeskMovementMonitor
         _inactivityTimer?.Dispose ( ) ;
         _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 1 ) ,
                                                  _scheduler )
-                                     .Subscribe ( _ => CheckForInactivity ( ) ,
+                                     .Subscribe ( tick =>
+                                                  {
+                                                      _logger.Debug ( "Inactivity timer tick {Tick}" ,
+                                                                      tick ) ;
+                                                      CheckForInactivity ( ) ;
+                                                  } ,
                                                   ex =>
                                                   {
                                                       _logger.Error ( ex ,
@@ -165,11 +170,14 @@ public class DeskMovementMonitor
     {
         // If we've already detected inactivity, don't check again
         if ( _inactivityDetected )
+        {
+            _logger.Debug ( "Inactivity already detected, skipping check" ) ;
             return ;
+        }
 
         var elapsed = _scheduler.Now - _lastUpdateTime ;
 
-        _logger.Verbose ( "Inactivity check: {Elapsed} seconds since last update" ,
+        _logger.Debug ( "Inactivity check: {Elapsed} seconds since last update" ,
                           elapsed.TotalSeconds ) ;
 
         if ( elapsed.TotalSeconds > 3 )
