@@ -140,7 +140,7 @@ public class DeskMovementMonitorTests : IDisposable
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Advance time by 2 seconds
+        // Advance time by 2 seconds (within 3 second timeout)
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Send another update
@@ -206,15 +206,15 @@ public class DeskMovementMonitorTests : IDisposable
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Wait 4 seconds (just under timeout)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        // Wait 2 seconds (within 3 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Send another update (resets the timer)
         _subjectHeightAndSpeed.OnNext ( _details2 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Wait another 4 seconds (total 9 seconds, but only 4 since last update)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        // Wait another 2 seconds (total 5 seconds, but only 2 since last update)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Should not have thrown or logged
         _logger.DidNotReceive ( )
