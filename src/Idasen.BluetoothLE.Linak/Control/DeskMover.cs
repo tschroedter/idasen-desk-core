@@ -272,6 +272,9 @@ public class DeskMover
             return ;
         }
 
+        // Reinitialize monitor for this movement cycle (resets inactivity detection)
+        _monitor?.Initialize ( ) ;
+
         // Compute initial start direction once for this cycle
         _calculator.Height                   = height ;
         _calculator.Speed                    = speed ;
