@@ -217,6 +217,9 @@ public class DeskMover
         _guard.StopGuarding ( ) ;
         _engine.StopMoveAsync ( ) ;
 
+        // Stop the inactivity watchdog when movement cycle completes
+        _monitor?.StopWatchdog ( ) ;
+
         _logger.Debug ( "Emitting finished (height={Height})" ,
                         Height ) ;
 
@@ -272,8 +275,8 @@ public class DeskMover
             return ;
         }
 
-        // Reinitialize monitor for this movement cycle (resets inactivity detection)
-        _monitor?.Initialize ( ) ;
+        // Start inactivity watchdog for this movement cycle
+        _monitor?.Start ( ) ;
 
         // Compute initial start direction once for this cycle
         _calculator.Height                   = height ;
