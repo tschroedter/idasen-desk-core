@@ -85,6 +85,36 @@ public class DeskMovementMonitorTests : IDisposable
     }
 
     [ TestMethod ]
+    public void Initialize_WithZeroCapacity_ThrowsArgumentOutOfRangeException ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.Initialize ( 0 ) ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "*Capacity must be positive*" )
+              .And.ParamName.Should ( ).Be ( "capacity" ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_WithNegativeCapacity_ThrowsArgumentOutOfRangeException ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.Initialize ( -5 ) ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "*Capacity must be positive*" )
+              .And.ParamName.Should ( ).Be ( "capacity" ) ;
+    }
+
+    [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForThreeEventsWithDifferentHeightAndSpeed_DoesNotThrow ( )
     {
         using var sut = CreateSut ( ) ;
