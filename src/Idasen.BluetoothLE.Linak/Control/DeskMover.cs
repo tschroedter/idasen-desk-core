@@ -273,9 +273,6 @@ public class DeskMover
             return ;
         }
 
-        // Start inactivity watchdog for this movement cycle
-        _monitor?.Start ( ) ;
-
         // Compute initial start direction once for this cycle
         _calculator.Height                   = height ;
         _calculator.Speed                    = speed ;
@@ -292,8 +289,18 @@ public class DeskMover
                                TargetHeight ,
                                CancellationToken.None ) ;
 
-        await _engine.StartMoveAsync ( _calculator.MoveIntoDirection ,
-                                       CancellationToken.None ) ;
+        if ( StartMovingIntoDirection != Direction.None )
+        {
+            // Start inactivity watchdog for this movement cycle
+            _monitor?.Start ( ) ;
+
+            await _engine.StartMoveAsync ( _calculator.MoveIntoDirection ,
+                                           CancellationToken.None ) ;
+        }
+        else
+        {
+            _logger.Debug ( "Already at target height; no movement needed" ) ;
+        }
     }
 
     private async Task OnFinished ( uint height )

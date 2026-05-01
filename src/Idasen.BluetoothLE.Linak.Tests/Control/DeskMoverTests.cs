@@ -380,6 +380,40 @@ public sealed class DeskMoverTests : IDisposable
     }
 
     [ TestMethod ]
+    public void StartAfterReceivingCurrentHeight_SetsCalculatorHeightAndSpeed ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.TargetHeight = 1000 ;
+
+        var testHeight = 500u ;
+        var testSpeed  = 42 ;
+
+        // Act - simulate initial height callback with specific height and speed
+        var method = sut.GetType ( )
+                        .GetMethod ( "StartAfterReceivingCurrentHeight" ,
+                                    System.Reflection.BindingFlags.NonPublic |
+                                    System.Reflection.BindingFlags.Instance ) ;
+        method?.Invoke ( sut , [ testHeight , testSpeed ] ) ;
+
+        // Assert - verify calculator received the height and speed parameters
+        _calculator.Received ( 1 ).Height = testHeight ;
+        _calculator.Received ( 1 ).Speed = testSpeed ;
+    }
+
+    [ TestMethod ]
     public void StartAfterReceivingCurrentHeight_CallsMonitorStart ( )
     {
         // Arrange
@@ -505,13 +539,165 @@ public sealed class DeskMoverTests : IDisposable
                                     System.Reflection.BindingFlags.NonPublic |
                                     System.Reflection.BindingFlags.Instance ) ;
 
-        // Act - simulate multiple movement cycles
-        method?.Invoke ( sut , [ 500u , 0 ] ) ;
-        method?.Invoke ( sut , [ 700u , 0 ] ) ;
-        method?.Invoke ( sut , [ 900u , 0 ] ) ;
+        // Act - simulate multiple movement cycles with different heights and speeds
+        method?.Invoke ( sut , [ 500u , 10 ] ) ;
+        method?.Invoke ( sut , [ 700u , 15 ] ) ;
+        method?.Invoke ( sut , [ 900u , 20 ] ) ;
 
         // Assert
         monitor.Received ( 3 ).Start ( ) ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterReceivingCurrentHeight_SetsCalculatorTargetHeight ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        var expectedTargetHeight = 1000u ;
+        sut.TargetHeight = expectedTargetHeight ;
+
+        // Act
+        var method = sut.GetType ( )
+                        .GetMethod ( "StartAfterReceivingCurrentHeight" ,
+                                    System.Reflection.BindingFlags.NonPublic |
+                                    System.Reflection.BindingFlags.Instance ) ;
+        method?.Invoke ( sut , [ 500u , 0 ] ) ;
+
+        // Assert
+        _calculator.Received ( 1 ).TargetHeight = expectedTargetHeight ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterReceivingCurrentHeight_CallsGuardStartGuarding ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        var targetHeight = 1000u ;
+        sut.TargetHeight = targetHeight ;
+
+        // Act
+        var method = sut.GetType ( )
+                        .GetMethod ( "StartAfterReceivingCurrentHeight" ,
+                                    System.Reflection.BindingFlags.NonPublic |
+                                    System.Reflection.BindingFlags.Instance ) ;
+        method?.Invoke ( sut , [ 500u , 0 ] ) ;
+
+        // Assert
+        _guard.Received ( 1 ).StartGuarding ( Direction.Up , targetHeight , Arg.Any < CancellationToken > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterReceivingCurrentHeight_CallsEngineStartMoveAsync ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.Up ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.TargetHeight = 1000 ;
+
+        // Act
+        var method = sut.GetType ( )
+                        .GetMethod ( "StartAfterReceivingCurrentHeight" ,
+                                    System.Reflection.BindingFlags.NonPublic |
+                                    System.Reflection.BindingFlags.Instance ) ;
+        method?.Invoke ( sut , [ 500u , 0 ] ) ;
+
+        // Assert
+        _engine.Received ( 1 ).StartMoveAsync ( Direction.Up , Arg.Any < CancellationToken > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterReceivingCurrentHeight_WhenDirectionIsNone_DoesNotCallEngineStartMoveAsync ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.TargetHeight = 1000 ;
+
+        // Act
+        var method = sut.GetType ( )
+                        .GetMethod ( "StartAfterReceivingCurrentHeight" ,
+                                    System.Reflection.BindingFlags.NonPublic |
+                                    System.Reflection.BindingFlags.Instance ) ;
+        method?.Invoke ( sut , [ 1000u , 0 ] ) ; // Already at target
+
+        // Assert
+        _engine.DidNotReceive ( ).StartMoveAsync ( Arg.Any < Direction > ( ) , Arg.Any < CancellationToken > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void StartAfterReceivingCurrentHeight_WhenDirectionIsNone_DoesNotCallMonitorStart ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( _finishedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+        _calculator.MoveIntoDirection.Returns ( Direction.None ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.TargetHeight = 1000 ;
+
+        // Act
+        var method = sut.GetType ( )
+                        .GetMethod ( "StartAfterReceivingCurrentHeight" ,
+                                    System.Reflection.BindingFlags.NonPublic |
+                                    System.Reflection.BindingFlags.Instance ) ;
+        method?.Invoke ( sut , [ 1000u , 0 ] ) ; // Already at target
+
+        // Assert
+        monitor.DidNotReceive ( ).Start ( ) ;
     }
 
     [ TestMethod ]
