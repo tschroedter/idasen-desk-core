@@ -298,15 +298,7 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
         // Advance time by 4 seconds (exceeds 3 second timeout)
-        // Note: We need to catch the exception since CheckForInactivity throws
-        try
-        {
-            _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
-        }
-        catch ( InvalidOperationException )
-        {
-            // Expected exception
-        }
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
 
         // Should have emitted an inactivity event
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
@@ -323,19 +315,66 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
         // Advance time by 4 seconds (exceeds 3 second timeout)
-        // Note: We need to catch the exception since CheckForInactivity throws
-        try
-        {
-            _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
-        }
-        catch ( InvalidOperationException )
-        {
-            // Expected exception
-        }
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
 
         // Should have logged a warning
         _logger.Received ( 1 )
                .Warning ( "No height updates received for {Seconds} seconds" ,
                           Arg.Is < double > ( s => s > 3.0 ) ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityDetected_OnlyEmitsOnce_WhenTimeoutExceeded ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+
+        // Advance time by 10 seconds (well beyond 3 second timeout)
+        // This should only emit one event, not multiple
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 10 ).Ticks ) ;
+
+        // Should have emitted exactly one inactivity event
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+        receivedEvents [ 0 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
+
+        // Should only have logged warning once
+        _logger.Received ( 1 )
+               .Warning ( "No height updates received for {Seconds} seconds" ,
+                          Arg.Any < double > ( ) ) ;
+    }
+
+    [ TestMethod ]
+    public void Initialize_ResetsInactivityDetection_ForNewCycle ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // First cycle: Send update and wait for timeout
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Should have emitted one event
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+
+        // Re-initialize for a new movement cycle
+        sut.Initialize ( ) ;
+
+        // Second cycle: Send update and wait for timeout
+        _subjectHeightAndSpeed.OnNext ( _details2 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Should have emitted a second event (one per cycle)
+        receivedEvents.Should ( ).HaveCount ( 2 ) ;
+        receivedEvents [ 1 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
     }
 }
