@@ -17,10 +17,11 @@ public class DeskMovementMonitor
 
     internal const int MinimumNumberOfItems = 3 ;
 
-    internal const int    DefaultCapacity       = 5 ;
-    internal const string HeightDidNotChange    = "Height didn't change when moving desk" ;
-    internal const string SpeedWasZero          = "Speed was zero when moving desk" ;
-    internal const string NoHeightUpdatesReceived = "No height updates received for timeout period" ;
+    internal const int    DefaultCapacity              = 5 ;
+    internal const int    InactivityTimeoutSeconds     = 1 ;
+    internal const string HeightDidNotChange           = "Height didn't change when moving desk" ;
+    internal const string SpeedWasZero                 = "Speed was zero when moving desk" ;
+    internal const string NoHeightUpdatesReceived      = "No height updates received for timeout period" ;
 
     private readonly IDeskHeightAndSpeed       _heightAndSpeed ;
     private readonly ILogger                   _logger ;
@@ -205,7 +206,7 @@ public class DeskMovementMonitor
         _logger.Debug ( "Inactivity check: {Elapsed} seconds since last update" ,
                           elapsed.TotalSeconds ) ;
 
-        if ( elapsed.TotalSeconds > 3 )
+        if ( elapsed.TotalSeconds > InactivityTimeoutSeconds )
         {
             _inactivityDetected = true ;
 
