@@ -926,4 +926,203 @@ public sealed class DeskMoverTests : IDisposable
         callOrder.IndexOf ( "MonitorStop" ).Should ( ).BeLessThan ( callOrder.IndexOf ( "EngineStop" ) ,
                                                                      "monitor should stop before engine" ) ;
     }
+
+    [ TestMethod ]
+    public async Task StopMovement_AlwaysCallsStopWatchdogAndEngineBeforeCheckingAlreadyStopped ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        using var targetReachedSubject = new Subject < uint > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        var callOrder       = new List < string > ( ) ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( targetReachedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        monitor.When ( m => m.StopWatchdog ( ) )
+               .Do ( _ => callOrder.Add ( "StopWatchdog" ) ) ;
+        _engine.When ( e => e.StopMoveAsync ( ) )
+               .Do ( _ => callOrder.Add ( "StopEngine" ) ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        // IsAllowedToMove is false by default (already stopped state)
+
+        // Act
+        await sut.StopMovement ( ) ;
+
+        // Assert
+        callOrder.Should ( ).HaveCount ( 2 ) ;
+        callOrder [ 0 ].Should ( ).Be ( "StopWatchdog" ,
+                                      "watchdog should stop first even when already stopped" ) ;
+        callOrder [ 1 ].Should ( ).Be ( "StopEngine" ,
+                                      "engine should stop even when already stopped" ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StopMovement_WhenAlreadyStopped_DoesNotEmitFinishedEvent ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        using var targetReachedSubject = new Subject < uint > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        var finishedEmitted = 0 ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( targetReachedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        _subjectFinished.Subscribe ( _ => finishedEmitted++ ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut , true ) ;
+
+        // Act - first stop should emit finished
+        await sut.StopMovement ( ) ;
+        var firstEmitCount = finishedEmitted ;
+
+        // Second stop should not emit finished
+        await sut.StopMovement ( ) ;
+
+        // Assert
+        firstEmitCount.Should ( ).Be ( 1 , "finished should be emitted on first stop" ) ;
+        finishedEmitted.Should ( ).Be ( 1 , "finished should not be emitted on duplicate stop" ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StopMovement_WhenInactivityDetectedDuringMovement_StopsEngineLoop ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        using var targetReachedSubject = new Subject < uint > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( targetReachedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut , true ) ;
+
+        // Act - simulate inactivity detected
+        inactivitySubject.OnNext ( "No height updates received for timeout period" ) ;
+
+        // Assert - verify engine was told to stop
+        await _engine.Received ( ).StopMoveAsync ( ) ;
+        monitor.Received ( ).StopWatchdog ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StopMovement_EnsuresEngineStopsBeforeReturning ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        using var targetReachedSubject = new Subject < uint > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        var engineStopCalled = false ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( targetReachedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        _engine.When ( e => e.StopMoveAsync ( ) )
+               .Do ( _ => engineStopCalled = true ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut , false ) ;
+
+        // Act - call StopMovement when already stopped
+        await sut.StopMovement ( ) ;
+
+        // Assert - engine stop must be called to terminate any running loop
+        engineStopCalled.Should ( ).BeTrue ( "engine stop must be called to ensure loop terminates" ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StopMovement_WhenCalledMultipleTimes_StopsEngineEachTime ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        using var targetReachedSubject = new Subject < uint > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( targetReachedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut , true ) ;
+
+        // Act - call StopMovement three times
+        await sut.StopMovement ( ) ;
+        await sut.StopMovement ( ) ;
+        await sut.StopMovement ( ) ;
+
+        // Assert - engine should be stopped each time to ensure any lingering loop terminates
+        await _engine.Received ( 3 ).StopMoveAsync ( ) ;
+        monitor.Received ( 3 ).StopWatchdog ( ) ;
+    }
+
+    [ TestMethod ]
+    public async Task StopMovement_StopsWatchdogBeforeEngine ( )
+    {
+        // Arrange
+        var monitor         = Substitute.For < IDeskMovementMonitor > ( ) ;
+        using var inactivitySubject = new Subject < string > ( ) ;
+        using var targetReachedSubject = new Subject < uint > ( ) ;
+        var initialProvider = Substitute.For < IInitialHeightProvider > ( ) ;
+        var callOrder       = new List < string > ( ) ;
+
+        _monitorFactory.Create ( _heightAndSpeed ).Returns ( monitor ) ;
+        _providerFactory.Create ( _executor , _heightAndSpeed ).Returns ( initialProvider ) ;
+        initialProvider!.Finished.Returns ( _finishedSubject ) ;
+        _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChangedSubject ) ;
+        _guard.TargetHeightReached.Returns ( targetReachedSubject ) ;
+        monitor.InactivityDetected.Returns ( inactivitySubject ) ;
+
+        monitor.When ( m => m.StopWatchdog ( ) )
+               .Do ( _ => callOrder.Add ( "Watchdog" ) ) ;
+        _engine.When ( e => e.StopMoveAsync ( ) )
+               .Do ( _ => callOrder.Add ( "Engine" ) ) ;
+
+        using var sut = CreateSut ( ) ;
+        sut.Initialize ( ) ;
+        sut.GetType ( ).GetProperty ( "IsAllowedToMove" )!.SetValue ( sut , true ) ;
+
+        // Act
+        await sut.StopMovement ( ) ;
+
+        // Assert - watchdog must stop before engine to prevent race condition
+        callOrder.Should ( ).HaveCount ( 2 ) ;
+        callOrder [ 0 ].Should ( ).Be ( "Watchdog" ,
+                                      "watchdog must stop first to prevent timer firing during shutdown" ) ;
+        callOrder [ 1 ].Should ( ).Be ( "Engine" ,
+                                      "engine should stop after watchdog" ) ;
+    }
 }
+
