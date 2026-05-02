@@ -116,6 +116,122 @@ public class DeskMovementMonitorTests : IDisposable
     }
 
     [ TestMethod ]
+    public void InactivityTimeoutSeconds_DefaultValue_IsOne ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        sut.InactivityTimeoutSeconds.Should ( ).Be ( 1 ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_SetToPositiveValue_Succeeds ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        sut.InactivityTimeoutSeconds = 5 ;
+
+        sut.InactivityTimeoutSeconds.Should ( ).Be ( 5 ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_SetToZero_ThrowsArgumentOutOfRangeException ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.InactivityTimeoutSeconds = 0 ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "*InactivityTimeoutSeconds must be greater than 0.*" )
+              .And.ParamName.Should ( ).Be ( "value" ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_SetToNegative_ThrowsArgumentOutOfRangeException ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.InactivityTimeoutSeconds = -1 ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "*InactivityTimeoutSeconds must be greater than 0.*" )
+              .And.ParamName.Should ( ).Be ( "value" ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_WhenChanged_AffectsTimerInterval ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        // Set custom timeout before starting
+        sut.InactivityTimeoutSeconds = 3 ;
+        sut.Initialize ( DefaultCapacity ) ;
+        sut.Start ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 3 ).Ticks ) ;
+
+        // Advance by 2 seconds (still within 3 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+
+        // Should not have emitted yet
+        receivedEvents.Should ( ).BeEmpty ( ) ;
+
+        // Advance by 2 more seconds (now exceeds 3 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+
+        // Should have emitted an inactivity event
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_WhenChangedBeforeStart_UsesNewInterval ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        // Set to 5 seconds before starting
+        sut.InactivityTimeoutSeconds = 5 ;
+        sut.Initialize ( DefaultCapacity ) ;
+        sut.Start ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
+
+        // Advance by 4 seconds (still within 5 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Should not have detected inactivity yet
+        receivedEvents.Should ( ).BeEmpty ( ) ;
+
+        // Advance by 2 more seconds (now exceeds 5 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+
+        // Should have detected inactivity
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+    }
+
+    [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForThreeEventsWithDifferentHeightAndSpeed_DoesNotThrow ( )
     {
         using var sut = CreateSut ( ) ;
@@ -169,17 +285,17 @@ public class DeskMovementMonitorTests : IDisposable
 
         // Send an update immediately
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 100 ).Ticks ) ;
 
-        // Advance time by 2 seconds (within 3 second timeout)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+        // Advance time by 0.5 seconds (within 1 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 500 ).Ticks ) ;
 
-        // Send another update
+        // Send another update (resets timer)
         _subjectHeightAndSpeed.OnNext ( _details2 ) ;
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 100 ).Ticks ) ;
 
-        // Advance another 2 seconds (total 5 seconds, but only 2 since last update)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+        // Advance another 0.5 seconds (only 0.5 since last update)
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 500 ).Ticks ) ;
 
         // Should not have logged a warning
         _logger.DidNotReceive ( )
@@ -235,17 +351,17 @@ public class DeskMovementMonitorTests : IDisposable
 
         // Send first update
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 100 ).Ticks ) ;
 
-        // Wait 2 seconds (within 3 second timeout)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+        // Wait 0.5 seconds (within 1 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 500 ).Ticks ) ;
 
         // Send another update (resets the timer)
         _subjectHeightAndSpeed.OnNext ( _details2 ) ;
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 100 ).Ticks ) ;
 
-        // Wait another 2 seconds (total 5 seconds, but only 2 since last update)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+        // Wait another 0.5 seconds (only 0.5 since last update)
+        _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 500 ).Ticks ) ;
 
         // Should not have thrown or logged
         _logger.DidNotReceive ( )
@@ -317,7 +433,7 @@ public class DeskMovementMonitorTests : IDisposable
     }
 
     [ TestMethod ]
-    public void InactivityDetected_WhenNoUpdatesFor3Seconds_EmitsEvent ( )
+    public void InactivityDetected_WhenNoUpdatesFor1Second_EmitsEvent ( )
     {
         using var sut = CreateSut ( ) ;
 
@@ -337,7 +453,7 @@ public class DeskMovementMonitorTests : IDisposable
     }
 
     [ TestMethod ]
-    public void InactivityTimer_WhenNoUpdatesFor3Seconds_LogsWarning ( )
+    public void InactivityTimer_WhenNoUpdatesFor1Second_LogsWarning ( )
     {
         using var sut = CreateSut ( ) ;
 
@@ -345,13 +461,13 @@ public class DeskMovementMonitorTests : IDisposable
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Advance time by 4 seconds (exceeds 3 second timeout)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        // Advance time by 2 seconds (exceeds 1 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Should have logged a warning
         _logger.Received ( 1 )
                .Warning ( "No height updates received for {Seconds} seconds" ,
-                          Arg.Is < double > ( s => s > 3.0 ) ) ;
+                          Arg.Is < double > ( s => s > 1.0 ) ) ;
     }
 
     [ TestMethod ]
@@ -366,9 +482,9 @@ public class DeskMovementMonitorTests : IDisposable
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Advance time by 10 seconds (well beyond 3 second timeout)
+        // Advance time by 5 seconds (well beyond 1 second timeout)
         // This should only emit one event, not multiple
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 10 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
 
         // Should have emitted exactly one inactivity event
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
@@ -391,7 +507,7 @@ public class DeskMovementMonitorTests : IDisposable
         // First cycle: Send update and wait for timeout
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Should have emitted one event
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
@@ -402,7 +518,7 @@ public class DeskMovementMonitorTests : IDisposable
         // Second cycle: Send update and wait for timeout
         _subjectHeightAndSpeed.OnNext ( _details2 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Should have emitted a second event (one per cycle)
         receivedEvents.Should ( ).HaveCount ( 2 ) ;
@@ -421,8 +537,8 @@ public class DeskMovementMonitorTests : IDisposable
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
 
-        // Advance time by 4 seconds to trigger inactivity
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        // Advance time by 2 seconds to trigger inactivity
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Verify first detection
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
@@ -434,7 +550,7 @@ public class DeskMovementMonitorTests : IDisposable
         _logger.ClearReceivedCalls ( ) ;
 
         // Continue advancing time (timer keeps ticking, but should early-return)
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 10 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
 
         // Should still only have one event (no duplicates)
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
@@ -583,7 +699,7 @@ public class DeskMovementMonitorTests : IDisposable
 
         // Start a new cycle
         sut.Start ( ) ;
-        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Assert - should emit inactivity event after restart
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
