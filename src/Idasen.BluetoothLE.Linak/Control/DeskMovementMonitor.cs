@@ -18,7 +18,6 @@ public class DeskMovementMonitor
     internal const int MinimumNumberOfItems = 3 ;
 
     internal const int    DefaultCapacity              = 5 ;
-    internal const int    InactivityTimeoutSeconds     = 1 ;
     internal const string HeightDidNotChange           = "Height didn't change when moving desk" ;
     internal const string SpeedWasZero                 = "Speed was zero when moving desk" ;
     internal const string NoHeightUpdatesReceived      = "No height updates received for timeout period" ;
@@ -33,8 +32,26 @@ public class DeskMovementMonitor
     private DateTimeOffset _lastUpdateTime = DateTimeOffset.MinValue ;
     private bool           _inactivityDetected ;
     private bool           _disposed ;
+    private int            _inactivityTimeoutSeconds = 1 ;
 
     internal CircularBuffer < HeightSpeedDetails > History = new(5) ;
+
+    /// <summary>
+    ///     Gets or sets the inactivity timeout in seconds. Default is 1 second.
+    ///     Must be a positive value greater than 0.
+    /// </summary>
+    public int InactivityTimeoutSeconds
+    {
+        get => _inactivityTimeoutSeconds ;
+        set
+        {
+            if ( value <= 0 )
+                throw new ArgumentOutOfRangeException ( nameof ( value ) ,
+                                                        value ,
+                                                        "InactivityTimeoutSeconds must be greater than 0." ) ;
+            _inactivityTimeoutSeconds = value ;
+        }
+    }
 
     public DeskMovementMonitor ( ILogger             logger ,
                                  IScheduler          scheduler ,
@@ -99,7 +116,7 @@ public class DeskMovementMonitor
         // Start inactivity watchdog: check every second if we've received updates
         _lastUpdateTime = _scheduler.Now ;
         _inactivityTimer?.Dispose ( ) ;
-        _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( 1 ) ,
+        _inactivityTimer = Observable.Interval ( TimeSpan.FromSeconds ( InactivityTimeoutSeconds ) ,
                                                  _scheduler )
                                      .Subscribe ( tick =>
                                                   {

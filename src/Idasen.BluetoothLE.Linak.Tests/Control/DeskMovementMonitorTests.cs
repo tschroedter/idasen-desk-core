@@ -116,6 +116,122 @@ public class DeskMovementMonitorTests : IDisposable
     }
 
     [ TestMethod ]
+    public void InactivityTimeoutSeconds_DefaultValue_IsOne ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        sut.InactivityTimeoutSeconds.Should ( ).Be ( 1 ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_SetToPositiveValue_Succeeds ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        sut.InactivityTimeoutSeconds = 5 ;
+
+        sut.InactivityTimeoutSeconds.Should ( ).Be ( 5 ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_SetToZero_ThrowsArgumentOutOfRangeException ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.InactivityTimeoutSeconds = 0 ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "*InactivityTimeoutSeconds must be greater than 0.*" )
+              .And.ParamName.Should ( ).Be ( "value" ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_SetToNegative_ThrowsArgumentOutOfRangeException ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        var action = ( ) => sut.InactivityTimeoutSeconds = -1 ;
+
+        action.Should ( )
+              .Throw < ArgumentOutOfRangeException > ( )
+              .WithMessage ( "*InactivityTimeoutSeconds must be greater than 0.*" )
+              .And.ParamName.Should ( ).Be ( "value" ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_WhenChanged_AffectsTimerInterval ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        // Set custom timeout before starting
+        sut.InactivityTimeoutSeconds = 3 ;
+        sut.Initialize ( DefaultCapacity ) ;
+        sut.Start ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 3 ).Ticks ) ;
+
+        // Advance by 2 seconds (still within 3 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+
+        // Should not have emitted yet
+        receivedEvents.Should ( ).BeEmpty ( ) ;
+
+        // Advance by 2 more seconds (now exceeds 3 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+
+        // Should have emitted an inactivity event
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+    }
+
+    [ TestMethod ]
+    public void InactivityTimeoutSeconds_WhenChangedBeforeStart_UsesNewInterval ( )
+    {
+        using var sut = new DeskMovementMonitor ( _logger ,
+                                                   _scheduler ,
+                                                   _heightAndSpeed ) ;
+
+        // Set to 5 seconds before starting
+        sut.InactivityTimeoutSeconds = 5 ;
+        sut.Initialize ( DefaultCapacity ) ;
+        sut.Start ( ) ;
+
+        var receivedEvents = new List < string > ( ) ;
+        sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
+
+        // Send initial update
+        _subjectHeightAndSpeed.OnNext ( _details1 ) ;
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
+
+        // Advance by 4 seconds (still within 5 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 4 ).Ticks ) ;
+
+        // Should not have detected inactivity yet
+        receivedEvents.Should ( ).BeEmpty ( ) ;
+
+        // Advance by 2 more seconds (now exceeds 5 second timeout)
+        _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
+
+        // Should have detected inactivity
+        receivedEvents.Should ( ).HaveCount ( 1 ) ;
+    }
+
+    [ TestMethod ]
     public void OnHeightAndSpeedChanged_ForThreeEventsWithDifferentHeightAndSpeed_DoesNotThrow ( )
     {
         using var sut = CreateSut ( ) ;
