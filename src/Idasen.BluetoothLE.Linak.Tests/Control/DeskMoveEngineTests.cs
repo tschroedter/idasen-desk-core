@@ -246,7 +246,7 @@ public class DeskMoveEngineTests
         _executor.Up ( ).Returns ( _ =>
         {
             callCount++ ;
-            return Task.FromResult ( callCount > 1 ) ; // False on first call, true afterwards
+            return Task.FromResult ( callCount > 1 ) ; // False on first call, true afterward
         } ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
@@ -336,7 +336,7 @@ public class DeskMoveEngineTests
         _executor.Up ( ).Returns ( _ =>
         {
             callCount++ ;
-            return Task.FromResult ( callCount > 2 ) ; // False for first two, true afterwards
+            return Task.FromResult ( callCount > 2 ) ; // False for first two, true afterward
         } ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;

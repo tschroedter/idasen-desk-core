@@ -32,6 +32,7 @@ public class DeskMovementMonitor
     private DateTimeOffset _lastUpdateTime = DateTimeOffset.MinValue ;
     private bool           _inactivityDetected ;
     private bool           _disposed ;
+    // ReSharper disable once ReplaceWithFieldKeyword
     private int            _inactivityTimeoutSeconds = 1 ;
 
     internal CircularBuffer < HeightSpeedDetails > History = new(5) ;
@@ -73,7 +74,19 @@ public class DeskMovementMonitor
     /// <inheritdoc />
     public void Dispose ( )
     {
-        Dispose ( true ) ;
+        if ( _disposed )
+            return ;
+
+        _disposalHeightAndSpeed?.Dispose ( ) ;
+        _disposalHeightAndSpeed = null ;
+
+        _inactivityTimer?.Dispose ( ) ;
+        _inactivityTimer = null ;
+
+        _subjectInactivityDetected.OnCompleted ( ) ;
+        _subjectInactivityDetected.Dispose ( ) ;
+
+        _disposed = true ;
 
         GC.SuppressFinalize ( this ) ;
     }
@@ -147,34 +160,6 @@ public class DeskMovementMonitor
         _inactivityTimer = null ;
 
         _logger.Information ( "Inactivity watchdog stopped" ) ;
-    }
-
-    protected virtual void Dispose ( bool disposing )
-    {
-        if ( _disposed )
-            return ;
-
-        if ( disposing )
-        {
-            _disposalHeightAndSpeed?.Dispose ( ) ;
-            _disposalHeightAndSpeed = null ;
-
-            _inactivityTimer?.Dispose ( ) ;
-            _inactivityTimer = null ;
-
-            _subjectInactivityDetected?.OnCompleted ( ) ;
-            _subjectInactivityDetected?.Dispose ( ) ;
-        }
-
-        _disposed = true ;
-    }
-
-    /// <summary>
-    ///     Finalizer to ensure unmanaged resources are released.
-    /// </summary>
-    ~DeskMovementMonitor ( )
-    {
-        Dispose ( false ) ;
     }
 
     private void OnHeightAndSpeedChanged ( HeightSpeedDetails details )
