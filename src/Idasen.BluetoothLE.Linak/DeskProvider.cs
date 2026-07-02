@@ -192,21 +192,32 @@ public class DeskProvider
                           token.WaitHandle
                       } ;
 
+        const int initialWaitMs = 1000 ;
+        const int maxWaitMs     = 16000 ; // Cap at 16 seconds
+        var       currentWaitMs = initialWaitMs ;
+
+#pragma warning disable S2589
         while ( Desk == null &&
                 ! token.IsCancellationRequested )
+#pragma warning restore S2589
         {
             _logger.Information ( "Trying to find desk" ) ;
 
-            // Wait up to 1s for either the desk-detected event or cancellation
+            // Wait for either the desk-detected event or cancellation
             var index = WaitHandle.WaitAny ( handles ,
-                                             1000 ) ;
+                                             currentWaitMs ) ;
 
             // If cancellation was signaled, leave immediately
             if ( index == 1 )
                 break ;
 
-            // If timed out (index == WaitHandle.WaitTimeout) just loop again and re-check conditions
             // If desk-detected event (index == 0), loop will re-check Desk and exit if set
+            // If timed out (index == WaitHandle.WaitTimeout), apply exponential backoff
+            if ( index == WaitHandle.WaitTimeout )
+            {
+                currentWaitMs = Math.Min ( currentWaitMs * 2 ,
+                                           maxWaitMs ) ;
+            }
         }
     }
 
