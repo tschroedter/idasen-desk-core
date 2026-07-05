@@ -9,6 +9,11 @@ public interface IDeskMovementMonitor
     : IDisposable
 {
     /// <summary>
+    ///     Observable that emits when the desk has stopped responding (no height updates).
+    /// </summary>
+    IObservable < string > InactivityDetected { get ; }
+
+    /// <summary>
     ///     Initializes the monitor with the specified ring buffer capacity.
     ///     This sets up the history buffer but does not start the inactivity timer.
     /// </summary>
@@ -25,9 +30,4 @@ public interface IDeskMovementMonitor
     ///     This should be called when a movement cycle completes or is cancelled.
     /// </summary>
     void StopWatchdog ( ) ;
-
-    /// <summary>
-    ///     Observable that emits when the desk has stopped responding (no height updates).
-    /// </summary>
-    IObservable < string > InactivityDetected { get ; }
 }

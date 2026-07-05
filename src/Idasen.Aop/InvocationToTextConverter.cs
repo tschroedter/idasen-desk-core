@@ -25,7 +25,7 @@ public sealed class InvocationToTextConverter : IInvocationToTextConverter
         // Prefer the declaring type to avoid Castle proxy type names (e.g., SampleProxy)
         var type = invocation.Method.DeclaringType ??
                    invocation.TargetType ??
-                   invocation.Proxy?.GetType ( ).BaseType ;
+                   invocation.Proxy.GetType ( ).BaseType ;
 
         var typeName = type?.FullName ?? "UnknownType" ;
 

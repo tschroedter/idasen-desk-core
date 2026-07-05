@@ -75,11 +75,12 @@ public class GattCharacteristicWrapper
     public ushort AttributeHandle => _characteristic.AttributeHandle ;
 
     /// <inheritdoc />
-    public async Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer , int timeoutMs = 5000 )
+    public async Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer ,
+                                                                              int     timeoutMs = 5000 )
     {
         var writeTask = _characteristic.WriteValueWithResultAsync ( buffer ).AsTask ( ) ;
         var completedTask = await Task.WhenAny ( writeTask ,
-                                                  Task.Delay ( timeoutMs ) ) ;
+                                                 Task.Delay ( timeoutMs ) ) ;
 
         if ( completedTask == writeTask )
         {
@@ -96,16 +97,14 @@ public class GattCharacteristicWrapper
     }
 
     /// <inheritdoc />
-    public async Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer , int timeoutMs = 5000 )
+    public async Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer ,
+                                                                    int     timeoutMs = 5000 )
     {
         var writeTask = _characteristic.WriteValueAsync ( buffer ).AsTask ( ) ;
         var completedTask = await Task.WhenAny ( writeTask ,
-                                                  Task.Delay ( timeoutMs ) ) ;
+                                                 Task.Delay ( timeoutMs ) ) ;
 
-        if ( completedTask == writeTask )
-        {
-            return await writeTask ;
-        }
+        if ( completedTask == writeTask ) return await writeTask ;
 
         _logger.Warning ( "WriteValueAsync timed out after {TimeoutMs}ms for characteristic {Uuid}" ,
                           timeoutMs ,

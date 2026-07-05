@@ -5,6 +5,7 @@ using Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs ;
 
@@ -30,7 +31,7 @@ public class GattCharacteristicProviderTests
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger              = Substitute.For < ILogger > ( ) ;
+        _logger              = Logger.None ; // Use Serilog's NullLogger instead of mocking
         _gattCharacteristics = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
 
         _foundCharacteristicsDictionary = new Dictionary < string , Guid > ( ) ;

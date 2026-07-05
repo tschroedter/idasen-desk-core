@@ -7,6 +7,7 @@ using JetBrains.Annotations ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
@@ -50,7 +51,7 @@ public class DeskDetectorTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger       = Substitute.For < ILogger > ( ) ;
+        _logger       = Logger.None ;
         _scheduler    = new TestScheduler ( ) ;
         _monitor      = Substitute.For < IDeviceMonitorWithExpiry > ( ) ;
         _factory      = Substitute.For < IDeskFactory > ( ) ;

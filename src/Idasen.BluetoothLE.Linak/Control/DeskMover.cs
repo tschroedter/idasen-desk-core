@@ -38,11 +38,11 @@ public class DeskMover
 
     private IDisposable ? _disposableProvider ;
     private IDisposable ? _guardTargetHeightReached ;
-    private IDisposable ? _monitorInactivityDetected ;
 
     private IInitialHeightProvider ? _initialProvider ;
 
     private IDeskMovementMonitor ? _monitor ;
+    private IDisposable ?          _monitorInactivityDetected ;
 
     private IDisposable ? _rawHeightAndSpeedSubscription ;
 
@@ -140,8 +140,9 @@ public class DeskMover
                                                  .ObserveOn ( _scheduler )
                                                  .Subscribe ( reason =>
                                                               {
-                                                                  _logger.Error ( "Movement stopped due to inactivity: {Reason}" ,
-                                                                                  reason ) ;
+                                                                  _logger
+                                                                     .Error ( "Movement stopped due to inactivity: {Reason}" ,
+                                                                              reason ) ;
                                                                   StopMovement ( ) ;
                                                               } ) ;
         }

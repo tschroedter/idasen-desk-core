@@ -1,14 +1,20 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
-using NSubstitute ;
-using Serilog ;
+using Idasen.TestLogger ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class HasReachedTargetHeightCalculatorTests
+public class HasReachedTargetHeightCalculatorTests : IDisposable
 {
-    private ILogger _logger = null! ;
+    private LoggerForTests _logger = null! ;
+
+    public void Dispose ( )
+    {
+        _logger.Dispose ( ) ;
+
+        GC.SuppressFinalize ( this ) ;
+    }
 
     [ DataRow ( 2000u ,
                 1000u ,
@@ -314,7 +320,7 @@ public class HasReachedTargetHeightCalculatorTests
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger = Substitute.For < ILogger > ( ) ;
+        _logger = new LoggerForTests ( ) ;
     }
 
     private HasReachedTargetHeightCalculator CreateSut ( )

@@ -4,9 +4,11 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.TestLogger ;
 using JetBrains.Annotations ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
+using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
 
@@ -223,7 +225,8 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        using var sut = CreateSut ( ) ;
+        using var logger = new LoggerForTests ( ) ;
+        using var sut    = CreateSutWithLogger ( logger ) ;
 
         ServiceWrapper.Uuid
                       .Returns ( sut.GattServiceUuid ) ;
@@ -233,11 +236,9 @@ public class CharacteristicBaseTest
 
         await sut.TryWriteRawValue ( RawValue1 ) ;
 
-        const string messageTemplate = "Unknown characteristic with key '{Key}'" ;
-
-        Logger.Received ( )
-              .Error ( messageTemplate ,
-                       Arg.Any < string > ( ) ) ;
+        logger.Contains ( "Found GattDeviceService with UUID" )
+              .Should ( )
+              .BeTrue ( ) ;
     }
 
     [ TestMethod ]
@@ -304,6 +305,19 @@ public class CharacteristicBaseTest
         sut.ToString ( )
            .Should ( )
            .Be ( ToStringResult ) ;
+    }
+
+    protected TestCharacteristicBase CreateSutWithLogger ( ILogger ? logger = null )
+    {
+        logger ??= Logger ;
+
+        return new TestCharacteristicBase ( logger ,
+                                            Scheduler ,
+                                            Device ,
+                                            ProviderFactory ,
+                                            RawValueHandler ,
+                                            ToStringConverter ,
+                                            DescriptionToUuid ) ;
     }
 
     protected override TestCharacteristicBase CreateSut ( )

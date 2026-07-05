@@ -4,6 +4,7 @@ using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
@@ -26,7 +27,7 @@ public class DeskMoverFactoryTests
         _executor       = Substitute.For < IDeskCommandExecutor > ( ) ;
         _heightAndSpeed = Substitute.For < IDeskHeightAndSpeed > ( ) ;
 
-        _logger          = Substitute.For < ILogger > ( ) ;
+        _logger          = Logger.None ;
         _providerFactory = Substitute.For < IInitialHeightAndSpeedProviderFactory > ( ) ;
         _monitorFactory  = Substitute.For < IDeskMovementMonitorFactory > ( ) ;
         _calculator      = Substitute.For < IStoppingHeightCalculator > ( ) ;

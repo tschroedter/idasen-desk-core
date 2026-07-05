@@ -4,6 +4,7 @@ using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 
@@ -27,7 +28,7 @@ public class DeskMoveGuardTests : IDisposable
     {
         _heightAndSpeed        = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _calculator            = Substitute.For < IStoppingHeightCalculator > ( ) ;
-        _logger                = Substitute.For < ILogger > ( ) ;
+        _logger                = Logger.None ;
         _heightAndSpeedChanged = new Subject < HeightSpeedDetails > ( ) ;
         _heightAndSpeed.HeightAndSpeedChanged.Returns ( _heightAndSpeedChanged ) ;
     }

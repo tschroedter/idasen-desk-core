@@ -4,6 +4,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
@@ -28,7 +29,7 @@ public class DeskLockerTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger         = Substitute.For < ILogger > ( ) ;
+        _logger         = Logger.None ;
         _scheduler      = new TestScheduler ( ) ;
         _deskMover      = Substitute.For < IDeskMover > ( ) ;
         _executor       = Substitute.For < IDeskCommandExecutor > ( ) ;

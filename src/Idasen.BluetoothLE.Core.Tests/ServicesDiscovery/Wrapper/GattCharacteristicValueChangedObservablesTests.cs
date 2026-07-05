@@ -5,6 +5,7 @@ using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 
@@ -26,7 +27,7 @@ public class GattCharacteristicValueChangedObservablesTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger    = Substitute.For < ILogger > ( ) ;
+        _logger    = Logger.None ;
         _subject   = new Subject < GattCharacteristicValueChangedDetails > ( ) ;
         _scheduler = Substitute.For < IScheduler > ( ) ;
         _details = new GattCharacteristicValueChangedDetails ( Guid.NewGuid ( ) ,

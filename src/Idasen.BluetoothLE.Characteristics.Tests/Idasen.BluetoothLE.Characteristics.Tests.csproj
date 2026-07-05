@@ -14,15 +14,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="8.9.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
-        <PackageReference Include="MSTest.TestAdapter" Version="4.2.1" />
-        <PackageReference Include="MSTest.TestFramework" Version="4.2.1" />
-        <PackageReference Include="coverlet.collector" Version="10.0.0">
+        <PackageReference Include="FluentAssertions" Version="8.10.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
+        <PackageReference Include="MSTest.TestAdapter" Version="4.2.3" />
+        <PackageReference Include="MSTest.TestFramework" Version="4.2.3" />
+        <PackageReference Include="coverlet.collector" Version="10.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Selkie.DefCon.One" Version="0.2.38" />
+        <PackageReference Include="Selkie.DefCon.One" Version="0.2.39" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,6 +30,7 @@
         <ProjectReference Include="..\Idasen.BluetoothLE.Common.Tests\Idasen.BluetoothLE.Common.Tests.csproj" />
         <ProjectReference Include="..\Idasen.BluetoothLE.Core.Tests\Idasen.BluetoothLE.Core.Tests.csproj" />
         <ProjectReference Include="..\Idasen.BluetoothLE.Core\Idasen.BluetoothLE.Core.csproj" />
+        <ProjectReference Include="..\Idasen.TestLogger\Idasen.TestLogger.csproj" />
     </ItemGroup>
 
     <ItemGroup>

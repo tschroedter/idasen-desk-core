@@ -1,8 +1,10 @@
 using System.Reactive.Concurrency ;
 using System.Reactive.Subjects ;
+using FluentAssertions ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
+using Idasen.TestLogger ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
@@ -18,13 +20,14 @@ public class DeviceMonitorWithExpiryTests
     private          ISubject < IDevice >    _deviceExpired  = null! ;
     private          IDeviceMonitor          _deviceMonitor  = null! ;
     private          IObservableTimerFactory _factory        = null! ;
-    private          ILogger                 _logger         = null! ;
+    private          LoggerForTests          _logger         = null! ;
     private          IScheduler              _scheduler      = null! ;
 
     public void Dispose ( )
     {
         _deviceMonitor.Dispose ( ) ;
         _subject.Dispose ( ) ;
+        _logger.Dispose ( ) ;
 
         GC.SuppressFinalize ( this ) ;
     }
@@ -32,7 +35,7 @@ public class DeviceMonitorWithExpiryTests
     [ TestInitialize ]
     public void Setup ( )
     {
-        _logger         = Substitute.For < ILogger > ( ) ;
+        _logger         = new LoggerForTests ( ) ;
         _dateTimeOffset = Substitute.For < IDateTimeOffset > ( ) ;
         _deviceMonitor  = Substitute.For < IDeviceMonitor > ( ) ;
         _deviceExpired  = new Subject < IDevice > ( ) ;
@@ -117,8 +120,9 @@ public class DeviceMonitorWithExpiryTests
         Assert.AreEqual ( newTimeout ,
                           sut.TimeOut ) ;
 
-        _logger.Received ( ).Debug ( "TimeOut = {Timeout}" ,
-                                     newTimeout ) ;
+        _logger.Contains ( $"TimeOut = {newTimeout}" )
+               .Should ( )
+               .BeTrue ( ) ;
     }
 
     [ TestMethod ]

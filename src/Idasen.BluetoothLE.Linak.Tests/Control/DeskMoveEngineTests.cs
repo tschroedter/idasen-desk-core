@@ -1,16 +1,23 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
+using Idasen.TestLogger ;
 using NSubstitute ;
-using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 
 [ TestClass ]
-public class DeskMoveEngineTests
+public class DeskMoveEngineTests : IDisposable
 {
     private IDeskCommandExecutor _executor = null! ;
-    private ILogger              _logger   = null! ;
+    private LoggerForTests       _logger   = null! ;
+
+    public void Dispose ( )
+    {
+        _logger.Dispose ( ) ;
+
+        GC.SuppressFinalize ( this ) ;
+    }
 
     private DeskMoveEngine CreateSut ( )
     {
@@ -21,7 +28,7 @@ public class DeskMoveEngineTests
     [ TestInitialize ]
     public void Init ( )
     {
-        _logger   = Substitute.For < ILogger > ( ) ;
+        _logger   = new LoggerForTests ( ) ;
         _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
         _executor.Up ( ).Returns ( Task.FromResult ( true ) ) ;
         _executor.Down ( ).Returns ( Task.FromResult ( true ) ) ;
@@ -204,9 +211,11 @@ public class DeskMoveEngineTests
                                    cts.Token ) ;
 
         // Verify that the debug message is logged when the command fails
-        _logger.Received ( ).Debug ( "StartMoveAsync command failed: {Desired} (consecutive failures: {Count})" ,
-                                     Direction.Up ,
-                                     Arg.Any < int > ( ) ) ;
+        var message = $"StartMoveAsync command failed: {Direction.Up} (consecutive failures:" ;
+
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
     }
 
     [ TestMethod ]
@@ -228,8 +237,11 @@ public class DeskMoveEngineTests
         await _executor.Received ( 3 ).Up ( ) ;
 
         // Verify that a warning was logged
-        _logger.Received ( ).Warning ( "Stopping move due to {Count} consecutive failures" ,
-                                       3 ) ;
+        var message = "Stopping move due to 3 consecutive failures" ;
+
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Verify that the direction is reset to None
         sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
@@ -244,10 +256,10 @@ public class DeskMoveEngineTests
 
         // First call fails, second succeeds, then continue succeeding
         _executor.Up ( ).Returns ( _ =>
-        {
-            callCount++ ;
-            return Task.FromResult ( callCount > 1 ) ; // False on first call, true afterward
-        } ) ;
+                                   {
+                                       callCount ++ ;
+                                       return Task.FromResult ( callCount > 1 ) ; // False on first call, true afterward
+                                   } ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
 
@@ -260,8 +272,11 @@ public class DeskMoveEngineTests
         await _executor.Received ( ).Up ( ) ;
 
         // Verify that no warning about consecutive failures was logged
-        _logger.DidNotReceive ( ).Warning ( "Stopping move due to {Count} consecutive failures" ,
-                                            Arg.Any < int > ( ) ) ;
+        var message = "Stopping move due to " ;
+
+        _logger.Contains ( message )
+               .Should ( )
+               .BeFalse ( ) ;
     }
 
     [ TestMethod ]
@@ -273,10 +288,10 @@ public class DeskMoveEngineTests
 
         // Alternate between success and failure
         _executor.Up ( ).Returns ( _ =>
-        {
-            callCount++ ;
-            return Task.FromResult ( callCount % 2 == 0 ) ; // Success on even calls
-        } ) ;
+                                   {
+                                       callCount ++ ;
+                                       return Task.FromResult ( callCount % 2 == 0 ) ; // Success on even calls
+                                   } ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
 
@@ -289,8 +304,11 @@ public class DeskMoveEngineTests
         await _executor.Received ( ).Up ( ) ;
 
         // Verify that no warning about consecutive failures was logged
-        _logger.DidNotReceive ( ).Warning ( "Stopping move due to {Count} consecutive failures" ,
-                                            Arg.Any < int > ( ) ) ;
+        var message = "Stopping move due to 3 consecutive failures" ;
+
+        _logger.Contains ( message )
+               .Should ( )
+               .BeFalse ( ) ;
     }
 
     [ TestMethod ]
@@ -299,7 +317,8 @@ public class DeskMoveEngineTests
         var sut = CreateSut ( ) ;
 
         // Simulate exceptions in the Up command
-        _executor.Up ( ).Returns ( Task.FromException < bool > ( new InvalidOperationException ( "Test exception" ) ) ) ;
+        _executor.Up ( )
+                 .Returns ( Task.FromException < bool > ( new InvalidOperationException ( "Test exception" ) ) ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
 
@@ -312,14 +331,18 @@ public class DeskMoveEngineTests
         await _executor.Received ( 3 ).Up ( ) ;
 
         // Verify that errors were logged
-        _logger.Received ( ).Error ( Arg.Any < Exception > ( ) ,
-                                     "StartMoveAsync command threw exception: {Desired} (consecutive failures: {Count})" ,
-                                     Direction.Up ,
-                                     Arg.Any < int > ( ) ) ;
+        var message = $"StartMoveAsync command threw exception: {Direction.Up} (consecutive failures:" ;
+
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Verify that a warning was logged
-        _logger.Received ( ).Warning ( "Stopping move due to {Count} consecutive failures" ,
-                                       3 ) ;
+        message = "Stopping move due to 3 consecutive failures" ;
+
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Verify that the direction is reset to None
         sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
@@ -334,10 +357,10 @@ public class DeskMoveEngineTests
 
         // First two calls fail, then succeed
         _executor.Up ( ).Returns ( _ =>
-        {
-            callCount++ ;
-            return Task.FromResult ( callCount > 2 ) ; // False for first two, true afterward
-        } ) ;
+                                   {
+                                       callCount ++ ;
+                                       return Task.FromResult ( callCount > 2 ) ; // False for first two, true afterward
+                                   } ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
 
@@ -350,8 +373,11 @@ public class DeskMoveEngineTests
         await _executor.Received ( ).Up ( ) ;
 
         // The failure counter should have been reset after success
-        _logger.DidNotReceive ( ).Warning ( "Stopping move due to {Count} consecutive failures" ,
-                                            Arg.Any < int > ( ) ) ;
+        var message = "Stopping move due to" ;
+
+        _logger.Contains ( message )
+               .Should ( )
+               .BeFalse ( ) ;
     }
 
     [ TestMethod ]
@@ -373,11 +399,15 @@ public class DeskMoveEngineTests
         await _executor.Received ( 3 ).Down ( ) ;
 
         // Verify that a warning was logged
-        _logger.Received ( ).Warning ( "Stopping move due to {Count} consecutive failures" ,
-                                       3 ) ;
+        var message = "Stopping move due to 3 consecutive failures" ;
+
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Verify that the direction is reset to None
-        sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
+        sut.CurrentDirection
+           .Should ( )
+           .Be ( Direction.None ) ;
     }
 }
-

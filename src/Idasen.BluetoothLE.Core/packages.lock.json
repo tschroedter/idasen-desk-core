@@ -4,18 +4,18 @@
     "net10.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[9.1.0, )",
-        "resolved": "9.1.0",
-        "contentHash": "onT/BcnnfWcQNXiuC7R/0h8ALQzRdsAI20gpB7nfrudXpFMXdVZKz1umdtHXDwjc/bmWEsrCBAxck3+Arnk15g=="
+        "requested": "[9.3.0, )",
+        "resolved": "9.3.0",
+        "contentHash": "OXigGAa1oFYbHmI9lEEYYSRQvbtGC3AnNdg+4BEhHa0x8XlJrYOS7Sg5fZtmlrHPLp+gRsDnz2aqbsglNUnv0g=="
       },
       "Autofac.Extras.DynamicProxy": {
         "type": "Direct",
-        "requested": "[7.1.0, )",
-        "resolved": "7.1.0",
-        "contentHash": "Da6Szv7A1LK/cTdeoyqS45zb/BC5vep8+86f6C1oh2UhZaYtiijlNfLWamp3lxe0uUQ33kFe1dDCjsvfwJWzLg==",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "0EBAve2CmfOsxAPbmO0dJwgLHtrdlSwjxSIcIwSZ03fgPUIyt8Y8LaOp2o8ieSMW8XUpx6vCTE334irE4J/CUA==",
         "dependencies": {
-          "Autofac": "6.5.0",
-          "Castle.Core": "5.1.1"
+          "Autofac": "9.3.0",
+          "Castle.Core": "5.2.1"
         }
       },
       "AutofacSerilogIntegration": {
@@ -36,15 +36,15 @@
       },
       "JetBrains.Annotations": {
         "type": "Direct",
-        "requested": "[2025.2.4, )",
-        "resolved": "2025.2.4",
-        "contentHash": "TwbgxAkXxY+vNEhNVx/QXjJ4vqxmepOjsgRvvImQPbHkHMMb4W+ahL3laMsxXKtNT7iMy+E1B3xkqao2hf1n3A=="
+        "requested": "[2026.2.0, )",
+        "resolved": "2026.2.0",
+        "contentHash": "drvAEaI7Xf4wU6dx4UTB9MoZWXZlraaQ0qoeThPQ411FxNhId7QdUTukIC9I8aUHP0ycAaGwZNKqSvfOZQvUlg=="
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
-        "requested": "[0.2.38, )",
-        "resolved": "0.2.38",
-        "contentHash": "0HCKvuXV7/u3N2CAGhbAITH6IwwotUcmMQHhadVgJO0QY5pAEctHPeY1P3dtvWqwnJtCHc4PywZVszdLwUSrng=="
+        "requested": "[0.2.39, )",
+        "resolved": "0.2.39",
+        "contentHash": "3CgPQJJV3b2E/CV+O4eeCvQ/mIH7lRbzTAUciiQqXk0BYfWhjSjFnQkbHP1gCweJyKm8596mKXR4arEy7PQ2Bg=="
       },
       "Serilog": {
         "type": "Direct",
@@ -72,8 +72,8 @@
       },
       "Castle.Core": {
         "type": "Transitive",
-        "resolved": "5.1.1",
-        "contentHash": "rpYtIczkzGpf+EkZgDr9CClTdemhsrwA/W5hMoPjLkRFnXzH44zDLoovXeKtmxb1ykXK9aJVODSpiJml8CTw2g==",
+        "resolved": "5.2.1",
+        "contentHash": "wHARzQA695jwwKreOzNsq54KiGqKP38tv8hi8e2FXDEC/sA6BtrX90tVPDkOfVu13PbEzr00TCV8coikl+D1Iw==",
         "dependencies": {
           "System.Diagnostics.EventLog": "6.0.0"
         }
@@ -86,8 +86,8 @@
       "idasen.aop": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "[7.1.0, )",
-          "JetBrains.Annotations": "[2025.2.4, )",
+          "Autofac.Extras.DynamicProxy": "[8.0.0, )",
+          "JetBrains.Annotations": "[2026.2.0, )",
           "Serilog": "[4.3.1, )"
         }
       }

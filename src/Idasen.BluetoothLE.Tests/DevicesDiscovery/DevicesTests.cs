@@ -3,71 +3,77 @@ using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
-using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class DevicesTests
 {
-    [ AutoDataTestMethod ]
-    public void Constructor_ForLoggerNull_Throws ( Lazy < Devices >   sutLazy ,
-                                                   [ BeNull ] ILogger logger )
+    private static Devices CreateSut ( )
     {
-        // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sutLazy.Value ;
-                     } ;
+        return new Devices ( Logger.None ) ;
+    }
+
+    [ TestMethod ]
+    public void Constructor_ForLoggerNull_Throws ( )
+    {
+        var action = ( ) => new Devices ( null! ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( logger ) ) ;
+              .WithParameterName ( "logger" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void DiscoveredDevices_ForInitialized_IsEmpty ( Devices sut )
+    [ TestMethod ]
+    public void DiscoveredDevices_ForInitialized_IsEmpty ( )
     {
+        var sut = CreateSut ( ) ;
+
         sut.DiscoveredDevices
            .Should ( )
            .BeEmpty ( "Should be empty when created" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void AddOrUpdateDevice_ForDeviceIsNull_Throws ( Devices sut )
+    [ TestMethod ]
+    public void AddOrUpdateDevice_ForDeviceIsNull_Throws ( )
     {
+        var sut    = CreateSut ( ) ;
         var action = ( ) => { sut.AddOrUpdateDevice ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( "device" ) ;
+              .WithParameterName ( "device" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void RemoveDevice_ForDeviceIsNull_Throws ( Devices sut )
+    [ TestMethod ]
+    public void RemoveDevice_ForDeviceIsNull_Throws ( )
     {
+        var sut    = CreateSut ( ) ;
         var action = ( ) => { sut.RemoveDevice ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( "device" ) ;
+              .WithParameterName ( "device" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void ContainsDevice_ForDeviceIsNull_Throws ( Devices sut )
+    [ TestMethod ]
+    public void ContainsDevice_ForDeviceIsNull_Throws ( )
     {
+        var sut    = CreateSut ( ) ;
         var action = ( ) => { sut.ContainsDevice ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( "device" ) ;
+              .WithParameterName ( "device" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void AddOrUpdateDevice_ForNewDeviceAdded_IncreasesCount ( Devices sut ,
-                                                                     IDevice device )
+    [ TestMethod ]
+    public void AddOrUpdateDevice_ForNewDeviceAdded_IncreasesCount ( )
     {
+        var sut    = CreateSut ( ) ;
+        var device = Substitute.For < IDevice > ( ) ;
+
         sut.AddOrUpdateDevice ( device ) ;
 
         sut.DiscoveredDevices
@@ -76,11 +82,13 @@ public class DevicesTests
            .Be ( 1 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Remove_ForExistingDevice_RemovesDevice ( Devices        sut ,
-                                                         IDevice        device ,
-                                                         DeviceComparer comparer )
+    [ TestMethod ]
+    public void Remove_ForExistingDevice_RemovesDevice ( )
     {
+        var sut      = CreateSut ( ) ;
+        var device   = Substitute.For < IDevice > ( ) ;
+        var comparer = new DeviceComparer ( ) ;
+
         sut.AddOrUpdateDevice ( device ) ;
 
         sut.RemoveDevice ( device ) ;
@@ -91,12 +99,14 @@ public class DevicesTests
                                                 device ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Remove_ForExistingDevice_DoesNotRemovesOtherDevice ( Devices        sut ,
-                                                                     IDevice        device1 ,
-                                                                     IDevice        device2 ,
-                                                                     DeviceComparer comparer )
+    [ TestMethod ]
+    public void Remove_ForExistingDevice_DoesNotRemovesOtherDevice ( )
     {
+        var sut      = CreateSut ( ) ;
+        var device1  = Substitute.For < IDevice > ( ) ;
+        var device2  = Substitute.For < IDevice > ( ) ;
+        var comparer = new DeviceComparer ( ) ;
+
         device1.Address.Returns ( 1u ) ;
         device2.Address.Returns ( 2u ) ;
 
@@ -118,10 +128,12 @@ public class DevicesTests
                                                    device2 ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Remove_ForExistingDevice_DecreasesCount ( Devices sut ,
-                                                          IDevice device )
+    [ TestMethod ]
+    public void Remove_ForExistingDevice_DecreasesCount ( )
     {
+        var sut    = CreateSut ( ) ;
+        var device = Substitute.For < IDevice > ( ) ;
+
         sut.AddOrUpdateDevice ( device ) ;
 
         sut.RemoveDevice ( device ) ;
@@ -132,11 +144,13 @@ public class DevicesTests
            .Be ( 0 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void AddOrUpdateDevice_ForNewDeviceAdded_DeviceAdded ( Devices        sut ,
-                                                                  IDevice        device ,
-                                                                  DeviceComparer comparer )
+    [ TestMethod ]
+    public void AddOrUpdateDevice_ForNewDeviceAdded_DeviceAdded ( )
     {
+        var sut      = CreateSut ( ) ;
+        var device   = Substitute.For < IDevice > ( ) ;
+        var comparer = new DeviceComparer ( ) ;
+
         sut.AddOrUpdateDevice ( device ) ;
 
         sut.DiscoveredDevices
@@ -145,11 +159,13 @@ public class DevicesTests
                                                    device ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void AddOrUpdateDevice_ForTwoNewDevicesAdded_IncreasesCount ( Devices sut ,
-                                                                         IDevice device1 ,
-                                                                         IDevice device2 )
+    [ TestMethod ]
+    public void AddOrUpdateDevice_ForTwoNewDevicesAdded_IncreasesCount ( )
     {
+        var sut     = CreateSut ( ) ;
+        var device1 = Substitute.For < IDevice > ( ) ;
+        var device2 = Substitute.For < IDevice > ( ) ;
+
         device1.Address.Returns ( 1u ) ;
         device2.Address.Returns ( 2u ) ;
 
@@ -162,12 +178,14 @@ public class DevicesTests
            .Be ( 2 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void AddOrUpdateDevice_ForTwoNewDevicesAdded_DevicesAdded ( Devices        sut ,
-                                                                       IDevice        device1 ,
-                                                                       IDevice        device2 ,
-                                                                       DeviceComparer comparer )
+    [ TestMethod ]
+    public void AddOrUpdateDevice_ForTwoNewDevicesAdded_DevicesAdded ( )
     {
+        var sut      = CreateSut ( ) ;
+        var device1  = Substitute.For < IDevice > ( ) ;
+        var device2  = Substitute.For < IDevice > ( ) ;
+        var comparer = new DeviceComparer ( ) ;
+
         device1.Address.Returns ( 1u ) ;
         device2.Address.Returns ( 2u ) ;
 
@@ -187,10 +205,12 @@ public class DevicesTests
                                                    device2 ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void AddOrUpdateDevice_ForSameDeviceAddedTwice_CountStaysTheSame ( Devices sut ,
-                                                                              IDevice device )
+    [ TestMethod ]
+    public void AddOrUpdateDevice_ForSameDeviceAddedTwice_CountStaysTheSame ( )
     {
+        var sut    = CreateSut ( ) ;
+        var device = Substitute.For < IDevice > ( ) ;
+
         sut.AddOrUpdateDevice ( device ) ;
         sut.AddOrUpdateDevice ( device ) ;
 
@@ -200,12 +220,14 @@ public class DevicesTests
            .Be ( 1 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void AddOrUpdateDevice_ForSameDeviceAddedTwice_UpdatesDevice ( Devices        sut ,
-                                                                          IDevice        device1 ,
-                                                                          IDevice        device2 ,
-                                                                          DeviceComparer comparer )
+    [ TestMethod ]
+    public void AddOrUpdateDevice_ForSameDeviceAddedTwice_UpdatesDevice ( )
     {
+        var sut      = CreateSut ( ) ;
+        var device1  = Substitute.For < IDevice > ( ) ;
+        var device2  = Substitute.For < IDevice > ( ) ;
+        var comparer = new DeviceComparer ( ) ;
+
         device2.Address
                .Returns ( device1.Address ) ;
 
@@ -218,12 +240,14 @@ public class DevicesTests
                                                    device2 ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void AddOrUpdateDevice_ForDeviceWithEmptyName_UpdatesDeviceName ( Devices        sut ,
-                                                                             IDevice        device1 ,
-                                                                             IDevice        device2 ,
-                                                                             DeviceComparer comparer )
+    [ TestMethod ]
+    public void AddOrUpdateDevice_ForDeviceWithEmptyName_UpdatesDeviceName ( )
     {
+        var sut      = CreateSut ( ) ;
+        var device1  = Substitute.For < IDevice > ( ) ;
+        var device2  = Substitute.For < IDevice > ( ) ;
+        var comparer = new DeviceComparer ( ) ;
+
         device1.Name
                .Returns ( string.Empty ) ;
 
@@ -241,10 +265,12 @@ public class DevicesTests
                                                    device2 ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void ContainsDevice_ForExistingDevice_ReturnsTrue ( Devices sut ,
-                                                               IDevice device )
+    [ TestMethod ]
+    public void ContainsDevice_ForExistingDevice_ReturnsTrue ( )
     {
+        var sut    = CreateSut ( ) ;
+        var device = Substitute.For < IDevice > ( ) ;
+
         sut.AddOrUpdateDevice ( device ) ;
 
         sut.ContainsDevice ( device )
@@ -252,28 +278,34 @@ public class DevicesTests
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void ContainsDevice_ForNotExistingDevice_ReturnsFalse ( Devices sut ,
-                                                                   IDevice device )
+    [ TestMethod ]
+    public void ContainsDevice_ForNotExistingDevice_ReturnsFalse ( )
     {
+        var sut    = CreateSut ( ) ;
+        var device = Substitute.For < IDevice > ( ) ;
+
         sut.ContainsDevice ( device )
            .Should ( )
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void TryGetDevice_ForNotExistingDevice_ReturnsFalse ( Devices sut )
+    [ TestMethod ]
+    public void TryGetDevice_ForNotExistingDevice_ReturnsFalse ( )
     {
+        var sut = CreateSut ( ) ;
+
         sut.TryGetDevice ( 0ul ,
                            out _ )
            .Should ( )
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void TryGetDevice_ForExistingDevice_ReturnsTrue ( Devices sut ,
-                                                             IDevice device )
+    [ TestMethod ]
+    public void TryGetDevice_ForExistingDevice_ReturnsTrue ( )
     {
+        var sut    = CreateSut ( ) ;
+        var device = Substitute.For < IDevice > ( ) ;
+
         sut.AddOrUpdateDevice ( device ) ;
 
         sut.TryGetDevice ( device.Address ,
@@ -282,11 +314,13 @@ public class DevicesTests
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void TryGetDevice_ForExistingDevice_ReturnsDevice ( Devices        sut ,
-                                                               IDevice        device ,
-                                                               DeviceComparer comparer )
+    [ TestMethod ]
+    public void TryGetDevice_ForExistingDevice_ReturnsDevice ( )
     {
+        var sut      = CreateSut ( ) ;
+        var device   = Substitute.For < IDevice > ( ) ;
+        var comparer = new DeviceComparer ( ) ;
+
         sut.AddOrUpdateDevice ( device ) ;
 
         sut.TryGetDevice ( device.Address ,
