@@ -6,6 +6,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Serilog ;
 using Serilog.Core ;
+// ReSharper disable MethodSupportsCancellation
 
 // ReSharper disable AccessToDisposedClosure
 
@@ -393,8 +394,7 @@ public class DeskProviderTests
         var startTime = DateTime.UtcNow ;
 
         // Start waiting and cancel immediately
-        var waitTask = Task.Run ( ( ) => { sut.DoTryGetDesk ( source.Token ) ; } ,
-                                  source.Token ) ;
+        var waitTask = Task.Run ( ( ) => { sut.DoTryGetDesk ( source.Token ) ; } ) ;
         source.Cancel ( ) ;
 
         waitTask.Wait ( TimeSpan.FromSeconds ( 2 ) ) ;
