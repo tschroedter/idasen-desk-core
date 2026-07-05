@@ -1,17 +1,24 @@
 using FluentAssertions ;
-using Selkie.AutoMocking ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class RawValueToHeightAndSpeedConverterTests
 {
     private readonly byte [ ] _invalidHeightAndSpeed = [1 , 0 , 2] ;
     private readonly byte [ ] _validHeightAndSpeed   = [1 , 0 , 2 , 0] ;
 
-    [ AutoDataTestMethod ]
-    public void TryConvert_ForValidBytes_ReturnsTrue ( RawValueToHeightAndSpeedConverter sut )
+    private static RawValueToHeightAndSpeedConverter CreateSut ( )
     {
+        return new RawValueToHeightAndSpeedConverter ( Logger.None ) ;
+    }
+
+    [ TestMethod ]
+    public void TryConvert_ForValidBytes_ReturnsTrue ( )
+    {
+        var sut = CreateSut ( ) ;
+
         sut.TryConvert ( _validHeightAndSpeed ,
                          out _ ,
                          out _ )
@@ -19,9 +26,10 @@ public class RawValueToHeightAndSpeedConverterTests
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void TryConvert_ForValidBytes_ReturnsHeight ( RawValueToHeightAndSpeedConverter sut )
+    [ TestMethod ]
+    public void TryConvert_ForValidBytes_ReturnsHeight ( )
     {
+        var sut = CreateSut ( ) ;
         var expected = RawValueToHeightAndSpeedConverter.HeightBaseInMicroMeter + 1u ;
 
         sut.TryConvert ( _validHeightAndSpeed ,
@@ -32,9 +40,11 @@ public class RawValueToHeightAndSpeedConverterTests
               .Be ( expected ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void TryConvert_ForValidBytes_ReturnsSpeed ( RawValueToHeightAndSpeedConverter sut )
+    [ TestMethod ]
+    public void TryConvert_ForValidBytes_ReturnsSpeed ( )
     {
+        var sut = CreateSut ( ) ;
+
         sut.TryConvert ( _validHeightAndSpeed ,
                          out _ ,
                          out var speed ) ;
@@ -43,9 +53,11 @@ public class RawValueToHeightAndSpeedConverterTests
              .Be ( 2 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void TryConvert_ForInvalidBytes_ReturnsFalse ( RawValueToHeightAndSpeedConverter sut )
+    [ TestMethod ]
+    public void TryConvert_ForInvalidBytes_ReturnsFalse ( )
     {
+        var sut = CreateSut ( ) ;
+
         sut.TryConvert ( _invalidHeightAndSpeed ,
                          out _ ,
                          out _ )

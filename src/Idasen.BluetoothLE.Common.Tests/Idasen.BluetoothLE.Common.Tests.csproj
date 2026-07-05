@@ -25,7 +25,7 @@
         <PackageReference Include="AutofacSerilogIntegration" Version="5.0.0" />
         <PackageReference Include="FluentAssertions" Version="8.10.0" />
         <PackageReference Include="MSTest.TestFramework" Version="4.2.3" />
-        <PackageReference Include="Selkie.DefCon.One" Version="0.2.38" />
+        <PackageReference Include="Selkie.DefCon.One" Version="0.2.39" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
     </ItemGroup>
 

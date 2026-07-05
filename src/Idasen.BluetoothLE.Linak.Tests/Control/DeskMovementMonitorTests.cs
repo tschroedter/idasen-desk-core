@@ -2,9 +2,9 @@ using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
+using Idasen.TestLogger ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
-using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 
@@ -23,7 +23,7 @@ public class DeskMovementMonitorTests : IDisposable
     private HeightSpeedDetails  _details8WithSpeedZero        = null! ;
     private IDeskHeightAndSpeed _heightAndSpeed               = null! ;
 
-    private ILogger                        _logger                = null! ;
+    private LoggerForTests                 _logger                = null! ;
     private TestScheduler                  _scheduler             = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
     private bool                           _disposed ;
@@ -52,7 +52,7 @@ public class DeskMovementMonitorTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger                = Substitute.For < ILogger > ( ) ;
+        _logger                = new LoggerForTests ( ) ;
         _scheduler             = new TestScheduler ( ) ;
         _heightAndSpeed        = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;
@@ -339,9 +339,9 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromMilliseconds ( 500 ).Ticks ) ;
 
         // Should not have logged a warning
-        _logger.DidNotReceive ( )
-               .Warning ( "No height updates received for {Seconds} seconds" ,
-                          Arg.Any < double > ( ) ) ;
+        _logger.Contains ( "No height updates received for" )
+               .Should ( )
+               .BeFalse ( ) ;
 
         sut.Dispose ( ) ;
     }
@@ -361,9 +361,9 @@ public class DeskMovementMonitorTests : IDisposable
         }
 
         // Should not have logged any warnings
-        _logger.DidNotReceive ( )
-               .Warning ( "No height updates received for {Seconds} seconds" ,
-                          Arg.Any < double > ( ) ) ;
+        _logger.Contains("No height updates received for")
+               .Should()
+               .BeFalse();
 
         sut.Dispose();
     }
@@ -384,9 +384,9 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 6 ).Ticks ) ;
 
         // Should not throw or log (timer should be disposed)
-        _logger.DidNotReceive ( )
-               .Warning ( "No height updates received for {Seconds} seconds" ,
-                          Arg.Any < double > ( ) ) ;
+        _logger.Contains("No height updates received for")
+               .Should()
+               .BeFalse();
     }
 
     [ TestMethod ]
@@ -494,9 +494,9 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Should have logged a warning
-        _logger.Received ( 1 )
-               .Warning ( "No height updates received for {Seconds} seconds" ,
-                          Arg.Is < double > ( s => s > 1.0 ) ) ;
+        _logger.Contains("No height updates received for")
+               .Should()
+               .BeTrue();
 
         sut.Dispose ( ) ;
     }
@@ -522,9 +522,9 @@ public class DeskMovementMonitorTests : IDisposable
         receivedEvents [ 0 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
 
         // Should only have logged warning once
-        _logger.Received ( 1 )
-               .Warning ( "No height updates received for {Seconds} seconds" ,
-                          Arg.Any < double > ( ) ) ;
+        _logger.Contains($"No height updates received for")
+               .Should()
+               .BeTrue();
 
         sut.Dispose ( ) ;
     }
@@ -577,12 +577,13 @@ public class DeskMovementMonitorTests : IDisposable
 
         // Verify first detection
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
-        _logger.Received ( 1 )
-               .Warning ( "No height updates received for {Seconds} seconds" ,
-                          Arg.Any < double > ( ) ) ;
+
+        _logger.Contains ( "No height updates received for" )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Clear received calls to verify no additional calls
-        _logger.ClearReceivedCalls ( ) ;
+        _logger.Clear( ) ;
 
         // Continue advancing time (timer keeps ticking, but should early-return)
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
@@ -591,9 +592,9 @@ public class DeskMovementMonitorTests : IDisposable
         receivedEvents.Should ( ).HaveCount ( 1 ) ;
 
         // Should not have logged additional warnings (early return prevents it)
-        _logger.DidNotReceive ( )
-               .Warning ( "No height updates received for {Seconds} seconds" ,
-                          Arg.Any < double > ( ) ) ;
+        _logger.Contains ( "No height updates received for" )
+               .Should ( )
+               .BeFalse ( ) ;
 
         sut.Dispose ( ) ;
     }

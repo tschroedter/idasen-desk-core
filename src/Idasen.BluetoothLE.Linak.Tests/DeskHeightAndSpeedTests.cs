@@ -7,6 +7,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
@@ -183,7 +184,7 @@ public class DeskHeightAndSpeedTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger                   = Substitute.For < ILogger > ( ) ;
+        _logger                   = Logger.None ;
         _scheduler                = new TestScheduler ( ) ;
         _referenceOutput          = Substitute.For < IReferenceOutput > ( ) ;
         _converter                = Substitute.For < IRawValueToHeightAndSpeedConverter > ( ) ;

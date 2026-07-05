@@ -2,21 +2,27 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
-using NSubstitute ;
-using Serilog ;
+using Idasen.TestLogger ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
 [ TestClass ]
-public class StoppingHeightCalculatorTests
+public class StoppingHeightCalculatorTests : IDisposable
 {
     private IHasReachedTargetHeightCalculator _calculator = null! ;
-    private ILogger                           _logger     = null! ;
+    private LoggerForTests                    _logger     = null! ;
+
+    public void Dispose()
+    {
+        _logger?.Dispose();
+
+        GC.SuppressFinalize(this);
+    }
 
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger     = Substitute.For < ILogger > ( ) ;
+        _logger     = new LoggerForTests ( ) ;
         _calculator = new HasReachedTargetHeightCalculator ( _logger ) ;
     }
 

@@ -5,9 +5,9 @@ using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Characteristics.Common ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
+using Idasen.TestLogger ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
-using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
@@ -22,7 +22,7 @@ public class InitialHeightProviderTests : IDisposable
 
     private IDeskCommandExecutor           _executor              = null! ;
     private IDeskHeightAndSpeed            _heightAndSpeed        = null! ;
-    private ILogger                        _logger                = null! ;
+    private LoggerForTests                 _logger                = null! ;
     private TestScheduler                  _scheduler             = null! ;
     private Subject < uint >               _subjectFinished       = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
@@ -33,6 +33,8 @@ public class InitialHeightProviderTests : IDisposable
         _subjectHeightAndSpeed.OnCompleted ( ) ;
         _subjectFinished.Dispose ( ) ;
         _subjectHeightAndSpeed.Dispose ( ) ;
+        _logger.Dispose ( ) ;
+
         GC.SuppressFinalize ( this ) ;
     }
 
@@ -40,7 +42,7 @@ public class InitialHeightProviderTests : IDisposable
     public void Initialize ( )
     {
         _scheduler       = new TestScheduler ( ) ;
-        _logger          = Substitute.For < ILogger > ( ) ;
+        _logger          = new LoggerForTests ( ) ;
         _heightAndSpeed  = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _executor        = Substitute.For < IDeskCommandExecutor > ( ) ;
         _subjectFinished = new Subject < uint > ( ) ;

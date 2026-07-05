@@ -4,64 +4,90 @@ using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Linak.Control ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class DeskCommandExecutorTests
 {
-    [ AutoDataTestMethod ]
-    public void Constructor_ForLoggerNull_Throws ( Lazy < DeskCommandExecutor > sut ,
-                                                   [ BeNull ] ILogger           logger )
+    [ TestMethod ]
+    public void Constructor_ForLoggerNull_Throws ( )
     {
-        // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var errorManager = Substitute.For < IErrorManager > ( ) ;
+        var provider     = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control      = Substitute.For < IControl > ( ) ;
+
+        var action = ( ) => new DeskCommandExecutor ( null! ,
+                                                      errorManager ,
+                                                      provider ,
+                                                      control ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( logger ) ) ;
+              .WithParameter ( "logger" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForProviderNull_Throws ( Lazy < DeskCommandExecutor >     sut ,
-                                                     [ BeNull ] IDeskCommandsProvider provider )
+    [ TestMethod ]
+    public void Constructor_ForProviderNull_Throws ( )
     {
-        // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var logger       = Logger.None ;
+        var errorManager = Substitute.For < IErrorManager > ( ) ;
+        var control      = Substitute.For < IControl > ( ) ;
+
+        var action = ( ) => new DeskCommandExecutor ( logger ,
+                                                      errorManager ,
+                                                      null! ,
+                                                      control ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( provider ) ) ;
+              .WithParameter ( "provider" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForControlNull_Throws ( Lazy < DeskCommandExecutor > sut ,
-                                                    [ BeNull ] IControl          control )
+    [ TestMethod ]
+    public void Constructor_ForControlNull_Throws ( )
     {
-        // ReSharper disable once UnusedVariable
-        var action = ( ) =>
-                     {
-                         var test = sut.Value ;
-                     } ;
+        var logger       = Logger.None ;
+        var errorManager = Substitute.For < IErrorManager > ( ) ;
+        var provider     = Substitute.For < IDeskCommandsProvider > ( ) ;
+
+        var action = ( ) => new DeskCommandExecutor ( logger ,
+                                                      errorManager ,
+                                                      provider ,
+                                                      null! ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( control ) ) ;
+              .WithParameter ( "control" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Up_ForInvokedWithUnknownCommand_ReturnsFalse ( DeskCommandExecutor              sut ,
-                                                                     [ Freeze ] IDeskCommandsProvider provider ,
-                                                                     [ Freeze ] IControl              control )
+    [ TestMethod ]
+    public void Constructor_ForErrorManagerNull_Throws ( )
     {
+        var logger   = Logger.None ;
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+
+        var action = ( ) => new DeskCommandExecutor ( logger ,
+                                                      null! ,
+                                                      provider ,
+                                                      control ) ;
+
+        action.Should ( )
+              .Throw < ArgumentNullException > ( )
+              .WithParameter ( "errorManager" ) ;
+    }
+
+    [ TestMethod ]
+    public async Task Up_ForInvokedWithUnknownCommand_ReturnsFalse ( )
+    {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         provider.TryGetValue ( DeskCommands.MoveUp ,
                                out Arg.Any < IEnumerable < byte > > ( ) )
                 .Returns ( x =>
@@ -76,11 +102,14 @@ public class DeskCommandExecutorTests
                      .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Up_ForInvoked_ReturnsTrueForSuccess ( DeskCommandExecutor              sut ,
-                                                            [ Freeze ] IDeskCommandsProvider provider ,
-                                                            [ Freeze ] IControl              control )
+    [ TestMethod ]
+    public async Task Up_ForInvoked_ReturnsTrueForSuccess ( )
     {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         var bytes = new byte [ ]
                     {
                         0 ,
@@ -95,17 +124,24 @@ public class DeskCommandExecutorTests
 
                                return true ;
                            } ) ;
+
+        control.TryWriteRawControl2 ( bytes )
+               .Returns ( true ) ;
+
         var actual = await sut.Up ( ) ;
 
         actual.Should ( )
               .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Up_ForInvoked_CallsControl ( DeskCommandExecutor              sut ,
-                                                   [ Freeze ] IDeskCommandsProvider provider ,
-                                                   [ Freeze ] IControl              control )
+    [ TestMethod ]
+    public async Task Up_ForInvoked_CallsControl ( )
     {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         var bytes = new byte [ ]
                     {
                         0 ,
@@ -126,11 +162,14 @@ public class DeskCommandExecutorTests
                      .TryWriteRawControl2 ( bytes ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Down_ForInvokedWithUnknownCommand_ReturnsFalse ( DeskCommandExecutor              sut ,
-                                                                       [ Freeze ] IDeskCommandsProvider provider ,
-                                                                       [ Freeze ] IControl              control )
+    [ TestMethod ]
+    public async Task Down_ForInvokedWithUnknownCommand_ReturnsFalse ( )
     {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         provider.TryGetValue ( DeskCommands.MoveDown ,
                                out Arg.Any < IEnumerable < byte > > ( ) )
                 .Returns ( x =>
@@ -145,10 +184,14 @@ public class DeskCommandExecutorTests
                      .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Down_ForInvoked_ReturnsTrueForSuccess ( DeskCommandExecutor              sut ,
-                                                              [ Freeze ] IDeskCommandsProvider provider )
+    [ TestMethod ]
+    public async Task Down_ForInvoked_ReturnsTrueForSuccess ( )
     {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         var bytes = new byte [ ]
                     {
                         0 ,
@@ -163,17 +206,24 @@ public class DeskCommandExecutorTests
 
                                return true ;
                            } ) ;
+
+        control.TryWriteRawControl2 ( bytes )
+               .Returns ( true ) ;
+
         var actual = await sut.Down ( ) ;
 
         actual.Should ( )
               .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Down_ForInvoked_CallsControl ( DeskCommandExecutor              sut ,
-                                                     [ Freeze ] IDeskCommandsProvider provider ,
-                                                     [ Freeze ] IControl              control )
+    [ TestMethod ]
+    public async Task Down_ForInvoked_CallsControl ( )
     {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         var bytes = new byte [ ]
                     {
                         0 ,
@@ -194,11 +244,14 @@ public class DeskCommandExecutorTests
                      .TryWriteRawControl2 ( bytes ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Stop_ForInvokedWithUnknownCommand_ReturnsFalse ( DeskCommandExecutor              sut ,
-                                                                       [ Freeze ] IDeskCommandsProvider provider ,
-                                                                       [ Freeze ] IControl              control )
+    [ TestMethod ]
+    public async Task Stop_ForInvokedWithUnknownCommand_ReturnsFalse ( )
     {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         provider.TryGetValue ( DeskCommands.MoveStop ,
                                out Arg.Any < IEnumerable < byte > > ( ) )
                 .Returns ( x =>
@@ -213,10 +266,14 @@ public class DeskCommandExecutorTests
                      .TryWriteRawControl2 ( Arg.Any < IEnumerable < byte > > ( ) ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Stop_ForInvoked_ReturnsTrueForSuccess ( DeskCommandExecutor              sut ,
-                                                              [ Freeze ] IDeskCommandsProvider provider )
+    [ TestMethod ]
+    public async Task Stop_ForInvoked_ReturnsTrueForSuccess ( )
     {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         var bytes = new byte [ ]
                     {
                         0 ,
@@ -231,17 +288,24 @@ public class DeskCommandExecutorTests
 
                                return true ;
                            } ) ;
+
+        control.TryWriteRawControl2 ( bytes )
+               .Returns ( true ) ;
+
         var actual = await sut.StopMovement ( ) ;
 
         actual.Should ( )
               .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Stop_ForInvoked_CallsControl ( DeskCommandExecutor              sut ,
-                                                     [ Freeze ] IDeskCommandsProvider provider ,
-                                                     [ Freeze ] IControl              control )
+    [ TestMethod ]
+    public async Task Stop_ForInvoked_CallsControl ( )
     {
+        var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
+        var control  = Substitute.For < IControl > ( ) ;
+        var sut      = CreateSut ( provider : provider ,
+                                   control : control ) ;
+
         var bytes = new byte [ ]
                     {
                         0 ,
@@ -260,5 +324,21 @@ public class DeskCommandExecutorTests
 
         await control.Received ( )
                      .TryWriteRawControl2 ( bytes ) ;
+    }
+
+    private static DeskCommandExecutor CreateSut ( ILogger?               logger        = null ,
+                                                   IErrorManager?         errorManager  = null ,
+                                                   IDeskCommandsProvider? provider      = null ,
+                                                   IControl?              control       = null )
+    {
+        logger       ??= Logger.None ;
+        errorManager ??= Substitute.For < IErrorManager > ( ) ;
+        provider     ??= Substitute.For < IDeskCommandsProvider > ( ) ;
+        control      ??= Substitute.For < IControl > ( ) ;
+
+        return new DeskCommandExecutor ( logger ,
+                                         errorManager ,
+                                         provider ,
+                                         control ) ;
     }
 }

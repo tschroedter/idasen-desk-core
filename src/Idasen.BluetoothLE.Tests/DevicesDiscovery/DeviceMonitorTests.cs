@@ -6,6 +6,7 @@ using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
@@ -30,7 +31,7 @@ public class DeviceMonitorTests
     {
         _scheduler = new TestScheduler ( ) ;
 
-        _logger = Substitute.For < ILogger > ( ) ;
+        _logger = Logger.None ;
 
         _device = Substitute.For < IDevice > ( ) ;
         _device.Name

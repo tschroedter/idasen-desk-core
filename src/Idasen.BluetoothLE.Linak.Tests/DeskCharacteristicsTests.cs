@@ -5,18 +5,20 @@ using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class DeskCharacteristicsTests
 {
-    [ AutoDataTestMethod ]
-    public async Task Refresh_ForInvoked_CallsCharacteristicRefresh ( DeskCharacteristics      sut ,
-                                                                      IGenericAccess           genericAccess ,
-                                                                      IGenericAttributeService genericAttributeService )
+    [ TestMethod ]
+    public async Task Refresh_ForInvoked_CallsCharacteristicRefresh ( )
     {
+        var genericAccess           = Substitute.For < IGenericAccess > ( ) ;
+        var genericAttributeService = Substitute.For < IGenericAttributeService > ( ) ;
+        var sut                     = CreateSut ( ) ;
+
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
                                   genericAccess ) ;
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAttribute ,
@@ -33,11 +35,13 @@ public class DeskCharacteristicsTests
                                      .Refresh ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Initialize_ForInvoked_CallsCreator ( DeskCharacteristics                    sut ,
-                                                     IDevice                                device ,
-                                                     [ Freeze ] IDeskCharacteristicsCreator creator )
+    [ TestMethod ]
+    public void Initialize_ForInvoked_CallsCreator ( )
     {
+        var creator = Substitute.For < IDeskCharacteristicsCreator > ( ) ;
+        var device  = Substitute.For < IDevice > ( ) ;
+        var sut     = CreateSut ( creator ) ;
+
         sut.Initialize ( device ) ;
 
         creator.Received ( )
@@ -45,9 +49,11 @@ public class DeskCharacteristicsTests
                          device ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Initialize_ForDeviceIsNull_Throws ( DeskCharacteristics sut )
+    [ TestMethod ]
+    public void Initialize_ForDeviceIsNull_Throws ( )
     {
+        var sut = CreateSut ( ) ;
+
         Action action = ( ) => sut.Initialize ( null! ) ;
 
         action.Should ( )
@@ -55,9 +61,11 @@ public class DeskCharacteristicsTests
               .WithParameter ( "device" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void WithCharacteristics_ForCharacteristicIsNull_Throws ( DeskCharacteristics sut )
+    [ TestMethod ]
+    public void WithCharacteristics_ForCharacteristicIsNull_Throws ( )
     {
+        var sut = CreateSut ( ) ;
+
         Action action = ( ) => sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
                                                          null! ) ;
 
@@ -66,10 +74,12 @@ public class DeskCharacteristicsTests
               .WithParameter ( "characteristic" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void WithCharacteristics_ForCharacteristic_AddsCharacteristic ( DeskCharacteristics sut ,
-                                                                           IGenericAccess      genericAccess )
+    [ TestMethod ]
+    public void WithCharacteristics_ForCharacteristic_AddsCharacteristic ( )
     {
+        var genericAccess = Substitute.For < IGenericAccess > ( ) ;
+        var sut           = CreateSut ( ) ;
+
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
                                   genericAccess ) ;
 
@@ -79,11 +89,13 @@ public class DeskCharacteristicsTests
                            x.Value == genericAccess ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void ToString_ForInvoked_Instance ( DeskCharacteristics      sut ,
-                                               IGenericAccess           genericAccess ,
-                                               IGenericAttributeService genericAttributeService )
+    [ TestMethod ]
+    public void ToString_ForInvoked_Instance ( )
     {
+        var genericAccess           = Substitute.For < IGenericAccess > ( ) ;
+        var genericAttributeService = Substitute.For < IGenericAttributeService > ( ) ;
+        var sut                     = CreateSut ( ) ;
+
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAccess ,
                                   genericAccess ) ;
         sut.WithCharacteristics ( DeskCharacteristicKey.GenericAttribute ,
@@ -98,5 +110,15 @@ public class DeskCharacteristicsTests
         sut.ToString ( )
            .Should ( )
            .Contain ( "GenericAttributeService" ) ;
+    }
+
+    private static DeskCharacteristics CreateSut ( IDeskCharacteristicsCreator? creator = null )
+    {
+        var logger = Logger.None ;
+
+        creator ??= Substitute.For < IDeskCharacteristicsCreator > ( ) ;
+
+        return new DeskCharacteristics ( logger ,
+                                         creator ) ;
     }
 }

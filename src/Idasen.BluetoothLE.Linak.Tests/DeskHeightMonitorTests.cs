@@ -1,7 +1,7 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Control ;
-using NSubstitute ;
 using Serilog ;
+using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
@@ -13,7 +13,7 @@ public class DeskHeightMonitorTests
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger = Substitute.For < ILogger > ( ) ;
+        _logger = Logger.None ;
     }
 
     private DeskHeightMonitor CreateSut ( )

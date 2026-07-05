@@ -22,7 +22,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Selkie.DefCon.One" Version="0.2.38" />
+        <PackageReference Include="Selkie.DefCon.One" Version="0.2.39" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,6 +30,7 @@
         <ProjectReference Include="..\Idasen.BluetoothLE.Common.Tests\Idasen.BluetoothLE.Common.Tests.csproj" />
         <ProjectReference Include="..\Idasen.BluetoothLE.Core.Tests\Idasen.BluetoothLE.Core.Tests.csproj" />
         <ProjectReference Include="..\Idasen.BluetoothLE.Core\Idasen.BluetoothLE.Core.csproj" />
+        <ProjectReference Include="..\Idasen.TestLogger\Idasen.TestLogger.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -53,8 +53,8 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Transitive",
-        "resolved": "0.2.38",
-        "contentHash": "0HCKvuXV7/u3N2CAGhbAITH6IwwotUcmMQHhadVgJO0QY5pAEctHPeY1P3dtvWqwnJtCHc4PywZVszdLwUSrng=="
+        "resolved": "0.2.39",
+        "contentHash": "3CgPQJJV3b2E/CV+O4eeCvQ/mIH7lRbzTAUciiQqXk0BYfWhjSjFnQkbHP1gCweJyKm8596mKXR4arEy7PQ2Bg=="
       },
       "Serilog": {
         "type": "Transitive",
@@ -93,7 +93,7 @@
           "CsvHelper": "[33.1.0, )",
           "Idasen.Aop": "[1.0.0, )",
           "JetBrains.Annotations": "[2026.2.0, )",
-          "Selkie.DefCon.One.Common": "[0.2.38, )",
+          "Selkie.DefCon.One.Common": "[0.2.39, )",
           "Serilog": "[4.3.1, )",
           "System.Reactive": "[6.1.0, )",
           "System.ValueTuple": "[4.6.2, )"

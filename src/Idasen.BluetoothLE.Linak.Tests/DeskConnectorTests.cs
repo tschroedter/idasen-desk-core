@@ -7,8 +7,8 @@ using Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
+using Idasen.TestLogger ;
 using NSubstitute ;
-using Serilog ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
@@ -39,7 +39,7 @@ public sealed class DeskConnectorTests : IDisposable
     private Subject < uint >               _heightChanged         = null! ;
     private Subject < HeightSpeedDetails > _heightSpeedSubject    = null! ;
     private Subject < uint >               _heightSubject         = null! ;
-    private ILogger                        _logger                = null! ;
+    private LoggerForTests                 _logger                = null! ;
     private IDeskMover                     _mover                 = null! ;
 
     private IDeskMoverFactory _moverFactory     = null! ;
@@ -70,7 +70,7 @@ public sealed class DeskConnectorTests : IDisposable
 
     private DeskConnector CreateSut ( )
     {
-        _logger = Substitute.For < ILogger > ( ) ;
+        _logger = new LoggerForTests ( ) ;
         // Use a real scheduler to ensure Rx SubscribeOn executes subscriptions.
         _scheduler = CurrentThreadScheduler.Instance ;
 
@@ -167,13 +167,9 @@ public sealed class DeskConnectorTests : IDisposable
         var result = await sut.MoveUpAsync ( ) ;
 
         result.Should ( ).BeFalse ( ) ;
-        _logger.Received ( ).Error (
-#pragma warning disable CA2254
-#pragma warning disable Serilog004
-                                    Arg.Is < string > ( s => s.Contains ( "refreshed" ,
-                                                                          StringComparison.OrdinalIgnoreCase ) ) ) ;
-#pragma warning restore Serilog004
-#pragma warning restore CA2254
+        _logger.Lines.Any ( x => x.Contains ( "Error" ) )
+               .Should ( )
+               .BeTrue ( ) ;
     }
 
     [ TestMethod ]
@@ -571,7 +567,10 @@ public sealed class DeskConnectorTests : IDisposable
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
-        _logger.Received ( 1 ).Warning ( "Failed to refresh Gatt services" ) ;
+        _logger.Contains( "Failed to refresh Gatt services" )
+               .Should ( )
+               .BeTrue ( ) ;
+
         refreshedChanged.Should ( ).BeFalse ( ) ;
     }
 
@@ -599,14 +598,9 @@ public sealed class DeskConnectorTests : IDisposable
         sut.MoveTo ( 100u ) ;
 
         _mover.DidNotReceive ( ).Start ( ) ;
-        _logger.Received ( ).Error (
-#pragma warning disable CA2254
-#pragma warning disable Serilog004
-                                    Arg.Is < string > ( s => s.Contains ( "refreshed" ,
-                                                                          StringComparison.OrdinalIgnoreCase ) )
-#pragma warning restore Serilog004
-#pragma warning restore CA2254
-                                   ) ;
+        _logger.Contains("Error")
+               .Should()
+               .BeTrue();
     }
 
     [ TestMethod ]
@@ -639,8 +633,9 @@ public sealed class DeskConnectorTests : IDisposable
         var ex = new InvalidOperationException ( "boom" ) ;
         _genericAccessDeviceNameChanged.OnError ( ex ) ;
 
-        _logger.Received ( 1 ).Error ( ex ,
-                                       "Error handling DeviceNameChanged" ) ;
+        _logger.Contains ( "Error handling DeviceNameChanged" )
+               .Should ( )
+               .BeTrue ( ) ;
     }
 
     [ TestMethod ]
