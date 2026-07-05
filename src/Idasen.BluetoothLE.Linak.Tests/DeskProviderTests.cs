@@ -6,6 +6,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Serilog ;
 using Serilog.Core ;
+// ReSharper disable AccessToDisposedClosure
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
@@ -15,13 +16,16 @@ public class DeskProviderTests
     [ TestMethod ]
     public void Initialize_ForDeviceNameIsNull_Throws ( )
     {
-        using var sut      = CreateSut ( ) ;
-        var deviceAddress  = 123uL ;
-        var deviceTimeout  = 456u ;
+        Action action = ( ) =>
+                        {
+                            using var sut           = CreateSut();
+                            var       deviceAddress = 123uL;
+                            var       deviceTimeout = 456u;
 
-        Action action = ( ) => sut.Initialize ( null! ,
-                                                deviceAddress ,
-                                                deviceTimeout ) ;
+                            sut.Initialize ( null! ,
+                                             deviceAddress ,
+                                             deviceTimeout ) ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentException > ( )
@@ -56,12 +60,9 @@ public class DeskProviderTests
 
         detector.DeskDetected.Returns ( deskDetected ) ;
 
-        // Setup the chain: deskDetected.ObserveOn(scheduler) returns innerObservable
-        // Use WhenForAnyArgs since ObserveOn is an extension method
         Observable.Return ( ( IDesk ) null! )
-                  .Subscribe ( x => { } ) ; // Clear any previous setup
+                  .Subscribe ( _ => { } ) ;
 
-        // Create a real observable that can be used
         using var sut     = CreateSut ( detector : detector ,
                                         scheduler : scheduler ,
                                         deskDetected : deskDetected ) ;
@@ -275,8 +276,10 @@ public class DeskProviderTests
         source.CancelAfter ( TimeSpan.FromSeconds ( 5 ) ) ;
 
         // Ensure scheduling is not skipped due to token pre-cancellation; pass token only to the work, not to Task.Run
-        var waitForDetection = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) ) ;
-        var triggerDetection = Task.Run ( ( ) => sut.OnDeskDetected ( desk ) ) ;
+        var waitForDetection = Task.Run ( ( ) => { sut.DoTryGetDesk(source.Token); } ,
+                                          source.Token ) ;
+        var triggerDetection = Task.Run ( ( ) => { sut.OnDeskDetected(desk); } ,
+                                          source.Token ) ;
 
         await Task.WhenAll ( waitForDetection ,
                              triggerDetection ) ;
@@ -360,10 +363,12 @@ public class DeskProviderTests
         var startTime = DateTime.UtcNow ;
 
         // Start waiting for desk in background
-        var waitTask = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) ) ;
+        var waitTask = Task.Run ( ( ) => { sut.DoTryGetDesk(source.Token); } ,
+                                  source.Token ) ;
 
         // Simulate desk detection after a short delay (before first timeout)
-        await Task.Delay ( TimeSpan.FromMilliseconds ( 500 ) ) ;
+        await Task.Delay ( TimeSpan.FromMilliseconds ( 500 ) ,
+                           source.Token ) ;
         sut.OnDeskDetected ( desk ) ;
 
         await waitTask ;
@@ -387,7 +392,8 @@ public class DeskProviderTests
         var startTime = DateTime.UtcNow ;
 
         // Start waiting and cancel immediately
-        var waitTask = Task.Run ( ( ) => sut.DoTryGetDesk ( source.Token ) ) ;
+        var waitTask = Task.Run ( ( ) => { sut.DoTryGetDesk(source.Token); } ,
+                                  source.Token ) ;
         source.Cancel ( ) ;
 
         waitTask.Wait ( TimeSpan.FromSeconds ( 2 ) ) ;

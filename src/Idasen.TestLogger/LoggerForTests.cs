@@ -43,8 +43,8 @@ public sealed class LoggerForTests : ILogger, IDisposable
     /// <summary>
     ///     Gets all captured log lines as an array.
     /// </summary>
-    public string [ ] Lines => Output.Split ( new [ ] { Environment.NewLine } ,
-                                               StringSplitOptions.RemoveEmptyEntries ) ;
+    public string [ ] Lines => Output.Split ( [Environment.NewLine] ,
+                                              StringSplitOptions.RemoveEmptyEntries ) ;
 
     public void Dispose ( )
     {

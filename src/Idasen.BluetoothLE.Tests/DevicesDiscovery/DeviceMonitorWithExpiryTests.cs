@@ -144,8 +144,12 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void TimeOut_ForValueLessThanZero_SetsTimeOut ( )
     {
-        using var sut = CreateSut ( ) ;
-        Action action = ( ) => sut.TimeOut = TimeSpan.FromHours ( - 0.1 ) ;
+        Action action = ( ) =>
+                        {
+                            using var sut = CreateSut();
+
+                            sut.TimeOut = TimeSpan.FromHours ( - 0.1 ) ;
+                        } ;
 
         action.Should ( )
               .Throw < ArgumentException > ( ) ;

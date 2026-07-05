@@ -14,6 +14,7 @@ public class StoppingHeightCalculatorTests : IDisposable
 
     public void Dispose()
     {
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
         _logger?.Dispose();
 
         GC.SuppressFinalize(this);

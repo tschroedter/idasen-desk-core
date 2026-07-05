@@ -522,9 +522,9 @@ public class DeskMovementMonitorTests : IDisposable
         receivedEvents [ 0 ].Should ( ).Be ( DeskMovementMonitor.NoHeightUpdatesReceived ) ;
 
         // Should only have logged warning once
-        _logger.Contains($"No height updates received for")
-               .Should()
-               .BeTrue();
+        _logger.Contains ( "No height updates received for" )
+               .Should ( )
+               .BeTrue ( ) ;
 
         sut.Dispose ( ) ;
     }

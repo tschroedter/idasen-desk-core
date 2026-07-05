@@ -211,7 +211,7 @@ public class DeskProvider
             if ( index == 1 )
                 break ;
 
-            // If desk-detected event (index == 0), loop will re-check Desk and exit if set
+            // If desk-detected event (index == 0), loop will re-check Desk and exit if set.
             // If timed out (index == WaitHandle.WaitTimeout), apply exponential backoff
             if ( index == WaitHandle.WaitTimeout )
             {
