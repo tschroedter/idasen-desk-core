@@ -6,6 +6,7 @@ using Idasen.BluetoothLE.Linak.Interfaces ;
 using NSubstitute ;
 using Serilog ;
 using Serilog.Core ;
+
 // ReSharper disable AccessToDisposedClosure
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
@@ -16,16 +17,16 @@ public class DeskProviderTests
     [ TestMethod ]
     public void Initialize_ForDeviceNameIsNull_Throws ( )
     {
-        Action action = ( ) =>
-                        {
-                            using var sut           = CreateSut();
-                            var       deviceAddress = 123uL;
-                            var       deviceTimeout = 456u;
+        var action = ( ) =>
+                     {
+                         using var sut           = CreateSut ( ) ;
+                         var       deviceAddress = 123uL ;
+                         var       deviceTimeout = 456u ;
 
-                            sut.Initialize ( null! ,
-                                             deviceAddress ,
-                                             deviceTimeout ) ;
-                        } ;
+                         sut.Initialize ( null! ,
+                                          deviceAddress ,
+                                          deviceTimeout ) ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentException > ( )
@@ -35,11 +36,11 @@ public class DeskProviderTests
     [ TestMethod ]
     public void Initialize_ForInvoked_CallsDetectorInitialize ( )
     {
-        var detector      = Substitute.For < IDeskDetector > ( ) ;
-        using var sut     = CreateSut ( detector : detector ) ;
-        var deviceName    = "TestDevice" ;
-        var deviceAddress = 123uL ;
-        var deviceTimeout = 456u ;
+        var       detector      = Substitute.For < IDeskDetector > ( ) ;
+        using var sut           = CreateSut ( detector : detector ) ;
+        var       deviceName    = "TestDevice" ;
+        var       deviceAddress = 123uL ;
+        var       deviceTimeout = 456u ;
 
         sut.Initialize ( deviceName ,
                          deviceAddress ,
@@ -54,18 +55,18 @@ public class DeskProviderTests
     [ TestMethod ]
     public void Initialize_ForInvoked_SubscribesToDeskDetected ( )
     {
-        var deskDetected    = Substitute.For < IObservable < IDesk > > ( ) ;
-        var detector        = Substitute.For < IDeskDetector > ( ) ;
-        var scheduler       = Substitute.For < IScheduler > ( ) ;
+        var deskDetected = Substitute.For < IObservable < IDesk > > ( ) ;
+        var detector     = Substitute.For < IDeskDetector > ( ) ;
+        var scheduler    = Substitute.For < IScheduler > ( ) ;
 
         detector.DeskDetected.Returns ( deskDetected ) ;
 
-        Observable.Return ( ( IDesk ) null! )
+        Observable.Return ( ( IDesk )null! )
                   .Subscribe ( _ => { } ) ;
 
-        using var sut     = CreateSut ( detector : detector ,
-                                        scheduler : scheduler ,
-                                        deskDetected : deskDetected ) ;
+        using var sut = CreateSut ( detector : detector ,
+                                    scheduler : scheduler ,
+                                    deskDetected : deskDetected ) ;
         var deviceName    = "TestDevice" ;
         var deviceAddress = 123uL ;
         var deviceTimeout = 456u ;
@@ -84,11 +85,11 @@ public class DeskProviderTests
     [ TestMethod ]
     public void StartDetecting_ForInvoked_CallsDeskDetectorStart ( )
     {
-        var detector      = Substitute.For < IDeskDetector > ( ) ;
-        using var sut     = CreateSut ( detector : detector ) ;
-        var deviceName    = "TestDevice" ;
-        var deviceAddress = 123uL ;
-        var deviceTimeout = 456u ;
+        var       detector      = Substitute.For < IDeskDetector > ( ) ;
+        using var sut           = CreateSut ( detector : detector ) ;
+        var       deviceName    = "TestDevice" ;
+        var       deviceAddress = 123uL ;
+        var       deviceTimeout = 456u ;
 
         sut.Initialize ( deviceName ,
                          deviceAddress ,
@@ -102,11 +103,11 @@ public class DeskProviderTests
     [ TestMethod ]
     public void StopDetecting_ForInvoked_CallsDeskDetectorStart ( )
     {
-        var detector      = Substitute.For < IDeskDetector > ( ) ;
-        using var sut     = CreateSut ( detector : detector ) ;
-        var deviceName    = "TestDevice" ;
-        var deviceAddress = 123uL ;
-        var deviceTimeout = 456u ;
+        var       detector      = Substitute.For < IDeskDetector > ( ) ;
+        using var sut           = CreateSut ( detector : detector ) ;
+        var       deviceName    = "TestDevice" ;
+        var       deviceAddress = 123uL ;
+        var       deviceTimeout = 456u ;
 
         sut.Initialize ( deviceName ,
                          deviceAddress ,
@@ -120,11 +121,11 @@ public class DeskProviderTests
     [ TestMethod ]
     public void Dispose_ForInvoked_DisposesDeskDetected ( )
     {
-        var detector      = Substitute.For < IDeskDetector > ( ) ;
-        using var sut     = CreateSut ( detector : detector ) ;
-        var deviceName    = "TestDevice" ;
-        var deviceAddress = 123uL ;
-        var deviceTimeout = 456u ;
+        var       detector      = Substitute.For < IDeskDetector > ( ) ;
+        using var sut           = CreateSut ( detector : detector ) ;
+        var       deviceName    = "TestDevice" ;
+        var       deviceAddress = 123uL ;
+        var       deviceTimeout = 456u ;
 
         sut.Initialize ( deviceName ,
                          deviceAddress ,
@@ -143,11 +144,11 @@ public class DeskProviderTests
     [ TestMethod ]
     public void StopDetecting_ForInvoked_DisposesDeskDetector ( )
     {
-        var detector      = Substitute.For < IDeskDetector > ( ) ;
-        using var sut     = CreateSut ( detector : detector ) ;
-        var deviceName    = "TestDevice" ;
-        var deviceAddress = 123uL ;
-        var deviceTimeout = 456u ;
+        var       detector      = Substitute.For < IDeskDetector > ( ) ;
+        using var sut           = CreateSut ( detector : detector ) ;
+        var       deviceName    = "TestDevice" ;
+        var       deviceAddress = 123uL ;
+        var       deviceTimeout = 456u ;
 
         sut.Initialize ( deviceName ,
                          deviceAddress ,
@@ -164,7 +165,7 @@ public class DeskProviderTests
         var deskDetected = Substitute.For < IObservable < IDesk > > ( ) ;
         var detector     = Substitute.For < IDeskDetector > ( ) ;
         detector.DeskDetected.Returns ( deskDetected ) ;
-        using var sut    = CreateSut ( detector : detector ) ;
+        using var sut = CreateSut ( detector : detector ) ;
 
         var result = sut.DeskDetected ;
 
@@ -175,12 +176,12 @@ public class DeskProviderTests
     [ TestMethod ]
     public async Task TryGetDesk_ForInvoked_CallsDeskDetectorStart ( )
     {
-        var detector      = Substitute.For < IDeskDetector > ( ) ;
-        using var sut     = CreateSut ( detector : detector ) ;
-        using var source  = new CancellationTokenSource ( ) ;
-        var deviceName    = "TestDevice" ;
-        var deviceAddress = 123uL ;
-        var deviceTimeout = 456u ;
+        var       detector      = Substitute.For < IDeskDetector > ( ) ;
+        using var sut           = CreateSut ( detector : detector ) ;
+        using var source        = new CancellationTokenSource ( ) ;
+        var       deviceName    = "TestDevice" ;
+        var       deviceAddress = 123uL ;
+        var       deviceTimeout = 456u ;
 
         await sut.Initialize ( deviceName ,
                                deviceAddress ,
@@ -194,12 +195,12 @@ public class DeskProviderTests
     [ TestMethod ]
     public async Task TryGetDesk_ForCancelled_ReturnsFalse ( )
     {
-        var detector      = Substitute.For < IDeskDetector > ( ) ;
-        using var sut     = CreateSut ( detector : detector ) ;
-        using var source  = new CancellationTokenSource ( ) ;
-        var deviceName    = "TestDevice" ;
-        var deviceAddress = 123uL ;
-        var deviceTimeout = 456u ;
+        var       detector      = Substitute.For < IDeskDetector > ( ) ;
+        using var sut           = CreateSut ( detector : detector ) ;
+        using var source        = new CancellationTokenSource ( ) ;
+        var       deviceName    = "TestDevice" ;
+        var       deviceAddress = 123uL ;
+        var       deviceTimeout = 456u ;
 
         detector.When ( x => x.Initialize ( deviceName ,
                                             deviceAddress ,
@@ -218,12 +219,12 @@ public class DeskProviderTests
     [ TestMethod ]
     public async Task TryGetDesk_ForCancelled_ReturnsNullForDesk ( )
     {
-        var detector      = Substitute.For < IDeskDetector > ( ) ;
-        using var sut     = CreateSut ( detector : detector ) ;
-        using var source  = new CancellationTokenSource ( ) ;
-        var deviceName    = "TestDevice" ;
-        var deviceAddress = 123uL ;
-        var deviceTimeout = 456u ;
+        var       detector      = Substitute.For < IDeskDetector > ( ) ;
+        using var sut           = CreateSut ( detector : detector ) ;
+        using var source        = new CancellationTokenSource ( ) ;
+        var       deviceName    = "TestDevice" ;
+        var       deviceAddress = 123uL ;
+        var       deviceTimeout = 456u ;
 
         detector.When ( x => x.Initialize ( deviceName ,
                                             deviceAddress ,
@@ -242,9 +243,9 @@ public class DeskProviderTests
     [ TestMethod ]
     public void OnDeskDetected_ForInvoked_CallsDeskDetectorStop ( )
     {
-        var detector = Substitute.For < IDeskDetector > ( ) ;
-        var desk     = Substitute.For < IDesk > ( ) ;
-        using var sut = CreateSut ( detector : detector ) ;
+        var       detector = Substitute.For < IDeskDetector > ( ) ;
+        var       desk     = Substitute.For < IDesk > ( ) ;
+        using var sut      = CreateSut ( detector : detector ) ;
 
         sut.OnDeskDetected ( desk ) ;
 
@@ -255,8 +256,8 @@ public class DeskProviderTests
     [ TestMethod ]
     public void OnDeskDetected_ForInvoked_SetsDesk ( )
     {
-        var desk      = Substitute.For < IDesk > ( ) ;
-        using var sut = CreateSut ( ) ;
+        var       desk = Substitute.For < IDesk > ( ) ;
+        using var sut  = CreateSut ( ) ;
 
         sut.OnDeskDetected ( desk ) ;
 
@@ -268,7 +269,7 @@ public class DeskProviderTests
     [ TestMethod ]
     public async Task OnDeskDetected_ForInvoked_CallsDeskDetectedEventSet ( )
     {
-        var desk         = Substitute.For < IDesk > ( ) ;
+        var       desk   = Substitute.For < IDesk > ( ) ;
         using var sut    = CreateSut ( ) ;
         using var source = new CancellationTokenSource ( ) ;
 
@@ -276,9 +277,9 @@ public class DeskProviderTests
         source.CancelAfter ( TimeSpan.FromSeconds ( 5 ) ) ;
 
         // Ensure scheduling is not skipped due to token pre-cancellation; pass token only to the work, not to Task.Run
-        var waitForDetection = Task.Run ( ( ) => { sut.DoTryGetDesk(source.Token); } ,
+        var waitForDetection = Task.Run ( ( ) => { sut.DoTryGetDesk ( source.Token ) ; } ,
                                           source.Token ) ;
-        var triggerDetection = Task.Run ( ( ) => { sut.OnDeskDetected(desk); } ,
+        var triggerDetection = Task.Run ( ( ) => { sut.OnDeskDetected ( desk ) ; } ,
                                           source.Token ) ;
 
         await Task.WhenAll ( waitForDetection ,
@@ -353,7 +354,7 @@ public class DeskProviderTests
     [ TestMethod ]
     public async Task DoTryGetDesk_WithExponentialBackoff_ExitsImmediatelyOnDeskDetection ( )
     {
-        var desk         = Substitute.For < IDesk > ( ) ;
+        var       desk   = Substitute.For < IDesk > ( ) ;
         using var sut    = CreateSut ( ) ;
         using var source = new CancellationTokenSource ( ) ;
 
@@ -363,7 +364,7 @@ public class DeskProviderTests
         var startTime = DateTime.UtcNow ;
 
         // Start waiting for desk in background
-        var waitTask = Task.Run ( ( ) => { sut.DoTryGetDesk(source.Token); } ,
+        var waitTask = Task.Run ( ( ) => { sut.DoTryGetDesk ( source.Token ) ; } ,
                                   source.Token ) ;
 
         // Simulate desk detection after a short delay (before first timeout)
@@ -392,7 +393,7 @@ public class DeskProviderTests
         var startTime = DateTime.UtcNow ;
 
         // Start waiting and cancel immediately
-        var waitTask = Task.Run ( ( ) => { sut.DoTryGetDesk(source.Token); } ,
+        var waitTask = Task.Run ( ( ) => { sut.DoTryGetDesk ( source.Token ) ; } ,
                                   source.Token ) ;
         source.Cancel ( ) ;
 
@@ -411,7 +412,7 @@ public class DeskProviderTests
     [ TestMethod ]
     public void DoTryGetDesk_WithExponentialBackoff_ExitsImmediatelyIfDeskAlreadySet ( )
     {
-        var desk         = Substitute.For < IDesk > ( ) ;
+        var       desk   = Substitute.For < IDesk > ( ) ;
         using var sut    = CreateSut ( ) ;
         using var source = new CancellationTokenSource ( ) ;
 
@@ -431,11 +432,11 @@ public class DeskProviderTests
            .Be ( desk ) ;
     }
 
-    private static DeskProvider CreateSut ( ILogger?       logger        = null ,
-                                            ITaskRunner?   taskRunner    = null ,
-                                            IScheduler?    scheduler     = null ,
-                                            IDeskDetector? detector      = null ,
-                                            IErrorManager? errorManager  = null ,
+    private static DeskProvider CreateSut ( ILogger ?               logger       = null ,
+                                            ITaskRunner ?           taskRunner   = null ,
+                                            IScheduler ?            scheduler    = null ,
+                                            IDeskDetector ?         detector     = null ,
+                                            IErrorManager ?         errorManager = null ,
                                             IObservable < IDesk > ? deskDetected = null )
     {
         logger       ??= Logger.None ;
@@ -445,7 +446,7 @@ public class DeskProviderTests
 
         if ( detector == null )
         {
-            detector = Substitute.For < IDeskDetector > ( ) ;
+            detector     =   Substitute.For < IDeskDetector > ( ) ;
             deskDetected ??= Substitute.For < IObservable < IDesk > > ( ) ;
             detector.DeskDetected.Returns ( deskDetected ) ;
         }

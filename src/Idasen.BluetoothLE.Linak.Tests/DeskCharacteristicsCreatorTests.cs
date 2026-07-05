@@ -10,8 +10,8 @@ namespace Idasen.BluetoothLE.Linak.Tests ;
 [ TestClass ]
 public class DeskCharacteristicsCreatorTests
 {
-    private ILogger                    _logger      = null! ;
     private ICharacteristicBaseFactory _baseFactory = null! ;
+    private ILogger                    _logger      = null! ;
 
     [ TestInitialize ]
     public void Setup ( )
@@ -25,6 +25,7 @@ public class DeskCharacteristicsCreatorTests
         return new DeskCharacteristicsCreator ( _logger ,
                                                 _baseFactory ) ;
     }
+
     [ TestMethod ]
     public void Create_ForInvokedWithCharacteristics_AddsGenericAccess ( )
     {

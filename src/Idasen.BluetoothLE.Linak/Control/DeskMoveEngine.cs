@@ -74,7 +74,7 @@ internal class DeskMoveEngine
 
                     if ( ! ok )
                     {
-                        consecutiveFailures++ ;
+                        consecutiveFailures ++ ;
                         _logger.Debug ( "StartMoveAsync command failed: {Desired} (consecutive failures: {Count})" ,
                                         desired ,
                                         consecutiveFailures ) ;
@@ -93,7 +93,7 @@ internal class DeskMoveEngine
                 }
                 catch ( Exception ex )
                 {
-                    consecutiveFailures++ ;
+                    consecutiveFailures ++ ;
                     _logger.Error ( ex ,
                                     "StartMoveAsync command threw exception: {Desired} (consecutive failures: {Count})" ,
                                     desired ,

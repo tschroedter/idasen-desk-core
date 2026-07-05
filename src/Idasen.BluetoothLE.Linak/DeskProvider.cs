@@ -214,10 +214,8 @@ public class DeskProvider
             // If desk-detected event (index == 0), loop will re-check Desk and exit if set.
             // If timed out (index == WaitHandle.WaitTimeout), apply exponential backoff
             if ( index == WaitHandle.WaitTimeout )
-            {
                 currentWaitMs = Math.Min ( currentWaitMs * 2 ,
                                            maxWaitMs ) ;
-            }
         }
     }
 

@@ -17,25 +17,40 @@ public class DeskMovementMonitor
 
     internal const int MinimumNumberOfItems = 3 ;
 
-    internal const int    DefaultCapacity              = 5 ;
-    internal const string HeightDidNotChange           = "Height didn't change when moving desk" ;
-    internal const string SpeedWasZero                 = "Speed was zero when moving desk" ;
-    internal const string NoHeightUpdatesReceived      = "No height updates received for timeout period" ;
+    internal const int    DefaultCapacity         = 5 ;
+    internal const string HeightDidNotChange      = "Height didn't change when moving desk" ;
+    internal const string SpeedWasZero            = "Speed was zero when moving desk" ;
+    internal const string NoHeightUpdatesReceived = "No height updates received for timeout period" ;
 
-    private readonly IDeskHeightAndSpeed       _heightAndSpeed ;
-    private readonly ILogger                   _logger ;
-    private readonly IScheduler                _scheduler ;
-    private readonly Subject < string >        _subjectInactivityDetected ;
+    private readonly IDeskHeightAndSpeed _heightAndSpeed ;
+    private readonly ILogger             _logger ;
+    private readonly IScheduler          _scheduler ;
+    private readonly Subject < string >  _subjectInactivityDetected ;
 
     private IDisposable ? _disposalHeightAndSpeed ;
-    private IDisposable ? _inactivityTimer ;
-    private DateTimeOffset _lastUpdateTime = DateTimeOffset.MinValue ;
-    private bool           _inactivityDetected ;
-    private bool           _disposed ;
+    private bool          _disposed ;
+    private bool          _inactivityDetected ;
+
     // ReSharper disable once ReplaceWithFieldKeyword
     private int            _inactivityTimeoutSeconds = 1 ;
+    private IDisposable ?  _inactivityTimer ;
+    private DateTimeOffset _lastUpdateTime = DateTimeOffset.MinValue ;
 
     internal CircularBuffer < HeightSpeedDetails > History = new(5) ;
+
+    public DeskMovementMonitor ( ILogger             logger ,
+                                 IScheduler          scheduler ,
+                                 IDeskHeightAndSpeed heightAndSpeed )
+    {
+        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
+        ArgumentNullException.ThrowIfNull ( logger ) ;
+
+        _logger                    = logger ;
+        _scheduler                 = scheduler ;
+        _heightAndSpeed            = heightAndSpeed ;
+        _subjectInactivityDetected = new Subject < string > ( ) ;
+    }
 
     /// <summary>
     ///     Gets or sets the inactivity timeout in seconds. Default is 1 second.
@@ -52,20 +67,6 @@ public class DeskMovementMonitor
                                                         "InactivityTimeoutSeconds must be greater than 0." ) ;
             _inactivityTimeoutSeconds = value ;
         }
-    }
-
-    public DeskMovementMonitor ( ILogger             logger ,
-                                 IScheduler          scheduler ,
-                                 IDeskHeightAndSpeed heightAndSpeed )
-    {
-        ArgumentNullException.ThrowIfNull ( scheduler ) ;
-        ArgumentNullException.ThrowIfNull ( heightAndSpeed ) ;
-        ArgumentNullException.ThrowIfNull ( logger ) ;
-
-        _logger                    = logger ;
-        _scheduler                 = scheduler ;
-        _heightAndSpeed            = heightAndSpeed ;
-        _subjectInactivityDetected = new Subject < string > ( ) ;
     }
 
     /// <inheritdoc />
@@ -206,7 +207,7 @@ public class DeskMovementMonitor
         var elapsed = _scheduler.Now - _lastUpdateTime ;
 
         _logger.Debug ( "Inactivity check: {Elapsed} seconds since last update" ,
-                          elapsed.TotalSeconds ) ;
+                        elapsed.TotalSeconds ) ;
 
         if ( elapsed.TotalSeconds > InactivityTimeoutSeconds )
         {

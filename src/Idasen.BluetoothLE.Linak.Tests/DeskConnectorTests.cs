@@ -567,7 +567,7 @@ public sealed class DeskConnectorTests : IDisposable
         await InvokeOnGattServicesRefreshedAsync ( sut ,
                                                    GattCommunicationStatus.Success ) ;
 
-        _logger.Contains( "Failed to refresh Gatt services" )
+        _logger.Contains ( "Failed to refresh Gatt services" )
                .Should ( )
                .BeTrue ( ) ;
 
@@ -598,9 +598,9 @@ public sealed class DeskConnectorTests : IDisposable
         sut.MoveTo ( 100u ) ;
 
         _mover.DidNotReceive ( ).Start ( ) ;
-        _logger.Contains("Error")
-               .Should()
-               .BeTrue();
+        _logger.Contains ( "Error" )
+               .Should ( )
+               .BeTrue ( ) ;
     }
 
     [ TestMethod ]

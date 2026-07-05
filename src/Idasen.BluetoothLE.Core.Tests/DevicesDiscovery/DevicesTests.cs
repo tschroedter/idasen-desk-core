@@ -26,8 +26,8 @@ public class DevicesTests
         return new Devices ( _logger ) ;
     }
 
-    private static IDevice CreateDevice ( ulong address = 123456ul ,
-                                          string name   = "TestDevice" )
+    private static IDevice CreateDevice ( ulong  address = 123456ul ,
+                                          string name    = "TestDevice" )
     {
         var device = Substitute.For < IDevice > ( ) ;
         device.Address
@@ -35,11 +35,12 @@ public class DevicesTests
         device.Name
               .Returns ( name ) ;
         device.RawSignalStrengthInDBm
-              .Returns ( ( short ) - 50 ) ;
+              .Returns ( ( short )- 50 ) ;
         device.BroadcastTime
               .Returns ( Substitute.For < IDateTimeOffset > ( ) ) ;
         return device ;
     }
+
     [ TestMethod ]
     public void Constructor_ForLoggerNull_Throws ( )
     {
@@ -131,9 +132,11 @@ public class DevicesTests
     [ TestMethod ]
     public void Remove_ForExistingDevice_DoesNotRemovesOtherDevice ( )
     {
-        var sut      = CreateSut ( ) ;
-        var device1  = CreateDevice ( 123ul , "Device1" ) ;
-        var device2  = CreateDevice ( 456ul , "Device2" ) ;
+        var sut = CreateSut ( ) ;
+        var device1 = CreateDevice ( 123ul ,
+                                     "Device1" ) ;
+        var device2 = CreateDevice ( 456ul ,
+                                     "Device2" ) ;
         var comparer = new DeviceComparer ( ) ;
 
         sut.AddOrUpdateDevice ( device1 ) ;
@@ -188,9 +191,11 @@ public class DevicesTests
     [ TestMethod ]
     public void AddOrUpdateDevice_ForTwoNewDevicesAdded_IncreasesCount ( )
     {
-        var sut     = CreateSut ( ) ;
-        var device1 = CreateDevice ( 123ul , "Device1" ) ;
-        var device2 = CreateDevice ( 456ul , "Device2" ) ;
+        var sut = CreateSut ( ) ;
+        var device1 = CreateDevice ( 123ul ,
+                                     "Device1" ) ;
+        var device2 = CreateDevice ( 456ul ,
+                                     "Device2" ) ;
 
         sut.AddOrUpdateDevice ( device1 ) ;
         sut.AddOrUpdateDevice ( device2 ) ;
@@ -204,9 +209,11 @@ public class DevicesTests
     [ TestMethod ]
     public void AddOrUpdateDevice_ForTwoNewDevicesAdded_DevicesAdded ( )
     {
-        var sut      = CreateSut ( ) ;
-        var device1  = CreateDevice ( 123ul , "Device1" ) ;
-        var device2  = CreateDevice ( 456ul , "Device2" ) ;
+        var sut = CreateSut ( ) ;
+        var device1 = CreateDevice ( 123ul ,
+                                     "Device1" ) ;
+        var device2 = CreateDevice ( 456ul ,
+                                     "Device2" ) ;
         var comparer = new DeviceComparer ( ) ;
 
         sut.AddOrUpdateDevice ( device1 ) ;
@@ -243,13 +250,15 @@ public class DevicesTests
     [ TestMethod ]
     public void AddOrUpdateDevice_ForSameDeviceAddedTwice_UpdatesDevice ( )
     {
-        var sut     = CreateSut ( ) ;
-        var device1 = CreateDevice ( 123ul , "Device1" ) ;
-        var device2 = CreateDevice ( 123ul , "Device2" ) ;
+        var sut = CreateSut ( ) ;
+        var device1 = CreateDevice ( 123ul ,
+                                     "Device1" ) ;
+        var device2 = CreateDevice ( 123ul ,
+                                     "Device2" ) ;
 
         // Configure device2 with different signal strength to verify update
         device2.RawSignalStrengthInDBm
-               .Returns ( ( short ) - 75 ) ;
+               .Returns ( ( short )- 75 ) ;
 
         sut.AddOrUpdateDevice ( device1 ) ;
         sut.AddOrUpdateDevice ( device2 ) ;
@@ -259,16 +268,18 @@ public class DevicesTests
 
         // The signal strength should be updated to device2's value
         storedDevice!.RawSignalStrengthInDBm
-                    .Should ( )
-                    .Be ( - 75 ) ;
+                     .Should ( )
+                     .Be ( - 75 ) ;
     }
 
     [ TestMethod ]
     public void AddOrUpdateDevice_ForDeviceWithEmptyName_UpdatesDeviceName ( )
     {
-        var sut      = CreateSut ( ) ;
-        var device1  = CreateDevice ( 123ul , string.Empty ) ;
-        var device2  = CreateDevice ( 123ul , "UpdatedDevice" ) ;
+        var sut = CreateSut ( ) ;
+        var device1 = CreateDevice ( 123ul ,
+                                     string.Empty ) ;
+        var device2 = CreateDevice ( 123ul ,
+                                     "UpdatedDevice" ) ;
         var comparer = new DeviceComparer ( ) ;
 
         sut.AddOrUpdateDevice ( device1 ) ;

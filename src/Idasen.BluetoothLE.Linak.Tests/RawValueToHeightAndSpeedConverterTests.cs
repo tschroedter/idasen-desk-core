@@ -29,7 +29,7 @@ public class RawValueToHeightAndSpeedConverterTests
     [ TestMethod ]
     public void TryConvert_ForValidBytes_ReturnsHeight ( )
     {
-        var sut = CreateSut ( ) ;
+        var sut      = CreateSut ( ) ;
         var expected = RawValueToHeightAndSpeedConverter.HeightBaseInMicroMeter + 1u ;
 
         sut.TryConvert ( _validHeightAndSpeed ,

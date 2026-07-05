@@ -9,6 +9,13 @@ public class HasReachedTargetHeightCalculatorTests : IDisposable
 {
     private LoggerForTests _logger = null! ;
 
+    public void Dispose ( )
+    {
+        _logger.Dispose ( ) ;
+
+        GC.SuppressFinalize ( this ) ;
+    }
+
     [ DataRow ( 2000u ,
                 1000u ,
                 10 ,
@@ -319,12 +326,5 @@ public class HasReachedTargetHeightCalculatorTests : IDisposable
     private HasReachedTargetHeightCalculator CreateSut ( )
     {
         return new HasReachedTargetHeightCalculator ( _logger ) ;
-    }
-
-    public void Dispose()
-    {
-        _logger.Dispose ( ) ;
-
-        GC.SuppressFinalize ( this ) ;
     }
 }

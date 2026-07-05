@@ -12,23 +12,23 @@ public class DeskMoveEngineTests : IDisposable
     private IDeskCommandExecutor _executor = null! ;
     private LoggerForTests       _logger   = null! ;
 
+    public void Dispose ( )
+    {
+        _logger.Dispose ( ) ;
+
+        GC.SuppressFinalize ( this ) ;
+    }
+
     private DeskMoveEngine CreateSut ( )
     {
         return new DeskMoveEngine ( _logger ,
                                     _executor ) ;
     }
 
-    public void Dispose()
-    {
-        _logger.Dispose();
-
-        GC.SuppressFinalize(this);
-    }
-
     [ TestInitialize ]
     public void Init ( )
     {
-        _logger   = new LoggerForTests() ;
+        _logger   = new LoggerForTests ( ) ;
         _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
         _executor.Up ( ).Returns ( Task.FromResult ( true ) ) ;
         _executor.Down ( ).Returns ( Task.FromResult ( true ) ) ;
@@ -237,11 +237,11 @@ public class DeskMoveEngineTests : IDisposable
         await _executor.Received ( 3 ).Up ( ) ;
 
         // Verify that a warning was logged
-        var message = "Stopping move due to 3 consecutive failures";
+        var message = "Stopping move due to 3 consecutive failures" ;
 
-        _logger.Contains(message)
-               .Should()
-               .BeTrue();
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Verify that the direction is reset to None
         sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
@@ -256,10 +256,10 @@ public class DeskMoveEngineTests : IDisposable
 
         // First call fails, second succeeds, then continue succeeding
         _executor.Up ( ).Returns ( _ =>
-        {
-            callCount++ ;
-            return Task.FromResult ( callCount > 1 ) ; // False on first call, true afterward
-        } ) ;
+                                   {
+                                       callCount ++ ;
+                                       return Task.FromResult ( callCount > 1 ) ; // False on first call, true afterward
+                                   } ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
 
@@ -272,11 +272,11 @@ public class DeskMoveEngineTests : IDisposable
         await _executor.Received ( ).Up ( ) ;
 
         // Verify that no warning about consecutive failures was logged
-        var message = "Stopping move due to ";
+        var message = "Stopping move due to " ;
 
-        _logger.Contains(message)
-               .Should()
-               .BeFalse();
+        _logger.Contains ( message )
+               .Should ( )
+               .BeFalse ( ) ;
     }
 
     [ TestMethod ]
@@ -288,10 +288,10 @@ public class DeskMoveEngineTests : IDisposable
 
         // Alternate between success and failure
         _executor.Up ( ).Returns ( _ =>
-        {
-            callCount++ ;
-            return Task.FromResult ( callCount % 2 == 0 ) ; // Success on even calls
-        } ) ;
+                                   {
+                                       callCount ++ ;
+                                       return Task.FromResult ( callCount % 2 == 0 ) ; // Success on even calls
+                                   } ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
 
@@ -304,11 +304,11 @@ public class DeskMoveEngineTests : IDisposable
         await _executor.Received ( ).Up ( ) ;
 
         // Verify that no warning about consecutive failures was logged
-        var message = "Stopping move due to 3 consecutive failures";
+        var message = "Stopping move due to 3 consecutive failures" ;
 
-        _logger.Contains(message)
-               .Should()
-               .BeFalse();
+        _logger.Contains ( message )
+               .Should ( )
+               .BeFalse ( ) ;
     }
 
     [ TestMethod ]
@@ -317,7 +317,8 @@ public class DeskMoveEngineTests : IDisposable
         var sut = CreateSut ( ) ;
 
         // Simulate exceptions in the Up command
-        _executor.Up ( ).Returns ( Task.FromException < bool > ( new InvalidOperationException ( "Test exception" ) ) ) ;
+        _executor.Up ( )
+                 .Returns ( Task.FromException < bool > ( new InvalidOperationException ( "Test exception" ) ) ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
 
@@ -330,18 +331,18 @@ public class DeskMoveEngineTests : IDisposable
         await _executor.Received ( 3 ).Up ( ) ;
 
         // Verify that errors were logged
-        var message = $"StartMoveAsync command threw exception: {Direction.Up} (consecutive failures:";
+        var message = $"StartMoveAsync command threw exception: {Direction.Up} (consecutive failures:" ;
 
-        _logger.Contains(message)
-               .Should()
-               .BeTrue();
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Verify that a warning was logged
         message = "Stopping move due to 3 consecutive failures" ;
 
-        _logger.Contains(message)
-               .Should()
-               .BeTrue();
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Verify that the direction is reset to None
         sut.CurrentDirection.Should ( ).Be ( Direction.None ) ;
@@ -356,10 +357,10 @@ public class DeskMoveEngineTests : IDisposable
 
         // First two calls fail, then succeed
         _executor.Up ( ).Returns ( _ =>
-        {
-            callCount++ ;
-            return Task.FromResult ( callCount > 2 ) ; // False for first two, true afterward
-        } ) ;
+                                   {
+                                       callCount ++ ;
+                                       return Task.FromResult ( callCount > 2 ) ; // False for first two, true afterward
+                                   } ) ;
 
         sut.DelayInterval = TimeSpan.FromMilliseconds ( 10 ) ;
 
@@ -374,9 +375,9 @@ public class DeskMoveEngineTests : IDisposable
         // The failure counter should have been reset after success
         var message = "Stopping move due to" ;
 
-        _logger.Contains(message)
-               .Should()
-               .BeFalse();
+        _logger.Contains ( message )
+               .Should ( )
+               .BeFalse ( ) ;
     }
 
     [ TestMethod ]
@@ -398,11 +399,11 @@ public class DeskMoveEngineTests : IDisposable
         await _executor.Received ( 3 ).Down ( ) ;
 
         // Verify that a warning was logged
-        var message = "Stopping move due to 3 consecutive failures";
+        var message = "Stopping move due to 3 consecutive failures" ;
 
-        _logger.Contains(message)
-               .Should()
-               .BeTrue();
+        _logger.Contains ( message )
+               .Should ( )
+               .BeTrue ( ) ;
 
         // Verify that the direction is reset to None
         sut.CurrentDirection
@@ -410,4 +411,3 @@ public class DeskMoveEngineTests : IDisposable
            .Be ( Direction.None ) ;
     }
 }
-

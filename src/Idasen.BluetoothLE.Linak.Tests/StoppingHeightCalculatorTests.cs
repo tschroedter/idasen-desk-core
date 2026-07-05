@@ -12,12 +12,12 @@ public class StoppingHeightCalculatorTests : IDisposable
     private IHasReachedTargetHeightCalculator _calculator = null! ;
     private LoggerForTests                    _logger     = null! ;
 
-    public void Dispose()
+    public void Dispose ( )
     {
         // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
-        _logger?.Dispose();
+        _logger?.Dispose ( ) ;
 
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize ( this ) ;
     }
 
     [ TestInitialize ]

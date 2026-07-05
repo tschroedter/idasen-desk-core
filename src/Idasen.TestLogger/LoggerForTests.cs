@@ -1,7 +1,7 @@
-using System.Text;
-using Serilog;
-using Serilog.Core;
-using Serilog.Events;
+using System.Text ;
+using Serilog ;
+using Serilog.Core ;
+using Serilog.Events ;
 
 namespace Idasen.TestLogger ;
 
@@ -9,11 +9,13 @@ namespace Idasen.TestLogger ;
 ///     Test logger that captures log output for verification in unit tests.
 ///     Provides a real Serilog logger instance that writes to an in-memory string buffer.
 /// </summary>
-public sealed class LoggerForTests : ILogger, IDisposable
+public sealed class LoggerForTests
+    : ILogger ,
+      IDisposable
 {
-    private readonly StringBuilder            _output ;
-    private readonly TestLoggerSink           _sink ;
-    private bool                              _disposed ;
+    private readonly StringBuilder  _output ;
+    private readonly TestLoggerSink _sink ;
+    private          bool           _disposed ;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="LoggerForTests" /> class.
@@ -43,8 +45,9 @@ public sealed class LoggerForTests : ILogger, IDisposable
     /// <summary>
     ///     Gets all captured log lines as an array.
     /// </summary>
-    public string [ ] Lines => Output.Split ( [Environment.NewLine] ,
-                                              StringSplitOptions.RemoveEmptyEntries ) ;
+    public string [ ] Lines =>
+        Output.Split ( [Environment.NewLine] ,
+                       StringSplitOptions.RemoveEmptyEntries ) ;
 
     public void Dispose ( )
     {
@@ -54,6 +57,11 @@ public sealed class LoggerForTests : ILogger, IDisposable
         ( Logger as IDisposable )?.Dispose ( ) ;
 
         _disposed = true ;
+    }
+
+    public void Write ( LogEvent logEvent )
+    {
+        _sink.Emit ( logEvent ) ;
     }
 
     /// <summary>
@@ -113,11 +121,6 @@ public sealed class LoggerForTests : ILogger, IDisposable
     public override string ToString ( )
     {
         return Output ;
-    }
-
-    public void Write ( LogEvent logEvent )
-    {
-        _sink.Emit ( logEvent ) ;
     }
 }
 

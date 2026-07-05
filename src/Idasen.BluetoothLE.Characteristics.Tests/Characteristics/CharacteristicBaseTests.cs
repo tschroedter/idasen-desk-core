@@ -61,7 +61,7 @@ public abstract class CharacteristicBaseTests < T >
     [ TestInitialize ]
     public virtual void Initialize ( )
     {
-        Logger                 = Serilog.Core.Logger.None; // Use Serilog's NullLogger instead of mocking
+        Logger                 = Serilog.Core.Logger.None ; // Use Serilog's NullLogger instead of mocking
         Device                 = Substitute.For < IDevice > ( ) ;
         Scheduler              = Substitute.For < IScheduler > ( ) ;
         ProviderFactory        = Substitute.For < IGattCharacteristicsProviderFactory > ( ) ;

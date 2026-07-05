@@ -47,7 +47,8 @@ public interface IGattCharacteristicWrapper
     /// <returns>
     ///     Result of the write process.
     /// </returns>
-    Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer , int timeoutMs = 5000 ) ;
+    Task < IGattWriteResultWrapper > WriteValueWithResultAsync ( IBuffer buffer ,
+                                                                 int     timeoutMs = 5000 ) ;
 
     /// <summary>
     ///     Writes the given raw bytes async.
@@ -61,7 +62,8 @@ public interface IGattCharacteristicWrapper
     /// <returns>
     ///     Result of the write process.
     /// </returns>
-    Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer , int timeoutMs = 5000 ) ;
+    Task < GattCommunicationStatus > WriteValueAsync ( IBuffer buffer ,
+                                                       int     timeoutMs = 5000 ) ;
 
     /// <summary>
     ///     Performs a Characteristic Value read from the value cache

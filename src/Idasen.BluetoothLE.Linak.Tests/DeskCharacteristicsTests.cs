@@ -112,7 +112,7 @@ public class DeskCharacteristicsTests
            .Contain ( "GenericAttributeService" ) ;
     }
 
-    private static DeskCharacteristics CreateSut ( IDeskCharacteristicsCreator? creator = null )
+    private static DeskCharacteristics CreateSut ( IDeskCharacteristicsCreator ? creator = null )
     {
         var logger = Logger.None ;
 

@@ -7,7 +7,7 @@ namespace Idasen.TestLogger ;
 ///     Example tests demonstrating how to use the LoggerForTests class.
 /// </summary>
 [ TestClass ]
-public class LoggerForTestsExamples 
+public class LoggerForTestsExamples
 {
     [ TestMethod ]
     public void Example_BasicUsage_VerifyLogContainsText ( )
@@ -142,7 +142,7 @@ public class LoggerForTestsExamples
         using var testLogger = new LoggerForTests ( ) ;
 
         // Act
-        for ( var i = 0 ; i < 5 ; i++ )
+        for ( var i = 0 ; i < 5 ; i ++ )
             testLogger.Logger.Debug ( "Processing item {Item}" ,
                                       i ) ;
 

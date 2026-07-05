@@ -30,6 +30,7 @@ public class RawValueReaderTests
         return new RawValueReader ( _logger ,
                                     _reader ) ;
     }
+
     [ TestMethod ]
     public async Task TryReadValueAsync_ForCharacteristicIsNull_Throws ( )
     {
@@ -158,7 +159,14 @@ public class RawValueReaderTests
         var sut            = CreateSut ( ) ;
         var result         = Substitute.For < IGattReadResultWrapper > ( ) ;
         var characteristic = Substitute.For < IGattCharacteristicWrapper > ( ) ;
-        var bytes          = new byte [ ] { 1 , 2 , 3 , 4 , 5 } ;
+        var bytes = new byte [ ]
+                    {
+                        1 ,
+                        2 ,
+                        3 ,
+                        4 ,
+                        5
+                    } ;
 
         WithTryReadValueResult ( _reader ,
                                  bytes ) ;
@@ -225,7 +233,7 @@ public class RawValueReaderTests
         var sut            = CreateSut ( ) ;
         var result         = Substitute.For < IGattReadResultWrapper > ( ) ;
         var characteristic = Substitute.For < IGattCharacteristicWrapper > ( ) ;
-        var protocolError  = ( byte ) 42 ;
+        var protocolError  = ( byte )42 ;
 
         WithTryReadValueResult ( _reader ,
                                  Array.Empty < byte > ( ) ) ;

@@ -85,8 +85,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         provider.TryGetValue ( DeskCommands.MoveUp ,
                                out Arg.Any < IEnumerable < byte > > ( ) )
@@ -107,8 +107,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         var bytes = new byte [ ]
                     {
@@ -139,8 +139,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         var bytes = new byte [ ]
                     {
@@ -167,8 +167,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         provider.TryGetValue ( DeskCommands.MoveDown ,
                                out Arg.Any < IEnumerable < byte > > ( ) )
@@ -189,8 +189,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         var bytes = new byte [ ]
                     {
@@ -221,8 +221,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         var bytes = new byte [ ]
                     {
@@ -249,8 +249,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         provider.TryGetValue ( DeskCommands.MoveStop ,
                                out Arg.Any < IEnumerable < byte > > ( ) )
@@ -271,8 +271,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         var bytes = new byte [ ]
                     {
@@ -303,8 +303,8 @@ public class DeskCommandExecutorTests
     {
         var provider = Substitute.For < IDeskCommandsProvider > ( ) ;
         var control  = Substitute.For < IControl > ( ) ;
-        var sut      = CreateSut ( provider : provider ,
-                                   control : control ) ;
+        var sut = CreateSut ( provider : provider ,
+                              control : control ) ;
 
         var bytes = new byte [ ]
                     {
@@ -326,10 +326,10 @@ public class DeskCommandExecutorTests
                      .TryWriteRawControl2 ( bytes ) ;
     }
 
-    private static DeskCommandExecutor CreateSut ( ILogger?               logger        = null ,
-                                                   IErrorManager?         errorManager  = null ,
-                                                   IDeskCommandsProvider? provider      = null ,
-                                                   IControl?              control       = null )
+    private static DeskCommandExecutor CreateSut ( ILogger ?               logger       = null ,
+                                                   IErrorManager ?         errorManager = null ,
+                                                   IDeskCommandsProvider ? provider     = null ,
+                                                   IControl ?              control      = null )
     {
         logger       ??= Logger.None ;
         errorManager ??= Substitute.For < IErrorManager > ( ) ;

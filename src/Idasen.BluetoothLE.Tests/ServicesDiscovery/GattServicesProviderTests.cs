@@ -13,25 +13,23 @@ namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
 [ TestClass ]
 public class GattServicesProviderTests
 {
-    private static GattServicesProvider CreateSut (
-        IGattServices ?                        services  = null ,
-        ISubject < GattCommunicationStatus > ? refreshed = null ,
-        IBluetoothLeDeviceWrapper ?            device    = null )
+    private static GattServicesProvider CreateSut ( IGattServices ?                        services  = null ,
+                                                    ISubject < GattCommunicationStatus > ? refreshed = null ,
+                                                    IBluetoothLeDeviceWrapper ?            device    = null )
     {
-        return new GattServicesProvider (
-            Logger.None ,
-            services  ?? Substitute.For < IGattServices > ( ) ,
-            refreshed ?? Substitute.For < ISubject < GattCommunicationStatus > > ( ) ,
-            device    ?? Substitute.For < IBluetoothLeDeviceWrapper > ( ) ) ;
+        return new GattServicesProvider ( Logger.None ,
+                                          services  ?? Substitute.For < IGattServices > ( ) ,
+                                          refreshed ?? Substitute.For < ISubject < GattCommunicationStatus > > ( ) ,
+                                          device    ?? Substitute.For < IBluetoothLeDeviceWrapper > ( ) ) ;
     }
+
     [ TestMethod ]
     public void Constructor_ForLoggerNull_Throws ( )
     {
-        var action = ( ) => new GattServicesProvider (
-            null! ,
-            Substitute.For < IGattServices > ( ) ,
-            Substitute.For < ISubject < GattCommunicationStatus > > ( ) ,
-            Substitute.For < IBluetoothLeDeviceWrapper > ( ) ) ;
+        var action = ( ) => new GattServicesProvider ( null! ,
+                                                       Substitute.For < IGattServices > ( ) ,
+                                                       Substitute.For < ISubject < GattCommunicationStatus > > ( ) ,
+                                                       Substitute.For < IBluetoothLeDeviceWrapper > ( ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -41,11 +39,10 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public void Constructor_ForServicesNull_Throws ( )
     {
-        var action = ( ) => new GattServicesProvider (
-            Logger.None ,
-            null! ,
-            Substitute.For < ISubject < GattCommunicationStatus > > ( ) ,
-            Substitute.For < IBluetoothLeDeviceWrapper > ( ) ) ;
+        var action = ( ) => new GattServicesProvider ( Logger.None ,
+                                                       null! ,
+                                                       Substitute.For < ISubject < GattCommunicationStatus > > ( ) ,
+                                                       Substitute.For < IBluetoothLeDeviceWrapper > ( ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -55,11 +52,10 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public void Constructor_ForRefreshedNull_Throws ( )
     {
-        var action = ( ) => new GattServicesProvider (
-            Logger.None ,
-            Substitute.For < IGattServices > ( ) ,
-            null! ,
-            Substitute.For < IBluetoothLeDeviceWrapper > ( ) ) ;
+        var action = ( ) => new GattServicesProvider ( Logger.None ,
+                                                       Substitute.For < IGattServices > ( ) ,
+                                                       null! ,
+                                                       Substitute.For < IBluetoothLeDeviceWrapper > ( ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -69,11 +65,10 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public void Constructor_ForDeviceNull_Throws ( )
     {
-        var action = ( ) => new GattServicesProvider (
-            Logger.None ,
-            Substitute.For < IGattServices > ( ) ,
-            Substitute.For < ISubject < GattCommunicationStatus > > ( ) ,
-            null! ) ;
+        var action = ( ) => new GattServicesProvider ( Logger.None ,
+                                                       Substitute.For < IGattServices > ( ) ,
+                                                       Substitute.For < ISubject < GattCommunicationStatus > > ( ) ,
+                                                       null! ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -174,8 +169,8 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task Refresh_ForInvoked_ClearsServices ( )
     {
-        var services = Substitute.For < IGattServices > ( ) ;
-        using var sut = CreateSut ( services : services ) ;
+        var       services = Substitute.For < IGattServices > ( ) ;
+        using var sut      = CreateSut ( services ) ;
 
         await sut.Refresh ( ) ;
 
@@ -189,7 +184,7 @@ public class GattServicesProviderTests
         var device    = Substitute.For < IBluetoothLeDeviceWrapper > ( ) ;
         var refreshed = Substitute.For < ISubject < GattCommunicationStatus > > ( ) ;
         var result    = Substitute.For < IGattDeviceServicesResultWrapper > ( ) ;
-        var expected = GattCommunicationStatus.ProtocolError ;
+        var expected  = GattCommunicationStatus.ProtocolError ;
 
         result.Status
               .Returns ( expected ) ;
@@ -237,9 +232,9 @@ public class GattServicesProviderTests
         service.GetCharacteristicsAsync ( )
                .Returns ( characteristics ) ;
 
-        using var sut = CreateSut ( services : services ,
-                                    refreshed : refreshed ,
-                                    device : device ) ;
+        using var sut = CreateSut ( services ,
+                                    refreshed ,
+                                    device ) ;
 
         await sut.Refresh ( ) ;
 
@@ -275,7 +270,7 @@ public class GattServicesProviderTests
         service.GetCharacteristicsAsync ( )
                .Returns ( characteristics ) ;
 
-        using var sut = CreateSut ( services : services ,
+        using var sut = CreateSut ( services ,
                                     device : device ) ;
 
         await sut.Refresh ( ) ;

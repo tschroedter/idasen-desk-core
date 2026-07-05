@@ -16,10 +16,10 @@ namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 [ TestClass ]
 public class GattServicesProviderTests
 {
-    private ILogger                              _logger    = null! ;
-    private IGattServices                        _services  = null! ;
-    private ISubject < GattCommunicationStatus > _refreshed = null! ;
     private IBluetoothLeDeviceWrapper            _device    = null! ;
+    private ILogger                              _logger    = null! ;
+    private ISubject < GattCommunicationStatus > _refreshed = null! ;
+    private IGattServices                        _services  = null! ;
 
     [ TestInitialize ]
     public void Setup ( )
@@ -37,6 +37,7 @@ public class GattServicesProviderTests
                                           _refreshed ,
                                           _device ) ;
     }
+
     [ TestMethod ]
     public void Constructor_ForLoggerNull_Throws ( )
     {
@@ -305,7 +306,7 @@ public class GattServicesProviderTests
         var sut = CreateSut ( ) ;
 
         var readOnlyDict = new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( )
-                          .AsReadOnly ( ) ;
+           .AsReadOnly ( ) ;
 
         _services.ReadOnlyDictionary
                  .Returns ( readOnlyDict ) ;

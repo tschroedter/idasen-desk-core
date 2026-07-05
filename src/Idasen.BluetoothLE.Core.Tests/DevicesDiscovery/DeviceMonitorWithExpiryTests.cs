@@ -35,7 +35,7 @@ public class DeviceMonitorWithExpiryTests
     [ TestInitialize ]
     public void Setup ( )
     {
-        _logger         = new LoggerForTests (  ) ;
+        _logger         = new LoggerForTests ( ) ;
         _dateTimeOffset = Substitute.For < IDateTimeOffset > ( ) ;
         _deviceMonitor  = Substitute.For < IDeviceMonitor > ( ) ;
         _deviceExpired  = new Subject < IDevice > ( ) ;
@@ -120,9 +120,9 @@ public class DeviceMonitorWithExpiryTests
         Assert.AreEqual ( newTimeout ,
                           sut.TimeOut ) ;
 
-        _logger.Contains($"TimeOut = {newTimeout}")
-               .Should()
-               .BeTrue();
+        _logger.Contains ( $"TimeOut = {newTimeout}" )
+               .Should ( )
+               .BeTrue ( ) ;
     }
 
     [ TestMethod ]

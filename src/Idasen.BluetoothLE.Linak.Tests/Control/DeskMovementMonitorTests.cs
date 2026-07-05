@@ -21,17 +21,17 @@ public class DeskMovementMonitorTests : IDisposable
     private HeightSpeedDetails  _details6WithSpeedZero        = null! ;
     private HeightSpeedDetails  _details7WithSpeedZero        = null! ;
     private HeightSpeedDetails  _details8WithSpeedZero        = null! ;
-    private IDeskHeightAndSpeed _heightAndSpeed               = null! ;
+    private bool                _disposed ;
+    private IDeskHeightAndSpeed _heightAndSpeed = null! ;
 
     private LoggerForTests                 _logger                = null! ;
     private TestScheduler                  _scheduler             = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
-    private bool                           _disposed ;
 
     public void Dispose ( )
     {
         Dispose ( true ) ;
-        GC.SuppressFinalize ( this );
+        GC.SuppressFinalize ( this ) ;
     }
 
     protected virtual void Dispose ( bool disposing )
@@ -145,7 +145,7 @@ public class DeskMovementMonitorTests : IDisposable
 
         sut.InactivityTimeoutSeconds.Should ( ).Be ( 1 ) ;
 
-        sut.Dispose();
+        sut.Dispose ( ) ;
     }
 
     [ TestMethod ]
@@ -316,7 +316,7 @@ public class DeskMovementMonitorTests : IDisposable
               .Throw < InvalidOperationException > ( )
               .WithMessage ( DeskMovementMonitor.SpeedWasZero ) ;
 
-        sut.Dispose();
+        sut.Dispose ( ) ;
     }
 
     [ TestMethod ]
@@ -352,20 +352,20 @@ public class DeskMovementMonitorTests : IDisposable
         var sut = CreateSut ( ) ;
 
         // Simulate regular updates every 1 second for 15 seconds
-        for ( var i = 0 ; i < 15 ; i++ )
+        for ( var i = 0 ; i < 15 ; i ++ )
         {
             _subjectHeightAndSpeed.OnNext ( new HeightSpeedDetails ( DateTimeOffset.Now ,
-                                                                     ( uint ) ( i + 1 ) ,
+                                                                     ( uint )( i + 1 ) ,
                                                                      10 ) ) ;
             _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 1 ).Ticks ) ;
         }
 
         // Should not have logged any warnings
-        _logger.Contains("No height updates received for")
-               .Should()
-               .BeFalse();
+        _logger.Contains ( "No height updates received for" )
+               .Should ( )
+               .BeFalse ( ) ;
 
-        sut.Dispose();
+        sut.Dispose ( ) ;
     }
 
     [ TestMethod ]
@@ -384,9 +384,9 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 6 ).Ticks ) ;
 
         // Should not throw or log (timer should be disposed)
-        _logger.Contains("No height updates received for")
-               .Should()
-               .BeFalse();
+        _logger.Contains ( "No height updates received for" )
+               .Should ( )
+               .BeFalse ( ) ;
     }
 
     [ TestMethod ]
@@ -430,7 +430,7 @@ public class DeskMovementMonitorTests : IDisposable
         // Should be able to subscribe to the observable
         var action = ( ) =>
                      {
-                         using var sut = CreateSut();
+                         using var sut = CreateSut ( ) ;
 
                          sut.InactivityDetected.Subscribe ( _ => { } ) ;
                      } ;
@@ -444,9 +444,8 @@ public class DeskMovementMonitorTests : IDisposable
         var sut = CreateSut ( ) ;
 
         var completed = false ;
-        sut.InactivityDetected.Subscribe (
-            _ => { } ,
-            ( ) => completed = true ) ;
+        sut.InactivityDetected.Subscribe ( _ => { } ,
+                                           ( ) => completed = true ) ;
 
         // Send an update
         _subjectHeightAndSpeed.OnNext ( _details1 ) ;
@@ -494,9 +493,9 @@ public class DeskMovementMonitorTests : IDisposable
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 2 ).Ticks ) ;
 
         // Should have logged a warning
-        _logger.Contains("No height updates received for")
-               .Should()
-               .BeTrue();
+        _logger.Contains ( "No height updates received for" )
+               .Should ( )
+               .BeTrue ( ) ;
 
         sut.Dispose ( ) ;
     }
@@ -583,7 +582,7 @@ public class DeskMovementMonitorTests : IDisposable
                .BeTrue ( ) ;
 
         // Clear received calls to verify no additional calls
-        _logger.Clear( ) ;
+        _logger.Clear ( ) ;
 
         // Continue advancing time (timer keeps ticking, but should early-return)
         _scheduler.AdvanceBy ( TimeSpan.FromSeconds ( 5 ).Ticks ) ;
@@ -605,9 +604,9 @@ public class DeskMovementMonitorTests : IDisposable
         var action = ( ) =>
                      {
                          // This covers the null branch of _inactivityTimer?.Dispose() on line 87
-                         var sut = new DeskMovementMonitor(_logger,
-                                                           _scheduler,
-                                                           _heightAndSpeed);
+                         var sut = new DeskMovementMonitor ( _logger ,
+                                                             _scheduler ,
+                                                             _heightAndSpeed ) ;
 
                          sut.Initialize ( ) ;
                      } ;
@@ -622,12 +621,12 @@ public class DeskMovementMonitorTests : IDisposable
         var action = ( ) =>
                      {
                          // This covers the non-null branch of _inactivityTimer?.Dispose() on line 87
-                         using var sut = new DeskMovementMonitor(_logger,
-                                                           _scheduler,
-                                                           _heightAndSpeed);
+                         using var sut = new DeskMovementMonitor ( _logger ,
+                                                                   _scheduler ,
+                                                                   _heightAndSpeed ) ;
 
                          // First initialization creates timer
-                         sut.Initialize();
+                         sut.Initialize ( ) ;
 
                          sut.Initialize ( ) ;
                      } ;
@@ -640,9 +639,9 @@ public class DeskMovementMonitorTests : IDisposable
     {
         var action = ( ) =>
                      {
-                         var sut = new DeskMovementMonitor(_logger,
-                                                           _scheduler,
-                                                           _heightAndSpeed);
+                         var sut = new DeskMovementMonitor ( _logger ,
+                                                             _scheduler ,
+                                                             _heightAndSpeed ) ;
 
                          sut.Dispose ( ) ;
                      } ;
@@ -661,8 +660,12 @@ public class DeskMovementMonitorTests : IDisposable
         sut.Initialize ( 10 ) ;
 
         // Send only 2 items with different heights but speed zero
-        var details1 = new HeightSpeedDetails ( DateTimeOffset.Now , 1u , 0 ) ;
-        var details2 = new HeightSpeedDetails ( DateTimeOffset.Now , 2u , 0 ) ;
+        var details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                1u ,
+                                                0 ) ;
+        var details2 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                2u ,
+                                                0 ) ;
 
         _subjectHeightAndSpeed.OnNext ( details1 ) ;
         _subjectHeightAndSpeed.OnNext ( details2 ) ;
@@ -683,9 +686,15 @@ public class DeskMovementMonitorTests : IDisposable
         var sut = CreateSut ( ) ;
 
         // Send 3 items with different heights and at least one non-zero speed
-        var details1 = new HeightSpeedDetails ( DateTimeOffset.Now , 1u , 0 ) ;
-        var details2 = new HeightSpeedDetails ( DateTimeOffset.Now , 2u , 0 ) ;
-        var details3 = new HeightSpeedDetails ( DateTimeOffset.Now , 3u , 5 ) ; // Non-zero speed
+        var details1 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                1u ,
+                                                0 ) ;
+        var details2 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                2u ,
+                                                0 ) ;
+        var details3 = new HeightSpeedDetails ( DateTimeOffset.Now ,
+                                                3u ,
+                                                5 ) ; // Non-zero speed
 
         _subjectHeightAndSpeed.OnNext ( details1 ) ;
         _subjectHeightAndSpeed.OnNext ( details2 ) ;
@@ -702,7 +711,7 @@ public class DeskMovementMonitorTests : IDisposable
     public void StopWatchdog_StopsInactivityTimer ( )
     {
         // Arrange
-        var sut = CreateSut ( ) ;
+        var sut            = CreateSut ( ) ;
         var receivedEvents = new List < string > ( ) ;
         sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
 
@@ -740,7 +749,7 @@ public class DeskMovementMonitorTests : IDisposable
     public void StopWatchdog_ThenStart_RestartsWatchdog ( )
     {
         // Arrange
-        var sut = CreateSut ( ) ;
+        var sut            = CreateSut ( ) ;
         var receivedEvents = new List < string > ( ) ;
         sut.InactivityDetected.Subscribe ( receivedEvents.Add ) ;
 
@@ -771,7 +780,7 @@ public class DeskMovementMonitorTests : IDisposable
                                                                 _scheduler ,
                                                                 _heightAndSpeed ) ;
 
-                      sut.Initialize(DefaultCapacity);
+                      sut.Initialize ( DefaultCapacity ) ;
 
                       // Note: not calling Start()
 

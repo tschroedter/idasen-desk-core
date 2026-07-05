@@ -14,6 +14,7 @@ public class DevicesTests
     {
         return new Devices ( Logger.None ) ;
     }
+
     [ TestMethod ]
     public void Constructor_ForLoggerNull_Throws ( )
     {
@@ -37,7 +38,7 @@ public class DevicesTests
     [ TestMethod ]
     public void AddOrUpdateDevice_ForDeviceIsNull_Throws ( )
     {
-        var sut = CreateSut ( ) ;
+        var sut    = CreateSut ( ) ;
         var action = ( ) => { sut.AddOrUpdateDevice ( null! ) ; } ;
 
         action.Should ( )
@@ -48,7 +49,7 @@ public class DevicesTests
     [ TestMethod ]
     public void RemoveDevice_ForDeviceIsNull_Throws ( )
     {
-        var sut = CreateSut ( ) ;
+        var sut    = CreateSut ( ) ;
         var action = ( ) => { sut.RemoveDevice ( null! ) ; } ;
 
         action.Should ( )
@@ -59,7 +60,7 @@ public class DevicesTests
     [ TestMethod ]
     public void ContainsDevice_ForDeviceIsNull_Throws ( )
     {
-        var sut = CreateSut ( ) ;
+        var sut    = CreateSut ( ) ;
         var action = ( ) => { sut.ContainsDevice ( null! ) ; } ;
 
         action.Should ( )

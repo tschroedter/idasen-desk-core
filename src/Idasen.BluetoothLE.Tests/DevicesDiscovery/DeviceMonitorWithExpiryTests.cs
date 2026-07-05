@@ -16,32 +16,30 @@ namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 [ TestClass ]
 public class DeviceMonitorWithExpiryTests
 {
-    private static DeviceMonitorWithExpiry CreateSut (
-        ILogger ?                 logger         = null ,
-        IDateTimeOffset ?         dateTimeOffset = null ,
-        IDeviceMonitor ?          deviceMonitor  = null ,
-        ISubject < IDevice > ?    deviceExpired  = null ,
-        IObservableTimerFactory ? factory        = null ,
-        IScheduler ?              scheduler      = null )
+    private static DeviceMonitorWithExpiry CreateSut ( ILogger ?                 logger         = null ,
+                                                       IDateTimeOffset ?         dateTimeOffset = null ,
+                                                       IDeviceMonitor ?          deviceMonitor  = null ,
+                                                       ISubject < IDevice > ?    deviceExpired  = null ,
+                                                       IObservableTimerFactory ? factory        = null ,
+                                                       IScheduler ?              scheduler      = null )
     {
-        return new DeviceMonitorWithExpiry (
-            logger        ?? Logger.None ,
-            dateTimeOffset ?? Substitute.For < IDateTimeOffset > ( ) ,
-            deviceMonitor ?? Substitute.For < IDeviceMonitor > ( ) ,
-            deviceExpired ?? Substitute.For < ISubject < IDevice > > ( ) ,
-            factory       ?? Substitute.For < IObservableTimerFactory > ( ) ,
-            scheduler     ?? Substitute.For < IScheduler > ( ) ) ;
+        return new DeviceMonitorWithExpiry ( logger         ?? Logger.None ,
+                                             dateTimeOffset ?? Substitute.For < IDateTimeOffset > ( ) ,
+                                             deviceMonitor  ?? Substitute.For < IDeviceMonitor > ( ) ,
+                                             deviceExpired  ?? Substitute.For < ISubject < IDevice > > ( ) ,
+                                             factory        ?? Substitute.For < IObservableTimerFactory > ( ) ,
+                                             scheduler      ?? Substitute.For < IScheduler > ( ) ) ;
     }
+
     [ TestMethod ]
     public void Constructor_ForLoggerNull_Throws ( )
     {
-        var action = ( ) => new DeviceMonitorWithExpiry (
-            null! ,
-            Substitute.For < IDateTimeOffset > ( ) ,
-            Substitute.For < IDeviceMonitor > ( ) ,
-            Substitute.For < ISubject < IDevice > > ( ) ,
-            Substitute.For < IObservableTimerFactory > ( ) ,
-            Substitute.For < IScheduler > ( ) ) ;
+        var action = ( ) => new DeviceMonitorWithExpiry ( null! ,
+                                                          Substitute.For < IDateTimeOffset > ( ) ,
+                                                          Substitute.For < IDeviceMonitor > ( ) ,
+                                                          Substitute.For < ISubject < IDevice > > ( ) ,
+                                                          Substitute.For < IObservableTimerFactory > ( ) ,
+                                                          Substitute.For < IScheduler > ( ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -51,13 +49,12 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void Constructor_ForDateTimeOffsetNull_Throws ( )
     {
-        var action = ( ) => new DeviceMonitorWithExpiry (
-            Logger.None ,
-            null! ,
-            Substitute.For < IDeviceMonitor > ( ) ,
-            Substitute.For < ISubject < IDevice > > ( ) ,
-            Substitute.For < IObservableTimerFactory > ( ) ,
-            Substitute.For < IScheduler > ( ) ) ;
+        var action = ( ) => new DeviceMonitorWithExpiry ( Logger.None ,
+                                                          null! ,
+                                                          Substitute.For < IDeviceMonitor > ( ) ,
+                                                          Substitute.For < ISubject < IDevice > > ( ) ,
+                                                          Substitute.For < IObservableTimerFactory > ( ) ,
+                                                          Substitute.For < IScheduler > ( ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -67,13 +64,12 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void Constructor_ForDeviceMonitorNull_Throws ( )
     {
-        var action = ( ) => new DeviceMonitorWithExpiry (
-            Logger.None ,
-            Substitute.For < IDateTimeOffset > ( ) ,
-            null! ,
-            Substitute.For < ISubject < IDevice > > ( ) ,
-            Substitute.For < IObservableTimerFactory > ( ) ,
-            Substitute.For < IScheduler > ( ) ) ;
+        var action = ( ) => new DeviceMonitorWithExpiry ( Logger.None ,
+                                                          Substitute.For < IDateTimeOffset > ( ) ,
+                                                          null! ,
+                                                          Substitute.For < ISubject < IDevice > > ( ) ,
+                                                          Substitute.For < IObservableTimerFactory > ( ) ,
+                                                          Substitute.For < IScheduler > ( ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -83,13 +79,12 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void Constructor_ForFactoryNull_Throws ( )
     {
-        var action = ( ) => new DeviceMonitorWithExpiry (
-            Logger.None ,
-            Substitute.For < IDateTimeOffset > ( ) ,
-            Substitute.For < IDeviceMonitor > ( ) ,
-            Substitute.For < ISubject < IDevice > > ( ) ,
-            null! ,
-            Substitute.For < IScheduler > ( ) ) ;
+        var action = ( ) => new DeviceMonitorWithExpiry ( Logger.None ,
+                                                          Substitute.For < IDateTimeOffset > ( ) ,
+                                                          Substitute.For < IDeviceMonitor > ( ) ,
+                                                          Substitute.For < ISubject < IDevice > > ( ) ,
+                                                          null! ,
+                                                          Substitute.For < IScheduler > ( ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -99,13 +94,12 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void Constructor_ForSchedulerIsNull_Throws ( )
     {
-        var action = ( ) => new DeviceMonitorWithExpiry (
-            Logger.None ,
-            Substitute.For < IDateTimeOffset > ( ) ,
-            Substitute.For < IDeviceMonitor > ( ) ,
-            Substitute.For < ISubject < IDevice > > ( ) ,
-            Substitute.For < IObservableTimerFactory > ( ) ,
-            null! ) ;
+        var action = ( ) => new DeviceMonitorWithExpiry ( Logger.None ,
+                                                          Substitute.For < IDateTimeOffset > ( ) ,
+                                                          Substitute.For < IDeviceMonitor > ( ) ,
+                                                          Substitute.For < ISubject < IDevice > > ( ) ,
+                                                          Substitute.For < IObservableTimerFactory > ( ) ,
+                                                          null! ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -115,13 +109,12 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void Constructor_ForDeviceExpiredNull_Throws ( )
     {
-        var action = ( ) => new DeviceMonitorWithExpiry (
-            Logger.None ,
-            Substitute.For < IDateTimeOffset > ( ) ,
-            Substitute.For < IDeviceMonitor > ( ) ,
-            null! ,
-            Substitute.For < IObservableTimerFactory > ( ) ,
-            Substitute.For < IScheduler > ( ) ) ;
+        var action = ( ) => new DeviceMonitorWithExpiry ( Logger.None ,
+                                                          Substitute.For < IDateTimeOffset > ( ) ,
+                                                          Substitute.For < IDeviceMonitor > ( ) ,
+                                                          null! ,
+                                                          Substitute.For < IObservableTimerFactory > ( ) ,
+                                                          Substitute.For < IScheduler > ( ) ) ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
@@ -131,8 +124,8 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void TimeOut_ForValueGreaterZero_SetsTimeOut ( )
     {
-        using var sut = CreateSut ( ) ;
-        var expected = TimeSpan.FromHours ( 1.23 ) ;
+        using var sut      = CreateSut ( ) ;
+        var       expected = TimeSpan.FromHours ( 1.23 ) ;
 
         sut.TimeOut = expected ;
 
@@ -144,12 +137,12 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void TimeOut_ForValueLessThanZero_SetsTimeOut ( )
     {
-        Action action = ( ) =>
-                        {
-                            using var sut = CreateSut();
+        var action = ( ) =>
+                     {
+                         using var sut = CreateSut ( ) ;
 
-                            sut.TimeOut = TimeSpan.FromHours ( - 0.1 ) ;
-                        } ;
+                         sut.TimeOut = TimeSpan.FromHours ( - 0.1 ) ;
+                     } ;
 
         action.Should ( )
               .Throw < ArgumentException > ( ) ;
@@ -158,9 +151,9 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void RemoveDevice_ForInvoked_CallsDeviceMonitor ( )
     {
-        var monitor = Substitute.For < IDeviceMonitor > ( ) ;
-        var device  = Substitute.For < IDevice > ( ) ;
-        using var sut = CreateSut ( deviceMonitor : monitor ) ;
+        var       monitor = Substitute.For < IDeviceMonitor > ( ) ;
+        var       device  = Substitute.For < IDevice > ( ) ;
+        using var sut     = CreateSut ( deviceMonitor : monitor ) ;
 
         sut.RemoveDevice ( device ) ;
 
@@ -171,8 +164,8 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void Start_ForInvoked_CallsDeviceMonitor ( )
     {
-        var monitor = Substitute.For < IDeviceMonitor > ( ) ;
-        using var sut = CreateSut ( deviceMonitor : monitor ) ;
+        var       monitor = Substitute.For < IDeviceMonitor > ( ) ;
+        using var sut     = CreateSut ( deviceMonitor : monitor ) ;
 
         sut.StartListening ( ) ;
 
@@ -183,8 +176,8 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void Stop_ForInvoked_CallsDeviceMonitor ( )
     {
-        var monitor = Substitute.For < IDeviceMonitor > ( ) ;
-        using var sut = CreateSut ( deviceMonitor : monitor ) ;
+        var       monitor = Substitute.For < IDeviceMonitor > ( ) ;
+        using var sut     = CreateSut ( deviceMonitor : monitor ) ;
 
         sut.StopListening ( ) ;
 
@@ -196,7 +189,7 @@ public class DeviceMonitorWithExpiryTests
     public void Dispose_ForInvoked_DisposesMonitor ( )
     {
         var monitor = Substitute.For < IDeviceMonitor > ( ) ;
-        var sut = CreateSut ( deviceMonitor : monitor ) ;
+        var sut     = CreateSut ( deviceMonitor : monitor ) ;
 
         sut.Dispose ( ) ;
 
@@ -402,13 +395,13 @@ public class DeviceMonitorWithExpiryTests
     [ TestMethod ]
     public void CleanUp_ForOneExpiredDeviceInCollection_NotifiesDeviceExpired ( )
     {
-        var logger         = Logger.None ;
-        var dateTimeOffset = Substitute.For < IDateTimeOffset > ( ) ;
-        var deviceMonitor  = Substitute.For < IDeviceMonitor > ( ) ;
-        using var deviceExpired = new Subject < IDevice > ( ) ;
-        var factory        = new ObservableTimerFactory ( ) ;
-        var scheduler      = new TestScheduler ( ) ;
-        var device         = Substitute.For < IDevice > ( ) ;
+        var       logger         = Logger.None ;
+        var       dateTimeOffset = Substitute.For < IDateTimeOffset > ( ) ;
+        var       deviceMonitor  = Substitute.For < IDeviceMonitor > ( ) ;
+        using var deviceExpired  = new Subject < IDevice > ( ) ;
+        var       factory        = new ObservableTimerFactory ( ) ;
+        var       scheduler      = new TestScheduler ( ) ;
+        var       device         = Substitute.For < IDevice > ( ) ;
 
         using var sut = new DeviceMonitorWithExpiry ( logger ,
                                                       dateTimeOffset ,

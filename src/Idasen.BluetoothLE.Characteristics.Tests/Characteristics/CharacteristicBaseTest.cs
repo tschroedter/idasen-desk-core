@@ -4,6 +4,7 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
+using Idasen.TestLogger ;
 using JetBrains.Annotations ;
 using NSubstitute ;
 using Selkie.AutoMocking ;
@@ -224,7 +225,7 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        using var logger = new TestLogger.LoggerForTests();
+        using var logger = new LoggerForTests ( ) ;
         using var sut    = CreateSutWithLogger ( logger ) ;
 
         ServiceWrapper.Uuid
@@ -235,9 +236,9 @@ public class CharacteristicBaseTest
 
         await sut.TryWriteRawValue ( RawValue1 ) ;
 
-        logger.Contains("Found GattDeviceService with UUID")
-              .Should()
-              .BeTrue();
+        logger.Contains ( "Found GattDeviceService with UUID" )
+              .Should ( )
+              .BeTrue ( ) ;
     }
 
     [ TestMethod ]
@@ -306,17 +307,17 @@ public class CharacteristicBaseTest
            .Be ( ToStringResult ) ;
     }
 
-    protected TestCharacteristicBase CreateSutWithLogger(ILogger? logger = null)
+    protected TestCharacteristicBase CreateSutWithLogger ( ILogger ? logger = null )
     {
-        logger ??= Logger;
+        logger ??= Logger ;
 
-        return new TestCharacteristicBase(logger,
-                                          Scheduler,
-                                          Device,
-                                          ProviderFactory,
-                                          RawValueHandler,
-                                          ToStringConverter,
-                                          DescriptionToUuid);
+        return new TestCharacteristicBase ( logger ,
+                                            Scheduler ,
+                                            Device ,
+                                            ProviderFactory ,
+                                            RawValueHandler ,
+                                            ToStringConverter ,
+                                            DescriptionToUuid ) ;
     }
 
     protected override TestCharacteristicBase CreateSut ( )
