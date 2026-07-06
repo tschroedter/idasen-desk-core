@@ -96,4 +96,28 @@ public class DeskTests
            .Should ( )
            .Be ( bluetoothAddressType ) ;
     }
+
+    [ AutoDataTestMethod ]
+    public void ConnectionStatus_ForConnected_ReturnsConnected ( Desk                      sut ,
+                                                                 [ Freeze ] IDeskConnector connector )
+    {
+        connector.ConnectionStatus
+                 .Returns ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Connected ) ;
+
+        sut.ConnectionStatus
+           .Should ( )
+           .Be ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Connected ) ;
+    }
+
+    [ AutoDataTestMethod ]
+    public void ConnectionStatus_ForDisconnected_ReturnsDisconnected ( Desk                      sut ,
+                                                                       [ Freeze ] IDeskConnector connector )
+    {
+        connector.ConnectionStatus
+                 .Returns ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Disconnected ) ;
+
+        sut.ConnectionStatus
+           .Should ( )
+           .Be ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Disconnected ) ;
+    }
 }

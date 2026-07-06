@@ -103,4 +103,7 @@ public sealed class Desk
 
     /// <inheritdoc />
     public string DeviceName => _connector.DeviceName ;
+
+    /// <inheritdoc />
+    public Windows.Devices.Bluetooth.BluetoothConnectionStatus ConnectionStatus => _connector.ConnectionStatus ;
 }

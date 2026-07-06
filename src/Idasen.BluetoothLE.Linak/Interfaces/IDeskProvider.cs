@@ -62,4 +62,9 @@ public interface IDeskProvider
     ///     The second parameter is the detected desk or null.
     /// </returns>
     Task < (bool , IDesk ?) > TryGetDesk ( CancellationToken token ) ;
+
+    /// <summary>
+    ///     Indicates if the provider is connected to a desk.
+    /// </summary>
+    bool ConnectionStatus { get ; }
 }

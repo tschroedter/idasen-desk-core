@@ -60,6 +60,11 @@ public interface IDesk
     string DeviceName { get ; }
 
     /// <summary>
+    ///     Gets the Bluetooth connection status of the desk.
+    /// </summary>
+    Windows.Devices.Bluetooth.BluetoothConnectionStatus ConnectionStatus { get ; }
+
+    /// <summary>
     ///     Connect to a desk.
     /// </summary>
     void Connect ( ) ;

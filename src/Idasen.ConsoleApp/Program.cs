@@ -44,7 +44,13 @@ internal static class Program
             var (isSuccess , desk) = await provider.TryGetDesk ( token ) ;
 
             if ( isSuccess )
+            {
                 desk!.MoveTo ( 7200u ) ;
+
+                logger.Information("Desk detected and moved to 7200");
+                logger.Information("Desk ConnectionStatus: {ConnectionStatus}",
+                                   desk.ConnectionStatus);
+            }
             else
                 logger.Error ( "Failed to detect desk" ) ;
 
