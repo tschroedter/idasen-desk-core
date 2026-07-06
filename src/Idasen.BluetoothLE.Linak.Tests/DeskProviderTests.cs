@@ -268,6 +268,48 @@ public class DeskProviderTests
     }
 
     [ TestMethod ]
+    public void ConnectionStatus_ForNullDesk_ReturnsFalse ( )
+    {
+        using var sut = CreateSut ( ) ;
+
+        sut.ConnectionStatus
+           .Should ( )
+           .BeFalse ( ) ;
+    }
+
+    [ TestMethod ]
+    public void ConnectionStatus_ForConnectedDesk_ReturnsTrue ( )
+    {
+        var       desk = Substitute.For < IDesk > ( ) ;
+        using var sut  = CreateSut ( ) ;
+
+        desk.ConnectionStatus
+            .Returns ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Connected ) ;
+
+        sut.OnDeskDetected ( desk ) ;
+
+        sut.ConnectionStatus
+           .Should ( )
+           .BeTrue ( ) ;
+    }
+
+    [ TestMethod ]
+    public void ConnectionStatus_ForDisconnectedDesk_ReturnsFalse ( )
+    {
+        var       desk = Substitute.For < IDesk > ( ) ;
+        using var sut  = CreateSut ( ) ;
+
+        desk.ConnectionStatus
+            .Returns ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Disconnected ) ;
+
+        sut.OnDeskDetected ( desk ) ;
+
+        sut.ConnectionStatus
+           .Should ( )
+           .BeFalse ( ) ;
+    }
+
+    [ TestMethod ]
     public async Task OnDeskDetected_ForInvoked_CallsDeskDetectedEventSet ( )
     {
         var       desk   = Substitute.For < IDesk > ( ) ;

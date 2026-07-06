@@ -112,6 +112,9 @@ public class DeskConnector
     public string DeviceName => _device.Name ;
 
     /// <inheritdoc />
+    public Windows.Devices.Bluetooth.BluetoothConnectionStatus ConnectionStatus => _device.ConnectionStatus ;
+
+    /// <inheritdoc />
     public void Connect ( )
     {
         _device.Connect ( ) ;
