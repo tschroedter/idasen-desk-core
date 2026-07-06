@@ -66,5 +66,5 @@ public interface IDeskProvider
     /// <summary>
     ///     Indicates if the provider is connected to a desk.
     /// </summary>
-    bool ConnectionStatus { get ; }
+    Windows.Devices.Bluetooth.BluetoothConnectionStatus ConnectionStatus { get ; }
 }

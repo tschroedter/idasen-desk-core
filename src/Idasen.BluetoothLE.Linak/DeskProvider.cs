@@ -80,7 +80,7 @@ public class DeskProvider
         }
     }
 
-    public bool ConnectionStatus => Desk?.ConnectionStatus == Windows.Devices.Bluetooth.BluetoothConnectionStatus.Connected ;
+    public Windows.Devices.Bluetooth.BluetoothConnectionStatus ConnectionStatus => Desk?.ConnectionStatus ?? Windows.Devices.Bluetooth.BluetoothConnectionStatus.Disconnected ;
 
     /// <inheritdoc />
     public IObservable < IDesk > DeskDetected => _detector.DeskDetected ;

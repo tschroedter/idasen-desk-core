@@ -274,7 +274,7 @@ public class DeskProviderTests
 
         sut.ConnectionStatus
            .Should ( )
-           .BeFalse ( ) ;
+           .Be ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Disconnected ) ;
     }
 
     [ TestMethod ]
@@ -290,7 +290,7 @@ public class DeskProviderTests
 
         sut.ConnectionStatus
            .Should ( )
-           .BeTrue ( ) ;
+           .Be ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Connected ) ;
     }
 
     [ TestMethod ]
@@ -306,7 +306,7 @@ public class DeskProviderTests
 
         sut.ConnectionStatus
            .Should ( )
-           .BeFalse ( ) ;
+           .Be ( Windows.Devices.Bluetooth.BluetoothConnectionStatus.Disconnected ) ;
     }
 
     [ TestMethod ]
