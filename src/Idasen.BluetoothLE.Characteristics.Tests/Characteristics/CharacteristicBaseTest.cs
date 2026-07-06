@@ -225,7 +225,7 @@ public class CharacteristicBaseTest
     {
         Wrappers.Clear ( ) ;
 
-        using var logger = new LoggerForTests ( ) ;
+        using var logger = new InMemoryLogger ( ) ;
         using var sut    = CreateSutWithLogger ( logger ) ;
 
         ServiceWrapper.Uuid

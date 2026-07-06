@@ -39,7 +39,7 @@ public sealed class DeskConnectorTests : IDisposable
     private Subject < uint >               _heightChanged         = null! ;
     private Subject < HeightSpeedDetails > _heightSpeedSubject    = null! ;
     private Subject < uint >               _heightSubject         = null! ;
-    private LoggerForTests                 _logger                = null! ;
+    private InMemoryLogger                 _logger                = null! ;
     private IDeskMover                     _mover                 = null! ;
 
     private IDeskMoverFactory _moverFactory     = null! ;
@@ -70,7 +70,7 @@ public sealed class DeskConnectorTests : IDisposable
 
     private DeskConnector CreateSut ( )
     {
-        _logger = new LoggerForTests ( ) ;
+        _logger = new InMemoryLogger ( ) ;
         // Use a real scheduler to ensure Rx SubscribeOn executes subscriptions.
         _scheduler = CurrentThreadScheduler.Instance ;
 

@@ -22,7 +22,7 @@ public class InitialHeightProviderTests : IDisposable
 
     private IDeskCommandExecutor           _executor              = null! ;
     private IDeskHeightAndSpeed            _heightAndSpeed        = null! ;
-    private LoggerForTests                 _logger                = null! ;
+    private InMemoryLogger                 _logger                = null! ;
     private TestScheduler                  _scheduler             = null! ;
     private Subject < uint >               _subjectFinished       = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
@@ -42,7 +42,7 @@ public class InitialHeightProviderTests : IDisposable
     public void Initialize ( )
     {
         _scheduler       = new TestScheduler ( ) ;
-        _logger          = new LoggerForTests ( ) ;
+        _logger          = new InMemoryLogger ( ) ;
         _heightAndSpeed  = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _executor        = Substitute.For < IDeskCommandExecutor > ( ) ;
         _subjectFinished = new Subject < uint > ( ) ;

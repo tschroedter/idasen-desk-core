@@ -10,7 +10,7 @@ namespace Idasen.BluetoothLE.Linak.Tests.Control ;
 public class DeskMoveEngineTests : IDisposable
 {
     private IDeskCommandExecutor _executor = null! ;
-    private LoggerForTests       _logger   = null! ;
+    private InMemoryLogger       _logger   = null! ;
 
     public void Dispose ( )
     {
@@ -28,7 +28,7 @@ public class DeskMoveEngineTests : IDisposable
     [ TestInitialize ]
     public void Init ( )
     {
-        _logger   = new LoggerForTests ( ) ;
+        _logger   = new InMemoryLogger ( ) ;
         _executor = Substitute.For < IDeskCommandExecutor > ( ) ;
         _executor.Up ( ).Returns ( Task.FromResult ( true ) ) ;
         _executor.Down ( ).Returns ( Task.FromResult ( true ) ) ;

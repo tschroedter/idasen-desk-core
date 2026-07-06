@@ -24,7 +24,7 @@ public class DeskMovementMonitorTests : IDisposable
     private bool                _disposed ;
     private IDeskHeightAndSpeed _heightAndSpeed = null! ;
 
-    private LoggerForTests                 _logger                = null! ;
+    private InMemoryLogger                 _logger                = null! ;
     private TestScheduler                  _scheduler             = null! ;
     private Subject < HeightSpeedDetails > _subjectHeightAndSpeed = null! ;
 
@@ -52,7 +52,7 @@ public class DeskMovementMonitorTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger                = new LoggerForTests ( ) ;
+        _logger                = new InMemoryLogger ( ) ;
         _scheduler             = new TestScheduler ( ) ;
         _heightAndSpeed        = Substitute.For < IDeskHeightAndSpeed > ( ) ;
         _subjectHeightAndSpeed = new Subject < HeightSpeedDetails > ( ) ;

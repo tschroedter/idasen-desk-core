@@ -7,7 +7,7 @@ namespace Idasen.BluetoothLE.Linak.Tests ;
 [ TestClass ]
 public class HasReachedTargetHeightCalculatorTests : IDisposable
 {
-    private LoggerForTests _logger = null! ;
+    private InMemoryLogger _logger = null! ;
 
     public void Dispose ( )
     {
@@ -320,7 +320,7 @@ public class HasReachedTargetHeightCalculatorTests : IDisposable
     [ TestInitialize ]
     public void Initialize ( )
     {
-        _logger = new LoggerForTests ( ) ;
+        _logger = new InMemoryLogger ( ) ;
     }
 
     private HasReachedTargetHeightCalculator CreateSut ( )
