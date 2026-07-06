@@ -9,7 +9,7 @@ namespace Idasen.TestLogger ;
 ///     Test logger that captures log output for verification in unit tests.
 ///     Provides a real Serilog logger instance that writes to an in-memory string buffer.
 /// </summary>
-public sealed class LoggerForTests
+public sealed class InMemoryLogger
     : ILogger ,
       IDisposable
 {
@@ -18,10 +18,10 @@ public sealed class LoggerForTests
     private          bool           _disposed ;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="LoggerForTests" /> class.
+    ///     Initializes a new instance of the <see cref="InMemoryLogger" /> class.
     /// </summary>
     /// <param name="minimumLevel">The minimum log level to capture. Defaults to Verbose.</param>
-    public LoggerForTests ( LogEventLevel minimumLevel = LogEventLevel.Verbose )
+    public InMemoryLogger ( LogEventLevel minimumLevel = LogEventLevel.Verbose )
     {
         _output = new StringBuilder ( ) ;
         _sink   = new TestLoggerSink ( _output ) ;
@@ -65,6 +65,17 @@ public sealed class LoggerForTests
     }
 
     /// <summary>
+    ///     Checks if the log output does not contain the specified text.
+    /// </summary>
+    /// <param name="expectedText">The text to search for.</param>
+    /// <returns>True if the log output does not contain the text; otherwise, false.</returns>
+    public bool DoesNotContains ( string expectedText )
+    {
+        return ! Output.Contains ( expectedText ,
+                                   StringComparison.OrdinalIgnoreCase ) ;
+    }
+
+    /// <summary>
     ///     Checks if the log output contains the specified text.
     /// </summary>
     /// <param name="expectedText">The text to search for.</param>
@@ -73,6 +84,35 @@ public sealed class LoggerForTests
     {
         return Output.Contains ( expectedText ,
                                  StringComparison.OrdinalIgnoreCase ) ;
+    }
+
+    /// <summary>
+    ///     Checks if the log output contains the specified text.
+    /// </summary>
+    /// <param name="expectedText">The text to search for.</param>
+    /// <param name="times">The number of times the text is expected to appear.</param>
+    /// <returns>True if the log output contains the text the specified number of times; otherwise, false.</returns>
+    public bool Contains ( string expectedText ,
+                           int    times )
+    {
+        var count = Lines.Where ( x => x.Contains ( expectedText ) )
+                         .ToArray ( ) ;
+        return count.Length == times ;
+    }
+
+    /// <summary>
+    ///     Checks if the log output contains the specified text.
+    /// </summary>
+    /// <param name="expectedText">The text to search for.</param>
+    /// <param name="level">The log event level to match.</param>
+    /// <returns>True if the log output contains the text with the specified level; otherwise, false.</returns>
+    public bool Contains ( string        expectedText ,
+                           LogEventLevel level )
+    {
+        var count = Lines.Where ( x => x.Contains ( expectedText ) && x.StartsWith ( $"[{level}]" ) )
+                         .ToArray ( ) ;
+
+        return count.Length > 0 ;
     }
 
     /// <summary>
@@ -121,6 +161,13 @@ public sealed class LoggerForTests
     public override string ToString ( )
     {
         return Output ;
+    }
+
+    public bool ContainsLevel ( LogEventLevel level )
+    {
+        var levelText = $"[{level}]" ;
+
+        return Lines.Any ( x => x.StartsWith ( levelText ) ) ;
     }
 }
 

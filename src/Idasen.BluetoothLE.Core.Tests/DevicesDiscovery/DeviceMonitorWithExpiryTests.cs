@@ -20,7 +20,7 @@ public class DeviceMonitorWithExpiryTests
     private          ISubject < IDevice >    _deviceExpired  = null! ;
     private          IDeviceMonitor          _deviceMonitor  = null! ;
     private          IObservableTimerFactory _factory        = null! ;
-    private          LoggerForTests          _logger         = null! ;
+    private          InMemoryLogger          _logger         = null! ;
     private          IScheduler              _scheduler      = null! ;
 
     public void Dispose ( )
@@ -35,7 +35,7 @@ public class DeviceMonitorWithExpiryTests
     [ TestInitialize ]
     public void Setup ( )
     {
-        _logger         = new LoggerForTests ( ) ;
+        _logger         = new InMemoryLogger ( ) ;
         _dateTimeOffset = Substitute.For < IDateTimeOffset > ( ) ;
         _deviceMonitor  = Substitute.For < IDeviceMonitor > ( ) ;
         _deviceExpired  = new Subject < IDevice > ( ) ;
