@@ -4,9 +4,9 @@
     "net10.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[9.3.0, )",
-        "resolved": "9.3.0",
-        "contentHash": "OXigGAa1oFYbHmI9lEEYYSRQvbtGC3AnNdg+4BEhHa0x8XlJrYOS7Sg5fZtmlrHPLp+gRsDnz2aqbsglNUnv0g=="
+        "requested": "[9.3.1, )",
+        "resolved": "9.3.1",
+        "contentHash": "WCDp+kYLr+r9enkRDt4PYRzj321P/c+8SICxHhWo9gkVNqE9EziiYyUMa7A0ce27SK6qgRWYCK0zp19J2ykVHw=="
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Direct",
@@ -20,9 +20,9 @@
       },
       "Serilog": {
         "type": "Direct",
-        "requested": "[4.3.1, )",
-        "resolved": "4.3.1",
-        "contentHash": "savYe7h5yRlkqBVOwP8cIRDOdqKiPmYCU4W87JH38sBmcKD5EBoXvQIw6bNEvZ/pTe1gsiye3VFCzBsoppGkXQ=="
+        "requested": "[4.4.0, )",
+        "resolved": "4.4.0",
+        "contentHash": "ZC6Le3rr4TVJJjS4KsQAesxeF1EhW9qcZmmG7eP5Y2G3+gTGkJEUXkq4+tZNPtyp05I0wWOxnIjwtxFweJsObw=="
       },
       "SerilogAnalyzer": {
         "type": "Direct",
@@ -38,10 +38,10 @@
       },
       "Autofac.Extras.DynamicProxy": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "0EBAve2CmfOsxAPbmO0dJwgLHtrdlSwjxSIcIwSZ03fgPUIyt8Y8LaOp2o8ieSMW8XUpx6vCTE334irE4J/CUA==",
+        "resolved": "8.0.1",
+        "contentHash": "Rb6s8c1x+df23qofYx32JgkN1DMqgk6vtxmcqLC+HUQckamUWqzY09srvno59AcfvE/yMj17/O/vkkUQV9lFRQ==",
         "dependencies": {
-          "Autofac": "9.3.0",
+          "Autofac": "9.3.1",
           "Castle.Core": "5.2.1"
         }
       },
@@ -87,8 +87,8 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Transitive",
-        "resolved": "0.2.39",
-        "contentHash": "3CgPQJJV3b2E/CV+O4eeCvQ/mIH7lRbzTAUciiQqXk0BYfWhjSjFnQkbHP1gCweJyKm8596mKXR4arEy7PQ2Bg=="
+        "resolved": "0.2.40",
+        "contentHash": "/IkPIXflHfs6AYJ7a0RPsMPU9Lt2gyps7qljWfjcZWFle/wPKrTjDTRUxV55iKUR81Q12zL0nM6zQoviq7CQTA=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
@@ -103,15 +103,15 @@
       "idasen.aop": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "[8.0.0, )",
+          "Autofac.Extras.DynamicProxy": "[8.0.1, )",
           "JetBrains.Annotations": "[2026.2.0, )",
-          "Serilog": "[4.3.1, )"
+          "Serilog": "[4.4.0, )"
         }
       },
       "idasen.bluetoothle.characteristics": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "[8.0.0, )",
+          "Autofac.Extras.DynamicProxy": "[8.0.1, )",
           "CsvHelper": "[33.1.0, )",
           "Idasen.Aop": "[1.0.0, )",
           "Idasen.BluetoothLE.Core": "[1.0.0, )"
@@ -120,14 +120,14 @@
       "idasen.bluetoothle.core": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[9.3.0, )",
-          "Autofac.Extras.DynamicProxy": "[8.0.0, )",
+          "Autofac": "[9.3.1, )",
+          "Autofac.Extras.DynamicProxy": "[8.0.1, )",
           "AutofacSerilogIntegration": "[5.0.0, )",
           "CsvHelper": "[33.1.0, )",
           "Idasen.Aop": "[1.0.0, )",
           "JetBrains.Annotations": "[2026.2.0, )",
-          "Selkie.DefCon.One.Common": "[0.2.39, )",
-          "Serilog": "[4.3.1, )",
+          "Selkie.DefCon.One.Common": "[0.2.40, )",
+          "Serilog": "[4.4.0, )",
           "System.Reactive": "[6.1.0, )",
           "System.ValueTuple": "[4.6.2, )"
         }
