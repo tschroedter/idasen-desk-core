@@ -12,16 +12,6 @@
           "Serilog": "2.9.0"
         }
       },
-      "AutoFixture.AutoNSubstitute": {
-        "type": "Direct",
-        "requested": "[4.18.1, )",
-        "resolved": "4.18.1",
-        "contentHash": "xJxIsShO/1Ceei7BDFCobFANiw5a+enpdklgX/Xic6vKavHo9gSJO7ZGkKlf2lh+TlblTEet9mjzf9wHWIqWGQ==",
-        "dependencies": {
-          "AutoFixture": "4.18.1",
-          "NSubstitute": "[2.0.3, 6.0.0)"
-        }
-      },
       "coverlet.collector": {
         "type": "Direct",
         "requested": "[10.0.1, )",
@@ -88,33 +78,6 @@
           "Castle.Core": "5.1.1"
         }
       },
-      "Selkie.AutoMocking": {
-        "type": "Direct",
-        "requested": "[0.1.24, )",
-        "resolved": "0.1.24",
-        "contentHash": "hADv4brgpmXZaF9G/TNq6uA9JgshNODs1LQth252no7c1R6s5GpOVBPVixxYpHemans1bmt1cymqQU1YJ1VgvQ==",
-        "dependencies": {
-          "AutoFixture.AutoNSubstitute": "4.18.1",
-          "JetBrains.Annotations": "2025.2.2",
-          "MSTest.TestFramework": "4.0.1",
-          "NSubstitute": "5.3.0"
-        }
-      },
-      "Selkie.DefCon.One": {
-        "type": "Direct",
-        "requested": "[0.2.39, )",
-        "resolved": "0.2.39",
-        "contentHash": "5HXUAXcTaCVG90n+ANJGmJgNqpjw1giVks89Tt6iyGjPWBs2Hd/B9+BH6ETMnYlqJSwkLJfpBoT3X7ICPF/3Cg==",
-        "dependencies": {
-          "AutoFixture": "4.18.1",
-          "AutoFixture.AutoNSubstitute": "4.18.1",
-          "Autofac": "9.3.0",
-          "JetBrains.Annotations": "2026.2.0",
-          "NSubstitute": "5.3.0",
-          "Selkie.DefCon.One.Common": "0.2.39",
-          "Serilog": "4.3.1"
-        }
-      },
       "Serilog": {
         "type": "Direct",
         "requested": "[4.4.0, )",
@@ -135,14 +98,6 @@
           "Castle.Core": "5.2.1"
         }
       },
-      "AutoFixture": {
-        "type": "Transitive",
-        "resolved": "4.18.1",
-        "contentHash": "BmWZDY4fkrYOyd5/CTBOeXbzsNwV8kI4kDi/Ty1Y5F+WDHBVKxzfWlBE4RSicvZ+EOi2XDaN5uwdrHsItLW6Kw==",
-        "dependencies": {
-          "Fare": "[2.1.1, 3.0.0)"
-        }
-      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "5.2.1",
@@ -155,14 +110,6 @@
         "type": "Transitive",
         "resolved": "33.1.0",
         "contentHash": "kqfTOZGrn7NarNeXgjh86JcpTHUoeQDMB8t9NVa/ZtlSYiV1rxfRnQ49WaJsob4AiGrbK0XDzpyKkBwai4F8eg=="
-      },
-      "Fare": {
-        "type": "Transitive",
-        "resolved": "2.1.1",
-        "contentHash": "HaI8puqA66YU7/9cK4Sgbs1taUTP1Ssa4QT2PIzqJ7GvAbN1QgkjbRsjH+FSbMh1MJdvS0CIwQNLtFT+KF6KpA==",
-        "dependencies": {
-          "NETStandard.Library": "1.6.1"
-        }
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
@@ -183,11 +130,6 @@
         "type": "Transitive",
         "resolved": "10.0.8",
         "contentHash": "vLyZVpxmduO2jx+76ggqnsA3m81kwMY3NkWciNTj5E+Nvqb0VihqCvQP89QsGONWp0AJwMZG+u9GzaCjDdFGNw=="
-      },
-      "Microsoft.NETCore.Platforms": {
-        "type": "Transitive",
-        "resolved": "1.1.0",
-        "contentHash": "kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A=="
       },
       "Microsoft.Testing.Extensions.CodeCoverage": {
         "type": "Transitive",
@@ -280,14 +222,6 @@
         "resolved": "4.3.0",
         "contentHash": "Od+0h98vkWxsDKwk3N7RfS4SHOq2D4imLeCcs5YO2+g8ZsO2+QhymVg7HDoB81J3zA1UEj09PNBdNBGAdNUMNg=="
       },
-      "NETStandard.Library": {
-        "type": "Transitive",
-        "resolved": "1.6.1",
-        "contentHash": "WcSp3+vP+yHNgS8EV5J7pZ9IRpeDuARBPN28by8zqff1wJQXm26PVU8L3/fYLBJVU7BtDyqNVWq2KlCVvSSR4A==",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0"
-        }
-      },
       "Newtonsoft.Json": {
         "type": "Transitive",
         "resolved": "13.0.3",
@@ -295,8 +229,8 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Transitive",
-        "resolved": "0.2.40",
-        "contentHash": "/IkPIXflHfs6AYJ7a0RPsMPU9Lt2gyps7qljWfjcZWFle/wPKrTjDTRUxV55iKUR81Q12zL0nM6zQoviq7CQTA=="
+        "resolved": "0.2.41",
+        "contentHash": "Psst6Vg7CnRcRAbZF9v/DOwoafjQlsXcu86/YAmr+xkntrpQ0ldSu40hPDXXchrRwZPOXoGrAh0/vutsz3SNHA=="
       },
       "Serilog.Sinks.Console": {
         "type": "Transitive",
@@ -335,8 +269,9 @@
           "Autofac": "[9.3.1, )",
           "AutofacSerilogIntegration": "[5.0.0, )",
           "FluentAssertions": "[8.10.0, )",
+          "JetBrains.Annotations": "[2026.2.0, )",
           "MSTest.TestFramework": "[4.3.0, )",
-          "Selkie.DefCon.One": "[0.2.39, )",
+          "NSubstitute": "[5.3.0, )",
           "Serilog.Sinks.Console": "[6.1.1, )"
         }
       },
@@ -349,7 +284,7 @@
           "CsvHelper": "[33.1.0, )",
           "Idasen.Aop": "[1.0.0, )",
           "JetBrains.Annotations": "[2026.2.0, )",
-          "Selkie.DefCon.One.Common": "[0.2.40, )",
+          "Selkie.DefCon.One.Common": "[0.2.41, )",
           "Serilog": "[4.4.0, )",
           "System.Reactive": "[6.1.0, )",
           "System.ValueTuple": "[4.6.2, )"

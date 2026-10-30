@@ -1,19 +1,31 @@
 using FluentAssertions ;
+using Autofac ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
-using Selkie.AutoMocking ;
+using Microsoft.VisualStudio.TestTools.UnitTesting ;
+using NSubstitute ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Factories ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class CharacteristicBaseFactoryTests
 {
-    [ AutoDataTestMethod ]
-    public void Create_ForInvoked_Instance ( CharacteristicBaseFactory sut ,
-                                             IDevice                   device )
+    private sealed class Dummy { public int Value { get; set; } = 42; }
+    [ TestMethod ]
+    public void Create_ForInvoked_Instance ( )
     {
-        // not easy to  test because of dependency on ILifetimeScope
-        sut.Create < object > ( device )
+        // Use a real Autofac lifetime scope and register a dummy type to resolve
+        var builder = new ContainerBuilder ( ) ;
+
+        builder.RegisterType<Dummy> ( ).As<Dummy> ( ) ;
+
+        var container = builder.Build ( ) ;
+        var scope = container.BeginLifetimeScope ( ) ;
+
+        var sut = new CharacteristicBaseFactory ( scope ) ;
+        var device = Substitute.For< IDevice > ( ) ;
+
+        sut.Create<Dummy> ( device )
            .Should ( )
            .NotBeNull ( ) ;
     }

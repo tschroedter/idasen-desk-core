@@ -22,7 +22,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Selkie.DefCon.One" Version="0.2.39" />
+        <PackageReference Include="NSubstitute" Version="5.3.0" />
     </ItemGroup>
 
     <ItemGroup>

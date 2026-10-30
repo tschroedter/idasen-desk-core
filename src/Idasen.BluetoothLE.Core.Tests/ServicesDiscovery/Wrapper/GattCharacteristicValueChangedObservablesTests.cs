@@ -3,13 +3,12 @@ using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 using Serilog ;
 using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class GattCharacteristicValueChangedObservablesTests : IDisposable
 {
     private GattCharacteristicValueChangedDetails             _details   = null! ;
@@ -35,9 +34,13 @@ public class GattCharacteristicValueChangedObservablesTests : IDisposable
                                                                DateTimeOffset.Now ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Create_ForInvoked_Instance ( GattCharacteristicValueChangedObservables sut )
+    [ TestMethod ]
+    public void Create_ForInvoked_Instance ( )
     {
+        using var sut = new GattCharacteristicValueChangedObservables ( _logger ,
+                                                                        _scheduler ,
+                                                                        _subject ) ;
+
         sut.Should ( )
            .NotBeNull ( ) ;
     }

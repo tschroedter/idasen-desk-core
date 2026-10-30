@@ -7,7 +7,6 @@ using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Idasen.TestLogger ;
 using JetBrains.Annotations ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
@@ -42,14 +41,15 @@ public class CharacteristicBaseTest
            .Be ( GattServiceUuid ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Initialize_ForUnknownGattServiceUuid_Throws ( TestCharacteristicBase sut ,
-                                                              [ Freeze ] IDevice     device )
+    [ TestMethod ]
+    public void Initialize_ForUnknownGattServiceUuid_Throws ( )
     {
+        using var sut = CreateSut ( ) ;
+
         IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > gattServices =
             new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( ) ;
 
-        device.GattServices
+        Device.GattServices
               .Returns ( gattServices ) ;
 
         Action action = ( ) => sut.Initialize < TestCharacteristicBase > ( ) ;

@@ -1,34 +1,39 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery.Wrappers ;
-using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery.Wrapper ;
 
 [ TestClass ]
 public class GattCharacteristicValueChangedDetailsTests
 {
-    [ AutoDataTestMethod ]
-    public void Constructor_ForInvoked_SetsUuid ( GattCharacteristicValueChangedDetails sut ,
-                                                  [ Freeze ] Guid                       uuid )
+    [ TestMethod ]
+    public void Constructor_ForInvoked_SetsUuid ( )
     {
+        var uuid = Guid.NewGuid ( ) ;
+        var sut = new GattCharacteristicValueChangedDetails ( uuid , Array.Empty< byte > ( ) , DateTimeOffset.UtcNow ) ;
+
         sut.Uuid
            .Should ( )
            .Be ( uuid ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForInvoked_SetsValue ( GattCharacteristicValueChangedDetails sut ,
-                                                   [ Freeze ] IEnumerable < byte >       value )
+    [ TestMethod ]
+    public void Constructor_ForInvoked_SetsValue ( )
     {
+        var value = new byte [ ] { 1 , 2 , 3 } ;
+        var sut = new GattCharacteristicValueChangedDetails ( Guid.NewGuid ( ) , value , DateTimeOffset.UtcNow ) ;
+
         sut.Value
            .Should ( )
            .BeEquivalentTo ( value ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForInvoked_SetsTimestamp ( GattCharacteristicValueChangedDetails sut ,
-                                                       [ Freeze ] DateTimeOffset             timestamp )
+    [ TestMethod ]
+    public void Constructor_ForInvoked_SetsTimestamp ( )
     {
+        var timestamp = DateTimeOffset.UtcNow ;
+        var sut = new GattCharacteristicValueChangedDetails ( Guid.NewGuid ( ) , Array.Empty< byte > ( ) , timestamp ) ;
+
         sut.Timestamp
            .Should ( )
            .Be ( timestamp ) ;

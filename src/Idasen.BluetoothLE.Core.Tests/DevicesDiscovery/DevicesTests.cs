@@ -45,7 +45,7 @@ public class DevicesTests
     public void Constructor_ForLoggerNull_Throws ( )
     {
         // ReSharper disable once ObjectCreationAsStatement
-        var action = ( ) => { new Devices ( null! ) ; } ;
+        var action = ( ) => { _ = new Devices ( null! ) ; } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )

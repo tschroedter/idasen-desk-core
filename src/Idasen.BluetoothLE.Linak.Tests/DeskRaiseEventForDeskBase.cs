@@ -2,24 +2,21 @@ using System.Reactive.Subjects ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
-using Selkie.AutoMocking ;
+using NSubstitute ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public abstract class DeskRaiseEventForDeskBase < TSubject >
 {
     public bool WasCalled { get ; private set ; }
 
-    [ AutoDataTestMethod ]
-    public void RefreshedChanged_ForEventRaised_GetsNotified ( Desk                 _ ,
-                                                               IDeskConnector       connector ,
-                                                               Subject < TSubject > subject ,
-                                                               TestScheduler        scheduler )
+    [ TestMethod ]
+    public void RefreshedChanged_ForEventRaised_GetsNotified ( )
     {
-        ArgumentNullException.ThrowIfNull ( connector ) ;
-        ArgumentNullException.ThrowIfNull ( subject ) ;
-        ArgumentNullException.ThrowIfNull ( scheduler ) ;
+        var connector = Substitute.For< IDeskConnector > ( ) ;
+        using var subject = new Subject< TSubject > ( ) ;
+        var scheduler = new TestScheduler ( ) ;
 
         SetSubject ( connector ,
                      subject ) ;

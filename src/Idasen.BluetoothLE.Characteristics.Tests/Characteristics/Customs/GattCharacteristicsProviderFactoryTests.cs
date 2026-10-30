@@ -1,17 +1,23 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics.Customs ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
-using Selkie.AutoMocking ;
+using NSubstitute ;
+using Microsoft.VisualStudio.TestTools.UnitTesting ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics.Customs ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class GattCharacteristicsProviderFactoryTests
 {
-    [ AutoDataTestMethod ]
-    public void Create_ForInvoked_Instance ( GattCharacteristicsProviderFactory sut ,
-                                             IGattCharacteristicsResultWrapper  wrapper )
+    [ TestMethod ]
+    public void Create_ForInvoked_Instance ( )
     {
+        // provide a factory delegate that returns a simple provider
+        GattCharacteristicProvider.Factory factory = _ => Substitute.For< Idasen.BluetoothLE.Characteristics.Interfaces.Characteristics.Customs.IGattCharacteristicProvider > ( ) ;
+
+        var sut = new GattCharacteristicsProviderFactory ( factory ) ;
+        var wrapper = Substitute.For< IGattCharacteristicsResultWrapper > ( ) ;
+
         sut.Create ( wrapper )
            .Should ( )
            .NotBeNull ( ) ;

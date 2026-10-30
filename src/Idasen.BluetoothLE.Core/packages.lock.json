@@ -42,9 +42,9 @@
       },
       "Selkie.DefCon.One.Common": {
         "type": "Direct",
-        "requested": "[0.2.40, )",
-        "resolved": "0.2.40",
-        "contentHash": "/IkPIXflHfs6AYJ7a0RPsMPU9Lt2gyps7qljWfjcZWFle/wPKrTjDTRUxV55iKUR81Q12zL0nM6zQoviq7CQTA=="
+        "requested": "[0.2.41, )",
+        "resolved": "0.2.41",
+        "contentHash": "Psst6Vg7CnRcRAbZF9v/DOwoafjQlsXcu86/YAmr+xkntrpQ0ldSu40hPDXXchrRwZPOXoGrAh0/vutsz3SNHA=="
       },
       "Serilog": {
         "type": "Direct",

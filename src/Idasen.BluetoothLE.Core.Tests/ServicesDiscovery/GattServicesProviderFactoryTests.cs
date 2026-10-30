@@ -2,16 +2,19 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Common.Tests ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
-using Selkie.AutoMocking ;
+using NSubstitute ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class GattServicesProviderFactoryTests
 {
-    [ AutoDataTestMethod ]
-    public void Create_ForWrapperNull_Throws ( GattServicesProviderFactory sut )
+    [ TestMethod ]
+    public void Create_ForWrapperNull_Throws ( )
     {
+        var sut = new GattServicesProviderFactory ( _ => Substitute.For< IGattServicesProvider > ( ) ) ;
+
         Action action = ( ) => sut.Create ( null! ) ;
 
         action.Should ( )
@@ -19,10 +22,12 @@ public class GattServicesProviderFactoryTests
               .WithParameter ( "wrapper" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Create_ForWrapper_Instance ( GattServicesProviderFactory sut ,
-                                             IBluetoothLeDeviceWrapper   wrapper )
+    [ TestMethod ]
+    public void Create_ForWrapper_Instance ( )
     {
+        var sut = new GattServicesProviderFactory ( _ => Substitute.For< IGattServicesProvider > ( ) ) ;
+        var wrapper = Substitute.For< IBluetoothLeDeviceWrapper > ( ) ;
+
         sut.Create ( wrapper )
            .Should ( )
            .NotBeNull ( ) ;

@@ -3,11 +3,10 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class WatcherTests
 {
     private ISubject < DateTime > _subject = null! ;
@@ -44,12 +43,14 @@ public class WatcherTests
            .Be ( expected ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Start_ForIsListeningTrue_DoesNotCallWatcherStart ( Watcher             sut ,
-                                                                   [ Freeze ] IWrapper wrapper )
+    [ TestMethod ]
+    public void Start_ForIsListeningTrue_DoesNotCallWatcherStart ( )
     {
+        var wrapper = Substitute.For < IWrapper > ( ) ;
         wrapper.Status
                .Returns ( Status.Started ) ;
+
+        using var sut = new Watcher ( wrapper , _subject ) ;
 
         sut.StartListening ( ) ;
 
@@ -57,12 +58,14 @@ public class WatcherTests
                .StartListening ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Start_ForIsListeningFalse_CallsWatcherStart ( Watcher             sut ,
-                                                              [ Freeze ] IWrapper wrapper )
+    [ TestMethod ]
+    public void Start_ForIsListeningFalse_CallsWatcherStart ( )
     {
+        var wrapper = Substitute.For < IWrapper > ( ) ;
         wrapper.Status
                .Returns ( Status.Created ) ;
+
+        using var sut = new Watcher ( wrapper , _subject ) ;
 
         sut.StartListening ( ) ;
 
@@ -70,13 +73,16 @@ public class WatcherTests
                .StartListening ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Start_ForIsListeningFalse_PublishesStarted ( Watcher                          sut ,
-                                                             [ Freeze ] IWrapper              wrapper ,
-                                                             [ Freeze ] ISubject < DateTime > subject )
+    [ TestMethod ]
+    public void Start_ForIsListeningFalse_PublishesStarted ( )
     {
+        var wrapper = Substitute.For < IWrapper > ( ) ;
+        var subject = Substitute.For < ISubject < DateTime > > ( ) ;
+
         wrapper.Status
                .Returns ( Status.Created ) ;
+
+        using var sut = new Watcher ( wrapper , subject ) ;
 
         sut.StartListening ( ) ;
 
@@ -84,12 +90,14 @@ public class WatcherTests
                .OnNext ( Arg.Any < DateTime > ( ) ) ; // Assertion added to verify that OnNext is called
     }
 
-    [ AutoDataTestMethod ]
-    public void Stop_ForIsListeningTrue_CallsWatcherStop ( Watcher             sut ,
-                                                           [ Freeze ] IWrapper wrapper )
+    [ TestMethod ]
+    public void Stop_ForIsListeningTrue_CallsWatcherStop ( )
     {
+        var wrapper = Substitute.For < IWrapper > ( ) ;
         wrapper.Status
                .Returns ( Status.Started ) ;
+
+        using var sut = new Watcher ( wrapper , _subject ) ;
 
         sut.StopListening ( ) ;
 
@@ -97,12 +105,14 @@ public class WatcherTests
                .StopListening ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Stop_ForIsListeningFalse_DoesNotCallWatcherStop ( Watcher             sut ,
-                                                                  [ Freeze ] IWrapper wrapper )
+    [ TestMethod ]
+    public void Stop_ForIsListeningFalse_DoesNotCallWatcherStop ( )
     {
+        var wrapper = Substitute.For < IWrapper > ( ) ;
         wrapper.Status
                .Returns ( Status.Created ) ;
+
+        using var sut = new Watcher ( wrapper , _subject ) ;
 
         sut.StopListening ( ) ;
 
@@ -110,33 +120,42 @@ public class WatcherTests
                .StopListening ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesWrapper ( Watcher             sut ,
-                                                     [ Freeze ] IWrapper wrapper )
+    [ TestMethod ]
+    public void Dispose_ForInvoked_DisposesWrapper ( )
     {
+        var wrapper = Substitute.For < IWrapper > ( ) ;
+
+        using var sut = new Watcher ( wrapper , _subject ) ;
+
         sut.Dispose ( ) ;
 
         wrapper.Received ( )
                .Dispose ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Started_ForSubscribe_CallsSubscribe ( Watcher                          sut ,
-                                                      [ Freeze ] ISubject < DateTime > subject )
+    [ TestMethod ]
+    public void Started_ForSubscribe_CallsSubscribe ( )
     {
+        var subject = Substitute.For < ISubject < DateTime > > ( ) ;
+
+        using var sut = new Watcher ( _wrapper , subject ) ;
+
         using var disposable = sut.Started.Subscribe ( ) ;
 
         subject.ReceivedWithAnyArgs ( )
                .Subscribe ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Stopped_ForSubscribe_CallsSubscribe ( Watcher               sut ,
-                                                      ISubject < DateTime > subject ,
-                                                      [ Freeze ] IWrapper   wrapper )
+    [ TestMethod ]
+    public void Stopped_ForSubscribe_CallsSubscribe ( )
     {
+        var subject = Substitute.For < ISubject < DateTime > > ( ) ;
+        var wrapper = Substitute.For < IWrapper > ( ) ;
+
         wrapper.Stopped
                .Returns ( subject ) ;
+
+        using var sut = new Watcher ( wrapper , _subject ) ;
 
         using var disposable = sut.Stopped
                                   .Subscribe ( ) ;
@@ -145,13 +164,16 @@ public class WatcherTests
                .Subscribe ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Received_ForSubscribe_CallsSubscribe ( Watcher              sut ,
-                                                       ISubject < IDevice > subject ,
-                                                       [ Freeze ] IWrapper  wrapper )
+    [ TestMethod ]
+    public void Received_ForSubscribe_CallsSubscribe ( )
     {
+        var subject = Substitute.For < ISubject < IDevice > > ( ) ;
+        var wrapper = Substitute.For < IWrapper > ( ) ;
+
         wrapper.Received
                .Returns ( subject ) ;
+
+        using var sut = new Watcher ( wrapper , _subject ) ;
 
         using var disposable = sut.Received
                                   .Subscribe ( ) ;

@@ -280,5 +280,5 @@ public class GattServicesProviderTests
            .NotBe ( characteristics ) ;
     }
 
-    // todo integration tests
+    // to do integration tests
 }

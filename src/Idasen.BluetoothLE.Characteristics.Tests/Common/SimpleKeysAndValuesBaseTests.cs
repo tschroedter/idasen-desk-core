@@ -1,17 +1,19 @@
 using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Selkie.AutoMocking ;
+// Selkie.AutoMocking usages removed; tests converted to explicit setup
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class SimpleKeysAndValuesBaseTests
 {
-    [ AutoDataTestMethod ]
-    public void Indexer_ForNewKeyAndValue_AddsKeyAndValue ( TestSimpleKeysAndValuesBase sut ,
-                                                            string                      key ,
-                                                            Guid                        id )
+    [ TestMethod ]
+    public void Indexer_ForNewKeyAndValue_AddsKeyAndValue ( )
     {
+        var sut = new TestSimpleKeysAndValuesBase ( ) ;
+        var key = "key" ;
+        var id = Guid.NewGuid ( ) ;
+
         sut [ key ] = id ;
 
         sut [ key ]
@@ -19,11 +21,13 @@ public class SimpleKeysAndValuesBaseTests
            .Be ( id ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_RemovesAllKeys ( TestSimpleKeysAndValuesBase sut ,
-                                                  string                      key ,
-                                                  Guid                        id )
+    [ TestMethod ]
+    public void Clear_ForInvoked_RemovesAllKeys ( )
     {
+        var sut = new TestSimpleKeysAndValuesBase ( ) ;
+        var key = "key" ;
+        var id = Guid.NewGuid ( ) ;
+
         sut [ key ] = id ;
 
         sut.Clear ( ) ;
@@ -33,11 +37,13 @@ public class SimpleKeysAndValuesBaseTests
            .Be ( 0 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Count_ForInvoked_ReturnsCount ( TestSimpleKeysAndValuesBase sut ,
-                                                string                      key ,
-                                                Guid                        id )
+    [ TestMethod ]
+    public void Count_ForInvoked_ReturnsCount ( )
     {
+        var sut = new TestSimpleKeysAndValuesBase ( ) ;
+        var key = "key" ;
+        var id = Guid.NewGuid ( ) ;
+
         sut [ key ] = id ;
 
         sut.Count
@@ -45,13 +51,15 @@ public class SimpleKeysAndValuesBaseTests
            .Be ( 1 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Keys_ForInvoked_ReturnsKeys ( TestSimpleKeysAndValuesBase sut ,
-                                              string                      key1 ,
-                                              Guid                        guid1 ,
-                                              string                      key2 ,
-                                              Guid                        guid2 )
+    [ TestMethod ]
+    public void Keys_ForInvoked_ReturnsKeys ( )
     {
+        var sut = new TestSimpleKeysAndValuesBase ( ) ;
+        var key1 = "k1" ;
+        var guid1 = Guid.NewGuid ( ) ;
+        var key2 = "k2" ;
+        var guid2 = Guid.NewGuid ( ) ;
+
         sut [ key1 ] = guid1 ;
         sut [ key2 ] = guid2 ;
 
@@ -61,12 +69,14 @@ public class SimpleKeysAndValuesBaseTests
                              key2 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void ReadOnlyDictionary_ForInvoked_ReturnsClone ( TestSimpleKeysAndValuesBase sut ,
-                                                             string                      key ,
-                                                             Guid                        id ,
-                                                             Guid                        newGuid )
+    [ TestMethod ]
+    public void ReadOnlyDictionary_ForInvoked_ReturnsClone ( )
     {
+        var sut = new TestSimpleKeysAndValuesBase ( ) ;
+        var key = "key" ;
+        var id = Guid.NewGuid ( ) ;
+        var newGuid = Guid.NewGuid ( ) ;
+
         sut [ key ] = id ;
 
         var actual = sut.ReadOnlyDictionary ;

@@ -1,6 +1,7 @@
 using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Selkie.AutoMocking ;
+using Idasen.BluetoothLE.Core ;
+// Selkie.AutoMocking removed; tests use explicit setup
 
 namespace Idasen.BluetoothLE.Tests ;
 
@@ -61,7 +62,7 @@ public class GuardTests
     public void ArgumentNotNull_ForValueNull_Throws ( )
     {
         // ReSharper disable once AssignNullToNotNullAttribute
-        var action = new Action ( ( ) => Guard.ArgumentNotNull ( null ,
+        var action = new Action ( ( ) => Guard.ArgumentNotNull ( null! ,
                                                                  "parameter" ) ) ;
 
         action.Should ( )

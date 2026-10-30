@@ -3,35 +3,45 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
+using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class MatchMakerTests
 {
-    [ AutoDataTestMethod ]
-    public void Create_ForKnownAddress_Instance ( MatchMaker sut ,
-                                                  ulong      address )
+    [ TestMethod ]
+    public void Create_ForKnownAddress_Instance ( )
     {
-        sut.PairToDeviceAsync ( address )
+        var logger = Substitute.For< Serilog.ILogger > ( ) ;
+        var collection = Substitute.For< IOfficialGattServicesCollection > ( ) ;
+        var deviceFactory = Substitute.For< IDeviceFactory > ( ) ;
+        var device = Substitute.For< IDevice > ( ) ;
+        deviceFactory.FromBluetoothAddressAsync ( Arg.Any< ulong > ( ) )
+                     .Returns ( device ) ;
+
+        var sut = new MatchMaker ( logger , collection , deviceFactory ) ;
+
+        sut.PairToDeviceAsync ( 123UL )
            .Should ( )
            .NotBeNull ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public async Task Create_ForUnknownAddress_Throws ( Lazy < MatchMaker >       sut ,
-                                                        [ Freeze ] IDeviceFactory deviceFactory ,
-                                                        ulong                     address )
+    [ TestMethod ]
+    public async Task Create_ForUnknownAddress_Throws ( )
     {
-        deviceFactory.FromBluetoothAddressAsync ( Arg.Any < ulong > ( ) )
+        var logger = Substitute.For< Serilog.ILogger > ( ) ;
+        var collection = Substitute.For< IOfficialGattServicesCollection > ( ) ;
+        var deviceFactory = Substitute.For< IDeviceFactory > ( ) ;
+        deviceFactory.FromBluetoothAddressAsync ( Arg.Any< ulong > ( ) )
                      .Returns ( ( IDevice )null ) ;
+
+        var sut = new MatchMaker ( logger , collection , deviceFactory ) ;
 
         var action = async ( ) =>
                      {
-                         await sut.Value
-                                  .PairToDeviceAsync ( address )
+                         await sut.PairToDeviceAsync ( 123UL )
                                   .ConfigureAwait ( false ) ;
                      } ;
 

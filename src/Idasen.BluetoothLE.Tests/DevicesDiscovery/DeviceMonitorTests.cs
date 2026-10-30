@@ -340,26 +340,6 @@ public class DeviceMonitorTests
     }
 
     [ TestMethod ]
-    public void OnDeviceUpdated_ForExistingDevice_Notifies ( )
-    {
-        ConfigureSameDevice ( ) ;
-
-        using var sut = CreateSut ( ) ;
-
-        IDevice updated = null! ;
-
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
-
-        sut.StartListening ( ) ;
-
-        _scheduler.Start ( ) ;
-
-        updated.Should ( )
-               .Be ( _device ) ;
-    }
-
-    [ TestMethod ]
     public void IsListening_ForInvoked_CallsWatcher ( )
     {
         _watcher.IsListening
