@@ -23,15 +23,15 @@
     <ItemGroup>
         <PackageReference Include="AutofacSerilogIntegration" Version="5.0.0" />
         <!-- AutoFixture.AutoNSubstitute not used after test conversion; remove to avoid NSubstitute version constraints -->
-        <PackageReference Include="FluentAssertions" Version="8.10.0" />
+        <PackageReference Include="FluentAssertions" Version="8.11.0" />
         <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
-        <PackageReference Include="Microsoft.Reactive.Testing" Version="6.1.0" />
-        <PackageReference Include="MSTest.TestAdapter" Version="4.3.0" />
-        <PackageReference Include="MSTest.TestFramework" Version="4.3.0" />
-        <PackageReference Include="NSubstitute" Version="5.3.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+        <PackageReference Include="Microsoft.Reactive.Testing" Version="7.0.0" />
+        <PackageReference Include="MSTest.TestAdapter" Version="4.5.2" />
+        <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
+        <PackageReference Include="NSubstitute" Version="6.2.0" />
         <PackageReference Include="Serilog" Version="4.4.0" />
-        <PackageReference Include="coverlet.collector" Version="10.0.1">
+        <PackageReference Include="coverlet.collector" Version="10.1.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
