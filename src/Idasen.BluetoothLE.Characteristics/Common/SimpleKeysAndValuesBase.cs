@@ -70,15 +70,11 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
     }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary < TKey , TValue > ReadOnlyDictionary
+    [UsedImplicitly]
+    public IReadOnlyDictionary<TKey, TValue> GetReadOnlyDictionary()
     {
-        get
-        {
-            lock ( _padlock )
-            {
-                // Create a shallow copy snapshot to avoid exposing internal state
-                return new Dictionary < TKey , TValue > ( _dictionary ) ;
-            }
+        lock (_padlock) {
+            return new Dictionary<TKey, TValue>(_dictionary);
         }
     }
 

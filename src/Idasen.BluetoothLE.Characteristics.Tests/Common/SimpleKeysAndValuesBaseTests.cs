@@ -78,7 +78,7 @@ public class SimpleKeysAndValuesBaseTests
 
         sut [ key ] = id ;
 
-        var actual = sut.ReadOnlyDictionary ;
+        var actual = sut.GetReadOnlyDictionary ( ) ;
 
         using var scope = new AssertionScope ( ) ;
 

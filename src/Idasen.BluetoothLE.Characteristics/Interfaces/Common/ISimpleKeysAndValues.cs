@@ -19,7 +19,7 @@ public interface ISimpleKeysAndValues < TKey , TValue >
     /// <summary>
     ///     Gets a cloned version of the dictionary.
     /// </summary>
-    IReadOnlyDictionary < TKey , TValue > ReadOnlyDictionary { get ; }
+    IReadOnlyDictionary < TKey , TValue > GetReadOnlyDictionary ( ) ;
 
     /// <summary>
     ///     Gets or sets the value associated with the specified key.
