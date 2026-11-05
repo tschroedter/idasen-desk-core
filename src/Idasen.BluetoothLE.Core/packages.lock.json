@@ -40,12 +40,6 @@
         "resolved": "2026.2.0",
         "contentHash": "drvAEaI7Xf4wU6dx4UTB9MoZWXZlraaQ0qoeThPQ411FxNhId7QdUTukIC9I8aUHP0ycAaGwZNKqSvfOZQvUlg=="
       },
-      "Selkie.DefCon.One.Common": {
-        "type": "Direct",
-        "requested": "[0.2.41, )",
-        "resolved": "0.2.41",
-        "contentHash": "Psst6Vg7CnRcRAbZF9v/DOwoafjQlsXcu86/YAmr+xkntrpQ0ldSu40hPDXXchrRwZPOXoGrAh0/vutsz3SNHA=="
-      },
       "Serilog": {
         "type": "Direct",
         "requested": "[4.4.0, )",

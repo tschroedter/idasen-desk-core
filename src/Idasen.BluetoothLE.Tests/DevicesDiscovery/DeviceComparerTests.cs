@@ -3,7 +3,6 @@ using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using NSubstitute ;
-// Selkie.AutoMocking removed; tests use explicit setup
 
 namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 

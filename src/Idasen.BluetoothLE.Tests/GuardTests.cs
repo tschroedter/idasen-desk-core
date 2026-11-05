@@ -1,7 +1,6 @@
 using FluentAssertions ;
 using FluentAssertions.Execution ;
 using Idasen.BluetoothLE.Core ;
-// Selkie.AutoMocking removed; tests use explicit setup
 
 namespace Idasen.BluetoothLE.Tests ;
 
