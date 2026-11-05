@@ -79,8 +79,12 @@ public class GattCharacteristicWrapper
                                                                               int     timeoutMs = 5000 )
     {
         var writeTask = _characteristic.WriteValueWithResultAsync ( buffer ).AsTask ( ) ;
+        using var timeoutCancellation = new CancellationTokenSource ( ) ;
+        var timeoutTask = Task.Delay ( timeoutMs ,
+                                       timeoutCancellation.Token ) ;
         var completedTask = await Task.WhenAny ( writeTask ,
-                                                 Task.Delay ( timeoutMs ) ) ;
+                                                 timeoutTask ) ;
+        timeoutCancellation.Cancel ( ) ;
 
         if ( completedTask == writeTask )
         {
@@ -101,8 +105,12 @@ public class GattCharacteristicWrapper
                                                                     int     timeoutMs = 5000 )
     {
         var writeTask = _characteristic.WriteValueAsync ( buffer ).AsTask ( ) ;
+        using var timeoutCancellation = new CancellationTokenSource ( ) ;
+        var timeoutTask = Task.Delay ( timeoutMs ,
+                                       timeoutCancellation.Token ) ;
         var completedTask = await Task.WhenAny ( writeTask ,
-                                                 Task.Delay ( timeoutMs ) ) ;
+                                                 timeoutTask ) ;
+        timeoutCancellation.Cancel ( ) ;
 
         if ( completedTask == writeTask ) return await writeTask ;
 
