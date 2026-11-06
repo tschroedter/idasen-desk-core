@@ -1,44 +1,51 @@
 using FluentAssertions ;
-using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class HeightSpeedDetailsTests
 {
-    [ AutoDataTestMethod ]
-    public void Timestamp_ForInvoked_Instance ( HeightSpeedDetails        sut ,
-                                                [ Freeze ] DateTimeOffset timestamp )
+    [ TestMethod ]
+    public void Timestamp_ForInvoked_Instance ( )
     {
+        var timestamp = DateTimeOffset.UtcNow ;
+        var sut = new HeightSpeedDetails ( timestamp , 0u , 0 ) ;
+
         sut.Timestamp
            .Should ( )
            .Be ( timestamp ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Height_ForInvoked_Instance ( HeightSpeedDetails sut ,
-                                             [ Freeze ] uint    height )
+    [ TestMethod ]
+    public void Height_ForInvoked_Instance ( )
     {
+        var height = 100u ;
+        var sut = new HeightSpeedDetails ( DateTimeOffset.UtcNow , height , 0 ) ;
+
         sut.Height
            .Should ( )
            .Be ( height ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Speed_ForInvoked_Instance ( HeightSpeedDetails sut ,
-                                            [ Freeze ] int     speed )
+    [ TestMethod ]
+    public void Speed_ForInvoked_Instance ( )
     {
+        var speed = 5 ;
+        var sut = new HeightSpeedDetails ( DateTimeOffset.UtcNow , 0u , speed ) ;
+
         sut.Speed
            .Should ( )
            .Be ( speed ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void ToString_ForInvoked_Instance ( HeightSpeedDetails        sut ,
-                                               [ Freeze ] DateTimeOffset timestamp ,
-                                               [ Freeze ] uint           height ,
-                                               [ Freeze ] int            speed )
+    [ TestMethod ]
+    public void ToString_ForInvoked_Instance ( )
     {
+        var timestamp = DateTimeOffset.UtcNow ;
+        var height = 100u ;
+        var speed = 5 ;
+        var sut = new HeightSpeedDetails ( timestamp , height , speed ) ;
+
         var expected = $"Timestamp = {timestamp:O}, " +
                        $"Height = {height}, "         +
                        $"Speed = {speed}" ;

@@ -1,52 +1,39 @@
-using System.Globalization ;
-using Autofac.Extras.DynamicProxy ;
-using CsvHelper ;
-using CsvHelper.Configuration ;
-using CsvHelper.TypeConversion ;
-using Idasen.Aop.Aspects ;
+using System.Globalization;
+using Autofac.Extras.DynamicProxy;
+using CsvHelper;
+using Idasen.Aop.Aspects;
 
-namespace Idasen.BluetoothLE.Core.ServicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.ServicesDiscovery;
 
-[ Intercept ( typeof ( LogAspect ) ) ]
-public class OfficialGattServiceConverter
-    : DefaultTypeConverter
+[Intercept(typeof(LogAspect))]
+public sealed class OfficialGattServiceConverter
+    : ICsvConverter<ushort>
 {
-    public override object ConvertFromString ( string ?      text ,
-                                               IReaderRow    row ,
-                                               MemberMapData memberMapData )
+    public ushort Read(CsvReader reader, int index)
     {
-        Guard.ArgumentNotNull ( row ,
-                                nameof ( row ) ) ;
-        Guard.ArgumentNotNull ( memberMapData ,
-                                nameof ( memberMapData ) ) ;
+        ArgumentNullException.ThrowIfNull(reader);
 
-        var number = text?.Replace ( "0x" ,
-                                     "" ,
-                                     StringComparison.InvariantCulture ) ??
-                     string.Empty ;
+        var text = reader.GetString(index);
 
-        if ( string.IsNullOrWhiteSpace ( text ) )
-            return ( ushort )0 ;
+        var number = text.Replace ( "0x" ,
+                                    "" ,
+                                    StringComparison.InvariantCulture ) ;
 
-        return ushort.TryParse ( number ,
-                                 NumberStyles.HexNumber ,
-                                 CultureInfo.InvariantCulture ,
-                                 out var value )
+        if (string.IsNullOrWhiteSpace(text))
+            return 0;
+
+        return ushort.TryParse(number,
+                               NumberStyles.HexNumber,
+                               CultureInfo.InvariantCulture,
+                               out var value)
                    ? value
-                   : ushort.MaxValue ;
+                   : ushort.MaxValue;
     }
 
-    public override string ConvertToString ( object ?      value ,
-                                             IWriterRow    row ,
-                                             MemberMapData memberMapData )
+    public void Write(CsvWriter writer, ushort value)
     {
-        Guard.ArgumentNotNull ( row ,
-                                nameof ( row ) ) ;
-        Guard.ArgumentNotNull ( memberMapData ,
-                                nameof ( memberMapData ) ) ;
+        ArgumentNullException.ThrowIfNull(writer);
 
-        return value != null
-                   ? value.ToString ( ) ?? "null"
-                   : "null" ;
+        writer.WriteField(value.ToString(CultureInfo.InvariantCulture));
     }
 }

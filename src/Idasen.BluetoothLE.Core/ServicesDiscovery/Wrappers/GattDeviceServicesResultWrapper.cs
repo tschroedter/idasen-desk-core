@@ -28,8 +28,7 @@ public class GattDeviceServicesResultWrapper
 
         IReadOnlyList < GattDeviceService > services = _service.Services ?? [] ;
 
-        Services = services.Select ( s => serviceWrapperFactory1 ( s ) )
-                           .ToArray ( ) ;
+        Services = [.. services.Select ( s => serviceWrapperFactory1 ( s ) )] ;
     }
 
     public void Dispose ( )

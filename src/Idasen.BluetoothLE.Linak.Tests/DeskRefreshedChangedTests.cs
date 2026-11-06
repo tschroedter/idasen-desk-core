@@ -3,11 +3,10 @@ using System.Reactive.Subjects ;
 using Idasen.BluetoothLE.Linak.Interfaces ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public sealed class DeskRefreshedChangedTests
     : DeskRaiseEventForDeskBase < bool >
 {

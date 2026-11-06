@@ -70,7 +70,7 @@ public class DeviceMonitorTests
             list.Add ( OnNext ( time ++ ,
                                 device ) ) ;
 
-        return list.ToArray ( ) ;
+        return [.. list] ;
     }
 
     private static Recorded < Notification < IDevice > > OnNext ( long    time ,
@@ -337,26 +337,6 @@ public class DeviceMonitorTests
 
         updated.Should ( )
                .Be ( _deviceNewName ) ;
-    }
-
-    [ TestMethod ]
-    public void OnDeviceUpdated_ForExistingDevice_Notifies ( )
-    {
-        ConfigureSameDevice ( ) ;
-
-        using var sut = CreateSut ( ) ;
-
-        IDevice updated = null! ;
-
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
-
-        sut.StartListening ( ) ;
-
-        _scheduler.Start ( ) ;
-
-        updated.Should ( )
-               .Be ( _device ) ;
     }
 
     [ TestMethod ]

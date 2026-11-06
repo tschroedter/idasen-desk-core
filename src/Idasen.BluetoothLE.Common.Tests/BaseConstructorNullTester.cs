@@ -2,9 +2,9 @@ using Autofac ;
 using AutofacSerilogIntegration ;
 using FluentAssertions ;
 using FluentAssertions.Execution ;
-using Selkie.DefCon.One ;
-using Selkie.DefCon.One.Common ;
-using Selkie.DefCon.One.Interfaces ;
+using System.Linq.Expressions ;
+using System.Reflection ;
+using NSubstitute ;
 using Serilog ;
 using Serilog.Events ;
 using Serilog.Sinks.SystemConsole.Themes ;
@@ -16,6 +16,11 @@ public abstract class BaseConstructorNullTester < T >
     where T : class
 {
     private IContainer ? _container ;
+    // Lock to serialize creation of non-null argument instances which uses
+    // reflection, expression compilation and NSubstitute. Running these
+    // concurrently from parallel test runners caused intermittent failures.
+    // The actual lock is defined in a non-generic helper to avoid static
+    // field behavior on generic types which analyzers warn about.
 
     public abstract int NumberOfConstructorsPassed { get ; }
     public abstract int NumberOfConstructorsFailed { get ; }
@@ -44,7 +49,7 @@ public abstract class BaseConstructorNullTester < T >
         const string template = "[{Timestamp:HH:mm:ss.ffff} {Level:u3}] {Message:lj}{NewLine}{Exception}" ;
 
         Log.Logger = new LoggerConfiguration ( )
-                    .Enrich.WithCaller ( )
+                    // Enrichment intentionally omitted in tests
                     .MinimumLevel.Information ( )
                     .WriteTo.Console ( LogEventLevel.Information ,
                                        template ,
@@ -60,7 +65,6 @@ public abstract class BaseConstructorNullTester < T >
     protected virtual void RegisterModules ( ContainerBuilder builder )
     {
         builder.RegisterLogger ( ) ;
-        builder.RegisterModule < DefConOneModule > ( ) ;
     }
 
     protected virtual IContainer BuildContainer ( )
@@ -73,30 +77,272 @@ public abstract class BaseConstructorNullTester < T >
     [ TestMethod ]
     public virtual void Constructor_ForAnyParameterNullThrows_AllPassing ( )
     {
-        var tester = CreateTester ( ) ;
-
-        tester.Test < T > ( ) ;
+        var result = RunConstructorNullTests ( ) ;
 
         using ( new AssertionScope ( ) )
         {
-            tester.HasPassed
-                  .Should ( )
-                  .BeTrue ( "Has Passed" ) ;
+            var failedList = result.FailedConstructors is { Length: > 0 }
+                                 ? string.Join ( " | ", result.FailedConstructors )
+                                 : string.Empty ;
 
-            tester.ConstructorsToTest
+            result.HasPassed
+                  .Should ( )
+                  .BeTrue ( $"Has Passed. Failed constructors: {failedList}" ) ;
+
+            result.ConstructorsToTest
                   .Should ( )
                   .Be ( NumberOfConstructorsPassed ,
                         "ConstructorsToTest" ) ;
 
-            tester.ConstructorsFailed
+            result.ConstructorsFailed
                   .Should ( )
                   .Be ( NumberOfConstructorsFailed ,
                         "ConstructorsFailed" ) ;
         }
     }
 
-    protected virtual INotNullTester CreateTester ( )
+    private static ( bool HasPassed , int ConstructorsToTest , int ConstructorsFailed , string[] FailedConstructors )
+        RunConstructorNullTests ()
     {
-        return Container.Resolve < INotNullTester > ( ) ;
+        // Diagnostic: capture which constructors fail to help debugging intermittent failures
+        var failedConstructors = new List<string> ( ) ;
+
+        var hasPassed = true ;
+        var constructorsToTest = 0 ;
+        var constructorsFailed = 0 ;
+
+        var type = typeof ( T ) ;
+
+        var constructors = type.GetConstructors ( BindingFlags.Public | BindingFlags.Instance ) ;
+
+        foreach ( var ctor in constructors )
+        {
+            var parameters = ctor.GetParameters ( ) ;
+
+            if ( parameters.Length == 0 )
+                continue ;
+
+            // If every parameter is a value type or intentionally ignored by
+            // GuardIgnore, there is nothing to test for null-reference guarding.
+            var allSkippable = parameters.All ( p =>
+            {
+                if ( p.ParameterType.IsValueType )
+                    return true ;
+
+                var name = p.GetCustomAttributes ( false )
+                            .Select ( a => a.GetType ( ).Name )
+                            .FirstOrDefault ( ) ;
+
+                return name is "GuardIgnoreAttribute" or "GuardIgnore" ;
+            } ) ;
+
+            if ( allSkippable )
+                continue ;
+
+            constructorsToTest++ ;
+
+            var ctorPassed = true ;
+
+            for ( var i = 0 ; i < parameters.Length ; i++ )
+            {
+                // Skip value type parameters since they cannot be null and
+                // the null-constructor tester only verifies reference-type
+                // parameter null checks.
+                if (parameters[i].ParameterType.IsValueType)
+                    continue;
+
+                // Skip parameters marked with GuardIgnore attribute since the
+                // constructor intentionally does not guard them against null.
+                var hasGuardIgnore = parameters[i].GetCustomAttributes ( false )
+                                           .Any ( a =>
+                                                  {
+                                                      var name = a.GetType ( ).Name ;
+                                                      return name is "GuardIgnoreAttribute" or "GuardIgnore" ;
+                                                  } ) ;
+
+                if ( hasGuardIgnore )
+                    continue ;
+                var args = new object[ parameters.Length ] ;
+
+                for ( var j = 0 ; j < parameters.Length ; j++ )
+                {
+                    if ( j == i )
+                    {
+                        args[ j ] = parameters[ j ].ParameterType.IsValueType
+                                       ? Activator.CreateInstance ( parameters[ j ].ParameterType )!
+                                       : null! ;
+                    }
+                    else
+                    {
+                        args[ j ] = CreateNonNull ( parameters[ j ].ParameterType ) ;
+                    }
+                }
+
+                try
+                {
+                    _ = ctor.Invoke ( args ) ;
+                    ctorPassed = false ;
+                    var paramName = parameters[i].Name ?? i.ToString();
+                    var paramType = parameters[i].ParameterType.Name;
+                    failedConstructors.Add ( $"{ctor} - param[{i}] {paramName}:{paramType}" ) ;
+                    break ;
+                }
+                catch ( TargetInvocationException tie ) when ( tie.InnerException is ArgumentNullException )
+                {
+                    // expected
+                }
+                catch ( TargetInvocationException tie )
+                {
+                    // Constructor threw an exception different from ArgumentNullException
+                    ctorPassed = false ;
+                    var inner = tie.InnerException ;
+                    failedConstructors.Add ( $"{ctor} -> {inner?.GetType().Name}: {inner?.Message}" ) ;
+                    break ;
+                }
+                catch ( ArgumentNullException )
+                {
+                    // expected
+                }
+                catch ( Exception ex )
+                {
+                    ctorPassed = false ;
+                    failedConstructors.Add ( $"{ctor} -> {ex.GetType().Name}: {ex.Message}" ) ;
+                    break ;
+                }
+            }
+
+            if ( !ctorPassed )
+            {
+                constructorsFailed++ ;
+                hasPassed = false ;
+            }
+        }
+
+        if ( failedConstructors.Count > 0 )
+            Console.WriteLine ( $"Constructor null tester failed for: {string.Join ( " | ", failedConstructors )}" ) ;
+
+        return ( hasPassed , constructorsToTest , constructorsFailed , [.. failedConstructors] ) ;
+    }
+
+    private static object CreateNonNull ( Type t )
+    {
+        // Serialize creation of instances that rely on reflection, expression
+        // compilation or NSubstitute. These operations touch shared runtime
+        // state and caused race conditions when tests ran in parallel.
+        lock ( TestLocks.CreateNonNullLock )
+        {
+            if ( t == typeof ( string ) )
+                return "value" ;
+
+            if ( t.IsValueType )
+                return Activator.CreateInstance ( t )! ;
+
+            if ( t.IsInterface || t.IsAbstract )
+            {
+                try
+                {
+                    return Substitute.For ( [t] , [] ) ;
+                }
+                catch
+                {
+                    return new object ( ) ;
+                }
+            }
+
+            // Try to create a concrete instance. If the type has a parameterless constructor use it.
+            try
+            {
+                var instance = Activator.CreateInstance ( t ) ;
+                if ( instance != null )
+                    return instance ;
+            }
+            catch
+            {
+                // ignored - fallback below
+            }
+
+            // Try to find an assignable concrete type with parameterless ctor in loaded assemblies
+            try
+            {
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies ( ) ;
+
+                foreach ( var asm in assemblies )
+                {
+                    Type[] types ;
+
+                    try
+                    {
+                        types = asm.GetTypes ( ) ;
+                    }
+                    catch
+                    {
+                        continue ;
+                    }
+
+                    var candidate = types.FirstOrDefault ( x => t.IsAssignableFrom ( x ) && !x.IsAbstract && x.GetConstructor ( Type.EmptyTypes ) != null ) ;
+
+                    if ( candidate != null )
+                    {
+                        try
+                        {
+                            var inst = Activator.CreateInstance ( candidate ) ;
+                            if ( inst != null )
+                                return inst ;
+                        }
+                        catch
+                        {
+                            // continue searching
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // ignore
+            }
+
+            // Special handling for delegate types (Func<...> / Action<...>) used in many factories
+            if ( typeof ( Delegate ).IsAssignableFrom ( t ) )
+            {
+                try
+                {
+                    // Create a simple delegate that returns default(TResult) or does nothing for Action
+                    var invokeMethod = t.GetMethod ( "Invoke" ) ;
+                    if ( invokeMethod != null )
+                    {
+                        var parameters = invokeMethod.GetParameters ( ).Select ( p => Expression.Parameter ( p.ParameterType , p.Name ) ).ToArray ( ) ;
+                        Expression body ;
+
+                        if ( invokeMethod.ReturnType == typeof ( void ) )
+                        {
+                            body = Expression.Empty ( ) ;
+                        }
+                        else
+                        {
+                            var defaultValue = Expression.Default ( invokeMethod.ReturnType ) ;
+                            body = defaultValue ;
+                        }
+
+                        var lambda = Expression.Lambda ( t , body , parameters ) ;
+                        return lambda.Compile ( ) ;
+                    }
+                }
+                catch
+                {
+                    // ignore
+                }
+            }
+
+            // As a last resort, try to create an NSubstitute for the concrete type so it is assignable
+            try
+            {
+                return Substitute.For ( [t] , [] ) ;
+            }
+            catch
+            {
+                // fallback to plain object when substitute/creation fails
+                return new object ( ) ;
+            }
+        }
     }
 }

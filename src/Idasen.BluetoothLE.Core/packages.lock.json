@@ -4,17 +4,17 @@
     "net10.0-windows10.0.19041": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[9.3.0, )",
-        "resolved": "9.3.0",
-        "contentHash": "OXigGAa1oFYbHmI9lEEYYSRQvbtGC3AnNdg+4BEhHa0x8XlJrYOS7Sg5fZtmlrHPLp+gRsDnz2aqbsglNUnv0g=="
+        "requested": "[9.3.4, )",
+        "resolved": "9.3.4",
+        "contentHash": "sKldkrIDjhic/BtE6KBl50VjwnuVVOXMnJgh9CsG5uHa8IsGR1BkvjyF6UifPfXPfnkauPqJrAF0QF+JhhRTsw=="
       },
       "Autofac.Extras.DynamicProxy": {
         "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "0EBAve2CmfOsxAPbmO0dJwgLHtrdlSwjxSIcIwSZ03fgPUIyt8Y8LaOp2o8ieSMW8XUpx6vCTE334irE4J/CUA==",
+        "requested": "[8.1.0, )",
+        "resolved": "8.1.0",
+        "contentHash": "nvfnsOa0HZRXJ1vjJ90lCe5OpDsyvH487q3JGyODfFpIB4/gXHfooD0fC8ZfTcbaorv5nvrxev9leWms/87smg==",
         "dependencies": {
-          "Autofac": "9.3.0",
+          "Autofac": "9.3.2",
           "Castle.Core": "5.2.1"
         }
       },
@@ -30,9 +30,9 @@
       },
       "CsvHelper": {
         "type": "Direct",
-        "requested": "[33.1.0, )",
-        "resolved": "33.1.0",
-        "contentHash": "kqfTOZGrn7NarNeXgjh86JcpTHUoeQDMB8t9NVa/ZtlSYiV1rxfRnQ49WaJsob4AiGrbK0XDzpyKkBwai4F8eg=="
+        "requested": "[34.0.0, )",
+        "resolved": "34.0.0",
+        "contentHash": "yiFG6lPSgNFhraURmM/e4ROhbnNzMOZI1HxMvjNzn5lkc9dx3aN/sm/N4UM+rV6CPpZBQfrJfwEKUxkndeRKUQ=="
       },
       "JetBrains.Annotations": {
         "type": "Direct",
@@ -40,17 +40,11 @@
         "resolved": "2026.2.0",
         "contentHash": "drvAEaI7Xf4wU6dx4UTB9MoZWXZlraaQ0qoeThPQ411FxNhId7QdUTukIC9I8aUHP0ycAaGwZNKqSvfOZQvUlg=="
       },
-      "Selkie.DefCon.One.Common": {
-        "type": "Direct",
-        "requested": "[0.2.39, )",
-        "resolved": "0.2.39",
-        "contentHash": "3CgPQJJV3b2E/CV+O4eeCvQ/mIH7lRbzTAUciiQqXk0BYfWhjSjFnQkbHP1gCweJyKm8596mKXR4arEy7PQ2Bg=="
-      },
       "Serilog": {
         "type": "Direct",
-        "requested": "[4.3.1, )",
-        "resolved": "4.3.1",
-        "contentHash": "savYe7h5yRlkqBVOwP8cIRDOdqKiPmYCU4W87JH38sBmcKD5EBoXvQIw6bNEvZ/pTe1gsiye3VFCzBsoppGkXQ=="
+        "requested": "[4.4.0, )",
+        "resolved": "4.4.0",
+        "contentHash": "ZC6Le3rr4TVJJjS4KsQAesxeF1EhW9qcZmmG7eP5Y2G3+gTGkJEUXkq4+tZNPtyp05I0wWOxnIjwtxFweJsObw=="
       },
       "SerilogAnalyzer": {
         "type": "Direct",
@@ -60,9 +54,9 @@
       },
       "System.Reactive": {
         "type": "Direct",
-        "requested": "[6.1.0, )",
-        "resolved": "6.1.0",
-        "contentHash": "M5cCC1ZMkZr9jbSQGTHnVkb5TDN67qWCV7AP8TAHdGkvDlu0puT5NzemESNn9+HkYIDpWpocP68/i+/ame2/2w=="
+        "requested": "[7.0.0, )",
+        "resolved": "7.0.0",
+        "contentHash": "VYaSP2Kt+45GFnr3q7c/b4awT48VvueOJV4jPjdUXi5MxC9mSUy+HkJYtm8rGZ6fC3tNHG9gBu/YwNAR/FYqhg=="
       },
       "System.ValueTuple": {
         "type": "Direct",
@@ -86,9 +80,9 @@
       "idasen.aop": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extras.DynamicProxy": "[8.0.0, )",
+          "Autofac.Extras.DynamicProxy": "[8.1.0, )",
           "JetBrains.Annotations": "[2026.2.0, )",
-          "Serilog": "[4.3.1, )"
+          "Serilog": "[4.4.0, )"
         }
       }
     }

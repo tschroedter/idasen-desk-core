@@ -1,164 +1,87 @@
-using CsvHelper ;
-using CsvHelper.Configuration ;
-using FluentAssertions ;
-using Idasen.BluetoothLE.Common.Tests ;
-using Idasen.BluetoothLE.Core.ServicesDiscovery ;
-using NSubstitute ;
+using CsvHelper;
+using FluentAssertions;
+using Idasen.BluetoothLE.Core.ServicesDiscovery;
 
-namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery ;
+namespace Idasen.BluetoothLE.Core.Tests.ServicesDiscovery;
 
-[ TestClass ]
+[TestClass]
 public class OfficialGattServiceConverterTests
 {
-    private const string NotANumber = "not a number" ;
+    private const string NotANumber = "not a number";
 
-    private MemberMapData _memberMapData = null! ;
-    private IReaderRow    _readerRow     = null! ;
-    private string        _text          = null! ;
-    private uint          _value ;
-    private IWriterRow    _writerRow = null! ;
-
-    [ TestInitialize ]
-    public void Initialize ( )
+    [TestMethod]
+    public void Read_ForTextNull_Zero()
     {
-        _text      = "1800" ;
-        _value     = 6144u ;
-        _readerRow = Substitute.For < IReaderRow > ( ) ;
-        _writerRow = Substitute.For < IWriterRow > ( ) ;
+        using var reader = CsvReader.Create(new StringReader(","));
+        reader.Read();
 
-        var memberInfo = typeof ( TestClass ).GetMember ( "One" )
-                                             .First ( ) ;
-
-        _memberMapData = new MemberMapData ( memberInfo ) ;
+        CreateSut().Read(reader, 0)
+                   .Should()
+                   .Be(0);
     }
 
-    [ TestMethod ]
-    public void ConvertFromString_ForTextNull_Zero ( )
+    [TestMethod]
+    public void Read_ForReaderNull_Throws()
     {
-        CreateSut ( ).ConvertFromString ( null! ,
-                                          _readerRow ,
-                                          _memberMapData )
-                     .Should ( )
-                     .Be ( 0 ) ;
+        var action = () => {
+            CreateSut().Read(null!, 0);
+        };
+
+        action.Should()
+              .Throw<ArgumentNullException>();
     }
 
-    [ TestMethod ]
-    public void ConvertFromString_ForReaderRowNull_Throws ( )
+    [TestMethod]
+    public void Read_ForTextIsNumber_Number()
     {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).ConvertFromString ( _text ,
-                                                           null! ,
-                                                           _memberMapData ) ;
-                     } ;
+        var options = new CsvReaderOptions { HasHeader = false };
+        using var reader = CsvReader.Create(new StringReader("1800"), options);
+        reader.Read();
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( "row" ) ;
+        CreateSut().Read(reader, 0)
+                   .Should()
+                   .Be(0x1800);
     }
 
-    [ TestMethod ]
-    public void ConvertFromString_ForMemberMapDataNull_Throws ( )
+    [TestMethod]
+    public void Read_ForTextIsNotANumber_MaxValue()
     {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).ConvertFromString ( _text ,
-                                                           _readerRow ,
-                                                           null! ) ;
-                     } ;
+        var options = new CsvReaderOptions { HasHeader = false };
+        using var reader = CsvReader.Create(new StringReader(NotANumber), options);
+        reader.Read();
 
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( "memberMapData" ) ;
+        CreateSut().Read(reader, 0)
+                   .Should()
+                   .Be(ushort.MaxValue);
     }
 
-    [ TestMethod ]
-    public void ConvertFromString_ForTextIsNumber_Number ( )
+    [TestMethod]
+    public void Write_ForValidValue_WritesField()
     {
-        CreateSut ( ).ConvertFromString ( _text ,
-                                          _readerRow ,
-                                          _memberMapData )
-                     .Should ( )
-                     .Be ( 6144u ) ;
+        using var stringWriter = new StringWriter();
+        using var csvWriter = CsvWriter.Create(stringWriter);
+        var sut = CreateSut();
+        sut.Write(csvWriter, 6144);
+        csvWriter.Flush();
+
+        stringWriter.ToString()
+                     .Should()
+                     .Be("6144");
     }
 
-    [ TestMethod ]
-    public void ConvertFromString_ForTextIsNotANumber_MaxValue ( )
+    [TestMethod]
+    public void Write_ForWriterNull_Throws()
     {
-        CreateSut ( ).ConvertFromString ( NotANumber ,
-                                          _readerRow ,
-                                          _memberMapData )
-                     .Should ( )
-                     .Be ( ushort.MaxValue ) ;
+        var action = () => {
+            CreateSut().Write(null!, 6144);
+        };
+
+        action.Should()
+              .Throw<ArgumentNullException>();
     }
 
-    [ TestMethod ]
-    public void ConvertToString_ForValueNull_NullText ( )
+    private static OfficialGattServiceConverter CreateSut()
     {
-        CreateSut ( ).ConvertToString ( null! ,
-                                        _writerRow ,
-                                        _memberMapData )
-                     .Should ( )
-                     .Be ( "null" ) ;
-    }
-
-    [ TestMethod ]
-    public void ConvertToString_ForWriterRowNull_Throws ( )
-    {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).ConvertToString ( _value ,
-                                                         null! ,
-                                                         _memberMapData ) ;
-                     } ;
-
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( "row" ) ;
-    }
-
-    [ TestMethod ]
-    public void ConvertToString_ForMemberMapDataNull_Throws ( )
-    {
-        var action = ( ) =>
-                     {
-                         CreateSut ( ).ConvertToString ( _value ,
-                                                         _writerRow ,
-                                                         null! ) ;
-                     } ;
-
-        action.Should ( )
-              .Throw < ArgumentNullException > ( )
-              .WithParameter ( "memberMapData" ) ;
-    }
-
-    [ TestMethod ]
-    public void ConvertToString_ForValueIsNumber_String ( )
-    {
-        CreateSut ( ).ConvertToString ( _value ,
-                                        _writerRow ,
-                                        _memberMapData )
-                     .Should ( )
-                     .Be ( "6144" ) ;
-    }
-
-    [ TestMethod ]
-    public void ConvertToString_ForValueIsNotANumber_String ( )
-    {
-        CreateSut ( ).ConvertToString ( NotANumber ,
-                                        _writerRow ,
-                                        _memberMapData )
-                     .Should ( )
-                     .Be ( NotANumber ) ;
-    }
-
-    private static OfficialGattServiceConverter CreateSut ( )
-    {
-        return new OfficialGattServiceConverter ( ) ;
-    }
-
-    public class TestClass
-    {
-        public int One { get ; set ; }
+        return new OfficialGattServiceConverter();
     }
 }

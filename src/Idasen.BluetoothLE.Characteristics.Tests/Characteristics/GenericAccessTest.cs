@@ -152,7 +152,7 @@ public class GenericAccessTest
                  .Refresh ( ) ;
 
         _subjectAppearanceChanged.Received ( )
-                                 .OnNext ( RawValue1 ) ;
+                                 .OnNext ( RawValue2 ) ;
     }
 
     [ TestMethod ]
@@ -167,7 +167,7 @@ public class GenericAccessTest
                  .Refresh ( ) ;
 
         _subjectParametersChanged.Received ( )
-                                 .OnNext ( RawValue4 ) ;
+                                 .OnNext ( RawValue3 ) ;
     }
 
     [ TestMethod ]
@@ -182,7 +182,7 @@ public class GenericAccessTest
                  .Refresh ( ) ;
 
         _subjectResolutionChanged.Received ( )
-                                 .OnNext ( RawValue3 ) ;
+                                 .OnNext ( RawValue4 ) ;
     }
 
     [ TestMethod ]
@@ -197,7 +197,7 @@ public class GenericAccessTest
                  .Refresh ( ) ;
 
         _subjectDeviceNameChanged.Received ( )
-                                 .OnNext ( RawValue2 ) ;
+                                 .OnNext ( RawValue1 ) ;
     }
 
     protected override void AfterInitialize ( )
@@ -212,10 +212,10 @@ public class GenericAccessTest
         _subjectFactory = Substitute.For < Func < ISubject < IEnumerable < byte > > > > ( ) ;
 
         _subjectFactory.Invoke ( )
-                       .Returns ( _subjectAppearanceChanged ,
-                                  _subjectParametersChanged ,
+                       .Returns ( _subjectDeviceNameChanged ,
                                   _subjectResolutionChanged ,
-                                  _subjectDeviceNameChanged ) ;
+                                  _subjectParametersChanged ,
+                                  _subjectAppearanceChanged ) ;
     }
 
     protected override GenericAccess CreateSut ( )

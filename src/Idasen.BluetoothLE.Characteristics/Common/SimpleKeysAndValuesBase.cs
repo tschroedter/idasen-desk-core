@@ -70,15 +70,11 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
     }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary < TKey , TValue > ReadOnlyDictionary
+    [UsedImplicitly]
+    public IReadOnlyDictionary<TKey, TValue> GetReadOnlyDictionary()
     {
-        get
-        {
-            lock ( _padlock )
-            {
-                // Create a shallow copy snapshot to avoid exposing internal state
-                return new Dictionary < TKey , TValue > ( _dictionary ) ;
-            }
+        lock (_padlock) {
+            return new Dictionary<TKey, TValue>(_dictionary);
         }
     }
 
@@ -88,9 +84,11 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
         lock ( _padlock )
         {
             // Avoid invalid casts; only include keys that are truly strings
-            return _dictionary.Keys
+            return
+            [
+                .. _dictionary.Keys
                               .OfType < string > ( )
-                              .ToArray ( ) ;
+            ] ;
         }
     }
 }

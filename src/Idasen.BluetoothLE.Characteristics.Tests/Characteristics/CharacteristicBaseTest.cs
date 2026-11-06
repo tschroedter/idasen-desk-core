@@ -2,12 +2,10 @@ using System.Runtime.Versioning ;
 using Windows.Storage.Streams ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Idasen.TestLogger ;
 using JetBrains.Annotations ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 using Serilog ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Characteristics ;
@@ -42,16 +40,18 @@ public class CharacteristicBaseTest
            .Be ( GattServiceUuid ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Initialize_ForUnknownGattServiceUuid_Throws ( TestCharacteristicBase sut ,
-                                                              [ Freeze ] IDevice     device )
+    [ TestMethod ]
+    public void Initialize_ForUnknownGattServiceUuid_Throws ( )
     {
+        using var sut = CreateSut ( ) ;
+
         IReadOnlyDictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > gattServices =
             new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( ) ;
 
-        device.GattServices
+        Device.GattServices
               .Returns ( gattServices ) ;
 
+        // ReSharper disable once AccessToDisposedClosure
         Action action = ( ) => sut.Initialize < TestCharacteristicBase > ( ) ;
 
         action.Should ( )

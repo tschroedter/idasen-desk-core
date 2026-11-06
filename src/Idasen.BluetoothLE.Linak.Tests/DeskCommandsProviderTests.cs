@@ -19,11 +19,7 @@ public class DeskCommandsProviderTests
     public void TryGetValue_ForDeskCommandsMoveDown_ReturnsBytes ( )
     {
         // ReSharper disable once UseUtf8StringLiteral
-        var expected = new byte [ ]
-                       {
-                           0x46 ,
-                           0x00
-                       } ;
+        var expected = "F\0"u8.ToArray ( ) ;
 
         CreateSut ( ).TryGetValue ( DeskCommands.MoveDown ,
                                     out var bytes ) ;
@@ -45,11 +41,7 @@ public class DeskCommandsProviderTests
     public void TryGetValue_ForDeskCommandsMoveUp_ReturnsBytes ( )
     {
         // ReSharper disable once UseUtf8StringLiteral
-        var expected = new byte [ ]
-                       {
-                           0x47 ,
-                           0x00
-                       } ;
+        var expected = "G\0"u8.ToArray ( ) ;
 
         CreateSut ( ).TryGetValue ( DeskCommands.MoveUp ,
                                     out var bytes ) ;
@@ -71,11 +63,7 @@ public class DeskCommandsProviderTests
     public void TryGetValue_ForDeskCommandsMoveStop_ReturnsBytes ( )
     {
         // ReSharper disable once UseUtf8StringLiteral
-        var expected = new byte [ ]
-                       {
-                           0x48 ,
-                           0x00
-                       } ;
+        var expected = "H\0"u8.ToArray ( ) ;
 
         CreateSut ( ).TryGetValue ( DeskCommands.MoveStop ,
                                     out var bytes ) ;

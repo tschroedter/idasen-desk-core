@@ -1,15 +1,15 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Common ;
-using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class NotInitializeExceptionTests
 {
-    [ AutoDataTestMethod ]
-    public void Constructor_ForInvoked_SetsMessage ( string message )
+    [ TestMethod ]
+    public void Constructor_ForInvoked_SetsMessage ( )
     {
+        var message = "msg" ;
         var sut = new NotInitializeException ( message ) ;
 
         sut.Message

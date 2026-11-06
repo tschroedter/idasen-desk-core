@@ -140,7 +140,7 @@ public abstract class CharacteristicBase
             return ;
         }
 
-        Characteristics.Refresh ( DescriptionToUuid.ReadOnlyDictionary ) ;
+        Characteristics.Refresh ( DescriptionToUuid.GetReadOnlyDictionary ( ) ) ;
 
         var keys = Characteristics.Characteristics.Keys.ToArray ( ) ;
 

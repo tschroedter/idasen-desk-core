@@ -44,10 +44,10 @@ public class GattServicesProviderTests
         // ReSharper disable once ObjectCreationAsStatement
         var action = ( ) =>
                      {
-                         new GattServicesProvider ( null! ,
-                                                    _services ,
-                                                    _refreshed ,
-                                                    _device ) ;
+                         using var _ = new GattServicesProvider ( null! ,
+                                                                  _services ,
+                                                                  _refreshed ,
+                                                                  _device ) ;
                      } ;
 
         action.Should ( )
@@ -61,10 +61,10 @@ public class GattServicesProviderTests
         // ReSharper disable once ObjectCreationAsStatement
         var action = ( ) =>
                      {
-                         new GattServicesProvider ( _logger ,
-                                                    null! ,
-                                                    _refreshed ,
-                                                    _device ) ;
+                         using var _ = new GattServicesProvider ( _logger ,
+                                                                  null! ,
+                                                                  _refreshed ,
+                                                                  _device ) ;
                      } ;
 
         action.Should ( )
@@ -78,10 +78,10 @@ public class GattServicesProviderTests
         // ReSharper disable once ObjectCreationAsStatement
         var action = ( ) =>
                      {
-                         new GattServicesProvider ( _logger ,
-                                                    _services ,
-                                                    null! ,
-                                                    _device ) ;
+                         using var _ = new GattServicesProvider ( _logger ,
+                                                                  _services ,
+                                                                  null! ,
+                                                                  _device ) ;
                      } ;
 
         action.Should ( )
@@ -95,10 +95,10 @@ public class GattServicesProviderTests
         // ReSharper disable once ObjectCreationAsStatement
         var action = ( ) =>
                      {
-                         new GattServicesProvider ( _logger ,
-                                                    _services ,
-                                                    _refreshed ,
-                                                    null! ) ;
+                         using var _ = new GattServicesProvider ( _logger ,
+                                                                  _services ,
+                                                                  _refreshed ,
+                                                                  null! ) ;
                      } ;
 
         action.Should ( )
@@ -109,7 +109,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public void GattCommunicationStatus_ForGattResultIsNull_Unreachable ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         sut.GattCommunicationStatus
            .Should ( )
@@ -119,7 +119,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task Refresh_ForDisconnected_SetsGattCommunicationStatusUnreachable ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         _device.ConnectionStatus
                .Returns ( BluetoothConnectionStatus.Disconnected ) ;
@@ -134,7 +134,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task GattCommunicationStatus_ForConnectedAndServicesAvailable_Success ( )
     {
-        var sut    = CreateSut ( ) ;
+        using var sut    = CreateSut ( ) ;
         var result = Substitute.For < IGattDeviceServicesResultWrapper > ( ) ;
 
         result.Status
@@ -156,7 +156,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task Refresh_ForDisconnected_Notifies ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         _device.ConnectionStatus
                .Returns ( BluetoothConnectionStatus.Disconnected ) ;
@@ -170,7 +170,8 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task Refresh_ForConnected_SetsGattCommunicationStatusUnreachable ( )
     {
-        var sut    = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
+
         var result = Substitute.For < IGattDeviceServicesResultWrapper > ( ) ;
 
         result.Status
@@ -192,7 +193,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task Refresh_ForInvoked_ClearsServices ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         await sut.Refresh ( ) ;
 
@@ -203,9 +204,9 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task Refresh_ForConnected_Notifies ( )
     {
-        var sut      = CreateSut ( ) ;
-        var result   = Substitute.For < IGattDeviceServicesResultWrapper > ( ) ;
-        var expected = GattCommunicationStatus.ProtocolError ;
+        using var sut = CreateSut ( ) ;
+        var result    = Substitute.For < IGattDeviceServicesResultWrapper > ( ) ;
+        var expected  = GattCommunicationStatus.ProtocolError ;
 
         result.Status
               .Returns ( expected ) ;
@@ -225,7 +226,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task Refresh_ForConnectedAndCharacteristicsSuccess_AddsService ( )
     {
-        var sut             = CreateSut ( ) ;
+        using var sut       = CreateSut ( ) ;
         var result          = Substitute.For < IGattDeviceServicesResultWrapper > ( ) ;
         var service         = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
         var characteristics = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
@@ -258,7 +259,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public async Task Refresh_ForConnectedAndCharacteristicsUnreachable_DoesNotAddService ( )
     {
-        var sut             = CreateSut ( ) ;
+        using var sut       = CreateSut ( ) ;
         var result          = Substitute.For < IGattDeviceServicesResultWrapper > ( ) ;
         var service         = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
         var characteristics = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
@@ -291,7 +292,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public void Refreshed_ForInvoked_CallsSubject ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         using var disposable = sut.Refreshed
                                   .Subscribe ( DoNothing ) ;
@@ -303,7 +304,7 @@ public class GattServicesProviderTests
     [ TestMethod ]
     public void Services_ForInvoked_CallsServices ( )
     {
-        var sut = CreateSut ( ) ;
+        using var sut = CreateSut ( ) ;
 
         var readOnlyDict = new Dictionary < IGattDeviceServiceWrapper , IGattCharacteristicsResultWrapper > ( )
            .AsReadOnly ( ) ;
@@ -327,7 +328,9 @@ public class GattServicesProviderTests
                  .Dispose ( ) ;
     }
 
+#pragma warning disable S1186
     private void DoNothing ( GattCommunicationStatus status )
+#pragma warning restore S1186
     {
     }
 

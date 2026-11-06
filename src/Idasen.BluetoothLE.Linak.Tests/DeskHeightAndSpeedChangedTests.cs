@@ -1,13 +1,12 @@
-using System.Reactive.Linq ;
-using System.Reactive.Subjects ;
-using Idasen.BluetoothLE.Linak.Interfaces ;
-using Microsoft.Reactive.Testing ;
-using NSubstitute ;
-using Selkie.AutoMocking ;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Idasen.BluetoothLE.Linak.Interfaces;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
 
 namespace Idasen.BluetoothLE.Linak.Tests ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class DeskHeightAndSpeedChangedTests
     : DeskRaiseEventForDeskBase < HeightSpeedDetails >
 {

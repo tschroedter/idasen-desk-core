@@ -14,15 +14,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="8.10.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
-        <PackageReference Include="MSTest.TestAdapter" Version="4.2.3" />
-        <PackageReference Include="MSTest.TestFramework" Version="4.2.3" />
-        <PackageReference Include="coverlet.collector" Version="10.0.1">
+        <PackageReference Include="FluentAssertions" Version="8.11.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+        <PackageReference Include="MSTest.TestAdapter" Version="4.5.2" />
+        <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
+        <PackageReference Include="coverlet.collector" Version="10.1.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Selkie.DefCon.One" Version="0.2.39" />
+        <PackageReference Include="NSubstitute" Version="6.2.0" />
     </ItemGroup>
 
     <ItemGroup>

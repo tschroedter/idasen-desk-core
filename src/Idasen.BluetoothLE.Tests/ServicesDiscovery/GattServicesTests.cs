@@ -2,18 +2,19 @@ using FluentAssertions ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Idasen.BluetoothLE.Core.ServicesDiscovery ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Tests.ServicesDiscovery ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class GattServicesTests
 {
-    [ AutoDataTestMethod ]
-    public void Indexer_ForServiceAndResult_SetsKeyAndValue ( GattServices                      sut ,
-                                                              IGattDeviceServiceWrapper         service ,
-                                                              IGattCharacteristicsResultWrapper result )
+    [ TestMethod ]
+    public void Indexer_ForServiceAndResult_SetsKeyAndValue ( )
     {
+        using var sut     = new GattServices ( ) ;
+        var       service = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+
         sut [ service ] = result ;
 
         sut [ service ]
@@ -21,11 +22,13 @@ public class GattServicesTests
            .Be ( result ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Indexer_ForServiceAndResult_UpdatesCount ( GattServices                      sut ,
-                                                           IGattDeviceServiceWrapper         service ,
-                                                           IGattCharacteristicsResultWrapper result )
+    [ TestMethod ]
+    public void Indexer_ForServiceAndResult_UpdatesCount ( )
     {
+        using var sut     = new GattServices ( ) ;
+        var       service = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+
         sut [ service ] = result ;
 
         sut.Count
@@ -33,13 +36,15 @@ public class GattServicesTests
            .Be ( 1 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_DisposesService1 ( GattServices                      sut ,
-                                                    IGattDeviceServiceWrapper         service1 ,
-                                                    IGattCharacteristicsResultWrapper result1 ,
-                                                    IGattDeviceServiceWrapper         service2 ,
-                                                    IGattCharacteristicsResultWrapper result2 )
+    [ TestMethod ]
+    public void Clear_ForInvoked_DisposesService1 ( )
     {
+        using var sut      = new GattServices ( ) ;
+        var       service1 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result1  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+        var       service2 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result2  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
 
@@ -49,13 +54,15 @@ public class GattServicesTests
                 .Dispose ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_DisposesService2 ( GattServices                      sut ,
-                                                    IGattDeviceServiceWrapper         service1 ,
-                                                    IGattCharacteristicsResultWrapper result1 ,
-                                                    IGattDeviceServiceWrapper         service2 ,
-                                                    IGattCharacteristicsResultWrapper result2 )
+    [ TestMethod ]
+    public void Clear_ForInvoked_DisposesService2 ( )
     {
+        using var sut      = new GattServices ( ) ;
+        var       service1 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result1  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+        var       service2 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result2  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
 
@@ -66,11 +73,13 @@ public class GattServicesTests
            .Be ( 0 ) ; // Added assertion to verify the count is zero after Clear is invoked
     }
 
-    [ AutoDataTestMethod ]
-    public void Clear_ForInvoked_SetsCountToZero ( GattServices                      sut ,
-                                                   IGattDeviceServiceWrapper         service ,
-                                                   IGattCharacteristicsResultWrapper result )
+    [ TestMethod ]
+    public void Clear_ForInvoked_SetsCountToZero ( )
     {
+        using var sut     = new GattServices ( ) ;
+        var       service = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+
         sut [ service ] = result ;
 
         sut.Clear ( ) ;
@@ -80,13 +89,15 @@ public class GattServicesTests
            .Be ( 0 ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesService1 ( GattServices                      sut ,
-                                                      IGattDeviceServiceWrapper         service1 ,
-                                                      IGattCharacteristicsResultWrapper result1 ,
-                                                      IGattDeviceServiceWrapper         service2 ,
-                                                      IGattCharacteristicsResultWrapper result2 )
+    [ TestMethod ]
+    public void Dispose_ForInvoked_DisposesService1 ( )
     {
+        var sut      = new GattServices ( ) ;
+        var       service1 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result1  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+        var       service2 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result2  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
 
@@ -96,13 +107,15 @@ public class GattServicesTests
                 .Dispose ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Dispose_ForInvoked_DisposesService2 ( GattServices                      sut ,
-                                                      IGattDeviceServiceWrapper         service1 ,
-                                                      IGattCharacteristicsResultWrapper result1 ,
-                                                      IGattDeviceServiceWrapper         service2 ,
-                                                      IGattCharacteristicsResultWrapper result2 )
+    [ TestMethod ]
+    public void Dispose_ForInvoked_DisposesService2 ( )
     {
+        var sut      = new GattServices ( ) ;
+        var       service1 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result1  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+        var       service2 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result2  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+
         sut [ service1 ] = result1 ;
         sut [ service2 ] = result2 ;
 
@@ -112,11 +125,13 @@ public class GattServicesTests
                 .Dispose ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void ReadOnlyDictionary_ForInvoked_ContainsService1 ( GattServices                      sut ,
-                                                                 IGattDeviceServiceWrapper         service ,
-                                                                 IGattCharacteristicsResultWrapper result )
+    [ TestMethod ]
+    public void ReadOnlyDictionary_ForInvoked_ContainsService1 ( )
     {
+        using var sut     = new GattServices ( ) ;
+        var       service = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
+        var       result  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
+
         sut [ service ] = result ;
 
         sut.ReadOnlyDictionary [ service ]

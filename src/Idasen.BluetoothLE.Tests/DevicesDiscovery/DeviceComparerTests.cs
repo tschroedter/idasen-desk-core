@@ -1,58 +1,65 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Core ;
 using Idasen.BluetoothLE.Core.DevicesDiscovery ;
-using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using NSubstitute ;
-using Selkie.AutoMocking ;
 
 namespace Idasen.BluetoothLE.Tests.DevicesDiscovery ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class DeviceComparerTests
 {
-    [ AutoDataTestMethod ]
-    public void IsEquivalentTo_ForBothNull_ReturnsFalse ( DeviceComparer sut )
+    [ TestMethod ]
+    public void IsEquivalentTo_ForBothNull_ReturnsFalse ( )
     {
+        var sut = new DeviceComparer ( ) ;
+
         sut.IsEquivalentTo ( null ,
                              null )
            .Should ( )
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void IsEquivalentTo_ForDeviceAIsNull_ReturnsFalse ( DeviceComparer sut ,
-                                                               IDevice        device )
+    [ TestMethod ]
+    public void IsEquivalentTo_ForDeviceAIsNull_ReturnsFalse ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var device = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "n" , 0 ) ;
+
         sut.IsEquivalentTo ( null ,
                              device )
            .Should ( )
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void IsEquivalentTo_ForDeviceBIsNull_ReturnsFalse ( DeviceComparer sut ,
-                                                               IDevice        device )
+    [ TestMethod ]
+    public void IsEquivalentTo_ForDeviceBIsNull_ReturnsFalse ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var device = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "n" , 0 ) ;
+
         sut.IsEquivalentTo ( device ,
                              null )
            .Should ( )
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void IsEquivalentTo_ForSameDevice_ReturnsTrue ( DeviceComparer sut ,
-                                                           IDevice        device )
+    [ TestMethod ]
+    public void IsEquivalentTo_ForSameDevice_ReturnsTrue ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var device = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "n" , 0 ) ;
+
         sut.IsEquivalentTo ( device ,
                              device )
            .Should ( )
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void IsEquivalentTo_For2DeviceDifferentName_ReturnsTrue ( DeviceComparer sut ,
-                                                                     IDevice        deviceA )
+    [ TestMethod ]
+    public void IsEquivalentTo_For2DeviceDifferentName_ReturnsTrue ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "name" , 0 ) ;
+
         var deviceB = new Device ( deviceA.BroadcastTime ,
                                    deviceA.Address ,
                                    "Other Name" ,
@@ -64,10 +71,12 @@ public class DeviceComparerTests
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void IsEquivalentTo_For2DeviceDifferentBroadcastTime_ReturnsTrue ( DeviceComparer sut ,
-                                                                              IDevice        deviceA )
+    [ TestMethod ]
+    public void IsEquivalentTo_For2DeviceDifferentBroadcastTime_ReturnsTrue ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "name" , 0 ) ;
+
         var deviceB = new Device ( new DateTimeOffsetWrapper ( ) ,
                                    deviceA.Address ,
                                    deviceA.Name ,
@@ -79,12 +88,11 @@ public class DeviceComparerTests
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void IsEquivalentTo_For2DeviceRawSignalStrengthInDBm_ReturnsTrue ( DeviceComparer sut ,
-                                                                              IDevice        deviceA )
+    [ TestMethod ]
+    public void IsEquivalentTo_For2DeviceRawSignalStrengthInDBm_ReturnsTrue ( )
     {
-        deviceA.RawSignalStrengthInDBm
-               .Returns ( ( short )- 1 ) ;
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "n" , -1 ) ;
 
         var deviceB = new Device ( deviceA.BroadcastTime ,
                                    deviceA.Address ,
@@ -97,12 +105,11 @@ public class DeviceComparerTests
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void IsEquivalentTo_For2DevicesDifferentAddress_ReturnsFalse ( DeviceComparer sut ,
-                                                                          IDevice        deviceA )
+    [ TestMethod ]
+    public void IsEquivalentTo_For2DevicesDifferentAddress_ReturnsFalse ( )
     {
-        deviceA.Address
-               .Returns ( 0ul ) ;
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 0ul , "n" , 0 ) ;
 
         var deviceB = new Device ( deviceA.BroadcastTime ,
                                    1ul ,
@@ -115,49 +122,59 @@ public class DeviceComparerTests
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Equals_ForBothNull_ReturnsFalse ( DeviceComparer sut )
+    [ TestMethod ]
+    public void Equals_ForBothNull_ReturnsFalse ( )
     {
+        var sut = new DeviceComparer ( ) ;
+
         sut.Equals ( null ,
                      null )
            .Should ( )
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Equals_ForDeviceAIsNull_ReturnsFalse ( DeviceComparer sut ,
-                                                       IDevice        device )
+    [ TestMethod ]
+    public void Equals_ForDeviceAIsNull_ReturnsFalse ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var device = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "n" , 0 ) ;
+
         sut.Equals ( null ,
                      device )
            .Should ( )
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Equals_ForDeviceBIsNull_ReturnsFalse ( DeviceComparer sut ,
-                                                       IDevice        device )
+    [ TestMethod ]
+    public void Equals_ForDeviceBIsNull_ReturnsFalse ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var device = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "n" , 0 ) ;
+
         sut.Equals ( device ,
                      null )
            .Should ( )
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Equals_ForTheSameDevice_ReturnsTrue ( DeviceComparer sut ,
-                                                      IDevice        deviceA )
+    [ TestMethod ]
+    public void Equals_ForTheSameDevice_ReturnsTrue ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "n" , 0 ) ;
+
         sut.Equals ( deviceA ,
                      deviceA )
            .Should ( )
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Equals_For2DeviceDifferentName_ReturnsFalse ( DeviceComparer sut ,
-                                                              IDevice        deviceA )
+    [ TestMethod ]
+    public void Equals_For2DeviceDifferentName_ReturnsFalse ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "name" , 0 ) ;
+
         var deviceB = new Device ( deviceA.BroadcastTime ,
                                    deviceA.Address ,
                                    "Other Name" ,
@@ -169,10 +186,12 @@ public class DeviceComparerTests
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Equals_For2DeviceDifferentBroadcastTime_ReturnsTrue ( DeviceComparer sut ,
-                                                                      IDevice        deviceA )
+    [ TestMethod ]
+    public void Equals_For2DeviceDifferentBroadcastTime_ReturnsTrue ( )
     {
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "name" , 0 ) ;
+
         var deviceB = new Device ( new DateTimeOffsetWrapper ( ) ,
                                    deviceA.Address ,
                                    deviceA.Name ,
@@ -184,12 +203,11 @@ public class DeviceComparerTests
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Equals_For2DeviceRawSignalStrengthInDBm_ReturnsTrue ( DeviceComparer sut ,
-                                                                      IDevice        deviceA )
+    [ TestMethod ]
+    public void Equals_For2DeviceRawSignalStrengthInDBm_ReturnsTrue ( )
     {
-        deviceA.RawSignalStrengthInDBm
-               .Returns ( ( short )- 1 ) ;
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 1ul , "n" , -1 ) ;
 
         var deviceB = new Device ( deviceA.BroadcastTime ,
                                    deviceA.Address ,
@@ -202,12 +220,11 @@ public class DeviceComparerTests
            .BeFalse ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Equals_For2DevicesDifferentAddress_ReturnsFalse ( DeviceComparer sut ,
-                                                                  IDevice        deviceA )
+    [ TestMethod ]
+    public void Equals_For2DevicesDifferentAddress_ReturnsFalse ( )
     {
-        deviceA.Address
-               .Returns ( 0ul ) ;
+        var sut = new DeviceComparer ( ) ;
+        var deviceA = new Device ( new DateTimeOffsetWrapper ( ) , 0ul , "n" , 0 ) ;
 
         var deviceB = new Device ( deviceA.BroadcastTime ,
                                    1ul ,

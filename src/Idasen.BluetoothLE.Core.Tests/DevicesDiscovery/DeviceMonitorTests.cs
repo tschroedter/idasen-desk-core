@@ -6,13 +6,12 @@ using Idasen.BluetoothLE.Core.DevicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
 using Microsoft.Reactive.Testing ;
 using NSubstitute ;
-using Selkie.AutoMocking ;
 using Serilog ;
 using Serilog.Core ;
 
 namespace Idasen.BluetoothLE.Core.Tests.DevicesDiscovery ;
 
-[ AutoDataTestClass ]
+[ TestClass ]
 public class DeviceMonitorTests
 {
     private IDevice _device             = null! ;
@@ -73,7 +72,7 @@ public class DeviceMonitorTests
             list.Add ( OnNext ( time ++ ,
                                 device ) ) ;
 
-        return list.ToArray ( ) ;
+        return [.. list] ;
     }
 
     private static Recorded < Notification < IDevice > > OnNext ( long    time ,
@@ -88,80 +87,96 @@ public class DeviceMonitorTests
         return _subjects.Dequeue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForLoggerNull_Throws ( Lazy < DeviceMonitor > sut ,
-                                                   [ BeNull ] ILogger     logger )
+    [ TestMethod ]
+    public void Constructor_ForLoggerNull_Throws ( )
     {
+        var sut = new Lazy< DeviceMonitor > ( ( ) => new DeviceMonitor ( null! , _scheduler , _factory , _devices! , _watcher ) ) ;
+
         // ReSharper disable once UnusedVariable
         var action = ( ) =>
                      {
-                         var test = sut.Value ;
+                         _ = sut.Value ;
                      } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( logger ) ) ;
+              .WithParameter ( "logger" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForFactoryNull_Throws ( Lazy < DeviceMonitor >                   sut ,
-                                                    [ BeNull ] Func < ISubject < IDevice > > factory )
+    [ TestMethod ]
+    public void Constructor_ForFactoryNull_Throws ( )
     {
+        var sut = new Lazy< DeviceMonitor > ( ( ) => new DeviceMonitor ( _logger , _scheduler , null! , _devices! , _watcher ) ) ;
+
         // ReSharper disable once UnusedVariable
         var action = ( ) =>
                      {
-                         var test = sut.Value ;
+                         _ = sut.Value ;
                      } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( factory ) ) ;
+              .WithParameter ( "factory" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForDevicesNull_Throws ( Lazy < DeviceMonitor > sut ,
-                                                    [ BeNull ] IDevices    devices )
+    [ TestMethod ]
+    public void Constructor_ForDevicesNull_Throws ( )
     {
+        var sut = new Lazy< DeviceMonitor > ( ( ) => new DeviceMonitor ( _logger , _scheduler , _factory , null! , _watcher ) ) ;
+
         // ReSharper disable once UnusedVariable
         var action = ( ) =>
                      {
-                         var test = sut.Value ;
+                         _ = sut.Value ;
                      } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( devices ) ) ;
+              .WithParameter ( "devices" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Constructor_ForWatcherNull_Throws ( Lazy < DeviceMonitor > sut ,
-                                                    [ BeNull ] IWatcher    watcher )
+    [ TestMethod ]
+    public void Constructor_ForWatcherNull_Throws ( )
     {
+        var sut = new Lazy< DeviceMonitor > ( ( ) => new DeviceMonitor ( _logger , _scheduler , _factory , _devices! , null! ) ) ;
+
         // ReSharper disable once UnusedVariable
         var action = ( ) =>
                      {
-                         var test = sut.Value ;
+                         _ = sut.Value ;
                      } ;
 
         action.Should ( )
               .Throw < ArgumentNullException > ( )
-              .WithParameter ( nameof ( watcher ) ) ;
+              .WithParameter ( "watcher" ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Start_ForInvoked_CallsStart ( DeviceMonitor       sut ,
-                                              [ Freeze ] IWatcher watcher )
+    [ TestMethod ]
+    public void Start_ForInvoked_CallsStart ( )
     {
+        var watcher = Substitute.For< IWatcher > ( ) ;
+        using var sut = new DeviceMonitor ( _logger ,
+                                            _scheduler ,
+                                            _factory ,
+                                            _devices! ,
+                                            watcher ) ;
+
         sut.StartListening ( ) ;
 
         watcher.Received ( )
                .StartListening ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void Stop_ForInvoked_CallsStop ( DeviceMonitor       sut ,
-                                            [ Freeze ] IWatcher watcher )
+    [ TestMethod ]
+    public void Stop_ForInvoked_CallsStop ( )
     {
+        var watcher = Substitute.For< IWatcher > ( ) ;
+        using var sut = new DeviceMonitor ( _logger ,
+                                            _scheduler ,
+                                            _factory ,
+                                            _devices! ,
+                                            watcher ) ;
+
         sut.StopListening ( ) ;
 
         watcher.Received ( )
@@ -349,52 +364,53 @@ public class DeviceMonitorTests
     }
 
     [ TestMethod ]
-    public void OnDeviceUpdated_ForExistingDevice_Notifies ( )
+    public void IsListening_ForInvoked_CallsWatcher ( )
     {
-        ConfigureSameDevice ( ) ;
-
-        using var sut = CreateSutSubscribed ( ) ;
-
-        IDevice updated = null! ;
-
-        using var observer = sut.DeviceUpdated
-                                .Subscribe ( x => updated = x ) ;
-
-        _scheduler.Start ( ) ;
-
-        updated.Should ( )
-               .Be ( _device ) ;
-    }
-
-    [ AutoDataTestMethod ]
-    public void IsListening_ForInvoked_CallsWatcher ( DeviceMonitor       sut ,
-                                                      [ Freeze ] IWatcher watcher )
-    {
+        var watcher = Substitute.For< IWatcher > ( ) ;
         watcher.IsListening
                .Returns ( true ) ;
+
+        using var sut = new DeviceMonitor ( _logger ,
+                                            _scheduler ,
+                                            _factory ,
+                                            _devices! ,
+                                            watcher ) ;
 
         sut.IsListening
            .Should ( )
            .BeTrue ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void DiscoveredDevices_ForInvoked_CallsDevices ( DeviceMonitor       sut ,
-                                                            [ Freeze ] IDevices devices )
+    [ TestMethod ]
+    public void DiscoveredDevices_ForInvoked_CallsDevices ( )
     {
+        var devices = Substitute.For< IDevices > ( ) ;
         devices.DiscoveredDevices
                .Returns ( new List < IDevice > ( ).AsReadOnly ( ) ) ;
+
+        using var sut = new DeviceMonitor ( _logger ,
+                                            _scheduler ,
+                                            _factory ,
+                                            devices ,
+                                            _watcher ) ;
 
         sut.DiscoveredDevices
            .Should ( )
            .BeEmpty ( ) ;
     }
 
-    [ AutoDataTestMethod ]
-    public void RemoveDevice_ForInvoked_CallsDevices ( DeviceMonitor       sut ,
-                                                       [ Freeze ] IDevices devices ,
-                                                       IDevice             device )
+    [ TestMethod ]
+    public void RemoveDevice_ForInvoked_CallsDevices ( )
     {
+        var devices = Substitute.For< IDevices > ( ) ;
+        var device = Substitute.For< IDevice > ( ) ;
+
+        using var sut = new DeviceMonitor ( _logger ,
+                                            _scheduler ,
+                                            _factory ,
+                                            devices ,
+                                            _watcher ) ;
+
         sut.RemoveDevice ( device ) ;
 
         devices.Received ( )

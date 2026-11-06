@@ -5,7 +5,6 @@ using Idasen.Aop ;
 using Idasen.Aop.Aspects ;
 using Idasen.BluetoothLE.Core.Interfaces ;
 using Idasen.BluetoothLE.Core.Interfaces.DevicesDiscovery ;
-using Selkie.DefCon.One.Common ;
 
 namespace Idasen.BluetoothLE.Core.DevicesDiscovery ;
 
@@ -32,10 +31,10 @@ public class Device
         RawSignalStrengthInDBm = device.RawSignalStrengthInDBm ;
     }
 
-    public Device ( IDateTimeOffset          broadcastTime ,
-                    ulong                    address ,
-                    [ GuardIgnore ] string ? name ,
-                    short                    rawSignalStrengthInDBm )
+    public Device ( IDateTimeOffset broadcastTime ,
+                    ulong           address ,
+                    string ?        name ,
+                    short           rawSignalStrengthInDBm )
     {
         Guard.ArgumentNotNull ( broadcastTime ,
                                 nameof ( broadcastTime ) ) ;

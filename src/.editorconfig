@@ -171,4 +171,7 @@ build_property.Nullable = enable
 # Analyzer severities examples
 dotnet_diagnostic.CA2000.severity = warning
 
+[**/*Tests/**/*.cs]
+resharper_access_to_disposed_closure_highlighting = none
+
 # End of file
