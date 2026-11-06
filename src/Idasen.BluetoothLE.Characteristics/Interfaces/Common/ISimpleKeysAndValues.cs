@@ -1,5 +1,4 @@
 // ReSharper disable UnusedMemberInSuper.Global
-
 // ReSharper disable InvalidXmlDocComment
 
 namespace Idasen.BluetoothLE.Characteristics.Interfaces.Common ;
