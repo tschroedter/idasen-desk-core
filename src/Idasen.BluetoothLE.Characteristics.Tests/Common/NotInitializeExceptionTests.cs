@@ -1,6 +1,5 @@
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Common ;
-using NSubstitute ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 

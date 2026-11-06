@@ -71,9 +71,9 @@ public sealed class AllGattCharacteristicsProvider
         using var csv = CsvReader.Create(reader,
                                          options);
 
-        var readCsvfile = csv.GetRecords<CsvGattCharacteristic>()
+        var readCsvFile = csv.GetRecords<CsvGattCharacteristic>()
                              .ToArray();
 
-        return readCsvfile;
+        return readCsvFile;
     }
 }

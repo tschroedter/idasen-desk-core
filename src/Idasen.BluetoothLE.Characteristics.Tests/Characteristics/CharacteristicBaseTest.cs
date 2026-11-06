@@ -2,7 +2,6 @@ using System.Runtime.Versioning ;
 using Windows.Storage.Streams ;
 using FluentAssertions ;
 using Idasen.BluetoothLE.Characteristics.Characteristics ;
-using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery ;
 using Idasen.BluetoothLE.Core.Interfaces.ServicesDiscovery.Wrappers ;
 using Idasen.TestLogger ;
 using JetBrains.Annotations ;

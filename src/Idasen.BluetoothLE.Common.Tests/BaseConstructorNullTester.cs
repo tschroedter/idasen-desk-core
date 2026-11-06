@@ -1,4 +1,3 @@
-using System ;
 using Autofac ;
 using AutofacSerilogIntegration ;
 using FluentAssertions ;
@@ -106,7 +105,7 @@ public abstract class BaseConstructorNullTester < T >
         RunConstructorNullTests ()
     {
         // Diagnostic: capture which constructors fail to help debugging intermittent failures
-        var failedCtors = new List<string> ( ) ;
+        var failedConstructors = new List<string> ( ) ;
 
         var hasPassed = true ;
         var constructorsToTest = 0 ;
@@ -114,9 +113,9 @@ public abstract class BaseConstructorNullTester < T >
 
         var type = typeof ( T ) ;
 
-        var ctors = type.GetConstructors ( BindingFlags.Public | BindingFlags.Instance ) ;
+        var constructors = type.GetConstructors ( BindingFlags.Public | BindingFlags.Instance ) ;
 
-        foreach ( var ctor in ctors )
+        foreach ( var ctor in constructors )
         {
             var parameters = ctor.GetParameters ( ) ;
 
@@ -188,7 +187,7 @@ public abstract class BaseConstructorNullTester < T >
                     ctorPassed = false ;
                     var paramName = parameters[i].Name ?? i.ToString();
                     var paramType = parameters[i].ParameterType.Name;
-                    failedCtors.Add ( $"{ctor} - param[{i}] {paramName}:{paramType}" ) ;
+                    failedConstructors.Add ( $"{ctor} - param[{i}] {paramName}:{paramType}" ) ;
                     break ;
                 }
                 catch ( TargetInvocationException tie ) when ( tie.InnerException is ArgumentNullException )
@@ -201,7 +200,7 @@ public abstract class BaseConstructorNullTester < T >
                     // Constructor threw an exception different from ArgumentNullException
                     ctorPassed = false ;
                     var inner = tie.InnerException ;
-                    failedCtors.Add ( $"{ctor} -> {inner?.GetType().Name}: {inner?.Message}" ) ;
+                    failedConstructors.Add ( $"{ctor} -> {inner?.GetType().Name}: {inner?.Message}" ) ;
                     break ;
                 }
                 catch ( ArgumentNullException )
@@ -212,7 +211,7 @@ public abstract class BaseConstructorNullTester < T >
                 catch ( Exception ex )
                 {
                     ctorPassed = false ;
-                    failedCtors.Add ( $"{ctor} -> {ex.GetType().Name}: {ex.Message}" ) ;
+                    failedConstructors.Add ( $"{ctor} -> {ex.GetType().Name}: {ex.Message}" ) ;
                     break ;
                 }
             }
@@ -224,10 +223,10 @@ public abstract class BaseConstructorNullTester < T >
             }
         }
 
-        if ( failedCtors.Count > 0 )
-            Console.WriteLine ( $"Constructor null tester failed for: {string.Join ( " | ", failedCtors )}" ) ;
+        if ( failedConstructors.Count > 0 )
+            Console.WriteLine ( $"Constructor null tester failed for: {string.Join ( " | ", failedConstructors )}" ) ;
 
-        return ( hasPassed , constructorsToTest , constructorsFailed , failedCtors.ToArray ( ) ) ;
+        return ( hasPassed , constructorsToTest , constructorsFailed , failedConstructors.ToArray ( ) ) ;
     }
 
     private static object CreateNonNull ( Type t )
@@ -237,118 +236,118 @@ public abstract class BaseConstructorNullTester < T >
         // state and caused race conditions when tests ran in parallel.
         lock ( TestLocks.CreateNonNullLock )
         {
-        if ( t == typeof ( string ) )
-            return "value" ;
+            if ( t == typeof ( string ) )
+                return "value" ;
 
-        if ( t.IsValueType )
-            return Activator.CreateInstance ( t )! ;
+            if ( t.IsValueType )
+                return Activator.CreateInstance ( t )! ;
 
-        if ( t.IsInterface || t.IsAbstract )
-        {
-            try
+            if ( t.IsInterface || t.IsAbstract )
             {
-                return Substitute.For ( new[] { t } , Array.Empty<object>() ) ;
-            }
-            catch
-            {
-                return new object ( ) ;
-            }
-        }
-
-        // Try to create a concrete instance. If the type has a parameterless constructor use it.
-        try
-        {
-            var instance = Activator.CreateInstance ( t ) ;
-            if ( instance != null )
-                return instance ;
-        }
-        catch
-        {
-            // ignored - fallback below
-        }
-
-        // Try to find an assignable concrete type with parameterless ctor in loaded assemblies
-        try
-        {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies ( ) ;
-
-            foreach ( var asm in assemblies )
-            {
-                Type[] types ;
-
                 try
                 {
-                    types = asm.GetTypes ( ) ;
+                    return Substitute.For ( new[] { t } , Array.Empty<object>() ) ;
                 }
                 catch
                 {
-                    continue ;
+                    return new object ( ) ;
                 }
+            }
 
-                var candidate = types.FirstOrDefault ( x => t.IsAssignableFrom ( x ) && !x.IsAbstract && x.GetConstructor ( Type.EmptyTypes ) != null ) ;
+            // Try to create a concrete instance. If the type has a parameterless constructor use it.
+            try
+            {
+                var instance = Activator.CreateInstance ( t ) ;
+                if ( instance != null )
+                    return instance ;
+            }
+            catch
+            {
+                // ignored - fallback below
+            }
 
-                if ( candidate != null )
+            // Try to find an assignable concrete type with parameterless ctor in loaded assemblies
+            try
+            {
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies ( ) ;
+
+                foreach ( var asm in assemblies )
                 {
+                    Type[] types ;
+
                     try
                     {
-                        var inst = Activator.CreateInstance ( candidate ) ;
-                        if ( inst != null )
-                            return inst ;
+                        types = asm.GetTypes ( ) ;
                     }
                     catch
                     {
-                        // continue searching
+                        continue ;
                     }
-                }
-            }
-        }
-        catch
-        {
-            // ignore
-        }
 
-        // Special handling for delegate types (Func<...> / Action<...>) used in many factories
-        if ( typeof ( Delegate ).IsAssignableFrom ( t ) )
-        {
-            try
-            {
-                // Create a simple delegate that returns default(TResult) or does nothing for Action
-                var invokeMethod = t.GetMethod ( "Invoke" ) ;
-                if ( invokeMethod != null )
-                {
-                    var parameters = invokeMethod.GetParameters ( ).Select ( p => Expression.Parameter ( p.ParameterType , p.Name ) ).ToArray ( ) ;
-                    Expression body ;
+                    var candidate = types.FirstOrDefault ( x => t.IsAssignableFrom ( x ) && !x.IsAbstract && x.GetConstructor ( Type.EmptyTypes ) != null ) ;
 
-                    if ( invokeMethod.ReturnType == typeof ( void ) )
+                    if ( candidate != null )
                     {
-                        body = Expression.Empty ( ) ;
+                        try
+                        {
+                            var inst = Activator.CreateInstance ( candidate ) ;
+                            if ( inst != null )
+                                return inst ;
+                        }
+                        catch
+                        {
+                            // continue searching
+                        }
                     }
-                    else
-                    {
-                        var defaultValue = Expression.Default ( invokeMethod.ReturnType ) ;
-                        body = defaultValue ;
-                    }
-
-                    var lambda = Expression.Lambda ( t , body , parameters ) ;
-                    return lambda.Compile ( ) ;
                 }
             }
             catch
             {
                 // ignore
             }
-        }
 
-        // As a last resort, try to create an NSubstitute for the concrete type so it is assignable
-        try
-        {
-            return Substitute.For ( new[] { t } , Array.Empty<object>() ) ;
-        }
-        catch
-        {
-            // fallback to plain object when substitute/creation fails
-            return new object ( ) ;
-        }
+            // Special handling for delegate types (Func<...> / Action<...>) used in many factories
+            if ( typeof ( Delegate ).IsAssignableFrom ( t ) )
+            {
+                try
+                {
+                    // Create a simple delegate that returns default(TResult) or does nothing for Action
+                    var invokeMethod = t.GetMethod ( "Invoke" ) ;
+                    if ( invokeMethod != null )
+                    {
+                        var parameters = invokeMethod.GetParameters ( ).Select ( p => Expression.Parameter ( p.ParameterType , p.Name ) ).ToArray ( ) ;
+                        Expression body ;
+
+                        if ( invokeMethod.ReturnType == typeof ( void ) )
+                        {
+                            body = Expression.Empty ( ) ;
+                        }
+                        else
+                        {
+                            var defaultValue = Expression.Default ( invokeMethod.ReturnType ) ;
+                            body = defaultValue ;
+                        }
+
+                        var lambda = Expression.Lambda ( t , body , parameters ) ;
+                        return lambda.Compile ( ) ;
+                    }
+                }
+                catch
+                {
+                    // ignore
+                }
+            }
+
+            // As a last resort, try to create an NSubstitute for the concrete type so it is assignable
+            try
+            {
+                return Substitute.For ( new[] { t } , Array.Empty<object>() ) ;
+            }
+            catch
+            {
+                // fallback to plain object when substitute/creation fails
+                return new object ( ) ;
+            }
         }
     }
 }

@@ -1,7 +1,5 @@
-using System ;
-using System.Linq ;
 using System.Reflection ;
-using System.Runtime.Serialization ;
+using JetBrains.Annotations ;
 using NSubstitute ;
 
 namespace Idasen.BluetoothLE.Common.Tests ;
@@ -9,8 +7,14 @@ namespace Idasen.BluetoothLE.Common.Tests ;
 public interface INotNullTester
 {
     void Test< T > () where T : class ;
+
+    [UsedImplicitly]
     bool HasPassed { get ; }
+
+    [UsedImplicitly]
     int ConstructorsToTest { get ; }
+
+    [UsedImplicitly]
     int ConstructorsFailed { get ; }
 }
 
@@ -31,9 +35,9 @@ public class NotNullTester : INotNullTester
 
         var type = typeof ( T ) ;
 
-        var ctors = type.GetConstructors ( BindingFlags.Public | BindingFlags.Instance ) ;
+        var constructors = type.GetConstructors ( BindingFlags.Public | BindingFlags.Instance ) ;
 
-        foreach ( var ctor in ctors )
+        foreach ( var ctor in constructors )
         {
             var parameters = ctor.GetParameters ( ) ;
 
