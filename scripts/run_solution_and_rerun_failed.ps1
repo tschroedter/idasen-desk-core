@@ -39,7 +39,7 @@ foreach ($t in $trxs) {
 		# Re-run per-project to get full trace
 		# Attempt to build a project path by removing the bin\... suffix from the TRX folder.
 		# Use parentheses so the -replace operator gets exactly two operands and then concatenate.
-		if ($t.Directory -ne $null) {
+		if ($null -ne $t.Directory) {
 			$base = ($t.Directory.FullName -replace '\\bin\\.*$','')
 			$projCandidate = Join-Path $base 'Idasen.BluetoothLE.Linak.Tests\Idasen.BluetoothLE.Linak.Tests.csproj'
 			if (Test-Path $projCandidate) {
