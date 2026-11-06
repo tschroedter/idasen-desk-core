@@ -1,5 +1,6 @@
 using FluentAssertions ;
 using FluentAssertions.Execution ;
+using Idasen.BluetoothLE.Characteristics.Common ;
 
 namespace Idasen.BluetoothLE.Characteristics.Tests.Common ;
 
@@ -66,6 +67,58 @@ public class SimpleKeysAndValuesBaseTests
            .Should ( )
            .BeEquivalentTo ( key1 ,
                              key2 ) ;
+    }
+
+    [ TestMethod ]
+    public void GetKeys_ForInvoked_ReturnsKeys ( )
+    {
+        var sut = new TestSimpleKeysAndValuesBase ( ) ;
+        var key1 = "k1" ;
+        var key2 = "k2" ;
+
+        sut [ key1 ] = Guid.NewGuid ( ) ;
+        sut [ key2 ] = Guid.NewGuid ( ) ;
+
+        sut.GetKeys ( )
+           .Should ( )
+           .BeEquivalentTo ( key1 ,
+                             key2 ) ;
+    }
+
+    [ TestMethod ]
+    public void GetKeys_ForEmptyDictionary_ReturnsEmptyCollection ( )
+    {
+        var sut = new TestSimpleKeysAndValuesBase ( ) ;
+
+        sut.GetKeys ( )
+           .Should ( )
+           .BeEmpty ( ) ;
+    }
+
+    [ TestMethod ]
+    public void GetKeys_ForNonStringKeys_ReturnsEmptyCollection ( )
+    {
+        var sut = new SimpleKeysAndValuesBase < int , Guid > { [ 1 ] = Guid.NewGuid ( ) } ;
+
+        sut.GetKeys ( )
+           .Should ( )
+           .BeEmpty ( ) ;
+    }
+
+    [ TestMethod ]
+    public void GetKeys_ForDictionaryChangedAfterCall_ReturnsSnapshot ( )
+    {
+        var sut = new TestSimpleKeysAndValuesBase ( ) ;
+        var key1 = "k1" ;
+        var key2 = "k2" ;
+        sut [ key1 ] = Guid.NewGuid ( ) ;
+
+        var keys = sut.GetKeys ( ) ;
+
+        sut [ key2 ] = Guid.NewGuid ( ) ;
+
+        keys.Should ( )
+            .BeEquivalentTo ( key1 ) ;
     }
 
     [ TestMethod ]
