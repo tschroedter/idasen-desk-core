@@ -76,7 +76,7 @@ public class DeskTests
     public void Dispose_ForInvoked_CallsDeskConnector ( )
     {
         var connector = Substitute.For< IDeskConnector > ( ) ;
-        using var sut = new Desk ( connector ) ;
+        var sut = new Desk ( connector ) ;
 
         sut.Dispose ( ) ;
 

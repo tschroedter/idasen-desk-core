@@ -92,7 +92,7 @@ public class GattServicesTests
     [ TestMethod ]
     public void Dispose_ForInvoked_DisposesService1 ( )
     {
-        using var sut      = new GattServices ( ) ;
+        var sut      = new GattServices ( ) ;
         var       service1 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
         var       result1  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
         var       service2 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
@@ -110,7 +110,7 @@ public class GattServicesTests
     [ TestMethod ]
     public void Dispose_ForInvoked_DisposesService2 ( )
     {
-        using var sut      = new GattServices ( ) ;
+        var sut      = new GattServices ( ) ;
         var       service1 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;
         var       result1  = Substitute.For < IGattCharacteristicsResultWrapper > ( ) ;
         var       service2 = Substitute.For < IGattDeviceServiceWrapper > ( ) ;

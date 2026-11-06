@@ -81,7 +81,7 @@ public abstract class BaseConstructorNullTester < T >
 
         using ( new AssertionScope ( ) )
         {
-            var failedList = result.FailedConstructors != null && result.FailedConstructors.Length > 0
+            var failedList = result.FailedConstructors is { Length: > 0 }
                                  ? string.Join ( " | ", result.FailedConstructors )
                                  : string.Empty ;
 
@@ -130,13 +130,10 @@ public abstract class BaseConstructorNullTester < T >
                     return true ;
 
                 var name = p.GetCustomAttributes ( false )
-                            .Select ( a => a?.GetType ( )?.Name )
+                            .Select ( a => a.GetType ( ).Name )
                             .FirstOrDefault ( ) ;
 
-                if ( name == "GuardIgnoreAttribute" || name == "GuardIgnore" )
-                    return true ;
-
-                return false ;
+                return name is "GuardIgnoreAttribute" or "GuardIgnore" ;
             } ) ;
 
             if ( allSkippable )
@@ -159,8 +156,8 @@ public abstract class BaseConstructorNullTester < T >
                 var hasGuardIgnore = parameters[i].GetCustomAttributes ( false )
                                            .Any ( a =>
                                                   {
-                                                      var name = a?.GetType ( )?.Name ;
-                                                      return name == "GuardIgnoreAttribute" || name == "GuardIgnore" ;
+                                                      var name = a.GetType ( ).Name ;
+                                                      return name is "GuardIgnoreAttribute" or "GuardIgnore" ;
                                                   } ) ;
 
                 if ( hasGuardIgnore )
@@ -193,7 +190,6 @@ public abstract class BaseConstructorNullTester < T >
                 catch ( TargetInvocationException tie ) when ( tie.InnerException is ArgumentNullException )
                 {
                     // expected
-                    continue ;
                 }
                 catch ( TargetInvocationException tie )
                 {
@@ -206,7 +202,6 @@ public abstract class BaseConstructorNullTester < T >
                 catch ( ArgumentNullException )
                 {
                     // expected
-                    continue ;
                 }
                 catch ( Exception ex )
                 {
@@ -226,7 +221,7 @@ public abstract class BaseConstructorNullTester < T >
         if ( failedConstructors.Count > 0 )
             Console.WriteLine ( $"Constructor null tester failed for: {string.Join ( " | ", failedConstructors )}" ) ;
 
-        return ( hasPassed , constructorsToTest , constructorsFailed , failedConstructors.ToArray ( ) ) ;
+        return ( hasPassed , constructorsToTest , constructorsFailed , [.. failedConstructors] ) ;
     }
 
     private static object CreateNonNull ( Type t )
@@ -246,7 +241,7 @@ public abstract class BaseConstructorNullTester < T >
             {
                 try
                 {
-                    return Substitute.For ( new[] { t } , Array.Empty<object>() ) ;
+                    return Substitute.For ( [t] , [] ) ;
                 }
                 catch
                 {
@@ -341,7 +336,7 @@ public abstract class BaseConstructorNullTester < T >
             // As a last resort, try to create an NSubstitute for the concrete type so it is assignable
             try
             {
-                return Substitute.For ( new[] { t } , Array.Empty<object>() ) ;
+                return Substitute.For ( [t] , [] ) ;
             }
             catch
             {

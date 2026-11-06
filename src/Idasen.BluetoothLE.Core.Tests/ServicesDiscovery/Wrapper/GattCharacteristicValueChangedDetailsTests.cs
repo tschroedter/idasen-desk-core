@@ -10,7 +10,7 @@ public class GattCharacteristicValueChangedDetailsTests
     public void Constructor_ForInvoked_SetsUuid ( )
     {
         var uuid = Guid.NewGuid ( ) ;
-        var sut = new GattCharacteristicValueChangedDetails ( uuid , Array.Empty< byte > ( ) , DateTimeOffset.UtcNow ) ;
+        var sut  = new GattCharacteristicValueChangedDetails ( uuid , [] , DateTimeOffset.UtcNow ) ;
 
         sut.Uuid
            .Should ( )
@@ -32,7 +32,7 @@ public class GattCharacteristicValueChangedDetailsTests
     public void Constructor_ForInvoked_SetsTimestamp ( )
     {
         var timestamp = DateTimeOffset.UtcNow ;
-        var sut = new GattCharacteristicValueChangedDetails ( Guid.NewGuid ( ) , Array.Empty< byte > ( ) , timestamp ) ;
+        var sut       = new GattCharacteristicValueChangedDetails ( Guid.NewGuid ( ) , [] , timestamp ) ;
 
         sut.Timestamp
            .Should ( )

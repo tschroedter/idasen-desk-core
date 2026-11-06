@@ -12,9 +12,9 @@ public class DeskCommandsProvider
     private static readonly Dictionary < DeskCommands , byte [ ] > Commands =
         new( )
         {
-            { DeskCommands.MoveUp , "G\0"u8.ToArray ( ) } ,
-            { DeskCommands.MoveDown , "F\0"u8.ToArray ( ) } ,
-            { DeskCommands.MoveStop , "H\0"u8.ToArray ( ) }
+            { DeskCommands.MoveUp , [.. "G\0"u8] } ,
+            { DeskCommands.MoveDown , [.. "F\0"u8] } ,
+            { DeskCommands.MoveStop , [.. "H\0"u8] }
         } ;
 
     /// <inheritdoc />

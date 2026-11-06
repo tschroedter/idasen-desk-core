@@ -97,7 +97,9 @@ public class GattCharacteristicsResultWrapper
 
         var initialized = await Task.WhenAll ( initTasks ) ;
 
+#pragma warning disable IDE0028
         Characteristics = initialized.Where ( w => w is not null ).ToList ( )! ;
+#pragma warning restore IDE0028
 
         return this ;
     }

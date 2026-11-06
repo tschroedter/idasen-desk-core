@@ -40,7 +40,7 @@ public class OfficialGattServiceConverterTests
 
         CreateSut().Read(reader, 0)
                    .Should()
-                   .Be((ushort)0x1800);
+                   .Be(0x1800);
     }
 
     [TestMethod]

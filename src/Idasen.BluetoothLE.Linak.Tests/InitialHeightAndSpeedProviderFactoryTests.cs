@@ -14,6 +14,7 @@ public class InitialHeightAndSpeedProviderFactoryTests
         var logger = Substitute.For< Serilog.ILogger > ( ) ;
         var scheduler = Substitute.For< System.Reactive.Concurrency.IScheduler > ( ) ;
         using var subjectFinished = new System.Reactive.Subjects.Subject< uint > ( ) ;
+        // ReSharper disable once AccessToDisposedClosure
         var factory = new InitialHeightProvider.Factory ( ( executor , height ) => new InitialHeightProvider ( logger , scheduler , height , executor , subjectFinished ) ) ;
         var sut = new InitialHeightAndSpeedProviderFactory ( factory ) ;
         var executor = Substitute.For< IDeskCommandExecutor > ( ) ;

@@ -132,7 +132,7 @@ public class DeviceTests
     {
         var wrapper = Substitute.For < IBluetoothLeDeviceWrapper > ( ) ;
         var scheduler = Substitute.For < System.Reactive.Concurrency.IScheduler > ( ) ;
-        using var sut = new Device ( scheduler , wrapper ) ;
+        var sut = new Device ( scheduler , wrapper ) ;
 
         sut.Dispose ( ) ;
 
@@ -153,10 +153,9 @@ public class DeviceTests
         wrapper.ConnectionStatusChanged
                .Returns ( status ) ;
 
-        using var sut = new Device ( scheduler , wrapper ) ;
+        var sut = new Device ( scheduler , wrapper ) ;
 
-        sut
-           .Dispose ( ) ;
+        sut.Dispose ( ) ;
 
         // We cannot directly assert subscription disposal on the substitute observable, but ensure no exceptions thrown
         subscriber.DidNotReceiveWithAnyArgs ( )

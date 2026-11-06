@@ -51,6 +51,7 @@ public class CharacteristicBaseTest
         Device.GattServices
               .Returns ( gattServices ) ;
 
+        // ReSharper disable once AccessToDisposedClosure
         Action action = ( ) => sut.Initialize < TestCharacteristicBase > ( ) ;
 
         action.Should ( )

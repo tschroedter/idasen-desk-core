@@ -72,7 +72,7 @@ public class DeviceMonitorTests
             list.Add ( OnNext ( time ++ ,
                                 device ) ) ;
 
-        return list.ToArray ( ) ;
+        return [.. list] ;
     }
 
     private static Recorded < Notification < IDevice > > OnNext ( long    time ,

@@ -90,7 +90,6 @@ public class NotNullTester : INotNullTester
                 catch ( ArgumentNullException )
                 {
                     // expected
-                    continue ;
                 }
                 catch
                 {
@@ -99,11 +98,10 @@ public class NotNullTester : INotNullTester
                 }
             }
 
-            if ( !ctorPassed )
-            {
-                ConstructorsFailed++ ;
-                HasPassed = false ;
-            }
+            if ( ctorPassed ) continue ;
+
+            ConstructorsFailed++ ;
+            HasPassed = false ;
         }
     }
 
@@ -119,7 +117,7 @@ public class NotNullTester : INotNullTester
         {
             try
             {
-                return Substitute.For ( new[] { t } , Array.Empty<object>() ) ;
+                return Substitute.For ( [t] , []) ;
             }
             catch
             {
@@ -136,7 +134,7 @@ public class NotNullTester : INotNullTester
             // as fallback return a substitute for the type if possible
             try
             {
-                return Substitute.For ( new[] { t } , Array.Empty<object>() ) ;
+                return Substitute.For ( [t] , []) ;
             }
             catch
             {

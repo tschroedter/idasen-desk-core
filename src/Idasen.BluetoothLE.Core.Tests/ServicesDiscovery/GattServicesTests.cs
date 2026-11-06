@@ -16,6 +16,7 @@ public class GattServicesTests
 
         var service = Substitute.For< IGattDeviceServiceWrapper > ( ) ;
 
+        // ReSharper disable once AccessToDisposedClosure
         Action action = ( ) => sut [ service ] = null! ;
 
         action.Should ( )

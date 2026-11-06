@@ -125,7 +125,7 @@ public class WatcherTests
     {
         var wrapper = Substitute.For < IWrapper > ( ) ;
 
-        using var sut = new Watcher ( wrapper , _subject ) ;
+        var sut = new Watcher ( wrapper , _subject ) ;
 
         sut.Dispose ( ) ;
 

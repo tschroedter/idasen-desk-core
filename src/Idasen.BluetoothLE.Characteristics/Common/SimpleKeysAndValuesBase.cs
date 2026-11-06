@@ -84,9 +84,11 @@ public class SimpleKeysAndValuesBase < TKey , TValue >
         lock ( _padlock )
         {
             // Avoid invalid casts; only include keys that are truly strings
-            return _dictionary.Keys
+            return
+            [
+                .. _dictionary.Keys
                               .OfType < string > ( )
-                              .ToArray ( ) ;
+            ] ;
         }
     }
 }

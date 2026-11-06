@@ -15,10 +15,9 @@ public sealed class OfficialGattServiceConverter
 
         var text = reader.GetString(index);
 
-        var number = text?.Replace("0x",
-                                   "",
-                                   StringComparison.InvariantCulture) ??
-                     string.Empty;
+        var number = text.Replace ( "0x" ,
+                                    "" ,
+                                    StringComparison.InvariantCulture ) ;
 
         if (string.IsNullOrWhiteSpace(text))
             return 0;

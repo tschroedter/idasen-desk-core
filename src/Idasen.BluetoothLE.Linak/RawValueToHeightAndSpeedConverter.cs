@@ -37,7 +37,7 @@ public class RawValueToHeightAndSpeedConverter
         height = 0 ;
         speed  = 0 ;
 
-        var enumerable = bytes as byte [ ] ?? bytes.ToArray ( ) ;
+        var enumerable = bytes as byte [ ] ?? [.. bytes] ;
 
         try
         {
