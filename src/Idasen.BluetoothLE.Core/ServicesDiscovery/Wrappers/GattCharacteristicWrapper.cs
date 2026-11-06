@@ -84,7 +84,7 @@ public class GattCharacteristicWrapper
                                        timeoutCancellation.Token ) ;
         var completedTask = await Task.WhenAny ( writeTask ,
                                                  timeoutTask ) ;
-        timeoutCancellation.Cancel ( ) ;
+        await timeoutCancellation.CancelAsync ( ) ;
 
         if ( completedTask == writeTask )
         {
@@ -110,7 +110,7 @@ public class GattCharacteristicWrapper
                                        timeoutCancellation.Token ) ;
         var completedTask = await Task.WhenAny ( writeTask ,
                                                  timeoutTask ) ;
-        timeoutCancellation.Cancel ( ) ;
+        await timeoutCancellation.CancelAsync ( ) ;
 
         if ( completedTask == writeTask ) return await writeTask ;
 
